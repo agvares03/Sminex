@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G31" minimumToolsVersion="Automatic">
+    <entity name="Applications" representedClassName="Applications" syncable="YES">
+        <attribute name="client" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="close" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="is_answered" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="is_read" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="number" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="owner" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="com" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comments" inverseName="app" inverseEntity="Comments" syncable="YES"/>
+    </entity>
+    <entity name="Comments" representedClassName="Comments" syncable="YES">
+        <attribute name="author" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="id_account" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id_app" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="id_author" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="app" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Applications" inverseName="com" inverseEntity="Applications" syncable="YES"/>
+    </entity>
+    <entity name="Counters" representedClassName="Counters" syncable="YES">
+        <attribute name="count_ed_izm" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="count_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="diff" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="num_month" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="owner" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="prev_value" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="uniq_num" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="year" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Applications" positionX="-63" positionY="-18" width="128" height="180"/>
+        <element name="Comments" positionX="216" positionY="-3" width="128" height="165"/>
+        <element name="Counters" positionX="79" positionY="-216" width="128" height="193"/>
+    </elements>
+</model>
