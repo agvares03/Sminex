@@ -80,6 +80,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
         super.viewDidLoad()
         
         stopAnimation()
+        passTextField.isSecureTextEntry = false
     }
     
     private func startAnimation() {

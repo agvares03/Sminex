@@ -3348,6 +3348,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ruU-XC-z70">
+                                <rect key="frame" x="267" y="154" width="22" height="22"/>
+                                <state key="normal" image="ic_show_password"/>
+                                <connections>
+                                    <action selector="showPasswordPressed:" destination="okP-hc-Mwi" eventType="touchUpInside" id="PWQ-Cs-3Hy"/>
+                                    <action selector="showPasswordPressed:" destination="0GA-rU-H4s" eventType="touchUpInside" id="cVu-7C-RUq"/>
+                                    <action selector="showPasswordPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gB9-8y-hZE"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите лицевой счет или телефон, привязанный к лицевому счету" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O1p-tk-qkW">
                                 <rect key="frame" x="31" y="185" width="258" height="35"/>
                                 <constraints>
@@ -3369,6 +3378,7 @@
                             <constraint firstItem="9xb-A3-6Xn" firstAttribute="top" secondItem="hee-F2-x5x" secondAttribute="bottom" constant="27" id="Gi0-xq-MGg"/>
                             <constraint firstItem="oDe-MC-br6" firstAttribute="leading" secondItem="9xb-A3-6Xn" secondAttribute="leading" id="Hzm-mS-l40"/>
                             <constraint firstItem="yEg-Oz-e19" firstAttribute="trailing" secondItem="Lx2-vx-Y9n" secondAttribute="trailing" id="Jfh-LC-dMy"/>
+                            <constraint firstItem="ruU-XC-z70" firstAttribute="trailing" secondItem="bRs-P8-Fnm" secondAttribute="trailing" id="Myu-fv-NO0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="bRs-P8-Fnm" secondAttribute="trailing" constant="15" id="NPa-av-Omv"/>
                             <constraint firstItem="JCI-C4-gLc" firstAttribute="leading" secondItem="ggL-8y-dqY" secondAttribute="leadingMargin" id="R5T-RY-OS0"/>
                             <constraint firstItem="Lx2-vx-Y9n" firstAttribute="leading" secondItem="ggL-8y-dqY" secondAttribute="leadingMargin" constant="3" id="SXW-MS-Zqi"/>
@@ -3380,6 +3390,7 @@
                             <constraint firstItem="bRs-P8-Fnm" firstAttribute="leading" secondItem="ggL-8y-dqY" secondAttribute="leadingMargin" constant="15" id="e15-ee-dWa"/>
                             <constraint firstItem="yEg-Oz-e19" firstAttribute="leading" secondItem="uId-9H-Ibi" secondAttribute="trailing" constant="10" id="ftn-bD-YtT"/>
                             <constraint firstAttribute="trailing" secondItem="hee-F2-x5x" secondAttribute="trailing" id="hGb-14-Vzu"/>
+                            <constraint firstItem="ruU-XC-z70" firstAttribute="centerY" secondItem="bRs-P8-Fnm" secondAttribute="centerY" id="jKP-eQ-P4g"/>
                             <constraint firstItem="uId-9H-Ibi" firstAttribute="bottom" secondItem="yEg-Oz-e19" secondAttribute="bottom" id="l57-wp-qmd"/>
                             <constraint firstItem="O1p-tk-qkW" firstAttribute="top" secondItem="bRs-P8-Fnm" secondAttribute="bottom" constant="5" id="nPT-NM-E9d"/>
                             <constraint firstItem="uId-9H-Ibi" firstAttribute="leading" secondItem="oDe-MC-br6" secondAttribute="trailing" constant="14" id="o4X-gO-xoi"/>
@@ -3396,6 +3407,7 @@
                         <outlet property="btn_go" destination="Lx2-vx-Y9n" id="nPp-Mt-54s"/>
                         <outlet property="edLS" destination="bRs-P8-Fnm" id="A2O-NT-jP0"/>
                         <outlet property="indicator" destination="ktK-cw-PlJ" id="hIK-xR-Bly"/>
+                        <outlet property="showpswrd" destination="ruU-XC-z70" id="6n8-lX-bGB"/>
                         <outlet property="txtDesc" destination="O1p-tk-qkW" id="FM6-Hv-bAL"/>
                         <segue destination="okP-hc-Mwi" kind="show" identifier="reg_step1" id="zwM-dg-aGy"/>
                     </connections>
@@ -5409,7 +5421,7 @@
         <segue reference="1KR-u4-Yg3"/>
         <segue reference="5Uf-Bn-pmk"/>
         <segue reference="zej-3x-GgL"/>
-        <segue reference="BpE-SW-HQS"/>
+        <segue reference="KXk-ki-vVr"/>
         <segue reference="fpg-Qn-QUT"/>
     </inferredMetricsTieBreakers>
 </document>

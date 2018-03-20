@@ -86,6 +86,8 @@ final class Registration_Sminex_SMS: UIViewController {
      
         endLoading()
         
+        smsField.isSecureTextEntry = false
+        
         if numberPhone_ != "" {
             txtNameLS.text  = "Номер телефона"
             NameLS.text     = numberPhone_

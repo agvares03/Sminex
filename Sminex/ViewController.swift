@@ -78,6 +78,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
         
+        print(edPass.isSecureTextEntry)
+        
         if edPass.isSecureTextEntry {
             
             showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
@@ -96,6 +98,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         edLogin.delegate = self
+        
+        edPass.isSecureTextEntry = false
         
         stopIndicator()
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))

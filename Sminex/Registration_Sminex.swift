@@ -14,6 +14,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var txtDesc:     UILabel!
+    @IBOutlet private weak var showpswrd:   UIButton!
     
     open var isReg_ = true
     
@@ -23,6 +24,19 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     
     // Признак того, вводим мы телефон или нет
     private var itsPhone = false
+    
+    @IBAction private func showPasswordPressed(_ sender: UIButton) {
+        
+        if edLS.isSecureTextEntry {
+            
+            showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
+            edLS.isSecureTextEntry = false
+        } else {
+            
+            showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+            edLS.isSecureTextEntry = true
+        }
+    }
     
     @IBAction private func btn_go_action(_ sender: UIButton) {
         
@@ -168,6 +182,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         
         btn_go.isEnabled = false
         btn_go.alpha = 0.5
+        
+        edLS.isSecureTextEntry = false
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {

@@ -17,16 +17,30 @@ final class ForgotPass: UIViewController, UITextFieldDelegate {
     open var letter_            = ""
     private var responseString  = ""
     
-    @IBOutlet private weak var FogLogin: UITextField!
+    @IBOutlet private weak var FogLogin:  UITextField!
     @IBOutlet private weak var btnFogrot: UIButton!
     @IBOutlet private weak var btnCancel: UIButton!
     @IBOutlet private weak var indicator: UIActivityIndicatorView!
+    @IBOutlet private weak var showpswrd: UIButton!
     
     private var ls = ""
     
     // признак того, вводим мы телефон или нет
     private var itsPhone = false
 
+    @IBAction private func showPasswordPressed(_ sender: UIButton) {
+        
+        if FogLogin.isSecureTextEntry {
+            
+            showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
+            FogLogin.isSecureTextEntry = false
+        } else {
+            
+            showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+            FogLogin.isSecureTextEntry = true
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +56,8 @@ final class ForgotPass: UIViewController, UITextFieldDelegate {
         view.addGestureRecognizer(theTap)
         
         FogLogin.text = letter_
+        
+        FogLogin.isSecureTextEntry = false
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
