@@ -9,7 +9,7 @@
 import CoreData
 import UIKit
 
-class DB: NSObject, XMLParserDelegate {
+final class DB: NSObject, XMLParserDelegate {
     
     // Глобальные переменные для парсинга
     var parser = XMLParser()

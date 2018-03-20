@@ -17,14 +17,14 @@ extension Counters {
     }
 
     @NSManaged public var count_ed_izm: String?
-    @NSManaged public var count_name: String?
-    @NSManaged public var diff: Float
-    @NSManaged public var id: Int64
-    @NSManaged public var num_month: String?
-    @NSManaged public var owner: String?
-    @NSManaged public var prev_value: Float
-    @NSManaged public var uniq_num: String?
-    @NSManaged public var value: Float
-    @NSManaged public var year: String?
+    @NSManaged public var count_name:   String?
+    @NSManaged public var diff:         Float
+    @NSManaged public var id:           Int64
+    @NSManaged public var num_month:    String?
+    @NSManaged public var owner:        String?
+    @NSManaged public var prev_value:   Float
+    @NSManaged public var uniq_num: 	String?
+    @NSManaged public var value:        Float
+    @NSManaged public var year: 	    String?
 
 }

@@ -13,6 +13,8 @@ final class RegistrationSminexEnterPassword: UIViewController {
     @IBOutlet private weak var saveButton:      UIButton!
     @IBOutlet private weak var passTextField:   UITextField!
     @IBOutlet private weak var descTxt:         UILabel!
+    @IBOutlet private weak var showpswrd:       UIButton!
+    @IBOutlet private weak var waitView:        UIActivityIndicatorView!
     
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
@@ -57,6 +59,19 @@ final class RegistrationSminexEnterPassword: UIViewController {
         }.resume()
     }
     
+    @IBAction private func showPasswordPressed(_ sender: UIButton) {
+        
+        if passTextField.isSecureTextEntry {
+            
+            showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
+            passTextField.isSecureTextEntry = false
+        } else {
+            
+            showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+            passTextField.isSecureTextEntry = true
+        }
+    }
+    
     open var login_ = ""
     
     private var responceString = ""
@@ -64,15 +79,23 @@ final class RegistrationSminexEnterPassword: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        stopAnimation()
     }
     
     private func startAnimation() {
         
+        saveButton.isHidden = true
+        waitView.isHidden = false
+        
+        waitView.startAnimating()
     }
     
     private func stopAnimation() {
         
+        saveButton.isHidden = false
+        waitView.isHidden = true
+        
+        waitView.stopAnimating()
     }
     
     private func choise() {

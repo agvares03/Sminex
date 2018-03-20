@@ -16,13 +16,13 @@ extension Saldo {
         return NSFetchRequest<Saldo>(entityName: "Saldo")
     }
 
-    @NSManaged public var id: Int64
-    @NSManaged public var usluga: String?
-    @NSManaged public var num_month: String?
-    @NSManaged public var year: String?
-    @NSManaged public var start: String?
-    @NSManaged public var plus: String?
-    @NSManaged public var minus: String?
-    @NSManaged public var end: String?
+    @NSManaged public var id:           Int64
+    @NSManaged public var usluga:       String?
+    @NSManaged public var num_month:    String?
+    @NSManaged public var year:         String?
+    @NSManaged public var start: 	    String?
+    @NSManaged public var plus: 	    String?
+    @NSManaged public var minus: 	    String?
+    @NSManaged public var end: 	        String?
 
 }

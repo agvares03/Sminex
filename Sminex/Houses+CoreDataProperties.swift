@@ -17,7 +17,7 @@ extension Houses {
     }
 
     @NSManaged public var fias: String?
-    @NSManaged public var id: Int64
+    @NSManaged public var id:   Int64
     @NSManaged public var name: String?
 
 }

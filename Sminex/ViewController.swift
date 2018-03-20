@@ -22,6 +22,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var btnReg:      UIButton!
     @IBOutlet private weak var btnEnter:    UIButton!
     @IBOutlet private weak var btnForgot:   UIButton!
+    @IBOutlet private weak var showpswrd:   UIButton!
     
     @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
@@ -72,6 +73,19 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             // Запрос - получение данных !!!
             enter()
+        }
+    }
+    
+    @IBAction private func showPasswordPressed(_ sender: UIButton) {
+        
+        if edPass.isSecureTextEntry {
+            
+            showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
+            edPass.isSecureTextEntry = false
+        } else {
+            
+            showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+            edPass.isSecureTextEntry = true
         }
     }
     

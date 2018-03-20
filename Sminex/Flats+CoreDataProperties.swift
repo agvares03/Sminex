@@ -16,8 +16,8 @@ extension Flats {
         return NSFetchRequest<Flats>(entityName: "Flats")
     }
 
-    @NSManaged public var id: Int64
+    @NSManaged public var id:       Int64
     @NSManaged public var id_house: Int64
-    @NSManaged public var name: String?
+    @NSManaged public var name:     String?
 
 }

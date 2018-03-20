@@ -16,6 +16,7 @@ final class Registration_Sminex_SMS: UIViewController {
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var smsField:    UITextField!
+    @IBOutlet private weak var showpswrd:   UIButton!
     
     @IBAction private func btn_go_touch(_ sender: UIButton) {
         
@@ -53,6 +54,19 @@ final class Registration_Sminex_SMS: UIViewController {
             self.choise()
             
             }.resume()
+    }
+    
+    @IBAction private func showPasswordPressed(_ sender: UIButton) {
+        
+        if smsField.isSecureTextEntry {
+            
+            showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
+            smsField.isSecureTextEntry = false
+        } else {
+            
+            showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+            smsField.isSecureTextEntry = true
+        }
     }
     
     @IBAction private func btn_cancel(_ sender: UIButton) {
