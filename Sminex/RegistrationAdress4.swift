@@ -8,93 +8,95 @@
 
 import UIKit
 
-class RegistrationAdress4: UIViewController {
+final class RegistrationAdress4: UIViewController {
+    
     // Картинки на подмену
-    @IBOutlet weak var fon_top: UIImageView!
-    @IBOutlet weak var home: UIImageView!
-    @IBOutlet weak var flat: UIImageView!
-    @IBOutlet weak var number_ls: UIImageView!
-    @IBOutlet weak var new_phone: UIImageView!
-    @IBOutlet weak var new_mail: UIImageView!
+    @IBOutlet private weak var fon_top:   UIImageView!
+    @IBOutlet private weak var home:      UIImageView!
+    @IBOutlet private weak var flat:      UIImageView!
+    @IBOutlet private weak var number_ls: UIImageView!
+    @IBOutlet private weak var new_phone: UIImageView!
+    @IBOutlet private weak var new_mail:  UIImageView!
     
-    var responseString:NSString = ""
-    var letter:String = ""
+    private var responseString = ""
+    open var letter_           = ""
     
-    @IBOutlet weak var edAdress: UITextField!
-    @IBOutlet weak var edFlat: UITextField!
-    @IBOutlet weak var edLogin: UITextField!
-    @IBOutlet weak var edPhone: UITextField!
-    @IBOutlet weak var edMail: UITextField!
+    @IBOutlet private weak var edAdress: UITextField!
+    @IBOutlet private weak var edFlat:   UITextField!
+    @IBOutlet private weak var edLogin:  UITextField!
+    @IBOutlet private weak var edPhone:  UITextField!
+    @IBOutlet private weak var edMail:   UITextField!
     
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
-    @IBOutlet weak var btnCancel: UIButton!
-    @IBOutlet weak var btnReg: UIButton!
+    @IBOutlet private weak var btnCancel: UIButton!
+    @IBOutlet private weak var btnReg:    UIButton!
     
-    @IBAction func goCancel(_ sender: UIButton) {
+    @IBAction private func goCancel(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func goReg(_ sender: UIButton) {
-        // Регистрация
-        StartIndicator()
+    @IBAction private func goReg(_ sender: UIButton) {
         
-        let address = edAdress.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        // Регистрация
+        startIndicator()
+        
+        let address       = edAdress.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
         let premiseNumber = edFlat.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let login = edLogin.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let phone = edPhone.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let mail = edMail.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        let login         = edLogin.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        let phone         = edPhone.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        let mail          = edMail.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
         
         var itsOk: Bool = true
-        if (address == "") {
+        if address == "" {
             itsOk = false
         }
-        if (premiseNumber == "") {
+        if premiseNumber == "" {
             itsOk = false
         }
-        if (login == "") {
+        if login == "" {
             itsOk = false
         }
-        if (phone == "") {
+        if phone == "" {
             itsOk = false
         }
-        if (mail == "") {
+        if mail == "" {
             itsOk = false
         }
-        if (!itsOk) {
-            self.StopIndicator()
-            var textError: String = "Не заполнены параметры: "
-            var firstPar: Bool = true
-            if (address == "") {
+        if !itsOk {
+            self.stopIndicator()
+            var textError = "Не заполнены параметры: "
+            var firstPar  = true
+            if address == "" {
                 textError = textError + "адрес дома"
                 firstPar = false
             }
-            if (premiseNumber == "") {
-                if (firstPar) {
+            if premiseNumber == "" {
+                if firstPar {
                     textError = textError + "номер квартиры"
                     firstPar = false
                 } else {
                     textError = textError + ", номер квартиры"
                 }
             }
-            if (login == "") {
-                if (firstPar) {
+            if login == "" {
+                if firstPar {
                     textError = textError + "логин"
                     firstPar = false
                 } else {
                     textError = textError + ", логин"
                 }
             }
-            if (phone == "") {
-                if (firstPar) {
+            if phone == "" {
+                if firstPar {
                     textError = textError + "номер телефона"
                     firstPar = false
                 } else {
                     textError = textError + ", номер телефона"
                 }
             }
-            if (mail == "") {
-                if (firstPar) {
+            if mail == "" {
+                if firstPar {
                     textError = textError + "e-mail"
                     firstPar = false
                 } else {
@@ -112,88 +114,79 @@ class RegistrationAdress4: UIViewController {
                 "&login=" + login +
                 "&phone=" + phone +
                 "&email=" + mail
-            let url: NSURL = NSURL(string: urlPath)!
-            let request = NSMutableURLRequest(url: url as URL)
+            
+            var request = URLRequest(url: URL(string: urlPath)!)
             request.httpMethod = "GET"
-            let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                                  completionHandler: {
-                                                    data, response, error in
-                                                    
-                                                    if error != nil {
-                                                        return
-                                                    }
-                                                    
-                                                    let answerString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                                                    print("answer (reg) = \(String(describing: answerString))")
-                                                    
-                                                    self.answer_reg(answer: answerString)
-                                                    
-            })
-            task.resume()
+            
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil {
+                    return
+                }
+                
+                let answerString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+                    print("answer (reg) = \(String(describing: answerString))")
+                #endif
+                
+                self.answerReg(answer: answerString)
+            }.resume()
         }
-        
     }
     
-    func answer_reg(answer: String) {
-        if (answer == "1") {
-            // Переданы некорректные данные
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private func answerReg(answer: String) {
+        DispatchQueue.main.async {
+            
+            if answer == "1" {
+                // Переданы некорректные данные
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Ошибка", message: "Переданы некорректные параметры", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
-            })
-        } else if (answer == "2") {
-            // Лицевой счет не найден в базе данных
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            } else if answer == "2" {
+                // Лицевой счет не найден в базе данных
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Ошибка", message: "Лицевой счет не найден в базе данных", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
-            })
-        } else if (answer == "3") {
-            // Этот лицевой счет уже зарегистрирован
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            } else if answer == "3" {
+                // Этот лицевой счет уже зарегистрирован
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Ошибка", message: "Этот лицевой счет уже зарегистрирован", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
-            })
-        } else if (answer == "5") {
-            // Некорректный e-mail
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            } else if answer == "5" {
+                // Некорректный e-mail
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Ошибка", message: "Некорректный e-mail", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
-            })
-        } else if (answer == "7") {
-            // Лицевой счет не найден в указанной квартире
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            } else if answer == "7" {
+                // Лицевой счет не найден в указанной квартире
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Ошибка", message: "Лицевой счет не найден в указанной квартире", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
-            })
-        } else if (answer == "0") {
-            // Регистрация прошла успешно
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            } else if answer == "0" {
+                // Регистрация прошла успешно
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Успешно", message: "Пароль выслан на указанный e-mail (" + self.edMail.text! + ")", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
@@ -208,60 +201,49 @@ class RegistrationAdress4: UIViewController {
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
-            })
-        } else {
-            // Ошибка - попробуйте позже
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            } else {
+                // Ошибка - попробуйте позже
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Ошибка", message: "Не удалось. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-                
-            })
+            }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
         
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         view.addGestureRecognizer(theTap)
         
-        edLogin.text = letter
+        edLogin.text = letter_
     }
     
-    @objc func ViewTapped(recognizer: UIGestureRecognizer) {
+    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     // Процедуры индикации
-    func StartIndicator(){
-        self.btnReg.isHidden = true
+    private func startIndicator(){
+        self.btnReg.isHidden    = true
         self.btnCancel.isHidden = true
         
         self.indicator.startAnimating()
         self.indicator.isHidden = false
     }
     
-    func StopIndicator(){
-        self.btnReg.isHidden = false
+    private func stopIndicator(){
+        self.btnReg.isHidden    = false
         self.btnCancel.isHidden = false
         
         self.indicator.stopAnimating()
         self.indicator.isHidden = true
     }
-    
 }

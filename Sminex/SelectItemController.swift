@@ -8,47 +8,45 @@
 
 import UIKit
 
-class SelectItemController: UITableViewController {
+final class SelectItemController: UITableViewController {
 
-    @IBAction func cancelItem(_ sender: UIBarButtonItem) {
+    @IBAction private func cancelItem(_ sender: UIBarButtonItem) {
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    var selectedIndex: Int = -1
-    var strings = [String]()
-    var selectHandler:((Int)->Void)?
+    open var selectedIndex_   = -1
+    open var strings_         = [String]()
+    open var selectHandler_:    ((Int)->Void)?
     
     override func viewDidLoad() {
         
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
         
-        if tableView.numberOfSections > 0 && tableView.numberOfRows(inSection: 0) < selectedIndex {
-            let path = NSIndexPath(row: selectedIndex, section: 0)
-            tableView.selectRow(at: path as IndexPath, animated: false, scrollPosition: UITableViewScrollPosition.none)
+        if tableView.numberOfSections > 0 && tableView.numberOfRows(inSection: 0) < selectedIndex_ {
+            let path = IndexPath(row: selectedIndex_, section: 0)
+            tableView.selectRow(at: path, animated: false, scrollPosition: UITableViewScrollPosition.none)
         }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return strings.count
+        return strings_.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "item", for: indexPath as IndexPath)
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "item")
-        cell?.textLabel?.text = strings[indexPath.row]
-        cell?.accessoryType = selectedIndex == indexPath.row ? .checkmark : .none
+        cell?.textLabel?.text = strings_[indexPath.row]
+        cell?.accessoryType = selectedIndex_ == indexPath.row ? .checkmark : .none
         return cell!
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndex = indexPath.row
+        selectedIndex_ = indexPath.row
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        if selectHandler != nil {
-            selectHandler!(selectedIndex)
+        if selectHandler_ != nil {
+            selectHandler_!(selectedIndex_)
         }
         navigationController?.dismiss(animated: true, completion: nil)
     }

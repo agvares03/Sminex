@@ -147,9 +147,9 @@ final class Choice_UK: UIViewController {
         
         if segue.identifier == "get_regions" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = regionsNames
-            selectItemController.selectedIndex = teckRegion
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = regionsNames
+            selectItemController.selectedIndex_ = teckRegion
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.clearRaions()
                 self.clearCities()
@@ -166,9 +166,9 @@ final class Choice_UK: UIViewController {
             }
         } else if segue.identifier == "get_raions" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = raionsNames
-            selectItemController.selectedIndex = teckRaion
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = raionsNames
+            selectItemController.selectedIndex_ = teckRaion
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.clearCities()
                 self.clearUKs()
@@ -183,9 +183,9 @@ final class Choice_UK: UIViewController {
             }
         } else if segue.identifier == "get_cities" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = citiesNames
-            selectItemController.selectedIndex = teckCity
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = citiesNames
+            selectItemController.selectedIndex_ = teckCity
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.clearUKs()
                 
@@ -199,9 +199,9 @@ final class Choice_UK: UIViewController {
             }
         } else if segue.identifier == "get_uks" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = uksNames
-            selectItemController.selectedIndex = teckUk
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = uksNames
+            selectItemController.selectedIndex_ = teckUk
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.teckUk = selectedIndex
                 

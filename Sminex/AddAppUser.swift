@@ -253,18 +253,18 @@ final class AddAppUser: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "selectType" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = appTypes
-            selectItemController.selectedIndex = appType
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = appTypes
+            selectItemController.selectedIndex_ = appType
+            selectItemController.selectHandler_ = { selectedIndex in
                 self.appType = selectedIndex
                 self.typeCell.detailTextLabel?.text = self.appTypeString()
             }
         }
         else if segue.identifier == "selectPriority" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = appPriorities
-            selectItemController.selectedIndex = appPriority
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = appPriorities
+            selectItemController.selectedIndex_ = appPriority
+            selectItemController.selectHandler_ = { selectedIndex in
                 self.appPriority = selectedIndex
                 self.priorityCell.detailTextLabel?.text = self.appPriorityString()
             }

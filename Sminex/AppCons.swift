@@ -13,55 +13,56 @@ protocol ShowAppConsDelegate : class {
     func showAppDone(showAppCons: AppCons)
 }
 
-class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
     // Картинки на подмену
-    @IBOutlet weak var view_btn: UIView!
-    @IBOutlet weak var fon_app: UIImageView!
+    @IBOutlet private weak var view_btn:    UIView!
+    @IBOutlet private weak var fon_app:     UIImageView!
     
     // массивы для перевода на консультантов (один массив - имена, другой - коды)
-    var names_cons: [String] = []
-    var ids_cons: [String] = []
-    var teck_cons = -1
+    private var namesConsArray: [String] = []
+    private var idsConsArray:   [String] = []
+    private var teckCons = -1
     
-    var delegate:ShowAppConsDelegate? = nil
+    open var delegate: ShowAppConsDelegate?
     
-    var responseString: String = ""
-    var teckID: Int64 = 0
+    private var responseString: String = ""
+    private var teckID:         Int64  = 0
 
-    @IBOutlet weak var adress: UILabel!
-    @IBOutlet weak var tema: UILabel!
-    @IBOutlet weak var text_app: UILabel!
-    @IBOutlet weak var date_app: UILabel!
+    @IBOutlet private weak var adress:   UILabel!
+    @IBOutlet private weak var tema:     UILabel!
+    @IBOutlet private weak var text_app: UILabel!
+    @IBOutlet private weak var date_app: UILabel!
     
-    var fetchedResultsController: NSFetchedResultsController<Comments>?
+    private var fetchedResultsController: NSFetchedResultsController<Comments>?
     
-    @IBOutlet weak var table_comments: UITableView!
+    @IBOutlet private weak var table_comments: UITableView!
     
     // Аутлеты для индикации
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
-    @IBOutlet weak var btn1: UIButton!
-    @IBOutlet weak var btn2: UIButton!
-    @IBOutlet weak var btn3: UIButton!
-    @IBOutlet weak var btn4: UIButton!
-    @IBOutlet weak var btn5: UIButton!
-    @IBOutlet weak var btn6: UIButton!
-    @IBOutlet weak var btn_ring: UIButton!
+    @IBOutlet private weak var indicator:   UIActivityIndicatorView!
+    @IBOutlet private weak var btn1:        UIButton!
+    @IBOutlet private weak var btn2: 	    UIButton!
+    @IBOutlet private weak var btn3:        UIButton!
+    @IBOutlet private weak var btn4:        UIButton!
+    @IBOutlet private weak var btn5:        UIButton!
+    @IBOutlet private weak var btn6: 	    UIButton!
+    @IBOutlet private weak var btn_ring:    UIButton!
     
     // id аккаунта текущего
-    var id_author: String = ""
-    var name_account: String = ""
-    var id_account: String = ""
-    var id_app: String = ""
+    private var idAuthor    = ""
+    private var nameAccount = ""
+    private var idAccount   = ""
+    open var idApp_         = ""
     
-    var txt_adress: String = ""
-    var txt_phone:String = ""
-    var txt_tema: String = ""
-    var txt_text: String = ""
-    var txt_date: String = ""
+    open var txtAdress_ = ""
+    open var txtPhone_  = ""
+    open var txtTema_   = ""
+    open var txtText_   = ""
+    open var txtDate_   = ""
     
-    @IBAction func do_call(_ sender: UIButton) {
-        if (txt_phone != "") {
-            let url = URL(string: "tel://\(txt_phone)")!
+    @IBAction private func do_call(_ sender: UIButton) {
+        if txtPhone_ != "" {
+            let url = URL(string: "tel://\(txtPhone_)")!
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.openURL(url)
             }
@@ -76,46 +77,47 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.StopIndicator()
+        self.stopIndicator()
         
         // Установим общий стиль
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
         
         // получим id текущего аккаунта
         let defaults = UserDefaults.standard
-        id_author    = defaults.string(forKey: "id_account")!
-        name_account = defaults.string(forKey: "name")!
-        id_account   = defaults.string(forKey: "id_account")!
+        idAuthor    = defaults.string(forKey: "id_account")!
+        nameAccount = defaults.string(forKey: "name")!
+        idAccount   = defaults.string(forKey: "id_account")!
         
-        adress.text = txt_adress
-        tema.text = txt_tema
-        text_app.text = txt_text
-        date_app.text = txt_date
+        adress.text   = txtAdress_
+        tema.text     = txtTema_
+        text_app.text = txtText_
+        date_app.text = txtDate_
 
-        table_comments.delegate = self
+        table_comments.delegate  = self
         table_comments.rowHeight = UITableViewAutomaticDimension
         table_comments.estimatedRowHeight = 44.0
         
-        load_data()
+        loadData()
         updateTable()
-        get_cons(id_acc: id_account)
+        getCons(id_acc: idAccount)
     }
 
-    func load_data() {
-        let predicateFormat = String(format: "id_app = %@", id_app)
+    private func loadData() {
+        let predicateFormat = String(format: "id_app = %@", idApp_)
         fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Comments", keysForSort: ["id"], predicateFormat: predicateFormat) as? NSFetchedResultsController<Comments>
         do {
             try fetchedResultsController?.performFetch()
         } catch {
-            print(error)
+            
+            #if DEBUG
+                print(error)
+            #endif
         }
     }
     
-    func updateTable() {
+    private func updateTable() {
         table_comments.reloadData()
     }
     
@@ -129,7 +131,7 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let comm = (fetchedResultsController?.object(at: indexPath))! as Comments
-        if (comm.id_author != id_account) {
+        if comm.id_author != idAccount {
             let cell = self.table_comments.dequeueReusableCell(withIdentifier: "CommConsCell_cons") as! CommConsCell_cons
             cell.author.text     = comm.author
             cell.date.text       = comm.date
@@ -152,25 +154,26 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "select_cons" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = names_cons
-            selectItemController.selectedIndex = teck_cons
-            selectItemController.selectHandler = { selectedIndex in
-                self.teck_cons = selectedIndex
+            selectItemController.strings_ = namesConsArray
+            selectItemController.selectedIndex_ = teckCons
+            selectItemController.selectHandler_ = { selectedIndex in
+                self.teckCons = selectedIndex
                 let choice_cons = self.appConsString()
-                let choice_id   = self.ids_cons[selectedIndex]
+                let choice_id   = self.idsConsArray[selectedIndex]
                 print("User - " + choice_cons + " id - " + choice_id)
+                
                 // Переведем заявку другому консультанту
-                self.ch_app(id_account: self.id_account, id_app: self.id_app, new_cons_id: choice_id, new_cons_name: choice_cons)
+                self.chApp(id_account: self.idAccount, id_app: self.idApp_, new_cons_id: choice_id, new_cons_name: choice_cons)
             }
         }
     }
-    func appConsString() -> String {
-        if teck_cons == -1 {
+    private func appConsString() -> String {
+        if teckCons == -1 {
             return "не выбран"
         }
         
-        if teck_cons >= 0 && teck_cons < names_cons.count {
-            return names_cons[teck_cons]
+        if teckCons >= 0 && teckCons < namesConsArray.count {
+            return namesConsArray[teckCons]
         }
         
         return ""
@@ -178,7 +181,7 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // Действия консультанта
     // Принять заявку
-    @IBAction func get_app(_ sender: UIButton) {
+    @IBAction private func getApp(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "Принятие заявки", message: "Принять заявку к выполнению?", preferredStyle: .alert)
         
@@ -186,37 +189,36 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
         alert.addAction(cancelAction)
         let okAction = UIAlertAction(title: "Да", style: .default) { (_) -> Void in
             
-            self.StartIndicator()
+            self.startIndicator()
             
-            let id_app_txt = self.id_app.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+            let id_app_txt = self.idApp_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
             
-            let urlPath = Server.SERVER + Server.GET_APP + "accID=" + self.id_account + "&reqID=" + id_app_txt
-            let url: NSURL = NSURL(string: urlPath)!
-            let request = NSMutableURLRequest(url: url as URL)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APP + "accID=" + self.idAccount + "&reqID=" + id_app_txt)!)
             request.httpMethod = "GET"
             
-            let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                                  completionHandler: {
-                                                    data, response, error in
-                                                    
-                                                    if error != nil {
-                                                        DispatchQueue.main.async(execute: {
-                                                            self.StopIndicator()
-                                                            
-                                                            let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                            alert.addAction(cancelAction)
-                                                            self.present(alert, animated: true, completion: nil)
-                                                        })
-                                                        return
-                                                    }
-                                                    
-                                                    self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                                                    print("responseString = \(self.responseString)")
-                                                    
-                                                    self.choice_get_app()
-            })
-            task.resume()
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.stopIndicator()
+                        
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                self.responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+                    print("responseString = \(self.responseString)")
+                #endif
+                
+                self.choiceGetApp()
+                }.resume()
 
         }
         alert.addAction(okAction)
@@ -224,47 +226,47 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     }
     // Написать комментарий
-    @IBAction func send_comm(_ sender: UIButton) {
+    @IBAction private func send_comm(_ sender: UIButton) {
         
-        let alert = AddCom(main_View: self.view, title: "Добавление комментария")
-        alert.delegate = self
+        let alert       = AddCom(main_View: self.view, title: "Добавление комментария")
+        alert.delegate  = self
         alert.show(animated: true)
         
     }
     // Перевести заявку
-    func ch_app(id_account: String, id_app: String, new_cons_id: String, new_cons_name: String) {
-        self.StartIndicator()
-        let urlPath = Server.SERVER + Server.CH_CONS + "accID=" + id_account + "&reqID=" + id_app + "&chgID=" + new_cons_id
-        let url: NSURL = NSURL(string: urlPath)!
-        let request = NSMutableURLRequest(url: url as URL)
+    private func chApp(id_account: String, id_app: String, new_cons_id: String, new_cons_name: String) {
+        
+        self.startIndicator()
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.CH_CONS + "accID=" + id_account + "&reqID=" + id_app + "&chgID=" + new_cons_id)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    DispatchQueue.main.async(execute: {
-                                                        self.StopIndicator()
-                                                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                        alert.addAction(cancelAction)
-                                                        self.present(alert, animated: true, completion: nil)
-                                                    })
-                                                    return
-                                                }
-                                                
-                                                self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                                                print("responseString = \(self.responseString)")
-                                                
-                                                self.choice_cons_app(name_cons: new_cons_name)
-        })
-        task.resume()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.stopIndicator()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            self.choiceConsApp(name_cons: new_cons_name)
+            }.resume()
     }
-    @IBAction func send_app(_ sender: UIButton) {
-    }
+    @IBAction private func send_app(_ sender: UIButton) {}
+    
     // Выполнить заявку
-    @IBAction func ok_app(_ sender: UIButton) {
+    @IBAction private func ok_app(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "Выполнение заявки", message: "Выполнить заявку?", preferredStyle: .alert)
         
@@ -272,36 +274,35 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
         alert.addAction(cancelAction)
         let okAction = UIAlertAction(title: "Да", style: .default) { (_) -> Void in
             
-            self.StartIndicator()
+            self.startIndicator()
             
-            let id_app_txt = self.id_app.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+            let id_app_txt = self.idApp_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
             
-            let urlPath = Server.SERVER + Server.OK_APP + "accID=" + self.id_account + "&reqID=" + id_app_txt
-            let url: NSURL = NSURL(string: urlPath)!
-            let request = NSMutableURLRequest(url: url as URL)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.OK_APP + "accID=" + self.idAccount + "&reqID=" + id_app_txt)!)
             request.httpMethod = "GET"
             
-            let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                                  completionHandler: {
-                                                    data, response, error in
-                                                    
-                                                    if error != nil {
-                                                        DispatchQueue.main.async(execute: {
-                                                            self.StopIndicator()
-                                                            let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                            alert.addAction(cancelAction)
-                                                            self.present(alert, animated: true, completion: nil)
-                                                        })
-                                                        return
-                                                    }
-                                                    
-                                                    self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                                                    print("responseString = \(self.responseString)")
-                                                    
-                                                    self.choice_ok_app()
-            })
-            task.resume()
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.stopIndicator()
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                self.responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+                    print("responseString = \(self.responseString)")
+                #endif
+                
+                self.choiceOkApp()
+            }.resume()
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
@@ -309,43 +310,42 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     // Закрыть заявку
-    @IBAction func close_app(_ sender: UIButton) {
+    @IBAction private func close_app(_ sender: UIButton) {
         let alert = UIAlertController(title: "Закрытие заявки", message: "Действительно закрыть заявку?", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Отмена", style: .default) { (_) -> Void in }
         alert.addAction(cancelAction)
         let okAction = UIAlertAction(title: "Да", style: .default) { (_) -> Void in
             
-            self.StartIndicator()
+            self.startIndicator()
             
-            let id_app_txt = self.id_app.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+            let id_app_txt = self.idApp_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
             
-            let urlPath = Server.SERVER + Server.CLOSE_APP_CONS + "accID=" + self.id_account + "&reqID=" + id_app_txt
-            let url: NSURL = NSURL(string: urlPath)!
-            let request = NSMutableURLRequest(url: url as URL)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.CLOSE_APP_CONS + "accID=" + self.idAccount + "&reqID=" + id_app_txt)!)
             request.httpMethod = "GET"
             
-            let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                                  completionHandler: {
-                                                    data, response, error in
-                                                    
-                                                    if error != nil {
-                                                        DispatchQueue.main.async(execute: {
-                                                            self.StopIndicator()
-                                                            let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                            alert.addAction(cancelAction)
-                                                            self.present(alert, animated: true, completion: nil)
-                                                        })
-                                                        return
-                                                    }
-                                                    
-                                                    self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                                                    print("responseString = \(self.responseString)")
-                                                    
-                                                    self.choice_close_app()
-            })
-            task.resume()
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.stopIndicator()
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                self.responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+                    print("responseString = \(self.responseString)")
+                #endif
+                
+                self.choiceCloseApp()
+                }.resume()
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
@@ -353,191 +353,184 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // ПРОЦЕДУРЫ ОТВЕТЫ ОТ СЕРВЕРА
     // Ответ - принятие заявки
-    func choice_get_app() {
-        if (responseString == "xxx") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private func choiceGetApp() {
+        DispatchQueue.main.async {
+        
+        if self.responseString == "xxx" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Ошибка сервера. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "3"){
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            
+        } else if self.responseString == "3" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Предупреждение", message: "Заявка принята специалистом", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "1") {
-            DispatchQueue.main.async(execute: {
+            
+        } else if self.responseString == "1" {
                 let db = DB()
-                db.add_comm(ID: self.teckID, id_request: Int64(self.id_app)!, text: "Заявка принята специалистом " + self.name_account, added: self.date_teck()!, id_Author: self.id_author, name: self.name_account, id_account: self.id_account)
-                self.StopIndicator()
-                self.load_data()
+                db.add_comm(ID: self.teckID, id_request: Int64(self.idApp_)!, text: "Заявка принята специалистом " + self.nameAccount, added: self.dateTeck()!, id_Author: self.idAuthor, name: self.nameAccount, id_account: self.idAccount)
+                self.stopIndicator()
+                self.loadData()
                 self.updateTable()
-            })
+            }
         }
     }
     
     // Ответ - комментарий
-    func choice_send_comm(text: String) {
-        if (responseString == "xxx") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private func choiceSendComm(text: String) {
+        DispatchQueue.main.async {
+        
+        if self.responseString == "xxx" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Ошибка сервера. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
+            
         } else {
-            DispatchQueue.main.async(execute: {                
                 // Экземпляр класса DB
                 let db = DB()
-                db.add_comm(ID: Int64(self.responseString)!, id_request: Int64(self.id_app)!, text: text, added: self.date_teck()!, id_Author: self.id_author, name: self.name_account, id_account: self.id_account)
-                self.StopIndicator()
-                self.load_data()
+                db.add_comm(ID: Int64(self.responseString)!, id_request: Int64(self.idApp_)!, text: text, added: self.dateTeck()!, id_Author: self.idAuthor, name: self.nameAccount, id_account: self.idAccount)
+                self.stopIndicator()
+                self.loadData()
                 self.updateTable()
-                
-            })
+            }
         }
     }
     
     // Ответ - перевести заявку другому консультанту
-    func choice_cons_app(name_cons: String) {
-        if (responseString == "xxx") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private func choiceConsApp(name_cons: String) {
+        DispatchQueue.main.async {
+        
+        if self.responseString == "xxx" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Ошибка сервера. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "1") {
-            DispatchQueue.main.async(execute: {
+            
+        } else if self.responseString == "1" {
                 // Экземпляр класса DB
                 let db = DB()
-                db.add_comm(ID: self.teckID, id_request: Int64(self.id_app)!, text: "Заявка №" + self.id_app + " переведена специалисту - " + name_cons, added: self.date_teck()!, id_Author: self.id_author, name: self.name_account, id_account: self.id_account)
+                db.add_comm(ID: self.teckID, id_request: Int64(self.idApp_)!, text: "Заявка №" + self.idApp_ + " переведена специалисту - " + name_cons, added: self.dateTeck()!, id_Author: self.idAuthor, name: self.nameAccount, id_account: self.idAccount)
                 // Подумать, как можно удалить потом
                 //db.del_app(number: self.id_app)
-                self.StopIndicator()
-                self.load_data()
+                self.stopIndicator()
+                self.loadData()
                 self.updateTable()
-                
-            })
+            
         } else {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Ошибка сервера. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
+            }
         }
     }
     
     // Ответ - выполнить заявку
-    func choice_ok_app() {
-        if (responseString == "xxx") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private func choiceOkApp() {
+        DispatchQueue.main.async {
+        
+        if self.responseString == "xxx" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Ошибка сервера. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
+            
         } else{
-            DispatchQueue.main.async(execute: {
                 // Экземпляр класса DB
                 let db = DB()
-                db.add_comm(ID: self.teckID, id_request: Int64(self.id_app)!, text: "Заявка №" + self.id_app + " выполнена специалистом - " + self.name_account, added: self.date_teck()!, id_Author: self.id_author, name: self.name_account, id_account: self.id_account)
+                db.add_comm(ID: self.teckID, id_request: Int64(self.idApp_)!, text: "Заявка №" + self.idApp_ + " выполнена специалистом - " + self.nameAccount, added: self.dateTeck()!, id_Author: self.idAuthor, name: self.nameAccount, id_account: self.idAccount)
                 // Подумать, как можно удалить потом
 //                db.del_app(number: self.id_app)
-                self.StopIndicator()
-                self.load_data()
+                self.stopIndicator()
+                self.loadData()
                 self.updateTable()
                 
-            })
+            }
         }
     }
     
     // Ответ - закрыть заявку
-    func choice_close_app() {
-        if (responseString == "xxx") {
-            self.StopIndicator()
-            DispatchQueue.main.async(execute: {
+    private func choiceCloseApp() {
+        DispatchQueue.main.async {
+        
+        if self.responseString == "xxx" {
+            self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Ошибка сервера. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
+            
         } else{
-            DispatchQueue.main.async(execute: {
                 // Экземпляр класса DB
                 let db = DB()
-                db.add_comm(ID: self.teckID, id_request: Int64(self.id_app)!, text: "Заявка №" + self.id_app + " закрыта специалистом - " + self.name_account, added: self.date_teck()!, id_Author: self.id_author, name: self.name_account, id_account: self.id_account)
+                db.add_comm(ID: self.teckID, id_request: Int64(self.idApp_)!, text: "Заявка №" + self.idApp_ + " закрыта специалистом - " + self.nameAccount, added: self.dateTeck()!, id_Author: self.idAuthor, name: self.nameAccount, id_account: self.idAccount)
                 // Подумать, как можно удалить потом
 //                db.del_app(number: self.id_app)
-                self.StopIndicator()
-                self.load_data()
+                self.stopIndicator()
+                self.loadData()
                 self.updateTable()
                 
-            })
+            }
         }
     }
     
     // ВСПОМОГАТЕЛЬНЫЕ ПРОЦЕДУРЫ
-    func date_teck() -> (String)? {
-        let date = Date()
-        let dateFormatter = DateFormatter()
+    private func dateTeck() -> (String)? {
+        let dateFormatter        = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        let dateString = dateFormatter.string(from: date as Date)
+        let dateString = dateFormatter.string(from: Date())
         return dateString
         
     }
     
-    func get_cons(id_acc: String) {
-        let urlPath = Server.SERVER + Server.GET_CONS + "id_account=" + id_acc
+    private func getCons(id_acc: String) {
         
-        let url: NSURL = NSURL(string: urlPath)!
-        let request = NSMutableURLRequest(url: url as URL)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_CONS + "id_account=" + id_acc)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    return
-                                                } else {
-                                                    do {
-                                                        let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-
-                                                        // Получим список консультантов
-                                                        if let houses = json["data"] {
-                                                            for index in 0...(houses.count)!-1 {
-                                                                let obj_cons = houses.object(at: index) as! [String:AnyObject]
-                                                                for obj in obj_cons {
-                                                                    if obj.key == "name" {
-                                                                        self.names_cons.append(obj.value as! String)
-                                                                    }
-                                                                    if obj.key == "id" {
-                                                                        self.ids_cons.append(String(describing: obj.value))
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } catch let error as NSError {
-                                                        print(error)
-                                                    }
-                                                }
-                                                
-        })
-        task.resume()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                return
+            } else {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                    
+                    // Получим список консультантов
+                    if let houses = json["data"] {
+                        for index in 0...(houses.count)!-1 {
+                            let obj_cons = houses.object(at: index) as! [String:AnyObject]
+                            for obj in obj_cons {
+                                if obj.key == "name" {
+                                    self.namesConsArray.append(obj.value as! String)
+                                }
+                                if obj.key == "id" {
+                                    self.idsConsArray.append(String(describing: obj.value))
+                                }
+                            }
+                        }
+                    }
+                } catch let error {
+                    
+                    #if DEBUG
+                        print(error)
+                    #endif
+                }
+            }
+        }.resume()
     }
     
-    func StartIndicator() {
+    private func startIndicator() {
         self.btn1.isEnabled = false
         self.btn1.isHidden  = true
         
@@ -563,7 +556,7 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.indicator.isHidden = false
     }
     
-    func StopIndicator() {
+    private func stopIndicator() {
         self.btn1.isEnabled = true
         self.btn1.isHidden  = false
         
@@ -590,42 +583,59 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func addCommDone(addApp: AddCom, addComm: String) {
-        if (addComm != "") {
-            self.StartIndicator()
+        
+        if addComm != "" {
+            self.startIndicator()
             
-            let id_app_txt = self.id_app.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+            let id_app_txt = self.idApp_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
             let text_txt   = addComm.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
             
-            let urlPath = Server.SERVER + Server.SEND_COMM_CONS + "reqID=" + id_app_txt + "&text=" + text_txt + "&accID=" + self.id_account + "&isHidden=false"
-            let url: NSURL = NSURL(string: urlPath)!
-            let request = NSMutableURLRequest(url: url as URL)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM_CONS + "reqID=" + id_app_txt + "&text=" + text_txt + "&accID=" + self.idAccount + "&isHidden=false")!)
             request.httpMethod = "GET"
             
-            let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                                  completionHandler: {
-                                                    data, response, error in
-                                                    
-                                                    if error != nil {
-                                                        DispatchQueue.main.async(execute: {
-                                                            //                                                                self.StopIndicator()
-                                                            let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                            alert.addAction(cancelAction)
-                                                            self.present(alert, animated: true, completion: nil)
-                                                        })
-                                                        return
-                                                    }
-                                                    
-                                                    self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                                                    print("responseString = \(self.responseString)")
-                                                    
-                                                    self.choice_send_comm(text: (addComm))
-            })
-            task.resume()
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.stopIndicator()
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                self.responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+                    print("responseString = \(self.responseString)")
+                #endif
+                
+                self.choiceSendComm(text: (addComm))
+            }.resume()
         }
         
-        load_data()
+        loadData()
         self.table_comments.reloadData()
     }
+}
+
+// MARK: -CELLS
+
+private final class CommConsCell: UITableViewCell {
+    
+    @IBOutlet weak var author: UILabel!
+    @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var text_comm: UILabel!
+    
+}
+
+private final class CommConsCell_cons: UITableViewCell {
+    
+    @IBOutlet weak var author: UILabel!
+    @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var text_comm: UILabel!
     
 }

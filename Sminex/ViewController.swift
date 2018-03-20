@@ -110,7 +110,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         let txtLogin = edLogin.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let txtPass = edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
+        #if DEBUG
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + "999993" + "&pwd=" + "wjkEQzn/pkSIqUN5uL8wQ/2ZIRY=")!)
+        #else
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
+        #endif
         request.httpMethod = "GET"
         
         #if DEBUG
@@ -159,11 +163,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         var salt = ""
         let queue = DispatchGroup()
         
-        var soleRequest = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
-        soleRequest.httpMethod = "GET"
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
         
         queue.enter()
-        URLSession.shared.dataTask(with: soleRequest) {
+        URLSession.shared.dataTask(with: request) {
             data, response, error in
         
             defer {

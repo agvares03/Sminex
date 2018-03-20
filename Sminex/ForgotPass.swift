@@ -8,127 +8,123 @@
 
 import UIKit
 
-class ForgotPass: UIViewController, UITextFieldDelegate {
+final class ForgotPass: UIViewController, UITextFieldDelegate {
+    
     // Картинки на подмену
-    @IBOutlet weak var fon_top: UIImageView!
-    @IBOutlet weak var new_face: UIImageView!
+    @IBOutlet private weak var fon_top: UIImageView!
+    @IBOutlet private weak var new_face: UIImageView!
     
-    var letter: String = ""
-    var responseString:NSString = ""
+    open var letter_            = ""
+    private var responseString  = ""
     
-    @IBOutlet weak var FogLogin: UITextField!
-    @IBOutlet weak var btnFogrot: UIButton!
-    @IBOutlet weak var btnCancel: UIButton!
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet private weak var FogLogin: UITextField!
+    @IBOutlet private weak var btnFogrot: UIButton!
+    @IBOutlet private weak var btnCancel: UIButton!
+    @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
-    var ls:String = ""
+    private var ls = ""
+    
     // признак того, вводим мы телефон или нет
-    var itsPhone: Bool = false
+    private var itsPhone = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         FogLogin.delegate = self
         
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
         
-        StopIndicator()
+        stopIndicator()
         
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         view.addGestureRecognizer(theTap)
         
-        FogLogin.text = letter
+        FogLogin.text = letter_
     }
     
-    @objc func ViewTapped(recognizer: UIGestureRecognizer) {
+    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
     }    
     
-    @IBAction func ForgetPass(_ sender: UIButton) {
+    @IBAction private func ForgetPass(_ sender: UIButton) {
         
-        StartIndicator()
+        startIndicator()
         
-        let urlPath = Server.SERVER + Server.FORGOT + "login=" + FogLogin.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let url: NSURL = NSURL(string: urlPath)!
-        
-        let request = NSMutableURLRequest(url: url as URL)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "login=" + FogLogin.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    let alert = UIAlertController(title: "Результат", message: "Не удалось. Попробуйте позже", preferredStyle: UIAlertControllerStyle.alert)
-                                                    alert.addAction(UIAlertAction(title: "Ок", style: UIAlertActionStyle.default, handler: nil))
-                                                    self.present(alert, animated: true, completion: nil)
-                                                    self.responseString = "xxx";
-                                                    self.choice()
-                                                    return
-                                                }
-                                                
-                                                self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
-                                                print("responseString = \(self.responseString)")
-                                                
-                                                self.choice()
-                                                
-        })
-        
-        task.resume()
-        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    
+                    let alert = UIAlertController(title: "Результат", message: "Не удалось. Попробуйте позже", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Ок", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                self.responseString = "xxx";
+                self.choice()
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            
+            self.choice()
+            
+        }.resume()
     }
     
-    func choice(){
-        if (responseString == "1") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private func choice() {
+        DispatchQueue.main.async {
+            
+        if self.responseString == "1" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Не указан лицевой счет", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "2") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            
+        } else if self.responseString == "2" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Некорректные данные", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString.length > 150) {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+            
+        } else if self.responseString.length > 150 {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Ошибка сервера. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "xxx") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
-            })
+            
+        } else if self.responseString == "xxx" {
+                self.stopIndicator()
+            
         } else {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Успешно", message: "Пароль отправлен на почту - " + (self.responseString as String), preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                     self.presentingViewController?.dismiss(animated: true, completion: nil)
                 }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
+            }
         }
     }
     
-    @IBAction func backBtn(_ sender: UIButton) {
+    @IBAction private func backBtn(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func StartIndicator(){
+    private func startIndicator() {
         self.btnFogrot.isHidden = true
         self.btnCancel.isHidden = true
         
@@ -136,7 +132,7 @@ class ForgotPass: UIViewController, UITextFieldDelegate {
         self.indicator.isHidden = false
     }
     
-    func StopIndicator(){
+    private func stopIndicator() {
         self.btnFogrot.isHidden = false
         self.btnCancel.isHidden = false
         
@@ -157,188 +153,188 @@ class ForgotPass: UIViewController, UITextFieldDelegate {
             ls = ls + string
         }
         
-        // определим телефон это или нет
-        var first: Bool = true
-        var ls_1_end = ""
-        if (ls.count < 1) {
-            ls_1_end = ""
-        } else {
-            let ls_1 = ls.index(ls.startIndex, offsetBy: 1)
-            ls_1_end = ls.substring(to: ls_1)
-        }
-        
-        var ls_12_end = ""
-        if (ls.count < 2) {
-            ls_12_end = ""
-        } else {
-            let ls_12 = ls.index(ls.startIndex, offsetBy: 2)
-            ls_12_end = ls.substring(to: ls_12)
-        }
-        if (ls_1_end == "+") {
-            itsPhone = true
-        }
-        if (!itsPhone) {
-            if (ls_12_end == "89") || (ls_12_end == "79") {
-                itsPhone = true
-            }
-        }
-        
-        var new_ls: String = ""
-        first = true
-        var j: Int = 1
-        for character in ls {
-            if (first) {
-                new_ls = String(character)
-                first = false
-            } else {
-                if (itsPhone) {
-                    if (ls_1_end == "+") {
-                        if (j == 2) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 3) {
-                            new_ls = new_ls + "(" + String(character)
-                        } else if (j == 4) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 5) {
-                            new_ls = new_ls + String(character) + ")"
-                        } else if (j == 6) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 7) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 8) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 9) {
-                            new_ls = new_ls + "-" + String(character)
-                        } else if (j == 10) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 11) {
-                            new_ls = new_ls + "_" + String(character)
-                        } else if (j == 12) {
-                            new_ls = new_ls + String(character)
-                        } else {
-                            new_ls = new_ls + String(character)
-                        }
-                    } else {
-                        if (j == 2) {
-                            new_ls = new_ls + "(" + String(character)
-                        } else if (j == 3) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 4) {
-                            new_ls = new_ls + String(character) + ")"
-                        } else if (j == 5) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 6) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 7) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 8) {
-                            new_ls = new_ls + "-" + String(character)
-                        } else if (j == 9) {
-                            new_ls = new_ls + String(character)
-                        } else if (j == 10) {
-                            new_ls = new_ls + "-" + String(character)
-                        } else if (j == 11) {
-                            new_ls = new_ls + String(character)
-                        } else {
-                            new_ls = new_ls + String(character)
-                        }
-                    }
-                } else {
-                    new_ls = new_ls + String(character)
-                }
-            }
-            j = j + 1
-        }
-        
-        if (itsPhone) {
-            if (ls_1_end == "+") {
-                if (j == 2) {
-                    new_ls = new_ls + "*(***)***-**-**"
-                } else if (j == 3) {
-                    new_ls = new_ls + "(***)***-**-**"
-                } else if (j == 4) {
-                    new_ls = new_ls + "**)***-**-**"
-                } else if (j == 5) {
-                    new_ls = new_ls + "*)***-**-**"
-                } else if (j == 6) {
-                    new_ls = new_ls + "***-**-**"
-                } else if (j == 7) {
-                    new_ls = new_ls + "**-**-**"
-                } else if (j == 8) {
-                    new_ls = new_ls + "*-**-**"
-                } else if (j == 9) {
-                    new_ls = new_ls + "-**-**"
-                } else if (j == 10) {
-                    new_ls = new_ls + "*-**"
-                } else if (j == 11) {
-                    new_ls = new_ls + "-**"
-                } else if (j == 12) {
-                    new_ls = new_ls + "*"
-                }
-            } else {
-                if (j == 3) {
-                    new_ls = new_ls + "**)***-**-**"
-                } else if (j == 4) {
-                    new_ls = new_ls + "*)***-**-**"
-                } else if (j == 5) {
-                    new_ls = new_ls + "***-**-**"
-                } else if (j == 6) {
-                    new_ls = new_ls + "**-**-**"
-                } else if (j == 7) {
-                    new_ls = new_ls + "*-**-**"
-                } else if (j == 8) {
-                    new_ls = new_ls + "-**-**"
-                } else if (j == 9) {
-                    new_ls = new_ls + "*-**"
-                } else if (j == 10) {
-                    new_ls = new_ls + "-**"
-                } else if (j == 11) {
-                    new_ls = new_ls + "*"
-                }
-            }
-        }
-        
-        textField.text = new_ls
-        
-        // Установим курсор, если это телефон
-        if (itsPhone) {
-            var jj = j
-            if (ls_1_end == "+") {
-                if (j == 2) {
-                    jj = 1
-                }
-                if (j > 5) {
-                    jj = j + 1
-                }
-                if (j > 8) {
-                    jj = j + 2
-                }
-                if (j > 10) {
-                    jj = j + 3
-                }
-            } else {
-                if (j > 4) {
-                    jj = j + 1
-                }
-                if (j > 7) {
-                    jj = j + 2
-                }
-                if (j > 9) {
-                    jj = j + 3
-                }
-            }
-            if let newPosition = textField.position(from: textField.beginningOfDocument, offset: jj) {
-                textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
-            }
-        }
-        
-        // Установим тип - для номера телефона - только цифры
-        if (itsPhone) {
-            textField.keyboardType = UIKeyboardType.phonePad
-        } else {
-            textField.keyboardType = UIKeyboardType.default
-        }
-        textField.reloadInputViews()
+//        // определим телефон это или нет
+//        var first: Bool = true
+//        var ls_1_end = ""
+//        if (ls.count < 1) {
+//            ls_1_end = ""
+//        } else {
+//            let ls_1 = ls.index(ls.startIndex, offsetBy: 1)
+//            ls_1_end = ls.substring(to: ls_1)
+//        }
+//
+//        var ls_12_end = ""
+//        if (ls.count < 2) {
+//            ls_12_end = ""
+//        } else {
+//            let ls_12 = ls.index(ls.startIndex, offsetBy: 2)
+//            ls_12_end = ls.substring(to: ls_12)
+//        }
+//        if (ls_1_end == "+") {
+//            itsPhone = true
+//        }
+//        if (!itsPhone) {
+//            if (ls_12_end == "89") || (ls_12_end == "79") {
+//                itsPhone = true
+//            }
+//        }
+//
+//        var new_ls: String = ""
+//        first = true
+//        var j: Int = 1
+//        for character in ls {
+//            if (first) {
+//                new_ls = String(character)
+//                first = false
+//            } else {
+//                if (itsPhone) {
+//                    if (ls_1_end == "+") {
+//                        if (j == 2) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 3) {
+//                            new_ls = new_ls + "(" + String(character)
+//                        } else if (j == 4) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 5) {
+//                            new_ls = new_ls + String(character) + ")"
+//                        } else if (j == 6) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 7) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 8) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 9) {
+//                            new_ls = new_ls + "-" + String(character)
+//                        } else if (j == 10) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 11) {
+//                            new_ls = new_ls + "_" + String(character)
+//                        } else if (j == 12) {
+//                            new_ls = new_ls + String(character)
+//                        } else {
+//                            new_ls = new_ls + String(character)
+//                        }
+//                    } else {
+//                        if (j == 2) {
+//                            new_ls = new_ls + "(" + String(character)
+//                        } else if (j == 3) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 4) {
+//                            new_ls = new_ls + String(character) + ")"
+//                        } else if (j == 5) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 6) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 7) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 8) {
+//                            new_ls = new_ls + "-" + String(character)
+//                        } else if (j == 9) {
+//                            new_ls = new_ls + String(character)
+//                        } else if (j == 10) {
+//                            new_ls = new_ls + "-" + String(character)
+//                        } else if (j == 11) {
+//                            new_ls = new_ls + String(character)
+//                        } else {
+//                            new_ls = new_ls + String(character)
+//                        }
+//                    }
+//                } else {
+//                    new_ls = new_ls + String(character)
+//                }
+//            }
+//            j = j + 1
+//        }
+//
+//        if (itsPhone) {
+//            if (ls_1_end == "+") {
+//                if (j == 2) {
+//                    new_ls = new_ls + "*(***)***-**-**"
+//                } else if (j == 3) {
+//                    new_ls = new_ls + "(***)***-**-**"
+//                } else if (j == 4) {
+//                    new_ls = new_ls + "**)***-**-**"
+//                } else if (j == 5) {
+//                    new_ls = new_ls + "*)***-**-**"
+//                } else if (j == 6) {
+//                    new_ls = new_ls + "***-**-**"
+//                } else if (j == 7) {
+//                    new_ls = new_ls + "**-**-**"
+//                } else if (j == 8) {
+//                    new_ls = new_ls + "*-**-**"
+//                } else if (j == 9) {
+//                    new_ls = new_ls + "-**-**"
+//                } else if (j == 10) {
+//                    new_ls = new_ls + "*-**"
+//                } else if (j == 11) {
+//                    new_ls = new_ls + "-**"
+//                } else if (j == 12) {
+//                    new_ls = new_ls + "*"
+//                }
+//            } else {
+//                if (j == 3) {
+//                    new_ls = new_ls + "**)***-**-**"
+//                } else if (j == 4) {
+//                    new_ls = new_ls + "*)***-**-**"
+//                } else if (j == 5) {
+//                    new_ls = new_ls + "***-**-**"
+//                } else if (j == 6) {
+//                    new_ls = new_ls + "**-**-**"
+//                } else if (j == 7) {
+//                    new_ls = new_ls + "*-**-**"
+//                } else if (j == 8) {
+//                    new_ls = new_ls + "-**-**"
+//                } else if (j == 9) {
+//                    new_ls = new_ls + "*-**"
+//                } else if (j == 10) {
+//                    new_ls = new_ls + "-**"
+//                } else if (j == 11) {
+//                    new_ls = new_ls + "*"
+//                }
+//            }
+//        }
+//
+//        textField.text = new_ls
+//
+//        // Установим курсор, если это телефон
+//        if (itsPhone) {
+//            var jj = j
+//            if (ls_1_end == "+") {
+//                if (j == 2) {
+//                    jj = 1
+//                }
+//                if (j > 5) {
+//                    jj = j + 1
+//                }
+//                if (j > 8) {
+//                    jj = j + 2
+//                }
+//                if (j > 10) {
+//                    jj = j + 3
+//                }
+//            } else {
+//                if (j > 4) {
+//                    jj = j + 1
+//                }
+//                if (j > 7) {
+//                    jj = j + 2
+//                }
+//                if (j > 9) {
+//                    jj = j + 3
+//                }
+//            }
+//            if let newPosition = textField.position(from: textField.beginningOfDocument, offset: jj) {
+//                textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+//            }
+//        }
+//
+//        // Установим тип - для номера телефона - только цифры
+//        if (itsPhone) {
+//            textField.keyboardType = UIKeyboardType.phonePad
+//        } else {
+//            textField.keyboardType = UIKeyboardType.default
+//        }
+//        textField.reloadInputViews()
         
         return false
         

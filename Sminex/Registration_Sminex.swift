@@ -8,24 +8,25 @@
 
 import UIKit
 
-class Registration_Sminex: UIViewController, UITextFieldDelegate {
+final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     
-    @IBOutlet weak var edLS:        UITextField!
-    @IBOutlet weak var indicator:   UIActivityIndicatorView!
-    @IBOutlet weak var btn_go:      UIButton!
-    @IBOutlet weak var txtDesc:     UILabel!
+    @IBOutlet private weak var edLS:        UITextField!
+    @IBOutlet private weak var indicator:   UIActivityIndicatorView!
+    @IBOutlet private weak var btn_go:      UIButton!
+    @IBOutlet private weak var txtDesc:     UILabel!
     
     open var isReg_ = true
     
-    var responseString:NSString = ""
+    private var responseString = ""
     
-    var ls:String = ""
+    private var ls = ""
+    
     // Признак того, вводим мы телефон или нет
-    var itsPhone: Bool = false
+    private var itsPhone = false
     
-    @IBAction func btn_go_action(_ sender: UIButton) {
+    @IBAction private func btn_go_action(_ sender: UIButton) {
         
-        if (edLS.text != "") {
+        if edLS.text != "" {
             self.startAnimation()
             // Здесь мы проверяем есть ли лиц. счет или номер телефона
             // Если нет лиц. счета -                 txtDesc = "Лицевой счет " + edLS + " не зарегистрирован".
@@ -47,46 +48,44 @@ class Registration_Sminex: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction func btn_cancel(_ sender: UIButton) {
+    @IBAction private func btn_cancel(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func registration() {
+    private func registration() {
         var ls_for_zapros = ls.replacingOccurrences(of: "+", with: "")
         ls_for_zapros = ls.replacingOccurrences(of: " ", with: "")
         if (itsPhone) {
             ls_for_zapros = "7" + ls_for_zapros.substring(fromIndex: 1)
         }
-        let urlPath = Server.SERVER + Server.REGISTRATION_SMINEX + "identOrPhone=" + ls_for_zapros
-        let url: NSURL = NSURL(string: urlPath)!
-        let request = NSMutableURLRequest(url: url as URL)
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.REGISTRATION_SMINEX + "identOrPhone=" + ls_for_zapros)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    DispatchQueue.main.async(execute: {
-                                                        self.stopAnimation()
-                                                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                        alert.addAction(cancelAction)
-                                                        self.present(alert, animated: true, completion: nil)
-                                                    })
-                                                    return
-                                                }
-                                                
-                                                self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
-                                                print("responseString = \(self.responseString)")
-                                                
-                                                self.choice_reg()
-        })
-        task.resume()
-        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.stopAnimation()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            self.choiceReg()
+        }.resume()
     }
     
-    func forgotPass() {
+    private func forgotPass() {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "identOrPhone=" + edLS.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
         request.httpMethod = "GET"
@@ -103,15 +102,17 @@ class Registration_Sminex: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
-            print("responseString = \(self.responseString)")
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
             self.choice()
             
             }.resume()
     }
     
-    func choice() {
+    private func choice() {
         
         DispatchQueue.main.async {
             
@@ -128,7 +129,9 @@ class Registration_Sminex: UIViewController, UITextFieldDelegate {
                 
             } else if self.responseString == "xxx" {
                 self.changeDescTextTo(isError: true, text: "Ошибка сервера. Попробуйте позже")
-                
+            
+            } else if self.responseString.contains("error") {
+                self.changeDescTextTo(isError: true, text: self.responseString.replacingOccurrences(of: "error:", with: ""))
             } else {
                 self.changeDescTextTo(isError: false)
                 self.performSegue(withIdentifier: "reg_step1", sender: self)
@@ -136,7 +139,7 @@ class Registration_Sminex: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func choice_reg() {
+    private func choiceReg() {
         if (responseString.contains("error")) {
             DispatchQueue.main.async(execute: {
                 self.stopAnimation()
@@ -167,25 +170,25 @@ class Registration_Sminex: UIViewController, UITextFieldDelegate {
         btn_go.alpha = 0.5
     }
     
-    @objc func ViewTapped(recognizer: UIGestureRecognizer) {
+    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
     }
     
-    func startAnimation() {
+    private func startAnimation() {
         indicator.isHidden = false
         indicator.startAnimating()
         
         btn_go.isHidden = true
     }
     
-    func stopAnimation() {
+    private func stopAnimation() {
         indicator.isHidden = true
         indicator.stopAnimating()
         
         btn_go.isHidden = false
     }
     
-    func changeDescTextTo(isError: Bool, text: String? = nil) {
+    private func changeDescTextTo(isError: Bool, text: String? = nil) {
         
         // Если доступно, изменяем с анимацией
         // если нет, то без анимации
@@ -232,7 +235,7 @@ class Registration_Sminex: UIViewController, UITextFieldDelegate {
         
     }
     
-    func changeGoButton(isEnabled: Bool) {
+    private func changeGoButton(isEnabled: Bool) {
         
         // Если доступно, изменяем с анимацией
         // если нет, то без анимации
@@ -267,11 +270,13 @@ class Registration_Sminex: UIViewController, UITextFieldDelegate {
             
             let vc  = segue.destination as!  Registration_Sminex_SMS
             if (self.itsPhone) {
-                vc.number_phone = self.edLS.text!
-                vc.number_ls = ""
+                vc.numberPhone_ = self.edLS.text!
+                vc.numberLs_    = ""
+                vc.isReg_       = isReg_
             } else {
-                vc.number_phone = ""
-                vc.number_ls = self.edLS.text!
+                vc.numberPhone_ = ""
+                vc.numberLs_    = self.edLS.text!
+                vc.isReg_       = isReg_
             }
         }
     }

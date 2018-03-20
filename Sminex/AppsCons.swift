@@ -95,12 +95,12 @@ final class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             let AppCons        = segue.destination as! AppCons
             AppCons.title      = "Заявка №" + app.number!
-            AppCons.txt_tema   = app.tema!
-            AppCons.txt_text   = app.text!
-            AppCons.txt_date   = app.date!
-            AppCons.id_app     = app.number!
-            AppCons.txt_adress = app.adress!
-            AppCons.txt_phone  = app.phone!
+            AppCons.txtTema_   = app.tema!
+            AppCons.txtText_   = app.text!
+            AppCons.txtDate_   = app.date!
+            AppCons.idApp_     = app.number!
+            AppCons.txtAdress_ = app.adress!
+            AppCons.txtPhone_  = app.phone!
             AppCons.delegate   = self
         }
     }

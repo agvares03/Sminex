@@ -8,87 +8,77 @@
 
 import UIKit
 
-class ChoiceLS: UITableViewController {
+final class ChoiceLS: UITableViewController {
 
-    @IBAction func cancelItem(_ sender: UIBarButtonItem) {
+    @IBAction private func cancelItem(_ sender: UIBarButtonItem) {
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    @IBOutlet weak var streetCell: UITableViewCell!
-    @IBOutlet weak var flatCell: UITableViewCell!
-    @IBOutlet weak var lsCell: UITableViewCell!
-    @IBOutlet weak var phone: UITextField!
-    @IBAction func choice(_ sender: UIButton) {
+    @IBOutlet private weak var streetCell:  UITableViewCell!
+    @IBOutlet private weak var flatCell:    UITableViewCell!
+    @IBOutlet private weak var lsCell:      UITableViewCell!
+    @IBOutlet private weak var phone:       UITextField!
     
-    }
+    @IBAction private func choice(_ sender: UIButton) {}
     
-    let Streets: [String] = []
-    let Flats: [String] = []
-    let LS: [String] = []
+    private let streetsArray:    [String] = []
+    private let flatsArray:      [String] = []
+    private let lsArray:         [String] = []
     
-    var street = -1
-    var streetStr = ""
-    var flat = -1
-    var flatStr = ""
-    var ls = -1
-    var lsStr = ""
+    private var street      = -1
+    private var ls          = -1
+    private var flat        = -1
+    private var streetStr   = ""
+    private var flatStr     = ""
+    private var lsStr       = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Установим общий стиль
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
         
-        load_data()
-        update_views()
+        loadData()
+        updateViews()
         
     }
     
-    func load_data() {
-        
+    private func loadData() {}
+    
+    private func updateViews() {
+        streetCell.detailTextLabel?.text    = streetString()
+        flatCell.detailTextLabel?.text      = flatString()
+        lsCell.detailTextLabel?.text        = lsString()
     }
     
-    func update_views() {
-        streetCell.detailTextLabel?.text = streetString()
-        flatCell.detailTextLabel?.text = flatString()
-        lsCell.detailTextLabel?.text = lsString()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func streetString() -> String {
+    private func streetString() -> String {
         if street == -1 {
             return "не выбран"
         }
-        if street >= 0 && street < Streets.count {
-            return Streets[street]
+        if street >= 0 && street < streetsArray.count {
+            return streetsArray[street]
         }
         return ""
     }
     
-    func flatString() -> String {
+    private func flatString() -> String {
         if flat == -1 {
             return "не выбран"
         }
-        if flat >= 0 && flat < Flats.count {
-            return Flats[flat]
+        if flat >= 0 && flat < flatsArray.count {
+            return flatsArray[flat]
         }
         return ""
     }
     
-    func lsString() -> String {
+    private func lsString() -> String {
         if ls == -1 {
             return "не выбран"
         }
-        if ls >= 0 && ls < LS.count {
-            return LS[ls]
+        if ls >= 0 && ls < lsArray.count {
+            return lsArray[ls]
         }
         return ""
     }

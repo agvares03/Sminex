@@ -150,9 +150,9 @@ final class Choice_UK_Street: UIViewController {
         
         if segue.identifier == "get_regions_street" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = regionsNames
-            selectItemController.selectedIndex = teckRegion
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = regionsNames
+            selectItemController.selectedIndex_ = teckRegion
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.clearRaions()
                 self.clearCities()
@@ -174,9 +174,9 @@ final class Choice_UK_Street: UIViewController {
             }
         } else if segue.identifier == "get_raions_street" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = raionsNames
-            selectItemController.selectedIndex = teckRaion
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = raionsNames
+            selectItemController.selectedIndex_ = teckRaion
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.clearCities()
                 self.clearStreets()
@@ -195,9 +195,9 @@ final class Choice_UK_Street: UIViewController {
             }
         } else if segue.identifier == "get_cities_street" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = citiesNames
-            selectItemController.selectedIndex = teckCity
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = citiesNames
+            selectItemController.selectedIndex_ = teckCity
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.clearStreets()
                 self.clearUKs()
@@ -214,9 +214,9 @@ final class Choice_UK_Street: UIViewController {
             }
         } else if segue.identifier == "get_streets_street" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = streetsNames
-            selectItemController.selectedIndex = teckStreet
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = streetsNames
+            selectItemController.selectedIndex_ = teckStreet
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.clearUKs()
                 
@@ -231,9 +231,9 @@ final class Choice_UK_Street: UIViewController {
             }
         } else if segue.identifier == "get_uks_street" {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
-            selectItemController.strings = uksNames
-            selectItemController.selectedIndex = teckUK
-            selectItemController.selectHandler = { selectedIndex in
+            selectItemController.strings_ = uksNames
+            selectItemController.selectedIndex_ = teckUK
+            selectItemController.selectHandler_ = { selectedIndex in
                 
                 self.teckUK = selectedIndex
                 

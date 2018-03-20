@@ -16,13 +16,14 @@ protocol AddCommDelegateUser : class {
     func addCommDone(addApp: AddCom, addComm: String)
 }
 
-class AddCom: UIView, Modal {
-    var mainView = UIView()
-    var backgroundView = UIView()
-    var dialogView = UIView()
+final class AddCom: UIView, Modal {
     
-    var textComm: String = ""
-    let textEdit = UITextView()
+    var mainView        = UIView()
+    var backgroundView  = UIView()
+    var dialogView      = UIView()
+    
+    private var textComm = ""
+    private let textEdit = UITextView()
     
     weak var delegate: AppCons!
     weak var delegate_user: AppUser!

@@ -20,7 +20,7 @@ protocol Modal {
 extension Modal where Self:UIView{
     func show(animated:Bool){
         self.backgroundView.alpha = 0
-//        UIApplication.shared.delegate?.window??.rootViewController?.view.addSubview(self)
+        
         mainView.addSubview(self)
         if animated {
             UIView.animate(withDuration: 0.33, animations: {
@@ -31,13 +31,13 @@ extension Modal where Self:UIView{
             }, completion: { (completed) in
                 
             })
-        }else{
+        } else {
             self.backgroundView.alpha = 0.66
             self.dialogView.center  = self.center
         }
     }
     
-    func dismiss(animated:Bool){
+    func dismiss(animated: Bool){
         if animated {
             UIView.animate(withDuration: 0.33, animations: {
                 self.backgroundView.alpha = 0
@@ -49,7 +49,7 @@ extension Modal where Self:UIView{
             }, completion: { (completed) in
                 self.removeFromSuperview()
             })
-        }else{
+        }else {
             self.removeFromSuperview()
         }
         

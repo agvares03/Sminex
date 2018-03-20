@@ -318,27 +318,27 @@ class ViewController_UK: UIViewController {
         
         if segue.identifier == Optional("goForget") {
             let forgotVC: ForgotPass = segue.destination as! ForgotPass
-            forgotVC.letter = edLogin.text ?? ""
+            forgotVC.letter_ = edLogin.text ?? ""
             
         } else if segue.identifier == Optional("goRegistration") {
             let regVC: Registration = segue.destination as! Registration
-            regVC.letter = edLogin.text ?? ""
+            regVC.letter_ = edLogin.text ?? ""
             
         } else if segue.identifier == Optional("goForget_uk") {
             let forgotVC: ForgotPass = segue.destination as! ForgotPass
-            forgotVC.letter = edLogin.text ?? ""
+            forgotVC.letter_ = edLogin.text ?? ""
             
         } else if segue.identifier == Optional("goRegistration_uk") {
             let regVC: Registration = segue.destination as! Registration
-            regVC.letter = edLogin.text ?? ""
+            regVC.letter_ = edLogin.text ?? ""
             
         } else if segue.identifier == Optional("goRegistration2") {
             let regVC: Registration = segue.destination as! Registration
-            regVC.letter = edLogin.text ?? ""
+            regVC.letter_ = edLogin.text ?? ""
             
         } else if segue.identifier == Optional("goRegistration3") {
             let regVC: RegistrationAdress = segue.destination as! RegistrationAdress
-            regVC.letter = edLogin.text ?? ""
+            regVC.letter_ = edLogin.text ?? ""
             
         } else if segue.identifier == Optional("choice_uk_street") {
             let choiseUKStreetVC = segue.destination as! Choice_UK_Street

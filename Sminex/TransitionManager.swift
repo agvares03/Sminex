@@ -8,9 +8,9 @@
 
 import UIKit
 
-class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
+final class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
     
-    var presenting = true
+    private var presenting = true
     
     // MARK: методы протокола UIViewControllerAnimatedTransitioning
     
