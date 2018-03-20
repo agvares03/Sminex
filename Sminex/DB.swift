@@ -385,9 +385,9 @@ class DB: NSObject, XMLParserDelegate {
                                                                 if let flats = houses["Premises"] as? [String: AnyObject] {
                                                                     let id_flat = flats["ID"] as? String
                                                                     var flat_name = flats["Number"] as? String
-                                                                    if (flat_name?.characters.count == 1) {
+                                                                    if (flat_name?.count == 1) {
                                                                         flat_name = "00" + flat_name!
-                                                                    } else if (flat_name?.characters.count == 2) {
+                                                                    } else if (flat_name?.count == 2) {
                                                                         flat_name = "0" + flat_name!
                                                                     }
                                                                     self.add_flat(ID: Int64(id_flat!)!, id_house: Int64(id_house!)!, name: flat_name! + " кв.")

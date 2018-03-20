@@ -85,11 +85,7 @@ class AddCom: UIView, Modal {
         btn_ok.setTitleColor(UIColor.white, for: UIControlState.normal)
         // Определим интерфейс для разных ук
         let server = Server()
-        #if isGKRZS
-            btn_ok.backgroundColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            btn_ok.backgroundColor = server.hexStringToUIColor(hex: "#32CD32")
-        #endif
+        btn_ok.backgroundColor = server.hexStringToUIColor(hex: "#32CD32")
         btn_ok.layer.cornerRadius = 10
         btn_ok.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTappedAdd)))
         dialogView.addSubview(btn_cancel)
@@ -104,15 +100,15 @@ class AddCom: UIView, Modal {
         addSubview(dialogView)
     }
     
-    func didTappedCancel(){
+    @objc func didTappedCancel(){
         dismiss(animated: true)
     }
     
-    func didTappedOnBackgroundView(){
+    @objc func didTappedOnBackgroundView(){
         endEditing(true)
     }
     
-    func didTappedAdd() {
+    @objc func didTappedAdd() {
         if self.delegate != nil {
             textComm = textEdit.text
             self.delegate?.addCommDone(addApp: self, addComm: textComm)

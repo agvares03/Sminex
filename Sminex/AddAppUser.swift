@@ -13,24 +13,25 @@ protocol AddAppDelegate : class {
     func addAppDone(addApp: AddAppUser)
 }
 
-class AddAppUser: UITableViewController {
+final class AddAppUser: UITableViewController {
     
-    var responseString: String = ""
     // id аккаунта текущего
-    var id_author: String = ""
-    var name_account: String = ""
-    var id_account: String = ""
-    var id_app: String = ""
+    private var authorId = ""
     
-    @IBOutlet weak var typeCell: UITableViewCell!
-    @IBOutlet weak var priorityCell: UITableViewCell!
-    @IBOutlet weak var tema: UITextField!
-    @IBOutlet weak var textApp: UITextField!
+    private var responseString    = ""
+    private var nameAccount       = ""
+    private var idAccount         = ""
+    private var idApp             = ""
+    
+    @IBOutlet private weak var typeCell:      UITableViewCell!
+    @IBOutlet private weak var priorityCell:  UITableViewCell!
+    @IBOutlet private weak var tema:          UITextField!
+    @IBOutlet private weak var textApp:       UITextField!
     
     weak var delegate: AddAppDelegate?
     
-    @IBOutlet weak var btnAdd: UIButton!
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet private weak var btnAdd:    UIButton!
+    @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
     @IBAction func cancelItem(_ sender: UIBarButtonItem) {
         navigationController?.dismiss(animated: true, completion: nil)
@@ -39,52 +40,52 @@ class AddAppUser: UITableViewController {
     // Создать заявку
     @IBAction func AddApp(_ sender: UIButton) {
         
-        self.StartIndicator()
+        self.startIndicator()
         
-        let txtLogin: String = edLogin.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let txtPass: String  = edPass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let txtTema: String  = tema.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let txtText: String  = textApp.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        let txtLogin = edLogin.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtPass  = edPass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtTema  = tema.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtText  = textApp.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         
         var itsOk: Bool = true
-        if (txtTema == "") {
+        if txtTema == "" {
             itsOk = false
         }
-        if (txtText == "") {
+        if txtText == "" {
             itsOk = false
         }
-        if ((self.appType + 1) <= 0) {
+        if appType + 1 <= 0 {
             itsOk = false
         }
-        if ((self.appPriority + 1) <= 0) {
+        if appPriority + 1 <= 0 {
             itsOk = false
         }
-        if (!itsOk) {
-            self.StopIndicator()
+        if !itsOk {
+            self.stopIndicator()
             var textError: String = "Не заполнены параметры: "
             var firstPar: Bool = true
-            if (txtTema == "") {
+            if txtTema == "" {
                 textError = textError + "тема"
                 firstPar = false
             }
-            if (txtText == "") {
-                if (firstPar) {
+            if txtText == "" {
+                if firstPar {
                     textError = textError + "текст"
                     firstPar = false
                 } else {
                     textError = textError + ", текст"
                 }
             }
-            if ((self.appType + 1) <= 0) {
-                if (firstPar) {
+            if appType + 1 <= 0 {
+                if firstPar {
                     textError = textError + "тип"
                     firstPar = false
                 } else {
                     textError = textError + ", тип"
                 }
             }
-            if ((self.appPriority + 1) <= 0) {
-                if (firstPar) {
+            if appPriority + 1 <= 0 {
+                if firstPar {
                     textError = textError + "приоритет"
                     firstPar = false
                 } else {
@@ -95,7 +96,9 @@ class AddAppUser: UITableViewController {
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
+            
         } else {
+            
             let urlPath = Server.SERVER + Server.ADD_APP +
                 "login=" + txtLogin +
                 "&pwd=" + txtPass +
@@ -104,83 +107,80 @@ class AddAppUser: UITableViewController {
                 "&type=" + String(self.appType + 1) +
                 "&priority=" + String(self.appPriority + 1)
             
-            let url: NSURL = NSURL(string: urlPath)!
-            let request = NSMutableURLRequest(url: url as URL)
+            var request = URLRequest(url: URL(string: urlPath)!)
             request.httpMethod = "GET"
             
-            let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                                  completionHandler: {
-                                                    data, response, error in
-                                                    
-                                                    if error != nil {
-                                                        DispatchQueue.main.async(execute: {
-                                                            self.StopIndicator()
-                                                            let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                            alert.addAction(cancelAction)
-                                                            self.present(alert, animated: true, completion: nil)
-                                                        })
-                                                        return
-                                                    }
-                                                    
-                                                    self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                                                    print("responseString = \(self.responseString)")
-                                                    
-                                                    self.choice()
-            })
-            task.resume()
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.stopIndicator()
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                self.responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+                    print("responseString = \(self.responseString)")
+                #endif
+                
+                self.choice()
+                
+                }.resume()
         }
-    
     }
     
-    var edLogin: String = ""
-    var edPass: String = ""
+    private var edLogin  = ""
+    private var edPass   = ""
     
-    let appTypes = ["Бухгалтерия", "Паспортный стол", "Сантехник", "Электрик", "Другие вопросы"]
-    let appPriorities = ["а) низкий", "б) средний", "в) высокий", "г) критичный"]
+    private let appTypes      = ["Бухгалтерия", "Паспортный стол", "Сантехник", "Электрик", "Другие вопросы"]
+    private let appPriorities = ["а) низкий", "б) средний", "в) высокий", "г) критичный"]
     
-    var appType = -1
-    var appTypeStr = ""
-    var appPriority = -1
-    var appPriorityStr = ""
-    var appTheme = ""
-    var appText = ""
-
-    func choice() {
-        if (responseString == "1") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private var appType           = -1
+    private var appTypeStr        = ""
+    private var appPriority       = -1
+    private var appPriorityStr    = ""
+    private var appTheme          = ""
+    private var appText           = ""
+    
+    private func choice() {
+        DispatchQueue.main.async {
+            
+            if self.responseString == "1" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "2") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+                
+            } else if self.responseString == "2" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Неверный логин или пароль", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "xxx") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+                
+            } else if self.responseString == "xxx" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Не удалось. Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else {
-            DispatchQueue.main.async(execute: {
                 
-                // все ок - запишем заявку в БД (необходимо получить и записать авт. комментарий в БД
+            } else {
+                // Все ок - запишем заявку в БД (необходимо получить и записать авт. комментарий в БД
                 // Запишем заявку в БД
                 let db = DB()
-                db.add_app(id: 1, number: self.responseString, text: self.textApp.text!, tema: self.tema.text!, date: self.date_teck()!, adress: "", flat: "", phone: "", owner: self.name_account, is_close: 1, is_read: 1, is_answered: 1)
+                db.add_app(id: 1, number: self.responseString, text: self.textApp.text!, tema: self.tema.text!, date: self.dateTeck()!, adress: "", flat: "", phone: "", owner: self.nameAccount, is_close: 1, is_read: 1, is_answered: 1)
                 db.getComByID(login: self.edLogin, pass: self.edPass, number: self.responseString)
                 
-                self.StopIndicator()
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Успешно", message: "Создана заявка №" + self.responseString, preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
@@ -192,9 +192,8 @@ class AddAppUser: UITableViewController {
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
-            })
+            }
         }
-        
     }
     
     override func viewDidLoad() {
@@ -202,33 +201,23 @@ class AddAppUser: UITableViewController {
         
         // Установим общий стиль
         let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
         navigationBar?.tintColor = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
-
-        self.StopIndicator()
         
-        let defaults = UserDefaults.standard
-        edLogin = defaults.string(forKey: "login")!
-        edPass = defaults.string(forKey: "pass")!
+        self.stopIndicator()
+        
+        let defaults    = UserDefaults.standard
+        edLogin         = defaults.string(forKey: "login")!
+        edPass          = defaults.string(forKey: "pass")!
         // получим id текущего аккаунта
-        id_author    = defaults.string(forKey: "id_account")!
-        name_account = defaults.string(forKey: "name")!
-        id_account   = defaults.string(forKey: "id_account")!
+        authorId        = defaults.string(forKey: "id_account")!
+        nameAccount     = defaults.string(forKey: "name")!
+        idAccount       = defaults.string(forKey: "id_account")!
         
-        typeCell.detailTextLabel?.text = appTypeString()
-        priorityCell.detailTextLabel?.text = appPriorityString()
-        tema.text = appTheme
-        textApp.text = appText
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
+        typeCell.detailTextLabel?.text      = appTypeString()
+        priorityCell.detailTextLabel?.text  = appPriorityString()
+        tema.text       = appTheme
+        textApp.text    = appText
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -236,13 +225,8 @@ class AddAppUser: UITableViewController {
         self.textApp.resignFirstResponder()
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    func appTypeString() -> String {
+    private func appTypeString() -> String {
         if appType == -1 {
             return "не выбран"
         }
@@ -254,7 +238,7 @@ class AddAppUser: UITableViewController {
         return ""
     }
     
-    func appPriorityString() -> String {
+    private func appPriorityString() -> String {
         if appPriority == -1 {
             return "не выбран"
         }
@@ -287,7 +271,7 @@ class AddAppUser: UITableViewController {
         }
     }
     
-    func StartIndicator() {
+    private func startIndicator() {
         self.btnAdd.isEnabled = false
         self.btnAdd.isHidden  = true
         
@@ -295,7 +279,7 @@ class AddAppUser: UITableViewController {
         self.indicator.isHidden = false
     }
     
-    func StopIndicator() {
+    private func stopIndicator() {
         self.btnAdd.isEnabled = true
         self.btnAdd.isHidden  = false
         
@@ -303,13 +287,11 @@ class AddAppUser: UITableViewController {
         self.indicator.isHidden = true
     }
     
-    func date_teck() -> (String)? {
-        let date = NSDate()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        let dateString = dateFormatter.string(from: date as Date)
+    private func dateTeck() -> (String)? {
+        let dateFormatter           = DateFormatter()
+        dateFormatter.dateFormat    = "dd.MM.yyyy HH:mm:ss"
+        let dateString = dateFormatter.string(from: Date())
         return dateString
         
     }
-
 }

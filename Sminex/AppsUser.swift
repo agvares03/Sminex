@@ -9,14 +9,15 @@
 import UIKit
 import CoreData
 
-class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSource, AddAppDelegate, ShowAppDelegate {
+final class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSource, AddAppDelegate, ShowAppDelegate {
 
-    @IBOutlet weak var menuButton: UIBarButtonItem!
-    @IBOutlet weak var tableApps: UITableView!
+    @IBOutlet private weak var menuButton:    UIBarButtonItem!
+    @IBOutlet private weak var tableApps:     UITableView!
     
-    var fetchedResultsController: NSFetchedResultsController<Applications>?
+    private var fetchedResultsController: NSFetchedResultsController<Applications>?
     
-    @IBOutlet weak var switchCloseApps: UISwitch!
+    @IBOutlet private weak var switchCloseApps: UISwitch!
+    
     @IBAction func switch_Go(_ sender: UISwitch) {
         updateCloseApps()
     }
@@ -25,10 +26,8 @@ class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSource, Ad
         super.viewDidLoad()
         
         // Установим общий стиль
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
 
         if self.revealViewController() != nil {
@@ -39,21 +38,13 @@ class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSource, Ad
         
         tableApps.delegate = self
         
-        load_data()
+        loadData()
         updateTable()
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
-        
     }
     
-    func load_data() {
-        if (switchCloseApps.isOn) {
+    private func loadData() {
+        
+        if switchCloseApps.isOn {
             self.fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Applications", keysForSort: ["number"]) as? NSFetchedResultsController<Applications>
         } else {
             let close: NSNumber = 1
@@ -64,11 +55,14 @@ class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSource, Ad
         do {
             try fetchedResultsController!.performFetch()
         } catch {
-            print(error)
+            
+            #if DEBUG
+                print(error)
+            #endif
         }
     }
     
-    func updateTable() {
+    private func updateTable() {
         tableApps.reloadData()
     }
     
@@ -83,29 +77,17 @@ class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSource, Ad
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let app = (fetchedResultsController?.object(at: indexPath))! as Applications
         
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let img = UIImage(named: "ic_comm_list_white")
-        #else
-            let img = UIImage(named: "ic_comm_list")
-        #endif
-        
-        if (app.is_close == 1) {
+        if app.is_close == 1 {
             let cell = self.tableApps.dequeueReusableCell(withIdentifier: "AppCell") as! AppsCell
-            cell.Number.text    = app.number
-            cell.tema.text      = app.tema
-            cell.text_app.text  = app.text
-            cell.date_app.text  = app.date
-            cell.image_app.image = img
-            
-            #if isGKRZS
-                let server = Server()
-                cell.Number.textColor = server.hexStringToUIColor(hex: "#1f287f")
-            #else
-            #endif
+            cell.Number.text        = app.number
+            cell.tema.text          = app.tema
+            cell.text_app.text      = app.text
+            cell.date_app.text      = app.date
+            cell.image_app.image    = UIImage(named: "ic_comm_list")
             
             cell.delegate = self
             return cell
+            
         } else {
             let cell = self.tableApps.dequeueReusableCell(withIdentifier: "AppCellClose") as! AppsCloseCell
             cell.Number.text    = app.number
@@ -118,56 +100,82 @@ class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSource, Ad
         }
     
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "show_app" {
             let indexPath = tableApps.indexPathForSelectedRow!
             let app = fetchedResultsController!.object(at: indexPath)
             
-            let AppUser             = segue.destination as! AppUser
-            AppUser.title           = "Заявка №" + app.number!
-            AppUser.txt_tema   = app.tema!
-            AppUser.txt_text   = app.text!
-            AppUser.txt_date   = app.date!
-            AppUser.id_app     = app.number!
-            AppUser.delegate   = self
-            AppUser.App        = app
-        } else if (segue.identifier == "show_app_close") {
+            let appUser             = segue.destination as! AppUser
+            appUser.title           = "Заявка №" + app.number!
+            appUser.txtTema_   = app.tema!
+            appUser.txtText_   = app.text!
+            appUser.txtDate_   = app.date!
+            appUser.idApp_     = app.number!
+            appUser.delegate  = self
+            appUser.apps_      = app
+        
+        } else if segue.identifier == "show_app_close" {
             let indexPath = tableApps.indexPathForSelectedRow!
             let app = fetchedResultsController!.object(at: indexPath)
             
-            let AppUser             = segue.destination as! AppUser
-            AppUser.title           = "Заявка №" + app.number!
-            AppUser.txt_tema   = app.tema!
-            AppUser.txt_text   = app.text!
-            AppUser.txt_date   = app.date!
-            AppUser.id_app     = app.number!
-            AppUser.delegate   = self
-            AppUser.App        = app
-        } else if (segue.identifier == "add_app") {
+            let appUser             = segue.destination as! AppUser
+            appUser.title           = "Заявка №" + app.number!
+            appUser.txtTema_   = app.tema!
+            appUser.txtText_   = app.text!
+            appUser.txtDate_   = app.date!
+            appUser.idApp_     = app.number!
+            appUser.delegate  = self
+            appUser.apps_      = app
+        
+        } else if segue.identifier == "add_app" {
             let AddApp = (segue.destination as! UINavigationController).viewControllers.first as! AddAppUser
             AddApp.delegate = self
         }
     }
     
     func addAppDone(addApp: AddAppUser) {
-        load_data()
-        self.tableApps.reloadData()
+        loadData()
+        tableApps.reloadData()
     }
     
     func showAppDone(showApp: AppUser) {
-        load_data()
+        loadData()
         updateTable()
     }
     
-    func updateCloseApps() {
-        load_data()
+    private func updateCloseApps() {
+        loadData()
         updateTable()
     }
 
 }
+
+
+
+
+
+private final class AppsCell: UITableViewCell {
+    
+    var delegate: UIViewController?
+    
+    @IBOutlet weak var image_app: UIImageView!
+    @IBOutlet weak var Number:    UILabel!
+    @IBOutlet weak var tema:      UILabel!
+    @IBOutlet weak var text_app:  UILabel!
+    @IBOutlet weak var date_app:  UILabel!
+    
+}
+
+private final class AppsCloseCell: UITableViewCell {
+    
+    var delegate: UIViewController?
+    
+    @IBOutlet weak var Number:    UILabel!
+    @IBOutlet weak var tema:      UILabel!
+    @IBOutlet weak var text_app:  UILabel!
+    @IBOutlet weak var date_app:  UILabel!
+    
+}
+

@@ -18,14 +18,6 @@ class Files: UIViewController {
         //        navigationBar?.backgroundColor = UIColor.blue
         navigationBar?.tintColor = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
     }
 
     override func didReceiveMemoryWarning() {

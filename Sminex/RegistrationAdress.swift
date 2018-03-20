@@ -46,7 +46,7 @@ class RegistrationAdress: UIViewController {
     @IBOutlet weak var btnReg: UIButton!
     
     @IBAction func goCancel(_ sender: UIButton) {
-        self.presentingViewController?.dismiss(animated: false, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func goReg(_ sender: UIButton) {
@@ -306,23 +306,6 @@ class RegistrationAdress: UIViewController {
                                                 
         })
         task.resume()
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            fon_top.image               = UIImage(named: "fon_top_gkrzs")
-            home.image                  = UIImage(named: "home_gkrzs")
-            flat.image                  = UIImage(named: "flat_gkrzs")
-            number_ls.image             = UIImage(named: "new_number_ls_gkrzs")
-            new_phone.image             = UIImage(named: "new_phone_gkrzs")
-            new_mail.image              = UIImage(named: "new_mail_gkrzs")
-            btnReg.backgroundColor      = server.hexStringToUIColor(hex: "#1f287f")
-            btnCancel.tintColor         = server.hexStringToUIColor(hex: "#c0c0c0")
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
-        
     }
     
     func end_choice_adress() {
@@ -448,7 +431,7 @@ class RegistrationAdress: UIViewController {
         task.resume()
     }
     
-    func ViewTapped(recognizer: UIGestureRecognizer) {
+    @objc func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
     }
 

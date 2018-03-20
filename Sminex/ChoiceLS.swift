@@ -46,14 +46,6 @@ class ChoiceLS: UITableViewController {
         load_data()
         update_views()
         
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.tintColor = server.hexStringToUIColor(hex: "#c0c0c0")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
-        
     }
     
     func load_data() {

@@ -8,18 +8,15 @@
 
 import UIKit
 
-class SettingsUser: UIViewController {
+final class SettingsUser: UIViewController {
 
-    @IBOutlet weak var menuButton: UIBarButtonItem!
+    @IBOutlet private weak var menuButton: UIBarButtonItem!
     
-    @IBAction func changeUser(_ sender: UIButton) {
+    @IBAction private func changeUser(_ sender: UIButton) {
         saveUsersDefaults()
-        
-        let vc  = self.storyboard?.instantiateViewController(withIdentifier: "login_activity") as!  ViewController
-        self.present(vc, animated: true, completion: nil)
     }
     
-    func saveUsersDefaults() {
+    private func saveUsersDefaults() {
         let defaults = UserDefaults.standard
         defaults.setValue("", forKey: "login")
         defaults.setValue("", forKey: "pass")
@@ -30,10 +27,8 @@ class SettingsUser: UIViewController {
         super.viewDidLoad()
         
         // Установим общий стиль
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
 
         if self.revealViewController() != nil {
@@ -41,31 +36,5 @@ class SettingsUser: UIViewController {
             menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
-        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

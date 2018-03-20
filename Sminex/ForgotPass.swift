@@ -42,22 +42,9 @@ class ForgotPass: UIViewController, UITextFieldDelegate {
         view.addGestureRecognizer(theTap)
         
         FogLogin.text = letter
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            fon_top.image               = UIImage(named: "fon_top_gkrzs")
-            new_face.image              = UIImage(named: "new_face_gkrzs")
-            btnFogrot.backgroundColor    = server.hexStringToUIColor(hex: "#1f287f")
-            btnCancel.tintColor            = server.hexStringToUIColor(hex: "#c0c0c0")
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
-        
     }
     
-    func ViewTapped(recognizer: UIGestureRecognizer) {
+    @objc func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
     }    
     
@@ -138,7 +125,7 @@ class ForgotPass: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func backBtn(_ sender: UIButton) {
-        self.presentingViewController?.dismiss(animated: false, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     func StartIndicator(){
@@ -173,7 +160,7 @@ class ForgotPass: UIViewController, UITextFieldDelegate {
         // определим телефон это или нет
         var first: Bool = true
         var ls_1_end = ""
-        if (ls.characters.count < 1) {
+        if (ls.count < 1) {
             ls_1_end = ""
         } else {
             let ls_1 = ls.index(ls.startIndex, offsetBy: 1)
@@ -181,7 +168,7 @@ class ForgotPass: UIViewController, UITextFieldDelegate {
         }
         
         var ls_12_end = ""
-        if (ls.characters.count < 2) {
+        if (ls.count < 2) {
             ls_12_end = ""
         } else {
             let ls_12 = ls.index(ls.startIndex, offsetBy: 2)

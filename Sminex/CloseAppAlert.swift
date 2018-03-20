@@ -13,108 +13,107 @@ protocol CloseAppDelegate : class {
     func closeAppDone(closeApp: CloseAppAlert)
 }
 
-class CloseAppAlert: UIViewController, FloatRatingViewDelegate {
+final class CloseAppAlert: UIViewController, FloatRatingViewDelegate {
     
-    weak var delegate: CloseAppDelegate?
-    var App: Applications? = nil
+    open weak var delegate: CloseAppDelegate?
+    open var apps_:         Applications?
     
     // Номер заявки
-    var number:String = ""
-    var responseString:NSString = ""
+    open var number_                 = ""
+    private var responseString = ""
     
     // Данные для создания комментария
-    var id_author: String = ""
-    var name_account: String = ""
-    var id_account: String = ""
-    var teck_id: Int64 = 1
-
-    @IBOutlet weak var floatRatingView: FloatRatingView!
-    @IBOutlet weak var closeComm: UITextField!
+    open var idAuthor_      = ""
+    open var nameAccount_   = ""
+    open var idAccount_     = ""
+    open var teckId_: Int64 = 1
     
-    @IBOutlet weak var btnClose: UIButton!
-    @IBOutlet weak var btnOk: UIButton!
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet private weak var floatRatingView:   FloatRatingView!
+    @IBOutlet private weak var closeComm:         UITextField!
     
-    @IBAction func close_action_close(_ sender: UIButton) {
+    @IBOutlet private weak var btnClose:  UIButton!
+    @IBOutlet private weak var btnOk:     UIButton!
+    @IBOutlet private weak var indicator: UIActivityIndicatorView!
+    
+    @IBAction private func close_action_close(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func close_action_do(_ sender: UIButton) {
-        self.StartIndicator()
+    @IBAction private func close_action_do(_ sender: UIButton) {
+        self.startIndicator()
         let urlPath = Server.SERVER + Server.CLOSE_APP +
-                             "&reqID=" + self.number.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! +
-                             "&text=" + self.closeComm.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! +
-                             "&mark=" + self.mark.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let url: NSURL = NSURL(string: urlPath)!
-        let request = NSMutableURLRequest(url: url as URL)
+            "&reqID=" + self.number_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! +
+            "&text=" + self.closeComm.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! +
+            "&mark=" + self.mark.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        var request = URLRequest(url: URL(string: urlPath)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    DispatchQueue.main.async(execute: {
-                                                        self.StopIndicator()
-                                                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                        alert.addAction(cancelAction)
-                                                        self.present(alert, animated: true, completion: nil)
-                                                    })
-                                                    return
-                                                }
-                                                
-                                                self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
-                                                print("responseString = \(self.responseString)")
-                                                
-                                                self.choice()
-        })
-        task.resume()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.stopIndicator()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            
+            self.choice()
+            }.resume()
     }
     
     // Оценка
-    var mark = "7"
+    private var mark = "7"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Rating
         // Required float rating view params
         self.floatRatingView.emptyImage = UIImage(named: "StarEmpty")
-        self.floatRatingView.fullImage = UIImage(named: "StarFull")
+        self.floatRatingView.fullImage  = UIImage(named: "StarFull")
         // Optional params
-        self.floatRatingView.delegate = self
-        self.floatRatingView.contentMode = UIViewContentMode.scaleAspectFit
-        self.floatRatingView.maxRating = 5
-        self.floatRatingView.minRating = 1
-        self.floatRatingView.rating = 3.5
-        self.floatRatingView.editable = true
-        self.floatRatingView.halfRatings = true
-        self.floatRatingView.floatRatings = false
+        self.floatRatingView.delegate       = self
+        self.floatRatingView.contentMode    = UIViewContentMode.scaleAspectFit
+        self.floatRatingView.maxRating      = 5
+        self.floatRatingView.minRating      = 1
+        self.floatRatingView.rating         = 3.5
+        self.floatRatingView.editable       = true
+        self.floatRatingView.halfRatings    = true
+        self.floatRatingView.floatRatings   = false
         
-        self.StopIndicator()
+        self.stopIndicator()
     }
     
-    func choice() {
-        if (responseString == "0") {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+    private func choice() {
+        DispatchQueue.main.async {
+            
+            if self.responseString == "0" {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Не удалось закрыть заявку, попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else if (responseString == "1") {
-            DispatchQueue.main.async(execute: {
                 
+            } else if self.responseString == "1" {
                 // Успешно - обновим значение в БД
-                self.App?.is_close = 0
+                self.apps_?.is_close = 0
                 CoreDataManager.instance.saveContext()
                 
                 let db = DB()
-                db.add_comm(ID: self.teck_id, id_request: Int64(self.number)!, text: "Заявка закрыта с оценкой - " + self.mark, added: self.date_teck()!, id_Author: self.id_author, name: self.name_account, id_account: self.id_account)
+                db.add_comm(ID: self.teckId_, id_request: Int64(self.number_)!, text: "Заявка закрыта с оценкой - " + self.mark, added: self.dateTeck()!, id_Author: self.idAuthor_, name: self.nameAccount_, id_account: self.idAccount_)
                 
-                self.StopIndicator()
+                self.stopIndicator()
                 
                 let alert = UIAlertController(title: "Успешно", message: "Заявка закрыта с оценкой - " + self.mark, preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
@@ -125,58 +124,57 @@ class CloseAppAlert: UIViewController, FloatRatingViewDelegate {
                 }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
-        } else {
-            DispatchQueue.main.async(execute: {
-                self.StopIndicator()
+                
+            } else {
+                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Не удалось закрыть заявку, попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            })
+            }
         }
     }
     
-    func StartIndicator(){
-        self.btnClose.isHidden = true
-        self.btnOk.isHidden = true
+    private func startIndicator() {
+        self.btnClose.isHidden  = true
+        self.btnOk.isHidden     = true
         
         self.indicator.startAnimating()
         self.indicator.isHidden = false
     }
     
-    func StopIndicator(){
-        self.btnClose.isHidden = false
-        self.btnOk.isHidden = false
+    private func stopIndicator() {
+        self.btnClose.isHidden  = false
+        self.btnOk.isHidden     = false
         
         self.indicator.stopAnimating()
         self.indicator.isHidden = true
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    func date_teck() -> (String)? {
-        let date = NSDate()
-        let dateFormatter = DateFormatter()
+    private func dateTeck() -> (String)? {
+        let dateFormatter        = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        let dateString = dateFormatter.string(from: date as Date)
+        let dateString           = dateFormatter.string(from: Date())
         return dateString
         
     }
-
+    
     // MARK: FloatRatingViewDelegate
     
     func floatRatingView(ratingView: FloatRatingView, isUpdating rating:Float) {
-        print(NSString(format: "%.0f", self.floatRatingView.rating) as String)
-        self.mark = NSString(format: "%.0f", self.floatRatingView.rating * 2) as String
+        
+        #if DEBUG
+            print(String(format: "%.0f", self.floatRatingView.rating))
+        #endif
+        self.mark = String(format: "%.0f", self.floatRatingView.rating * 2)
     }
     
     func floatRatingView(ratingView: FloatRatingView, didUpdate rating: Float) {
-        print(NSString(format: "%.0f", self.floatRatingView.rating * 2) as String)
-        self.mark = NSString(format: "%f.0", self.floatRatingView.rating * 2) as String
+        
+        #if DEBUG
+            print(String(format: "%.0f", self.floatRatingView.rating * 2))
+        #endif
+        self.mark = String(format: "%f.0", self.floatRatingView.rating * 2)
     }
-
+    
 }

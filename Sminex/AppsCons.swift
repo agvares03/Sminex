@@ -9,21 +9,19 @@
 import UIKit
 import CoreData
 
-class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSource, ShowAppConsDelegate {
+final class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSource, ShowAppConsDelegate {
 
-    @IBOutlet weak var menuButton: UIBarButtonItem!
-    @IBOutlet weak var tableApps: UITableView!
+    @IBOutlet private weak var menuButton: UIBarButtonItem!
+    @IBOutlet private weak var tableApps: UITableView!
     
-    var fetchedResultsController: NSFetchedResultsController<Applications>?
+    private var fetchedResultsController: NSFetchedResultsController<Applications>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Установим общий стиль
-        let navigationBar = self.navigationController?.navigationBar
-//        navigationBar?.barStyle = UIBarStyle.black
-//        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
         
         if self.revealViewController() != nil {
@@ -34,31 +32,25 @@ class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSource, Sh
         
         tableApps.delegate = self
         
-        load_data()
+        loadData()
         updateTable()
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
-        
     }
     
-    func load_data() {
+    private func loadData() {
         let close: NSNumber = 1
         let predicateFormat = String(format: " is_close =%@ ", close)
         self.fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Applications", keysForSort: ["number"], predicateFormat: predicateFormat) as? NSFetchedResultsController<Applications>
         do {
             try fetchedResultsController!.performFetch()
         } catch {
-            print(error)
+            
+            #if DEBUG
+                print(error)
+            #endif
         }
     }
     
-    func updateTable() {
+    private func updateTable() {
         tableApps.reloadData()
     }
     
@@ -72,13 +64,6 @@ class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSource, Sh
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let img = UIImage(named: "ic_comm_list_white")
-        #else
-            let img = UIImage(named: "ic_comm_list")
-        #endif
-        
         let app = (fetchedResultsController?.object(at: indexPath))! as Applications
         
         if (app.is_close == 1) {
@@ -87,13 +72,7 @@ class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSource, Sh
             cell.tema.text       = app.tema
             cell.text_app.text   = app.text
             cell.date_app.text   = app.date
-            cell.image_app.image = img
-            
-            #if isGKRZS
-                let server = Server()
-                cell.Number.textColor = server.hexStringToUIColor(hex: "#1f287f")
-            #else
-            #endif
+            cell.image_app.image = UIImage(named: "ic_comm_list")
             
             cell.delegate = self
             return cell
@@ -114,8 +93,8 @@ class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSource, Sh
             let indexPath = tableApps.indexPathForSelectedRow!
             let app = fetchedResultsController!.object(at: indexPath)
             
-            let AppCons             = segue.destination as! AppCons
-            AppCons.title           = "Заявка №" + app.number!
+            let AppCons        = segue.destination as! AppCons
+            AppCons.title      = "Заявка №" + app.number!
             AppCons.txt_tema   = app.tema!
             AppCons.txt_text   = app.text!
             AppCons.txt_date   = app.date!
@@ -125,14 +104,9 @@ class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSource, Sh
             AppCons.delegate   = self
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     func showAppDone(showAppCons: AppCons) {
-        load_data()
+        loadData()
         updateTable()
     }
 

@@ -8,18 +8,16 @@
 
 import UIKit
 
-class SettingsCons: UIViewController {
+final class SettingsCons: UIViewController {
 
-    @IBOutlet weak var menuButton: UIBarButtonItem!
+    @IBOutlet private weak var menuButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Установим общий стиль
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
 
         if self.revealViewController() != nil {
@@ -27,20 +25,5 @@ class SettingsCons: UIViewController {
             menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.tintColor = server.hexStringToUIColor(hex: "#c0c0c0")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
 }

@@ -103,28 +103,6 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
         load_data()
         updateTable()
         get_cons(id_acc: id_account)
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-            view_btn.backgroundColor = server.hexStringToUIColor(hex: "#1f287f")
-            fon_app.image = UIImage(named: "fon_app_gkrzs.jpg")
-            let image1 = UIImage(named: "ic_get_app_white")
-            btn1.setImage(image1, for: UIControlState.normal)
-            let image2 = UIImage(named: "ic_comm_action_white")
-            btn2.setImage(image2, for: UIControlState.normal)
-            let image3 = UIImage(named: "ic_send_app_white")
-            btn3.setImage(image3, for: UIControlState.normal)
-            let image4 = UIImage(named: "ic_ok_app_white")
-            btn4.setImage(image4, for: UIControlState.normal)
-            let image5 = UIImage(named: "ic_close_action_white")
-            btn5.setImage(image5, for: UIControlState.normal)
-            let image6 = UIImage(named: "ic_action_files_white")
-            btn6.setImage(image6, for: UIControlState.normal)
-        #else
-            // Оставим текущуий интерфейс
-        #endif
     }
 
     func load_data() {
@@ -139,11 +117,6 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func updateTable() {
         table_comments.reloadData()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -163,12 +136,6 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
             cell.text_comm.text  = comm.text
             self.teckID = comm.id + 1
             
-            #if isGKRZS
-                let server = Server()
-                cell.author.textColor = server.hexStringToUIColor(hex: "#1f287f")
-            #else
-            #endif
-            
             return cell
         } else {
             let cell = self.table_comments.dequeueReusableCell(withIdentifier: "CommConsCell") as! CommConsCell
@@ -176,12 +143,6 @@ class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSource {
             cell.date.text       = comm.date
             cell.text_comm.text  = comm.text
             self.teckID = comm.id + 1
-            
-            #if isGKRZS
-                let server = Server()
-                cell.author.textColor = server.hexStringToUIColor(hex: "#1f287f")
-            #else
-            #endif
             
             return cell
         }

@@ -9,37 +9,37 @@
 import UIKit
 import CoreData
 
-class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var fon_app: UIImageView!
+    @IBOutlet private weak var fon_app: UIImageView!
     
-    var currYear: String = ""
-    var currMonth: String = ""
-    var iterYear: String = "0"
-    var iterMonth: String = "0"
-    var minYear: String = ""
-    var minMonth: String = ""
-    var maxYear: String = ""
-    var maxMonth: String = ""
+    private var currYear    = ""
+    private var currMonth   = ""
+    private var iterYear    = "0"
+    private var iterMonth   = "0"
+    private var minYear     = ""
+    private var minMonth    = ""
+    private var maxYear     = ""
+    private var maxMonth    = ""
     
     // название месяца для вывода в шапку
-    var name_month: String = "";
+    private var name_month  = "";
     
     // Индекс сроки для группировки
-    var selectedRow = -5;
+    private var selectedRow = -5;
 
-    @IBOutlet weak var menuButton: UIBarButtonItem!
-    @IBOutlet weak var tableOSV: UITableView!
-    @IBOutlet weak var monthLabel: UILabel!
-    @IBOutlet weak var rigthButton: UIButton!
-    @IBOutlet weak var leftButton: UIButton!
+    @IBOutlet private weak var menuButton:  UIBarButtonItem!
+    @IBOutlet private weak var tableOSV:    UITableView!
+    @IBOutlet private weak var monthLabel:  UILabel!
+    @IBOutlet private weak var rigthButton: UIButton!
+    @IBOutlet private weak var leftButton:  UIButton!
     
-    var fetchedResultsController: NSFetchedResultsController<Saldo>?
+    private var fetchedResultsController: NSFetchedResultsController<Saldo>?
     
-    @IBAction func leftButtonDidPress(_ sender: UIButton) {
+    @IBAction private func leftButtonDidPress(_ sender: UIButton) {
         
-        var m = Int(iterMonth)!
-        var y = Int(iterYear)!
+        var m = Int(iterMonth) ?? 0
+        var y = Int(iterYear) ?? 0
         
         if m > 1 {
             m = m - 1
@@ -59,10 +59,10 @@ class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
     }
     
-    @IBAction func rightButtonDidPress(_ sender: UIButton) {
+    @IBAction private func rightButtonDidPress(_ sender: UIButton) {
         
-        var m = Int(iterMonth)!
-        var y = Int(iterYear)!
+        var m = Int(iterMonth) ?? 0
+        var y = Int(iterYear) ?? 0
         
         if m < 12 {
             m = m + 1
@@ -86,10 +86,8 @@ class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
         super.viewDidLoad()
         
         // Установим общий стиль
-        let navigationBar = self.navigationController?.navigationBar
-        //        navigationBar?.barStyle = UIBarStyle.black
-        //        navigationBar?.backgroundColor = UIColor.blue
-        navigationBar?.tintColor = UIColor.white
+        let navigationBar           = self.navigationController?.navigationBar
+        navigationBar?.tintColor    = UIColor.white
         navigationBar?.barTintColor = UIColor.blue
 
         if self.revealViewController() != nil {
@@ -103,14 +101,14 @@ class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
         currYear         = defaults.string(forKey: "year_osv")!
         currMonth        = defaults.string(forKey: "month_osv")!
         
-        iterMonth = currMonth
-        iterYear = currYear
+        iterMonth   = currMonth
+        iterYear    = currYear
         
         // Установим значения текущие (если нет данных вообще)
-        minMonth = iterMonth
-        minYear = iterYear
-        maxMonth = iterMonth
-        maxYear = iterYear
+        minMonth    = iterMonth
+        minYear     = iterYear
+        maxMonth    = iterMonth
+        maxYear     = iterYear
         
         tableOSV.delegate = self
         
@@ -119,26 +117,17 @@ class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
         updateMonthLabel()
         updateTable()
         updateArrowsEnabled()
-        
-        // Определим интерфейс для разных ук
-        #if isGKRZS
-            let server = Server()
-            navigationBar?.barTintColor = server.hexStringToUIColor(hex: "#1f287f")
-            leftButton.backgroundColor = server.hexStringToUIColor(hex: "#1f287f")
-            rigthButton.backgroundColor = server.hexStringToUIColor(hex: "#1f287f")
-            fon_app.image = UIImage(named: "fon_counters_gkrzs.jpg")
-        #else
-            // Оставим текущуий интерфейс
-        #endif
-        
     }
     
-    func updateBorderDates() {
+    private func updateBorderDates() {
         fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Saldo", keysForSort: ["year"], predicateFormat: nil) as? NSFetchedResultsController<Saldo>
         do {
             try fetchedResultsController?.performFetch()
         } catch {
-            print(error)
+            
+            #if DEBUG
+                print(error)
+            #endif
         }
         
         if (fetchedResultsController?.sections?.count)! > 0 {
@@ -147,32 +136,35 @@ class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 let rightCounter = fetchedResultsController?.sections?.first?.objects?.last as! Saldo
                 
                 minMonth = leftCounter.num_month!
-                minYear = leftCounter.year!
+                minYear  = leftCounter.year!
                 maxMonth = rightCounter.num_month!
-                maxYear = rightCounter.year!
+                maxYear  = rightCounter.year!
             }
         }
     }
     
-    func updateFetchedResultsController() {
-        let predicateFormat = String(format: "num_month = %@ AND year = %@", iterMonth, iterYear)
+    private func updateFetchedResultsController() {
+        let predicateFormat      = String(format: "num_month = %@ AND year = %@", iterMonth, iterYear)
         fetchedResultsController = CoreDataManager.instance.fetchedResultsControllerSaldo(entityName: "Saldo", keysForSort: ["usluga"], predicateFormat: predicateFormat) as NSFetchedResultsController<Saldo>
         do {
             try fetchedResultsController?.performFetch()
         } catch {
-            print(error)
+            
+            #if DEBUG
+                print(error)
+            #endif
         }
     }
     
-    func updateMonthLabel() {
-        monthLabel.text = get_name_month(number_month: iterMonth) + " " + (iterYear == "0" ? "-" : iterYear)
+    private func updateMonthLabel() {
+        monthLabel.text = getNameMonth(number_month: iterMonth) + " " + (iterYear == "0" ? "-" : iterYear)
     }
     
-    func updateTable() {
+    private func updateTable() {
         tableOSV.reloadData()
     }
     
-    func updateArrowsEnabled() {
+    private func updateArrowsEnabled() {
         let m = Int(iterMonth)!
         let y = Int(iterYear)!
         let minM = Int(minMonth)!
@@ -180,40 +172,40 @@ class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let maxM = Int(maxMonth)!
         let maxY = Int(maxYear)!
         
-        leftButton.isEnabled = !(m <= minM && y <= minY);
+        leftButton.isEnabled  = !(m <= minM && y <= minY);
         rigthButton.isEnabled = !(m >= maxM && y >= maxY);
     }
 
-    func get_name_month(number_month: String) -> String {
-        var rezult: String = ""
+    private func getNameMonth(number_month: String) -> String {
+        var result: String = ""
         
-        if (number_month == "1") {
-            rezult = "Январь"
-        } else if (number_month == "2") {
-            rezult = "Февраль"
-        } else if (number_month == "3") {
-            rezult = "Март"
-        } else if (number_month == "4") {
-            rezult = "Апрель"
-        } else if (number_month == "5") {
-            rezult = "Май"
-        } else if (number_month == "6") {
-            rezult = "Июнь"
-        } else if (number_month == "7") {
-            rezult = "Июль"
-        } else if (number_month == "8") {
-            rezult = "Август"
-        } else if (number_month == "9") {
-            rezult = "Сентябрь"
-        } else if (number_month == "10") {
-            rezult = "Октябрь"
-        } else if (number_month == "11") {
-            rezult = "Ноябрь"
-        } else if (number_month == "12") {
-            rezult = "Декабрь"
+        if number_month == "1" {
+            result = "Январь"
+        } else if number_month == "2" {
+            result = "Февраль"
+        } else if number_month == "3" {
+            result = "Март"
+        } else if number_month == "4" {
+            result = "Апрель"
+        } else if number_month == "5" {
+            result = "Май"
+        } else if number_month == "6" {
+            result = "Июнь"
+        } else if number_month == "7" {
+            result = "Июль"
+        } else if number_month == "8" {
+            result = "Август"
+        } else if number_month == "9" {
+            result = "Сентябрь"
+        } else if number_month == "10" {
+            result = "Октябрь"
+        } else if number_month == "11" {
+            result = "Ноябрь"
+        } else if number_month == "12" {
+            result = "Декабрь"
         }
         
-        return rezult
+        return result
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -265,32 +257,42 @@ class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         
         tableOSV.reloadData()
-        
     }
-    
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 40
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let headerCell = self.tableOSV.dequeueReusableCell(withIdentifier: "HeaderCell") as! HeaderOSVCell
-//        return headerCell
-//    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
+
+// MARK: -CELLS
+
+private final class OSVCell: UITableViewCell {
+    
+    var delegate: UIViewController?
+    
+    @IBOutlet weak var usluga: UILabel!
+    @IBOutlet weak var start: UILabel!
+    @IBOutlet weak var plus: UILabel!
+    @IBOutlet weak var minus: UILabel!
+    @IBOutlet weak var end: UILabel!
+    @IBOutlet weak var img: UIImageView!
+    
+}
+
+
+private final class OSVCell_Group: UITableViewCell {
+    
+    var delegate: UIViewController?
+    
+    @IBOutlet weak var start_diff: UILabel!
+    @IBOutlet weak var plus_diff: UILabel!
+    @IBOutlet weak var minus_diff: UILabel!
+    @IBOutlet weak var end_diff: UILabel!
+    
+}
+
+private final class OSVCell_Header_Group: UITableViewCell {
+    
+    var delegate: UIViewController?
+    
+    @IBOutlet weak var usluga: UILabel!
+}
+
+private final class HeaderOSVCell: UITableViewCell {}
+

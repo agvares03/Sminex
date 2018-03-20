@@ -11,14 +11,14 @@ import FirebaseMessaging
 
 class FirstController: UIViewController {
     
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
-    var window: UIWindow?
-    var responseString:NSString = ""
+    private var window: UIWindow?
+    private var responseString = ""
     
-    var role_reg = "2"
-    var name_uk: String = ""
-
+    private var roleReg   = "2"
+    private var nameUK    = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,203 +27,170 @@ class FirstController: UIViewController {
         
         let defaults = UserDefaults.standard
         let name_uk_let = defaults.string(forKey: "name_uk")
-        if (name_uk_let != nil) {
-            name_uk = String(describing: name_uk_let)
+        if name_uk_let != nil {
+            nameUK = String(describing: name_uk_let)
         }
-
+        
         // Если необходимо - покажем окно выбора управляющей компании
-        #if isGKRZS
-            var site: String? = ""
-            do {
-                site = try UserDefaults.standard.string(forKey: "SiteSM")
-            } catch {
-                let defaults = UserDefaults.standard
-                defaults.setValue("", forKey: "SiteSM")
-                defaults.synchronize()
-            }
-            if (site == nil) {
-                let defaults = UserDefaults.standard
-                defaults.setValue("", forKey: "SiteSM")
-                defaults.synchronize()
-            }
-        #endif
         startActivity()
     }
     
-    func startActivity() {
+    private func startActivity() {
         
-        let urlPath = Server.SERVER + Server.CHECK_REGISTRATION
-        let url: NSURL = NSURL(string: urlPath)!
-        let request = NSMutableURLRequest(url: url as URL)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.CHECK_REGISTRATION)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    DispatchQueue.main.async(execute: {
-                                                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
-                                                        
-                                                            exit(0)
-                                                        
-                                                        }
-                                                        alert.addAction(cancelAction)
-                                                        self.present(alert, animated: true, completion: nil)
-                                                    })
-                                                    return
-                                                }
-                                                
-                                                self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
-                                                print("responseString = \(self.responseString)")
-                                                
-                                                self.choice()
-        })
-        task.resume()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
+                        
+                        exit(0)
+                        
+                    }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            
+            self.choice()
+            }.resume()
     }
     
-    func choice() {
-        if (responseString != "xxx") {
-            DispatchQueue.main.async(execute: {
+    private func choice() {
+        
+        if responseString != "xxx" {
+            
+            DispatchQueue.main.async {
                 var answer = self.responseString.components(separatedBy: ";")
                 let getUK = answer[0]
-                self.role_reg = answer[1]
+                self.roleReg = answer[1]
                 
-                if (getUK == "1") {
+                if getUK == "1" {
                     
-                    if (self.name_uk == "") {
-                        let vc  = self.storyboard?.instantiateViewController(withIdentifier: "choice_uk") as!  Choice_UK
-                        vc.role_reg = self.role_reg
-                        self.present(vc, animated: true, completion: nil)
+                    if self.nameUK == "" {
+                        self.performSegue(withIdentifier: "choice_uk", sender: self)
+                        
                     } else {
-                        let vc  = self.storyboard?.instantiateViewController(withIdentifier: "login_activity_uk") as!  ViewController_UK
-                        vc.role_reg = self.role_reg
-                        self.present(vc, animated: true, completion: nil)
+                        self.performSegue(withIdentifier: "login_UK", sender: self)
                     }
                     
                 } else {
                     
                     // Если в памяти есть логин и пароль, сразу зайдем в приложение
-                    self.go_to_apps();
+                    self.goToApps();
                     
                 }
-                
-            })
-        } else {
-            
+            }
         }
     }
     
-    func go_to_apps() {
+    private func goToApps() {
         
-        let defaults = UserDefaults.standard
-        let login = defaults.string(forKey: "login")
-        let pass = defaults.string(forKey: "pass")
+        let defaults    = UserDefaults.standard
+        let login       = defaults.string(forKey: "login")
+        let pass        = defaults.string(forKey: "pass")
         
-        if (login != nil) && (login != "") {
-            if (pass != nil) && (login != "") {
+        if login != nil && login != "" {
+            if pass != nil && login != "" {
                 enter(login: login!, pass: pass!)
+                
             } else {
-                let vc  = self.storyboard?.instantiateViewController(withIdentifier: "login_activity") as!  ViewController
-                vc.role_reg = self.role_reg
-                self.present(vc, animated: true, completion: nil)
+                performSegue(withIdentifier: "login_activity", sender: self)
             }
         } else {
-            let vc  = self.storyboard?.instantiateViewController(withIdentifier: "login_activity") as!  ViewController
-            vc.role_reg = self.role_reg
-            self.present(vc, animated: true, completion: nil)
+            performSegue(withIdentifier: "login_activity", sender: self)
         }
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if (segue.identifier == "login_UK") {
-            let Login = segue.destination as! ViewController_UK
-            Login.role_reg = self.role_reg
-        } else if (segue.identifier == "login") {
-            let Login = segue.destination as! ViewController
-            Login.role_reg = self.role_reg
+        if segue.identifier == "login_UK" {
+            let login = segue.destination as! UINavigationController
+            (login.viewControllers.first as! ViewController_UK).roleReg_ = self.roleReg
+            
+        } else if segue.identifier == "login" {
+            let login = segue.destination as! ViewController
+            login.roleReg_ = self.roleReg
+            
+        } else if segue.identifier == "login_activity" {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = roleReg
+            
+        } else if segue.identifier == "choice_uk" {
+            
+            let vc = segue.destination as! Choice_UK
+            vc.roleReg_ = roleReg
         }
-
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
     // ВХОД В ПРИЛОЖЕНИЕ - ДУБЛЬ ФУНКЦИЙ ИЗ ViewController
     // зайдем в приложение прям отсюда
-    func enter(login: String, pass: String) {
-        // Авторизация пользователя
-        let txtLogin = login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+    private func enter(login: String, pass: String) {
         
-        let urlPath = Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + txtPass;
-        let url: NSURL = NSURL(string: urlPath)!
-        let request = NSMutableURLRequest(url: url as URL)
+        // Авторизация пользователя
+        let txtLogin = login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + txtPass)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    DispatchQueue.main.async(execute: {
-                                                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                                                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                                                        alert.addAction(cancelAction)
-                                                        self.present(alert, animated: true, completion: nil)
-                                                    })
-                                                    return
-                                                }
-                                                
-                                                self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
-                                                print("responseString = \(self.responseString)")
-                                                
-                                                self.go_to_App(login: login, pass: pass)
-        })
-        task.resume()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            
+            self.goToApp(login: login, pass: pass)
+            }.resume()
     }
     
-    func go_to_App(login: String, pass: String) {
-        if (responseString == "1") {
-            DispatchQueue.main.async(execute: {
-                let vc  = self.storyboard?.instantiateViewController(withIdentifier: "login_activity") as!  ViewController
-                vc.role_reg = self.role_reg
-                self.present(vc, animated: true, completion: nil)
-            })
-        } else if (responseString == "2") {
-            DispatchQueue.main.async(execute: {
-                let vc  = self.storyboard?.instantiateViewController(withIdentifier: "login_activity") as!  ViewController
-                vc.role_reg = self.role_reg
-                self.present(vc, animated: true, completion: nil)
-            })
-        } else {
-            DispatchQueue.main.async(execute: {
+    private func goToApp(login: String, pass: String) {
+        DispatchQueue.main.async {
+            
+            if self.responseString == "1" {
+                self.performSegue(withIdentifier: "login_activity", sender: self)
+                
+            } else if self.responseString == "2" || self.responseString.contains("error") {
+                self.performSegue(withIdentifier: "login_activity", sender: self)
+                
+            } else {
                 
                 // авторизация на сервере - получение данных пользователя
                 var answer = self.responseString.components(separatedBy: ";")
                 
                 // сохраним значения в defaults
-                self.save_global_data(date1: answer[0], date2: answer[1], can_count: answer[2], mail: answer[3], id_account: answer[4], isCons: answer[5], name: answer[6], history_counters: answer[7], strah: "0")
+                self.saveGlobalData(date1: answer[0], date2: answer[1], can_count: answer[2], mail: answer[3], id_account: answer[4], isCons: answer[5], name: answer[6], history_counters: answer[7], strah: "0")
                 
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken
-                if (token != nil) {
+                if token != nil {
                     self.send_id_app(id_account: answer[4], token: token!)
                 }
                 
@@ -231,7 +198,7 @@ class FirstController: UIViewController {
                 let db = DB()
                 
                 // Если пользователь - окно пользователя, если консультант - другое окно
-                if (answer[5] == "1") {          // консультант
+                if answer[5] == "1" {          // консультант
                     
                     // ЗАЯВКИ С КОММЕНТАРИЯМИ
                     db.del_db(table_name: "Comments")
@@ -268,13 +235,21 @@ class FirstController: UIViewController {
                     self.performSegue(withIdentifier: "AppsUserNow", sender: self)
                     
                 }
-
-            })
+            }
         }
     }
     
     // сохранениеи глобальных значений
-    func save_global_data(date1: String, date2: String, can_count: String, mail: String, id_account: String, isCons: String, name: String, history_counters: String, strah: String) {
+    private func saveGlobalData(date1:            String,
+                                date2:            String,
+                                can_count:        String,
+                                mail:             String,
+                                id_account:       String,
+                                isCons:           String,
+                                name:             String,
+                                history_counters: String,
+                                strah:            String) {
+        
         let defaults = UserDefaults.standard
         defaults.setValue(date1, forKey: "date1")
         defaults.setValue(date2, forKey: "date2")
@@ -289,30 +264,30 @@ class FirstController: UIViewController {
     }
     
     // Отправка ид для оповещений
-    func send_id_app(id_account: String, token: String) {
+    private func send_id_app(id_account: String, token: String) {
         let urlPath = Server.SERVER + Server.SEND_ID_GOOGLE +
             "cid=" + id_account +
             "&did=" + token +
             "&os=" + "iOS" +
             "&version=" + UIDevice.current.systemVersion +
             "&model=" + UIDevice.current.model
-        let url: NSURL = NSURL(string: urlPath)!
-        let request = NSMutableURLRequest(url: url as URL)
+        
+        var request = URLRequest(url: URL(string: urlPath)!)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request as URLRequest,
-                                              completionHandler: {
-                                                data, response, error in
-                                                
-                                                if error != nil {
-                                                    return
-                                                }
-                                                
-                                                self.responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!
-                                                print("token (add) = \(String(describing: self.responseString))")
-                                                
-        })
-        task.resume()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("token (add) = \(String(describing: self.responseString))")
+            #endif
+            
+            }.resume()
     }
-    
 }
