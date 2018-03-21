@@ -63,8 +63,8 @@ final class Registration_Sminex_SMS: UIViewController {
             
             showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
             smsField.isSecureTextEntry = false
-        } else {
             
+        } else {
             showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
             smsField.isSecureTextEntry = true
         }
@@ -115,7 +115,11 @@ final class Registration_Sminex_SMS: UIViewController {
     @objc func keyboardWillShow(sender: NSNotification) {
         
         if isNeedToScroll() {
-            self.view.frame.origin.y = -30
+            view.frame.origin.y = -30
+            
+            if isNeedToScrollMore() {
+                view.frame.origin.y = -100
+            }
         }
     }
     
@@ -123,7 +127,7 @@ final class Registration_Sminex_SMS: UIViewController {
     @objc func keyboardWillHide(sender: NSNotification) {
         
         if isNeedToScroll() {
-            self.view.frame.origin.y = 0
+            view.frame.origin.y = 0
         }
     }
     

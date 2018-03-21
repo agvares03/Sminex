@@ -15,6 +15,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var txtDesc:     UILabel!
     @IBOutlet private weak var showpswrd:   UIButton!
+    @IBOutlet private var textConstraint:   NSLayoutConstraint!
     
     open var isReg_ = true
     
@@ -197,8 +198,12 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification) {
         
-        if isNeedToScroll() {    
-            self.view.frame.origin.y = -70
+        if isNeedToScroll() {
+            view.frame.origin.y = -70
+            
+            if isNeedToScrollMore() {
+                textConstraint.constant -= 30
+            }
         }
     }
     
@@ -207,6 +212,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         
         if isNeedToScroll() {
             self.view.frame.origin.y = 0
+            
+            if isNeedToScrollMore() {
+                textConstraint.constant += 30
+            }
         }
     }
     

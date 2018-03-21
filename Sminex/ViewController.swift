@@ -118,7 +118,14 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardWillShow(sender: NSNotification) {
         
         if isNeedToScroll() {
-            self.view.frame.origin.y = -100
+            
+            if isNeedToScrollMore() {
+                view.frame.origin.y = 0
+                scroll.contentOffset = CGPoint(x: 0, y: 140)
+            
+            } else {
+                view.frame.origin.y = -100
+            }
         }
     }
     
@@ -126,7 +133,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardWillHide(sender: NSNotification) {
         
         if isNeedToScroll() {
-            self.view.frame.origin.y = 0
+            view.frame.origin.y = 0
+            
+            if isNeedToScrollMore() {
+                scroll.contentOffset = CGPoint(x: 0, y: 0)
+            }
         }
     }
     
@@ -148,10 +159,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
         request.httpMethod = "GET"
-        
-        #if DEBUG
-            print(request.url!)
-        #endif
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in

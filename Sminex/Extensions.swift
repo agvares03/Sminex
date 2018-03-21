@@ -119,3 +119,11 @@ func isNeedToScroll() -> Bool {
                              Device.simulator(Device.iPhone4),
                              Device.simulator(Device.iPhone4s)])
 }
+
+func isNeedToScrollMore() -> Bool {
+    
+    return Device().isOneOf([Device.iPhone4,
+                             Device.iPhone4s,
+                             Device.simulator(Device.iPhone4),
+                             Device.simulator(Device.iPhone4s)])
+}

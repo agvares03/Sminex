@@ -18,6 +18,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
     @IBOutlet private weak var descTxt:         UILabel!
     @IBOutlet private weak var showpswrd:       UIButton!
     @IBOutlet private weak var waitView:        UIActivityIndicatorView!
+    @IBOutlet private var txtConstraint:        NSLayoutConstraint!
     
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
@@ -113,7 +114,12 @@ final class RegistrationSminexEnterPassword: UIViewController {
     @objc func keyboardWillShow(sender: NSNotification) {
         
         if isNeedToScroll() {
-            self.view.frame.origin.y = -50
+            view.frame.origin.y = -50
+            
+            if isNeedToScrollMore() {
+                view.frame.origin.y = -60
+                txtConstraint.constant -= 70
+            }
         }
     }
     
@@ -121,7 +127,11 @@ final class RegistrationSminexEnterPassword: UIViewController {
     @objc func keyboardWillHide(sender: NSNotification) {
         
         if isNeedToScroll() {
-            self.view.frame.origin.y = 0
+            view.frame.origin.y = 0
+            
+            if isNeedToScrollMore() {
+                txtConstraint.constant = 100
+            }
         }
     }
     
