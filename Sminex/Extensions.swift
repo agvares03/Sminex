@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DeviceKit
 
 extension UIView {
     
@@ -100,4 +101,21 @@ extension String {
         allowed.addCharacters(in: unreserved)
         return self.addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet)
     }
+}
+
+func isNeedToScroll() -> Bool {
+    
+    // Только если >4" экран
+    return Device().isOneOf([Device.iPhone5,
+                             Device.iPhone5s,
+                             Device.iPhone5c,
+                             Device.iPhoneSE,
+                             Device.iPhone4,
+                             Device.iPhone4s,
+                             Device.simulator(Device.iPhone5),
+                             Device.simulator(Device.iPhone5s),
+                             Device.simulator(Device.iPhone5c),
+                             Device.simulator(Device.iPhoneSE),
+                             Device.simulator(Device.iPhone4),
+                             Device.simulator(Device.iPhone4s)])
 }

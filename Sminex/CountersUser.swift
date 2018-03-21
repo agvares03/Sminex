@@ -158,9 +158,9 @@ final class CountersUser: UIViewController, UITableViewDelegate, UITableViewData
             #endif
         }
         
-        if (fetchedResultsController?.sections?.count ?? 0) > 0 {
-            if (fetchedResultsController?.sections?.first?.numberOfObjects ?? 0) > 0 {
-                let leftCounter  = fetchedResultsController?.sections?.first?.objects?.first as! Counters
+        if (fetchedResultsController?.sections?.count)! > 0 {
+            if (fetchedResultsController?.sections?.first?.numberOfObjects)! > 0 {
+                let leftCounter = fetchedResultsController?.sections?.first?.objects?.first as! Counters
                 let rightCounter = fetchedResultsController?.sections?.first?.objects?.last as! Counters
                 
                 minMonth = leftCounter.num_month!
@@ -220,11 +220,11 @@ final class CountersUser: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let counter = (fetchedResultsController?.object(at: indexPath))! as Counters
         self.Count = counter
-        if self.history_counters == "0" {
+        if (self.history_counters == "0") {
             let cell = self.tableCounters.dequeueReusableCell(withIdentifier: "Cell_no_history") as! CounterCell_no_history
             cell.name_counter.text = counter.count_name
             cell.teck.text = counter.value.description
-            cell.delegate  = self
+            cell.delegate = self
             return cell
         } else {
             let cell = self.tableCounters.dequeueReusableCell(withIdentifier: "Cell") as! CounterCell
@@ -242,11 +242,11 @@ final class CountersUser: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.history_counters == "0" {
+        if (self.history_counters == "0") {
             let headerCell = self.tableCounters.dequeueReusableCell(withIdentifier: "HeaderCell_no_history") as! HeaderCounterCEll_no_history
             return headerCell
         } else {
-            let headerCell = self.tableCounters.dequeueReusableCell(withIdentifier: "HeaderCell") as! HeaderCounterCell
+            let headerCell = self.tableCounters.dequeueReusableCell(withIdentifier: "HeaderCell") as? HeaderCounterCell
             return headerCell
         }
     }

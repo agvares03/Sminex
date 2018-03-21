@@ -155,4 +155,10 @@ struct Segues {
         static let toSelectLs        = "selectLS"
         static let toSelectFlat      = "selectFlat"
     }
+    
+    struct fromRegistrationSminexEnterPassword {
+        
+        static let toAppCons         = "appsCons"
+        static let toAppsUser        = "toAppsUser"
+    }
 }

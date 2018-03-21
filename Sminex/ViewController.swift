@@ -8,7 +8,6 @@
 
 import UIKit
 import FirebaseMessaging
-import DeviceKit
 import Arcane
 
 final class ViewController: UIViewController, UITextFieldDelegate {
@@ -118,16 +117,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification) {
         
-        // Только если 4" экран
-        if Device().isOneOf([Device.iPhone5,
-                             Device.iPhone5s,
-                             Device.iPhone5c,
-                             Device.iPhoneSE,
-                             Device.simulator(Device.iPhone5),
-                             Device.simulator(Device.iPhone5s),
-                             Device.simulator(Device.iPhone5c),
-                             Device.simulator(Device.iPhoneSE)]) {
-            
+        if isNeedToScroll() {
             self.view.frame.origin.y = -100
         }
     }
@@ -135,16 +125,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification) {
         
-        // Только если 4" экран
-        if Device().isOneOf([Device.iPhone5,
-                             Device.iPhone5s,
-                             Device.iPhone5c,
-                             Device.iPhoneSE,
-                             Device.simulator(Device.iPhone5),
-                             Device.simulator(Device.iPhone5s),
-                             Device.simulator(Device.iPhone5c),
-                             Device.simulator(Device.iPhoneSE)]) {
-            
+        if isNeedToScroll() {
             self.view.frame.origin.y = 0
         }
     }

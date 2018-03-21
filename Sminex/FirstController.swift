@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseMessaging
+import Arcane
 
 class FirstController: UIViewController {
     
@@ -145,7 +146,7 @@ class FirstController: UIViewController {
         let txtLogin = login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + txtPass)!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -169,6 +170,58 @@ class FirstController: UIViewController {
             
             self.goToApp(login: login, pass: pass)
             }.resume()
+    }
+    
+    
+    private func getHash(pass: String, salt: Data) -> String {
+        
+        let btl = pass.data(using: .utf16LittleEndian)!
+        let bSalt = Data(base64Encoded: salt)!
+        
+        var bAll = bSalt + btl
+        
+        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
+        bAll.withUnsafeBytes {
+            _ = CC_SHA1($0, CC_LONG(bAll.count), &digest)
+        }
+        
+        let psw = Data(bytes: digest).base64String.replacingOccurrences(of: "\n", with: "")
+        
+        return psw.stringByAddingPercentEncodingForRFC3986()!
+    }
+    
+    private func getSalt(login: String) -> Data {
+        
+        var salt: Data?
+        let queue = DispatchGroup()
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
+        
+        queue.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            defer {
+                queue.leave()
+            }
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            salt = data
+            }.resume()
+        
+        queue.wait()
+        return salt!
     }
     
     private func goToApp(login: String, pass: String) {

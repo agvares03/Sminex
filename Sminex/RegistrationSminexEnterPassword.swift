@@ -8,6 +8,8 @@
 
 import UIKit
 import DeviceKit
+import FirebaseMessaging
+import Arcane
 
 final class RegistrationSminexEnterPassword: UIViewController {
     
@@ -29,7 +31,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
         
         startAnimation()
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.CHANGE_PASSWRD + "login=" + login_ + "&pwd=" + passTextField.text!)!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.CHANGE_PASSWRD + "login=" + login_ + "&pwd=" + getHash(pass: passTextField.text ?? "", salt: getSalt(login: login_)))!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -47,15 +49,22 @@ final class RegistrationSminexEnterPassword: UIViewController {
                 return
             }
             
-            self.responceString = String(data: data!, encoding: .utf8) ?? ""
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print(self.responceString)
+                print(self.responseString)
             #endif
             
             DispatchQueue.main.async {
                 
-                self.choise()
+                if self.responseString.contains(find: "error") {
+                    self.descTxt.text = self.responseString.replacingOccurrences(of: "error:", with: "")
+                    self.descTxt.textColor = .red
+                    
+                } else {
+                    
+                    self.makeAuth()
+                }
             }
         }.resume()
     }
@@ -80,7 +89,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
     
     open var login_ = ""
     
-    private var responceString = ""
+    private var responseString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,16 +112,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification) {
         
-        // Только если 4" экран
-        if Device().isOneOf([Device.iPhone5,
-                             Device.iPhone5s,
-                             Device.iPhone5c,
-                             Device.iPhoneSE,
-                             Device.simulator(Device.iPhone5),
-                             Device.simulator(Device.iPhone5s),
-                             Device.simulator(Device.iPhone5c),
-                             Device.simulator(Device.iPhoneSE)]) {
-            
+        if isNeedToScroll() {
             self.view.frame.origin.y = -50
         }
     }
@@ -120,18 +120,61 @@ final class RegistrationSminexEnterPassword: UIViewController {
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification) {
         
-        // Только если 4" экран
-        if Device().isOneOf([Device.iPhone5,
-                             Device.iPhone5s,
-                             Device.iPhone5c,
-                             Device.iPhoneSE,
-                             Device.simulator(Device.iPhone5),
-                             Device.simulator(Device.iPhone5s),
-                             Device.simulator(Device.iPhone5c),
-                             Device.simulator(Device.iPhoneSE)]) {
-            
+        if isNeedToScroll() {
             self.view.frame.origin.y = 0
         }
+    }
+    
+    private func getHash(pass: String, salt: Data) -> String {
+        
+        let btl = pass.data(using: .utf16LittleEndian)!
+        let bSalt = Data(base64Encoded: salt)!
+        
+        var bAll = bSalt + btl
+        
+        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
+        bAll.withUnsafeBytes {
+            _ = CC_SHA1($0, CC_LONG(bAll.count), &digest)
+        }
+        
+        let psw = Data(bytes: digest).base64String.replacingOccurrences(of: "\n", with: "")
+        
+        return psw.stringByAddingPercentEncodingForRFC3986()!
+    }
+    
+    private func getSalt(login: String) -> Data {
+        
+        var salt: Data?
+        let queue = DispatchGroup()
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
+        
+        queue.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            defer {
+                queue.leave()
+            }
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    
+                    self.stopAnimation()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            salt = data
+            }.resume()
+        
+        queue.wait()
+        return salt!
     }
     
     private func startAnimation() {
@@ -150,17 +193,178 @@ final class RegistrationSminexEnterPassword: UIViewController {
         waitView.stopAnimating()
     }
     
-    private func choise() {
+    private func makeAuth() {
+        
+        // Авторизация пользователя
+        let txtLogin = login_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtPass = passTextField.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
+        request.httpMethod = "GET"
+        
+        #if DEBUG
+            print(request.url!)
+        #endif
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    
+                    self.stopAnimation()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            
+            self.choice()
+            
+            }.resume()
+    }
+    
+    private func choice() {
         
         self.stopAnimation()
         
-        if responceString.contains(find: "error") {
-            descTxt.text = responceString.replacingOccurrences(of: "error:", with: "")
-            descTxt.textColor = .red
-        
+        if responseString == "1" {
+            
+            let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            present(alert, animated: true, completion: nil)
+            
+        } else if responseString == "2" || responseString.contains("error") {
+            
+            let alert = UIAlertController(title: "Ошибка", message: "Попробуйте позже", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            present(alert, animated: true, completion: nil)
+            
         } else {
             
-            performSegue(withIdentifier: "backToLogin", sender: self)
+            // авторизация на сервере - получение данных пользователя
+            var answer = responseString.components(separatedBy: ";")
+            
+            // сохраним значения в defaults
+            saveGlobalData(date1: answer[0],
+                           date2: answer[1],
+                           can_count: answer[2],
+                           mail: answer[3],
+                           id_account: answer[4],
+                           isCons: answer[5],
+                           name: answer[6],
+                           history_counters: answer[7],
+                           strah: "0")
+            
+            // отправим на сервер данные об ид. устройства для отправки уведомлений
+            let token = Messaging.messaging().fcmToken
+            if token != nil {
+                sendAppId(id_account: answer[4], token: token!)
+            }
+            
+            // Экземпляр класса DB
+            let db = DB()
+            
+            // Если пользователь - окно пользователя, если консультант - другое окно
+            if answer[5] == "1" {          // консультант
+                
+                // ЗАЯВКИ С КОММЕНТАРИЯМИ
+                db.del_db(table_name: "Comments")
+                db.del_db(table_name: "Applications")
+                db.parse_Apps(login: login_, pass: passTextField.text ?? "", isCons: "1")
+                
+                // Дома, квартиры, лицевые счета
+                db.del_db(table_name: "Houses")
+                db.del_db(table_name: "Flats")
+                db.del_db(table_name: "Ls")
+                db.parse_Houses()
+                
+                self.performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toAppCons, sender: self)
+                
+            } else {                         // пользователь
+                
+                // ПОКАЗАНИЯ СЧЕТЧИКОВ
+                // Удалим данные из базы данных
+                db.del_db(table_name: "Counters")
+                // Получим данные в базу данных
+                db.parse_Countrers(login: login_, pass: passTextField.text ?? "", history: answer[7])
+                
+                // ВЕДОМОСТЬ (Пока данные тестовые)
+                // Удалим данные из базы данных
+                db.del_db(table_name: "Saldo")
+                // Получим данные в базу данных
+                db.parse_OSV(login: login_, pass: self.passTextField.text ?? "")
+                
+                // ЗАЯВКИ С КОММЕНТАРИЯМИ
+                db.del_db(table_name: "Applications")
+                db.del_db(table_name: "Comments")
+                db.parse_Apps(login: login_, pass: passTextField.text ?? "", isCons: "0")
+                
+                performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toAppsUser, sender: self)
+                
+            }
         }
+    }
+    
+    // сохранениеи глобальных значений
+    private func saveGlobalData(date1:              String,
+                                date2:              String,
+                                can_count:          String,
+                                mail:               String,
+                                id_account:         String,
+                                isCons:             String,
+                                name:               String,
+                                history_counters:   String,
+                                strah:              String) {
+        
+        let defaults = UserDefaults.standard
+        defaults.setValue(date1, forKey: "date1")
+        defaults.setValue(date2, forKey: "date2")
+        defaults.setValue(can_count, forKey: "can_count")
+        defaults.setValue(mail, forKey: "mail")
+        defaults.setValue(id_account, forKey: "id_account")
+        defaults.setValue(isCons, forKey: "isCons")
+        defaults.setValue(name, forKey: "name")
+        defaults.setValue(strah, forKey: "strah")
+        defaults.setValue(history_counters, forKey: "history_counters")
+        defaults.synchronize()
+    }
+    
+    // Отправка ид для оповещений
+    private func sendAppId(id_account: String, token: String) {
+        let urlPath = Server.SERVER + Server.SEND_ID_GOOGLE +
+            "cid=" + id_account +
+            "&did=" + token +
+            "&os=" + "iOS" +
+            "&version=" + UIDevice.current.systemVersion +
+            "&model=" + UIDevice.current.model
+        let url = URL(string: urlPath)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8)!
+            
+            #if DEBUG
+                print("token (add) = \(String(describing: self.responseString))")
+            #endif
+            
+            }.resume()
     }
 }
