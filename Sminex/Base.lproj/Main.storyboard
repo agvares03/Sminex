@@ -3477,14 +3477,14 @@
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="LBn-vk-R4o">
                                 <rect key="frame" x="150" y="267.5" width="20" height="20"/>
                             </activityIndicatorView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Код доступа из смс" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wyS-FK-L1t">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Код доступа из смс" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wyS-FK-L1t">
                                 <rect key="frame" x="16" y="142" width="280" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="SkQ-B3-3Pc"/>
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="tel"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wvt-5g-uYE">
                                 <rect key="frame" x="0.0" y="313" width="320" height="1"/>
@@ -3626,6 +3626,7 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
+                                    <action selector="backButtonPressed:" destination="ixU-3A-z1t" eventType="touchUpInside" id="zOc-C3-G6w"/>
                                     <action selector="btn_cancel:" destination="okP-hc-Mwi" eventType="touchUpInside" id="IHH-18-fKD"/>
                                 </connections>
                             </button>
@@ -5437,8 +5438,8 @@
         <segue reference="uNr-MC-mgZ"/>
         <segue reference="5Uf-Bn-pmk"/>
         <segue reference="0hz-wU-HaA"/>
-        <segue reference="RXh-Vy-ddC"/>
-        <segue reference="w3f-qU-qM7"/>
+        <segue reference="BpE-SW-HQS"/>
+        <segue reference="fpg-Qn-QUT"/>
         <segue reference="04S-tA-AbF"/>
         <segue reference="bbj-S3-hPb"/>
         <segue reference="vhV-Nn-aQs"/>

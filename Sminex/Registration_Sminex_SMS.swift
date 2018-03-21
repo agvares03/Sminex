@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DeviceKit
 
 final class Registration_Sminex_SMS: UIViewController {
     
@@ -20,14 +21,14 @@ final class Registration_Sminex_SMS: UIViewController {
     
     @IBAction private func btn_go_touch(_ sender: UIButton) {
         
-        guard (smsField.text?.count ?? 0) > 0 else {
+        guard (smsField.text?.count ?? 0) >= 0 else {
             descTxt.text = "Введите код доступа"
             return
         }
         
         startLoading()
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + smsField.text!)!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -88,6 +89,9 @@ final class Registration_Sminex_SMS: UIViewController {
         
         smsField.isSecureTextEntry = false
         
+        let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
+        view.addGestureRecognizer(theTap)
+        
         if numberPhone_ != "" {
             txtNameLS.text  = "Номер телефона"
             NameLS.text     = numberPhone_
@@ -96,6 +100,49 @@ final class Registration_Sminex_SMS: UIViewController {
             NameLS.text     = numberLs_
         }
         
+        // Подхватываем показ клавиатуры
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+    }
+    
+    
+    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
+    // Двигаем view вверх при показе клавиатуры
+    @objc func keyboardWillShow(sender: NSNotification) {
+        
+        // Только если 4" экран
+        if Device().isOneOf([Device.iPhone5,
+                             Device.iPhone5s,
+                             Device.iPhone5c,
+                             Device.iPhoneSE,
+                             Device.simulator(Device.iPhone5),
+                             Device.simulator(Device.iPhone5s),
+                             Device.simulator(Device.iPhone5c),
+                             Device.simulator(Device.iPhoneSE)]) {
+            
+            self.view.frame.origin.y = -30
+        }
+    }
+    
+    // И вниз при исчезновении
+    @objc func keyboardWillHide(sender: NSNotification) {
+        
+        // Только если 4" экран
+        if Device().isOneOf([Device.iPhone5,
+                             Device.iPhone5s,
+                             Device.iPhone5c,
+                             Device.iPhoneSE,
+                             Device.simulator(Device.iPhone5),
+                             Device.simulator(Device.iPhone5s),
+                             Device.simulator(Device.iPhone5c),
+                             Device.simulator(Device.iPhoneSE)]) {
+            
+            self.view.frame.origin.y = 0
+        }
     }
     
     private func choise() {
@@ -105,13 +152,13 @@ final class Registration_Sminex_SMS: UIViewController {
             if self.responseString.contains(find: "error") {
                 self.descTxt.text       = self.responseString.replacingOccurrences(of: "error:", with: "")
                 self.descTxt.textColor  = .red
+            
             } else {
-                
                 self.descTxt.text       = self.responseString
                 self.descTxt.textColor  = .lightGray
                 self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
             }
-            
+        
             self.endLoading()
         }
     }

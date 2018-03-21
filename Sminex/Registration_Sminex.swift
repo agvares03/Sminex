@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DeviceKit
 
 final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     
@@ -184,10 +185,48 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         btn_go.alpha = 0.5
         
         edLS.isSecureTextEntry = false
+        
+        // Подхватываем показ клавиатуры
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
+    }
+    
+    // Двигаем view вверх при показе клавиатуры
+    @objc func keyboardWillShow(sender: NSNotification) {
+        
+        // Только если 4" экран
+        if Device().isOneOf([Device.iPhone5,
+                             Device.iPhone5s,
+                             Device.iPhone5c,
+                             Device.iPhoneSE,
+                             Device.simulator(Device.iPhone5),
+                             Device.simulator(Device.iPhone5s),
+                             Device.simulator(Device.iPhone5c),
+                             Device.simulator(Device.iPhoneSE)]) {
+            
+            self.view.frame.origin.y = -70
+        }
+    }
+    
+    // И вниз при исчезновении
+    @objc func keyboardWillHide(sender: NSNotification) {
+        
+        // Только если 4" экран
+        if Device().isOneOf([Device.iPhone5,
+                             Device.iPhone5s,
+                             Device.iPhone5c,
+                             Device.iPhoneSE,
+                             Device.simulator(Device.iPhone5),
+                             Device.simulator(Device.iPhone5s),
+                             Device.simulator(Device.iPhone5c),
+                             Device.simulator(Device.iPhoneSE)]) {
+            
+            self.view.frame.origin.y = 0
+        }
     }
     
     private func startAnimation() {

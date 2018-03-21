@@ -8,6 +8,8 @@
 
 import UIKit
 import FirebaseMessaging
+import DeviceKit
+import Arcane
 
 final class ViewController: UIViewController, UITextFieldDelegate {
     
@@ -115,12 +117,36 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification) {
-        self.view.frame.origin.y = -100
+        
+        // Только если 4" экран
+        if Device().isOneOf([Device.iPhone5,
+                             Device.iPhone5s,
+                             Device.iPhone5c,
+                             Device.iPhoneSE,
+                             Device.simulator(Device.iPhone5),
+                             Device.simulator(Device.iPhone5s),
+                             Device.simulator(Device.iPhone5c),
+                             Device.simulator(Device.iPhoneSE)]) {
+            
+            self.view.frame.origin.y = -100
+        }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification) {
-        self.view.frame.origin.y = 0
+        
+        // Только если 4" экран
+        if Device().isOneOf([Device.iPhone5,
+                             Device.iPhone5s,
+                             Device.iPhone5c,
+                             Device.iPhoneSE,
+                             Device.simulator(Device.iPhone5),
+                             Device.simulator(Device.iPhone5s),
+                             Device.simulator(Device.iPhone5c),
+                             Device.simulator(Device.iPhoneSE)]) {
+            
+            self.view.frame.origin.y = 0
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,11 +165,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         let txtLogin = edLogin.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let txtPass = edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         
-        #if DEBUG
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + "999993" + "&pwd=" + "wjkEQzn/pkSIqUN5uL8wQ/2ZIRY=")!)
-        #else
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
-        #endif
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
         request.httpMethod = "GET"
         
         #if DEBUG
@@ -176,20 +198,26 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             }.resume()
     }
     
-    private func getHash(pass: String, salt: String) -> String {
+    private func getHash(pass: String, salt: Data) -> String {
         
-        let btl = pass.data(using: .utf16LittleEndian)
-        let bSalt = salt.data(using: .utf16LittleEndian)
-        var bAll = btl! + bSalt!
-        bAll.append(bSalt!)
-        bAll.append(btl!)
+        let btl = pass.data(using: .utf16LittleEndian)!
+        let bSalt = Data(base64Encoded: salt)!
         
-        return bAll.base64EncodedString().replacingOccurrences(of: "\n", with: "")
+        var bAll = bSalt + btl
+        
+        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
+        bAll.withUnsafeBytes {
+            _ = CC_SHA1($0, CC_LONG(bAll.count), &digest)
+        }
+        
+        let psw = Data(bytes: digest).base64String.replacingOccurrences(of: "\n", with: "")
+        
+        return psw.stringByAddingPercentEncodingForRFC3986()!
     }
     
-    private func getSalt(login: String) -> String {
+    private func getSalt(login: String) -> Data {
         
-        var salt = ""
+        var salt: Data?
         let queue = DispatchGroup()
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
@@ -215,11 +243,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            salt = String(data: data!, encoding: .utf8) ?? ""
+            salt = data
             }.resume()
         
         queue.wait()
-        return salt
+        return salt!
     }
     
     private func choice() {

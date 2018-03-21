@@ -8,5 +8,7 @@ target 'Sminex' do
   # Pods for DemoUC
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
+  pod 'DeviceKit'
+  pod 'Arcane'
   
 end
