@@ -51,7 +51,6 @@
 		4171BE7A1ECB402F00B9CDD7 /* fon_top.png in Resources */ = {isa = PBXBuildFile; fileRef = 4171BE791ECB402F00B9CDD7 /* fon_top.png */; };
 		4171BE7C1ECB41A200B9CDD7 /* new_face.png in Resources */ = {isa = PBXBuildFile; fileRef = 4171BE7B1ECB41A200B9CDD7 /* new_face.png */; };
 		4171BE7E1ECB41D300B9CDD7 /* new_zamok.png in Resources */ = {isa = PBXBuildFile; fileRef = 4171BE7D1ECB41D300B9CDD7 /* new_zamok.png */; };
-		4171BE811ECB4FEE00B9CDD7 /* ForgotPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4171BE801ECB4FEE00B9CDD7 /* ForgotPass.swift */; };
 		4171BE841ECB504900B9CDD7 /* Registration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4171BE831ECB504900B9CDD7 /* Registration.swift */; };
 		41979406203185460034298D /* start_img.png in Resources */ = {isa = PBXBuildFile; fileRef = 41979405203185460034298D /* start_img.png */; };
 		41979408203185F40034298D /* sminex_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 41979407203185F30034298D /* sminex_logo.png */; };
@@ -100,6 +99,7 @@
 		41E229991EEE5EC000306120 /* AddAppCons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E229981EEE5EC000306120 /* AddAppCons.swift */; };
 		41E2299B1EEE67A900306120 /* ChoiceLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E2299A1EEE67A900306120 /* ChoiceLS.swift */; };
 		41EBEC881ED17BDF009F6A9D /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41EBEC871ED17BDF009F6A9D /* SWRevealViewController.m */; };
+		6C2387C22062052400F20190 /* Segues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2387C12062052400F20190 /* Segues.swift */; };
 		6C6A36D4206102D00073FC2A /* RegistrationSminexEnterPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6A36D3206102D00073FC2A /* RegistrationSminexEnterPassword.swift */; };
 		6C6A36D62061217F0073FC2A /* AppsConsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6A36D52061217F0073FC2A /* AppsConsCell.swift */; };
 		6C8A1E032060BBD8009389A5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8A1E022060BBD8009389A5 /* Extensions.swift */; };
@@ -168,7 +168,6 @@
 		4171BE791ECB402F00B9CDD7 /* fon_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fon_top.png; sourceTree = "<group>"; };
 		4171BE7B1ECB41A200B9CDD7 /* new_face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_face.png; sourceTree = "<group>"; };
 		4171BE7D1ECB41D300B9CDD7 /* new_zamok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_zamok.png; sourceTree = "<group>"; };
-		4171BE801ECB4FEE00B9CDD7 /* ForgotPass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPass.swift; sourceTree = "<group>"; };
 		4171BE831ECB504900B9CDD7 /* Registration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Registration.swift; sourceTree = "<group>"; };
 		4179A6EE1F4D58DA00D4F565 /* log.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = log.png; sourceTree = "<group>"; };
 		41979405203185460034298D /* start_img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_img.png; sourceTree = "<group>"; };
@@ -227,6 +226,7 @@
 		41EBEC851ED17BDF009F6A9D /* DemoUC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DemoUC-Bridging-Header.h"; sourceTree = "<group>"; };
 		41EBEC861ED17BDF009F6A9D /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		41EBEC871ED17BDF009F6A9D /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		6C2387C12062052400F20190 /* Segues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segues.swift; sourceTree = "<group>"; };
 		6C6A36D3206102D00073FC2A /* RegistrationSminexEnterPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationSminexEnterPassword.swift; sourceTree = "<group>"; };
 		6C6A36D52061217F0073FC2A /* AppsConsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsConsCell.swift; sourceTree = "<group>"; };
 		6C8A1E022060BBD8009389A5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -452,7 +452,6 @@
 				419794092032C9380034298D /* Sminex */,
 				4136BD721EEBB2B5000EAE37 /* RatingView */,
 				41EBEC841ED17B83009F6A9D /* SWRevealViewController */,
-				4171BE801ECB4FEE00B9CDD7 /* ForgotPass.swift */,
 				4171BE831ECB504900B9CDD7 /* Registration.swift */,
 				41D3E6321F19AA130084BB92 /* RegistrationAdress.swift */,
 				411942EC1F4964CE006E2E0F /* RegistrationAdress4.swift */,
@@ -462,6 +461,7 @@
 				4111CA351EF4FBCB00BBEB7B /* Modal.swift */,
 				4111CA371EF4FC1800BBEB7B /* AddCom.swift */,
 				6C8A1E022060BBD8009389A5 /* Extensions.swift */,
+				6C2387C12062052400F20190 /* Segues.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -754,6 +754,7 @@
 				4136BD751EEBD695000EAE37 /* Files.swift in Sources */,
 				6C6A36D62061217F0073FC2A /* AppsConsCell.swift in Sources */,
 				4138B7C21F15AAF500DD0B52 /* Choice_UK.swift in Sources */,
+				6C2387C22062052400F20190 /* Segues.swift in Sources */,
 				411942ED1F4964CE006E2E0F /* RegistrationAdress4.swift in Sources */,
 				411B6CE91EE6FF22001DCBC7 /* Fotos+CoreDataProperties.swift in Sources */,
 				4197940B2032C9520034298D /* Registration_Sminex.swift in Sources */,
@@ -795,7 +796,6 @@
 				411B6CE01EE6FF22001DCBC7 /* Houses+CoreDataClass.swift in Sources */,
 				4171BE841ECB504900B9CDD7 /* Registration.swift in Sources */,
 				4136BD771EEBDACE000EAE37 /* SelectItemController.swift in Sources */,
-				4171BE811ECB4FEE00B9CDD7 /* ForgotPass.swift in Sources */,
 				411B6CC91EE3A7EC001DCBC7 /* Saldo+CoreDataClass.swift in Sources */,
 				41DFA8331ED34FDB00F15109 /* CountersUser.swift in Sources */,
 				411B6CE71EE6FF22001DCBC7 /* Applications+CoreDataProperties.swift in Sources */,

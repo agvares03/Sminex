@@ -251,7 +251,7 @@ final class AddAppUser: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "selectType" {
+        if segue.identifier == Segues.fromAddAppUser.toSelectType {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = appTypes
             selectItemController.selectedIndex_ = appType
@@ -260,7 +260,7 @@ final class AddAppUser: UITableViewController {
                 self.typeCell.detailTextLabel?.text = self.appTypeString()
             }
         }
-        else if segue.identifier == "selectPriority" {
+        else if segue.identifier == Segues.fromAddAppUser.toSelectPriority {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = appPriorities
             selectItemController.selectedIndex_ = appPriority

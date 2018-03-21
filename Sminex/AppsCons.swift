@@ -89,7 +89,7 @@ final class AppsCons: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "show_app_cons" {
+        if segue.identifier == Segues.fromAppCons.toShowAppsCons {
             let indexPath = tableApps.indexPathForSelectedRow!
             let app = fetchedResultsController!.object(at: indexPath)
             

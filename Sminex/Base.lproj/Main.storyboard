@@ -57,6 +57,9 @@
                         <segue destination="Lip-JJ-Y2v" kind="show" identifier="login_UK" id="1PE-8q-wsJ"/>
                         <segue destination="PCb-9V-BVh" kind="show" identifier="AppsUserNow" id="KXk-ki-vVr"/>
                         <segue destination="yke-5M-97h" kind="show" identifier="login_activity" id="lVm-la-GVd"/>
+                        <segue destination="NIv-C0-eHj" kind="show" identifier="choice_uk" id="9u6-YZ-U0D"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="login" id="YO5-b9-Oz3"/>
+                        <segue destination="OWo-vR-94Z" kind="show" identifier="AppsCons" id="5eY-7n-Vn3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LAe-1a-wix" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -379,6 +382,15 @@
                         <segue destination="PCb-9V-BVh" kind="show" identifier="AppsUsers_uk" id="RXh-Vy-ddC"/>
                         <segue destination="NIv-C0-eHj" kind="show" identifier="choice_uk" id="bbj-S3-hPb"/>
                         <segue destination="has-Qy-2Du" kind="show" identifier="choice_uk_street" id="afK-kx-b43"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="goForget" id="JjF-h0-zh0"/>
+                        <segue destination="Ibk-wW-3zd" kind="show" identifier="goRegistration" id="l5f-FI-tHy"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="goForget_uk" id="04S-tA-AbF"/>
+                        <segue destination="Ibk-wW-3zd" kind="show" identifier="goRegistration_uk" id="TNC-eu-tlL"/>
+                        <segue destination="Ibk-wW-3zd" kind="show" identifier="goRegistration2" id="Uo2-Tj-brT"/>
+                        <segue destination="HSw-ny-ae2" kind="show" identifier="goRegistration3" id="Llp-Zv-VGv"/>
+                        <segue destination="nM8-38-av6" kind="show" identifier="registration_uk4" id="8EX-SZ-s0B"/>
+                        <segue destination="Ibk-wW-3zd" kind="show" identifier="registration" id="ci5-wf-Ls3"/>
+                        <segue destination="HSw-ny-ae2" kind="show" identifier="registration_uk" id="J4c-R3-QE2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BaF-cr-4bP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -558,6 +570,7 @@
                         <outlet property="region_indicator" destination="7gZ-Hb-uaj" id="6QD-v2-vDs"/>
                         <outlet property="street_indicator" destination="uDr-Nr-YA1" id="Pne-Nr-EeH"/>
                         <outlet property="uk_indicator" destination="cXG-uZ-Kho" id="oSb-Xq-r6T"/>
+                        <segue destination="MtC-5j-21n" kind="show" identifier="login_activity_uk" id="sW9-nB-Vs0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YYY-RB-Cc7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -712,6 +725,7 @@
                         <outlet property="raion_indicator" destination="ZqO-NA-l2p" id="AGf-zF-HdZ"/>
                         <outlet property="region_indicator" destination="H8c-aG-JNa" id="0Dp-hk-nIs"/>
                         <outlet property="uk_indicator" destination="SFL-Q4-WOU" id="OU9-o6-DZZ"/>
+                        <segue destination="MtC-5j-21n" kind="show" identifier="login_activity_uk" id="vhV-Nn-aQs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a5N-o3-Sit" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1074,7 +1088,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="gNM-Pf-bVW" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="6tg-4T-te9"/>
+                                            <segue destination="gNM-Pf-bVW" kind="custom" identifier="order" customClass="SWRevealViewControllerSeguePushController" id="6tg-4T-te9"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1102,7 +1116,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="D0k-uT-hH1" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="vmX-8g-x2A"/>
+                                            <segue destination="D0k-uT-hH1" kind="custom" identifier="settings" customClass="SWRevealViewControllerSeguePushController" id="vmX-8g-x2A"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1142,7 +1156,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="YeP-WF-4RQ" kind="show" id="0hz-wU-HaA"/>
+                                            <segue destination="YeP-WF-4RQ" kind="show" identifier="exit" id="0hz-wU-HaA"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1611,7 +1625,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="nKt-CW-Q7j" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="UrZ-aR-qbk"/>
+                                            <segue destination="nKt-CW-Q7j" kind="custom" identifier="order" customClass="SWRevealViewControllerSeguePushController" id="UrZ-aR-qbk"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1639,7 +1653,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="gy3-LK-OAz" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="B7J-dy-aT2"/>
+                                            <segue destination="gy3-LK-OAz" kind="custom" identifier="evedence" customClass="SWRevealViewControllerSeguePushController" id="B7J-dy-aT2"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1667,7 +1681,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="UTF-bh-BKh" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="cic-Au-OLJ"/>
+                                            <segue destination="UTF-bh-BKh" kind="custom" identifier="OSV_User" customClass="SWRevealViewControllerSeguePushController" id="cic-Au-OLJ"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1695,7 +1709,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="3u5-2t-Dnd" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="cz3-BF-mXI"/>
+                                            <segue destination="3u5-2t-Dnd" kind="custom" identifier="pay" customClass="SWRevealViewControllerSeguePushController" id="cz3-BF-mXI"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1723,7 +1737,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="BI0-yh-ERy" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="0EY-fP-RX9"/>
+                                            <segue destination="BI0-yh-ERy" kind="custom" identifier="settings" customClass="SWRevealViewControllerSeguePushController" id="0EY-fP-RX9"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1763,7 +1777,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="YeP-WF-4RQ" kind="show" id="zej-3x-GgL"/>
+                                            <segue destination="YeP-WF-4RQ" kind="show" identifier="exit" id="zej-3x-GgL"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -2082,7 +2096,7 @@
                                         <state key="normal" image="ic_action_files_grey.png"/>
                                         <connections>
                                             <action selector="files_app:" destination="acI-Lj-o54" eventType="touchUpInside" id="Rj2-rU-5re"/>
-                                            <segue destination="Qyr-v6-Lm1" kind="show" id="1KR-u4-Yg3"/>
+                                            <segue destination="Qyr-v6-Lm1" kind="show" identifier="files" id="1KR-u4-Yg3"/>
                                         </connections>
                                     </button>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="P4V-6N-lZD">
@@ -2770,7 +2784,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kKU-Rl-78C" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7348.125" y="-169.01408450704224"/>
+            <point key="canvasLocation" x="7763" y="-169"/>
         </scene>
         <!--Registration Adress-->
         <scene sceneID="FAQ-08-qVB">
@@ -3243,7 +3257,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xoy-pD-lAR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2550" y="-1246.4788732394366"/>
+            <point key="canvasLocation" x="1959" y="-1679"/>
         </scene>
         <!--Registration Sminex-->
         <scene sceneID="j7F-dC-sq7">
@@ -3941,7 +3955,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j6V-EH-GKb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2436" y="387"/>
+            <point key="canvasLocation" x="-109" y="-1726"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="IGp-IF-mCx">
@@ -4780,7 +4794,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yPK-mU-0aI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6600" y="-169.01408450704224"/>
+            <point key="canvasLocation" x="6951" y="-169"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ghS-Io-TgX">
@@ -4835,7 +4849,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="UKx-Ur-BBs" kind="popoverPresentation" popoverAnchorView="IK1-al-A41" id="ruQ-5C-pw3">
+                                            <segue destination="UKx-Ur-BBs" kind="popoverPresentation" identifier="chooiseLs" popoverAnchorView="IK1-al-A41" id="ruQ-5C-pw3">
                                                 <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                                             </segue>
                                         </connections>
@@ -4991,7 +5005,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Q7-WH-n3r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6444.375" y="-563.02816901408448"/>
+            <point key="canvasLocation" x="5820" y="-1340"/>
         </scene>
         <!--App Cons-->
         <scene sceneID="isP-dT-QQO">
@@ -5098,7 +5112,7 @@
                                         <state key="normal" image="ic_action_files_grey.png"/>
                                         <connections>
                                             <action selector="files_app:" destination="acI-Lj-o54" eventType="touchUpInside" id="Wng-1e-bnC"/>
-                                            <segue destination="Qyr-v6-Lm1" kind="show" id="uNr-MC-mgZ"/>
+                                            <segue destination="Qyr-v6-Lm1" kind="show" identifier="files" id="uNr-MC-mgZ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SuO-mC-DUl">
@@ -5413,15 +5427,20 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="9nU-HW-VEW"/>
-        <segue reference="4Tn-Jm-b3B"/>
+        <segue reference="wcj-lH-os9"/>
         <segue reference="Wgk-9l-R5E"/>
         <segue reference="UrZ-aR-qbk"/>
         <segue reference="n8d-dl-PME"/>
-        <segue reference="JNJ-Bo-blo"/>
-        <segue reference="1KR-u4-Yg3"/>
+        <segue reference="ci5-wf-Ls3"/>
+        <segue reference="74p-PR-qrV"/>
+        <segue reference="J4c-R3-QE2"/>
+        <segue reference="uNr-MC-mgZ"/>
         <segue reference="5Uf-Bn-pmk"/>
-        <segue reference="zej-3x-GgL"/>
-        <segue reference="KXk-ki-vVr"/>
-        <segue reference="fpg-Qn-QUT"/>
+        <segue reference="0hz-wU-HaA"/>
+        <segue reference="RXh-Vy-ddC"/>
+        <segue reference="w3f-qU-qM7"/>
+        <segue reference="04S-tA-AbF"/>
+        <segue reference="bbj-S3-hPb"/>
+        <segue reference="vhV-Nn-aQs"/>
     </inferredMetricsTieBreakers>
 </document>

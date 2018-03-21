@@ -313,7 +313,7 @@ final class RegistrationAdress: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "get_adress" {
+        if segue.identifier == Segues.fromRegistrationAddres.toGetAddres {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = adressNames
             selectItemController.selectedIndex_ = teckAdress
@@ -329,7 +329,7 @@ final class RegistrationAdress: UIViewController {
                 self.addFlats(id_house: choice_id_adress)
                 
             }
-        } else if segue.identifier == "get_flat" {
+        } else if segue.identifier == Segues.fromRegistrationAddres.toGetFlat {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = flatsNames
             selectItemController.selectedIndex_ = teckFlat

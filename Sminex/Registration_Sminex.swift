@@ -148,7 +148,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
                 self.changeDescTextTo(isError: true, text: self.responseString.replacingOccurrences(of: "error:", with: ""))
             } else {
                 self.changeDescTextTo(isError: false)
-                self.performSegue(withIdentifier: "reg_step1", sender: self)
+                self.performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
             }
         }
     }
@@ -164,7 +164,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
                 self.stopAnimation()
                 
                 self.changeDescTextTo(isError: false)
-                self.performSegue(withIdentifier: "reg_step1", sender: self)
+                self.performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
             })
         }
     }
@@ -282,7 +282,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == Optional("reg_step1") {
+        if segue.identifier == Segues.fromRegistrationSminex.toRegStep1 {
             
             let vc  = segue.destination as!  Registration_Sminex_SMS
             if (self.itsPhone) {

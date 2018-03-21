@@ -79,10 +79,10 @@ class FirstController: UIViewController {
                 if getUK == "1" {
                     
                     if self.nameUK == "" {
-                        self.performSegue(withIdentifier: "choice_uk", sender: self)
+                        self.performSegue(withIdentifier: Segues.fromFirstController.toChooiseUk, sender: self)
                         
                     } else {
-                        self.performSegue(withIdentifier: "login_UK", sender: self)
+                        self.performSegue(withIdentifier: Segues.fromFirstController.toLoginUK, sender: self)
                     }
                     
                 } else {
@@ -106,30 +106,30 @@ class FirstController: UIViewController {
                 enter(login: login!, pass: pass!)
                 
             } else {
-                performSegue(withIdentifier: "login_activity", sender: self)
+                performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
             }
         } else {
-            performSegue(withIdentifier: "login_activity", sender: self)
+            performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
         }
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "login_UK" {
+        if segue.identifier == Segues.fromFirstController.toLoginUK {
             let login = segue.destination as! UINavigationController
             (login.viewControllers.first as! ViewController_UK).roleReg_ = self.roleReg
             
-        } else if segue.identifier == "login" {
+        } else if segue.identifier == Segues.fromFirstController.toLogin {
             let login = segue.destination as! ViewController
             login.roleReg_ = self.roleReg
             
-        } else if segue.identifier == "login_activity" {
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
             
             let vc = segue.destination as! UINavigationController
             (vc.viewControllers.first as! ViewController).roleReg_ = roleReg
             
-        } else if segue.identifier == "choice_uk" {
+        } else if segue.identifier == Segues.fromFirstController.toChooiseUk {
             
             let vc = segue.destination as! Choice_UK
             vc.roleReg_ = roleReg
@@ -175,10 +175,10 @@ class FirstController: UIViewController {
         DispatchQueue.main.async {
             
             if self.responseString == "1" {
-                self.performSegue(withIdentifier: "login_activity", sender: self)
+                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
                 
             } else if self.responseString == "2" || self.responseString.contains("error") {
-                self.performSegue(withIdentifier: "login_activity", sender: self)
+                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
                 
             } else {
                 
@@ -211,7 +211,7 @@ class FirstController: UIViewController {
                     db.del_db(table_name: "Ls")
                     db.parse_Houses()
                     
-                    self.performSegue(withIdentifier: "AppsCons", sender: self)
+                    self.performSegue(withIdentifier: Segues.fromFirstController.toAppsCons, sender: self)
                     
                 } else {                         // пользователь
                     
@@ -232,7 +232,7 @@ class FirstController: UIViewController {
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: login, pass: pass, isCons: "0")
                     
-                    self.performSegue(withIdentifier: "AppsUserNow", sender: self)
+                    self.performSegue(withIdentifier: Segues.fromFirstController.toAppsUserNow, sender: self)
                     
                 }
             }

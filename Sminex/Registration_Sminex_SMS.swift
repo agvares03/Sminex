@@ -109,7 +109,7 @@ final class Registration_Sminex_SMS: UIViewController {
                 
                 self.descTxt.text       = self.responseString
                 self.descTxt.textColor  = .lightGray
-                self.performSegue(withIdentifier: "enterPassword", sender: self)
+                self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
             }
             
             self.endLoading()

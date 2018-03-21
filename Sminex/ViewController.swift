@@ -78,8 +78,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
         
-        print(edPass.isSecureTextEntry)
-        
         if edPass.isSecureTextEntry {
             
             showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
@@ -173,7 +171,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         bAll.append(bSalt!)
         bAll.append(btl!)
         
-        return bAll.base64EncodedString().sha1().replacingOccurrences(of: "\n", with: "")
+        return bAll.base64EncodedString().replacingOccurrences(of: "\n", with: "")
     }
     
     private func getSalt(login: String) -> String {
@@ -262,7 +260,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                     db.del_db(table_name: "Ls")
                     db.parse_Houses()
                     
-                    self.performSegue(withIdentifier: "AppsCons", sender: self)
+                    self.performSegue(withIdentifier: Segues.fromViewController.toAppsCons, sender: self)
                     
                 } else {                         // пользователь
                     
@@ -283,7 +281,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", isCons: "0")
                     
-                    self.performSegue(withIdentifier: "AppsUsers", sender: self)
+                    self.performSegue(withIdentifier: Segues.fromViewController.toAppsUser, sender: self)
                     
                 }
                 self.stopIndicator()
@@ -374,12 +372,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == Optional("goForget") {
+        if segue.identifier == Segues.fromViewController.toForget {
             
             let regVC = segue.destination as! Registration_Sminex
             regVC.isReg_ = false
         
-        } else if segue.identifier == Optional("goRegister") {
+        } else if segue.identifier == Segues.fromViewController.toRegister {
             
             let regVC = segue.destination as! Registration_Sminex
             regVC.isReg_ = true

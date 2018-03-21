@@ -103,7 +103,7 @@ final class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "show_app" {
+        if segue.identifier == Segues.fromAppsUser.toShowApp {
             let indexPath = tableApps.indexPathForSelectedRow!
             let app = fetchedResultsController!.object(at: indexPath)
             
@@ -116,7 +116,7 @@ final class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSour
             appUser.delegate  = self
             appUser.apps_      = app
         
-        } else if segue.identifier == "show_app_close" {
+        } else if segue.identifier == Segues.fromAppsUser.toShowAppsClose {
             let indexPath = tableApps.indexPathForSelectedRow!
             let app = fetchedResultsController!.object(at: indexPath)
             
@@ -129,7 +129,7 @@ final class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSour
             appUser.delegate  = self
             appUser.apps_      = app
         
-        } else if segue.identifier == "add_app" {
+        } else if segue.identifier == Segues.fromAppsUser.toAddApp {
             let AddApp = (segue.destination as! UINavigationController).viewControllers.first as! AddAppUser
             AddApp.delegate = self
         }

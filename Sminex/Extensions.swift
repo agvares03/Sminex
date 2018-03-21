@@ -85,12 +85,20 @@ extension String {
         return self.range(of: find, options: .caseInsensitive) != nil
     }
     
-    func sha1() -> String {
-        let data = self.data(using: String.Encoding.utf8)!
-        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
-        data.withUnsafeBytes {
-            _ = CC_SHA1($0, CC_LONG(data.count), &digest)
-        }
-    return Data(bytes: digest).base64EncodedString()
+    func urlencode() -> String {
+        let stringToEncode = self.replacingOccurrences(of: " ", with: "+")
+        return stringToEncode.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)!
+    }
+    
+    func hmacsha1(key: String) -> Data {
+        let dataToDigest = self.data(using: String.Encoding.utf8)
+        let keyData = key.data(using: String.Encoding.utf8)
+        
+        let digestLength = Int(CC_SHA1_DIGEST_LENGTH)
+        let result = UnsafeMutablePointer<Any>.allocate(capacity: digestLength)
+        
+        CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA1), (keyData! as NSData).bytes, keyData!.count, (dataToDigest! as NSData).bytes, dataToDigest!.count, result)
+        
+        return Data(bytes: UnsafePointer(result), count: digestLength)
     }
 }

@@ -36,19 +36,19 @@ class ViewController_UK: UIViewController {
     @IBAction private func choice_uk(_ sender: UIButton) {
         
         // Для Оплата ЖКУ - форма выбора с улицей
-        performSegue(withIdentifier: "choice_uk", sender: self)
+        performSegue(withIdentifier: Segues.fromViewControllerUK.toChooseUK, sender: self)
     }
     
     @IBAction private func btnRegGo(_ sender: UIButton) {
         
         if roleReg_ == "1" {
-            performSegue(withIdentifier: "registration_uk", sender: self)
+            performSegue(withIdentifier: Segues.fromViewControllerUK.toRegistrationUK, sender: self)
             
         } else if roleReg_ == "4" {
-            performSegue(withIdentifier: "registration_uk4", sender: self)
+            performSegue(withIdentifier: Segues.fromViewControllerUK.toRegisterUK4, sender: self)
             
         } else {
-            performSegue(withIdentifier: "registration", sender: self)
+            performSegue(withIdentifier: Segues.fromViewControllerUK.toRegister, sender: self)
         }
     }
     
@@ -98,7 +98,7 @@ class ViewController_UK: UIViewController {
         nameUK.frame = myFrame
         
         if nameUK.text == "" {
-            performSegue(withIdentifier: "choice_uk", sender: self)
+            performSegue(withIdentifier: Segues.fromViewControllerUK.toChooseUK, sender: self)
         }
     }
     
@@ -194,7 +194,7 @@ class ViewController_UK: UIViewController {
                     //                    db.del_db(table_name: "Ls")
                     //                    db.parse_Houses()
                     
-                    self.performSegue(withIdentifier: "AppsCons_uk", sender: self)
+                    self.performSegue(withIdentifier: Segues.fromViewControllerUK.toAppsCons, sender: self)
                     
                 } else {                         // пользователь
                     
@@ -215,7 +215,7 @@ class ViewController_UK: UIViewController {
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: self.edLogin.text!, pass: self.edPass.text!, isCons: "0")
                     
-                    self.performSegue(withIdentifier: "AppsUsers_uk", sender: self)
+                    self.performSegue(withIdentifier: Segues.fromViewControllerUK.toAppsUser, sender: self)
                     
                 }
                 self.stopIndicator()
@@ -316,35 +316,37 @@ class ViewController_UK: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == Optional("goForget") {
-            let forgotVC: ForgotPass = segue.destination as! ForgotPass
-            forgotVC.letter_ = edLogin.text ?? ""
+        if segue.identifier == Segues.fromViewControllerUK.toGoForget {
+            let forgotVC = segue.destination as! Registration_Sminex
+//            forgotVC.letter_ = edLogin.text ?? ""
+            forgotVC.isReg_ = false
             
-        } else if segue.identifier == Optional("goRegistration") {
+        } else if segue.identifier ==  Segues.fromViewControllerUK.toGoRegister {
             let regVC: Registration = segue.destination as! Registration
             regVC.letter_ = edLogin.text ?? ""
             
-        } else if segue.identifier == Optional("goForget_uk") {
-            let forgotVC: ForgotPass = segue.destination as! ForgotPass
-            forgotVC.letter_ = edLogin.text ?? ""
+        } else if segue.identifier == Segues.fromViewControllerUK.toGoForgetUk {
+            let forgotVC = segue.destination as! Registration_Sminex
+//            forgotVC.letter_ = edLogin.text ?? ""
+            forgotVC.isReg_ = false
             
-        } else if segue.identifier == Optional("goRegistration_uk") {
+        } else if segue.identifier == Segues.fromViewControllerUK.toGoRegisterUk {
             let regVC: Registration = segue.destination as! Registration
             regVC.letter_ = edLogin.text ?? ""
             
-        } else if segue.identifier == Optional("goRegistration2") {
+        } else if segue.identifier == Segues.fromViewControllerUK.toGoRegister2 {
             let regVC: Registration = segue.destination as! Registration
             regVC.letter_ = edLogin.text ?? ""
             
-        } else if segue.identifier == Optional("goRegistration3") {
+        } else if segue.identifier == Segues.fromViewControllerUK.toGoRegister3 {
             let regVC: RegistrationAdress = segue.destination as! RegistrationAdress
             regVC.letter_ = edLogin.text ?? ""
             
-        } else if segue.identifier == Optional("choice_uk_street") {
+        } else if segue.identifier == Segues.fromViewControllerUK.toChooseUKStreet {
             let choiseUKStreetVC = segue.destination as! Choice_UK_Street
             choiseUKStreetVC.roleReg_ = roleReg_
             
-        } else if segue.identifier == Optional("choice_uk") {
+        } else if segue.identifier == Segues.fromViewControllerUK.toChooseUK {
             let choiseUKVC = segue.destination as! Choice_UK
             choiseUKVC.roleReg_ = roleReg_
         }

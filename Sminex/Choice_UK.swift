@@ -78,7 +78,7 @@ final class Choice_UK: UIViewController {
             defaults.setValue(self.uksSities[teckUk], forKey: "SiteSM")
             defaults.synchronize()
             
-            performSegue(withIdentifier: "login_activity_uk", sender: self)
+            performSegue(withIdentifier: Segues.fromChoiseUK.toLoginActivity, sender: self)
         }
     }
     
@@ -145,7 +145,7 @@ final class Choice_UK: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "get_regions" {
+        if segue.identifier == Segues.fromChoiseUK.toGetRegions {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = regionsNames
             selectItemController.selectedIndex_ = teckRegion
@@ -164,7 +164,7 @@ final class Choice_UK: UIViewController {
                 self.addTownsRegions(id_region: choice_id_region)
                 
             }
-        } else if segue.identifier == "get_raions" {
+        } else if segue.identifier == Segues.fromChoiseUK.toGetRaions {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = raionsNames
             selectItemController.selectedIndex_ = teckRaion
@@ -181,7 +181,7 @@ final class Choice_UK: UIViewController {
                 self.addTownsRaions(id_region: self.regionsIds[self.teckRegion], id_raion: choice_id_raion)
                 
             }
-        } else if segue.identifier == "get_cities" {
+        } else if segue.identifier == Segues.fromChoiseUK.toGetCities {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = citiesNames
             selectItemController.selectedIndex_ = teckCity
@@ -197,7 +197,7 @@ final class Choice_UK: UIViewController {
                 self.addUks(id_city: choice_id_city)
                 
             }
-        } else if segue.identifier == "get_uks" {
+        } else if segue.identifier == Segues.fromChoiseUK.toGetUKs {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = uksNames
             selectItemController.selectedIndex_ = teckUk
@@ -210,7 +210,7 @@ final class Choice_UK: UIViewController {
                 self.updateView()
             }
             
-        } else if segue.identifier == "login_activity_uk" {
+        } else if segue.identifier == Segues.fromChoiseUK.toLoginActivity {
             let vc = segue.destination as! ViewController_UK
             vc.roleReg_ = roleReg_
         }

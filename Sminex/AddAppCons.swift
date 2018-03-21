@@ -64,7 +64,7 @@ final class AddAppCons: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "selectTypeCons" {
+        if segue.identifier == Segues.fromAddAppCons.toSelectTypeCons {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = appTypes
             selectItemController.selectedIndex_ = appType
@@ -73,7 +73,7 @@ final class AddAppCons: UITableViewController {
                 self.typeCell.detailTextLabel?.text = self.appTypeString()
             }
         }
-        else if segue.identifier == "selectPriorityCons" {
+        else if segue.identifier == Segues.fromAddAppCons.toSelectPriority {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = appPriorities
             selectItemController.selectedIndex_ = appPriority

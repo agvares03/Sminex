@@ -79,7 +79,7 @@ final class Choice_UK_Street: UIViewController {
             defaults.setValue(self.uksSities[teckUK], forKey: "SiteSM")
             defaults.synchronize()
             
-            performSegue(withIdentifier: "login_activity_uk", sender: self)
+            performSegue(withIdentifier: Segues.fromChooiseStreetUK.toLoginActivity, sender: self)
             
         }
     }
@@ -148,7 +148,7 @@ final class Choice_UK_Street: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "get_regions_street" {
+        if segue.identifier == Segues.fromChooiseStreetUK.toRegionsStreet {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = regionsNames
             selectItemController.selectedIndex_ = teckRegion
@@ -172,7 +172,7 @@ final class Choice_UK_Street: UIViewController {
                 self.addTownsRegions(id_region: choice_id_region)
                 
             }
-        } else if segue.identifier == "get_raions_street" {
+        } else if segue.identifier == Segues.fromChooiseStreetUK.toGetRaions {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = raionsNames
             selectItemController.selectedIndex_ = teckRaion
@@ -193,7 +193,7 @@ final class Choice_UK_Street: UIViewController {
                 self.addTownsRaions(id_region: self.regionsIds[self.teckRegion], id_raion: choice_id_raion)
                 
             }
-        } else if segue.identifier == "get_cities_street" {
+        } else if segue.identifier == Segues.fromChooiseStreetUK.toGetCityStreets {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = citiesNames
             selectItemController.selectedIndex_ = teckCity
@@ -212,7 +212,7 @@ final class Choice_UK_Street: UIViewController {
                 self.addUks(id_city: choice_id_city)
                 
             }
-        } else if segue.identifier == "get_streets_street" {
+        } else if segue.identifier == Segues.fromChooiseStreetUK.toGetStreets {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = streetsNames
             selectItemController.selectedIndex_ = teckStreet
@@ -229,7 +229,7 @@ final class Choice_UK_Street: UIViewController {
                 self.addUksStreets(id_city: self.citiesIds[self.teckCity], id_street: choice_id_street)
                 
             }
-        } else if segue.identifier == "get_uks_street" {
+        } else if segue.identifier == Segues.fromChooiseStreetUK.toGetUKsStreet {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = uksNames
             selectItemController.selectedIndex_ = teckUK
@@ -242,7 +242,7 @@ final class Choice_UK_Street: UIViewController {
                 self.updateView()
             }
             
-        } else if segue.identifier == "login_activity_uk" {
+        } else if segue.identifier == Segues.fromChooiseStreetUK.toLoginActivity {
             
             let vc = segue.destination as! ViewController_UK
             vc.roleReg_ = roleReg_

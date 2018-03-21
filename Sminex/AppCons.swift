@@ -152,7 +152,7 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "select_cons" {
+        if segue.identifier == Segues.fromAppCons.toSelectCons {
             let selectItemController = (segue.destination as! UINavigationController).viewControllers.first as! SelectItemController
             selectItemController.strings_ = namesConsArray
             selectItemController.selectedIndex_ = teckCons
