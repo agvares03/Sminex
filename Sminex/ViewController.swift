@@ -104,10 +104,23 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         scroll.addGestureRecognizer(theTap)
         loadUsersDefaults()
         
+        // Подхватываем показ клавиатуры
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         scroll.endEditing(true)
+    }
+    
+    // Двигаем view вверх при показе клавиатуры
+    @objc func keyboardWillShow(sender: NSNotification) {
+        self.view.frame.origin.y = -100
+    }
+    
+    // И вниз при исчезновении
+    @objc func keyboardWillHide(sender: NSNotification) {
+        self.view.frame.origin.y = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
