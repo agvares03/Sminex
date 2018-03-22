@@ -18,7 +18,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
     @IBOutlet private weak var descTxt:         UILabel!
     @IBOutlet private weak var showpswrd:       UIButton!
     @IBOutlet private weak var waitView:        UIActivityIndicatorView!
-    @IBOutlet private var txtConstraint:        NSLayoutConstraint!
+    @IBOutlet private weak var scroll:          UIScrollView!
     
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
@@ -32,7 +32,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
         
         startAnimation()
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.CHANGE_PASSWRD + "login=" + login_ + "&pwd=" + getHash(pass: passTextField.text ?? "", salt: getSalt(login: login_)))!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.CHANGE_PASSWRD + "login=" + login_ + "&pwd=" + (passTextField.text ?? ""))!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -53,12 +53,13 @@ final class RegistrationSminexEnterPassword: UIViewController {
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print(self.responseString)
+                print("responseString = \(self.responseString)")
             #endif
             
             DispatchQueue.main.async {
                 
                 if self.responseString.contains(find: "error") {
+                    self.stopAnimation()
                     self.descTxt.text = self.responseString.replacingOccurrences(of: "error:", with: "")
                     self.descTxt.textColor = .red
                     
@@ -90,16 +91,18 @@ final class RegistrationSminexEnterPassword: UIViewController {
     
     open var login_ = ""
     
-    private var responseString = ""
+    private var responseString  = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         stopAnimation()
-        passTextField.isSecureTextEntry = false
         
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         view.addGestureRecognizer(theTap)
+        
+        showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+        passTextField.isSecureTextEntry = true
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -111,31 +114,41 @@ final class RegistrationSminexEnterPassword: UIViewController {
     }
     
     // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification) {
+    @objc func keyboardWillShow(sender: NSNotification?) {
         
         if isNeedToScroll() {
-            view.frame.origin.y = -50
             
             if isNeedToScrollMore() {
-                view.frame.origin.y = -60
-                txtConstraint.constant -= 70
+                scroll.contentSize.height += 30
+                scroll.contentOffset = CGPoint(x: 0, y: 50)
+            
+            } else {
+                view.frame.origin.y = -50
             }
         }
     }
     
     // И вниз при исчезновении
-    @objc func keyboardWillHide(sender: NSNotification) {
+    @objc func keyboardWillHide(sender: NSNotification?) {
         
         if isNeedToScroll() {
-            view.frame.origin.y = 0
             
             if isNeedToScrollMore() {
-                txtConstraint.constant = 100
+                scroll.contentSize.height -= 30
+                scroll.contentOffset = CGPoint(x: 0, y: 0)
+                
+            } else {
+                view.frame.origin.y = 0
             }
         }
     }
     
+    // Вычисляем соленый хэш пароля
     private func getHash(pass: String, salt: Data) -> String {
+        
+        if (String(data: salt, encoding: .utf8) ?? "Unauthorized").contains(find: "Unauthorized") {
+            return ""
+        }
         
         let btl = pass.data(using: .utf16LittleEndian)!
         let bSalt = Data(base64Encoded: salt)!
@@ -152,6 +165,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
         return psw.stringByAddingPercentEncodingForRFC3986()!
     }
     
+    // Качаем соль
     private func getSalt(login: String) -> Data {
         
         var salt: Data?
@@ -212,10 +226,6 @@ final class RegistrationSminexEnterPassword: UIViewController {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
         request.httpMethod = "GET"
         
-        #if DEBUG
-            print(request.url!)
-        #endif
-        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
@@ -237,9 +247,28 @@ final class RegistrationSminexEnterPassword: UIViewController {
                 print("responseString = \(self.responseString)")
             #endif
             
-            self.choice()
+            DispatchQueue.main.async {
+                self.choice()
+            }
             
             }.resume()
+    }
+    
+    private func choiseSMS() {
+        
+        DispatchQueue.main.async {
+            
+            if self.responseString.contains(find: "error") {
+                self.descTxt.text       = self.responseString.replacingOccurrences(of: "error:", with: "")
+                self.descTxt.textColor  = .red
+                
+            } else {
+                self.descTxt.textColor  = .gray
+                
+            }
+            
+            self.stopAnimation()
+        }
     }
     
     private func choice() {
@@ -376,5 +405,11 @@ final class RegistrationSminexEnterPassword: UIViewController {
             #endif
             
             }.resume()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // Поправим текущий UI перед переходом
+        keyboardWillHide(sender: nil)
     }
 }

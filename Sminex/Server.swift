@@ -81,7 +81,8 @@ final class Server {
     static let REGISTRATION_SMINEX = "RegisterSminex.ashx?"            // Регистрация (Смайнекс)
     
     static let SOLE                = "GetPasswordSaltByUserName.ashx?" // Получение соли для хеширования
-    static let COMPLETE_REG        = "CompleteRegisterSminex.ashx?"    // Проверка СМС кода
+    static let COMPLETE_REG        = "CompleteRegisterSminex.ashx?"    // Проверка СМС кода при регистрации
+    static let COMPLETE_REM        = "CompleteRemember.ashx?"          // Проверка СМС кода при восстановлении пароля
     static let CHANGE_PASSWRD      = "ChangePassword.ashx?"            // Изменение пароля
     
     func hexStringToUIColor(hex: String) -> UIColor {

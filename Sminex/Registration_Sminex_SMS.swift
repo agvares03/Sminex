@@ -18,6 +18,9 @@ final class Registration_Sminex_SMS: UIViewController {
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var smsField:    UITextField!
     @IBOutlet private weak var showpswrd:   UIButton!
+    @IBOutlet private weak var scroll:      UIScrollView!
+    @IBOutlet private weak var againLabel:  UIButton!
+    @IBOutlet private weak var againLine:   UILabel!
     
     @IBAction private func btn_go_touch(_ sender: UIButton) {
         
@@ -30,6 +33,11 @@ final class Registration_Sminex_SMS: UIViewController {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
         request.httpMethod = "GET"
+        
+        if !isReg_ {
+            request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REM + "smsCode=" + (smsField.text ?? ""))!)
+            request.httpMethod = "GET"
+        }
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in
@@ -75,19 +83,30 @@ final class Registration_Sminex_SMS: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    open var isReg_ = false
+    @IBAction private func retryLabelPressed(_ sender: UIButton) {
+        
+        self.startLoading()
+        
+        if isReg_ {
+            registration()
+        
+        } else {
+            forgotPass()
+        }
+    }
     
+    open var isPhone_     = false
+    open var isReg_       = false
     open var numberPhone_ = ""
     open var numberLs_    = ""
     
-    private var responseString = ""
+    private var responseString  = ""
+    private var descText        = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
      
         endLoading()
-        
-        smsField.isSecureTextEntry = false
         
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         view.addGestureRecognizer(theTap)
@@ -100,10 +119,16 @@ final class Registration_Sminex_SMS: UIViewController {
             NameLS.text     = numberLs_
         }
         
+        showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+        smsField.isSecureTextEntry = true
+        
+        descText = descTxt.text ?? ""
+        
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        startTimer()
     }
     
     
@@ -112,22 +137,44 @@ final class Registration_Sminex_SMS: UIViewController {
     }
     
     // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification) {
+    @objc func keyboardWillShow(sender: NSNotification?) {
         
         if isNeedToScroll() {
-            view.frame.origin.y = -30
             
             if isNeedToScrollMore() {
-                view.frame.origin.y = -100
+                scroll.contentSize.height += 30
+                scroll.contentOffset = CGPoint(x: 0, y: 80)
+            
+            } else {
+                view.frame.origin.y = -30
             }
         }
     }
     
     // И вниз при исчезновении
-    @objc func keyboardWillHide(sender: NSNotification) {
+    @objc func keyboardWillHide(sender: NSNotification?) {
         
         if isNeedToScroll() {
-            view.frame.origin.y = 0
+            
+            if isNeedToScrollMore() {
+                scroll.contentSize.height -= 30
+                scroll.contentOffset = CGPoint(x: 0, y: 0)
+            
+            } else {
+                view.frame.origin.y = 0
+            }
+        }
+    }
+    
+    private func startTimer() {
+        DispatchQueue.global(qos: .userInteractive).async {
+            sleep(60)
+            
+            DispatchQueue.main.async {
+                self.againLabel.isHidden    = false
+                self.againLine.isHidden     = false
+                self.descTxt.text = self.descTxt.text?.replacingOccurrences(of: "Запросить новый код можно через минуту", with: "")
+            }
         }
     }
     
@@ -138,14 +185,25 @@ final class Registration_Sminex_SMS: UIViewController {
             if self.responseString.contains(find: "error") {
                 self.descTxt.text       = self.responseString.replacingOccurrences(of: "error:", with: "")
                 self.descTxt.textColor  = .red
-            
+
             } else {
                 self.descTxt.text       = self.responseString
-                self.descTxt.textColor  = .lightGray
+                self.descTxt.textColor  = .gray
                 self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
             }
         
             self.endLoading()
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // Поправим текущий UI перед переходом
+        keyboardWillHide(sender: nil)
+        
+        if segue.identifier == Segues.fromRegistrationSminexSMS.toEnterPassword {
+            let vc = segue.destination as! RegistrationSminexEnterPassword
+            vc.login_ = self.numberLs_
         }
     }
     
@@ -163,5 +221,104 @@ final class Registration_Sminex_SMS: UIViewController {
         indicator.stopAnimating()
         
         btn_go.isHidden = false
+    }
+    
+    private func registration() {
+        var ls_for_zapros = numberLs_.replacingOccurrences(of: "+", with: "")
+        ls_for_zapros = numberLs_.replacingOccurrences(of: " ", with: "")
+        if (isPhone_) {
+            ls_for_zapros = "7" + ls_for_zapros.substring(fromIndex: 1)
+        }
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.REGISTRATION_SMINEX + "identOrPhone=" + ls_for_zapros)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.endLoading()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            self.choiceReg()
+            }.resume()
+    }
+    
+    private func forgotPass() {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "identOrPhone=" + numberLs_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                let alert = UIAlertController(title: "Результат", message: "Не удалось. Попробуйте позже", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Ок", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.responseString = "xxx";
+                self.choice()
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
+            self.choice()
+            
+            }.resume()
+    }
+    
+    private func choice() {
+        
+        DispatchQueue.main.async {
+            
+            self.endLoading()
+            
+            if self.responseString.contains("error") {
+                let alert = UIAlertController(title: "Ошибка", message: self.responseString.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ок", style: .default, handler: { (_) -> Void in self.navigationController?.popViewController(animated: true) }))
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                self.descTxt.text           = self.descText
+                self.againLabel.isHidden    = true
+                self.againLine.isHidden     = false
+                self.startTimer()
+            }
+        }
+    }
+    
+    private func choiceReg() {
+        self.endLoading()
+        
+        DispatchQueue.main.async {
+            
+            if self.responseString.contains("error") {
+                let alert = UIAlertController(title: "Ошибка", message: self.responseString.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ок", style: .default, handler: { (_) -> Void in self.navigationController?.popViewController(animated: true) }))
+                self.present(alert, animated: true, completion: nil)
+                
+            } else if self.responseString.contains("ok") {
+                self.descTxt.text           = self.descText
+                self.againLabel.isHidden    = true
+                self.againLine.isHidden     = false
+                self.startTimer()
+            }
+        }
     }
 }

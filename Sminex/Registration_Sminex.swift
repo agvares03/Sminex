@@ -14,8 +14,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var txtDesc:     UILabel!
-    @IBOutlet private weak var showpswrd:   UIButton!
-    @IBOutlet private var textConstraint:   NSLayoutConstraint!
+    @IBOutlet private weak var scroll:      UIScrollView!
     
     open var isReg_ = true
     
@@ -25,19 +24,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     
     // Признак того, вводим мы телефон или нет
     private var itsPhone = false
-    
-    @IBAction private func showPasswordPressed(_ sender: UIButton) {
-        
-        if edLS.isSecureTextEntry {
-            
-            showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
-            edLS.isSecureTextEntry = false
-        } else {
-            
-            showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
-            edLS.isSecureTextEntry = true
-        }
-    }
     
     @IBAction private func btn_go_action(_ sender: UIButton) {
         
@@ -51,6 +37,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
             
             if isReg_ {
                 registration()
+            
             } else {
                 forgotPass()
             }
@@ -149,24 +136,22 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
                 self.changeDescTextTo(isError: true, text: self.responseString.replacingOccurrences(of: "error:", with: ""))
             } else {
                 self.changeDescTextTo(isError: false)
-                self.performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
             }
         }
     }
     
     private func choiceReg() {
         if (responseString.contains("error")) {
-            DispatchQueue.main.async(execute: {
+            DispatchQueue.main.async {
                 self.stopAnimation()
                 self.changeDescTextTo(isError: true)
-            })
+            }
         } else if (responseString.contains("ok")) {
-            DispatchQueue.main.async(execute: {
+            DispatchQueue.main.async {
                 self.stopAnimation()
                 
                 self.changeDescTextTo(isError: false)
-                self.performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
-            })
+            }
         }
     }
     
@@ -184,7 +169,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         btn_go.isEnabled = false
         btn_go.alpha = 0.5
         
-        edLS.isSecureTextEntry = false
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -196,25 +180,31 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     }
     
     // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification) {
+    @objc func keyboardWillShow(sender: NSNotification?) {
         
         if isNeedToScroll() {
-            view.frame.origin.y = -70
             
             if isNeedToScrollMore() {
-                textConstraint.constant -= 30
+                scroll.contentSize.height += 70
+                scroll.contentOffset = CGPoint(x: 0, y: 130)
+            
+            } else {
+                view.frame.origin.y = -70
             }
         }
     }
     
     // И вниз при исчезновении
-    @objc func keyboardWillHide(sender: NSNotification) {
+    @objc func keyboardWillHide(sender: NSNotification?) {
         
         if isNeedToScroll() {
-            self.view.frame.origin.y = 0
             
             if isNeedToScrollMore() {
-                textConstraint.constant += 30
+                scroll.contentSize.height -= 70
+                scroll.contentOffset = CGPoint(x: 0, y: 0)
+                
+            } else {
+                view.frame.origin.y = 0
             }
         }
     }
@@ -240,44 +230,17 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         
         if isError {
             
-            if #available(iOS 10.0, *) {
-                UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
-                    
-                    self.txtDesc.textColor = .red
-                    self.txtDesc.text = self.responseString.replacingOccurrences(of: "error: ", with: "")
-                    }.startAnimation()
-                
-            } else {
-                
-                self.txtDesc.textColor = .red
-                if self.itsPhone {
-                    self.txtDesc.text = self.responseString.replacingOccurrences(of: "error: ", with: "")
-                }
-            }
+            self.txtDesc.textColor = .red
+            self.txtDesc.text = self.responseString.replacingOccurrences(of: "error: ", with: "")
             
             self.changeGoButton(isEnabled: false)
             
         } else {
+            self.txtDesc.textColor = .gray
+            self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text
             
-            if #available(iOS 10.0, *) {
-                UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
-                    
-                    self.txtDesc.textColor = .gray
-                    self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text
-                    }.startAnimation()
-                
-            } else {
-                
-                self.txtDesc.textColor = .red
-                if self.itsPhone {
-                    self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text
-                }
-            }
-            
-            self.changeGoButton(isEnabled: false)
-            
+            performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
         }
-        
     }
     
     private func changeGoButton(isEnabled: Bool) {
@@ -311,18 +274,16 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        // Поправим текущий UI перед переходом
+        keyboardWillHide(sender: nil)
+        
         if segue.identifier == Segues.fromRegistrationSminex.toRegStep1 {
             
             let vc  = segue.destination as!  Registration_Sminex_SMS
-            if (self.itsPhone) {
-                vc.numberPhone_ = self.edLS.text!
-                vc.numberLs_    = ""
-                vc.isReg_       = isReg_
-            } else {
-                vc.numberPhone_ = ""
-                vc.numberLs_    = self.edLS.text!
-                vc.isReg_       = isReg_
-            }
+            vc.numberLs_    = edLS.text!
+            vc.isReg_       = isReg_
+            vc.isPhone_     = itsPhone
+            
         }
     }
     

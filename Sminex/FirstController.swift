@@ -172,8 +172,12 @@ class FirstController: UIViewController {
             }.resume()
     }
     
-    
+    // Вычисляем соленый хэш пароля
     private func getHash(pass: String, salt: Data) -> String {
+        
+        if (String(data: salt, encoding: .utf8) ?? "Unauthorized").contains(find: "Unauthorized") {
+            return ""
+        }
         
         let btl = pass.data(using: .utf16LittleEndian)!
         let bSalt = Data(base64Encoded: salt)!
@@ -190,6 +194,7 @@ class FirstController: UIViewController {
         return psw.stringByAddingPercentEncodingForRFC3986()!
     }
     
+    // Качаем соль
     private func getSalt(login: String) -> Data {
         
         var salt: Data?

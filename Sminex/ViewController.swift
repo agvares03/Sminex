@@ -29,6 +29,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var lineForgot:  UILabel!
     @IBOutlet private weak var lineReg:     UILabel!
+    @IBOutlet private weak var errorLabel:  UILabel!
     
     // Признак того, вводим мы телефон или нет
     private var itsPhone = false
@@ -98,7 +99,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         
         edLogin.delegate = self
         
-        edPass.isSecureTextEntry = false
+        showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+        edPass.isSecureTextEntry = true
         
         stopIndicator()
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
@@ -115,12 +117,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification) {
+    @objc func keyboardWillShow(sender: NSNotification?) {
         
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-                view.frame.origin.y = 0
                 scroll.contentOffset = CGPoint(x: 0, y: 140)
             
             } else {
@@ -130,7 +131,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     // И вниз при исчезновении
-    @objc func keyboardWillHide(sender: NSNotification) {
+    @objc func keyboardWillHide(sender: NSNotification?) {
         
         if isNeedToScroll() {
             view.frame.origin.y = 0
@@ -186,7 +187,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             }.resume()
     }
     
+    // Вычисляем соленый хэш пароля
     private func getHash(pass: String, salt: Data) -> String {
+        
+        if (String(data: salt, encoding: .utf8) ?? "Unauthorized").contains(find: "Unauthorized") {
+            return ""
+        }
         
         let btl = pass.data(using: .utf16LittleEndian)!
         let bSalt = Data(base64Encoded: salt)!
@@ -203,6 +209,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         return psw.stringByAddingPercentEncodingForRFC3986()!
     }
     
+    // Качаем соль
     private func getSalt(login: String) -> Data {
         
         var salt: Data?
@@ -232,6 +239,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             }
             
             salt = data
+            
+            #if DEBUG
+                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
+            #endif
+            
             }.resume()
         
         queue.wait()
@@ -253,12 +265,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             } else if self.responseString == "2" || self.responseString.contains("error") {
                 
                 self.stopIndicator()
-                let alert = UIAlertController(title: "Ошибка", message: "Неверный логин или пароль", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                alert.addAction(cancelAction)
-                self.present(alert, animated: true, completion: nil)
+                self.errorLabel.isHidden = false
                 
             } else {
+                
+                self.errorLabel.isHidden = true
                 
                 // авторизация на сервере - получение данных пользователя
                 var answer = self.responseString.components(separatedBy: ";")
@@ -400,6 +411,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // Поправим текущий UI перед переходом
+        keyboardWillHide(sender: nil)
         
         if segue.identifier == Segues.fromViewController.toForget {
             
