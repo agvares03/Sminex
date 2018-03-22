@@ -287,14 +287,15 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if segue.identifier == Segues.fromRegistrationSminex.toRegStep1 {
             
             let vc  = segue.destination as!  Registration_Sminex_SMS
-            vc.numberLs_    = edLS.text!
-            vc.isReg_       = isReg_
-            vc.isPhone_     = itsPhone
-            
             if itsPhone {
                 vc.numberPhone_ = edLS.text!
+                vc.numberLs_ = ""
+            } else {
+                vc.numberPhone_ = ""
+                vc.numberLs_ = edLS.text!
             }
-            
+            vc.isReg_ = isReg_
+
         }
     }
     
