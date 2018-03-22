@@ -20,6 +20,8 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @IBOutlet private weak var waitView:        UIActivityIndicatorView!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var backView:        UIView!
+    @IBOutlet private weak var lsText:          UILabel!
+    @IBOutlet private weak var lsDesc:          UILabel!
     
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
@@ -90,7 +92,8 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         }
     }
     
-    open var login_ = ""
+    open var login_     = ""
+    open var phone_     = ""
     
     private var responseString  = ""
     
@@ -104,6 +107,9 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         
         showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
         passTextField.isSecureTextEntry = true
+        
+        lsText.text = login_
+        lsDesc.text = lsDesc.text! + " " + phone_
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)

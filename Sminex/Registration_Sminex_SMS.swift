@@ -210,7 +210,16 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         
         if segue.identifier == Segues.fromRegistrationSminexSMS.toEnterPassword {
             let vc = segue.destination as! RegistrationSminexEnterPassword
-            vc.login_ = self.numberLs_
+            
+            let response = responseString.components(separatedBy: ";")
+            
+            vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
+            vc.phone_ = response[1]
+            
+            print(responseString)
+            print(response)
+            print(response[0].replacingOccurrences(of: "ok: ", with: ""))
+            print(response[1])
         }
     }
     
@@ -293,7 +302,6 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     private func choice() {
         
         DispatchQueue.main.async {
-            
             self.endLoading()
             
             if self.responseString.contains("error") {
@@ -311,9 +319,9 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     }
     
     private func choiceReg() {
-        self.endLoading()
         
         DispatchQueue.main.async {
+            self.endLoading()
             
             if self.responseString.contains("error") {
                 let alert = UIAlertController(title: "Ошибка", message: self.responseString.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
