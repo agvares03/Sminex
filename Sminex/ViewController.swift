@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseMessaging
 import Arcane
+import DeviceKit
 
 final class ViewController: UIViewController, UITextFieldDelegate {
     

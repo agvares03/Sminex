@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class Registration_Sminex: UIViewController, UITextFieldDelegate {
+final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet private weak var edLS:        UITextField!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
@@ -51,7 +51,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         
     }
     
-    @objc private func btn_cancel(_ sender: UITapGestureRecognizer) {
+    @objc private func btn_cancel(_ sender: UITapGestureRecognizer?) {
         navigationController?.popViewController(animated: true)
     }
     
@@ -176,9 +176,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         
-        let recognizer = UITapGestureRecognizer.init(target: backView, action: #selector(btn_cancel(_:)))
-        backView.isUserInteractionEnabled = true
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
+        recognizer.delegate = self
         backView.addGestureRecognizer(recognizer)
+        backView.isUserInteractionEnabled = true
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
@@ -290,6 +291,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
             vc.isReg_       = isReg_
             vc.isPhone_     = itsPhone
             
+            if itsPhone {
+                vc.numberPhone_ = edLS.text!
+            }
+            
         }
     }
     
@@ -313,32 +318,32 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
 
             ls = ls + string
         }
-//
-//        // определим телефон это или нет
-//        var first: Bool = true
-//        var ls_1_end = ""
-//        if (ls.count < 1) {
-//            ls_1_end = ""
-//        } else {
-//            let ls_1 = ls.index(ls.startIndex, offsetBy: 1)
-//            ls_1_end = ls.substring(to: ls_1)
-//        }
-//
-//        var ls_12_end = ""
-//        if (ls.count < 2) {
-//            ls_12_end = ""
-//        } else {
-//            let ls_12 = ls.index(ls.startIndex, offsetBy: 2)
-//            ls_12_end = ls.substring(to: ls_12)
-//        }
-//        if (ls_1_end == "+") {
-//            itsPhone = true
-//        }
-//        if (!itsPhone) {
-//            if (ls_12_end == "89") || (ls_12_end == "79") {
-//                itsPhone = true
-//            }
-//        }
+
+        // определим телефон это или нет
+        var first: Bool = true
+        var ls_1_end = ""
+        if (ls.count < 1) {
+            ls_1_end = ""
+        } else {
+            let ls_1 = ls.index(ls.startIndex, offsetBy: 1)
+            ls_1_end = ls.substring(to: ls_1)
+        }
+
+        var ls_12_end = ""
+        if (ls.count < 2) {
+            ls_12_end = ""
+        } else {
+            let ls_12 = ls.index(ls.startIndex, offsetBy: 2)
+            ls_12_end = ls.substring(to: ls_12)
+        }
+        if (ls_1_end == "+") {
+            itsPhone = true
+        }
+        if (!itsPhone) {
+            if (ls_12_end == "89") || (ls_12_end == "79") {
+                itsPhone = true
+            }
+        }
 //
 //        var new_ls: String = ""
 //        first = true

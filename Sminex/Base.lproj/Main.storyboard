@@ -757,7 +757,7 @@
                                                 </constraints>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WV1-en-UxQ">
                                                 <rect key="frame" x="21" y="129" width="278" height="1"/>
@@ -3289,7 +3289,6 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="btn_cancel:" destination="0GA-rU-H4s" eventType="touchUpInside" id="h5Q-1C-Tu5"/>
                                             <segue destination="CIs-Ia-faV" kind="unwind" unwindAction="unwindToViewControllerWithSender:" id="rDe-l6-WUs"/>
                                         </connections>
                                     </button>
@@ -3468,9 +3467,6 @@
                                         <state key="normal" backgroundImage="sminex_arrow_navbar">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <connections>
-                                            <action selector="btn_cancel:" destination="okP-hc-Mwi" eventType="touchUpInside" id="chm-Av-gV0"/>
-                                        </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jff-6Y-xtv">
                                         <rect key="frame" x="6" y="-6" width="50" height="50"/>
@@ -3694,10 +3690,6 @@
                                         <state key="normal" backgroundImage="sminex_arrow_navbar">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <connections>
-                                            <action selector="backButtonPressed:" destination="ixU-3A-z1t" eventType="touchUpInside" id="zOc-C3-G6w"/>
-                                            <action selector="btn_cancel:" destination="okP-hc-Mwi" eventType="touchUpInside" id="IHH-18-fKD"/>
-                                        </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y8H-kI-nsc">
                                         <rect key="frame" x="6" y="2" width="50" height="50"/>

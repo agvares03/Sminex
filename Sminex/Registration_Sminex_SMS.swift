@@ -9,7 +9,7 @@
 import UIKit
 import DeviceKit
 
-final class Registration_Sminex_SMS: UIViewController {
+final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet private weak var txtNameLS:   UILabel!
     @IBOutlet private weak var NameLS:      UILabel!
@@ -79,7 +79,7 @@ final class Registration_Sminex_SMS: UIViewController {
         }
     }
     
-    @objc private func btn_cancel(_ sender: UIView) {
+    @objc private func btn_cancel(_ sender: UITapGestureRecognizer?) {
         
         navigationController?.popViewController(animated: true)
     }
@@ -115,6 +115,7 @@ final class Registration_Sminex_SMS: UIViewController {
         if numberPhone_ != "" {
             txtNameLS.text  = "Номер телефона"
             NameLS.text     = numberPhone_
+            
         } else {
             txtNameLS.text  = "Номер лицевого счета"
             NameLS.text     = numberLs_
@@ -129,7 +130,8 @@ final class Registration_Sminex_SMS: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        let recognizer = UITapGestureRecognizer.init(target: backView, action: #selector(btn_cancel(_:)))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
+        recognizer.delegate = self
         backView.isUserInteractionEnabled = true
         backView.addGestureRecognizer(recognizer)
         

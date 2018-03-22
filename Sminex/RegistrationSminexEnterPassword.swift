@@ -11,7 +11,7 @@ import DeviceKit
 import FirebaseMessaging
 import Arcane
 
-final class RegistrationSminexEnterPassword: UIViewController {
+final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet private weak var saveButton:      UIButton!
     @IBOutlet private weak var passTextField:   UITextField!
@@ -72,7 +72,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
         }.resume()
     }
     
-    @objc private func backButtonPressed(_ sender: UIView) {
+    @objc private func backButtonPressed(_ sender: UITapGestureRecognizer?) {
         let viewControllers = navigationController?.viewControllers
         navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
     }
@@ -109,7 +109,8 @@ final class RegistrationSminexEnterPassword: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        let recognizer = UITapGestureRecognizer.init(target: backView, action: #selector(backButtonPressed(_:)))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(backButtonPressed(_:)))
+        recognizer.delegate = self
         backView.isUserInteractionEnabled = true
         backView.addGestureRecognizer(recognizer)
     }
