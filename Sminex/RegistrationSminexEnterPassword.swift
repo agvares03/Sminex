@@ -19,6 +19,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
     @IBOutlet private weak var showpswrd:       UIButton!
     @IBOutlet private weak var waitView:        UIActivityIndicatorView!
     @IBOutlet private weak var scroll:          UIScrollView!
+    @IBOutlet private weak var backView:        UIView!
     
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
@@ -71,7 +72,7 @@ final class RegistrationSminexEnterPassword: UIViewController {
         }.resume()
     }
     
-    @IBAction private func backButtonPressed(_ sender: UIButton) {
+    @objc private func backButtonPressed(_ sender: UIView) {
         let viewControllers = navigationController?.viewControllers
         navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
     }
@@ -107,6 +108,10 @@ final class RegistrationSminexEnterPassword: UIViewController {
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        let recognizer = UITapGestureRecognizer.init(target: backView, action: #selector(backButtonPressed(_:)))
+        backView.isUserInteractionEnabled = true
+        backView.addGestureRecognizer(recognizer)
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {

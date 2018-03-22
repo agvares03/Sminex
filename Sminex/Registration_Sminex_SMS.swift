@@ -21,6 +21,7 @@ final class Registration_Sminex_SMS: UIViewController {
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var againLabel:  UIButton!
     @IBOutlet private weak var againLine:   UILabel!
+    @IBOutlet private weak var backView:    UIView!
     
     @IBAction private func btn_go_touch(_ sender: UIButton) {
         
@@ -78,7 +79,7 @@ final class Registration_Sminex_SMS: UIViewController {
         }
     }
     
-    @IBAction private func btn_cancel(_ sender: UIButton) {
+    @objc private func btn_cancel(_ sender: UIView) {
         
         navigationController?.popViewController(animated: true)
     }
@@ -127,6 +128,10 @@ final class Registration_Sminex_SMS: UIViewController {
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        let recognizer = UITapGestureRecognizer.init(target: backView, action: #selector(btn_cancel(_:)))
+        backView.isUserInteractionEnabled = true
+        backView.addGestureRecognizer(recognizer)
         
         startTimer()
     }

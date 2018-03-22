@@ -15,6 +15,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var txtDesc:     UILabel!
     @IBOutlet private weak var scroll:      UIScrollView!
+    @IBOutlet private weak var backView:    UIView!
     
     open var isReg_ = true
     
@@ -50,7 +51,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction private func btn_cancel(_ sender: UIButton) {
+    @objc private func btn_cancel(_ sender: UITapGestureRecognizer) {
         navigationController?.popViewController(animated: true)
     }
     
@@ -173,6 +174,11 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate {
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        
+        let recognizer = UITapGestureRecognizer.init(target: backView, action: #selector(btn_cancel(_:)))
+        backView.isUserInteractionEnabled = true
+        backView.addGestureRecognizer(recognizer)
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
