@@ -47,6 +47,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         collection.delegate     = self
         collection.dataSource   = self
+        automaticallyAdjustsScrollViewInsets = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
