@@ -26,9 +26,9 @@ final class AppsUser: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         
         // Установим общий стиль
-        let navigationBar           = self.navigationController?.navigationBar
-        navigationBar?.tintColor    = UIColor.white
-        navigationBar?.barTintColor = UIColor.blue
+//        let navigationBar           = self.navigationController?.navigationBar
+//        navigationBar?.tintColor    = UIColor.white
+//        navigationBar?.barTintColor = UIColor.blue
 
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()

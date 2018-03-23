@@ -161,4 +161,10 @@ struct Segues {
         static let toAppCons         = "appsCons"
         static let toAppsUser        = "toAppsUser"
     }
+    
+    struct fromMainScreenVC {
+        
+        static let toRequest         = "Request"
+        static let toSchet           = "schet"
+    }
 }

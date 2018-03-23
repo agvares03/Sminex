@@ -215,11 +215,6 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             
             vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
             vc.phone_ = response[1]
-            
-            print(responseString)
-            print(response)
-            print(response[0].replacingOccurrences(of: "ok: ", with: ""))
-            print(response[1])
         }
     }
     
@@ -243,6 +238,8 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         var ls_for_zapros = numberLs_.replacingOccurrences(of: "+", with: "")
         ls_for_zapros = numberLs_.replacingOccurrences(of: " ", with: "")
         if (isPhone_) {
+            var ls_for_zapros = numberPhone_.replacingOccurrences(of: "+", with: "")
+            ls_for_zapros = numberPhone_.replacingOccurrences(of: " ", with: "")
             ls_for_zapros = "7" + ls_for_zapros.substring(fromIndex: 1)
         }
         
@@ -276,6 +273,11 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "identOrPhone=" + numberLs_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
         request.httpMethod = "GET"
+        
+        if isPhone_ {
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "identOrPhone=" + numberPhone_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
+            request.httpMethod = "GET"
+        }
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in
