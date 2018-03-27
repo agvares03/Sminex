@@ -114,9 +114,9 @@ struct Segues {
     
     struct fromAppsUser {
         
-        static let toAddApp          = "add_app"
-        static let toShowAppsClose   = "show_app_close"
-        static let toShowApp         = "show_app"
+        static let toRequestType     = "requestType"
+        static let toAdmission       = "admission"
+        static let toService         = "service"
     }
     
     struct fromAppUser {
@@ -166,5 +166,21 @@ struct Segues {
         
         static let toRequest         = "Request"
         static let toSchet           = "schet"
+    }
+    
+    struct fromRequestTypeVC {
+        
+        static let toCreateAdmission = "admission"
+        static let toCreateServive   = "service"
+    }
+    
+    struct fromCreateTechService {
+        
+        static let toService         = "showService"
+    }
+    
+    struct fromCreateRequest {
+        
+        static let toAdmission       = "admission"
     }
 }

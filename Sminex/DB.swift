@@ -26,7 +26,10 @@ final class DB: NSObject, XMLParserDelegate {
                 CoreDataManager.instance.managedObjectContext.delete(result as! NSManagedObject)
             }
         } catch {
-            print(error)
+            
+            #if DEBUG
+                print(error)
+            #endif
         }
         CoreDataManager.instance.saveContext()
     }
@@ -47,11 +50,13 @@ final class DB: NSObject, XMLParserDelegate {
         parser.delegate = self
         let success:Bool = parser.parse()
         
-        if success {
-            print("parse success!")
-        } else {
-            print("parse failure!")
-        }
+        #if DEBUG
+            if success {
+                print("parse success!")
+            } else {
+                print("parse failure!")
+            }
+        #endif
         
         // сохраним последние значения Месяц-Год в глобальных переменных
         save_month_year(month: self.currMonth, year: self.currYear)
@@ -276,7 +281,10 @@ final class DB: NSObject, XMLParserDelegate {
                                                             sum = sum + Double(object.value(forKey: "end") as! String)!
                                                         }
                                                     } catch {
-                                                        print(error)
+                                                        
+                                                        #if DEBUG
+                                                            print(error)
+                                                        #endif
                                                     }
                                                     
                                                     let defaults = UserDefaults.standard
@@ -330,32 +338,34 @@ final class DB: NSObject, XMLParserDelegate {
     func parse_Apps(login: String, pass: String, isCons: String) {
         
         // Если в БД нет заявок - получаем все заявки
-//        let fetchedResultsController: NSFetchedResultsController<Applications>?
-//        fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Applications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Applications>
-//        if (fetchedResultsController?.sections?.count)! > 0 {
-//            
-//        } else {
+        //        let fetchedResultsController: NSFetchedResultsController<Applications>?
+        //        fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Applications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Applications>
+        //        if (fetchedResultsController?.sections?.count)! > 0 {
+        //
+        //        } else {
         
-            self.login = login
-            let pass  = pass
-            var TextCons = ""
-            if (isCons == "1") {
-                TextCons = "&isConsultant=true&isActive=1;isPerformed=0"
-            }
-            let urlPath = Server.SERVER + Server.GET_APPS_COMM + "login=" + login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + "&pwd=" + pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + TextCons;
-            let url: NSURL = NSURL(string: urlPath)!
-            
-            parser = XMLParser(contentsOf: url as URL)!
-            parser.delegate = self
-            let success:Bool = parser.parse()
-            
+        self.login = login
+        let pass  = pass
+        var TextCons = ""
+        if (isCons == "1") {
+            TextCons = "&isConsultant=true&isActive=1;isPerformed=0"
+        }
+        let urlPath = Server.SERVER + Server.GET_APPS_COMM + "login=" + login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + "&pwd=" + pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + TextCons;
+        let url: NSURL = NSURL(string: urlPath)!
+        
+        parser = XMLParser(contentsOf: url as URL)!
+        parser.delegate = self
+        let success     = parser.parse()
+        
+        #if DEBUG
             if success {
                 print("parse success!")
             } else {
                 print("parse failure!")
             }
-            
-//        }
+        #endif
+        
+        //        }
     }
 
     func parse_Houses() {
@@ -402,7 +412,10 @@ final class DB: NSObject, XMLParserDelegate {
                                                             }
 //                                                        }
                                                     } catch let error as NSError {
-                                                        print(error)
+                                                        
+                                                        #if DEBUG
+                                                            print(error)
+                                                        #endif
                                                     }
                                                 }
                                  
@@ -422,11 +435,13 @@ final class DB: NSObject, XMLParserDelegate {
         parser.delegate = self
         let success:Bool = parser.parse()
         
-        if success {
-            print("parse success!")
-        } else {
-            print("parse failure!")
-        }
+        #if DEBUG
+            if success {
+                print("parse success!")
+            } else {
+                print("parse failure!")
+            }
+        #endif
     }
     
     // ОТДЕЛЬНЫЕ ПРОЦЕДУРЫ РАБОТЫ С БД
@@ -502,7 +517,10 @@ final class DB: NSObject, XMLParserDelegate {
                 CoreDataManager.instance.managedObjectContext.delete(result as! NSManagedObject)
             }
         } catch {
-            print(error)
+            
+            #if DEBUG
+                print(error)
+            #endif
         }
         CoreDataManager.instance.saveContext()
     }

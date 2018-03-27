@@ -84,6 +84,8 @@ final class Server {
     static let COMPLETE_REG        = "CompleteRegisterSminex.ashx?"    // Проверка СМС кода при регистрации
     static let COMPLETE_REM        = "CompleteRemember.ashx?"          // Проверка СМС кода при восстановлении пароля
     static let CHANGE_PASSWRD      = "ChangePassword.ashx?"            // Изменение пароля
+    static let ADD_FILE            = "AddFileToRequest.ashx?"          // Загрузка файла на сервер
+    static let REQUEST_TYPE        = "GetRequestTypes.ashx?"           // Получение списка типов заявок
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

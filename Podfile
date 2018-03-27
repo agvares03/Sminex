@@ -8,10 +8,11 @@ target 'Sminex' do
     # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
     use_frameworks!
     
-    # Pods for DemoUC
-    pod 'Firebase/Core'
+    pod 'SwiftyXMLParser', :git => 'https://github.com/yahoojapan/SwiftyXMLParser.git'
     pod 'Firebase/Messaging'
+    pod 'Firebase/Core'
     pod 'DeviceKit'
     pod 'Arcane'
+    pod 'Gloss'
     
 end

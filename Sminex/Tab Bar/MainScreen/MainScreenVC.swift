@@ -48,6 +48,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         collection.delegate     = self
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false
+        
+        // Поправим Navigation bar
+        navigationController?.navigationBar.isTranslucent   = true
+        navigationController?.navigationBar.backgroundColor = .white
+        navigationController?.navigationBar.tintColor       = .white
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .thin) ]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -97,10 +109,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let title = (data[indexPath.section]![0] as! CellsHeaderData).title
         
         if title == "Опросы" {
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SurveyCell", for: indexPath) as! SurveyCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData)
-            
             return cell
         
         } else if title == "Новости" {
