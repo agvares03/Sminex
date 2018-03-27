@@ -408,6 +408,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             vc.isCreated_ = true
             vc.data_ = data!
             vc.reqId_ = reqId!
+            vc.delegate = delegate
         }
     }
     

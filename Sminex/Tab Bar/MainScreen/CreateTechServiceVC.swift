@@ -390,6 +390,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             vc.isCreate_ = true
             vc.data_ = data!
             vc.reqId_ = reqId!
+            vc.delegate = delegate
         }
     }
     

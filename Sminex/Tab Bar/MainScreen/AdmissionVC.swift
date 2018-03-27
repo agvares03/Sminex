@@ -80,6 +80,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         commentField.text = ""
         commentField.placeholder = "Сообщение"
         view.endEditing(true)
+        delegate?.update()
         
         // Подождем пока закроется клваиатура
         DispatchQueue.global(qos: .userInteractive).async {
@@ -92,6 +93,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    open var delegate: AppsUserDelegate?
     open var reqId_     = ""
     open var isCreated_ = false
     open var data_: AdmissionHeaderData = AdmissionHeaderData(icon: UIImage(named: "account")!,

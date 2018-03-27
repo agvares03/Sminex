@@ -52,6 +52,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         commentField.text = ""
         commentField.placeholder = "Сообщение"
         view.endEditing(true)
+        delegate?.update()
         
         // Подождем пока закроется клавиатура
         DispatchQueue.global(qos: .userInteractive).async {
@@ -91,6 +92,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         present(action, animated: true, completion: nil)
     }
     
+    open var delegate: AppsUserDelegate?
     open var reqId_    = ""
     open var isCreate_ = false
     open var data_: ServiceHeaderData = ServiceHeaderData(icon: UIImage(named: "account")!,
@@ -188,7 +190,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         
         var group = DispatchGroup()
         let comm = commentField.text!.stringByAddingPercentEncodingForRFC3986()
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "text=" + comm!)!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm!)!)
         request.httpMethod = "GET"
         
         group.enter()

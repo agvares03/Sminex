@@ -147,7 +147,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          images: [],
                                                          imagesUrl: images)
                     self.admissionComm = []
-
                     self.rowComms[row.id!]!.forEach { comm in
                         
                         var commImg: String?
@@ -192,7 +191,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          imagesUrl: images)
                     
                     self.techServiceComm = []
-                    
                     self.rowComms[row.id!]!.forEach { comm in
                         
                         var commImg: String?
@@ -266,8 +264,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func getRequests(isBackground: Bool = false) {
         
-        DispatchQueue.global(qos: .background).async {
-            
+        DispatchQueue.global(qos: .userInteractive).async {
+        
             let login = UserDefaults.standard.string(forKey: "login")!
             let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: self.getSalt(login: login))
             
@@ -338,7 +336,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                    isBack: isAnswered)
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.sync {
                     if !isBackground {
                         self.collection.reloadData()
                         self.stopAnimatior()
@@ -411,12 +409,14 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             vc.data_ = admission!
             vc.comments_ = admissionComm
             vc.reqId_ = reqId
+            vc.delegate = self
         
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC
             vc.data_ = techService!
             vc.comments_ = techServiceComm
             vc.reqId_ = reqId
+            vc.delegate = self
         
         } else if segue.identifier == Segues.fromAppsUser.toRequestType {
             let vc = segue.destination as! RequestTypeVC
