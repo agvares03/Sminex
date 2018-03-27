@@ -322,6 +322,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 db.deleteRequests()
                 }
                 
+                self.data = []
                 self.rows.forEach {
                    
                     let isAnswered = self.rowComms[$0.id!]?.count == 0 ? false : true

@@ -236,7 +236,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             }
             
             #if DEBUG
-//                print(String(data: data!, encoding: .utf8)!)
+                print(String(data: data!, encoding: .utf8)!)
             #endif
             }.resume()
         group.wait()
