@@ -12,8 +12,11 @@ private protocol MainDataProtocol:  class {}
 private protocol CellsDelegate:    class {
     func tapped(name: String)
 }
+protocol MainScreenDelegate: class {
+    func update()
+}
 
-final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout {
+final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout, MainScreenDelegate {
     
     @IBOutlet private weak var collection: UICollectionView!
     
@@ -166,7 +169,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
-    private func fetchRequests() {
+    private func fetchRequests(_ isBackground: Bool = false) {
         
         var count = 1
         DB().getRequests().forEach {
@@ -175,20 +178,22 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
         data[3]![count] = RequestAddCellData(title: "Добавить заявку")
         
-        let vc = AppsUser()
-        
-        DispatchQueue.global(qos: .background).async {
-            vc.getRequests(isBackground: true)
-            var count = 1
-            sleep(2)
-            DispatchQueue.main.async {
-                self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-                DB().getRequests().forEach {
-                    self.data[3]![count] = $0
-                    count += 1
+        if !isBackground {
+            let vc = AppsUser()
+            
+            DispatchQueue.global(qos: .background).async {
+                vc.getRequests(isBackground: true)
+                var count = 1
+                sleep(2)
+                DispatchQueue.main.async {
+                    self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                    DB().getRequests().forEach {
+                        self.data[3]![count] = $0
+                        count += 1
+                    }
+                    self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                    self.collection.reloadData()
                 }
-                self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-                self.collection.reloadData()
             }
         }
     }
@@ -198,7 +203,16 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
             let vc = segue.destination as! AppsUser
             vc.isCreatingRequest_ = true
+            vc.delegate = self
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
+            let vc = segue.destination as! AppsUser
+            vc.delegate = self
         }
+    }
+    
+    func update() {
+        fetchRequests(true)
     }
 }
 

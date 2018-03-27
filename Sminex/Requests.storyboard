@@ -934,9 +934,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пропуск" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QvO-IX-eFp">
-                                                    <rect key="frame" x="16" y="14.5" width="68" height="20.5"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пропуск" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QvO-IX-eFp">
+                                                    <rect key="frame" x="8" y="15.5" width="278" height="19.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -966,10 +966,10 @@
                                             <constraint firstAttribute="trailing" secondItem="MC5-J1-nGn" secondAttribute="trailing" id="Bv6-5n-hvl"/>
                                             <constraint firstItem="QvO-IX-eFp" firstAttribute="centerY" secondItem="I3c-Il-HSF" secondAttribute="centerY" id="SY4-gb-uHI"/>
                                             <constraint firstAttribute="bottom" secondItem="MC5-J1-nGn" secondAttribute="bottom" id="cmr-ER-o5y"/>
-                                            <constraint firstItem="QvO-IX-eFp" firstAttribute="leading" secondItem="I3c-Il-HSF" secondAttribute="leadingMargin" constant="8" id="g7c-6R-KDj"/>
+                                            <constraint firstItem="QvO-IX-eFp" firstAttribute="leading" secondItem="I3c-Il-HSF" secondAttribute="leadingMargin" id="g7c-6R-KDj"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="Suc-EE-97q" secondAttribute="trailing" constant="8" id="hdh-il-emV"/>
                                             <constraint firstItem="Suc-EE-97q" firstAttribute="centerY" secondItem="I3c-Il-HSF" secondAttribute="centerY" id="nP5-1I-3ei"/>
-                                            <constraint firstItem="Suc-EE-97q" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QvO-IX-eFp" secondAttribute="trailing" constant="50" id="pLc-5b-KJL"/>
+                                            <constraint firstItem="Suc-EE-97q" firstAttribute="leading" secondItem="QvO-IX-eFp" secondAttribute="trailing" constant="10" id="pLc-5b-KJL"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="title" destination="QvO-IX-eFp" id="0KX-aE-iek"/>

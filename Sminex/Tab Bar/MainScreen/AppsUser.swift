@@ -41,6 +41,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     open var isCreatingRequest_ = false
+    open var delegate: MainScreenDelegate?
     
     private var reqId = ""
     private var responceString = ""
@@ -284,10 +285,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 let requests = xml["Requests"]
                 
                 let row = requests["Row"]
+                self.rows = []
                 
                 row.forEach { row in
                     
-                    self.rows = []
                     self.rows.append(Request(row: row))
                     self.rowComms[row.attributes["ID"]!] = []
                     self.rowPersons[row.attributes["ID"]!] = []
@@ -317,19 +318,22 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                    
                     let isAnswered = self.rowComms[$0.id!]?.count == 0 ? false : true
                     
+                    var date = $0.planDate!
+                    date.removeLast(9)
+                    
                     let lastComm = self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     self.data.append( AppsUserCellData(title: $0.name!,
                                                        desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
                                                        icon: icon,
                                                        status: $0.status!,
-                                                       date: $0.dateTo!,
+                                                       date: date,
                                                        isBack: isAnswered,
                                                        type: $0.name!)  )
                     db.setRequests(title: $0.name!,
                                    desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
                                    icon: icon,
-                                   date: $0.dateTo!,
+                                   date: date,
                                    status: $0.status!,
                                    isBack: isAnswered)
                 }
@@ -434,6 +438,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func update() {
+        delegate?.update()
         getRequests()
     }
 }

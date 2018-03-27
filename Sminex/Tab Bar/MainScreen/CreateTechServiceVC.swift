@@ -273,6 +273,13 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             
             self.reqId = String(data: responce!, encoding: .utf8)
             
+            DB().setRequests(title: "Техническое обслуживание" + formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                             desc: edProblem.text!,
+                             icon: UIImage(named: "processing_label")!,
+                             date: String(describing: data!.date),
+                             status: "В ОБРАБОТКЕ",
+                             isBack: false)
+            
             return true
         }
     }

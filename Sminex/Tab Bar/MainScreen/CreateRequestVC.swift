@@ -304,6 +304,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 print(String(data: responce!, encoding: .utf8)!)
             #endif
             
+            DB().setRequests(title: "Пропуск" + formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                             desc: edComment.text!,
+                             icon: UIImage(named: "processing_label")!,
+                             date: (data?.date)!,
+                             status: "В ОБРАБОТКЕ",
+                             isBack: false)
+            
             return true
         }
     }
