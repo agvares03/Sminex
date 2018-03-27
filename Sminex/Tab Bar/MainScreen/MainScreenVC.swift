@@ -20,6 +20,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet private weak var collection: UICollectionView!
     
+    private var fetchGroup = DispatchGroup()
     private var isFetching = false
     private var data: [Int:[Int:MainDataProtocol]] = [
         0 : [
@@ -184,21 +185,23 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if !isBackground {
                 let vc = AppsUser()
                 
-//                DispatchQueue.global(qos: .background).async {
-//                    vc.getRequests(isBackground: true)
-//                    var count = 1
-//                    sleep(2)
-//                    DispatchQueue.main.sync {
-//                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-//                        DB().getRequests().forEach {
-//                            self.data[3]![count] = $0
-//                            count += 1
-//                        }
-//                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-//                        self.collection.reloadData()
-//                        self.isFetching = false
-//                    }
-//                }
+                fetchGroup.enter()
+                DispatchQueue.global(qos: .background).async {
+                    vc.getRequests(isBackground: true)
+                    self.fetchGroup.leave()
+                    var count = 1
+                    sleep(2)
+                    DispatchQueue.main.sync {
+                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                        DB().getRequests().forEach {
+                            self.data[3]![count] = $0
+                            count += 1
+                        }
+                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                        self.collection.reloadData()
+                        self.isFetching = false
+                    }
+                }
             }
         }
     }
@@ -211,6 +214,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.delegate = self
         
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
+            fetchGroup.wait()
             let vc = segue.destination as! AppsUser
             vc.delegate = self
         }
