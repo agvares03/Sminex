@@ -104,12 +104,18 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             
             if uploadRequest() {
                 
-                imagesArr.forEach {
-                    uploadPhoto($0)
+                DispatchQueue.global(qos: .userInteractive).async {
+                    
+                    self.imagesArr.forEach {
+                        self.uploadPhoto($0)
+                    }
+                    DispatchQueue.main.async {
+                        
+                        self.endAnimator()
+                        self.delegate?.update()
+                        self.performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
+                    }
                 }
-                endAnimator()
-                delegate?.update()
-                performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
             }
         }
     }

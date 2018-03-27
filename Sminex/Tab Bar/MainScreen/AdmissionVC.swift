@@ -72,28 +72,26 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         startAnimating()
         if img == nil {
             sendComment()
+            let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+            arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: commentField.text!, date: "Сейчас",commImg: img)  )
+            collection.reloadData()
+            img = nil
+            commentField.text = ""
+            commentField.placeholder = "Сообщение"
+            view.endEditing(true)
+            delegate?.update()
             
+            // Подождем пока закроется клваиатура
+            DispatchQueue.global(qos: .userInteractive).async {
+                usleep(900000)
+                
+                DispatchQueue.main.async {
+                    self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                    self.endAnimating()
+                }
+            }
         } else {
             uploadPhoto(img!)
-        }
-        
-        let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-        arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: commentField.text!, date: "Сейчас",commImg: img)  )
-        collection.reloadData()
-        img = nil
-        commentField.text = ""
-        commentField.placeholder = "Сообщение"
-        view.endEditing(true)
-        delegate?.update()
-        
-        // Подождем пока закроется клваиатура
-        DispatchQueue.global(qos: .userInteractive).async {
-            usleep(900000)
-            
-            DispatchQueue.main.async {
-                self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
-                self.endAnimating()
-            }
         }
     }
     
@@ -232,11 +230,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     private func uploadPhoto(_ img: UIImage) {
         
-        let group = DispatchGroup()
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         
-        group.enter()
         Alamofire.upload(multipartFormData: { multipartFromdata in
             multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: "tech_file", fileName: "tech_file.jpg", mimeType: "image/jpg")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
@@ -250,15 +246,31 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                 
                 upload.responseJSON { response in
                     print(response.result.value!)
-                    group.leave()
                     
+                    let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: "Сейчас",commImg: img)  )
+                    self.collection.reloadData()
+                    self.img = nil
+                    self.commentField.text = ""
+                    self.commentField.placeholder = "Сообщение"
+                    self.view.endEditing(true)
+                    self.delegate?.update()
+                    
+                    // Подождем пока закроется клваиатура
+                    DispatchQueue.global(qos: .userInteractive).async {
+                        usleep(900000)
+                        
+                        DispatchQueue.main.async {
+                            self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                            self.endAnimating()
+                        }
+                    }
                 }
                 
             case .failure(let encodingError):
                 print(encodingError)
             }
         }
-        group.wait()
         return
     }
     

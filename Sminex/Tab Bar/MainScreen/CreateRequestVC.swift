@@ -90,12 +90,19 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             
             if uploadRequest() {
                 
-                images.forEach {
-                    uploadPhoto($0)
+                DispatchQueue.global(qos: .userInteractive).async {
+                    
+                    self.images.forEach {
+                        self.uploadPhoto($0)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        
+                        self.endAnimator()
+                        self.delegate?.update()
+                        self.performSegue(withIdentifier: Segues.fromCreateRequest.toAdmission, sender: self)
+                    }
                 }
-                endAnimator()
-                delegate?.update()
-                performSegue(withIdentifier: Segues.fromCreateRequest.toAdmission, sender: self)
             }
         }
     }

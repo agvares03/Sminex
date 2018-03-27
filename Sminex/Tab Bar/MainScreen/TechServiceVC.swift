@@ -45,27 +45,26 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         
         if img == nil {
             sendComment()
+            let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+            arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: commentField.text!, date: "Сейчас", image: img)  )
+            img = nil
+            collection.reloadData()
+            commentField.text = ""
+            commentField.placeholder = "Сообщение"
+            view.endEditing(true)
+            delegate?.update()
             
+            // Подождем пока закроется клавиатура
+            DispatchQueue.global(qos: .userInteractive).async {
+                usleep(900000)
+                
+                DispatchQueue.main.async {
+                    self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                    self.endAnimator()
+                }
+            }
         } else {
             uploadPhoto(img!)
-        }
-        let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-        arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: commentField.text!, date: "Сейчас", image: img)  )
-        img = nil
-        collection.reloadData()
-        commentField.text = ""
-        commentField.placeholder = "Сообщение"
-        view.endEditing(true)
-        delegate?.update()
-        
-        // Подождем пока закроется клавиатура
-        DispatchQueue.global(qos: .userInteractive).async {
-            usleep(900000)
-            
-            DispatchQueue.main.async {
-                self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
-                self.endAnimator()
-            }
         }
     }
     
@@ -215,11 +214,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     private func uploadPhoto(_ img: UIImage) {
         
-        let group = DispatchGroup()
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         
-        group.enter()
         Alamofire.upload(multipartFormData: { multipartFromdata in
             multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: "tech_file", fileName: "tech_file.jpg", mimeType: "image/jpg")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
@@ -233,7 +230,25 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 
                 upload.responseJSON { response in
                     print(response.result.value!)
-                    group.leave()
+                    
+                    let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+                    self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: "Сейчас", image: img)  )
+                    self.img = nil
+                    self.collection.reloadData()
+                    self.commentField.text = ""
+                    self.commentField.placeholder = "Сообщение"
+                    self.view.endEditing(true)
+                    self.delegate?.update()
+                    
+                    // Подождем пока закроется клавиатура
+                    DispatchQueue.global(qos: .userInteractive).async {
+                        usleep(900000)
+                        
+                        DispatchQueue.main.async {
+                            self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                            self.endAnimator()
+                        }
+                    }
                     
                 }
                 
@@ -241,7 +256,6 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 print(encodingError)
             }
         }
-        group.wait()
         return
     }
     
