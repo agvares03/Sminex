@@ -102,10 +102,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                                      images: imagesArr)
             
             if uploadRequest() {
-//                
-//                imagesArr.forEach {
-//                    uploadPhoto($0)
-//                }
+                
+                imagesArr.forEach {
+                    uploadPhoto($0)
+                }
                 endAnimator()
                 delegate?.update()
                 performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
