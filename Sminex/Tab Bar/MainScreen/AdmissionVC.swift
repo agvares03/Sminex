@@ -9,8 +9,11 @@
 import UIKit
 
 private protocol AdmissionProtocol: class {}
+private protocol AdmissionCellsProtocol: class {
+    func imageTapped(_ sender: UITapGestureRecognizer)
+}
 
-final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AdmissionCellsProtocol {
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var collection:      UICollectionView!
@@ -194,12 +197,12 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionHeader", for: indexPath) as! AdmissionHeader
-            cell.display(arr[0] as! AdmissionHeaderData)
+            cell.display((arr[0] as! AdmissionHeaderData), delegate: self)
             return cell
         
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionCommentCell", for: indexPath) as! AdmissionCommentCell
-            cell.display(arr[indexPath.row] as! AdmissionCommentCellData)
+            cell.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self)
             return cell
         }
     }
@@ -280,6 +283,26 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         sendButtonPressed(nil)
         return true
     }
+    
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        
+        let imageView = sender.view as! UIImageView
+        let newImageView = UIImageView(image: imageView.image)
+        newImageView.frame = UIScreen.main.bounds
+        newImageView.backgroundColor = .black
+        newImageView.contentMode = .scaleAspectFit
+        newImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage(_:)))
+        newImageView.addGestureRecognizer(tap)
+        self.view.addSubview(newImageView)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.isNavigationBarHidden = false
+        sender.view?.removeFromSuperview()
+    }
 }
 
 
@@ -298,8 +321,11 @@ final class AdmissionHeader: UICollectionViewCell {
     @IBOutlet private weak var date:            UILabel!
     @IBOutlet private weak var status:          UILabel!
     
-    fileprivate func display(_ item: AdmissionHeaderData) {
+    private var delegate: AdmissionCellsProtocol?
+    
+    fileprivate func display(_ item: AdmissionHeaderData, delegate: AdmissionCellsProtocol) {
         
+        self.delegate = delegate
         imgsLoader.isHidden = true
         imgsLoader.stopAnimating()
         
@@ -336,6 +362,9 @@ final class AdmissionHeader: UICollectionViewCell {
                 let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: imgs.frame.size.height))
                 image.image = $0
                 x += 165.0
+                let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+                image.isUserInteractionEnabled = true
+                image.addGestureRecognizer(tap)
                 imgs.addSubview(image)
             }
             imgs.contentSize = CGSize(width: CGFloat(x), height: imgs.frame.size.height)
@@ -365,6 +394,9 @@ final class AdmissionHeader: UICollectionViewCell {
                         let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.imgs.frame.size.height))
                         image.image = $0
                         x += 165.0
+                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(_:)))
+                        image.isUserInteractionEnabled = true
+                        image.addGestureRecognizer(tap)
                         self.imgs.addSubview(image)
                     }
                     self.imgs.contentSize = CGSize(width: CGFloat(x), height: self.imgs.frame.size.height)
@@ -373,6 +405,10 @@ final class AdmissionHeader: UICollectionViewCell {
                 }
             }
         }
+    }
+    
+    @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
+        delegate?.imageTapped(sender)
     }
     
 }
@@ -411,8 +447,11 @@ final class AdmissionCommentCell: UICollectionViewCell {
     @IBOutlet private weak var comment: 	UILabel!
     @IBOutlet private weak var date:        UILabel!
     
-    fileprivate func display(_ item: AdmissionCommentCellData) {
+    private var delegate: AdmissionCellsProtocol?
+    
+    fileprivate func display(_ item: AdmissionCommentCellData, delegate: AdmissionCellsProtocol) {
         
+        self.delegate = delegate
         imgsLoader.isHidden = true
         imgsLoader.stopAnimating()
         
@@ -430,6 +469,10 @@ final class AdmissionCommentCell: UICollectionViewCell {
         title.text      = item.title
         comment.text    = item.comment
         date.text       = item.date
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        image.isUserInteractionEnabled = true
+        image.addGestureRecognizer(tap)
         
         if item.imgUrl != nil {
             imgsLoader.isHidden = false
@@ -449,6 +492,10 @@ final class AdmissionCommentCell: UICollectionViewCell {
                 }
             }
         }
+    }
+    
+    @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
+        delegate?.imageTapped(sender)
     }
     
 }

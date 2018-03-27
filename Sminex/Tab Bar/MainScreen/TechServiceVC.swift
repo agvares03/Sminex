@@ -9,8 +9,11 @@
 import UIKit
 
 private protocol TechServiceProtocol: class { }
+private protocol TechServiceCellsProtocol: class {
+    func imagePressed(_ sender: UITapGestureRecognizer)
+}
 
-final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, TechServiceCellsProtocol {
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var collection:      UICollectionView!
@@ -161,12 +164,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         
         if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ServiceHeader", for: indexPath) as! ServiceHeader
-            cell.display(arr[indexPath.row] as! ServiceHeaderData)
+            cell.display((arr[indexPath.row] as! ServiceHeaderData), delegate: self)
             return cell
         
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ServiceCommentCell", for: indexPath) as! ServiceCommentCell
-            cell.display(arr[indexPath.row] as! ServiceCommentCellData)
+            cell.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self)
             return cell
         }
     }
@@ -262,6 +265,29 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         sendButtonPressed(nil)
         return true
     }
+    
+    func imagePressed(_ sender: UITapGestureRecognizer) {
+        imageTapped(sender)
+    }
+    
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        let newImageView = UIImageView(image: imageView.image)
+        newImageView.frame = UIScreen.main.bounds
+        newImageView.backgroundColor = .black
+        newImageView.contentMode = .scaleAspectFit
+        newImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage(_:)))
+        newImageView.addGestureRecognizer(tap)
+        self.view.addSubview(newImageView)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.isNavigationBarHidden = false
+        sender.view?.removeFromSuperview()
+    }
 }
 
 final class ServiceHeader: UICollectionViewCell {
@@ -274,8 +300,11 @@ final class ServiceHeader: UICollectionViewCell {
     @IBOutlet private weak var icon:        UIImageView!
     @IBOutlet private weak var status:      UILabel!
     
-    fileprivate func display(_ item: ServiceHeaderData) {
+    private var delegate: TechServiceCellsProtocol?
+    
+    fileprivate func display(_ item: ServiceHeaderData, delegate: TechServiceCellsProtocol) {
         
+        self.delegate = delegate
         imageLoader.isHidden = true
         imageLoader.stopAnimating()
         
@@ -300,6 +329,9 @@ final class ServiceHeader: UICollectionViewCell {
                 let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
                 image.image = $0
                 x += 165.0
+                let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
+                image.isUserInteractionEnabled = true
+                image.addGestureRecognizer(tap)
                 scroll.addSubview(image)
             }
             scroll.contentSize = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
@@ -329,6 +361,9 @@ final class ServiceHeader: UICollectionViewCell {
                         let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
                         image.image = $0
                         x += 165.0
+                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
+                        image.isUserInteractionEnabled = true
+                        image.addGestureRecognizer(tap)
                         self.scroll.addSubview(image)
                     }
                     self.scroll.contentSize = CGSize(width: CGFloat(x), height: self.scroll.frame.size.height)
@@ -337,6 +372,10 @@ final class ServiceHeader: UICollectionViewCell {
                 }
             }
         }
+    }
+    
+    @objc func imagePressed(_ sender: UITapGestureRecognizer) {
+        delegate?.imagePressed(sender)
     }
 }
 
@@ -369,8 +408,11 @@ final class ServiceCommentCell: UICollectionViewCell {
     @IBOutlet private weak var desc:        UILabel!
     @IBOutlet private weak var date:    	UILabel!
     
-    fileprivate func display(_ item: ServiceCommentCellData) {
+    private var delegate: TechServiceCellsProtocol?
+    
+    fileprivate func display(_ item: ServiceCommentCellData, delegate: TechServiceCellsProtocol) {
         
+        self.delegate = delegate
         imageLoader.isHidden = true
         imageLoader.stopAnimating()
         
@@ -388,6 +430,10 @@ final class ServiceCommentCell: UICollectionViewCell {
         title.text  = item.title
         desc.text   = item.desc
         date.text   = item.date
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
+        image.isUserInteractionEnabled = true
+        image.addGestureRecognizer(tap)
         
         if item.imgUrl != nil {
             
@@ -407,6 +453,10 @@ final class ServiceCommentCell: UICollectionViewCell {
                 }
             }
         }
+    }
+    
+    @objc private func imagePressed(_ sender: UITapGestureRecognizer) {
+        delegate?.imagePressed(sender)
     }
 }
 

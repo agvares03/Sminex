@@ -262,8 +262,12 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }.resume()
     }
     
-    func getRequests(isBackground: Bool = false) {
+    @discardableResult
+    func getRequests(isBackground: Bool = false) -> [RequestCellData] {
         
+        var returnArr: [RequestCellData] = []
+        let group = DispatchGroup()
+        group.enter()
         DispatchQueue.global(qos: .userInteractive).async {
         
             let login = UserDefaults.standard.string(forKey: "login")!
@@ -274,6 +278,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
+                
+                defer {
+                    group.leave()
+                }
                 
                 #if DEBUG
                     print(String(data: data!, encoding: .utf8)!)
@@ -310,7 +318,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 
                 let db = DB()
+                if !isBackground {
                 db.deleteRequests()
+                }
                 
                 self.rows.forEach {
                    
@@ -328,12 +338,21 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                        date: date,
                                                        isBack: isAnswered,
                                                        type: $0.name!)  )
+                    if !isBackground {
                     db.setRequests(title: $0.name!,
                                    desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
                                    icon: icon,
                                    date: date,
                                    status: $0.status!,
                                    isBack: isAnswered)
+                    } else {
+                        returnArr.append( RequestCellData(title: $0.name!,
+                                                          desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
+                                                          icon: icon,
+                                                          date: date,
+                                                          status: $0.status!,
+                                                          isBack: isAnswered) )
+                    }
                 }
                 
                 DispatchQueue.main.sync {
@@ -344,6 +363,18 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 }.resume()
         }
+        if isBackground {
+            group.wait()
+        }
+        var ret: [RequestCellData] = []
+        
+        if returnArr.count != 0 {
+            ret.append(returnArr.popLast()!)
+        }
+        if returnArr.count != 0 {
+            ret.append(returnArr.popLast()!)
+        }
+        return ret
     }
     
     // Качаем соль

@@ -248,6 +248,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             images.forEach {
                 let img = UIImageView(frame: CGRect(x: x, y: 0.0, width: 150.0, height: 150.0))
                 img.image = $0
+                let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+                tap.delegate = self
+                img.isUserInteractionEnabled = true
+                img.addGestureRecognizer(tap)
                 imgScroll.addSubview(img)
                 
                 let deleteButton = UIButton(frame: CGRect(x: x + 130.0, y: 0.0, width: 20.0, height: 20.0))
@@ -272,6 +276,26 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         images.remove(at: sender.tag)
+    }
+    
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        
+        let imageView = sender.view as! UIImageView
+        let newImageView = UIImageView(image: imageView.image)
+        newImageView.frame = UIScreen.main.bounds
+        newImageView.backgroundColor = .black
+        newImageView.contentMode = .scaleAspectFit
+        newImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage(_:)))
+        newImageView.addGestureRecognizer(tap)
+        self.view.addSubview(newImageView)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.isNavigationBarHidden = false
+        sender.view?.removeFromSuperview()
     }
     
     private func uploadRequest() -> Bool {

@@ -20,8 +20,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet private weak var collection: UICollectionView!
     
-    private var fetchGroup = DispatchGroup()
-    private var isFetching = false
     private var data: [Int:[Int:MainDataProtocol]] = [
         0 : [
             0 : CellsHeaderData(title: "Опросы"),
@@ -173,34 +171,28 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     private func fetchRequests(_ isBackground: Bool = false) {
         
-        if !isFetching {
-            isFetching = true
-            var count = 1
-            DB().getRequests().forEach {
-                data[3]![count] = $0
-                count += 1
-            }
-            data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+        var count = 1
+        DB().getRequests().forEach {
+            data[3]![count] = $0
+            count += 1
+        }
+        data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+        
+        if !isBackground {
+            let vc = AppsUser()
             
-            if !isBackground {
-                let vc = AppsUser()
-                
-                fetchGroup.enter()
-                DispatchQueue.global(qos: .background).async {
-                    vc.getRequests(isBackground: true)
-                    self.fetchGroup.leave()
-                    var count = 1
-                    sleep(2)
-                    DispatchQueue.main.sync {
-                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-                        DB().getRequests().forEach {
-                            self.data[3]![count] = $0
-                            count += 1
-                        }
-                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-                        self.collection.reloadData()
-                        self.isFetching = false
+            DispatchQueue.global(qos: .background).async {
+                let res = vc.getRequests(isBackground: true)
+                var count = 1
+                sleep(2)
+                DispatchQueue.main.sync {
+                    self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                    res.forEach {
+                        self.data[3]![count] = $0
+                        count += 1
                     }
+                    self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                    self.collection.reloadData()
                 }
             }
         }
@@ -214,7 +206,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.delegate = self
         
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
-            fetchGroup.wait()
             let vc = segue.destination as! AppsUser
             vc.delegate = self
         }
