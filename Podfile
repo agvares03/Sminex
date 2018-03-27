@@ -9,6 +9,7 @@ target 'Sminex' do
     use_frameworks!
     
     pod 'SwiftyXMLParser', :git => 'https://github.com/yahoojapan/SwiftyXMLParser.git'
+    pod 'Alamofire', '~> 4.7'
     pod 'Firebase/Messaging'
     pod 'Firebase/Core'
     pod 'DeviceKit'

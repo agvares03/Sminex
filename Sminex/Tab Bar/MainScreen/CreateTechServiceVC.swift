@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -310,33 +311,31 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     private func uploadPhoto(_ img: UIImage) {
         
         let group = DispatchGroup()
+        let reqID = reqId?.stringByAddingPercentEncodingForRFC3986()
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
+        
         group.enter()
-        
-        let reqID = reqId?.stringByAddingPercentEncodingForRFC3986()!
-        let accID = UserDefaults.standard.string(forKey: "id_account")?.stringByAddingPercentEncodingForRFC3986()!
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + accID!)!)
-        request.httpMethod = "POST"
-        request.setValue("Keep-Alive", forHTTPHeaderField: "Connection")
-        request.setValue("multipart/form-data;boundary=----WebKitFormBoundary9xFB2hiUhzqbBQ4M", forHTTPHeaderField: "Content-Type")
-        
-        let header = "------WebKitFormBoundary9xFB2hiUhzqbBQ4M\r\nContent-Disposition: form-data; name=\"" +
-            "file_name" + "\"; filename=\"" + "file_name" + "\\r\nContent-Type: image/png\r\n"
-        let imgData = UIImagePNGRepresentation(img)
-        let headerEnd = "\r\n------WebKitFormBoundary9xFB2hiUhzqbBQ4M--\r\n"
-        
-        request.httpBody = header.data(using: .utf8)! + imgData! + headerEnd.data(using: .utf8)!
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
+        Alamofire.upload(multipartFormData: { multipartFromdata in
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: "tech_file", fileName: "tech_file.jpg", mimeType: "image/jpg")
+        }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
             
-            defer {
-                group.leave()
+            switch result {
+            case .success(let upload, _, _):
+                
+                upload.uploadProgress(closure: { (progress) in
+                    print("Upload Progress: \(progress.fractionCompleted)")
+                })
+                
+                upload.responseJSON { response in
+                    print(response.result.value!)
+                    group.leave()
+                    
+                }
+                
+            case .failure(let encodingError):
+                print(encodingError)
             }
-            
-            #if DEBUG
-//                print(String(data: data!, encoding: .utf8))
-            #endif
-            }.resume()
+        }
         group.wait()
         return
     }
