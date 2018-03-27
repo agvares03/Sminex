@@ -166,6 +166,7 @@ struct Segues {
         
         static let toRequest         = "Request"
         static let toSchet           = "schet"
+        static let toCreateRequest   = "createRequest"
     }
     
     struct fromRequestTypeVC {

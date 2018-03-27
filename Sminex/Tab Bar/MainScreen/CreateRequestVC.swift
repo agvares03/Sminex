@@ -93,6 +93,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     uploadPhoto($0)
                 }
                 endAnimator()
+                delegate?.update()
                 performSegue(withIdentifier: Segues.fromCreateRequest.toAdmission, sender: self)
             }
         }
@@ -131,6 +132,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
     }
     
+    open var delegate: AppsUserDelegate?
     private var reqId: String?
     private var data: AdmissionHeaderData?
     
@@ -278,7 +280,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: login))
         let comm = edComment.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\("Пропуск".stringByAddingPercentEncodingForRFC3986()!)&name=\("Пропуск (\(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .short))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986()!)&responsiblePerson=\(String(describing: data!.gosti.stringByAddingPercentEncodingForRFC3986()!))&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(String(describing: data!.date).stringByAddingPercentEncodingForRFC3986()!)&dateServiceDesired=\(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none).stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\("Пропуск".stringByAddingPercentEncodingForRFC3986()!)&name=\("Пропуск \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986()!)&responsiblePerson=\(String(describing: data!.gosti.stringByAddingPercentEncodingForRFC3986()!))&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(data?.date.stringByAddingPercentEncodingForRFC3986()! ?? "")&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -371,8 +373,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 group.leave()
             }
             
+            
             #if DEBUG
-                print(String(data: data!, encoding: .utf8)!)
+//                print(String(data: data!, encoding: .utf8)!)
             #endif
             }.resume()
         group.wait()
@@ -388,7 +391,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     private func endAnimator() {
         sendButton.isHidden = false
         loader.stopAnimating()
-        loader.isHidden = false
+        loader.isHidden = true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -399,6 +402,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             vc.data_ = data!
             vc.reqId_ = reqId!
         }
+    }
+    
+    private func formatDate(_ date: Date, format: String) -> String {
+        
+        let df = DateFormatter()
+        df.dateFormat = format
+        return df.string(from: date)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

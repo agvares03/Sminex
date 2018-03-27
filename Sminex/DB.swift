@@ -525,4 +525,71 @@ final class DB: NSObject, XMLParserDelegate {
         CoreDataManager.instance.saveContext()
     }
     
+    func getRequests() -> [RequestCellData] {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RequestEntity")
+        var arr: [RequestCellData] = []
+        
+        do {
+            let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
+            for result in results {
+                let res = result as! RequestEntity
+                
+                arr.append( RequestCellData(title: res.title!,
+                                            desc: res.desc!,
+                                            icon: UIImage(data: res.icon!)!,
+                                            date: res.date!,
+                                            status: res.status!,
+                                            isBack: res.isBack) )
+            }
+        } catch let error {
+            
+            #if DEBUG
+                print(error)
+            #endif
+        }
+        
+        var ret: [RequestCellData] = []
+        
+        if arr.count != 0 {
+            ret.append(arr.popLast()!)
+        }
+        if arr.count != 0 {
+            ret.append(arr.popLast()!)
+        }
+        
+        return ret
+    }
+    
+    func setRequests(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool) {
+        
+        let managedObject = RequestEntity()
+        
+        managedObject.title = title
+        managedObject.desc = desc
+        managedObject.icon = UIImagePNGRepresentation(icon)
+        managedObject.date = date
+        managedObject.status = status
+        managedObject.isBack = isBack
+        CoreDataManager.instance.saveContext()
+    }
+    
+    func deleteRequests() {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RequestEntity")
+        
+        do {
+            let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
+            for result in results {
+                CoreDataManager.instance.managedObjectContext.delete(result as! NSManagedObject)
+            }
+        } catch let error {
+            
+            #if DEBUG
+                print(error)
+            #endif
+        }
+        CoreDataManager.instance.saveContext()
+    }
+    
 }

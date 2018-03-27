@@ -16,7 +16,9 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
         navigationController?.popViewController(animated: true)
     }
     
-    var data = TemporaryHolder.instance.requestTypes?.types
+    open var delegate: AppsUserDelegate?
+    
+    private var data = TemporaryHolder.instance.requestTypes?.types
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +64,18 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestTypeCell", for: indexPath) as! RequestTypeCell
         cell.display(data![indexPath.row])
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == Segues.fromRequestTypeVC.toCreateAdmission {
+            let vc = segue.destination as! CreateRequestVC
+            vc.delegate = delegate
+        
+        } else if segue.identifier == Segues.fromRequestTypeVC.toCreateServive {
+            let vc = segue.destination as! CreateTechServiceVC
+            vc.delegate = delegate
+        }
     }
 }
 

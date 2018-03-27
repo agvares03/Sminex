@@ -107,12 +107,14 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                     uploadPhoto($0)
                 }
                 endAnimator()
+                delegate?.update()
                 performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
             }
         }
         
     }
     
+    open var delegate: AppsUserDelegate?
     private var data:   ServiceHeaderData?
     private var reqId:  String?
     private var imagesArr: [UIImage] = [] {
@@ -245,7 +247,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: login))
         let comm = edProblem.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\("Техническое обслуживание".stringByAddingPercentEncodingForRFC3986()!)&name=\("Техническое обслуживание (\(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .short))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=&responsiblePerson=&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(String(describing: data!.date).stringByAddingPercentEncodingForRFC3986()!)&dateServiceDesired=\(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none).stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\("Техническое обслуживание".stringByAddingPercentEncodingForRFC3986()!)&name=\("Техническое обслуживание \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=&responsiblePerson=&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(String(describing: data!.date).stringByAddingPercentEncodingForRFC3986()!)&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -301,11 +303,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 group.leave()
             }
             
-            print(error)
-            print(responce)
-            
             #if DEBUG
-                print(String(data: data!, encoding: .utf8))
+//                print(String(data: data!, encoding: .utf8))
             #endif
             }.resume()
         group.wait()
@@ -350,6 +349,13 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         
         queue.wait()
         return salt!
+    }
+    
+    private func formatDate(_ date: Date, format: String) -> String {
+        
+        let df = DateFormatter()
+        df.dateFormat = format
+        return df.string(from: date)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

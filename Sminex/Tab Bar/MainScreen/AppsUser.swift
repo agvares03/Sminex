@@ -11,7 +11,11 @@ import CoreData
 import Gloss
 import SwiftyXMLParser
 
-final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+protocol AppsUserDelegate: class {
+    func update()
+}
+
+final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppsUserDelegate {
     
     @IBOutlet private weak var collection:      UICollectionView!
     @IBOutlet private weak var createButton:    UIButton!
@@ -21,7 +25,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.popViewController(animated: true)
     }
     
-    @IBAction private func addRequestPressed(_ sender: UIButton) {
+    @IBAction private func addRequestPressed(_ sender: UIButton?) {
         
         startAnimator()
         
@@ -35,6 +39,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
     }
+    
+    open var isCreatingRequest_ = false
     
     private var reqId = ""
     private var responceString = ""
@@ -63,6 +69,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         
         getRequests()
+        
+        if isCreatingRequest_ {
+            addRequestPressed(nil)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -131,7 +141,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum!,
                                                          gosNumber: auto,
-                                                         date: row.dateTo!,
+                                                         date: row.planDate!,
                                                          status: row.status!,
                                                          images: [],
                                                          imagesUrl: images)
@@ -175,7 +185,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     self.techService = ServiceHeaderData(icon: self.data[indexPath.row].icon,
                                                          problem: row.text!,
-                                                         date: row.dateTo!,
+                                                         date: row.planDate!,
                                                          status: row.status!,
                                                          images: [],
                                                          imagesUrl: images)
@@ -253,7 +263,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }.resume()
     }
     
-    private func getRequests() {
+    func getRequests(isBackground: Bool = false) {
         
         DispatchQueue.global(qos: .background).async {
             
@@ -277,6 +287,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 row.forEach { row in
                     
+                    self.rows = []
                     self.rows.append(Request(row: row))
                     self.rowComms[row.attributes["ID"]!] = []
                     self.rowPersons[row.attributes["ID"]!] = []
@@ -299,6 +310,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                 }
                 
+                let db = DB()
+                db.deleteRequests()
+                
                 self.rows.forEach {
                    
                     let isAnswered = self.rowComms[$0.id!]?.count == 0 ? false : true
@@ -312,11 +326,19 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                        date: $0.dateTo!,
                                                        isBack: isAnswered,
                                                        type: $0.name!)  )
+                    db.setRequests(title: $0.name!,
+                                   desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
+                                   icon: icon,
+                                   date: $0.dateTo!,
+                                   status: $0.status!,
+                                   isBack: isAnswered)
                 }
                 
                 DispatchQueue.main.async {
-                    self.collection.reloadData()
-                    self.stopAnimatior()
+                    if !isBackground {
+                        self.collection.reloadData()
+                        self.stopAnimatior()
+                    }
                 }
                 }.resume()
         }
@@ -391,6 +413,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             vc.data_ = techService!
             vc.comments_ = techServiceComm
             vc.reqId_ = reqId
+        
+        } else if segue.identifier == Segues.fromAppsUser.toRequestType {
+            let vc = segue.destination as! RequestTypeVC
+            vc.delegate = self
         }
     }
     
@@ -405,6 +431,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         let dateString = dateFormatter.date(from: date)
         
         return DateFormatter.localizedString(from: dateString!, dateStyle: .short, timeStyle: .short)
+    }
+    
+    func update() {
+        getRequests()
     }
 }
 

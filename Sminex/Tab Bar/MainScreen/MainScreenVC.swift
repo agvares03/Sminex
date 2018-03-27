@@ -17,7 +17,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet private weak var collection: UICollectionView!
     
-    private let data: [Int:[Int:MainDataProtocol]] = [
+    private var data: [Int:[Int:MainDataProtocol]] = [
         0 : [
             0 : CellsHeaderData(title: "Опросы"),
             1 : SurveyCellData(title: "Лобби-бар в доме РЭНОМЭ", question: "6 вопросов"),
@@ -31,10 +31,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             0 : CellsHeaderData(title: "Акции и предложения", isNeedDetail: false),
             1 : StockCellData(images: [UIImage(named: "AppIcon")!])],
         3 : [
-            0 : CellsHeaderData(title: "Заявки"),
-            1 : RequestCellData(title: "Гостевой пропуск на 10 декабря", desc: "Укажите, пожайлуста, другой номер. По указанном не берут трубку", icon: UIImage(named: "AppIcon")!, date: "Сегодня", status: "В ОБРАБОТКЕ", isBack: true),
-            2 : RequestCellData(title: "Пропуск на 10 декабря", desc: "Хлебникова Александра. Контр. номер...", icon: UIImage(named: "AppIcon")!, date: "8 декабря", status: "ВЫДАН", isBack: false),
-            3 : RequestAddCellData(title: "Добавить заявку")],
+            0 : CellsHeaderData(title: "Заявки")],
         4 : [
             0 : CellsHeaderData(title: "К оплате"),
             1 : ForPayCellData(title: "114 246P", date: "До 31 января")],
@@ -45,6 +42,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchRequests()
         collection.delegate     = self
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false
@@ -88,7 +86,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if title == "Заявки" {
             
-            if indexPath.row == 2 {
+            if indexPath.row == data[indexPath.section]!.count - 2 {
                 return CGSize(width: view.frame.size.width, height: 50.0)
             }
             return CGSize(width: view.frame.size.width, height: 100.0)
@@ -125,9 +123,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if title == "Заявки" {
             
-            if indexPath.row == 2 {
+            if indexPath.row == data[indexPath.section]!.count - 2 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestAddCell", for: indexPath) as! RequestAddCell
-                cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestAddCellData)
+                cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestAddCellData, delegate: self)
                 return cell
                 
             } else {
@@ -162,6 +160,44 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if name == "Счетчики" || name == "Передать показания" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
+        
+        } else if name == "Добавить заявку" {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toCreateRequest, sender: self)
+        }
+    }
+    
+    private func fetchRequests() {
+        
+        var count = 1
+        DB().getRequests().forEach {
+            data[3]![count] = $0
+            count += 1
+        }
+        data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+        
+        let vc = AppsUser()
+        
+        DispatchQueue.global(qos: .background).async {
+            vc.getRequests(isBackground: true)
+            var count = 1
+            sleep(2)
+            DispatchQueue.main.async {
+                self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                DB().getRequests().forEach {
+                    self.data[3]![count] = $0
+                    count += 1
+                }
+                self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                self.collection.reloadData()
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
+            let vc = segue.destination as! AppsUser
+            vc.isCreatingRequest_ = true
         }
     }
 }
@@ -299,7 +335,7 @@ final class RequestCell: UICollectionViewCell {
     }
 }
 
-private final class RequestCellData: MainDataProtocol {
+final class RequestCellData: MainDataProtocol {
     
     let title:  String
     let desc:   String
@@ -323,8 +359,15 @@ final class RequestAddCell: UICollectionViewCell {
     @IBOutlet private weak var title:   UIButton!
     @IBOutlet private weak var button:  UIButton!
     
-    fileprivate func display(_ item: RequestAddCellData) {
+    @IBAction private func pressed(_ sender: UIButton!) {
+        delegate?.tapped(name: "Добавить заявку")
+    }
+    
+    private var delegate: CellsDelegate?
+    
+    fileprivate func display(_ item: RequestAddCellData, delegate: CellsDelegate? = nil) {
         
+        self.delegate = delegate
         title.setTitle(item.title, for: .normal)
     }
     
