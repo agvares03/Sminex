@@ -20,6 +20,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet private weak var collection: UICollectionView!
     
+    private var canCount = true
     private var data: [Int:[Int:MainDataProtocol]] = [
         0 : [
             0 : CellsHeaderData(title: "Опросы"),
@@ -44,6 +45,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let date1 = UserDefaults.standard.integer(forKey: "date1")
+        let date2 = UserDefaults.standard.integer(forKey: "date2")
+        canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
+        
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "Ru-ru")
+        dateFormatter.dateFormat = "LLLL"
+        
+        data[5]![1] = SchetCellData(title: "Осталось \(date1 - date2) дней для передачи показаний", date: "Передача с \(date1) по \(date2) \(dateFormatter.string(from: now))")
         
         fetchRequests()
         collection.delegate     = self
@@ -161,9 +173,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if name == "Заявки" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toRequest, sender: self)
         
-        } else if name == "Счетчики" || name == "Передать показания" {
+        } else if name == "Передать показания" {
+            if canCount {
+                performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
+            }
+            
+        } else if name == "Счетчики" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
-        
+            
         } else if name == "Добавить заявку" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toCreateRequest, sender: self)
         }
@@ -208,6 +225,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
             let vc = segue.destination as! AppsUser
             vc.delegate = self
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toSchet {
+            let vc = segue.destination as! CounterTableVC
+            vc.canCount = canCount
         }
     }
     

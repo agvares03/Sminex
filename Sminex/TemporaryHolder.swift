@@ -13,8 +13,8 @@ final class TemporaryHolder {
     
     static let instance = TemporaryHolder()
     
-    public var requestTypes:    RequestType?
-    public var contacts:        Contacts?
+    public var requestTypes:            RequestType?
+    public var contacts:                Contacts?
     
     func choise(_ responce: JSON) {
         

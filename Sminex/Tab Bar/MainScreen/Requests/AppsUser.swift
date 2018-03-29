@@ -43,6 +43,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     open var isCreatingRequest_ = false
     open var delegate: MainScreenDelegate?
     
+    private var typeName = ""
     private var reqId = ""
     private var responceString = ""
     private let typeGroup      = DispatchGroup()
@@ -112,8 +113,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 let type = self.data[indexPath.row].type
                 
-                if type.contains(find: "Пропуск") {
+                if type.contains(find: "ропуск") {
                     
+                    self.typeName = type
                     let row = self.rows[indexPath.row]
                     var persons = ""
                     var auto = ""
@@ -442,6 +444,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             vc.comments_ = admissionComm
             vc.reqId_ = reqId
             vc.delegate = self
+            vc.name_ = typeName
         
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC

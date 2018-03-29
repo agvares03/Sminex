@@ -95,6 +95,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    open var name_: String?
     open var delegate: AppsUserDelegate?
     open var reqId_     = ""
     open var isCreated_ = false
@@ -129,6 +130,10 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         reconizer.delegate              = self
         view.isUserInteractionEnabled   = true
         view.addGestureRecognizer(reconizer)
+        
+        if name_ != nil {
+            title = name_
+        }
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)

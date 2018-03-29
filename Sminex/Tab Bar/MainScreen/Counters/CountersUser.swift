@@ -198,7 +198,7 @@ final class CountersUser: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     private func updateMonthLabel() {
-        monthLabel.text = getNameAndMonth(number_month: iterMonth) + " " + iterYear
+        monthLabel.text = getNameAndMonth(iterMonth) + " " + iterYear
     }
     
     private func updateEditInfoLabel() {
@@ -272,7 +272,7 @@ final class CountersUser: UIViewController, UITableViewDelegate, UITableViewData
         tableCounters.reloadData()
     }
     
-    private func getNameAndMonth(number_month: String) -> String {
+    private func getNameAndMonth(_ number_month: String) -> String {
         var result: String = ""
         
         if number_month == "1" {

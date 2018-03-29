@@ -184,4 +184,15 @@ struct Segues {
         
         static let toAdmission       = "admission"
     }
+    
+    struct fromCounterTableVC {
+        
+        static let toStatement       = "statement"
+        static let toHistory         = "CounterHistory"
+    }
+    
+    struct fromCounterHistoryTableVC {
+        
+        static let toHistory         = "history"
+    }
 }

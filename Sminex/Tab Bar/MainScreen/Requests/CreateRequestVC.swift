@@ -140,6 +140,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
     }
     
+    open var name_ = ""
     open var delegate: AppsUserDelegate?
     private var reqId: String?
     private var data: AdmissionHeaderData?
@@ -163,6 +164,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         edContact.delegate  = self
         edFio.delegate      = self
+        
+        title = name_
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -312,7 +315,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: login))
         let comm = edComment.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\("Пропуск".stringByAddingPercentEncodingForRFC3986()!)&name=\("Пропуск \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986()!)&responsiblePerson=\(String(describing: data!.gosti.stringByAddingPercentEncodingForRFC3986()!))&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(data?.date.stringByAddingPercentEncodingForRFC3986()! ?? "")&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(name_.stringByAddingPercentEncodingForRFC3986() ?? "Пропуск")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986()!)&responsiblePerson=\(String(describing: data!.gosti.stringByAddingPercentEncodingForRFC3986()!))&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(data?.date.stringByAddingPercentEncodingForRFC3986()! ?? "")&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -441,6 +444,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             vc.data_ = data!
             vc.reqId_ = reqId!
             vc.delegate = delegate
+            vc.name_ = name_
         }
     }
     

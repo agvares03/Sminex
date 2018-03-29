@@ -18,16 +18,13 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
     
     open var delegate: AppsUserDelegate?
     
+    private var typeName = ""
     private var data = TemporaryHolder.instance.requestTypes?.types
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         automaticallyAdjustsScrollViewInsets = false
-        
-        #if DEBUG
-            data?.append(RequestTypeStruct(id: "54254132", name: "Пропуск"))
-        #endif
         
         collection.delegate  = self
         collection.dataSource = self
@@ -43,7 +40,8 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
         
         let name = data![indexPath.row].name
         
-        if  name == "Пропуск" {
+        if  (name?.contains(find: "ропуск"))! {
+            typeName = name ?? ""
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateAdmission, sender: self)
         
         } else if name == "Техническое обслуживание" {
@@ -71,6 +69,7 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
         if segue.identifier == Segues.fromRequestTypeVC.toCreateAdmission {
             let vc = segue.destination as! CreateRequestVC
             vc.delegate = delegate
+            vc.name_ = typeName
         
         } else if segue.identifier == Segues.fromRequestTypeVC.toCreateServive {
             let vc = segue.destination as! CreateTechServiceVC
