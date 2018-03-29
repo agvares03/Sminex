@@ -58,7 +58,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         dateFormatter.locale = Locale(identifier: "Ru-ru")
         dateFormatter.dateFormat = date2 < 10 ? "d LLLL" : "dd LLLL"
         
-        data[5]![1] = SchetCellData(title: "Осталось \(date1 - date2) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+        let leftDays = date1 - date2
+        
+        if leftDays == 1 {
+            data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+            
+        } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
+            data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+            
+        } else {
+            data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+        }
         
         fetchRequests()
         collection.delegate     = self
