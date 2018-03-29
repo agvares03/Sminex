@@ -50,12 +50,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let date2 = UserDefaults.standard.integer(forKey: "date2")
         canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
         
-        let now = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "Ru-ru")
         dateFormatter.dateFormat = "LLLL"
+        var day = DateComponents()
+        day.day = date2 - 1
+        let date = Calendar.current.date(byAdding: day, to: dateFormatter.date(from: dateFormatter.string(from: Date()))!)
+        dateFormatter.locale = Locale(identifier: "Ru-ru")
+        dateFormatter.dateFormat = date2 < 10 ? "d LLLL" : "dd LLLL"
         
-        data[5]![1] = SchetCellData(title: "Осталось \(date1 - date2) дней для передачи показаний", date: "Передача с \(date1) по \(date2) \(dateFormatter.string(from: now))")
+        data[5]![1] = SchetCellData(title: "Осталось \(date1 - date2) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
         
         fetchRequests()
         collection.delegate     = self
