@@ -30,7 +30,6 @@ final class CounterStatementVC: UIViewController {
     @IBOutlet private weak var typeLabel:       UILabel!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
-        
         navigationController?.popViewController(animated: true)
     }
     
@@ -39,9 +38,9 @@ final class CounterStatementVC: UIViewController {
         sendCount()
     }
     
-    open var month_: String?
-    open var date_: String?
-    open var value_: MeterValue?
+    open var month_:        String?
+    open var date_:         String?
+    open var value_:        MeterValue?
     open weak var delegate: CounterStatementDelegate?
     
     private var responseString = ""
@@ -50,24 +49,19 @@ final class CounterStatementVC: UIViewController {
         super.viewDidLoad()
         
         automaticallyAdjustsScrollViewInsets = false
-        
-        count.numberOfDigits = 4
+    
         count.bottomBorderColor = .clear
         count.nextDigitBottomBorderColor = .clear
         count.backColor = UIColor(white: 96/100, alpha: 1.0)
         count.font = UIFont.systemFont(ofSize: 17, weight: .thin)
         
-        if value_?.fractionalNumber?.contains(find: "alse") ?? true {
-            
-            print("1234567890")
-            
+        if !(value_?.fractionalNumber?.contains(find: "alse") ?? true) {
+            count.numberOfDigits = 5
             count.acceptableCharacters = "1234567890"
         
         } else {
-            print("1234567890.")
-            
             count.acceptableCharacters = "1234567890."
-            
+            count.numberOfDigits = 8
             descLabel1.isHidden = true
             descLabel2.isHidden = true
             goButtonConst.constant = 20
@@ -250,7 +244,9 @@ final class CounterStatementVC: UIViewController {
                 
             } else if self.responseString == "5" {
                 self.delegate?.update()
-                self.monthValLabel.text = String(describing: Int(self.count.text)!)
+                self.monthValLabel.text    = (self.self.value_?.fractionalNumber?.contains(find: "alse") ?? true)
+                                                ? String(describing: Int(self.count.text)!)
+                                                : String(describing: Float(self.count.text)!)
                 self.count.textField?.text = ""
                 self.count.setup()
             }

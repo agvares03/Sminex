@@ -87,8 +87,15 @@ open class DigitInputView: UIView {
     open var text: String {
         
         get {
+            
             guard let textField = textField else { return "" }
-            return textField.text ?? ""
+            var txt = textField.text ?? ""
+            
+            if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 4 {
+                txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 4))
+            }
+            return txt
+            
         }
         
     }
@@ -207,7 +214,7 @@ open class DigitInputView: UIView {
             addSubview(textField!)
         }
         
-        textField?.keyboardType = .numbersAndPunctuation
+        textField?.keyboardType = .numberPad
         
         // Since this function isn't called frequently, we just remove everything
         // and recreate them. Don't need to optimize it.
@@ -262,10 +269,16 @@ open class DigitInputView: UIView {
             item.text = ""
         }
         
-        for (index, item) in text.characters.enumerated() {
+        var txt = textField.text ?? ""
+        
+        if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 4 {
+            txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 4))
+        }
+        
+        for (index, item) in txt.reversed().enumerated() {
             if labels.count > index {
-                let animate = index == text.characters.count - 1 && !backspaced
-                changeText(of: labels[index], newText: String(item), animate)
+                let animate = index == text.count - 1 && !backspaced
+                changeText(of: labels.reversed()[index], newText: String(item), animate)
             }
         }
         
@@ -274,7 +287,7 @@ open class DigitInputView: UIView {
             underline.backgroundColor = bottomBorderColor
         }
         
-        let nextIndex = text.characters.count + 1
+        let nextIndex = text.count + 1
         if labels.count > 0, nextIndex < labels.count + 1 {
             // set the next digit bottom border color
             underlines[nextIndex - 1].backgroundColor = nextDigitBottomBorderColor
@@ -323,12 +336,15 @@ extension DigitInputView: UITextFieldDelegate {
         let isBackSpace = strcmp(char, "\\b")
         if isBackSpace == -92, let text = textField.text {
             
-            if textField.text?.count ?? 0 < numberOfDigits - 1 && textField.text?.count ?? 0 > 4 {
-                numberOfDigits -= 1
-            }
-            
             textField.text = text.substring(to: text.index(text.endIndex, offsetBy: -1))
             didChange(true)
+            return false
+        }
+        
+        if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 7 {
+            return false
+            
+        } else if !(acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 5 {
             return false
         }
         
@@ -341,22 +357,7 @@ extension DigitInputView: UITextFieldDelegate {
         
         } else if string == "." && !(textField.text ?? "").contains(find: ".") {
             
-            if textField.text?.count ?? 0 >= numberOfDigits - 1 {
-                textField.text = (textField.text ?? "") + string
-                numberOfDigits += 1
-                didChange()
-                return false
-                
-            } else {
-                textField.text = (textField.text ?? "") + string
-                didChange()
-                return false
-            }
-        }
-        
-        if textField.text?.count ?? 0 >= numberOfDigits - 1 {
             textField.text = (textField.text ?? "") + string
-            numberOfDigits += 1
             didChange()
             return false
         }
