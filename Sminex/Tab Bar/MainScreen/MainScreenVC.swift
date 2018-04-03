@@ -50,26 +50,30 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let date2 = UserDefaults.standard.integer(forKey: "date2")
         canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "LLLL"
-        var day = DateComponents()
-        day.day = date2 - 1
-        let date = Calendar.current.date(byAdding: day, to: dateFormatter.date(from: dateFormatter.string(from: Date()))!)
-        dateFormatter.locale = Locale(identifier: "Ru-ru")
-        dateFormatter.dateFormat = date2 < 10 ? "d LLLL" : "dd LLLL"
+        if date1 == 0 && date2 == 0 {
+            data[5]![1] = SchetCellData(title: "Показания передавать можно", date: "Передача показаний возможна в любой день текущего месяца")
         
-        let leftDays = date1 - date2
-        
-        if leftDays == 1 {
-            data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+        } else {   
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "LLLL"
+            var day = DateComponents()
+            day.day = date2 - 1
+            let date = Calendar.current.date(byAdding: day, to: dateFormatter.date(from: dateFormatter.string(from: Date()))!)
+            dateFormatter.locale = Locale(identifier: "Ru-ru")
+            dateFormatter.dateFormat = date2 < 10 ? "d LLLL" : "dd LLLL"
             
-        } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
-            data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+            let leftDays = date1 - date2
             
-        } else {
-            data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+            if leftDays == 1 {
+                data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+                
+            } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
+                data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+                
+            } else {
+                data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
+            }
         }
-        
         fetchRequests()
         collection.delegate     = self
         collection.dataSource   = self
@@ -196,6 +200,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if name == "Добавить заявку" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toCreateRequest, sender: self)
+        
+        } else if name == "Опросы" {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestions, sender: self)
         }
     }
     
@@ -374,8 +381,11 @@ final class RequestCell: UICollectionViewCell {
         title.text  = item.title
         desc.text   = item.desc
         icon.image  = item.icon
-        date.text   = item.date
         status.text = item.status
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
         
         if item.isBack {
             back.isHidden = false

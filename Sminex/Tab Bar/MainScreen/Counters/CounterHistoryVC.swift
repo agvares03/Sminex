@@ -33,8 +33,21 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         date.text = period_![0].year
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"
         
-        values.append( CounterHistoryCellData(value: data_?.value, previousValue: data_?.previousValue, period: Int(period_![0].numMonth!)!) )
-        values.append( CounterHistoryCellData(value: data_?.previousValue, previousValue: "0", period: Int(period_![0].numMonth!)! - 1) )
+        var metValues: [MeterValue] = []
+        
+        period_?.forEach { period in
+            period.perXml["MeterValue"].forEach {
+                let val = MeterValue($0, period: period.numMonth ?? "1")
+                if val.meterUniqueNum == data_?.meterUniqueNum {
+                    metValues.append(val)
+                    
+                }
+            }
+        }
+        
+        metValues.reversed().forEach {
+            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.previousValue, period: Int($0.period ?? "1") ?? 1) )
+        }
         
         collection.delegate     = self
         collection.dataSource   = self

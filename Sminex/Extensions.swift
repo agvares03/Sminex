@@ -172,3 +172,16 @@ func isNeedToScrollMore() -> Bool {
                              Device.simulator(Device.iPhone4),
                              Device.simulator(Device.iPhone4s)])
 }
+
+func dayDifference(from date: Date, style: String? = nil) -> String
+{
+    let calendar = NSCalendar.current
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = style == nil ? "hh:mm:ss" : style
+    if calendar.isDateInYesterday(date) { return "Вчера, \(dateFormatter.string(from: date))" }
+    else if calendar.isDateInToday(date) { return "Сегодня, \(dateFormatter.string(from: date))" }
+    else if calendar.isDateInTomorrow(date) { return "Завтра, \(dateFormatter.string(from: date))" }
+    else {
+        return dateFormatter.string(from: date)
+    }
+}

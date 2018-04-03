@@ -60,6 +60,11 @@
         <attribute name="id_flat" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="QuestionEntity" representedClassName=".Question" syncable="YES">
+        <attribute name="answerId" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="questionId" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
     <entity name="RequestEntity" representedClassName=".RequestEntity" syncable="YES">
         <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
@@ -86,7 +91,8 @@
         <element name="Fotos" positionX="286" positionY="72" width="128" height="135"/>
         <element name="Houses" positionX="250" positionY="-54" width="128" height="90"/>
         <element name="Ls" positionX="387" positionY="-162" width="128" height="105"/>
-        <element name="Saldo" positionX="405" positionY="-270" width="128" height="165"/>
         <element name="RequestEntity" positionX="414" positionY="-261" width="128" height="135"/>
+        <element name="Saldo" positionX="405" positionY="-270" width="128" height="165"/>
+        <element name="QuestionEntity" positionX="414" positionY="-261" width="128" height="90"/>
     </elements>
 </model>

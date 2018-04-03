@@ -46,7 +46,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         if img == nil {
             sendComment()
             let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-            arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: commentField.text!, date: "Сейчас", image: img)  )
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: commentField.text!, date: dateFormatter.string(from: Date()), image: img)  )
             img = nil
             collection.reloadData()
             commentField.text = ""
@@ -232,9 +234,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     print(response.result.value!)
                     
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-                    self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: "Сейчас", image: img)  )
-                    self.img = nil
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: img)  )
                     self.collection.reloadData()
+                    self.img = nil
                     self.commentField.text = ""
                     self.commentField.placeholder = "Сообщение"
                     self.view.endEditing(true)
@@ -325,9 +329,12 @@ final class ServiceHeader: UICollectionViewCell {
         imageLoader.stopAnimating()
         
         problem.text = item.problem
-        date.text = item.date
         icon.image = item.icon
         status.text = item.status
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
         
         if item.images.count == 0 {
             imageConst.constant = 30
@@ -445,7 +452,10 @@ final class ServiceCommentCell: UICollectionViewCell {
         icon.image  = item.icon
         title.text  = item.title
         desc.text   = item.desc
-        date.text   = item.date
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date)!)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
         image.isUserInteractionEnabled = true

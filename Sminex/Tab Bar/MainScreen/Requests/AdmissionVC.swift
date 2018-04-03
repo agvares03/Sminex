@@ -70,10 +70,13 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         startAnimating()
+        
         if img == nil {
             sendComment()
             let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-            arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: commentField.text!, date: "Сейчас",commImg: img)  )
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: commentField.text!, date: dateFormatter.string(from: Date()),commImg: img)  )
             collection.reloadData()
             img = nil
             commentField.text = ""
@@ -253,7 +256,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     print(response.result.value!)
                     
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: "Сейчас",commImg: img)  )
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: img)  )
                     self.collection.reloadData()
                     self.img = nil
                     self.commentField.text = ""
@@ -365,8 +370,11 @@ final class AdmissionHeader: UICollectionViewCell {
         gosti.text          = item.gosti
         mobileNumber.text   = item.mobileNumber
         gosNumbers.text     = item.gosNumber
-        date.text           = item.date
         status.text         = item.status
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
         
         if item.images.count == 0 && item.imgsUrl.count == 0 {
             imgs.isHidden       = true
@@ -487,7 +495,10 @@ final class AdmissionCommentCell: UICollectionViewCell {
         image.image     = item.image
         title.text      = item.title
         comment.text    = item.comment
-        date.text       = item.date
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date)!)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
         image.isUserInteractionEnabled = true

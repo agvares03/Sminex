@@ -89,7 +89,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CounterTableHeaderCell", for: indexPath) as! CounterTableHeaderCell
         
         if periods.count > 0 {
-            header.display(getNameAndMonth(periods[0].numMonth ?? "1") + " " + (periods[0].year ?? ""), delegate: self)
+            header.display(getNameAndMonth(periods.last?.numMonth ?? "1") + " " + (periods[0].year ?? ""), delegate: self)
         
         } else {
             header.display("", delegate: self)
@@ -131,11 +131,11 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             let xml = XML.parse(data!)
             let metersValues = xml["MetersValues"]
             let period = metersValues["Period"]
-            let meterValue = period["MeterValue"]
+            let meterValue = period.last["MeterValue"]
             
             self.meterArr = []
             meterValue.forEach {
-               self.meterArr.append( MeterValue($0) )
+                self.meterArr.append( MeterValue($0, period: period.last.attributes["NumMonth"] ?? "1") )
             }
             
             self.periods = []
@@ -296,9 +296,11 @@ struct MeterValue {
     let value:              String?
     let valueInput: 	    String?
     let previousPeriod:     String?
+    let period:             String?
     
-    init(_ row: XML.Accessor) {
+    init(_ row: XML.Accessor, period: String) {
         
+        self.period         = period
         fractionalNumber    = row.attributes["FractionalNumber"]
         units               = row.attributes["Units"]
         previousValue       = row.attributes["PreviousValue"]
@@ -321,8 +323,11 @@ struct CounterPeriod {
     let lastModf:   String?
     let year:       String?
     
+    let perXml:     XML.Accessor
+    
     init(_ row: XML.Accessor) {
         
+        perXml      = row
         periodDate  = row.attributes["PeriodDate"]
         numMonth    = row.attributes["NumMonth"]
         lastModf    = row.attributes["LastModified"]

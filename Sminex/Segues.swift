@@ -167,6 +167,7 @@ struct Segues {
         static let toRequest         = "Request"
         static let toSchet           = "schet"
         static let toCreateRequest   = "createRequest"
+        static let toQuestions       = "questionTable"
     }
     
     struct fromRequestTypeVC {
@@ -194,5 +195,15 @@ struct Segues {
     struct fromCounterHistoryTableVC {
         
         static let toHistory         = "history"
+    }
+    
+    struct fromQuestionsTableVC {
+        
+        static let toQuestion        = "questionAnswers"
+    }
+    
+    struct fromQuestionAnswerVC {
+        
+        static let toFinal           = "final"
     }
 }

@@ -525,6 +525,29 @@ final class DB: NSObject, XMLParserDelegate {
         CoreDataManager.instance.saveContext()
     }
     
+    func getQuestions() -> [QuestionEntity] {
+        
+        let fetchRequest =  NSFetchRequest<NSFetchRequestResult>(entityName: "QuestionEntity")
+        var arr: [QuestionEntity] = []
+        
+        do {
+            
+            let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
+            
+            for result in results {
+                arr.append(result as! QuestionEntity)
+            }
+            
+        } catch let error {
+            
+            #if DEBUG
+                print(error)
+            #endif
+        }
+        
+        return arr
+    }
+    
     func getRequests() -> [RequestCellData] {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RequestEntity")
@@ -571,6 +594,37 @@ final class DB: NSObject, XMLParserDelegate {
         managedObject.date = date
         managedObject.status = status
         managedObject.isBack = isBack
+        CoreDataManager.instance.saveContext()
+    }
+    
+    func setQuestions(answerId: [Int], questionId: [Int], id: String) {
+        
+        let managedObject = QuestionEntity()
+        
+        managedObject.questionId    = questionId
+        managedObject.answerId      = answerId
+        managedObject.id            = id
+        
+        CoreDataManager.instance.saveContext()
+    }
+    
+    func deleteQuestions() {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "QuestionEntity")
+        
+        do {
+            
+            let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
+            for result in results {
+                CoreDataManager.instance.managedObjectContext.delete(result as! NSManagedObject)
+            }
+        
+        } catch let error {
+            
+            #if DEBUG
+                print(error)
+            #endif
+        }
         CoreDataManager.instance.saveContext()
     }
     

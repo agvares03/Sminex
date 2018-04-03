@@ -46,7 +46,11 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             }
         
         } else {
-            dateBtn.setTitle(DateFormatter.localizedString(from: picker.date, dateStyle: .short, timeStyle: .none), for: .normal)
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMMM HH:mm"
+            
+            dateBtn.setTitle(dateFormatter.string(from: picker.date), for: .normal)
             picker.isHidden     = true
             pickerLine.isHidden = true
             imageConst.constant = 8
@@ -96,9 +100,11 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         } else {
             
             startAnimator()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             data = ServiceHeaderData(icon: UIImage(named: "account")!,
                                      problem: edProblem.text!,
-                                     date: DateFormatter.localizedString(from: picker.date, dateStyle: .short, timeStyle: .none),
+                                     date: dateFormatter.string(from: picker.date),
                                      status: "В ОБРАБОТКЕ",
                                      images: imagesArr)
             
@@ -138,7 +144,9 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         
-        dateBtn.setTitle(DateFormatter.localizedString(from: picker.date, dateStyle: .short, timeStyle: .none), for: .normal)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM HH:mm"
+        dateBtn.setTitle(dateFormatter.string(from: Date()), for: .normal)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self

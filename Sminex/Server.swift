@@ -86,6 +86,8 @@ final class Server {
     static let CHANGE_PASSWRD      = "ChangePassword.ashx?"            // Изменение пароля
     static let ADD_FILE            = "AddFileToRequest.ashx?"          // Загрузка файла на сервер
     static let REQUEST_TYPE        = "GetRequestTypes.ashx?"           // Получение списка типов заявок
+    static let GET_QUESTIONS       = "GetQuestions.ashx?"              // Получение списка опросов
+    static let SAVE_ANSWER         = "SaveUserAnswers.ashx?"           // Сохранение ответа
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

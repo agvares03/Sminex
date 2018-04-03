@@ -496,9 +496,12 @@ final class AppsUserCell: UICollectionViewCell {
         desc.text       = item.desc
         icon.image      = item.icon
         status.text     = item.status
-        date.text       = item.date
         back.isHidden   = !item.isBack
         type            = item.type
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
     }
 }
 

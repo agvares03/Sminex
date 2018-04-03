@@ -62,7 +62,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 imageConst.constant     = 5
             }
             
-            dateField.setTitle(DateFormatter.localizedString(from: picker.date, dateStyle: .short, timeStyle: .none), for: .normal)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMMM HH:mm"
+            
+            dateField.setTitle(dateFormatter.string(from: picker.date), for: .normal)
             picker.isHidden         = true
             pickerLine.isHidden     = true
         }
@@ -79,11 +82,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         } else {
             
             startAnimator()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                        gosti: edFio.text!,
                                        mobileNumber: edContact.text!,
                                        gosNumber: gosNumber.text ?? "",
-                                       date: DateFormatter.localizedString(from: picker.date, dateStyle: .short, timeStyle: .none),
+                                       date: dateFormatter.string(from: picker.date),
                                        status: "В ОБРАБОТКЕ",
                                        images: images,
                                        imagesUrl: [])
@@ -152,7 +157,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         
-        dateField.setTitle(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none), for: .normal)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM HH:mm"
+        dateField.setTitle(dateFormatter.string(from: Date()), for: .normal)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self
