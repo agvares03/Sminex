@@ -283,10 +283,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     } else if filtered.count == 1 {
                         self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
                     
-                    } else if filtered.count == 0 {
-                        self.data[0]![0] = CellsHeaderData(title: "Нет доступных опросов")
+//                    } else if filtered.count == 0 {
+//                        self.data.removeValue(forKey: 0)
                     }
-                    
+                
                     DispatchQueue.main.sync {
                         self.collection.reloadData()
                     }
