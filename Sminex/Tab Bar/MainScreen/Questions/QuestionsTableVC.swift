@@ -18,14 +18,10 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         navigationController?.popViewController(animated: true)
     }
     
-    private var questions: [QuestionDataJson]? = [] {
-        didSet {
-            DispatchQueue.main.sync {
-                self.collection.reloadData()
-            }
-        }
-    }
+    open var delegate: MainScreenDelegate?
+    open var performName_ = ""
     
+    private var questions: [QuestionDataJson]? = []
     private var index = 0
     
     override func viewDidLoad() {
@@ -57,7 +53,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         performSegue(withIdentifier: Segues.fromQuestionsTableVC.toQuestion, sender: self)
     }
     
-    private func getQuestions() {
+    func getQuestions() {
         
         loader.isHidden = false
         loader.startAnimating()
@@ -74,12 +70,19 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                 DispatchQueue.main.sync {
                     self.loader.isHidden = true
                     self.loader.stopAnimating()
+                    self.collection.reloadData()
+                    
+                    for (index, item) in (self.questions?.enumerated())! {
+                        if item.name == self.performName_ {
+                            self.index = index
+                            self.performSegue(withIdentifier: Segues.fromQuestionsTableVC.toQuestion, sender: self)
+                        }
+                    }
+                    
                 }
             }
-            
             let json = try? JSONSerialization.jsonObject(with: data!,
-                                                        options: .allowFragments)
-            
+                                                         options: .allowFragments)
             let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
             var filtered: [QuestionDataJson] = []
             unfilteredData?.forEach { json in
@@ -95,8 +98,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
             self.questions = filtered
-            
-        }.resume()
+            }.resume()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -104,6 +106,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         if segue.identifier == Segues.fromQuestionsTableVC.toQuestion {
             let vc = segue.destination as! QuestionAnswerVC
             vc.question_ = questions?[index]
+            vc.delegate = delegate
         }
     }
 }

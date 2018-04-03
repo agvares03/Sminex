@@ -2408,6 +2408,9 @@
                                                     <state key="normal" title="Пройти опрос">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="goButtonPressed:" destination="2GH-h3-fxQ" eventType="touchUpInside" id="emY-Cb-6zf"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zgg-bt-2IZ">
                                                     <rect key="frame" x="0.0" y="129" width="317" height="1"/>
@@ -2801,6 +2804,7 @@
                         <segue destination="PNL-ER-y4X" kind="show" identifier="schet" id="JHZ-fd-xvP"/>
                         <segue destination="yMo-H9-2l4" kind="show" identifier="createRequest" animates="NO" id="7Ci-na-4TA"/>
                         <segue destination="XmE-kI-RT8" kind="show" identifier="questionTable" id="E5J-g1-PDx"/>
+                        <segue destination="XmE-kI-RT8" kind="show" identifier="questionTableAnim" animates="NO" id="QLh-38-2Hc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iaa-22-iNE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4463,8 +4467,9 @@
         <image name="start_img.png" width="750" height="1334"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="QLh-38-2Hc"/>
         <segue reference="YO5-b9-Oz3"/>
-        <segue reference="7Ci-na-4TA"/>
+        <segue reference="FAf-8f-1ee"/>
         <segue reference="9nU-HW-VEW"/>
         <segue reference="Sxk-7w-i2P"/>
         <segue reference="6tg-4T-te9"/>

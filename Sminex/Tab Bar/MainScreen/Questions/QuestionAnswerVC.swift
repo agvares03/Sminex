@@ -16,6 +16,12 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var goButton:    UIButton!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
+        
+        let userDefaults = UserDefaults.standard
+        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: answers)
+        userDefaults.set(encodedData, forKey: String(question_?.id ?? 0))
+        userDefaults.synchronize()
+        
         navigationController?.popViewController(animated: true)
     }
     
@@ -42,6 +48,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
+    open var delegate: MainScreenDelegate?
     open var question_: QuestionDataJson?
     
     private var currQuestion = 0
@@ -53,6 +60,12 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         
         stopAnimation()
         navigationItem.title    = question_?.name
+        
+        let decoded = UserDefaults.standard.object(forKey: String(question_?.id ?? 0))
+        if decoded != nil {
+            answers = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) as! [Int:[Int]]
+        }
+        currQuestion = answers.count
         
         collection.delegate     = self
         collection.dataSource   = self
@@ -159,13 +172,12 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
                 DispatchQueue.main.sync {
                     self.stopAnimation()
                     
-                    let db = DB()
+                    var userDefaults = UserDefaults.standard
+                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.answers)
+                    userDefaults.set(encodedData, forKey: String(self.question_?.id ?? 0))
+                    userDefaults.synchronize()
                     
-                    self.answers.forEach { (args) in
-                        
-//                        let (key, item) = args
-                        
-                    }
+                    self.delegate?.update()
                     
                     self.performSegue(withIdentifier: Segues.fromQuestionAnswerVC.toFinal, sender: self)
                 }

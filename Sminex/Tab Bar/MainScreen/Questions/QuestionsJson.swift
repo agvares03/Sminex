@@ -26,12 +26,10 @@ struct QuestionDataJson: JSONDecodable {
     let id:         Int?
     
     init?(json: JSON) {
-        
         questions   = "Questions"   <~~ json
         name        = "Name"        <~~ json
         id          = "ID"          <~~ json
     }
-    
 }
 
 struct QuestionJson: JSONDecodable {

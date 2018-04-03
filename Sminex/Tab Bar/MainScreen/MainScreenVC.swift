@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import Gloss
 
 private protocol MainDataProtocol:  class {}
 private protocol CellsDelegate:    class {
     func tapped(name: String)
+    func pressed(at indexPath: IndexPath)
 }
 protocol MainScreenDelegate: class {
     func update()
@@ -20,12 +22,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet private weak var collection: UICollectionView!
     
+    private var surveyName = ""
     private var canCount = true
     private var data: [Int:[Int:MainDataProtocol]] = [
         0 : [
-            0 : CellsHeaderData(title: "Опросы"),
-            1 : SurveyCellData(title: "Лобби-бар в доме РЭНОМЭ", question: "6 вопросов"),
-            2 : SurveyCellData(title: "Обустройство детской площадки во дворе дома РЭНОМЭ", question: "Вы начали опрос")],
+            0 : CellsHeaderData(title: "Опросы")
+            ],
         1 : [
             0 : CellsHeaderData(title: "Новости"),
             1 : NewsCellData(title: "Отключение горячей воды", desc: "22 ноябя с 12:00 до 13:00 будет отключена горяча...", date: "сегодня, 10:05"),
@@ -75,6 +77,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
         }
         fetchRequests()
+        fetchQuestions()
         collection.delegate     = self
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false
@@ -140,7 +143,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         if title == "Опросы" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SurveyCell", for: indexPath) as! SurveyCell
-            cell.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData)
+            cell.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
             return cell
         
         } else if title == "Новости" {
@@ -181,8 +184,19 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        pressed(at: indexPath)
+    }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return data.count
+    }
+    
+    func pressed(at indexPath: IndexPath) {
+        if let cell = collection.cellForItem(at: indexPath) as? SurveyCell {
+            surveyName = cell.title.text ?? ""
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestionAnim, sender: self)
+        }
     }
     
     func tapped(name: String) {
@@ -235,6 +249,52 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
+    private func fetchQuestions() {
+        DispatchQueue.global().async {
+            
+            let id = UserDefaults.standard.string(forKey: "id_account") ?? ""
+            
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_QUESTIONS + "accID=" + id)!)
+            request.httpMethod = "GET"
+            
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
+                
+                
+                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments)
+                let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
+                var filtered: [QuestionDataJson] = []
+                unfilteredData?.forEach { json in
+                    
+                    var isContains = false
+                    json.questions?.forEach {
+                        if $0.isCompleteByUser ?? true {
+                            isContains = true
+                        }
+                    }
+                    if !isContains {
+                        filtered.append(json)
+                    }
+                    
+                    if filtered.count > 1 {
+                        self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
+                        self.data[0]![2] = SurveyCellData(title: filtered[filtered.count - 2].name!, question: "\(filtered[filtered.count - 2].questions?.count ?? 0) вопросов")
+                    
+                    } else if filtered.count == 1 {
+                        self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
+                    
+                    } else if filtered.count == 0 {
+                        self.data[0]![0] = CellsHeaderData(title: "Нет доступных опросов")
+                    }
+                    
+                    DispatchQueue.main.sync {
+                        self.collection.reloadData()
+                    }
+                }
+            }.resume()
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
@@ -249,11 +309,21 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toSchet {
             let vc = segue.destination as! CounterTableVC
             vc.canCount = canCount
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toQuestionAnim {
+            let vc = segue.destination as! QuestionsTableVC
+            vc.performName_ = surveyName
+            vc.delegate = self
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toQuestions {
+            let vc = segue.destination as! QuestionsTableVC
+            vc.delegate = self
         }
     }
     
     func update() {
         fetchRequests(true)
+        fetchQuestions()
     }
 }
 
@@ -296,13 +366,23 @@ private final class CellsHeaderData: MainDataProtocol {
 
 class SurveyCell: UICollectionViewCell {
     
-    @IBOutlet private weak var title:       UILabel!
+    @IBOutlet weak var title:       UILabel!
     @IBOutlet private weak var questions:   UILabel!
     
-    fileprivate func display(_ item: SurveyCellData) {
+    @IBAction private func goButtonPressed(_ sender: UIButton) {
+        delegate?.pressed(at: indexPath!)
+    }
+    
+    private var indexPath: IndexPath?
+    private var delegate: CellsDelegate?
+    
+    fileprivate func display(_ item: SurveyCellData, indexPath: IndexPath, delegate: CellsDelegate) {
         
-        title.text = item.title
-        questions.text = item.question
+        self.indexPath  = indexPath
+        self.delegate   = delegate
+        
+        title.text      = item.title
+        questions.text  = item.question
     }
     
 }
@@ -503,8 +583,6 @@ private final class SchetCellData: MainDataProtocol {
         self.date  = date
     }
 }
-
-
 
 
 
