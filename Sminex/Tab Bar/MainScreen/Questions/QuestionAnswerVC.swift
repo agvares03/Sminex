@@ -110,6 +110,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "QuestionAnswerCell", for: indexPath) as! QuestionAnswerCell
         cell.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
         return cell
@@ -118,6 +119,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
+        
+        print(isSomeAnswers)
+        
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerHeader", for: indexPath) as! QuestionAnswerHeader
         header.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
         return header
@@ -129,8 +133,10 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        isAccepted = false
-        NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
+        if !isSomeAnswers {
+            isAccepted = false
+            NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
+        }
         (collectionView.cellForItem(at: indexPath) as! QuestionAnswerCell).didTapOnOffButton()
     }
     
@@ -219,19 +225,31 @@ final class QuestionAnswerCell: UICollectionViewCell {
     @IBOutlet private weak var toggle:      OnOffButton!
     @IBOutlet private weak var field:       UITextField!
     @IBOutlet private weak var question:    UILabel!
+    @IBOutlet private weak var toggleView:  UIView!
     
     @objc fileprivate func didTapOnOffButton(_ sender: UITapGestureRecognizer? = nil) {
         
+        if sender != nil && !isSomeAnswers {
+            isAccepted = false
+            NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
+        }
+        
         if !isSomeAnswers {
-            
             if isAccepted && checked { return }
             if !isAccepted { isAccepted = true }
         }
         if checked {
-            
             selectedAnswers.append(index)
-            toggle.backgroundColor  = blueColor
-            toggle.strokeColor      = .white
+            
+            if isSomeAnswers {
+                toggle.checked = true
+                toggle.backgroundColor  = blueColor
+                toggle.strokeColor      = .white
+            
+            } else {
+                toggle.strokeColor  = blueColor
+                toggleView.isHidden = false
+            }
             checked                 = false
             isAccepted              = true
             
@@ -242,23 +260,35 @@ final class QuestionAnswerCell: UICollectionViewCell {
                     selectedAnswers.remove(at: ind)
                 }
             }
+            if isSomeAnswers {
+                toggle.checked = false
+                toggle.strokeColor      = blueColor
+                toggle.backgroundColor  = .white
             
-            toggle.strokeColor      = blueColor
-            toggle.backgroundColor  = .white
+            } else {
+                toggle.strokeColor  = .lightGray
+                toggleView.isHidden = true
+            }
             isAccepted              = false
             checked                 = true
         }
     }
     
-    private let blueColor = UIColor(red: 4/255, green: 51/255, blue: 255/255, alpha: 1)
+    private let blueColor = UIColor(red: 0/255, green: 100/255, blue: 255/255, alpha: 1)
     fileprivate var checked  = false
     private var index = 0
     
     fileprivate func display(_ item: QuestionsTextJson, index: Int) {
         self.index = index
         
+        toggle.checked = false
+        
+        if !isSomeAnswers {
+            toggle.strokeColor  = .lightGray
+            toggle.lineWidth    = 2
+        }
+        
         if item.text?.contains(find: "Свой вариант") ?? false {
-            
             display(isSomeAnswer: true)
             return
         }

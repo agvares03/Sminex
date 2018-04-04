@@ -169,7 +169,7 @@
                                                             <real key="value" value="1"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="strokeColor">
-                                                            <color key="value" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="value" red="0.0" green="0.58823529411764708" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="ringAlpha">
                                                             <real key="value" value="0.29999999999999999"/>
@@ -191,15 +191,30 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eWY-dc-yfb">
+                                                    <rect key="frame" x="25" y="44" width="12" height="12"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.39215686274509803" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="12" id="IX7-Pb-fla"/>
+                                                        <constraint firstAttribute="width" constant="12" id="RmE-V3-hoa"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="6"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                             </subviews>
                                         </view>
                                         <constraints>
                                             <constraint firstItem="1X8-lc-5k7" firstAttribute="trailing" secondItem="m17-5b-Kql" secondAttribute="trailing" id="36a-g6-bxK"/>
                                             <constraint firstItem="m17-5b-Kql" firstAttribute="leading" secondItem="Ry6-0b-s9G" secondAttribute="trailing" constant="8" id="63P-CM-96Y"/>
                                             <constraint firstItem="m17-5b-Kql" firstAttribute="top" secondItem="WKe-0l-nae" secondAttribute="topMargin" constant="8" id="Kem-QZ-JMT"/>
+                                            <constraint firstItem="eWY-dc-yfb" firstAttribute="centerX" secondItem="Ry6-0b-s9G" secondAttribute="centerX" id="RVI-JE-lpn"/>
                                             <constraint firstItem="Ry6-0b-s9G" firstAttribute="centerY" secondItem="WKe-0l-nae" secondAttribute="centerY" id="dzG-6w-pFr"/>
                                             <constraint firstItem="Ry6-0b-s9G" firstAttribute="leading" secondItem="WKe-0l-nae" secondAttribute="leadingMargin" constant="8" id="hOS-75-5sE"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="m17-5b-Kql" secondAttribute="trailing" constant="8" id="j07-AW-lLd"/>
+                                            <constraint firstItem="eWY-dc-yfb" firstAttribute="centerY" secondItem="Ry6-0b-s9G" secondAttribute="centerY" id="kuE-oa-YL2"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="m17-5b-Kql" secondAttribute="bottom" constant="8" id="q9l-gZ-ZlD"/>
                                             <constraint firstItem="1X8-lc-5k7" firstAttribute="centerY" secondItem="m17-5b-Kql" secondAttribute="centerY" id="vbr-vp-l7l"/>
                                             <constraint firstItem="1X8-lc-5k7" firstAttribute="leading" secondItem="m17-5b-Kql" secondAttribute="leading" id="x8U-b8-MKZ"/>
@@ -209,6 +224,7 @@
                                             <outlet property="field" destination="1X8-lc-5k7" id="mj5-gk-dK6"/>
                                             <outlet property="question" destination="m17-5b-Kql" id="zjK-VG-4Lp"/>
                                             <outlet property="toggle" destination="Ry6-0b-s9G" id="dmL-0f-LEj"/>
+                                            <outlet property="toggleView" destination="eWY-dc-yfb" id="YEJ-wc-up1"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
