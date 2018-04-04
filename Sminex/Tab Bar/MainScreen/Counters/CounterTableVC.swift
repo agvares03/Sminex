@@ -276,8 +276,8 @@ final class CounterTableCell: UICollectionViewCell {
     
     fileprivate func display(_ item: MeterValue) {
         
-        title.text = item.resource
-        count.text = item.previousValue != "0,00" ? item.previousValue : ""
+        title.text = item.name
+        count.text = item.value != "0,00" ? item.value : ""
         desc.text  = item.meterUniqueNum
     }
 }

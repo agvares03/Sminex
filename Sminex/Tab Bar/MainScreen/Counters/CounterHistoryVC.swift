@@ -28,7 +28,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        res.text = data_?.resource
+        res.text = data_?.name
         name.text = data_?.meterUniqueNum
         date.text = period_![0].year
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"
@@ -90,12 +90,8 @@ private final class CounterHistoryCellData {
     let outcome:    String
     
     init(value: String?, previousValue: String?, period: Int) {
-//
-//        let intVal = Int(value ?? "0") ?? 0
-//        let prevIntVal = Int(previousValue ?? "0") ?? 0
         
         send = value ?? ""
-//        outcome = String(intVal - prevIntVal)
         outcome = previousValue ?? ""
         
         if period == 1 {

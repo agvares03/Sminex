@@ -40,7 +40,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Горячая вода" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="2Dy-xV-0Gs">
-                                                    <rect key="frame" x="16" y="13" width="283" height="19.5"/>
+                                                    <rect key="frame" x="16" y="13" width="265" height="19.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -61,11 +61,11 @@
                                                         <constraint firstAttribute="height" constant="13" id="rNA-eG-Isv"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="oZ7-BM-khO">
-                                                    <rect key="frame" x="314" y="26.5" width="20" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="4" translatesAutoresizingMaskIntoConstraints="NO" id="oZ7-BM-khO">
+                                                    <rect key="frame" x="284" y="26.5" width="50" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="0SM-ci-GKw"/>
-                                                        <constraint firstAttribute="width" constant="20" id="daD-rq-o7S"/>
+                                                        <constraint firstAttribute="width" constant="50" id="daD-rq-o7S"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -95,9 +95,9 @@
                                             <constraint firstItem="2Dy-xV-0Gs" firstAttribute="leading" secondItem="4PD-Dy-6iV" secondAttribute="leadingMargin" constant="8" id="JFV-n2-Icv"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="NGi-hx-O2O" secondAttribute="trailing" constant="8" id="Xz7-pt-HwB"/>
                                             <constraint firstItem="oZ7-BM-khO" firstAttribute="centerY" secondItem="NGi-hx-O2O" secondAttribute="centerY" id="eli-oz-1WV"/>
-                                            <constraint firstItem="oZ7-BM-khO" firstAttribute="leading" secondItem="2Dy-xV-0Gs" secondAttribute="trailing" constant="15" id="gvv-iu-x4m"/>
+                                            <constraint firstItem="oZ7-BM-khO" firstAttribute="leading" secondItem="2Dy-xV-0Gs" secondAttribute="trailing" constant="3" id="gvv-iu-x4m"/>
                                             <constraint firstItem="NGi-hx-O2O" firstAttribute="centerY" secondItem="4PD-Dy-6iV" secondAttribute="centerY" id="jQU-4W-OAU"/>
-                                            <constraint firstItem="oZ7-BM-khO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4XE-rZ-aaI" secondAttribute="trailing" constant="15" id="lxJ-KH-USP"/>
+                                            <constraint firstItem="oZ7-BM-khO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4XE-rZ-aaI" secondAttribute="trailing" constant="3" id="lxJ-KH-USP"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="count" destination="oZ7-BM-khO" id="GMx-fI-fLF"/>

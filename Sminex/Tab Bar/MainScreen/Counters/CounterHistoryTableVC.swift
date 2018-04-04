@@ -34,7 +34,7 @@ final class CounterHistoryTableVC: UIViewController, UICollectionViewDelegate, U
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CounterHistoryTableCell", for: indexPath) as! CounterHistoryTableCell
-        cell.display(title: data_[indexPath.row].resource ?? "", desc: data_[indexPath.row].meterUniqueNum ?? "")
+        cell.display(title: data_[indexPath.row].name ?? "", desc: data_[indexPath.row].meterUniqueNum ?? "")
         return cell
     }
     

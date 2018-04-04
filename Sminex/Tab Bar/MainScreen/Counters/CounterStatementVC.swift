@@ -53,7 +53,7 @@ final class CounterStatementVC: UIViewController {
         count.bottomBorderColor = .clear
         count.nextDigitBottomBorderColor = .clear
         count.backColor = UIColor(white: 96/100, alpha: 1.0)
-        count.font = UIFont.systemFont(ofSize: 17, weight: .thin)
+        count.font = UIFont.systemFont(ofSize: 14, weight: .thin)
         
         if value_?.fractionalNumber?.contains(find: "alse") ?? true {
             count.numberOfDigits = 5
@@ -68,16 +68,13 @@ final class CounterStatementVC: UIViewController {
         }
         
         dateLabel.text = date_
-        typeLabel.text = value_?.resource
+        typeLabel.text = value_?.name
         counterLabel.text = value_?.meterUniqueNum
-        monthValLabel.text = value_?.value
+        monthValLabel.text = value_?.previousValue
         monthLabel.text = month_
         navigationController?.title = "Показания за " + month_!
         
-        let intVal = Int(value_?.value ?? "0") ?? 0
-        let prevIntVal = Int(value_?.previousValue ?? "0") ?? 0
-        
-        outcomeLabel.text = String(intVal - prevIntVal) + " " + (value_?.units)! + "/мес."
+        outcomeLabel.text = (value_?.difference ?? "0") + " " + (value_?.units)! + "/мес."
         
         stopAnimator()
         

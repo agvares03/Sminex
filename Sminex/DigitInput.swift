@@ -232,11 +232,13 @@ open class DigitInputView: UIView {
         for i in 0..<numberOfDigits {
             let label = DigitLabel()
             label.textAlignment = .center
-            label.isUserInteractionEnabled = false
+            label.isUserInteractionEnabled  = false
+            label.adjustsFontSizeToFitWidth = false
             label.textColor = textColor
             label.backgroundColor = backColor
             label.cornerRadius = 8
-            
+            label.text = "0"
+            label.font = font
             
             let underline = UIView()
             underline.backgroundColor = i == 0 ? nextDigitBottomBorderColor : bottomBorderColor
@@ -266,7 +268,7 @@ open class DigitInputView: UIView {
         guard let textField = textField, let text = textField.text else { return }
         
         for item in labels {
-            item.text = ""
+            item.text = "0"
         }
         
         var txt = textField.text ?? ""
