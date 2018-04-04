@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import OnOffButton
 
 final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -130,6 +129,8 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        isAccepted = false
+        NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
         (collectionView.cellForItem(at: indexPath) as! QuestionAnswerCell).didTapOnOffButton()
     }
     
@@ -269,6 +270,11 @@ final class QuestionAnswerCell: UICollectionViewCell {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapOnOffButton(_:)))
         toggle.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("Uncheck"), object: nil, queue: nil) { _ in
+            self.checked = false
+            self.didTapOnOffButton()
+        }
     }
     
     fileprivate func display(isSomeAnswer: Bool) {

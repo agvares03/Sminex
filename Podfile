@@ -12,7 +12,6 @@ target 'Sminex' do
     pod 'Alamofire', '~> 4.7'
     pod 'Firebase/Messaging'
     pod 'Firebase/Core'
-    pod 'OnOffButton'
     pod 'DeviceKit'
     pod 'Arcane'
     pod 'Gloss'
