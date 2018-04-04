@@ -172,7 +172,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         edContact.delegate  = self
         edFio.delegate      = self
         
-        title = name_
+        title = "Пропуск"
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)

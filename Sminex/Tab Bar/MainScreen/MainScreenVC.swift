@@ -96,7 +96,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (data[section]?.count ?? 2) - 1
+        
+        if data.keys.contains(section) {
+            return (data[section]?.count ?? 2) - 1
+            
+        } else {
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -107,6 +113,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        if !data.keys.contains(indexPath.section) {
+            return CGSize(width: 0, height: 0)
+        }
         
         let title = (data[indexPath.section]![0] as! CellsHeaderData).title
         
@@ -120,7 +130,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width, height: 200.0)
         
         } else if title == "Заявки" {
-            
             if indexPath.row == data[indexPath.section]!.count - 2 {
                 return CGSize(width: view.frame.size.width, height: 50.0)
             }
@@ -284,7 +293,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
                     
 //                    } else if filtered.count == 0 {
-//                        self.data.removeValue(forKey: 0)
+//                        DispatchQueue.main.sync {
+//                            self.data.removeValue(forKey: 0)
+//                            self.collection.deleteSections(IndexSet(integer: 0))
+//                        }
                     }
                 
                     DispatchQueue.main.sync {

@@ -221,7 +221,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             
             let vc = segue.destination as! CounterStatementVC
             vc.value_   = meterArr[index]
-            vc.month_   = getNameAndMonth(periods[0].numMonth ?? "1")
+            vc.month_   = getNameAndMonth(periods.last?.numMonth ?? "1")
             vc.date_    =  date[0] + " " + getNameAndMonth(periods[0].numMonth ?? "1") + " " + (periods[0].year ?? "")
             vc.delegate = self
         
