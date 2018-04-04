@@ -55,7 +55,7 @@ final class CounterStatementVC: UIViewController {
         count.backColor = UIColor(white: 96/100, alpha: 1.0)
         count.font = UIFont.systemFont(ofSize: 17, weight: .thin)
         
-        if !(value_?.fractionalNumber?.contains(find: "alse") ?? true) {
+        if value_?.fractionalNumber?.contains(find: "alse") ?? true {
             count.numberOfDigits = 5
             count.acceptableCharacters = "1234567890"
         
@@ -148,6 +148,7 @@ final class CounterStatementVC: UIViewController {
                 defer {
                     DispatchQueue.main.async {
                         self.stopAnimator()
+                        self.navigationController?.popViewController(animated: true)
                     }
                 }
                 
