@@ -207,4 +207,10 @@ struct Segues {
         
         static let toFinal           = "final"
     }
+    
+    struct fromAccountSettingsVC {
+        
+        static let toChangePassword   = "accountChangePassword"
+        static let toChangeNotific    = "changeNotifications"
+    }
 }

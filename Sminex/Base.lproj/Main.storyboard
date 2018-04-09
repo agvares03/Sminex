@@ -765,7 +765,7 @@
                     <connections>
                         <segue destination="GYN-oO-AFS" kind="relationship" relationship="viewControllers" id="yhh-7h-nAB"/>
                         <segue destination="3u1-1C-VRO" kind="relationship" relationship="viewControllers" id="Fz2-Tp-zz5"/>
-                        <segue destination="Bbx-jf-Aw6" kind="relationship" relationship="viewControllers" id="QxM-LQ-QwH"/>
+                        <segue destination="FNk-Bu-Yh8" kind="relationship" relationship="viewControllers" id="QxM-LQ-QwH"/>
                         <segue destination="t0Y-QY-7w6" kind="relationship" relationship="viewControllers" id="GJY-2R-qi5"/>
                     </connections>
                 </tabBarController>
@@ -2219,25 +2219,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sLl-nl-Hhp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2206.875" y="-1100.7042253521126"/>
-        </scene>
-        <!--Профиль-->
-        <scene sceneID="f2p-XG-acN">
-            <objects>
-                <viewController id="Bbx-jf-Aw6" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ElU-iL-DvC"/>
-                        <viewControllerLayoutGuide type="bottom" id="DXb-t7-pGr"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="jKQ-2z-U4b">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Профиль" image="account" id="sV4-4y-PUd"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8Ci-9i-wqJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1320" y="617"/>
         </scene>
         <!--Меню-->
         <scene sceneID="pyv-jt-7S4">
@@ -4426,11 +4407,20 @@
             </objects>
             <point key="canvasLocation" x="1539" y="-1822"/>
         </scene>
+        <!--Account-->
+        <scene sceneID="OvV-SI-eN7">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Account" id="FNk-Bu-Yh8" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="WEe-Gm-tQb"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hOQ-Pu-JVV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1320" y="617"/>
+        </scene>
     </scenes>
     <resources>
         <image name="StarEmpty" width="22" height="22"/>
         <image name="StarFull" width="22" height="22"/>
-        <image name="account" width="25" height="28"/>
         <image name="add_app.png" width="512" height="512"/>
         <image name="circled_chevron_down.png" width="1600" height="1600"/>
         <image name="contacts" width="25" height="25"/>

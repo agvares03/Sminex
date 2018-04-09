@@ -106,7 +106,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         stopIndicator()
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         scroll.addGestureRecognizer(theTap)
-        loadUsersDefaults()
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -254,7 +253,20 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 var answer = self.responseString.components(separatedBy: ";")
                 
                 // сохраним значения в defaults
-                self.saveGlobalData(date1: answer[0], date2: answer[1], can_count: answer[2], mail: answer[3], id_account: answer[4], isCons: answer[5], name: answer[6], history_counters: answer[7], strah: "0")
+                saveGlobalData(date1: answer[0],
+                               date2: answer[1],
+                               can_count: answer[2],
+                               mail: answer[3],
+                               id_account: answer[4],
+                               isCons: answer[5],
+                               name: answer[6],
+                               history_counters: answer[7],
+                               contactNumber: answer[answer.count - 2],
+                               adress: answer[10],
+                               roomsCount: answer[11],
+                               residentialArea: answer[12],
+                               totalArea: answer[13],
+                               strah: "0")
                 
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken
@@ -433,39 +445,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         let defaults = UserDefaults.standard
         defaults.setValue(edLogin.text!, forKey: "login")
         defaults.setValue(edPass.text!, forKey: "pass")
-        defaults.synchronize()
-    }
-    
-    private func loadUsersDefaults() {
-        let defaults    = UserDefaults.standard
-        let login       = defaults.string(forKey: "login")
-        let pass        = defaults.string(forKey: "pass")
-        
-        edLogin.text    = login
-        edPass.text     = pass
-    }
-    
-    // сохранениеи глобальных значений
-    private func saveGlobalData(date1:              String,
-                                date2:              String,
-                                can_count:          String,
-                                mail:               String,
-                                id_account:         String,
-                                isCons:             String,
-                                name:               String,
-                                history_counters:   String,
-                                strah:              String) {
-        
-        let defaults = UserDefaults.standard
-        defaults.setValue(date1, forKey: "date1")
-        defaults.setValue(date2, forKey: "date2")
-        defaults.setValue(can_count, forKey: "can_count")
-        defaults.setValue(mail, forKey: "mail")
-        defaults.setValue(id_account, forKey: "id_account")
-        defaults.setValue(isCons, forKey: "isCons")
-        defaults.setValue(name, forKey: "name")
-        defaults.setValue(strah, forKey: "strah")
-        defaults.setValue(history_counters, forKey: "history_counters")
         defaults.synchronize()
     }
     

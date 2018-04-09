@@ -44,6 +44,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         5 : [
             0 : CellsHeaderData(title: "Счетчики"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
+    private var questionSize: CGSize?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,19 +110,19 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CellsHeader", for: indexPath) as! CellsHeader
         header.display(data[indexPath.section]![0] as! CellsHeaderData, delegate: self)
+        
+        if header.title.text == "Опросы" && questionSize != nil {
+            header.frame.size = questionSize!
+        }
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if !data.keys.contains(indexPath.section) {
-            return CGSize(width: 0, height: 0)
-        }
-        
         let title = (data[indexPath.section]![0] as! CellsHeaderData).title
         
         if title == "Опросы" {
-            return CGSize(width: view.frame.size.width, height: 110.0)
+            return questionSize == nil ? CGSize(width: view.frame.size.width, height: 110.0) : questionSize!
         
         } else if title == "Новости" {
             return CGSize(width: view.frame.size.width, height: 75.0)
@@ -269,7 +270,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
-                
                 let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments)
                 let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
                 var filtered: [QuestionDataJson] = []
@@ -285,24 +285,31 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         filtered.append(json)
                     }
                     
+                    if filtered.count == 0 {
+                        self.questionSize = CGSize(width: 0, height: 0)
+                    }
+                    if filtered.count == 1 {
+                        self.questionSize = nil
+                        self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
+                    }
                     if filtered.count > 1 {
+                        self.questionSize = nil
                         self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
                         self.data[0]![2] = SurveyCellData(title: filtered[filtered.count - 2].name!, question: "\(filtered[filtered.count - 2].questions?.count ?? 0) вопросов")
-                    
-                    } else if filtered.count == 1 {
-                        self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
-                    
-//                    } else if filtered.count == 0 {
-//                        DispatchQueue.main.sync {
-//                            self.data.removeValue(forKey: 0)
-//                            self.collection.deleteSections(IndexSet(integer: 0))
-//                        }
                     }
                 
                     DispatchQueue.main.sync {
                         self.collection.reloadData()
                     }
                 }
+                
+                if unfilteredData?.count == 0 {
+                    DispatchQueue.main.sync {
+                        self.questionSize = CGSize(width: 0, height: 0)
+                        self.collection.reloadData()
+                    }
+                }
+                
             }.resume()
         }
     }
@@ -341,7 +348,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 
 final class CellsHeader: UICollectionReusableView {
     
-    @IBOutlet private weak var title:   UILabel!
+    @IBOutlet private(set) weak var title:   UILabel!
     @IBOutlet private weak var detail:  UIButton!
     
     @IBAction private func titlePressed(_ sender: UIButton) {

@@ -315,6 +315,11 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                            isCons: answer[5],
                            name: answer[6],
                            history_counters: answer[7],
+                           contactNumber: answer[answer.count - 2],
+                           adress: answer[10],
+                           roomsCount: answer[11],
+                           residentialArea: answer[12],
+                           totalArea: answer[13],
                            strah: "0")
             
             // отправим на сервер данные об ид. устройства для отправки уведомлений
@@ -365,30 +370,6 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                 
             }
         }
-    }
-    
-    // сохранениеи глобальных значений
-    private func saveGlobalData(date1:              String,
-                                date2:              String,
-                                can_count:          String,
-                                mail:               String,
-                                id_account:         String,
-                                isCons:             String,
-                                name:               String,
-                                history_counters:   String,
-                                strah:              String) {
-        
-        let defaults = UserDefaults.standard
-        defaults.setValue(date1, forKey: "date1")
-        defaults.setValue(date2, forKey: "date2")
-        defaults.setValue(can_count, forKey: "can_count")
-        defaults.setValue(mail, forKey: "mail")
-        defaults.setValue(id_account, forKey: "id_account")
-        defaults.setValue(isCons, forKey: "isCons")
-        defaults.setValue(name, forKey: "name")
-        defaults.setValue(strah, forKey: "strah")
-        defaults.setValue(history_counters, forKey: "history_counters")
-        defaults.synchronize()
     }
     
     // Отправка ид для оповещений

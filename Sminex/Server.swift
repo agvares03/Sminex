@@ -12,41 +12,6 @@ final class Server {
     
     private var responseString: String?
     
-    // Адрес сервера выберем в зависимости от текущего таргета
-    //    #if isGKRZS
-    //    static let SERVER: String = UserDefaults.standard.string(forKey: "SiteSM") == "" ? "http://uk-gkh.org/otherUK/" : UserDefaults.standard.string(forKey: "SiteSM")!
-    //    #elseif isDecember
-    //        static let SERVER          = "http://uk-gkh.org/tsgoktyabrskoe/"
-    //    #elseif isTeplo
-    //        static let SERVER          = "http://uk-gkh.org/teploenergoservice/"
-    //    #elseif isDJ
-    //        static let SERVER          = "http://uk-gkh.org/dgservicnew/"
-    //    #elseif isPocket
-    //        static let SERVER          = "http://uk-gkh.org/otherUK/"
-    //    #elseif isAlmaz
-    //        static let SERVER          = "http://uk-gkh.org/almaz/"
-    //    #elseif isT181
-    //        static let SERVER          = "http://uk-gkh.org/tsg181/"
-    //    #elseif isPSHSK17
-    //        static let SERVER          = "http://uk-gkh.org/pshsk17/"
-    //    #elseif isStandartDV
-    //        static let SERVER          = "http://uk-gkh.org/standartdv/"
-    //    #elseif isComfortService
-    //        static let SERVER          = "http://uk-gkh.org/komfortservice/"
-    //    #elseif isTPobeda1
-    //        static let SERVER          = "http://uk-gkh.org/tsgpobeda1/"
-    //    #elseif isBlagodatnaya13
-    //        static let SERVER          = "http://uk-gkh.org/blagodatnaya1315/"
-    //    #elseif isT270
-    //        static let SERVER          = "http://uk-gkh.org/tsg270/"
-    //    #elseif isTOkolitsa
-    //        static let SERVER          = "http://uk-gkh.org/okolitsa/"
-    //    #elseif isKomeks
-    //        static let SERVER          = "http://uk-gkh.org/komeks/"
-    //    #else
-    //        static let SERVER          = "http://uk-gkh.org/newjkh/"
-    //    #endif
-    
     static let SERVER              = "http://185.11.50.170:1580/"
     
     static let REGISTRATION        = "RegisterSimple.ashx?"            // Регистрация
@@ -71,13 +36,9 @@ final class Server {
     static let CHECK_REGISTRATION  = "CheckShowUKChoice.ashx"          // Способ регистрации и необходимость выбора УК
     static let GET_HOUSES_ONLY     = "GetHouses.ashx"                  // Получить список домов для регистрации (только дома)
     static let GET_HOUSES_FLATS    = "GetHouseData.ashx?"              // Получить список квартир по указанному дому
-    
     static let GET_BILLS_SERVICES  = "GetBillServices.ashx?"           // Получить данные ОСВ (взаиморасчеты)
-    
     static let SEND_MAIL           = "SendEmailMessage.ashx?"          // Отправить письмо (мне и Юрту)
-    
     static let GET_DEBT            = "GetDebtByAccount.ashx?"          // Получить данные о долгах (ДомЖилСервис)
-    
     static let REGISTRATION_SMINEX = "RegisterSminex.ashx?"            // Регистрация (Смайнекс)
     
     static let SOLE                = "GetPasswordSaltByUserName.ashx?" // Получение соли для хеширования
@@ -88,6 +49,7 @@ final class Server {
     static let REQUEST_TYPE        = "GetRequestTypes.ashx?"           // Получение списка типов заявок
     static let GET_QUESTIONS       = "GetQuestions.ashx?"              // Получение списка опросов
     static let SAVE_ANSWER         = "SaveUserAnswers.ashx?"           // Сохранение ответа
+    static let EDIT_ACCOUNT        = "EditAccountInfo.ashx?"           // Изменение настроек аккаунта
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

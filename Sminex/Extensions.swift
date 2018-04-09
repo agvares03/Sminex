@@ -126,6 +126,40 @@ extension URLSession {
     }
 }
 
+// сохранениеи глобальных значений
+func saveGlobalData(date1:              String,
+                    date2:              String,
+                    can_count:          String,
+                    mail:               String,
+                    id_account:         String,
+                    isCons:             String,
+                    name:               String,
+                    history_counters:   String,
+                    contactNumber:      String,
+                    adress:             String,
+                    roomsCount:         String,
+                    residentialArea:    String,
+                    totalArea:          String,
+                    strah:              String) {
+    
+    let defaults = UserDefaults.standard
+    defaults.setValue(date1, forKey: "date1")
+    defaults.setValue(date2, forKey: "date2")
+    defaults.setValue(can_count, forKey: "can_count")
+    defaults.setValue(mail, forKey: "mail")
+    defaults.setValue(id_account, forKey: "id_account")
+    defaults.setValue(isCons, forKey: "isCons")
+    defaults.setValue(name, forKey: "name")
+    defaults.setValue(strah, forKey: "strah")
+    defaults.setValue(roomsCount, forKey: "roomsCount")
+    defaults.setValue(residentialArea, forKey: "residentialArea")
+    defaults.setValue(totalArea, forKey: "totalArea")
+    defaults.setValue(history_counters, forKey: "history_counters")
+    defaults.setValue(adress, forKey: "adress")
+    defaults.setValue(contactNumber, forKey: "contactNumber")
+    defaults.synchronize()
+}
+
 // Вычисляем соленый хэш пароля
 func getHash(pass: String, salt: Data) -> String {
     

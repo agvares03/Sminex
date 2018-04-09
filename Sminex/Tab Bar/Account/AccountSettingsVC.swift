@@ -1,0 +1,232 @@
+//
+//  AccountSettingsVC.swift
+//  Sminex
+//
+//  Created by IH0kN3m on 4/6/18.
+//  Copyright © 2018 The Best. All rights reserved.
+//
+
+import UIKit
+
+final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    @IBOutlet private weak var loader:              UIActivityIndicatorView!
+    @IBOutlet private weak var scroll:              UIScrollView!
+    @IBOutlet private weak var accountImageView:    UIImageView!
+    @IBOutlet private weak var familyNameField:     UITextField!
+    @IBOutlet private weak var otchestvoField:  	UITextField!
+    @IBOutlet private weak var contactNumber:       UITextField!
+    @IBOutlet private weak var commentField:        UITextField!
+    @IBOutlet private weak var privNumber:          UITextField!
+    @IBOutlet private weak var nameField:       	UITextField!
+    @IBOutlet private weak var lsLabel:             UITextField!
+    @IBOutlet private weak var email:               UITextField!
+    @IBOutlet private weak var saveButton:          UIButton!
+    @IBOutlet private weak var changePassword:  	UILabel!
+    @IBOutlet private weak var notifications:   	UILabel!
+    
+    @IBAction private func imageViewPressed(_ sender: UIButton) {
+        
+        let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        action.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { (_) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = .photoLibrary;
+                imagePicker.allowsEditing = true
+                self.present(imagePicker, animated: true, completion: nil)
+            }
+        }))
+        action.addAction(UIAlertAction(title: "Сделать фото", style: .default, handler: { (_) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = .camera;
+                imagePicker.allowsEditing = false
+                self.present(imagePicker, animated: true, completion: nil)
+            }
+        }))
+        action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
+        present(action, animated: true, completion: nil)
+    }
+    
+    @IBAction private func exitButtonPressed(_ sender: UIButton) {
+        
+    }
+    
+    @IBAction private func saveButtonPressed(_ sender: UIButton) {
+        startAnimator()
+        editAccountInfo()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        accountImageView.cornerRadius = accountImageView.frame.height / 2
+        self.stopAnimator()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(tap)
+        
+        let changePasswordTap = UITapGestureRecognizer(target: self, action: #selector(changePasswordTapped(_:)))
+        changePassword.isUserInteractionEnabled = true
+        changePassword.addGestureRecognizer(changePasswordTap)
+        
+        let changeNotificationsTap = UITapGestureRecognizer(target: self, action: #selector(changeNotificationTapped(_:)))
+        notifications.isUserInteractionEnabled = true
+        notifications.addGestureRecognizer(changeNotificationsTap)
+        
+        let defaults            = UserDefaults.standard
+        email.text              = defaults.string(forKey: "mail")
+        contactNumber.text      = defaults.string(forKey: "contactNumber")
+        privNumber.text         = defaults.string(forKey: "contactNumber")
+        lsLabel.text            = defaults.string(forKey: "login")
+        
+        let name                = defaults.string(forKey: "name")?.split(separator: " ")
+        familyNameField.text    = String(describing: name?[0] ?? "")
+        nameField.text          = String(describing: name?[1] ?? "")
+        otchestvoField.text     = String(describing: name?[2] ?? "")
+        
+        // Поправим Navigation bar
+        navigationController?.navigationBar.isTranslucent   = true
+        navigationController?.navigationBar.backgroundColor = .white
+        navigationController?.navigationBar.tintColor       = .white
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .thin) ]
+    }
+    
+    @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
+       view.endEditing(true)
+    }
+    
+    @objc private func changePasswordTapped(_ sender: UITapGestureRecognizer?) {
+        performSegue(withIdentifier: Segues.fromAccountSettingsVC.toChangePassword, sender: self)
+    }
+    
+    @objc private func changeNotificationTapped(_ sender: UITapGestureRecognizer?) {
+        performSegue(withIdentifier: Segues.fromAccountSettingsVC.toChangeNotific, sender: self)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        accountImageView.image = image
+        dismiss(animated: true, completion: nil)
+    }
+    
+    private func editAccountInfo() {
+        
+        let area    = UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? ""
+        let phone   = UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986()     ?? ""
+        let rooms   = UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? ""
+        let total   = UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? ""
+        let adress  = UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? ""
+        let login   = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? ""
+        let name    = UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986()              ?? ""
+        let email   = UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986()              ?? ""
+        
+        let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: UserDefaults.standard.string(forKey: "login") ?? "")))&address=\(adress)&name=\(name)&phone=\(phone)&email=\(email)&additijnalInfo=\(commentField.text ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                DispatchQueue.main.sync {
+                    self.stopAnimator()
+                }
+            }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            #if DEBUG
+                print(String(data: data!, encoding: .utf8)!)
+            #endif
+        
+        }.resume()
+    }
+    
+    // Вычисляем соленый хэш пароля
+    func getHash(pass: String, salt: Data) -> String {
+        
+        if (String(data: salt, encoding: .utf8) ?? "Unauthorized").contains(find: "Unauthorized") {
+            return ""
+        }
+        
+        let btl = pass.data(using: .utf16LittleEndian)!
+        let bSalt = Data(base64Encoded: salt)!
+        
+        var bAll = bSalt + btl
+        
+        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
+        bAll.withUnsafeBytes {
+            _ = CC_SHA1($0, CC_LONG(bAll.count), &digest)
+        }
+        
+        let psw = Data(bytes: digest).base64String.replacingOccurrences(of: "\n", with: "")
+        
+        return psw.stringByAddingPercentEncodingForRFC3986()!
+    }
+    
+    // Качаем соль
+    private func getSalt(login: String) -> Data {
+        
+        var salt: Data?
+        let queue = DispatchGroup()
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
+        
+        queue.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            defer {
+                queue.leave()
+            }
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            salt = data
+            
+            #if DEBUG
+                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
+            #endif
+            
+            }.resume()
+        
+        queue.wait()
+        return salt!
+    }
+    
+    private func startAnimator() {
+        loader.isHidden = false
+        loader.startAnimating()
+        saveButton.isHidden = true
+    }
+    
+    private func stopAnimator() {
+        loader.stopAnimating()
+        loader.isHidden = true
+        saveButton.isHidden = false
+    }
+}
