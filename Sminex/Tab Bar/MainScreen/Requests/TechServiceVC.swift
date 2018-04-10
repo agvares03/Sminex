@@ -207,7 +207,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             }
             
             #if DEBUG
-                print(String(data: data!, encoding: .utf8))
+                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
         }.resume()
@@ -449,7 +449,24 @@ final class ServiceCommentCell: UICollectionViewCell {
             desc.isHidden   = false
         }
         
-        icon.image  = item.icon
+        if item.title == UserDefaults.standard.string(forKey: "name") ?? "" {
+            DispatchQueue.global(qos: .background).async {
+                if let imageData = UserDefaults.standard.object(forKey: "accountIcon"),
+                    let image = UIImage.init(data: imageData as! Data) {
+                    DispatchQueue.main.async {
+                        self.icon.image = image
+                        self.icon.cornerRadius = self.icon.frame.height / 2
+                    }
+                
+                } else {
+                    self.icon.image = item.icon
+                }
+            }
+        
+        } else {
+            icon.image = item.icon
+        }
+        
         title.text  = item.title
         desc.text   = item.desc
         

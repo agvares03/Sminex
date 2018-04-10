@@ -145,8 +145,12 @@ class FirstController: UIViewController {
         // Авторизация пользователя
         let txtLogin = login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let pwd = getHash(pass: txtPass, salt: getSalt(login: txtLogin))
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
+        UserDefaults.standard.setValue(pwd, forKey: "pwd")
+        UserDefaults.standard.synchronize()
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + pwd)!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {

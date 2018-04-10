@@ -8,6 +8,7 @@
 
 import UIKit
 import Gloss
+import SwiftyXMLParser
 
 private protocol MainDataProtocol:  class {}
 private protocol CellsDelegate:    class {
@@ -240,10 +241,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         data[3]![count] = RequestAddCellData(title: "Добавить заявку")
         
         if !isBackground {
-            let vc = AppsUser()
-            
             DispatchQueue.global(qos: .background).async {
-                let res = vc.getRequests(isBackground: true)
+                let res = self.getRequests()
                 var count = 1
                 sleep(2)
                 DispatchQueue.main.sync {
@@ -257,6 +256,114 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
         }
+    }
+    
+    func getRequests() -> [RequestCellData] {
+        
+        var returnArr: [RequestCellData] = []
+        let group = DispatchGroup()
+        group.enter()
+        DispatchQueue.global(qos: .userInteractive).async {
+            
+            let login = UserDefaults.standard.string(forKey: "login")!
+            let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: self.getSalt(login: login))
+            
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
+            request.httpMethod = "GET"
+            
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
+                
+                defer {
+                    group.leave()
+                }
+                
+                #if DEBUG
+                    print(String(data: data!, encoding: .utf8)!)
+                #endif
+                
+                let xml = XML.parse(data!)
+                let requests = xml["Requests"]
+                let row = requests["Row"]
+                var rows: [Request] = []
+                var rowComms: [String : [RequestComment]]  = [:]
+                
+                row.forEach { row in
+                    rows.append(Request(row: row))
+                    rowComms[row.attributes["ID"]!] = []
+                    
+                    row["Comm"].forEach {
+                        rowComms[row.attributes["ID"]!]?.append( RequestComment(row: $0) )
+                    }
+                }
+                
+                rows.forEach {
+                    let isAnswered = rowComms[$0.id!]?.count == 0 ? false : true
+                    
+                    var date = $0.planDate!
+                    date.removeLast(9)
+                    let lastComm = rowComms[$0.id!]?[(rowComms[$0.id!]?.count)! - 1]
+                    let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                    returnArr.append( RequestCellData(title: $0.name!,
+                                                      desc: rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
+                                                      icon: icon,
+                                                      date: date,
+                                                      status: $0.status!,
+                                                      isBack: isAnswered) )
+                }
+            }.resume()
+        }
+        
+        group.wait()
+        var ret: [RequestCellData] = []
+        
+        if returnArr.count != 0 {
+            ret.append(returnArr.popLast()!)
+        }
+        if returnArr.count != 0 {
+            ret.append(returnArr.popLast()!)
+        }
+        return ret
+    }
+    
+    // Качаем соль
+    private func getSalt(login: String) -> Data {
+        
+        var salt: Data?
+        let queue = DispatchGroup()
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
+        
+        queue.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            defer {
+                queue.leave()
+            }
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            salt = data
+            
+            #if DEBUG
+                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
+            #endif
+            
+            }.resume()
+        
+        queue.wait()
+        return salt!
     }
     
     private func fetchQuestions() {

@@ -86,7 +86,7 @@ final class DB: NSObject, XMLParserDelegate {
         }
         
         // Заявки с комментариями (xml)
-        var id_app: String = ""
+        var id_app = ""
         if (elementName == "Row") {
             // Запишем заявку в БД
             let managedObject = Applications()
@@ -116,6 +116,9 @@ final class DB: NSObject, XMLParserDelegate {
             }
             CoreDataManager.instance.saveContext()
             id_app                        = attributeDict["ID"]!
+            #if DEBUG
+                print(id_app)
+            #endif
         } else if (elementName == "Comm") {
             // Запишем комментарии в БД
             let managedObject = Comments()

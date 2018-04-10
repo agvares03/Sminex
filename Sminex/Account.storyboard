@@ -423,7 +423,7 @@
         <!--Настройка уведомлений-->
         <scene sceneID="vHM-QB-2BT">
             <objects>
-                <viewController id="yV0-2P-hvS" sceneMemberID="viewController">
+                <viewController id="yV0-2P-hvS" customClass="AccountNotificationsVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PTc-yA-Iga"/>
                         <viewControllerLayoutGuide type="bottom" id="ovY-8c-Ioq"/>
@@ -580,8 +580,18 @@
                     <navigationItem key="navigationItem" title="Настройка уведомлений" id="Ops-Fz-TeG">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="7xQ-I5-mKL">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="backButtonPressed:" destination="yV0-2P-hvS" id="gHa-1w-yXo"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="counters" destination="wQq-oh-yAl" id="RsH-nK-zBP"/>
+                        <outlet property="dolg" destination="Ajb-bK-mSF" id="tsv-As-uQe"/>
+                        <outlet property="newComment" destination="GPG-6u-EUp" id="7Mu-wV-x9i"/>
+                        <outlet property="newStatus" destination="adw-dF-WDq" id="wjx-z6-dVC"/>
+                        <outlet property="news" destination="Eec-9a-g6X" id="YvJ-rK-ptg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O4G-ny-GIH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -691,6 +701,15 @@
                                     <action selector="oldPasswordSecureButtonPressed:" destination="hwT-0i-uGh" eventType="touchUpInside" id="Azf-LU-ohC"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="5h2-sH-kXm">
+                                <rect key="frame" x="197" y="526" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Текущий пароль введен неправильно" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="jkl-oN-9oY">
+                                <rect key="frame" x="20" y="196" width="366" height="13.333333333333343"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
+                                <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -702,6 +721,7 @@
                             <constraint firstAttribute="trailing" secondItem="a8Z-v5-jIg" secondAttribute="trailing" id="BMx-ne-nJ2"/>
                             <constraint firstItem="xzR-iJ-hlV" firstAttribute="top" secondItem="YMC-Ff-aJq" secondAttribute="bottom" constant="180" id="IAy-fz-ULu"/>
                             <constraint firstItem="YMC-Ff-aJq" firstAttribute="leading" secondItem="o90-KA-jJ5" secondAttribute="leading" constant="15" id="KsT-WY-tnQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="jkl-oN-9oY" secondAttribute="trailing" constant="8" id="KvA-a9-LMO"/>
                             <constraint firstItem="40p-P1-ylY" firstAttribute="leading" secondItem="IMl-US-sAh" secondAttribute="trailing" constant="20" id="L7i-DE-fYX"/>
                             <constraint firstAttribute="trailing" secondItem="YMC-Ff-aJq" secondAttribute="trailing" constant="15" id="M3Y-Io-8rS"/>
                             <constraint firstItem="bba-vy-qHO" firstAttribute="top" secondItem="P1x-IF-U8V" secondAttribute="bottom" constant="10" id="MsD-s3-tCQ"/>
@@ -710,13 +730,17 @@
                             <constraint firstItem="P1x-IF-U8V" firstAttribute="top" secondItem="a8Z-v5-jIg" secondAttribute="bottom" constant="15" id="UHc-cb-3bU"/>
                             <constraint firstItem="7pZ-5U-Te7" firstAttribute="trailing" secondItem="P1x-IF-U8V" secondAttribute="trailing" id="Wi3-f5-AOl"/>
                             <constraint firstItem="a8Z-v5-jIg" firstAttribute="leading" secondItem="IMl-US-sAh" secondAttribute="leading" id="WoV-qo-9uH"/>
+                            <constraint firstItem="5h2-sH-kXm" firstAttribute="centerY" secondItem="YMC-Ff-aJq" secondAttribute="centerY" id="blj-Xf-kVA"/>
                             <constraint firstItem="EFf-ds-UBP" firstAttribute="top" secondItem="bba-vy-qHO" secondAttribute="bottom" constant="15" id="eWU-oE-Sfg"/>
                             <constraint firstItem="7pZ-5U-Te7" firstAttribute="centerY" secondItem="P1x-IF-U8V" secondAttribute="centerY" id="fvb-0b-or6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="40p-P1-ylY" secondAttribute="trailing" constant="15" id="gEz-le-VgR"/>
+                            <constraint firstItem="5h2-sH-kXm" firstAttribute="centerX" secondItem="o90-KA-jJ5" secondAttribute="centerX" id="gTC-CR-SAK"/>
                             <constraint firstItem="P1x-IF-U8V" firstAttribute="leading" secondItem="40p-P1-ylY" secondAttribute="leading" id="iv4-vm-rLZ"/>
                             <constraint firstAttribute="trailing" secondItem="bba-vy-qHO" secondAttribute="trailing" id="kj4-bw-V2M"/>
                             <constraint firstItem="Cet-4j-qAH" firstAttribute="centerY" secondItem="P1x-IF-U8V" secondAttribute="centerY" id="nRC-Hp-dk2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="P1x-IF-U8V" secondAttribute="trailing" constant="15" id="s73-zG-ZME"/>
+                            <constraint firstItem="jkl-oN-9oY" firstAttribute="top" secondItem="bba-vy-qHO" secondAttribute="bottom" constant="10" id="sde-Fd-wi4"/>
+                            <constraint firstItem="jkl-oN-9oY" firstAttribute="leading" secondItem="Cet-4j-qAH" secondAttribute="leading" id="stl-PY-nLe"/>
                             <constraint firstItem="a8Z-v5-jIg" firstAttribute="top" secondItem="40p-P1-ylY" secondAttribute="bottom" constant="10" id="x8P-Ky-efD"/>
                             <constraint firstItem="Cet-4j-qAH" firstAttribute="leading" secondItem="IMl-US-sAh" secondAttribute="leading" id="yLb-by-wwC"/>
                         </constraints>
@@ -730,16 +754,28 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="forgotTop" destination="eWU-oE-Sfg" id="Hjx-Tb-xPx"/>
+                        <outlet property="loader" destination="5h2-sH-kXm" id="IcS-e8-tx8"/>
                         <outlet property="newPasswordField" destination="P1x-IF-U8V" id="vwf-x5-K2S"/>
                         <outlet property="newPasswordSecure" destination="7pZ-5U-Te7" id="zFH-RA-8Ha"/>
                         <outlet property="oldPasswordField" destination="40p-P1-ylY" id="5Bo-gq-Ex1"/>
                         <outlet property="oldPasswordSecure" destination="ApN-Zs-vEt" id="TDU-MM-bFS"/>
                         <outlet property="saveButton" destination="YMC-Ff-aJq" id="MkK-Tq-Waz"/>
+                        <outlet property="wrongPassLabel" destination="jkl-oN-9oY" id="fX3-ib-Ydt"/>
+                        <segue destination="hEv-94-JAZ" kind="show" identifier="forgot" id="fxg-h6-PHB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fS7-Vi-xST" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2490" y="615"/>
+        </scene>
+        <!--forgot-->
+        <scene sceneID="k0d-hW-iW0">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Auth" referencedIdentifier="forgot" id="hEv-94-JAZ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Own-UU-sgi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3235" y="616"/>
         </scene>
         <!--Профиль-->
         <scene sceneID="Uy0-fU-ssT">

@@ -12,12 +12,14 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     @IBOutlet private weak var edLS:        UITextField!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
+    @IBOutlet private weak var backButton:  UIButton!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var txtDesc:     UILabel!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var backView:    UIView!
     
-    open var isReg_ = true
+    open var isReg_     = true
+    open var isFromApp_ = false
     
     private var responseString = ""
     
@@ -167,9 +169,18 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         edLS.text = ls
         indicator.isHidden = true
         
-        btn_go.isEnabled = false
-        btn_go.alpha = 0.5
+        if isFromApp_ {
+            navigationController?.isNavigationBarHidden = true
+            backView.isHidden   = true
+            backButton.isHidden = true
+            let login   = UserDefaults.standard.string(forKey: "login") ?? ""
+            ls          = login
+            edLS.text   = login
         
+        } else {
+            btn_go.isEnabled = false
+            btn_go.alpha = 0.5
+        }
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -321,7 +332,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         }
 
         // определим телефон это или нет
-        var first: Bool = true
         var ls_1_end = ""
         if (ls.count < 1) {
             ls_1_end = ""

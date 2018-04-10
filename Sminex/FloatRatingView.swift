@@ -310,9 +310,9 @@ public class FloatRatingView: UIView {
     
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Update delegate
-        if let delegate = self.delegate {
+//        if let delegate = self.delegate {
 //            delegate.floatRatingView(self, didUpdate: self.rating)
-        }
+//        }
     }
     
 }

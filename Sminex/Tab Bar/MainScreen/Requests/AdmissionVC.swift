@@ -492,7 +492,24 @@ final class AdmissionCommentCell: UICollectionViewCell {
             comImg.isHidden  = true
         }
         
-        image.image     = item.image
+        if item.title == UserDefaults.standard.string(forKey: "name") ?? "" {
+            DispatchQueue.global(qos: .background).async {
+                if let imageData = UserDefaults.standard.object(forKey: "accountIcon"),
+                    let image = UIImage.init(data: imageData as! Data) {
+                    DispatchQueue.main.async {
+                        self.image.image = image
+                        self.image.cornerRadius = self.image.frame.height / 2
+                    }
+                    
+                } else {
+                    self.image.image = item.image
+                }
+            }
+            
+        } else {
+            image.image = item.image
+        }
+        
         title.text      = item.title
         comment.text    = item.comment
         

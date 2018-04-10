@@ -213,4 +213,9 @@ struct Segues {
         static let toChangePassword   = "accountChangePassword"
         static let toChangeNotific    = "changeNotifications"
     }
+    
+    struct fromAccountChangePasswordVC {
+        
+        static let toForgot           = "forgot"
+    }
 }

@@ -53,7 +53,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     @IBAction private func exitButtonPressed(_ sender: UIButton) {
-        
+        UserDefaults.standard.setValue("", forKey: "pass")
+        UserDefaults.standard.removeObject(forKey: "accountIcon")
+        UserDefaults.standard.synchronize()
+        present(UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
     }
     
     @IBAction private func saveButtonPressed(_ sender: UIButton) {
@@ -64,6 +67,14 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let imageData = UserDefaults.standard.object(forKey: "accountIcon"),
+                let image = UIImage(data: imageData as! Data) {
+                DispatchQueue.main.async {
+                    self.accountImageView.image = image
+                }
+            }
+        }
         accountImageView.cornerRadius = accountImageView.frame.height / 2
         self.stopAnimator()
         
@@ -112,21 +123,25 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         accountImageView.image = image
+        DispatchQueue.global(qos: .background).async {
+            UserDefaults.standard.setValue(UIImagePNGRepresentation(image), forKey: "accountIcon")
+        }
         dismiss(animated: true, completion: nil)
     }
     
     private func editAccountInfo() {
         
+        let phone   = privNumber.text?.stringByAddingPercentEncodingForRFC3986() ?? (UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986() ?? "")
+        let email   = self.email.text?.stringByAddingPercentEncodingForRFC3986() ?? (UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986() ?? "")
         let area    = UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? ""
-        let phone   = UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986()     ?? ""
         let rooms   = UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? ""
         let total   = UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? ""
         let adress  = UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? ""
         let login   = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? ""
-        let name    = UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986()              ?? ""
-        let email   = UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986()              ?? ""
+        let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")
+        let pass    = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: UserDefaults.standard.string(forKey: "login")!))
         
-        let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: UserDefaults.standard.string(forKey: "login") ?? "")))&address=\(adress)&name=\(name)&phone=\(phone)&email=\(email)&additijnalInfo=\(commentField.text ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
+        let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&email=\(email)&additionalInfo=\(commentField.text ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         
@@ -136,6 +151,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             defer {
                 DispatchQueue.main.sync {
                     self.stopAnimator()
+                    
+                    #if DEBUG
+                    print(String(data: data!, encoding: .utf8)!)
+                    #endif
                 }
             }
             
@@ -148,34 +167,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 }
                 return
             }
-            
-            #if DEBUG
-                print(String(data: data!, encoding: .utf8)!)
-            #endif
         
         }.resume()
-    }
-    
-    // Вычисляем соленый хэш пароля
-    func getHash(pass: String, salt: Data) -> String {
-        
-        if (String(data: salt, encoding: .utf8) ?? "Unauthorized").contains(find: "Unauthorized") {
-            return ""
-        }
-        
-        let btl = pass.data(using: .utf16LittleEndian)!
-        let bSalt = Data(base64Encoded: salt)!
-        
-        var bAll = bSalt + btl
-        
-        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
-        bAll.withUnsafeBytes {
-            _ = CC_SHA1($0, CC_LONG(bAll.count), &digest)
-        }
-        
-        let psw = Data(bytes: digest).base64String.replacingOccurrences(of: "\n", with: "")
-        
-        return psw.stringByAddingPercentEncodingForRFC3986()!
     }
     
     // Качаем соль
@@ -207,11 +200,6 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             }
             
             salt = data
-            
-            #if DEBUG
-                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
-            #endif
-            
             }.resume()
         
         queue.wait()
