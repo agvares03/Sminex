@@ -18,8 +18,6 @@ final class TemporaryHolder {
     
     func choise(_ responce: JSON) {
         
-        
-        
         requestTypes = RequestType(json: responce)
         contacts = Contacts(json: responce)
     }

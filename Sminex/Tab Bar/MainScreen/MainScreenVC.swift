@@ -35,8 +35,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             2 : NewsCellData(title: "Собрание жильцов", desc: "20 ноября, с 11:00 до 18:00", date: "15 октября"),
             3 : NewsCellData(title: "Вынесено решение придомового комитета о поводу подземной парковки", desc: "20 ноября, с 11:00 до 18:00", date: "13 октября")],
         2 : [
-            0 : CellsHeaderData(title: "Акции и предложения", isNeedDetail: false),
-            1 : StockCellData(images: [UIImage(named: "AppIcon")!])],
+            0 : CellsHeaderData(title: "Акции и предложения"),
+            1 : StockCellData(images: [])
+            ],
         3 : [
             0 : CellsHeaderData(title: "Заявки")],
         4 : [
@@ -46,6 +47,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             0 : CellsHeaderData(title: "Счетчики"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
     private var questionSize: CGSize?
+    private var deals: [DealsJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,6 +80,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
             }
         }
+        fetchDeals()
         fetchRequests()
         fetchQuestions()
         collection.delegate     = self
@@ -164,7 +167,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if title == "Акции и предложения" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StockCell", for: indexPath) as! StockCell
-            cell.display(data[indexPath.section]![indexPath.row + 1] as! StockCellData)
+            cell.display(data[indexPath.section]![indexPath.row + 1] as! StockCellData, delegate: self, indexPath: indexPath)
             return cell
         
         } else if title == "Заявки" {
@@ -207,6 +210,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if let cell = collection.cellForItem(at: indexPath) as? SurveyCell {
             surveyName = cell.title.text ?? ""
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestionAnim, sender: self)
+        
+        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         }
     }
     
@@ -228,6 +234,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if name == "Опросы" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestions, sender: self)
+        
+        } else if name == "Акции и предложения" {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         }
     }
     
@@ -421,6 +430,45 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
+    private final func fetchDeals() {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                DispatchQueue.main.async {
+                    self.collection.reloadData()
+                }
+            }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.deals = (DealsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data)!
+            var imgs: [UIImage] = []
+            
+            self.deals.forEach {
+                imgs.append( $0.img ?? UIImage() )
+            }
+            self.data[2]![1] = StockCellData(images: imgs)
+            
+            #if DEBUG
+            //                print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            
+            }.resume()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
@@ -444,6 +492,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toQuestions {
             let vc = segue.destination as! QuestionsTableVC
             vc.delegate = self
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
+            let vc = segue.destination as! DealsListVC
+            vc.data_ = deals
         }
     }
     
@@ -551,16 +603,53 @@ private final class NewsCellData: MainDataProtocol {
     }
 }
 
-final class StockCell: UICollectionViewCell {
+final class StockCell: UICollectionViewCell, UIScrollViewDelegate {
     
-    @IBOutlet private weak var image:   UIImageView!
+    @IBOutlet private weak var scroll:  UIScrollView!
     @IBOutlet private weak var section: UIPageControl!
     
-    fileprivate func display(_ item: StockCellData) {
+    private var delegate:   CellsDelegate?
+    private var indexPath:  IndexPath?
+    
+    fileprivate func display(_ item: StockCellData, delegate: CellsDelegate? = nil, indexPath: IndexPath? = nil) {
         
-        image.image             = item.images.first
+        if item.images.count == 0, let imgData = UserDefaults.standard.data(forKey: "DealsImg"), let img = UIImage(data: imgData)  {
+            let image = UIImageView(frame: CGRect(x: 0, y: 0, width: 300, height: Int(scroll.frame.size.height)))
+            image.image = img
+            scroll.addSubview(image)
+            
+        } else if item.images.count != 0 {
+            var x = 0
+            
+            item.images.forEach {
+                let image    = UIImageView(frame: CGRect(x: x, y: 0, width: 300, height: Int(scroll.frame.size.height)))
+                x           += 320
+                image.image  = $0
+                scroll.addSubview(image)
+            }
+            DispatchQueue.global(qos: .background).async {
+                UserDefaults.standard.setValue(UIImagePNGRepresentation(item.images.first!), forKey: "DealsImg")
+                UserDefaults.standard.synchronize()
+            }
+            scroll.contentSize  = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
+        }
+        scroll.delegate         = self
         section.currentPage     = 0
-        section.numberOfPages   = item.images.count
+        section.numberOfPages   = item.images.count == 0 ? 1 : item.images.count
+        
+        self.delegate   = delegate
+        self.indexPath  = indexPath
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        scroll.addGestureRecognizer(tap)
+    }
+    
+    @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
+        delegate?.pressed(at: indexPath!)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        section.currentPage = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width))
     }
 }
 

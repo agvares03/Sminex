@@ -169,6 +169,7 @@ struct Segues {
         static let toCreateRequest   = "createRequest"
         static let toQuestions       = "questionTable"
         static let toQuestionAnim    = "questionTableAnim"
+        static let toDeals           = "deals"
     }
     
     struct fromRequestTypeVC {
@@ -217,5 +218,10 @@ struct Segues {
     struct fromAccountChangePasswordVC {
         
         static let toForgot           = "forgot"
+    }
+    
+    struct fromDealsListVC {
+        
+        static let toDealsDesc        = "dealsDesc"
     }
 }
