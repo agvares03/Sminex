@@ -67,6 +67,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        automaticallyAdjustsScrollViewInsets = false
         DispatchQueue.global(qos: .userInitiated).async {
             if let imageData = UserDefaults.standard.object(forKey: "accountIcon"),
                 let image = UIImage(data: imageData as! Data) {

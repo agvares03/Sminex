@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import DeviceKit
 
 final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var loader:              UIActivityIndicatorView!
     @IBOutlet private weak var forgotTop:           NSLayoutConstraint!
+    @IBOutlet private weak var saveButtonBottom:    NSLayoutConstraint!
     @IBOutlet private weak var oldPasswordField:    UITextField!
     @IBOutlet private weak var newPasswordField:    UITextField!
     @IBOutlet private weak var saveButton:          UIButton!
@@ -23,7 +25,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         navigationController?.popViewController(animated: true)
     }
     
-    @IBAction private func oldPasswordSecureButtonPressed(_ sender: UIButton) {
+    @IBAction private func oldPasswordSecureButtonPressed(_ sender: UIButton?) {
         
         if oldPasswordField.isSecureTextEntry {
             oldPasswordSecure.setImage(UIImage(named: "ic_show_password"), for: .normal)
@@ -35,7 +37,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction private func newPasswordSecureButtonPressed(_ sender: UIButton) {
+    @IBAction private func newPasswordSecureButtonPressed(_ sender: UIButton?) {
         
         if newPasswordField.isSecureTextEntry {
             newPasswordSecure.setImage(UIImage(named: "ic_show_password"), for: .normal)
@@ -68,6 +70,13 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if Device().isOneOf([.iPhone4, .iPhone4s, .simulator(.iPhone4), .simulator(.iPhone4s)]) {
+            saveButtonBottom.constant = 50
+        }
+        
+        oldPasswordSecureButtonPressed(nil)
+        newPasswordSecureButtonPressed(nil)
         
         stopAnimator()
         

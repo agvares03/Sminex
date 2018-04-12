@@ -185,26 +185,26 @@ func getHash(pass: String, salt: Data) -> String {
 func isNeedToScroll() -> Bool {
     
     // Только если >4" экран
-    return Device().isOneOf([Device.iPhone5,
-                             Device.iPhone5s,
-                             Device.iPhone5c,
-                             Device.iPhoneSE,
-                             Device.iPhone4,
-                             Device.iPhone4s,
-                             Device.simulator(Device.iPhone5),
-                             Device.simulator(Device.iPhone5s),
-                             Device.simulator(Device.iPhone5c),
-                             Device.simulator(Device.iPhoneSE),
-                             Device.simulator(Device.iPhone4),
-                             Device.simulator(Device.iPhone4s)])
+    return Device().isOneOf([.iPhone5,
+                             .iPhone5s,
+                             .iPhone5c,
+                             .iPhoneSE,
+                             .iPhone4,
+                             .iPhone4s,
+                             .simulator(Device.iPhone5),
+                             .simulator(Device.iPhone5s),
+                             .simulator(Device.iPhone5c),
+                             .simulator(Device.iPhoneSE),
+                             .simulator(Device.iPhone4),
+                             .simulator(Device.iPhone4s)])
 }
 
 func isNeedToScrollMore() -> Bool {
     
-    return Device().isOneOf([Device.iPhone4,
-                             Device.iPhone4s,
-                             Device.simulator(Device.iPhone4),
-                             Device.simulator(Device.iPhone4s)])
+    return Device().isOneOf([.iPhone4,
+                             .iPhone4s,
+                             .simulator(Device.iPhone4),
+                             .simulator(Device.iPhone4s)])
 }
 
 func dayDifference(from date: Date, style: String? = nil) -> String
