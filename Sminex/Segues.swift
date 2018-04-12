@@ -223,5 +223,6 @@ struct Segues {
     struct fromDealsListVC {
         
         static let toDealsDesc        = "dealsDesc"
+        static let toDealsAnim        = "dealNotAnimated"
     }
 }

@@ -60,6 +60,11 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.selectedItem?.title = "Главная"
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return meterArr.count
     }

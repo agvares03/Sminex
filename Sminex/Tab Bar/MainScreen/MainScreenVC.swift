@@ -14,6 +14,7 @@ private protocol MainDataProtocol:  class {}
 private protocol CellsDelegate:    class {
     func tapped(name: String)
     func pressed(at indexPath: IndexPath)
+    func stockCellPressed(currImg: Int)
 }
 protocol MainScreenDelegate: class {
     func update()
@@ -35,7 +36,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             2 : NewsCellData(title: "Собрание жильцов", desc: "20 ноября, с 11:00 до 18:00", date: "15 октября"),
             3 : NewsCellData(title: "Вынесено решение придомового комитета о поводу подземной парковки", desc: "20 ноября, с 11:00 до 18:00", date: "13 октября")],
         2 : [
-            0 : CellsHeaderData(title: "Акции и предложения"),
+            0 : CellsHeaderData(title: "Акции и предложения", isNeedDetail: false),
             1 : StockCellData(images: [])
             ],
         3 : [
@@ -48,6 +49,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
     private var questionSize: CGSize?
     private var deals: [DealsJson] = []
+    private var dealsIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,6 +99,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
     }
     
@@ -211,8 +214,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             surveyName = cell.title.text ?? ""
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestionAnim, sender: self)
         
-        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
-            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
+//        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
+//            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         }
     }
     
@@ -235,9 +238,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if name == "Опросы" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestions, sender: self)
         
-        } else if name == "Акции и предложения" {
-            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
+//        } else if name == "Акции и предложения" {
+//            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         }
+    }
+    
+    func stockCellPressed(currImg: Int) {
+        self.dealsIndex = currImg
+        performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
     }
     
     private func fetchRequests(_ isBackground: Bool = false) {
@@ -494,8 +502,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.delegate = self
         
         } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
-            let vc = segue.destination as! DealsListVC
-            vc.data_ = deals
+            let vc = segue.destination as! DealsListDescVC
+            vc.data_ = deals[dealsIndex]
         }
     }
     
@@ -610,16 +618,19 @@ final class StockCell: UICollectionViewCell, UIScrollViewDelegate {
     
     private var delegate:   CellsDelegate?
     private var indexPath:  IndexPath?
+    private var isLoading = false
     
     fileprivate func display(_ item: StockCellData, delegate: CellsDelegate? = nil, indexPath: IndexPath? = nil) {
         
         if item.images.count == 0, let imgData = UserDefaults.standard.data(forKey: "DealsImg"), let img = UIImage(data: imgData)  {
             let image = UIImageView(frame: CGRect(x: 0, y: 0, width: 300, height: Int(scroll.frame.size.height)))
             image.image = img
+            isLoading = true
             scroll.addSubview(image)
             
         } else if item.images.count != 0 {
             var x = 0
+            isLoading = false
             
             item.images.forEach {
                 let image    = UIImageView(frame: CGRect(x: x, y: 0, width: 300, height: Int(scroll.frame.size.height)))
@@ -645,11 +656,26 @@ final class StockCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
-        delegate?.pressed(at: indexPath!)
+        if !isLoading {
+            delegate?.stockCellPressed(currImg: section.currentPage)
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         section.currentPage = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width))
+        scroll.setContentOffset(CGPoint(x: 320 * section.currentPage, y: 0), animated: true)
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        section.currentPage = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width))
+        scroll.setContentOffset(CGPoint(x: 320 * section.currentPage, y: 0), animated: true)
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            section.currentPage = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width))
+            scroll.setContentOffset(CGPoint(x: 320 * section.currentPage, y: 0), animated: true)
+        }
     }
 }
 
