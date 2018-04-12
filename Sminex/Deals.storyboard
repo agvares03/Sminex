@@ -106,64 +106,48 @@
                         <outlet property="collection" destination="PBQ-l3-cfY" id="98L-dt-dca"/>
                         <outlet property="loader" destination="oZK-8f-Uhy" id="Kx7-PZ-j4y"/>
                         <segue destination="ATt-L0-HYi" kind="show" identifier="dealsDesc" id="BYg-2A-pfj"/>
+                        <segue destination="ATt-L0-HYi" kind="show" identifier="dealNotAnimated" id="ZQ8-ed-t7O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jky-j4-FUq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="346.39999999999998" y="-1741.0794602698652"/>
         </scene>
-        <!--Deals List DescVC-->
+        <!--Акция-->
         <scene sceneID="rmx-ad-nQm">
             <objects>
-                <viewController id="ATt-L0-HYi" customClass="DealsListDescVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="dealDetails" id="ATt-L0-HYi" customClass="DealsListDescVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vdt-1R-NYu"/>
                         <viewControllerLayoutGuide type="bottom" id="gHz-7J-xiK"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="JwL-ha-4n3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QXP-7v-m1M">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qS7-Z1-bbH">
-                                        <rect key="frame" x="10" y="6" width="50" height="50"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="50" id="SG6-Au-Aow"/>
-                                            <constraint firstAttribute="height" constant="50" id="bbk-cO-6JZ"/>
-                                        </constraints>
-                                    </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alU-es-7ue">
-                                        <rect key="frame" x="20" y="20" width="12" height="22"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" backgroundImage="sminex_arrow_navbar">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="backButtonTapped:" destination="ATt-L0-HYi" eventType="touchUpInside" id="wTO-sZ-HEn"/>
-                                        </connections>
-                                    </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Mzn-v9-IrZ">
-                                        <rect key="frame" x="15" y="56" width="345" height="150"/>
+                                        <rect key="frame" x="15" y="15" width="345" height="150"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="150" id="X4t-2c-Z5n"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MIA. Beauty Spa. Маникюр+шеллак 700 Р" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P61-mC-e9j">
-                                        <rect key="frame" x="15" y="216" width="345" height="50.5"/>
+                                        <rect key="frame" x="15" y="175" width="345" height="50.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 марта 2017, 16:45" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pw1-xy-TyP">
-                                        <rect key="frame" x="15" y="274.5" width="345" height="17"/>
+                                        <rect key="frame" x="15" y="233.5" width="345" height="17"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kJO-va-x8E">
-                                        <rect key="frame" x="15" y="313" width="345" height="153"/>
+                                        <rect key="frame" x="15" y="272" width="345" height="153"/>
                                         <string key="text">Цена мужской стрижки: 500–1550 ₽
 Цена женской стрижки: 700–2500 ₽
 Услуги: наращивание ресниц, коррекция бровей, эпиляция, маникюр, педикюр, артдизайн и многое другое.
@@ -174,7 +158,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Соцсети:" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="KO7-UT-4iF">
-                                        <rect key="frame" x="15" y="474" width="345" height="19.5"/>
+                                        <rect key="frame" x="15" y="433" width="345" height="19.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -184,10 +168,7 @@
                                     <constraint firstItem="Pw1-xy-TyP" firstAttribute="top" secondItem="P61-mC-e9j" secondAttribute="bottom" constant="8" id="B7g-Ch-ZwS"/>
                                     <constraint firstItem="KO7-UT-4iF" firstAttribute="top" secondItem="kJO-va-x8E" secondAttribute="bottom" constant="8" id="CG3-a7-gaq"/>
                                     <constraint firstItem="Pw1-xy-TyP" firstAttribute="leading" secondItem="P61-mC-e9j" secondAttribute="leading" id="Cfq-9X-30V"/>
-                                    <constraint firstItem="qS7-Z1-bbH" firstAttribute="centerY" secondItem="alU-es-7ue" secondAttribute="centerY" id="EAv-Xi-cvb"/>
-                                    <constraint firstItem="alU-es-7ue" firstAttribute="top" secondItem="QXP-7v-m1M" secondAttribute="top" constant="20" id="Hhz-nt-mpY"/>
                                     <constraint firstAttribute="bottom" secondItem="KO7-UT-4iF" secondAttribute="bottom" constant="50" id="IiZ-hp-SXV"/>
-                                    <constraint firstItem="Mzn-v9-IrZ" firstAttribute="top" secondItem="qS7-Z1-bbH" secondAttribute="bottom" id="Jd7-In-wgi"/>
                                     <constraint firstItem="P61-mC-e9j" firstAttribute="leading" secondItem="Mzn-v9-IrZ" secondAttribute="leading" id="PGx-NC-kHC"/>
                                     <constraint firstItem="P61-mC-e9j" firstAttribute="top" secondItem="Mzn-v9-IrZ" secondAttribute="bottom" constant="10" id="XdQ-g3-Dym"/>
                                     <constraint firstAttribute="trailing" secondItem="Mzn-v9-IrZ" secondAttribute="trailing" constant="15" id="dIL-5n-AKH"/>
@@ -196,11 +177,10 @@
                                     <constraint firstItem="KO7-UT-4iF" firstAttribute="leading" secondItem="kJO-va-x8E" secondAttribute="leading" id="iZu-rk-gnx"/>
                                     <constraint firstItem="Mzn-v9-IrZ" firstAttribute="leading" secondItem="QXP-7v-m1M" secondAttribute="leading" constant="15" id="kGd-yF-vAe"/>
                                     <constraint firstItem="KO7-UT-4iF" firstAttribute="trailing" secondItem="kJO-va-x8E" secondAttribute="trailing" id="mIu-qX-npM"/>
-                                    <constraint firstItem="qS7-Z1-bbH" firstAttribute="leading" secondItem="alU-es-7ue" secondAttribute="leading" constant="-10" id="mvI-f2-YgR"/>
                                     <constraint firstItem="P61-mC-e9j" firstAttribute="trailing" secondItem="Mzn-v9-IrZ" secondAttribute="trailing" id="pJz-La-JeV"/>
                                     <constraint firstItem="kJO-va-x8E" firstAttribute="trailing" secondItem="P61-mC-e9j" secondAttribute="trailing" id="qMs-Ql-Ubc"/>
-                                    <constraint firstItem="alU-es-7ue" firstAttribute="leading" secondItem="QXP-7v-m1M" secondAttribute="leading" constant="20" id="uKJ-xt-LXS"/>
                                     <constraint firstItem="Mzn-v9-IrZ" firstAttribute="centerX" secondItem="QXP-7v-m1M" secondAttribute="centerX" id="ujT-s5-qXi"/>
+                                    <constraint firstItem="Mzn-v9-IrZ" firstAttribute="top" secondItem="QXP-7v-m1M" secondAttribute="top" constant="15" id="x8a-es-afr"/>
                                     <constraint firstItem="kJO-va-x8E" firstAttribute="top" secondItem="P61-mC-e9j" secondAttribute="bottom" constant="46.5" id="z9J-Oo-d0a"/>
                                 </constraints>
                             </scrollView>
@@ -213,17 +193,16 @@
                             <constraint firstItem="QXP-7v-m1M" firstAttribute="leading" secondItem="JwL-ha-4n3" secondAttribute="leading" id="uSB-pj-dgn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="h2A-GE-2ED">
+                    <navigationItem key="navigationItem" title="Акция" id="h2A-GE-2ED">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="aed-yR-Pud">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
-                                <action selector="backButtonPressed:" destination="ATt-L0-HYi" id="1wL-e1-921"/>
+                                <action selector="backButtonTapped:" destination="ATt-L0-HYi" id="2MX-9Q-t5R"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedTopBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="backView" destination="qS7-Z1-bbH" id="Btb-9y-73T"/>
                         <outlet property="bodyLabel" destination="kJO-va-x8E" id="vdb-UG-fhp"/>
                         <outlet property="dateLabel" destination="Pw1-xy-TyP" id="YnT-sv-oin"/>
                         <outlet property="image" destination="Mzn-v9-IrZ" id="DQJ-4o-ujI"/>
@@ -239,4 +218,7 @@
     <resources>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="ZQ8-ed-t7O"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -18,11 +18,17 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         navigationController?.popViewController(animated: true)
     }
     
+    open var pressedData_: DealsJson?
     open var data_: [DealsJson] = []
     private var index = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+     
+        if pressedData_ != nil {
+            performSegue(withIdentifier: Segues.fromDealsListVC.toDealsAnim, sender: self)
+        }
+        automaticallyAdjustsScrollViewInsets = false
         
         collection.delegate     = self
         collection.dataSource   = self
@@ -34,6 +40,10 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         } else {
             stopAnimator()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -94,6 +104,10 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         if segue.identifier == Segues.fromDealsListVC.toDealsDesc {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = data_[index]
+        
+        } else if segue.identifier == Segues.fromDealsListVC.toDealsAnim {
+            let vc = segue.destination as! DealsListDescVC
+            vc.data_ = pressedData_!
         }
     }
     
