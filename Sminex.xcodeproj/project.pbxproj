@@ -102,6 +102,8 @@
 		6C170ACC207CD00E00C84BE6 /* DealsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C170ACB207CD00E00C84BE6 /* DealsListVC.swift */; };
 		6C170ACE207CDDB400C84BE6 /* DealsListDescVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C170ACD207CDDB400C84BE6 /* DealsListDescVC.swift */; };
 		6C2387C22062052400F20190 /* Segues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2387C12062052400F20190 /* Segues.swift */; };
+		6C2D3288207F42D000F5F4C8 /* BarcodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2D3287207F42D000F5F4C8 /* BarcodeGenerator.swift */; };
+		6C2D328A207F834900F5F4C8 /* FinanceBarCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2D3289207F834900F5F4C8 /* FinanceBarCodeVC.swift */; };
 		6C425610206B6EF0007E1BF6 /* Counter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C42560F206B6EF0007E1BF6 /* Counter.storyboard */; };
 		6C425614206B71AF007E1BF6 /* CounterTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C425613206B71AF007E1BF6 /* CounterTableVC.swift */; };
 		6C4C0A0D20675A83004EF2FF /* Requests.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C4C0A0C20675A83004EF2FF /* Requests.storyboard */; };
@@ -114,9 +116,12 @@
 		6C5E78DF2064EF6F00805EF1 /* TemporaryHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5E78DE2064EF6F00805EF1 /* TemporaryHolder.swift */; };
 		6C5E78E4206505A900805EF1 /* AdmissionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5E78E3206505A900805EF1 /* AdmissionVC.swift */; };
 		6C62C26F207E6E9C00B5EA11 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4171BE6D1ECB369A00B9CDD7 /* Info.plist */; };
+		6C62C271207F317400B5EA11 /* Finance.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C62C270207F317400B5EA11 /* Finance.storyboard */; };
+		6C62C274207F32D800B5EA11 /* FinanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C62C273207F32D800B5EA11 /* FinanceVC.swift */; };
 		6C6A36D4206102D00073FC2A /* RegistrationSminexEnterPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6A36D3206102D00073FC2A /* RegistrationSminexEnterPassword.swift */; };
 		6C6A36D62061217F0073FC2A /* AppsConsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6A36D52061217F0073FC2A /* AppsConsCell.swift */; };
 		6C6A6088207BBD47001DC95A /* AccountNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6A6087207BBD47001DC95A /* AccountNotifications.swift */; };
+		6C737FEF2080A2ED00AC0250 /* FinanceDebtVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C737FEE2080A2ED00AC0250 /* FinanceDebtVC.swift */; };
 		6C7AA96320720EB400D27FE2 /* QuestionFinalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7AA96220720EB400D27FE2 /* QuestionFinalVC.swift */; };
 		6C7AA967207211E100D27FE2 /* QuestionEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7AA966207211E100D27FE2 /* QuestionEntity+CoreDataClass.swift */; };
 		6C7AA9692072120900D27FE2 /* QuestionEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7AA9682072120900D27FE2 /* QuestionEntity+CoreDataProperties.swift */; };
@@ -135,6 +140,9 @@
 		6CD3AD9520661413001589B7 /* CreateRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD3AD9420661413001589B7 /* CreateRequestVC.swift */; };
 		6CD3AD97206622AE001589B7 /* TechServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD3AD96206622AE001589B7 /* TechServiceVC.swift */; };
 		6CD3AD99206624A7001589B7 /* CreateTechServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD3AD98206624A7001589B7 /* CreateTechServiceVC.swift */; };
+		6CFB5C68208345CB0028D331 /* FinanceDebtArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB5C67208345CB0028D331 /* FinanceDebtArchiveVC.swift */; };
+		6CFB5C6C2083ADC40028D331 /* FinanceCalcsArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB5C6B2083ADC40028D331 /* FinanceCalcsArchiveVC.swift */; };
+		6CFB5C6E2083AFF40028D331 /* FinanceCalcVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB5C6D2083AFF40028D331 /* FinanceCalcVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -261,6 +269,8 @@
 		6C170ACB207CD00E00C84BE6 /* DealsListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsListVC.swift; sourceTree = "<group>"; };
 		6C170ACD207CDDB400C84BE6 /* DealsListDescVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsListDescVC.swift; sourceTree = "<group>"; };
 		6C2387C12062052400F20190 /* Segues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segues.swift; sourceTree = "<group>"; };
+		6C2D3287207F42D000F5F4C8 /* BarcodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeGenerator.swift; sourceTree = "<group>"; };
+		6C2D3289207F834900F5F4C8 /* FinanceBarCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceBarCodeVC.swift; sourceTree = "<group>"; };
 		6C42560F206B6EF0007E1BF6 /* Counter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Counter.storyboard; sourceTree = "<group>"; };
 		6C425613206B71AF007E1BF6 /* CounterTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterTableVC.swift; sourceTree = "<group>"; };
 		6C4C0A0C20675A83004EF2FF /* Requests.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Requests.storyboard; sourceTree = "<group>"; };
@@ -272,9 +282,12 @@
 		6C5E78DC2064DF7200805EF1 /* RequestTypeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTypeVC.swift; sourceTree = "<group>"; };
 		6C5E78DE2064EF6F00805EF1 /* TemporaryHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryHolder.swift; sourceTree = "<group>"; };
 		6C5E78E3206505A900805EF1 /* AdmissionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmissionVC.swift; sourceTree = "<group>"; };
+		6C62C270207F317400B5EA11 /* Finance.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Finance.storyboard; sourceTree = "<group>"; };
+		6C62C273207F32D800B5EA11 /* FinanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceVC.swift; sourceTree = "<group>"; };
 		6C6A36D3206102D00073FC2A /* RegistrationSminexEnterPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationSminexEnterPassword.swift; sourceTree = "<group>"; };
 		6C6A36D52061217F0073FC2A /* AppsConsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsConsCell.swift; sourceTree = "<group>"; };
 		6C6A6087207BBD47001DC95A /* AccountNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNotifications.swift; sourceTree = "<group>"; };
+		6C737FEE2080A2ED00AC0250 /* FinanceDebtVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceDebtVC.swift; sourceTree = "<group>"; };
 		6C7AA96220720EB400D27FE2 /* QuestionFinalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFinalVC.swift; sourceTree = "<group>"; };
 		6C7AA966207211E100D27FE2 /* QuestionEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuestionEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6C7AA9682072120900D27FE2 /* QuestionEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuestionEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -293,6 +306,9 @@
 		6CD3AD9420661413001589B7 /* CreateRequestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRequestVC.swift; sourceTree = "<group>"; };
 		6CD3AD96206622AE001589B7 /* TechServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechServiceVC.swift; sourceTree = "<group>"; };
 		6CD3AD98206624A7001589B7 /* CreateTechServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTechServiceVC.swift; sourceTree = "<group>"; };
+		6CFB5C67208345CB0028D331 /* FinanceDebtArchiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceDebtArchiveVC.swift; sourceTree = "<group>"; };
+		6CFB5C6B2083ADC40028D331 /* FinanceCalcsArchiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceCalcsArchiveVC.swift; sourceTree = "<group>"; };
+		6CFB5C6D2083AFF40028D331 /* FinanceCalcVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceCalcVC.swift; sourceTree = "<group>"; };
 		91A02736ADFEA29A50626132 /* Pods-Sminex.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sminex.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sminex/Pods-Sminex.debug.xcconfig"; sourceTree = "<group>"; };
 		CE321028C763199FEA05A93B /* Pods-Sminex.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sminex.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sminex/Pods-Sminex.release.xcconfig"; sourceTree = "<group>"; };
 		FA6E6EBF662F32D68C69BE89 /* Pods_Sminex.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sminex.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -531,6 +547,7 @@
 				6C2387C12062052400F20190 /* Segues.swift */,
 				6C7B0B67206BCA0200E974AE /* DigitInput.swift */,
 				6C55E4AD207497A0003E432A /* OnOffButton.swift */,
+				6C2D3287207F42D000F5F4C8 /* BarcodeGenerator.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -656,6 +673,7 @@
 		6C4C0A1020675B7C004EF2FF /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				6C62C270207F317400B5EA11 /* Finance.storyboard */,
 				6C170AC7207CCF0200C84BE6 /* Deals.storyboard */,
 				6C7F90E5207633EB00CFA721 /* Account.storyboard */,
 				6C54077F206E7C600050A0D0 /* Questions.storyboard */,
@@ -671,6 +689,7 @@
 		6C5E78E02065054B00805EF1 /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
+				6C62C272207F32C600B5EA11 /* Finance */,
 				6C170AC9207CCFF300C84BE6 /* Deals */,
 				6CA10FA1206B964A00612D03 /* Counters */,
 				6C425615206B71BE007E1BF6 /* Requests */,
@@ -678,6 +697,19 @@
 				6CA908142063A7EB00CB78FE /* MainScreenVC.swift */,
 			);
 			path = MainScreen;
+			sourceTree = "<group>";
+		};
+		6C62C272207F32C600B5EA11 /* Finance */ = {
+			isa = PBXGroup;
+			children = (
+				6C62C273207F32D800B5EA11 /* FinanceVC.swift */,
+				6CFB5C67208345CB0028D331 /* FinanceDebtArchiveVC.swift */,
+				6CFB5C6B2083ADC40028D331 /* FinanceCalcsArchiveVC.swift */,
+				6CFB5C6D2083AFF40028D331 /* FinanceCalcVC.swift */,
+				6C737FEE2080A2ED00AC0250 /* FinanceDebtVC.swift */,
+				6C2D3289207F834900F5F4C8 /* FinanceBarCodeVC.swift */,
+			);
+			path = Finance;
 			sourceTree = "<group>";
 		};
 		6C7F90E720772DBC00CFA721 /* Account */ = {
@@ -834,6 +866,7 @@
 				411B6CF01EE71AA1001DCBC7 /* add_app.png in Resources */,
 				41D2BF541F8CA4D000D915A5 /* circled_chevron_up.png in Resources */,
 				6C540780206E7C600050A0D0 /* Questions.storyboard in Resources */,
+				6C62C271207F317400B5EA11 /* Finance.storyboard in Resources */,
 				41979408203185F40034298D /* sminex_logo.png in Resources */,
 				6C4C0A0F20675B2B004EF2FF /* Auth.storyboard in Resources */,
 				41DFA8291ED34E1100F15109 /* menu_counters.png in Resources */,
@@ -893,6 +926,7 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Arcane/Arcane.framework",
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
+				"${BUILT_PRODUCTS_DIR}/ExpyTableView/ExpyTableView.framework",
 				"${BUILT_PRODUCTS_DIR}/Gloss/Gloss.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
@@ -904,6 +938,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Arcane.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpyTableView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gloss.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
@@ -934,6 +969,7 @@
 				4138B7C21F15AAF500DD0B52 /* Choice_UK.swift in Sources */,
 				6C2387C22062052400F20190 /* Segues.swift in Sources */,
 				411942ED1F4964CE006E2E0F /* RegistrationAdress4.swift in Sources */,
+				6CFB5C68208345CB0028D331 /* FinanceDebtArchiveVC.swift in Sources */,
 				6C6A6088207BBD47001DC95A /* AccountNotifications.swift in Sources */,
 				411B6CE91EE6FF22001DCBC7 /* Fotos+CoreDataProperties.swift in Sources */,
 				6C5E78DD2064DF7200805EF1 /* RequestTypeVC.swift in Sources */,
@@ -950,10 +986,13 @@
 				6CA908152063A7EB00CB78FE /* MainScreenVC.swift in Sources */,
 				41DFA8391ED3504400F15109 /* SettingsUser.swift in Sources */,
 				6C5E78E4206505A900805EF1 /* AdmissionVC.swift in Sources */,
+				6C2D3288207F42D000F5F4C8 /* BarcodeGenerator.swift in Sources */,
+				6C62C274207F32D800B5EA11 /* FinanceVC.swift in Sources */,
 				4111CA361EF4FBCB00BBEB7B /* Modal.swift in Sources */,
 				6C170ACC207CD00E00C84BE6 /* DealsListVC.swift in Sources */,
 				6C938C75206F4B9B00E34EA1 /* QuestionsTableVC.swift in Sources */,
 				41DFA8241ED3475700F15109 /* SettingsCons.swift in Sources */,
+				6CFB5C6C2083ADC40028D331 /* FinanceCalcsArchiveVC.swift in Sources */,
 				411B6CDF1EE6FF22001DCBC7 /* Comments+CoreDataProperties.swift in Sources */,
 				6CD3AD97206622AE001589B7 /* TechServiceVC.swift in Sources */,
 				6CD3AD9520661413001589B7 /* CreateRequestVC.swift in Sources */,
@@ -968,9 +1007,11 @@
 				4111CA381EF4FC1800BBEB7B /* AddCom.swift in Sources */,
 				411B6CE51EE6FF22001DCBC7 /* Flats+CoreDataProperties.swift in Sources */,
 				6C5E78DF2064EF6F00805EF1 /* TemporaryHolder.swift in Sources */,
+				6C737FEF2080A2ED00AC0250 /* FinanceDebtVC.swift in Sources */,
 				41D9FBD71ED9563A00925972 /* Counters+CoreDataClass.swift in Sources */,
 				6C6A36D4206102D00073FC2A /* RegistrationSminexEnterPassword.swift in Sources */,
 				6C7F90E920772DDA00CFA721 /* AccountSettingsVC.swift in Sources */,
+				6C2D328A207F834900F5F4C8 /* FinanceBarCodeVC.swift in Sources */,
 				41D9FBA61ED92E7600925972 /* DB.swift in Sources */,
 				41D9FBD81ED9563A00925972 /* Counters+CoreDataProperties.swift in Sources */,
 				6C7AA9692072120900D27FE2 /* QuestionEntity+CoreDataProperties.swift in Sources */,
@@ -981,6 +1022,7 @@
 				6C5AE242206A074900438B46 /* RequestEntity+CoreDataClass.swift in Sources */,
 				41D9FBD91ED965AA00925972 /* DemoUC.xcdatamodeld in Sources */,
 				6C8C69C9206CA03C0090A49D /* CounterHistoryVC.swift in Sources */,
+				6CFB5C6E2083AFF40028D331 /* FinanceCalcVC.swift in Sources */,
 				6C7B0B68206BCA0200E974AE /* DigitInput.swift in Sources */,
 				6C938C79206F56F300E34EA1 /* QuestionAnswerVC.swift in Sources */,
 				411B6CCA1EE3A7EC001DCBC7 /* Saldo+CoreDataProperties.swift in Sources */,

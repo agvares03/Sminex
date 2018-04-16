@@ -42,8 +42,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         3 : [
             0 : CellsHeaderData(title: "Заявки")],
         4 : [
-            0 : CellsHeaderData(title: "К оплате"),
-            1 : ForPayCellData(title: "114 246P", date: "До 31 января")],
+            0 : CellsHeaderData(title: "К оплате")
+            ],
         5 : [
             0 : CellsHeaderData(title: "Счетчики"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
@@ -82,6 +82,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
             }
         }
+        fetchDebt()
         fetchDeals()
         fetchRequests()
         fetchQuestions()
@@ -240,6 +241,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
 //        } else if name == "Акции и предложения" {
 //            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
+        
+        } else if name == "К оплате" {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
         }
     }
     
@@ -380,7 +384,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }.resume()
         
         queue.wait()
-        return salt!
+        return salt ?? Data()
     }
     
     private func fetchQuestions() {
@@ -394,6 +398,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
+                guard data != nil else { return }
                 let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments)
                 let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
                 var filtered: [QuestionDataJson] = []
@@ -477,6 +482,53 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }.resume()
     }
     
+    private func fetchDebt() {
+        
+        let defaults = UserDefaults.standard
+        
+        self.data[4]![1] = ForPayCellData(title: defaults.string(forKey: "ForPayTitle") ?? "", date: defaults.string(forKey: "ForPayDate") ?? "")
+        
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: login))
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_DEBT + "login=" + login + "&pwd=" + pass)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                DispatchQueue.main.sync {
+                    self.collection.reloadData()
+                }
+            }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
+                
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            let debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data!
+            var datePay = debt?.datePay
+            datePay?.removeLast(9)
+            self.data[4]![1] = ForPayCellData(title: String(debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
+            
+            defaults.setValue(String(debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
+            defaults.setValue("До " + (datePay ?? ""), forKey: "ForPayDate")
+            defaults.synchronize()
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            #endif
+            
+            }.resume()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
@@ -510,6 +562,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     func update() {
         fetchRequests(true)
         fetchQuestions()
+        fetchDeals()
+        fetchDebt()
     }
 }
 

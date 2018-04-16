@@ -52,6 +52,9 @@ final class Server {
     static let EDIT_ACCOUNT        = "EditAccountInfo.ashx?"           // Изменение настроек аккаунта
     static let CONFIGURE_NOTIFY    = "SetNotifySettings.ashx?"         // Изменение настроек уведомлении
     static let PROPOSALS           = "GetProposals.ashx?"              // Получение списка акции
+    static let ACCOUNT_DEBT        = "GetAccountDebt.ashx?"            // Баланс аккаунта
+    static let GET_BILLS           = "GetAccountBills.ashx?"           // Получение списка квитанции
+    static let CALCULATIONS        = "GetAccountCalculations.ashx?"    // Получение списка взаиморасчетов
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

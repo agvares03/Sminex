@@ -219,3 +219,32 @@ func dayDifference(from date: Date, style: String? = nil) -> String
         return dateFormatter.string(from: date)
     }
 }
+
+func getNameAndMonth(_ number_month: Int) -> String {
+    
+    if number_month == 1 {
+        return "Январь"
+    } else if number_month == 2 {
+        return "Февраль"
+    } else if number_month == 3 {
+        return "Март"
+    } else if number_month == 4 {
+        return "Апрель"
+    } else if number_month == 5 {
+        return "Май"
+    } else if number_month == 6 {
+        return "Июнь"
+    } else if number_month == 7 {
+        return "Июль"
+    } else if number_month == 8 {
+        return "Август"
+    } else if number_month == 9 {
+        return "Сентябрь"
+    } else if number_month == 10 {
+        return "Октябрь"
+    } else if number_month == 11 {
+        return "Ноябрь"
+    } else {
+        return "Декабрь"
+    }
+}
