@@ -2567,6 +2567,9 @@
                                                     <state key="normal" title="Оплатить">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="payButtonPressed:" destination="1ZO-FU-KIK" eventType="touchUpInside" id="JnF-z5-k9P"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qls-pJ-33z">
                                                     <rect key="frame" x="0.0" y="74" width="317" height="1"/>
@@ -2783,6 +2786,7 @@
                         <segue destination="XmE-kI-RT8" kind="show" identifier="questionTableAnim" animates="NO" id="QLh-38-2Hc"/>
                         <segue destination="04S-iK-vIB" kind="show" identifier="deals" id="k7s-XO-so6"/>
                         <segue destination="WAZ-2P-F0t" kind="show" identifier="finance" id="efl-bX-pxf"/>
+                        <segue destination="F1c-aq-S8Y" kind="presentation" identifier="pay" id="42v-g6-Vpo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iaa-22-iNE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4363,7 +4367,15 @@
                 <viewControllerPlaceholder storyboardName="Deals" referencedIdentifier="dealDetails" id="04S-iK-vIB" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fe8-0i-uUr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="455" y="-1842"/>
+            <point key="canvasLocation" x="341" y="-1842"/>
+        </scene>
+        <!--FinancePay-->
+        <scene sceneID="3OB-Lv-PMM">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Finance" referencedIdentifier="FinancePay" id="F1c-aq-S8Y" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rDa-8g-6AJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="655" y="-1842"/>
         </scene>
         <!--UINavigationController-yke-5M-97h-->
         <scene sceneID="rNH-ea-17N">
@@ -4411,7 +4423,7 @@
                 <viewControllerPlaceholder storyboardName="Questions" id="XmE-kI-RT8" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d5s-AG-wFW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1539" y="-1822"/>
+            <point key="canvasLocation" x="1461" y="-1842"/>
         </scene>
         <!--Account-->
         <scene sceneID="OvV-SI-eN7">
@@ -4429,7 +4441,7 @@
                 <viewControllerPlaceholder storyboardName="Finance" id="WAZ-2P-F0t" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="93D-iD-1Ry" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1204" y="-1833"/>
+            <point key="canvasLocation" x="1204" y="-1842"/>
         </scene>
     </scenes>
     <resources>

@@ -10,6 +10,39 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Finance PayVC-->
+        <scene sceneID="WKZ-eA-w90">
+            <objects>
+                <viewController storyboardIdentifier="FinancePay" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="ODM-Ev-8QC" customClass="FinancePayVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Nm6-cN-mWZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="FTX-s7-UD1"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="j2E-NC-AAV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TDd-WY-aav">
+                                <rect key="frame" x="16" y="45" width="343" height="607"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TDd-WY-aav" firstAttribute="top" secondItem="Nm6-cN-mWZ" secondAttribute="bottom" constant="25" id="SLi-gn-LHf"/>
+                            <constraint firstItem="TDd-WY-aav" firstAttribute="trailing" secondItem="j2E-NC-AAV" secondAttribute="trailingMargin" id="b2K-lQ-sLx"/>
+                            <constraint firstItem="FTX-s7-UD1" firstAttribute="top" secondItem="TDd-WY-aav" secondAttribute="bottom" constant="15" id="q51-H3-NpH"/>
+                            <constraint firstItem="TDd-WY-aav" firstAttribute="leading" secondItem="j2E-NC-AAV" secondAttribute="leadingMargin" id="w8P-LP-8uc"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="TDd-WY-aav" id="nCb-OR-7Zp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E2P-yC-SMJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="359" y="-2606"/>
+        </scene>
         <!--Архив квитанции-->
         <scene sceneID="jiU-ew-GtH">
             <objects>
@@ -324,6 +357,9 @@
                                                                     <real key="value" value="3"/>
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="payButtonPressed:" destination="1x1-nX-OL3" eventType="touchUpInside" id="Tt1-LC-DcJ"/>
+                                                            </connections>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*До 31.01.2018*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bwG-Mu-38N">
                                                             <rect key="frame" x="20" y="168.5" width="82" height="13.5"/>
@@ -456,6 +492,7 @@
                         <segue destination="6z3-yt-nv7" kind="show" identifier="receiptArchive" id="egU-c6-gDP"/>
                         <segue destination="NQO-Y0-Fbv" kind="show" identifier="calcsArchive" id="DIU-KK-E9T"/>
                         <segue destination="T8C-5x-IHP" kind="show" identifier="calcs" id="UqP-vz-sNh"/>
+                        <segue destination="ODM-Ev-8QC" kind="presentation" identifier="financePay" id="NkK-9o-LHO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z91-TA-OR6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -816,7 +853,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zHK-b6-DPF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="182" y="-1858"/>
+            <point key="canvasLocation" x="359" y="-1858"/>
         </scene>
     </scenes>
     <resources>
@@ -824,7 +861,7 @@
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ePG-cd-LPa"/>
-        <segue reference="MyX-TE-Qvq"/>
+        <segue reference="UqP-vz-sNh"/>
+        <segue reference="M1z-fP-A6K"/>
     </inferredMetricsTieBreakers>
 </document>

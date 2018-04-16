@@ -171,6 +171,7 @@ struct Segues {
         static let toQuestionAnim    = "questionTableAnim"
         static let toDeals           = "deals"
         static let toFinance         = "finance"
+        static let toFinancePay      = "pay"
     }
     
     struct fromRequestTypeVC {
@@ -234,6 +235,7 @@ struct Segues {
         static let toCalcs            = "calcs"
         static let toReceiptArchive   = "receiptArchive"
         static let toCalcsArchive     = "calcsArchive"
+        static let toPay              = "financePay"
     }
     
     struct fromFinanceDebtArchiveVC {

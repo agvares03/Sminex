@@ -24,6 +24,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet private weak var collection: UICollectionView!
     
+    @IBAction private func payButtonPressed(_ sender: UIButton) {
+        requestPay()
+    }
+    
     private var surveyName = ""
     private var canCount = true
     private var data: [Int:[Int:MainDataProtocol]] = [
@@ -47,7 +51,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         5 : [
             0 : CellsHeaderData(title: "Счетчики"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
-    private var questionSize: CGSize?
+    private var questionSize:   CGSize?
+    private var url:            URLRequest?
+    private var debt:           AccountDebtJson?
     private var deals: [DealsJson] = []
     private var dealsIndex = 0
     
@@ -513,17 +519,50 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             
-            let debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data!
-            var datePay = debt?.datePay
+            self.debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data!
+            var datePay = self.debt?.datePay
             datePay?.removeLast(9)
-            self.data[4]![1] = ForPayCellData(title: String(debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
+            self.data[4]![1] = ForPayCellData(title: String(self.debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
             
-            defaults.setValue(String(debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
+            defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
             defaults.setValue("До " + (datePay ?? ""), forKey: "ForPayDate")
             defaults.synchronize()
             
             #if DEBUG
             print(String(data: data!, encoding: .utf8)!)
+            #endif
+            
+            }.resume()
+    }
+    
+    private func requestPay() {
+        
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let password = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: login))
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password + "&amount=" + String(debt?.sumPay ?? 0.0))!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error: ", with: "") ?? "", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.url = URLRequest(url: URL(string: String(data: data!, encoding: .utf8) ?? "")!)
+            
+            DispatchQueue.main.sync {
+                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+            }
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             }.resume()
@@ -556,6 +595,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = deals[dealsIndex]
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
+            let vc = segue.destination as! FinancePayVC
+            vc.url_ = url
         }
     }
     
