@@ -14,20 +14,25 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
 
     @IBOutlet private weak var loader:  UIActivityIndicatorView!
     @IBOutlet private weak var table:   ExpyTableView!
-    @IBOutlet private weak var webView: UIWebView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
     
     @IBAction private func barcodePreesed(_ sender: UIButton) {
-        performSegue(withIdentifier: Segues.fromFinanceVC.toBarcode, sender: self)
+        if debt?.codPay != "" && debt?.codPay != nil {
+            performSegue(withIdentifier: Segues.fromFinanceVC.toBarcode, sender: self)
+        
+        } else {
+            showToast(message: "Нет данных по штрихкоду")
+        }
     }
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
         requestPay()
     }
     
+    private var backColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1.0)
     private var url:        URLRequest?
     private var index = 0
     private var debt:       AccountDebtJson?
@@ -71,6 +76,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 datePay?.removeLast(9)
                 cell.display(amount: String(debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
             }
+            cell.contentView.backgroundColor = backColor
             return cell
             
         } else if indexPath.section == 1 {
@@ -79,37 +85,50 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 cell.display(title: "Архив квитанции", desc: ">")
             
             } else {
-                cell.display(title: getNameAndMonth(receipts[indexPath.row].numMonth ?? 0) + " \(receipts[indexPath.row].numYear ?? 0)", desc: (String(receipts[indexPath.row].sum ?? 0.0)) + " >")
+                cell.display(title: getNameAndMonth(receipts[indexPath.row].numMonth ?? 0) + " \(receipts[indexPath.row].numYear ?? 0)",
+                    desc: (String(receipts[indexPath.row].sum ?? 0.0)) + " >")
             }
+            cell.contentView.backgroundColor = backColor
+            return cell
+        
+        } else if indexPath.section == 3 {
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
+            cell.display(title: "История взаиморасчетов", desc: ">")
+            cell.contentView.backgroundColor = .white
             return cell
         
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            if indexPath.row != 4 {
-                cell.display(title: getNameAndMonth(calcs[indexPath.row].numMonthSet ?? 0) + " \(calcs[indexPath.row].numYearSet ?? 0)", desc: String(calcs[indexPath.row].sumDebt ?? 0) + " >")
-            
-            } else {
-                cell.display(title: "История взаиморасчетов", desc: ">")
-            }
+            cell.display(title: getNameAndMonth(calcs[indexPath.row].numMonthSet ?? 0) + " \(calcs[indexPath.row].numYearSet ?? 0)",
+                desc: calcs[indexPath.row].sumDebt != 0.0 ? "Долг " + String(calcs[indexPath.row].sumDebt ?? 0) + " >" : ">")
+            cell.contentView.backgroundColor = backColor
             return cell
+        
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            if receipts.count != 0 {
-                return 5
-                
-            } else {
+            if receipts.count == 0 {
                 return 0
+                
+            } else if receipts.count < 3 {
+                return receipts.count + 2
+            
+            } else {
+                return 5
             }
             
         } else if section == 2 {
-            if calcs.count != 0 {
-                return 5
+            if calcs.count == 0 {
+                return 0
+            
+            } else if calcs.count < 3 {
+                return calcs.count + 1
             
             } else {
-                return 0
+                return 4
             }
         
         } else {
@@ -117,8 +136,22 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         }
     }
     
+    func tableView(_ tableView: ExpyTableView, expyState state: ExpyState, changeForSection section: Int) {
+        
+        if state == .willExpand {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! FinanceSectionCell
+            cell.expand(true)
+        
+        } else if state == .willCollapse {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! FinanceSectionCell
+            cell.expand(false)
+        }
+    }
+    
     func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
-        if section == 0 {
+        if section == 0 || section == 3 {
             return false
             
         } else {
@@ -138,7 +171,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -160,6 +193,11 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             }
             index = indexPath.row - 1
             performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
+        
+        } else if indexPath.section == 3 {
+            if calcs.count != 0 {
+                performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
+            }
         }
     }
     
@@ -211,6 +249,10 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
+            
+            guard data != nil else {
+                return
+            }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
@@ -416,6 +458,16 @@ final class FinanceSectionCell: UITableViewCell {
     
     func display(_ title: String) {
         self.title.text     = title
+        self.img.image = UIImage(named: "expand")
+    }
+    
+    func expand(_ isExpanded: Bool) {
+        if !isExpanded {
+            self.img.image = UIImage(named: "expand")
+        
+        } else {
+            self.img.image = UIImage(named: "expanded")
+        }
     }
 }
 
@@ -426,7 +478,6 @@ final class FinanceHeaderCell: UITableViewCell {
     @IBOutlet private weak var date: UILabel!
     
     @IBAction private func barcodePressed(_ sender: UIButton) {
-        
     }
     
     func display(amount: String, date: String) {
@@ -533,6 +584,23 @@ struct AccountCalculationsJson: JSONDecodable {
         descSet     = "desc_set"        <~~ json
         sumPay      = "sum_pay"         <~~ json
         type        = "type"            <~~ json
+    }
+    
+    init(type: String,
+         sumAccrued: Double?,
+         sumDebt: Double?,
+         sumPay: Double?,
+         descSet: String? = nil,
+         numMonthSet: Int? = nil,
+         numYearSet: Int? = nil) {
+        
+        self.type           = type
+        self.sumAccrued     = sumAccrued
+        self.sumDebt        = sumDebt
+        self.sumPay         = sumPay
+        self.descSet        = descSet
+        self.numMonthSet    = numMonthSet
+        self.numYearSet     = numYearSet
     }
 }
 

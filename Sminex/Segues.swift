@@ -247,4 +247,10 @@ struct Segues {
         
         static let toCalc              = "calc"
     }
+    
+    struct fromFinanceDebtVC {
+        
+        static let toBarcode           = "barcode"
+        static let toPay               = "pay"
+    }
 }

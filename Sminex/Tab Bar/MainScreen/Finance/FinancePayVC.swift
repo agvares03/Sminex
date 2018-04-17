@@ -12,19 +12,16 @@ final class FinancePayVC: UIViewController {
     
     @IBOutlet private weak var webView: UIWebView!
     
+    @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     open var url_: URLRequest?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(tap)
-        
+        automaticallyAdjustsScrollViewInsets = false
         webView.loadRequest(url_!)
-    }
-    
-    @objc private func viewTapped(_ sender: UITapGestureRecognizer) {
-        dismiss(animated: true, completion: nil)
     }
 }

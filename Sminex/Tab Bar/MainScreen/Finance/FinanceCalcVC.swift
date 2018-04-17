@@ -27,7 +27,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data_ == nil ? 0 : 1
+        return data_ == nil ? 0 : 2
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -37,7 +37,12 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcCell", for: indexPath) as! FinanceCalcCell
-        cell.display(data_!)
+        if indexPath.row == 0 {
+            cell.display(data_!)
+        
+        } else {
+            cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: data_?.sumAccrued, sumDebt: data_?.sumDebt, sumPay: data_?.sumPay) )
+        }
         return cell
     }
     
