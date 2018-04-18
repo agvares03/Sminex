@@ -17,11 +17,21 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
         navigationController?.popViewController(animated: true)
     }
     
-    open var data_: [AccountCalculationsJson] = []
+    open var data_:           [AccountCalculationsJson] = []
+    private var filteredData: [AccountCalculationsJson] = []
     private var index = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var currMonth = 0
+        filteredData = data_.filter {
+            if ($0.numMonthSet ?? 0) != currMonth {
+                currMonth = ($0.numMonthSet ?? 0)
+                return true
+            }
+            return false
+        }
         
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
@@ -29,7 +39,7 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data_.count
+        return filteredData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -44,15 +54,25 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcsArchiveCell", for: indexPath) as! FinanceCalcsArchiveCell
-        cell.display(title: getNameAndMonth(data_[indexPath.row].numMonthSet ?? 0) + " \(data_[indexPath.row].numYearSet ?? 0)",
-            desc: data_[indexPath.row].sumDebt != 0.0 ? "Долг " + String(Int(data_[indexPath.row].sumDebt ?? 0.0)) + " >" : ">")
+        var debt = 0.0
+        let currDate = (filteredData[indexPath.row].numMonthSet, filteredData[indexPath.row].numYearSet)
+        data_.forEach {
+            if ($0.numMonthSet, $0.numYearSet) == currDate {
+                debt += ($0.sumDebt ?? 0.0)
+            }
+        }
+        cell.display(title: getNameAndMonth(filteredData[indexPath.row].numMonthSet ?? 0) + " \(filteredData[indexPath.row].numYearSet ?? 0)",
+            desc: debt != 0.0 ? "Долг " + String(debt) + " >" : ">")
         return cell
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceCalcsArchive.toCalc {
             let vc = segue.destination as! FinanceCalcVC
-            vc.data_ = data_[index]
+            let date = (filteredData[index].numMonthSet, filteredData[index].numYearSet)
+            vc.data_ = data_.filter {
+                return date == ($0.numMonthSet, $0.numYearSet)
+            }
         }
     }
 }

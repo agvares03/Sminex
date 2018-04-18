@@ -35,9 +35,10 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     private var backColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1.0)
     private var url:        URLRequest?
     private var index = 0
-    private var debt:       AccountDebtJson?
-    private var receipts:   [AccountBillsJson]          = []
-    private var calcs:      [AccountCalculationsJson]   = []
+    private var debt:          AccountDebtJson?
+    private var receipts:      [AccountBillsJson]        = []
+    private var calcs:         [AccountCalculationsJson] = []
+    private var filteredCalcs: [AccountCalculationsJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,8 +101,15 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            cell.display(title: getNameAndMonth(calcs[indexPath.row].numMonthSet ?? 0) + " \(calcs[indexPath.row].numYearSet ?? 0)",
-                desc: calcs[indexPath.row].sumDebt != 0.0 ? "Долг " + String(calcs[indexPath.row].sumDebt ?? 0) + " >" : ">")
+            var debt = 0.0
+            let currDate = (filteredCalcs[indexPath.row - 1].numMonthSet, filteredCalcs[indexPath.row - 1].numYearSet)
+            calcs.forEach {
+                if ($0.numMonthSet, $0.numYearSet) == currDate {
+                    debt += ($0.sumDebt ?? 0.0)
+                }
+            }
+            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
+                desc: debt != 0.0 ? "Долг " + String(debt) + " >" : ">")
             cell.contentView.backgroundColor = backColor
             return cell
         
@@ -121,11 +129,11 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             }
             
         } else if section == 2 {
-            if calcs.count == 0 {
+            if filteredCalcs.count == 0 {
                 return 0
             
-            } else if calcs.count < 3 {
-                return calcs.count + 1
+            } else if filteredCalcs.count < 3 {
+                return filteredCalcs.count + 1
             
             } else {
                 return 4
@@ -195,7 +203,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
         
         } else if indexPath.section == 3 {
-            if calcs.count != 0 {
+            if filteredCalcs.count != 0 {
                 performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
             }
         }
@@ -301,7 +309,15 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif
         
-            self.calcs = AccountCalculationsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+            self.calcs = AccountCalculationsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!.reversed()
+            var currMonth = 0
+            self.filteredCalcs = self.calcs.filter {
+                if ($0.numMonthSet ?? 0) != currMonth {
+                    currMonth = ($0.numMonthSet ?? 0)
+                    return true
+                }
+                return false
+            }
             DispatchQueue.main.sync {
                 self.table.reloadData()
             }
@@ -438,7 +454,10 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         
         } else if segue.identifier == Segues.fromFinanceVC.toCalcs {
             let vc = segue.destination as! FinanceCalcVC
-            vc.data_ = calcs[index]
+            let date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
+            vc.data_ = calcs.filter {
+                return date == ($0.numMonthSet, $0.numYearSet)
+            }
         
         } else if segue.identifier == Segues.fromFinanceVC.toCalcsArchive {
             let vc = segue.destination as! FinanceCalcsArchiveVC

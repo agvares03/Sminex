@@ -16,7 +16,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
         navigationController?.popViewController(animated: true)
     }
     
-    open var data_: AccountCalculationsJson?
+    open var data_: [AccountCalculationsJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data_ == nil ? 0 : 2
+        return data_.count == 0 ? 0 : data_.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -37,11 +37,21 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcCell", for: indexPath) as! FinanceCalcCell
-        if indexPath.row == 0 {
-            cell.display(data_!)
+        if indexPath.row != data_.count {
+            cell.display(data_[indexPath.row])
         
         } else {
-            cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: data_?.sumAccrued, sumDebt: data_?.sumDebt, sumPay: data_?.sumPay) )
+            var sumAccured  = 0.0
+            var sumDebt     = 0.0
+            var sumPay      = 0.0
+            
+            data_.forEach {
+                sumAccured  += $0.sumAccrued    ?? 0.0
+                sumDebt     += $0.sumDebt       ?? 0.0
+                sumPay      += $0.sumPay        ?? 0.0
+            }
+            
+            cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: sumAccured, sumDebt: sumDebt, sumPay: sumPay) )
         }
         return cell
     }
@@ -49,7 +59,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceCalcHeader", for: indexPath) as! FinanceCalcHeader
-        header.display(getNameAndMonth(data_?.numMonthSet ?? 0) + " \(data_?.numYearSet ?? 0)")
+        header.display(getNameAndMonth(data_.first?.numMonthSet ?? 0) + " \(data_.first?.numYearSet ?? 0)")
         return header
     }
 }

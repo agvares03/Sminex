@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
@@ -31,6 +31,8 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         selectedAnswers.forEach {
             answerArr.append((question_?.questions![currQuestion].answers![$0].id)!)
         }
+        guard answerArr.count != 0 else { return }
+        
         answers[(question_?.questions![currQuestion].groupId!)!] = answerArr
         
         isAccepted = false
@@ -66,8 +68,16 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         }
         currQuestion = answers.count
         
+        automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
+        
+//        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+//        navigationController?.interactivePopGestureRecognizer?.delegate  = self
+        
+        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped(_:)))
+        edgePan.edges = .left
+        view.addGestureRecognizer(edgePan)
         
         tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         
@@ -86,6 +96,46 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         tabBarController?.tabBar.isHidden = false
     }
 
+    @objc private func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        guard currQuestion != 0 else { return }
+        
+        if #available(iOS 10.0, *) {
+            UIViewPropertyAnimator(duration: 0, curve: .linear) {
+                self.collection.frame.origin.x = recognizer.location(in: self.view).x
+            }.startAnimation()
+        } else {
+            self.collection.frame.origin.x = recognizer.location(in: self.view).x
+        }
+        
+        if recognizer.state == .ended {
+            if recognizer.location(in: view).x > 100 {
+                currQuestion -= 1
+                
+                if #available(iOS 10.0, *) {
+                    collection.alpha = 0
+                    collection.frame.origin.x = 0
+                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
+                        self.collection.alpha = 1
+                    }.startAnimation()
+                } else {
+                    collection.alpha = 0
+                    collection.frame.origin.x = 0
+                    collection.alpha = 1
+                }
+                collection.reloadData()
+                
+            } else {
+                if #available(iOS 10.0, *) {
+                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
+                        self.collection.frame.origin.x = 0
+                    }.startAnimation()
+                    
+                } else {
+                    collection.frame.origin.x = 0
+                }
+            }
+        }
+    }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
@@ -119,8 +169,6 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
-        
-        print(isSomeAnswers)
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerHeader", for: indexPath) as! QuestionAnswerHeader
         header.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)

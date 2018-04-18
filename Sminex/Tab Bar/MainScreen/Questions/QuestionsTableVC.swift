@@ -27,6 +27,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
      
+        automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
         
