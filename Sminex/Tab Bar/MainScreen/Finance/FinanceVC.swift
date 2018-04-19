@@ -24,7 +24,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             performSegue(withIdentifier: Segues.fromFinanceVC.toBarcode, sender: self)
         
         } else {
-            showToast(message: "Нет данных по штрихкоду")
+            showToast(message: "Нет данных по QR-коду")
         }
     }
     

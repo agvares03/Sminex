@@ -23,7 +23,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             performSegue(withIdentifier: Segues.fromFinanceDebtVC.toBarcode, sender: self)
             
         } else {
-            showToast(message: "Нет данных по штрихкоду")
+            showToast(message: "Нет данных по QR-коду")
         }
     }
     
