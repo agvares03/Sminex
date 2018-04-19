@@ -127,10 +127,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-                scroll.contentOffset = CGPoint(x: 0, y: 140)
+                scroll.contentOffset = CGPoint(x: 0, y: 100)
             
             } else {
-                view.frame.origin.y = -60
+//                view.frame.origin.y = -60
             }
         }
     }

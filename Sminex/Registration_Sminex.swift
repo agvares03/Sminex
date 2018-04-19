@@ -193,6 +193,13 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         backView.isUserInteractionEnabled = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !isFromApp_ {
+            navigationController?.isNavigationBarHidden = false
+        }
+    }
+    
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
     }
