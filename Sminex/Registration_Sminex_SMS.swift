@@ -9,7 +9,7 @@
 import UIKit
 import DeviceKit
 
-final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelegate {
+final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
     @IBOutlet private weak var txtNameLS:   UILabel!
     @IBOutlet private weak var NameLS:      UILabel!
@@ -133,6 +133,11 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         
         descText = descTxt.text ?? ""
         
+        btn_go.isEnabled = false
+        btn_go.alpha = 0.5
+        
+        smsField.delegate = self
+        
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -156,8 +161,8 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-//                scroll.contentSize.height += 30
-//                scroll.contentOffset = CGPoint(x: 0, y: 80)
+                scroll.contentSize.height += 10
+                scroll.contentOffset = CGPoint(x: 0, y: 60)
             
             } else {
 //                view.frame.origin.y = -30
@@ -171,8 +176,8 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-//                scroll.contentSize.height -= 30
-//                scroll.contentOffset = CGPoint(x: 0, y: 0)
+                scroll.contentSize.height -= 10
+                scroll.contentOffset = CGPoint(x: 0, y: 0)
             
             } else {
 //                view.frame.origin.y = 0
@@ -344,5 +349,17 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
                 self.startTimer()
             }
         }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if smsField.text != "" {
+            btn_go.isEnabled = true
+            btn_go.alpha = 1
+        
+        } else {
+            btn_go.isEnabled = false
+            btn_go.alpha = 0.5
+        }
+        return true
     }
 }

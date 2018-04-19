@@ -79,6 +79,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
     }
     
+    @IBAction private func backButtonTapped(_ sender: UIBarButtonItem) {
+        backButtonPressed(nil)
+    }
+    
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
         
         if passTextField.isSecureTextEntry {

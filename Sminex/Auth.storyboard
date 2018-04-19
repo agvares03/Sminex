@@ -531,7 +531,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3kv-lm-VNr">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bDh-3R-Dhc">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bDh-3R-Dhc">
                                         <rect key="frame" x="16" y="-50" width="12" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" backgroundImage="sminex_arrow_navbar">
@@ -546,7 +546,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PEe-YX-n9B">
-                                        <rect key="frame" x="16" y="212" width="343" height="40"/>
+                                        <rect key="frame" x="16" y="187" width="343" height="40"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="2Fq-8g-8bp"/>
@@ -559,7 +559,7 @@
                                         </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
+                                                <real key="value" value="4"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -567,7 +567,7 @@
                                         </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Код доступа из смс" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wyS-FK-L1t">
-                                        <rect key="frame" x="16" y="88" width="343" height="35"/>
+                                        <rect key="frame" x="16" y="73" width="343" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="SkQ-B3-3Pc"/>
                                         </constraints>
@@ -576,7 +576,7 @@
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="tel"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wvt-5g-uYE">
-                                        <rect key="frame" x="0.0" y="267" width="375" height="1"/>
+                                        <rect key="frame" x="0.0" y="242" width="375" height="1"/>
                                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="43q-rC-AG6"/>
@@ -586,19 +586,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Не можете войти?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="45L-Um-Izl">
-                                        <rect key="frame" x="16" y="273" width="108" height="14.5"/>
+                                        <rect key="frame" x="16" y="248" width="108" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.45000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Обратитесь в тех. поддержку" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KKt-Ux-ZWN">
-                                        <rect key="frame" x="16" y="295.5" width="175.5" height="14.5"/>
+                                        <rect key="frame" x="16" y="270.5" width="175.5" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.45000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWb-NT-lfX">
-                                        <rect key="frame" x="259" y="273" width="44" height="40"/>
+                                        <rect key="frame" x="259" y="248" width="44" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="ZIj-sf-gFf"/>
                                             <constraint firstAttribute="height" constant="40" id="qt7-np-Qyq"/>
@@ -606,7 +606,7 @@
                                         <state key="normal" image="sminex_call"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f83-uc-0ue">
-                                        <rect key="frame" x="319" y="273" width="40" height="40"/>
+                                        <rect key="frame" x="319" y="248" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="NZe-w3-kKa"/>
                                             <constraint firstAttribute="width" constant="40" id="TqT-7T-BGZ"/>
@@ -614,28 +614,28 @@
                                         <state key="normal" image="sminex_mail"/>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лицевой счет" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="NKB-xY-BKw">
-                                        <rect key="frame" x="16" y="22" width="343" height="16"/>
+                                        <rect key="frame" x="16" y="17" width="343" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="0.45000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="42307 803 5 90308 0710235" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYi-M7-sQt">
-                                        <rect key="frame" x="16" y="46" width="343" height="17"/>
+                                        <rect key="frame" x="16" y="41" width="343" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отправлен на телефон +7 983 172 75 67 (действует в течение 10 минут). Запросить новый код можно через минуту" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2A-5f-WFT">
-                                        <rect key="frame" x="16" y="127" width="343" height="50"/>
+                                        <rect key="frame" x="16" y="112" width="343" height="45"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="ecS-xZ-jPd"/>
+                                            <constraint firstAttribute="height" constant="45" id="ecS-xZ-jPd"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.45000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2m4-WQ-EM2">
-                                        <rect key="frame" x="337" y="95" width="22" height="22"/>
+                                        <rect key="frame" x="337" y="80" width="22" height="22"/>
                                         <state key="normal" image="button:2m4-WQ-EM2:image"/>
                                         <connections>
                                             <action selector="showPasswordPressed:" destination="okP-hc-Mwi" eventType="touchUpInside" id="Ddr-6P-FA3"/>
@@ -643,10 +643,10 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="LBn-vk-R4o">
-                                        <rect key="frame" x="177.5" y="221.5" width="20" height="20"/>
+                                        <rect key="frame" x="177.5" y="196.5" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NQL-cZ-FuF">
-                                        <rect key="frame" x="16" y="188.5" width="188" height="1"/>
+                                        <rect key="frame" x="16" y="168.5" width="188" height="1"/>
                                         <color key="backgroundColor" red="0.0" green="0.52941176469999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="IcL-F6-euK"/>
@@ -656,7 +656,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RRs-DL-kPk">
-                                        <rect key="frame" x="16" y="167" width="188" height="27"/>
+                                        <rect key="frame" x="16" y="147" width="188" height="27"/>
                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="12"/>
                                         <state key="normal" title="Запросить код доступа еще раз"/>
                                         <connections>
@@ -667,7 +667,7 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bDh-3R-Dhc" secondAttribute="trailing" constant="15" id="160-fv-gKp"/>
                                     <constraint firstItem="g2A-5f-WFT" firstAttribute="trailing" secondItem="wyS-FK-L1t" secondAttribute="trailing" id="1DA-WC-k4g"/>
-                                    <constraint firstItem="wyS-FK-L1t" firstAttribute="top" secondItem="YYi-M7-sQt" secondAttribute="bottom" constant="25" id="47j-Zu-Wop"/>
+                                    <constraint firstItem="wyS-FK-L1t" firstAttribute="top" secondItem="YYi-M7-sQt" secondAttribute="bottom" constant="15" id="47j-Zu-Wop"/>
                                     <constraint firstItem="45L-Um-Izl" firstAttribute="leading" secondItem="3kv-lm-VNr" secondAttribute="leading" constant="16" id="4OT-bj-ITE"/>
                                     <constraint firstItem="jff-6Y-xtv" firstAttribute="centerY" secondItem="bDh-3R-Dhc" secondAttribute="centerY" id="8DH-yV-lvk"/>
                                     <constraint firstItem="f83-uc-0ue" firstAttribute="top" secondItem="Wvt-5g-uYE" secondAttribute="bottom" constant="5" id="9fJ-VR-Bch"/>
@@ -677,7 +677,7 @@
                                     <constraint firstItem="NQL-cZ-FuF" firstAttribute="leading" secondItem="RRs-DL-kPk" secondAttribute="leading" id="Fo6-1M-w0Z"/>
                                     <constraint firstItem="LBn-vk-R4o" firstAttribute="centerX" secondItem="3kv-lm-VNr" secondAttribute="centerX" id="HoZ-KG-IS9"/>
                                     <constraint firstItem="g2A-5f-WFT" firstAttribute="leading" secondItem="wyS-FK-L1t" secondAttribute="leading" id="JRg-rz-gxS"/>
-                                    <constraint firstItem="PEe-YX-n9B" firstAttribute="top" secondItem="g2A-5f-WFT" secondAttribute="bottom" constant="35" id="LZa-ld-pwd"/>
+                                    <constraint firstItem="PEe-YX-n9B" firstAttribute="top" secondItem="g2A-5f-WFT" secondAttribute="bottom" constant="30" id="LZa-ld-pwd"/>
                                     <constraint firstItem="2m4-WQ-EM2" firstAttribute="trailing" secondItem="wyS-FK-L1t" secondAttribute="trailing" id="MI1-Pu-KSn"/>
                                     <constraint firstItem="PEe-YX-n9B" firstAttribute="trailing" secondItem="g2A-5f-WFT" secondAttribute="trailing" id="NCd-Ss-wCe"/>
                                     <constraint firstItem="LBn-vk-R4o" firstAttribute="centerY" secondItem="PEe-YX-n9B" secondAttribute="centerY" id="NQP-oh-blO"/>
@@ -692,7 +692,7 @@
                                     <constraint firstItem="YYi-M7-sQt" firstAttribute="trailing" secondItem="NKB-xY-BKw" secondAttribute="trailing" id="dS0-po-e8y"/>
                                     <constraint firstItem="bDh-3R-Dhc" firstAttribute="leading" secondItem="3kv-lm-VNr" secondAttribute="leading" constant="16" id="eXt-44-eO7"/>
                                     <constraint firstItem="RRs-DL-kPk" firstAttribute="leading" secondItem="g2A-5f-WFT" secondAttribute="leading" id="ed6-Fn-K5I"/>
-                                    <constraint firstItem="NKB-xY-BKw" firstAttribute="top" secondItem="bDh-3R-Dhc" secondAttribute="bottom" constant="50" id="hfG-H9-5cm"/>
+                                    <constraint firstItem="NKB-xY-BKw" firstAttribute="top" secondItem="bDh-3R-Dhc" secondAttribute="bottom" constant="45" id="hfG-H9-5cm"/>
                                     <constraint firstItem="YWb-NT-lfX" firstAttribute="top" secondItem="Wvt-5g-uYE" secondAttribute="bottom" constant="5" id="i2g-mO-V4y"/>
                                     <constraint firstItem="g2A-5f-WFT" firstAttribute="top" secondItem="wyS-FK-L1t" secondAttribute="bottom" constant="4" id="jeX-Zr-azb"/>
                                     <constraint firstItem="YWb-NT-lfX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KKt-Ux-ZWN" secondAttribute="trailing" constant="8" id="kt3-Tn-xnE"/>
@@ -719,7 +719,14 @@
                             <constraint firstAttribute="trailing" secondItem="3kv-lm-VNr" secondAttribute="trailing" id="rYZ-ly-lRW"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Регистрация" id="d21-TW-OgT"/>
+                    <navigationItem key="navigationItem" title="Регистрация" id="d21-TW-OgT">
+                        <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="2sh-Ml-9JD">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="backButtonPressed:" destination="okP-hc-Mwi" id="PLt-ov-wUe"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="NameLS" destination="YYi-M7-sQt" id="bz6-sj-ELL"/>
@@ -740,7 +747,7 @@
             </objects>
             <point key="canvasLocation" x="-471" y="583"/>
         </scene>
-        <!--Registration Sminex Enter Password-->
+        <!--Новый пароль-->
         <scene sceneID="wBF-gN-OHO">
             <objects>
                 <viewController id="ixU-3A-z1t" customClass="RegistrationSminexEnterPassword" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
@@ -756,33 +763,33 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RaM-OM-K8H">
-                                        <rect key="frame" x="16" y="16" width="12" height="22"/>
+                                        <rect key="frame" x="16" y="-50" width="12" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" backgroundImage="sminex_arrow_navbar">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y8H-kI-nsc">
-                                        <rect key="frame" x="6" y="2" width="50" height="50"/>
+                                        <rect key="frame" x="6" y="-64" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="TgB-a0-csO"/>
                                             <constraint firstAttribute="width" constant="50" id="XWO-Vk-bTS"/>
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лицевой счет" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="op2-fO-COg">
-                                        <rect key="frame" x="16" y="58" width="343" height="18"/>
+                                        <rect key="frame" x="16" y="22" width="343" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.45000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="42307 803 5 90308 0710235" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yI9-Sr-wvJ">
-                                        <rect key="frame" x="16" y="84" width="343" height="21"/>
+                                        <rect key="frame" x="16" y="48" width="343" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Телефон, привязанный к лицевому счету  " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIt-0t-cEG">
-                                        <rect key="frame" x="16" y="110" width="343" height="25"/>
+                                        <rect key="frame" x="16" y="74" width="343" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="HDu-qa-JNJ"/>
                                         </constraints>
@@ -791,7 +798,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Придумайте пароль" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GSw-jW-HD8">
-                                        <rect key="frame" x="16" y="155" width="343" height="35"/>
+                                        <rect key="frame" x="16" y="119" width="343" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="Kge-Bl-2xe"/>
                                         </constraints>
@@ -800,7 +807,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1gU-BA-BgV">
-                                        <rect key="frame" x="16" y="290" width="343" height="40"/>
+                                        <rect key="frame" x="16" y="254" width="343" height="40"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="rwO-bT-AWy"/>
@@ -813,7 +820,7 @@
                                         </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
+                                                <real key="value" value="4"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -822,7 +829,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nLO-6F-W2a">
-                                        <rect key="frame" x="337" y="161.5" width="22" height="22"/>
+                                        <rect key="frame" x="337" y="125.5" width="22" height="22"/>
                                         <state key="normal" image="ic_show_password"/>
                                         <connections>
                                             <action selector="showPasswordPressed:" destination="okP-hc-Mwi" eventType="touchUpInside" id="HU5-ZU-ghP"/>
@@ -831,7 +838,7 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="92f-kW-XYO">
-                                        <rect key="frame" x="177.5" y="299.5" width="20" height="20"/>
+                                        <rect key="frame" x="177.5" y="263.5" width="20" height="20"/>
                                     </activityIndicatorView>
                                 </subviews>
                                 <constraints>
@@ -839,7 +846,7 @@
                                     <constraint firstItem="GSw-jW-HD8" firstAttribute="trailing" secondItem="aIt-0t-cEG" secondAttribute="trailing" id="3ci-am-7cg"/>
                                     <constraint firstItem="aIt-0t-cEG" firstAttribute="leading" secondItem="yI9-Sr-wvJ" secondAttribute="leading" id="6Jp-Zk-QMV"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="RaM-OM-K8H" secondAttribute="trailing" constant="15" id="7E0-yf-bt5"/>
-                                    <constraint firstItem="RaM-OM-K8H" firstAttribute="top" secondItem="U5b-II-9Qb" secondAttribute="top" constant="16" id="7dE-xz-lPx"/>
+                                    <constraint firstItem="RaM-OM-K8H" firstAttribute="top" secondItem="U5b-II-9Qb" secondAttribute="top" constant="-50" id="7dE-xz-lPx"/>
                                     <constraint firstItem="1gU-BA-BgV" firstAttribute="top" secondItem="GSw-jW-HD8" secondAttribute="bottom" constant="100" id="CVT-m4-hUY"/>
                                     <constraint firstItem="yI9-Sr-wvJ" firstAttribute="trailing" secondItem="op2-fO-COg" secondAttribute="trailing" id="Cj2-0z-MRe"/>
                                     <constraint firstItem="aIt-0t-cEG" firstAttribute="trailing" secondItem="yI9-Sr-wvJ" secondAttribute="trailing" id="D2M-lt-b0v"/>
@@ -847,7 +854,7 @@
                                     <constraint firstItem="GSw-jW-HD8" firstAttribute="leading" secondItem="aIt-0t-cEG" secondAttribute="leading" id="IY3-kP-7uH"/>
                                     <constraint firstItem="nLO-6F-W2a" firstAttribute="trailing" secondItem="GSw-jW-HD8" secondAttribute="trailing" id="J5e-cd-v9d"/>
                                     <constraint firstItem="RaM-OM-K8H" firstAttribute="leading" secondItem="U5b-II-9Qb" secondAttribute="leading" constant="16" id="JpM-OG-zhB"/>
-                                    <constraint firstItem="op2-fO-COg" firstAttribute="top" secondItem="RaM-OM-K8H" secondAttribute="bottom" constant="20" id="KIS-Rj-JDU"/>
+                                    <constraint firstItem="op2-fO-COg" firstAttribute="top" secondItem="RaM-OM-K8H" secondAttribute="bottom" constant="50" id="KIS-Rj-JDU"/>
                                     <constraint firstItem="op2-fO-COg" firstAttribute="leading" secondItem="U5b-II-9Qb" secondAttribute="leading" constant="16" id="Ssh-8b-pOJ"/>
                                     <constraint firstAttribute="trailing" secondItem="op2-fO-COg" secondAttribute="trailing" constant="16" id="TBt-Cv-shm"/>
                                     <constraint firstItem="nLO-6F-W2a" firstAttribute="centerY" secondItem="GSw-jW-HD8" secondAttribute="centerY" id="TUv-Ef-mnG"/>
@@ -872,6 +879,14 @@
                             <constraint firstItem="MlC-0n-can" firstAttribute="top" secondItem="U5b-II-9Qb" secondAttribute="bottom" id="kKa-KH-HoT"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Новый пароль" id="tJ8-Cz-Kg3">
+                        <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="gXu-1P-rnD">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="backButtonTapped:" destination="ixU-3A-z1t" id="hnr-s9-Qys"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="backView" destination="y8H-kI-nsc" id="jf0-xn-cK8"/>
                         <outlet property="descTxt" destination="aIt-0t-cEG" id="nCF-g9-l79"/>
@@ -1084,8 +1099,8 @@ USFUIWEhZiFuIXEhdiF+IYEhkyGWIZsAAAAAAAACAQAAAAAAAABZAAAAAAAAAAAAAAAAAAAhnQ
         <image name="sminex_mail" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sNG-0s-tau"/>
-        <segue reference="fpg-Qn-QUT"/>
+        <segue reference="pUi-B1-3Il"/>
+        <segue reference="xCb-zb-RnB"/>
         <segue reference="74p-PR-qrV"/>
     </inferredMetricsTieBreakers>
 </document>
