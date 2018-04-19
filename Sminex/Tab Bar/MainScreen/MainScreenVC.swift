@@ -656,6 +656,9 @@ final class CellsHeader: UICollectionReusableView {
         
         if item.title == "К оплате" || item.title ==  "Счетчики" {
             self.detail.setTitle("Подробнее", for: .normal)
+        
+        } else {
+            self.detail.setTitle("Все", for: .normal)
         }
     }
 }
