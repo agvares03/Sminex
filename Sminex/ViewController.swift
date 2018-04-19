@@ -128,6 +128,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             if isNeedToScrollMore() {
                 scroll.contentOffset = CGPoint(x: 0, y: 100)
+                scroll.contentSize.height += 50
             
             } else {
 //                view.frame.origin.y = -60
@@ -143,6 +144,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             if isNeedToScrollMore() {
                 scroll.contentOffset = CGPoint(x: 0, y: 0)
+                scroll.contentSize.height -= 50
             }
         }
     }
