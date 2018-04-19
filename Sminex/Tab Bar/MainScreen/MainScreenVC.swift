@@ -879,6 +879,13 @@ final class ForPayCell: UICollectionViewCell {
         
         title.text  = item.title
         date.text   = item.date
+        
+        if item.title.contains(find: "-") {
+            title.textColor = .green
+        
+        } else {
+            title.textColor = .black
+        }
     }
 }
 
