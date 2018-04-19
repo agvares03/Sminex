@@ -25,7 +25,6 @@ final class CounterStatementVC: UIViewController {
     @IBOutlet private weak var outcomeLabel:    UILabel!
     @IBOutlet private weak var monthLabel:      UILabel!
     @IBOutlet private weak var descLabel1:      UILabel!
-    @IBOutlet private weak var descLabel2:      UILabel!
     @IBOutlet private weak var dateLabel:       UILabel!
     @IBOutlet private weak var typeLabel:       UILabel!
     
@@ -63,7 +62,6 @@ final class CounterStatementVC: UIViewController {
             count.acceptableCharacters = "1234567890."
             count.numberOfDigits = 8
             descLabel1.isHidden = true
-            descLabel2.isHidden = true
             goButtonConst.constant = 20
         }
         

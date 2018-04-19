@@ -99,6 +99,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         edLogin.delegate = self
+        edPass.delegate = self
+        
+        btnEnter.isEnabled = false
+        btnEnter.alpha = 0.5
         
         showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
         edPass.isSecureTextEntry = true
@@ -449,6 +453,15 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
+        
+        if edLogin.text != "" && edPass.text != "" {
+            btnEnter.isEnabled = true
+            btnEnter.alpha = 1
+        
+        } else {
+            btnEnter.isEnabled = false
+            btnEnter.alpha = 0.5
+        }
         
         if string == "" {
 
