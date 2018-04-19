@@ -409,7 +409,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cLU-39-NnP">
-                                <rect key="frame" x="0.0" y="64" width="320" height="451"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="495"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zlW-D8-D8U">
                                     <size key="itemSize" width="320" height="350"/>
@@ -787,7 +787,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="RDF-Yu-Sbf"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -805,8 +805,8 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0iA-PT-qhI">
-                                                    <rect key="frame" x="26" y="82" width="58" height="10"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="8"/>
+                                                    <rect key="frame" x="26" y="82" width="59" height="10"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="8"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -1318,7 +1318,7 @@
                                             <constraint firstAttribute="width" constant="35" id="BYT-6N-rP9"/>
                                             <constraint firstAttribute="height" constant="25" id="Wjw-0n-86s"/>
                                         </constraints>
-                                        <state key="normal" image="camera_icon"/>
+                                        <state key="normal" image="cameraIcon"/>
                                         <connections>
                                             <action selector="cameraButtonPressed:" destination="Xqq-8c-mks" eventType="touchUpInside" id="vkT-Oi-fdr"/>
                                             <action selector="cameraPressed:" destination="nGr-Se-ITa" eventType="touchUpInside" id="pZe-u0-0ES"/>
@@ -1495,13 +1495,14 @@
     <resources>
         <image name="account" width="25" height="28"/>
         <image name="arrow_right" width="40" height="65"/>
+        <image name="cameraIcon" width="29" height="22"/>
         <image name="camera_icon" width="48" height="36"/>
         <image name="close_ic" width="20" height="20"/>
         <image name="send_icon" width="115" height="115"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="6le-cp-Wze"/>
+        <segue reference="QHF-Wt-DHI"/>
         <segue reference="qw4-Ju-feW"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -86,6 +86,19 @@ final class FinanceCalcCell: UICollectionViewCell {
         sumDebt.text = String(Int(item.sumDebt ?? 0.0))
         sumPay.text = String(Int(item.sumPay ?? 0.0))
         title.text = item.type
+        
+        if item.type == "Итого" {
+            sumAccured.font = UIFont.boldSystemFont(ofSize: sumAccured.font.pointSize)
+            sumDebt.font    = UIFont.boldSystemFont(ofSize: sumDebt.font.pointSize)
+            sumPay.font     = UIFont.boldSystemFont(ofSize: sumPay.font.pointSize)
+            title.font      = UIFont.boldSystemFont(ofSize: title.font.pointSize)
+        
+        } else {
+            sumAccured.font = UIFont.systemFont(ofSize: sumAccured.font.pointSize, weight: .light)
+            sumDebt.font    = UIFont.systemFont(ofSize: sumDebt.font.pointSize, weight: .light)
+            sumPay.font     = UIFont.systemFont(ofSize: sumPay.font.pointSize, weight: .light)
+            title.font      = UIFont.systemFont(ofSize: title.font.pointSize, weight: .light)
+        }
     }
 }
 

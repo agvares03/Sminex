@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="yke-5M-97h">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="yke-5M-97h">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,7 +35,7 @@
                                                 </constraints>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="phonePad" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WV1-en-UxQ">
                                                 <rect key="frame" x="21" y="129" width="333" height="1"/>
@@ -201,6 +201,13 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="auth_logo" translatesAutoresizingMaskIntoConstraints="NO" id="PrI-mo-onD">
+                                                <rect key="frame" x="132" y="15" width="111" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="111" id="Tc6-Wl-11H"/>
+                                                    <constraint firstAttribute="height" constant="24" id="b2U-l2-lov"/>
+                                                </constraints>
+                                            </imageView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="qNN-Pv-YY3" firstAttribute="top" secondItem="SBu-kd-Z9Z" secondAttribute="bottom" constant="3" id="0mS-FL-7wu"/>
@@ -208,6 +215,7 @@
                                             <constraint firstItem="mTL-wu-ThQ" firstAttribute="leading" secondItem="f1b-TL-tRq" secondAttribute="leading" constant="21" id="2q1-44-HI2"/>
                                             <constraint firstItem="hqY-I9-nDo" firstAttribute="trailing" secondItem="gfd-mN-qQ7" secondAttribute="trailing" id="5Ah-ZB-2dI"/>
                                             <constraint firstItem="a2d-Yb-NRc" firstAttribute="leading" secondItem="Yn3-d3-MMU" secondAttribute="leading" id="5Hn-Hb-j0X"/>
+                                            <constraint firstItem="PrI-mo-onD" firstAttribute="top" secondItem="f1b-TL-tRq" secondAttribute="top" constant="15" id="5SL-c5-7Pj"/>
                                             <constraint firstItem="XaO-y3-HG0" firstAttribute="leading" secondItem="rsk-7t-jNU" secondAttribute="leading" id="6i8-5y-CjU"/>
                                             <constraint firstItem="vJL-BB-Wcr" firstAttribute="top" secondItem="NeR-p2-8zi" secondAttribute="bottom" constant="8" id="7SX-sL-1Ax"/>
                                             <constraint firstItem="gfd-mN-qQ7" firstAttribute="leading" secondItem="f1b-TL-tRq" secondAttribute="leading" constant="21" id="816-66-lR5"/>
@@ -245,6 +253,7 @@
                                             <constraint firstItem="9mx-hx-Wm1" firstAttribute="leading" secondItem="f1b-TL-tRq" secondAttribute="leading" constant="21" id="gvH-Gy-XY8"/>
                                             <constraint firstItem="SBu-kd-Z9Z" firstAttribute="top" secondItem="7Ql-a3-ZCk" secondAttribute="bottom" constant="14" id="i9W-UT-10M"/>
                                             <constraint firstItem="hqY-I9-nDo" firstAttribute="leading" secondItem="gfd-mN-qQ7" secondAttribute="leading" id="kZN-qo-lB3"/>
+                                            <constraint firstItem="PrI-mo-onD" firstAttribute="centerX" secondItem="f1b-TL-tRq" secondAttribute="centerX" id="l9U-Sn-6iP"/>
                                             <constraint firstItem="Yn3-d3-MMU" firstAttribute="top" secondItem="NeR-p2-8zi" secondAttribute="bottom" constant="27" id="m7f-x4-SvG"/>
                                             <constraint firstItem="9mx-hx-Wm1" firstAttribute="centerY" secondItem="vn1-Ik-SLI" secondAttribute="centerY" id="oPI-n3-AFy"/>
                                             <constraint firstItem="rsk-7t-jNU" firstAttribute="baseline" secondItem="gfd-mN-qQ7" secondAttribute="baseline" id="oj0-Sr-1BA"/>
@@ -300,7 +309,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-260.625" y="-195.42253521126761"/>
+            <point key="canvasLocation" x="-261.60000000000002" y="-195.6521739130435"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1h7-oz-0Sy">
@@ -907,6 +916,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="auth_logo" width="111" height="24"/>
         <image name="button:2m4-WQ-EM2:image" width="22" height="15">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGVVZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QEgcI
@@ -1066,6 +1076,6 @@ USFUIWEhZiFuIXEhdiF+IYEhkyGWIZsAAAAAAAACAQAAAAAAAABZAAAAAAAAAAAAAAAAAAAhnQ
     <inferredMetricsTieBreakers>
         <segue reference="sNG-0s-tau"/>
         <segue reference="fpg-Qn-QUT"/>
-        <segue reference="H1q-dl-Fnd"/>
+        <segue reference="74p-PR-qrV"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -100,7 +100,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.isTranslucent   = true
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
-        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .thin) ]
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .medium) ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -250,6 +250,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if name == "К оплате" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
+        
+        } else if name == "Новости" {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toNews, sender: self)
         }
     }
     

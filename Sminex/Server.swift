@@ -12,7 +12,7 @@ final class Server {
     
     private var responseString: String?
     
-    static let SERVER              = "http://185.11.50.170:1580/"
+    static let SERVER              = "http://tst.sminex.com:1580/"
     
     static let REGISTRATION        = "RegisterSimple.ashx?"            // Регистрация
     static let FORGOT              = "remember.ashx?"                  // Забыли пароль
@@ -56,6 +56,7 @@ final class Server {
     static let GET_BILLS           = "GetAccountBills.ashx?"           // Получение списка квитанции
     static let CALCULATIONS        = "GetAccountCalculations.ashx?"    // Получение списка взаиморасчетов
     static let PAY_ONLINE          = "PayOnline.ashx?"                 // Оплата счета
+    static let GET_NEWS            = "GetNews.ashx?"                   // Получение списка новостей
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

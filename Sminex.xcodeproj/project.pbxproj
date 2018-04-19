@@ -141,6 +141,8 @@
 		6CD3AD9520661413001589B7 /* CreateRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD3AD9420661413001589B7 /* CreateRequestVC.swift */; };
 		6CD3AD97206622AE001589B7 /* TechServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD3AD96206622AE001589B7 /* TechServiceVC.swift */; };
 		6CD3AD99206624A7001589B7 /* CreateTechServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD3AD98206624A7001589B7 /* CreateTechServiceVC.swift */; };
+		6CE2F4B32087698700709242 /* News.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CE2F4B22087698700709242 /* News.storyboard */; };
+		6CE2F4B620876A1100709242 /* NewsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE2F4B520876A1100709242 /* NewsListVC.swift */; };
 		6CFB5C68208345CB0028D331 /* FinanceDebtArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB5C67208345CB0028D331 /* FinanceDebtArchiveVC.swift */; };
 		6CFB5C6C2083ADC40028D331 /* FinanceCalcsArchiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB5C6B2083ADC40028D331 /* FinanceCalcsArchiveVC.swift */; };
 		6CFB5C6E2083AFF40028D331 /* FinanceCalcVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB5C6D2083AFF40028D331 /* FinanceCalcVC.swift */; };
@@ -308,6 +310,8 @@
 		6CD3AD9420661413001589B7 /* CreateRequestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRequestVC.swift; sourceTree = "<group>"; };
 		6CD3AD96206622AE001589B7 /* TechServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechServiceVC.swift; sourceTree = "<group>"; };
 		6CD3AD98206624A7001589B7 /* CreateTechServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTechServiceVC.swift; sourceTree = "<group>"; };
+		6CE2F4B22087698700709242 /* News.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = News.storyboard; sourceTree = "<group>"; };
+		6CE2F4B520876A1100709242 /* NewsListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListVC.swift; sourceTree = "<group>"; };
 		6CFB5C67208345CB0028D331 /* FinanceDebtArchiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceDebtArchiveVC.swift; sourceTree = "<group>"; };
 		6CFB5C6B2083ADC40028D331 /* FinanceCalcsArchiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceCalcsArchiveVC.swift; sourceTree = "<group>"; };
 		6CFB5C6D2083AFF40028D331 /* FinanceCalcVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceCalcVC.swift; sourceTree = "<group>"; };
@@ -675,6 +679,7 @@
 		6C4C0A1020675B7C004EF2FF /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				6CE2F4B22087698700709242 /* News.storyboard */,
 				6C62C270207F317400B5EA11 /* Finance.storyboard */,
 				6C170AC7207CCF0200C84BE6 /* Deals.storyboard */,
 				6C7F90E5207633EB00CFA721 /* Account.storyboard */,
@@ -691,6 +696,7 @@
 		6C5E78E02065054B00805EF1 /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
+				6CE2F4B4208769FA00709242 /* News */,
 				6C62C272207F32C600B5EA11 /* Finance */,
 				6C170AC9207CCFF300C84BE6 /* Deals */,
 				6CA10FA1206B964A00612D03 /* Counters */,
@@ -754,6 +760,14 @@
 				6C5E78E02065054B00805EF1 /* MainScreen */,
 			);
 			path = "Tab Bar";
+			sourceTree = "<group>";
+		};
+		6CE2F4B4208769FA00709242 /* News */ = {
+			isa = PBXGroup;
+			children = (
+				6CE2F4B520876A1100709242 /* NewsListVC.swift */,
+			);
+			path = News;
 			sourceTree = "<group>";
 		};
 		7B0CDB758529507CA39A7AB3 /* Pods */ = {
@@ -880,6 +894,7 @@
 				411B6CD01EE3D0BA001DCBC7 /* GoogleService-Info.plist in Resources */,
 				4171BE7A1ECB402F00B9CDD7 /* fon_top.png in Resources */,
 				4171BE7E1ECB41D300B9CDD7 /* new_zamok.png in Resources */,
+				6CE2F4B32087698700709242 /* News.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -991,6 +1006,7 @@
 				6C5E78E4206505A900805EF1 /* AdmissionVC.swift in Sources */,
 				6C2D3288207F42D000F5F4C8 /* BarcodeGenerator.swift in Sources */,
 				6C62C274207F32D800B5EA11 /* FinanceVC.swift in Sources */,
+				6CE2F4B620876A1100709242 /* NewsListVC.swift in Sources */,
 				4111CA361EF4FBCB00BBEB7B /* Modal.swift in Sources */,
 				6C170ACC207CD00E00C84BE6 /* DealsListVC.swift in Sources */,
 				6C938C75206F4B9B00E34EA1 /* QuestionsTableVC.swift in Sources */,

@@ -72,9 +72,6 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         collection.delegate     = self
         collection.dataSource   = self
         
-//        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-//        navigationController?.interactivePopGestureRecognizer?.delegate  = self
-        
         let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped(_:)))
         edgePan.edges = .left
         view.addGestureRecognizer(edgePan)
@@ -110,16 +107,13 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         if recognizer.state == .ended {
             if recognizer.location(in: view).x > 100 {
                 currQuestion -= 1
-                
+                collection.alpha = 0
+                collection.frame.origin.x = 0
                 if #available(iOS 10.0, *) {
-                    collection.alpha = 0
-                    collection.frame.origin.x = 0
                     UIViewPropertyAnimator(duration: 0, curve: .linear) {
                         self.collection.alpha = 1
                     }.startAnimation()
                 } else {
-                    collection.alpha = 0
-                    collection.frame.origin.x = 0
                     collection.alpha = 1
                 }
                 collection.reloadData()
