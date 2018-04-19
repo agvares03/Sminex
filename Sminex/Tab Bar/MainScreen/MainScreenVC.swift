@@ -100,7 +100,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.isTranslucent   = true
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
-        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .medium) ]
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .heavy) ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,7 +139,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return questionSize == nil ? CGSize(width: view.frame.size.width, height: 110.0) : questionSize!
         
         } else if title == "Новости" {
-            return CGSize(width: view.frame.size.width, height: 75.0)
+            let cell = NewsCell.fromNib()
+            cell?.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+            return CGSize(width: view.frame.size.width, height: size.height)
         
         } else if title == "Акции и предложения" {
             return CGSize(width: view.frame.size.width, height: 200.0)
@@ -151,10 +154,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width, height: 100.0)
         
         } else if title == "К оплате" {
-            return CGSize(width: view.frame.size.width, height: 75.0)
+            return CGSize(width: view.frame.size.width, height: 80.0)
         
         } else if title == "Счетчики" {
-            return CGSize(width: view.frame.size.width, height: 95.0)
+            let cell = SchetCell.fromNib()
+            cell?.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+            return CGSize(width: view.frame.size.width, height: size.height)
         
         } else {
             return CGSize(width: view.frame.size.width, height: 100.0)
@@ -465,6 +471,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     self.collection.reloadData()
                 }
             }
+            guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
@@ -636,6 +643,10 @@ final class CellsHeader: UICollectionReusableView {
         }
         
         self.delegate = delegate
+        
+        if item.title == "К оплате" || item.title ==  "Счетчики" {
+            self.detail.setTitle("Подробнее", for: .normal)
+        }
     }
 }
 
@@ -696,9 +707,23 @@ final class NewsCell: UICollectionViewCell {
         desc.text   = item.desc
         date.text   = item.date
     }
+    
+    class func fromNib() -> NewsCell? {
+        var cell: NewsCell?
+        let nibViews = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        nibViews?.forEach {
+            if let cellView = $0 as? NewsCell {
+                cell = cellView
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 25
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
+        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
+        return cell
+    }
 }
 
-private final class NewsCellData: MainDataProtocol {
+final class NewsCellData: MainDataProtocol {
     
     let title:  String
     let desc:   String
@@ -918,6 +943,19 @@ final class SchetCell: UICollectionViewCell {
         date.text  = item.date
         
         self.delegate = delegate
+    }
+    
+    class func fromNib() -> SchetCell? {
+        var cell: SchetCell?
+        let nibViews = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        nibViews?.forEach {
+            if let cellView = $0 as? SchetCell {
+                cell = cellView
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 25
+        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
+        return cell
     }
 }
 

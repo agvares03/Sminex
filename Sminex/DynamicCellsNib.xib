@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NewsCell" id="1Dm-32-JrC" customClass="NewsCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="317" height="75"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="317" height="75"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отключение горячей воды" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0xE-w7-ywO">
+                        <rect key="frame" x="16" y="5" width="277" height="17"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Сегодня, 15 октября" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nQy-e1-k8e">
+                        <rect key="frame" x="239" y="40" width="70" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="rWy-Kn-kx1"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="10"/>
+                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C4M-AQ-N1m">
+                        <rect key="frame" x="0.0" y="74" width="317" height="1"/>
+                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="DPg-hR-7Ux"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="22 ноября с 12:00 до 13:00 будет отключениа горяча..." lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="edM-f0-j5L">
+                        <rect key="frame" x="16" y="27" width="213" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="ral-kL-PNm"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="edM-f0-j5L" firstAttribute="top" secondItem="0xE-w7-ywO" secondAttribute="bottom" constant="5" id="BBh-mA-Rgl"/>
+                <constraint firstAttribute="trailingMargin" secondItem="0xE-w7-ywO" secondAttribute="trailing" constant="8" id="CY9-Nm-ojp"/>
+                <constraint firstItem="edM-f0-j5L" firstAttribute="leading" secondItem="1Dm-32-JrC" secondAttribute="leadingMargin" id="GcH-ZA-LLH"/>
+                <constraint firstItem="0xE-w7-ywO" firstAttribute="leading" secondItem="1Dm-32-JrC" secondAttribute="leadingMargin" id="Gxf-Dp-Jf1"/>
+                <constraint firstItem="nQy-e1-k8e" firstAttribute="bottom" secondItem="edM-f0-j5L" secondAttribute="bottom" id="P9Y-O4-gxV"/>
+                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="edM-f0-j5L" secondAttribute="bottom" id="VNC-ns-BL1"/>
+                <constraint firstAttribute="trailing" secondItem="nQy-e1-k8e" secondAttribute="trailing" constant="8" id="Vxu-I8-wMH"/>
+                <constraint firstItem="nQy-e1-k8e" firstAttribute="leading" secondItem="edM-f0-j5L" secondAttribute="trailing" constant="10" id="dgg-Sx-hYb"/>
+                <constraint firstItem="0xE-w7-ywO" firstAttribute="top" secondItem="1Dm-32-JrC" secondAttribute="top" constant="5" id="jb8-eC-26U"/>
+                <constraint firstAttribute="bottom" secondItem="C4M-AQ-N1m" secondAttribute="bottom" id="mem-WU-80q"/>
+                <constraint firstItem="C4M-AQ-N1m" firstAttribute="leading" secondItem="1Dm-32-JrC" secondAttribute="leading" id="nyN-u5-fmh"/>
+                <constraint firstAttribute="trailing" secondItem="C4M-AQ-N1m" secondAttribute="trailing" id="p03-SB-0Mb"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="033-0j-iVM"/>
+            <size key="customSize" width="317" height="75"/>
+            <connections>
+                <outlet property="date" destination="nQy-e1-k8e" id="Ccr-b0-gaL"/>
+                <outlet property="desc" destination="edM-f0-j5L" id="cBc-vx-YFd"/>
+                <outlet property="title" destination="0xE-w7-ywO" id="lKb-QO-jQS"/>
+            </connections>
+            <point key="canvasLocation" x="-79" y="211"/>
+        </collectionViewCell>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ScetCell" id="bCT-TC-Pt4" customClass="SchetCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="317" height="90"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="317" height="90"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Осталось 4 дня для передачи показаний" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A9l-lP-4Q8">
+                        <rect key="frame" x="8" y="3" width="293" height="17"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Передача с 20 по 25 января" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iwx-GB-2iv">
+                        <rect key="frame" x="8" y="23" width="284" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="byJ-tS-K0G">
+                        <rect key="frame" x="8" y="45" width="301" height="40"/>
+                        <color key="backgroundColor" red="0.015686274510000001" green="0.3921568627" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="iAN-NT-3Br"/>
+                        </constraints>
+                        <state key="normal" title="Передать показания">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="4"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="buttonPressed:" destination="bCT-TC-Pt4" eventType="touchUpInside" id="xR1-mJ-z0c"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhf-fo-RgH">
+                        <rect key="frame" x="0.0" y="90" width="317" height="1"/>
+                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="meh-pX-ywv"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Iwx-GB-2iv" secondAttribute="trailing" constant="25" id="4V0-2Y-P52"/>
+                <constraint firstItem="Iwx-GB-2iv" firstAttribute="top" secondItem="A9l-lP-4Q8" secondAttribute="bottom" constant="3" id="6NT-ai-ubv"/>
+                <constraint firstAttribute="bottomMargin" secondItem="byJ-tS-K0G" secondAttribute="bottom" constant="5" id="88c-uu-Hsg"/>
+                <constraint firstItem="byJ-tS-K0G" firstAttribute="leading" secondItem="bCT-TC-Pt4" secondAttribute="leading" constant="8" id="ARi-zp-dG3"/>
+                <constraint firstAttribute="trailing" secondItem="byJ-tS-K0G" secondAttribute="trailing" constant="8" id="FV0-BZ-hxn"/>
+                <constraint firstItem="Iwx-GB-2iv" firstAttribute="leading" secondItem="bCT-TC-Pt4" secondAttribute="leading" constant="8" id="IyP-9C-4gx"/>
+                <constraint firstItem="rhf-fo-RgH" firstAttribute="top" secondItem="byJ-tS-K0G" secondAttribute="bottom" constant="5" id="Jff-nK-Hjw"/>
+                <constraint firstItem="rhf-fo-RgH" firstAttribute="leading" secondItem="bCT-TC-Pt4" secondAttribute="leading" id="MvN-iG-hGe"/>
+                <constraint firstItem="A9l-lP-4Q8" firstAttribute="top" secondItem="bCT-TC-Pt4" secondAttribute="top" constant="3" id="QDz-ju-DbJ"/>
+                <constraint firstItem="A9l-lP-4Q8" firstAttribute="leading" secondItem="bCT-TC-Pt4" secondAttribute="leading" constant="8" id="SB3-1Y-F7u"/>
+                <constraint firstAttribute="trailing" secondItem="rhf-fo-RgH" secondAttribute="trailing" id="T36-S6-kO7"/>
+                <constraint firstItem="byJ-tS-K0G" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Iwx-GB-2iv" secondAttribute="bottom" constant="6" id="nhK-P9-vaz"/>
+                <constraint firstAttribute="trailingMargin" secondItem="A9l-lP-4Q8" secondAttribute="trailing" id="qwx-KS-cKP"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="Hpv-ji-FxW"/>
+            <size key="customSize" width="317" height="90"/>
+            <connections>
+                <outlet property="button" destination="byJ-tS-K0G" id="T7S-ag-NkA"/>
+                <outlet property="date" destination="Iwx-GB-2iv" id="T4f-1e-PoC"/>
+                <outlet property="title" destination="A9l-lP-4Q8" id="xjI-cW-dHc"/>
+            </connections>
+            <point key="canvasLocation" x="-80" y="66"/>
+        </collectionViewCell>
+    </objects>
+</document>
