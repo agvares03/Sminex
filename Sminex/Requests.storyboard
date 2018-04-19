@@ -112,20 +112,20 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9 Сентября 10:00" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QZS-Gm-P6w">
-                                                    <rect key="frame" x="16" y="195.5" width="296" height="19.5"/>
+                                                    <rect key="frame" x="16" y="197.5" width="296" height="19.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mIG-i6-8Hc">
-                                                    <rect key="frame" x="16" y="385" width="15" height="15"/>
+                                                    <rect key="frame" x="16" y="387" width="15" height="15"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="15" id="gdv-4d-lWq"/>
                                                         <constraint firstAttribute="width" constant="15" id="xEZ-iC-PUw"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xp8-aG-9tr">
-                                                    <rect key="frame" x="39" y="385.5" width="82" height="14.5"/>
+                                                    <rect key="frame" x="39" y="387.5" width="82" height="14.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -141,13 +141,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p68-BP-3fq">
-                                                    <rect key="frame" x="16" y="223" width="296" height="150"/>
+                                                    <rect key="frame" x="16" y="225" width="296" height="150"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="150" id="VIR-fF-WRQ"/>
                                                     </constraints>
                                                 </scrollView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="L0T-Rr-j3U">
-                                                    <rect key="frame" x="135" y="273" width="50" height="50"/>
+                                                    <rect key="frame" x="135" y="275" width="50" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="XXp-mV-gAG"/>
                                                         <constraint firstAttribute="width" constant="50" id="hrW-3H-Xka"/>
@@ -189,7 +189,7 @@
                                             <constraint firstItem="L0T-Rr-j3U" firstAttribute="centerY" secondItem="p68-BP-3fq" secondAttribute="centerY" id="lJY-2d-3ji"/>
                                             <constraint firstItem="RPh-ah-GdZ" firstAttribute="top" secondItem="qZd-64-Z4j" secondAttribute="bottom" constant="10" id="lV6-HZ-kM4"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="PrH-BQ-daa" secondAttribute="trailing" id="mwx-Jg-Cdr"/>
-                                            <constraint firstItem="QZS-Gm-P6w" firstAttribute="top" secondItem="hZj-bm-VDz" secondAttribute="bottom" id="oJ3-HA-LMI"/>
+                                            <constraint firstItem="QZS-Gm-P6w" firstAttribute="top" secondItem="hZj-bm-VDz" secondAttribute="bottom" constant="2" id="oJ3-HA-LMI"/>
                                             <constraint firstItem="RPh-ah-GdZ" firstAttribute="leading" secondItem="SIv-67-Hoq" secondAttribute="leading" id="pY7-P8-ReU"/>
                                             <constraint firstItem="ONO-Q8-9aD" firstAttribute="top" secondItem="dRe-SY-7Fp" secondAttribute="bottom" id="qsH-gt-9pM"/>
                                             <constraint firstItem="qZd-64-Z4j" firstAttribute="top" secondItem="0d6-Zw-8PQ" secondAttribute="bottom" id="rCR-ZI-6mU"/>
@@ -752,6 +752,11 @@
                                 <state key="normal" title="Добавить заявку">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="addRequestPressed:" destination="H87-Hl-ytf" eventType="touchUpInside" id="AAe-FN-X14"/>
                                 </connections>
@@ -936,7 +941,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пропуск" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QvO-IX-eFp">
                                                     <rect key="frame" x="8" y="15.5" width="278" height="19.5"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -1248,9 +1253,9 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Транспорт" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pXU-rz-1Rb">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Транспорт" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pXU-rz-1Rb">
                                         <rect key="frame" x="8" y="124" width="85" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1306,9 +1311,9 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начало" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y3-DI-PxW">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начало" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7y3-DI-PxW">
                                         <rect key="frame" x="8" y="233" width="59" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>

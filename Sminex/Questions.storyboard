@@ -232,8 +232,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой выриант использования лобби-бара является для Вас предпочтительным" lineBreakMode="tailTruncation" numberOfLines="20" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="cTU-kd-Nbf">
-                                            <rect key="frame" x="13" y="38.5" width="354" height="156.5"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой выриант использования лобби-бара является для Вас предпочтительным" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="cTU-kd-Nbf">
+                                            <rect key="frame" x="13" y="38.5" width="354" height="143.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -254,7 +254,7 @@
                                         <constraint firstItem="bRe-Z6-WHN" firstAttribute="top" secondItem="lWZ-Yf-1Ax" secondAttribute="topMargin" constant="8" id="ABl-pp-o2y"/>
                                         <constraint firstItem="cTU-kd-Nbf" firstAttribute="top" secondItem="bRe-Z6-WHN" secondAttribute="bottom" constant="8" id="AfZ-xC-Nfk"/>
                                         <constraint firstItem="cTU-kd-Nbf" firstAttribute="leading" secondItem="bRe-Z6-WHN" secondAttribute="leading" id="Mt9-Ar-UFz"/>
-                                        <constraint firstAttribute="bottom" secondItem="cTU-kd-Nbf" secondAttribute="bottom" constant="5" id="vDP-gE-hZr"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="cTU-kd-Nbf" secondAttribute="bottom" constant="5" id="vDP-gE-hZr"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="question" destination="cTU-kd-Nbf" id="5dn-Vw-Iu8"/>

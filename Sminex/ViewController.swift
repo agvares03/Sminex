@@ -28,6 +28,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
+    @IBOutlet private weak var lsLabel:     UILabel!
     @IBOutlet private weak var lineForgot:  UILabel!
     @IBOutlet private weak var lineReg:     UILabel!
     @IBOutlet private weak var errorLabel:  UILabel!
@@ -129,7 +130,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 scroll.contentOffset = CGPoint(x: 0, y: 140)
             
             } else {
-                view.frame.origin.y = -100
+                view.frame.origin.y = -60
             }
         }
     }

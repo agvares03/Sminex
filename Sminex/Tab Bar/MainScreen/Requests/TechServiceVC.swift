@@ -459,7 +459,9 @@ final class ServiceCommentCell: UICollectionViewCell {
                     }
                 
                 } else {
-                    self.icon.image = item.icon
+                    DispatchQueue.main.async {
+                        self.icon.image = item.icon
+                    }
                 }
             }
         

@@ -378,7 +378,7 @@ final class AdmissionHeader: UICollectionViewCell {
         
         if item.images.count == 0 && item.imgsUrl.count == 0 {
             imgs.isHidden       = true
-            imgsConst.constant  = 8
+            imgsConst.constant  = 20
         
         } else if item.images.count != 0 {
             imgs.isHidden       = false
@@ -502,7 +502,9 @@ final class AdmissionCommentCell: UICollectionViewCell {
                     }
                     
                 } else {
-                    self.image.image = item.image
+                    DispatchQueue.main.async {
+                        self.image.image = item.image
+                    }
                 }
             }
             
