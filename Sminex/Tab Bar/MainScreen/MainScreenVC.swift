@@ -56,6 +56,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var debt:           AccountDebtJson?
     private var deals: [DealsJson] = []
     private var dealsIndex = 0
+    private var numSections = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -220,6 +221,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return data.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if section == 0 && questionSize != nil {
+            return CGSize(width: 0, height: 0)
+        
+        } else {
+            return CGSize(width: view.frame.size.width, height: 40.0)
+        }
     }
     
     func pressed(at indexPath: IndexPath) {

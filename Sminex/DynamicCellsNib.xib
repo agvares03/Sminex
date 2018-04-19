@@ -152,5 +152,40 @@
             </connections>
             <point key="canvasLocation" x="-80" y="66"/>
         </collectionViewCell>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="QuestionAnswerHeader" id="yyu-b1-aHD" customClass="QuestionAnswerHeader" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой выриант использования лобби-бара является для Вас предпочтительным" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="gap-mn-day">
+                    <rect key="frame" x="21" y="30.5" width="346" height="143.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 из 6" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QaE-re-wN9">
+                    <rect key="frame" x="21" y="8" width="35" height="14.5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="pp4-G3-Efi"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="12"/>
+                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstItem="gap-mn-day" firstAttribute="leading" secondItem="QaE-re-wN9" secondAttribute="leading" id="Dm6-AM-Kad"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="gap-mn-day" secondAttribute="bottom" constant="5" id="SjZ-dS-QCL"/>
+                <constraint firstItem="QaE-re-wN9" firstAttribute="leading" secondItem="yyu-b1-aHD" secondAttribute="leadingMargin" constant="5" id="ZS2-nw-BCx"/>
+                <constraint firstItem="QaE-re-wN9" firstAttribute="top" secondItem="yyu-b1-aHD" secondAttribute="topMargin" constant="8" id="jct-sM-boZ"/>
+                <constraint firstAttribute="trailing" secondItem="gap-mn-day" secondAttribute="trailing" constant="8" id="jzd-t4-ffX"/>
+                <constraint firstItem="gap-mn-day" firstAttribute="top" secondItem="QaE-re-wN9" secondAttribute="bottom" constant="8" id="qIZ-My-RU0"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="TYe-MN-Aac"/>
+            <connections>
+                <outlet property="question" destination="gap-mn-day" id="i8U-57-rPv"/>
+                <outlet property="title" destination="QaE-re-wN9" id="0QS-K9-kBS"/>
+            </connections>
+            <point key="canvasLocation" x="-80" y="396"/>
+        </collectionReusableView>
     </objects>
 </document>

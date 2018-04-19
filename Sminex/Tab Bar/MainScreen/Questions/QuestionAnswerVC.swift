@@ -173,6 +173,11 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         return CGSize(width: view.frame.size.width, height: 60.0)
     }
     
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        let cell = QuestionAnswerHeader.fromNib()
+//        cell.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
+//    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if !isSomeAnswers {
@@ -260,6 +265,17 @@ final class QuestionAnswerHeader: UICollectionReusableView {
         title.text = "\(currentQuestion + 1) из \(questionCount)"
     }
     
+    class func fromNib() -> QuestionAnswerHeader? {
+        var cell: QuestionAnswerHeader?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? QuestionAnswerHeader {
+                cell = view
+            }
+        }
+        cell?.question.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 25) - 25
+        return cell
+    }
 }
 
 final class QuestionAnswerCell: UICollectionViewCell {
