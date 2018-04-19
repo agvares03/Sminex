@@ -10,6 +10,8 @@ import UIKit
 
 final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
+    @IBOutlet private weak var edLsTop:     NSLayoutConstraint!
+    @IBOutlet private weak var btnGoTop:    NSLayoutConstraint!
     @IBOutlet private weak var edLS:        UITextField!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     @IBOutlet private weak var backButton:  UIButton!
@@ -51,6 +53,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             self.present(alert, animated: true, completion: nil)
         }
         
+    }
+    
+    @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func btn_cancel(_ sender: UITapGestureRecognizer?) {
@@ -182,10 +188,18 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             btn_go.alpha = 0.5
         }
         
+        if isNeedToScrollMore() {
+            btnGoTop.constant = 15
+            edLsTop.constant  = 45
+        }
+        
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        if !isReg_ {
+            navigationItem.title = "Восстановление пароля"
+        }
         
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
         recognizer.delegate = self
@@ -210,11 +224,11 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-                scroll.contentSize.height += 70
-                scroll.contentOffset = CGPoint(x: 0, y: 130)
+//                scroll.contentSize.height += 70
+//                scroll.contentOffset = CGPoint(x: 0, y: 130)
             
             } else {
-                view.frame.origin.y = -70
+//                view.frame.origin.y = -70
             }
         }
     }
@@ -225,11 +239,11 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-                scroll.contentSize.height -= 70
-                scroll.contentOffset = CGPoint(x: 0, y: 0)
+//                scroll.contentSize.height -= 70
+//                scroll.contentOffset = CGPoint(x: 0, y: 0)
                 
             } else {
-                view.frame.origin.y = 0
+//                view.frame.origin.y = 0
             }
         }
     }

@@ -79,8 +79,11 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         }
     }
     
+    @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     @objc private func btn_cancel(_ sender: UITapGestureRecognizer?) {
-        
         navigationController?.popViewController(animated: true)
     }
     
@@ -121,6 +124,10 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             NameLS.text     = numberLs_
         }
         
+        if !isReg_ {
+            navigationItem.title = "Восстановление пароля"
+        }
+        
         showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
         smsField.isSecureTextEntry = true
         
@@ -149,11 +156,11 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-                scroll.contentSize.height += 30
-                scroll.contentOffset = CGPoint(x: 0, y: 80)
+//                scroll.contentSize.height += 30
+//                scroll.contentOffset = CGPoint(x: 0, y: 80)
             
             } else {
-                view.frame.origin.y = -30
+//                view.frame.origin.y = -30
             }
         }
     }
@@ -164,11 +171,11 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         if isNeedToScroll() {
             
             if isNeedToScrollMore() {
-                scroll.contentSize.height -= 30
-                scroll.contentOffset = CGPoint(x: 0, y: 0)
+//                scroll.contentSize.height -= 30
+//                scroll.contentOffset = CGPoint(x: 0, y: 0)
             
             } else {
-                view.frame.origin.y = 0
+//                view.frame.origin.y = 0
             }
         }
     }
