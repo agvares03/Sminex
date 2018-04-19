@@ -29,41 +29,43 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             descTxt.text = "Введите код доступа"
             return
         }
+    
+        self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
         
-        startLoading()
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
-        request.httpMethod = "GET"
-        
-        if !isReg_ {
-            request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REM + "smsCode=" + (smsField.text ?? ""))!)
-            request.httpMethod = "GET"
-        }
-        
-        URLSession.shared.dataTask(with: request) {
-            data, response, error in
-            
-            if error != nil {
-                
-                DispatchQueue.main.async {
-                    self.endLoading()
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            self.responseString = String(data: data!, encoding: .utf8) ?? ""
-            
-            #if DEBUG
-                print(self.responseString)
-            #endif
-            
-            self.choise()
-            
-            }.resume()
+//        startLoading()
+//
+//        var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
+//        request.httpMethod = "GET"
+//
+//        if !isReg_ {
+//            request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REM + "smsCode=" + (smsField.text ?? ""))!)
+//            request.httpMethod = "GET"
+//        }
+//
+//        URLSession.shared.dataTask(with: request) {
+//            data, response, error in
+//
+//            if error != nil {
+//
+//                DispatchQueue.main.async {
+//                    self.endLoading()
+//                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+//                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//                    alert.addAction(cancelAction)
+//                    self.present(alert, animated: true, completion: nil)
+//                }
+//                return
+//            }
+//
+//            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+//
+//            #if DEBUG
+//                print(self.responseString)
+//            #endif
+//
+//            self.choise()
+//
+//            }.resume()
     }
     
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
@@ -225,8 +227,8 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             
             let response = responseString.components(separatedBy: ";")
             
-            vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
-            vc.phone_ = response[1]
+            vc.login_ = "3213"//response[0].replacingOccurrences(of: "ok: ", with: "")
+            vc.phone_ = "321"//response[1]
         }
     }
     

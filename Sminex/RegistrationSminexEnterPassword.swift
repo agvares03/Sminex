@@ -13,6 +13,7 @@ import Arcane
 
 final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecognizerDelegate {
     
+    @IBOutlet private weak var saveButtonTop:   NSLayoutConstraint!
     @IBOutlet private weak var saveButton:      UIButton!
     @IBOutlet private weak var passTextField:   UITextField!
     @IBOutlet private weak var descTxt:         UILabel!
@@ -115,6 +116,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         lsText.text = login_
         lsDesc.text = lsDesc.text! + " " + phone_
         
+        if isNeedToScrollMore() {
+            saveButtonTop.constant = 30
+        }
+        
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -136,10 +141,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             
             if isNeedToScrollMore() {
                 scroll.contentSize.height += 30
-                scroll.contentOffset = CGPoint(x: 0, y: 50)
+                scroll.contentOffset = CGPoint(x: 0, y: 30)
             
             } else {
-                view.frame.origin.y = -50
+//                view.frame.origin.y = -50
             }
         }
     }
@@ -154,7 +159,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                 scroll.contentOffset = CGPoint(x: 0, y: 0)
                 
             } else {
-                view.frame.origin.y = 0
+//                view.frame.origin.y = 0
             }
         }
     }
