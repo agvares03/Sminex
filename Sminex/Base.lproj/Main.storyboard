@@ -2359,32 +2359,29 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SurveyCell" id="2GH-h3-fxQ" customClass="SurveyCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="1.5" y="150" width="317" height="130"/>
+                                        <rect key="frame" x="1.5" y="150" width="317" height="104"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="317" height="130"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="317" height="104"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T9H-MD-pFl">
-                                                    <rect key="frame" x="16" y="0.0" width="276" height="57"/>
+                                                    <rect key="frame" x="16" y="8" width="276" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 вопросов" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dxj-E5-gQN">
-                                                    <rect key="frame" x="16" y="62" width="268" height="10"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="10" id="vqy-mU-GkS"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 вопросов" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dxj-E5-gQN">
+                                                    <rect key="frame" x="16" y="30" width="268" height="13.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5d-Rz-0GF">
-                                                    <rect key="frame" x="8" y="82" width="301" height="35"/>
+                                                    <rect key="frame" x="8" y="51" width="301" height="40"/>
                                                     <color key="backgroundColor" red="0.015686274510000001" green="0.3921568627" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="35" id="yOa-61-BeY"/>
+                                                        <constraint firstAttribute="height" constant="40" id="yOa-61-BeY"/>
                                                     </constraints>
                                                     <state key="normal" title="Пройти опрос">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2399,7 +2396,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zgg-bt-2IZ">
-                                                    <rect key="frame" x="0.0" y="129" width="317" height="1"/>
+                                                    <rect key="frame" x="0.0" y="103" width="317" height="1"/>
                                                     <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="GDW-K7-q6j"/>
@@ -2413,10 +2410,10 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="T9H-MD-pFl" secondAttribute="trailing" constant="25" id="72c-ZL-9ej"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="b5d-Rz-0GF" secondAttribute="trailing" id="9se-WD-Xmc"/>
-                                            <constraint firstItem="T9H-MD-pFl" firstAttribute="top" secondItem="2GH-h3-fxQ" secondAttribute="top" id="Fny-UU-dqr"/>
+                                            <constraint firstItem="T9H-MD-pFl" firstAttribute="top" secondItem="2GH-h3-fxQ" secondAttribute="top" constant="8" id="Fny-UU-dqr"/>
                                             <constraint firstAttribute="bottom" secondItem="Zgg-bt-2IZ" secondAttribute="bottom" id="Jkb-Jy-eMe"/>
                                             <constraint firstItem="Dxj-E5-gQN" firstAttribute="leading" secondItem="2GH-h3-fxQ" secondAttribute="leadingMargin" constant="8" id="MED-jk-4JD"/>
-                                            <constraint firstItem="b5d-Rz-0GF" firstAttribute="top" secondItem="Dxj-E5-gQN" secondAttribute="bottom" constant="10" id="Pqe-Bg-vxq"/>
+                                            <constraint firstItem="b5d-Rz-0GF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Dxj-E5-gQN" secondAttribute="bottom" constant="8" id="Pqe-Bg-vxq"/>
                                             <constraint firstItem="Zgg-bt-2IZ" firstAttribute="leading" secondItem="2GH-h3-fxQ" secondAttribute="leading" id="RYn-Q3-Cwh"/>
                                             <constraint firstItem="T9H-MD-pFl" firstAttribute="leading" secondItem="2GH-h3-fxQ" secondAttribute="leadingMargin" constant="8" id="UcZ-gt-ZXG"/>
                                             <constraint firstAttribute="trailing" secondItem="Zgg-bt-2IZ" secondAttribute="trailing" id="bnk-2E-DZt"/>
@@ -2425,14 +2422,14 @@
                                             <constraint firstItem="Dxj-E5-gQN" firstAttribute="top" secondItem="T9H-MD-pFl" secondAttribute="bottom" constant="5" id="xu4-Ci-lDA"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="Dxj-E5-gQN" secondAttribute="trailing" constant="25" id="zr5-U6-DDG"/>
                                         </constraints>
-                                        <size key="customSize" width="317" height="130"/>
+                                        <size key="customSize" width="317" height="104"/>
                                         <connections>
                                             <outlet property="questions" destination="Dxj-E5-gQN" id="I3d-a8-LN3"/>
                                             <outlet property="title" destination="T9H-MD-pFl" id="tEk-ls-y2n"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NewsCell" id="cc4-HP-IzJ" customClass="NewsCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="1.5" y="290" width="317" height="75"/>
+                                        <rect key="frame" x="1.5" y="264" width="317" height="75"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="317" height="75"/>
@@ -2496,7 +2493,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StockCell" id="pUe-QP-Vbe" customClass="StockCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="1.5" y="375" width="317" height="130"/>
+                                        <rect key="frame" x="1.5" y="349" width="317" height="130"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="317" height="130"/>
@@ -2544,7 +2541,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ForPayCell" id="sPE-gb-plh" customClass="ForPayCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="1.5" y="515" width="317" height="75"/>
+                                        <rect key="frame" x="1.5" y="489" width="317" height="75"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="317" height="75"/>
@@ -2618,7 +2615,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ScetCell" id="dvc-lt-sF6" customClass="SchetCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="1.5" y="600" width="317" height="90"/>
+                                        <rect key="frame" x="1.5" y="574" width="317" height="90"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="317" height="90"/>
@@ -2689,7 +2686,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RequestAddCell" id="kG0-BY-9uh" customClass="RequestAddCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="1.5" y="700" width="317" height="41"/>
+                                        <rect key="frame" x="1.5" y="674" width="317" height="41"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="317" height="41"/>
@@ -2753,13 +2750,13 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Счетчики" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="58k-aK-95U">
-                                            <rect key="frame" x="8" y="10" width="82.5" height="21"/>
+                                            <rect key="frame" x="8" y="11" width="82.5" height="21"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJN-bi-bzE">
-                                            <rect key="frame" x="282" y="8" width="30" height="23"/>
+                                            <rect key="frame" x="282" y="7" width="30" height="25"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <state key="normal" title="Все"/>
                                             <connections>

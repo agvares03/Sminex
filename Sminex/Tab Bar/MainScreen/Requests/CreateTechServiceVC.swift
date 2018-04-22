@@ -12,6 +12,7 @@ import Alamofire
 final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
+    @IBOutlet private weak var btnBottom:   NSLayoutConstraint!
     @IBOutlet private weak var btnConst:    NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var picker:      UIDatePicker!
@@ -33,6 +34,9 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     @IBAction private func dateButtonPressed(_ sender: UIButton?) {
         
+        if sender != nil {
+            view.endEditing(true)
+        }
         if picker.isHidden {
             picker.isHidden     = false
             pickerLine.isHidden = false
@@ -65,6 +69,13 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     @IBAction private func cameraButtonPressed(_ sender: UIButton) {
+        
+        if !picker.isHidden {
+            dateButtonPressed(nil)
+        
+        } else {
+            view.endEditing(true)
+        }
         
         let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         action.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { (_) in
@@ -129,6 +140,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     open var delegate: AppsUserDelegate?
     private var data:   ServiceHeaderData?
     private var reqId:  String?
+    private var constant: CGFloat = 0.0
     private var imagesArr: [UIImage] = [] {
         didSet {
             drawImages()
@@ -138,6 +150,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        constant = btnConst.constant
         if isNeedToScrollMore() {
             btnConst.constant = 50
         }
@@ -165,24 +178,43 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         tabBarController?.tabBar.isHidden = false
     }
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
+        if !picker.isHidden {
+            dateButtonPressed(nil)
+        }
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 200.0)
+        if isNeedToScroll() {
+            if imagesArr.count != 0 {
+                btnConst.constant  = 35
+                btnBottom.constant = 215
+            
+            } else {
+                btnConst.constant  = -15
+                btnBottom.constant = 240
+            }
+        }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - 200.0)
+        if isNeedToScroll() {
+            btnBottom.constant = 8
+            if !isNeedToScrollMore() {
+                btnConst.constant = constant
+            } else {
+                btnConst.constant = 50
+            }
+        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {

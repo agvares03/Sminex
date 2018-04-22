@@ -125,7 +125,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         accountImageView.image = image
         DispatchQueue.global(qos: .background).async {
-            UserDefaults.standard.setValue(UIImagePNGRepresentation(image), forKey: "accountIcon")
+            UserDefaults.standard.setValue(UIImagePNGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128))), forKey: "accountIcon")
         }
         dismiss(animated: true, completion: nil)
     }

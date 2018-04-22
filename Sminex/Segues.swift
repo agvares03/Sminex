@@ -254,4 +254,9 @@ struct Segues {
         static let toBarcode           = "barcode"
         static let toPay               = "pay"
     }
+    
+    struct fromNewsList {
+        
+        static let toNews               = "newsOne"
+    }
 }

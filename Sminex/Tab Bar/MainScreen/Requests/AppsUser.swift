@@ -89,7 +89,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: view.frame.size.width, height: 100.0)
+        let cell = AppsUserCell.fromNib()
+        cell?.display(data[indexPath.row])
+        let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+        return CGSize(width: view.frame.size.width, height: size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -285,6 +288,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     group.leave()
                 }
                 
+                guard data != nil else { return }
+                
                 #if DEBUG
                     print(String(data: data!, encoding: .utf8)!)
                 #endif
@@ -417,7 +422,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }.resume()
         
         queue.wait()
-        return salt!
+        return salt ?? Data()
     }
     
     private func startAnimator() {
@@ -502,6 +507,19 @@ final class AppsUserCell: UICollectionViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
+    }
+    
+    class func fromNib() -> AppsUserCell? {
+        var cell: AppsUserCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? AppsUserCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        return cell
     }
 }
 

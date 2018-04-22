@@ -172,27 +172,17 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if indexPath.row == 0 {
+
+            let cell = AdmissionHeader.fromNib()
+            cell?.display((arr[0] as! AdmissionHeaderData), delegate: self)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            return CGSize(width: view.frame.size.width, height: size.height)
             
-            if (arr[0] as! AdmissionHeaderData).gosNumber != "" {
-                if (arr[0] as! AdmissionHeaderData).images.count == 0 || (arr[0] as! AdmissionHeaderData).imgsUrl.count == 0 {
-                    return CGSize(width: view.frame.size.width, height: 290.0)
-                
-                } else {
-                    return CGSize(width: view.frame.size.width, height: 420.0)
-                }
-                
-            } else {
-                
-                if (arr[0] as! AdmissionHeaderData).images.count == 0 && (arr[0] as! AdmissionHeaderData).imgsUrl.count == 0 {
-                    return CGSize(width: view.frame.size.width, height: 230.0)
-                    
-                } else {
-                    return CGSize(width: view.frame.size.width, height: 360.0)
-                }
-            }
-        
         } else {
-            return CGSize(width: view.frame.size.width, height: 100.0)
+            let cell = AdmissionCommentCell.fromNib()
+            cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            return CGSize(width: view.frame.size.width, height: size.height)
         }
     }
     
@@ -228,6 +218,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             defer {
                 group.leave()
             }
+            
+            guard data != nil else { return }
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8)!)
@@ -437,7 +429,17 @@ final class AdmissionHeader: UICollectionViewCell {
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
         delegate?.imageTapped(sender)
     }
-    
+ 
+    class func fromNib() -> AdmissionHeader? {
+        var cell: AdmissionHeader?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? AdmissionHeader {
+                cell = view
+            }
+        }
+        return cell
+    }
 }
 
 final class AdmissionHeaderData: AdmissionProtocol {
@@ -520,8 +522,8 @@ final class AdmissionCommentCell: UICollectionViewCell {
         date.text = dayDifference(from: dateFormatter.date(from: item.date)!)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
-        image.isUserInteractionEnabled = true
-        image.addGestureRecognizer(tap)
+        comImg.isUserInteractionEnabled = true
+        comImg.addGestureRecognizer(tap)
         
         if item.imgUrl != nil {
             imgsLoader.isHidden = false
@@ -535,7 +537,7 @@ final class AdmissionCommentCell: UICollectionViewCell {
                 let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
                 
                 DispatchQueue.main.async {
-                    self.image.image = UIImage(data: data!)
+                    self.comImg.image = UIImage(data: data!)
                     self.imgsLoader.isHidden = true
                     self.imgsLoader.stopAnimating()
                 }
@@ -547,6 +549,18 @@ final class AdmissionCommentCell: UICollectionViewCell {
         delegate?.imageTapped(sender)
     }
     
+    class func fromNib() -> AdmissionCommentCell? {
+        var cell: AdmissionCommentCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? AdmissionCommentCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth   = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
+        cell?.comment.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
+        return cell
+    }
 }
 
 final class AdmissionCommentCellData: AdmissionProtocol {

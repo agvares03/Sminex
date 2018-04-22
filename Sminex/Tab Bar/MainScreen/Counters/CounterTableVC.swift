@@ -282,8 +282,10 @@ final class CounterTableCell: UICollectionViewCell {
     fileprivate func display(_ item: MeterValue) {
         
         title.text = item.name
-        count.text = item.value != "0,00" ? item.value : ""
         desc.text  = item.meterUniqueNum
+        
+        let value = String((item.value?.split(separator: ",")[0])!)
+        count.text = value != "0" ? value : ""
     }
 }
 

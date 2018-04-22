@@ -88,7 +88,7 @@ open class OnOffButton: UIButton {
         }
         
         if ringLayer != nil {
-            ringLayer.lineWidth   = lineWidth
+            ringLayer.lineWidth   = 2//lineWidth
             ringLayer.strokeColor = ringColorWithAlpha()
         }
     }

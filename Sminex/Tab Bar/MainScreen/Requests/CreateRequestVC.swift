@@ -37,9 +37,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
     }
     
-    @IBAction private func datePickerButtonPressed(_ sender: UIButton!) {
+    @IBAction private func datePickerButtonPressed(_ sender: UIButton?) {
         
-        viewTapped(nil)
+        if sender != nil {
+            viewTapped(nil)
+        }
         if picker.isHidden {
             
             if imgScroll.isHidden {
@@ -47,7 +49,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 
             } else {
                 sendBtnConst.constant   = 340
-                imageConst.constant     = 160
+                imageConst.constant     = 180
             }
             picker.isHidden         = false
             pickerLine.isHidden     = false
@@ -73,6 +75,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         
+        viewTapped(nil)
         if edFio.text == "" {
             edFio.placeholder = "Введите текст!"
         
@@ -114,6 +117,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     @IBAction private func cameraButtonPressed(_ sender: UIButton) {
         
+        viewTapped(nil)
         let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         action.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { (_) in
             
@@ -183,21 +187,27 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         tabBarController?.tabBar.isHidden = false
     }
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         
+        if !picker.isHidden {
+            datePickerButtonPressed(nil)
+        }
+        
         if isNeedToScroll() {
-            scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 200)
+            if images.count != 0 {
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 200)
+            } else {
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 50)
+            }
             scroll.contentOffset = CGPoint(x: 0, y: 140)
         }
     }
@@ -206,13 +216,20 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         if isNeedToScroll() {
-            scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 200)
+            if images.count != 0 {
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 200)
+            } else {
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 50)
+            }
             scroll.contentOffset = CGPoint(x: 0, y: 0)
         }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
         view.endEditing(true)
+        if !picker.isHidden {
+            datePickerButtonPressed(nil)
+        }
     }
     
     @objc private func stateChanged(_ sender: UISwitch) {
@@ -248,7 +265,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             imgScroll.isHidden = false
             
             if !picker.isHidden {
-                imageConst.constant = 170
+                imageConst.constant = 180
                 sendBtnConst.constant = 350
                 scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 350)
             

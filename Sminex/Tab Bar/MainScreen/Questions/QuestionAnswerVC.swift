@@ -170,13 +170,18 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 60.0)
+        let cell = QuestionAnswerCell.fromNib()
+        cell?.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
+        let size  = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+        return CGSize(width: view.frame.size.width, height: size.height)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        let cell = QuestionAnswerHeader.fromNib()
-//        cell.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
-//    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let cell = QuestionAnswerHeader.fromNib()
+        cell?.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
+        let size  = cell?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+        return CGSize(width: view.frame.size.width, height: size.height)
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -320,7 +325,7 @@ final class QuestionAnswerCell: UICollectionViewCell {
             }
             if isSomeAnswers {
                 toggle.checked = false
-                toggle.strokeColor      = blueColor
+                toggle.strokeColor      = .darkGray
                 toggle.backgroundColor  = .white
             
             } else {
@@ -344,6 +349,9 @@ final class QuestionAnswerCell: UICollectionViewCell {
         if !isSomeAnswers {
             toggle.strokeColor  = .lightGray
             toggle.lineWidth    = 2
+        
+        } else {
+            toggle.strokeColor = .darkGray
         }
         
         if item.text?.contains(find: "Свой вариант") ?? false {
@@ -380,6 +388,18 @@ final class QuestionAnswerCell: UICollectionViewCell {
         if checked {
             didTapOnOffButton()
         }
+    }
+    
+    class func fromNib() -> QuestionAnswerCell? {
+        var cell: QuestionAnswerCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? QuestionAnswerCell {
+                cell = view
+            }
+        }
+        cell?.question.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 50
+        return cell
     }
 }
 

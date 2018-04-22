@@ -179,15 +179,16 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if indexPath.row == 0 {
-            if (arr[indexPath.row] as! ServiceHeaderData).images.count == 0 && (arr[indexPath.row] as! ServiceHeaderData).imgsString.count == 0 {
-                return CGSize(width: view.frame.size.width, height: 200.0)
-                
-            } else {
-                return CGSize(width: view.frame.size.width, height: 350.0)
-            }
-        
+            let cell = ServiceHeader.fromNib()
+            cell?.display((arr[indexPath.row] as! ServiceHeaderData), delegate: self)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            return CGSize(width: view.frame.size.width, height: size.height)
+            
         } else {
-            return CGSize(width: view.frame.size.width, height: 120.0)
+            let cell = ServiceCommentCell.fromNib()
+            cell?.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            return CGSize(width: view.frame.size.width, height: size.height)
         }
     }
     
@@ -400,6 +401,18 @@ final class ServiceHeader: UICollectionViewCell {
     @objc func imagePressed(_ sender: UITapGestureRecognizer) {
         delegate?.imagePressed(sender)
     }
+    
+    class func fromNib() -> ServiceHeader? {
+        var cell: ServiceHeader?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? ServiceHeader {
+                cell = view
+            }
+        }
+        cell?.problem.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        return cell
+    }
 }
 
 final class ServiceHeaderData: TechServiceProtocol {
@@ -502,6 +515,19 @@ final class ServiceCommentCell: UICollectionViewCell {
     
     @objc private func imagePressed(_ sender: UITapGestureRecognizer) {
         delegate?.imagePressed(sender)
+    }
+    
+    class func fromNib() -> ServiceCommentCell? {
+        var cell: ServiceCommentCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? ServiceCommentCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 100
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 100
+        return cell
     }
 }
 

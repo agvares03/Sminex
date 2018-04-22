@@ -122,7 +122,6 @@ final class QuestionsTableCell: UICollectionViewCell {
         title.text = item.name
         
         var isAnswered = false
-        
         item.questions?.forEach {
             if $0.isAcceptSomeAnswers ?? false {
                 isAnswered = true
@@ -132,6 +131,9 @@ final class QuestionsTableCell: UICollectionViewCell {
         desc.text = (isAnswered)
             ? "Вы начали опрос"
             : String(item.questions?.count ?? 0) + " вопросов"
+        desc.textColor = (isAnswered)
+            ? .gray
+            : UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1)
     }
     
 }

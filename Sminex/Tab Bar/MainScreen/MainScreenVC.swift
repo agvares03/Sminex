@@ -35,10 +35,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             0 : CellsHeaderData(title: "Опросы")
             ],
         1 : [
-            0 : CellsHeaderData(title: "Новости"),
-            1 : NewsCellData(title: "Отключение горячей воды", desc: "22 ноябя с 12:00 до 13:00 будет отключена горяча...", date: "сегодня, 10:05"),
-            2 : NewsCellData(title: "Собрание жильцов", desc: "20 ноября, с 11:00 до 18:00", date: "15 октября"),
-            3 : NewsCellData(title: "Вынесено решение придомового комитета о поводу подземной парковки", desc: "20 ноября, с 11:00 до 18:00", date: "13 октября")],
+            0 : CellsHeaderData(title: "Новости")
+            ],
         2 : [
             0 : CellsHeaderData(title: "Акции и предложения", isNeedDetail: false),
             1 : StockCellData(images: [])
@@ -52,9 +50,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             0 : CellsHeaderData(title: "Счетчики"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
     private var questionSize:   CGSize?
+    private var newsSize:       CGSize?
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
-    private var deals: [DealsJson] = []
+    private var deals:  [DealsJson] = []
+    private var news:   [NewsJson]  = []
     private var dealsIndex = 0
     private var numSections = 0
     
@@ -89,6 +89,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
             }
         }
+        fetchNews()
         fetchDebt()
         fetchDeals()
         fetchRequests()
@@ -101,7 +102,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.isTranslucent   = true
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
-        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .heavy) ]
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -137,7 +138,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let title = (data[indexPath.section]![0] as! CellsHeaderData).title
         
         if title == "Опросы" {
-            return questionSize == nil ? CGSize(width: view.frame.size.width, height: 110.0) : questionSize!
+            let cell = SurveyCell.fromNib()
+            cell?.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+            return questionSize == nil ? CGSize(width: view.frame.size.width, height: size.height) : questionSize!
         
         } else if title == "Новости" {
             let cell = NewsCell.fromNib()
@@ -152,7 +156,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if indexPath.row == data[indexPath.section]!.count - 2 {
                 return CGSize(width: view.frame.size.width, height: 50.0)
             }
-            return CGSize(width: view.frame.size.width, height: 100.0)
+            let cell = RequestCell.fromNib()
+            cell?.display(data[indexPath.section]![indexPath.row + 1] as! RequestCellData)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            return CGSize(width: view.frame.size.width, height: size.height)
         
         } else if title == "К оплате" {
             return CGSize(width: view.frame.size.width, height: 80.0)
@@ -225,8 +232,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 && questionSize != nil {
-            return CGSize(width: 0, height: 0)
+            return questionSize!
         
+        } else if section == 1 && newsSize != nil {
+            return newsSize!
+            
         } else {
             return CGSize(width: view.frame.size.width, height: 40.0)
         }
@@ -323,6 +333,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 defer {
                     group.leave()
                 }
+                guard data != nil else { return }
                 
                 #if DEBUG
                     print(String(data: data!, encoding: .utf8)!)
@@ -528,6 +539,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     self.collection.reloadData()
                 }
             }
+            guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
@@ -553,6 +565,62 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             #endif
             
             }.resume()
+    }
+    
+    private func fetchNews() {
+        DispatchQueue.global(qos: .background).async {
+            let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
+            
+            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
+                let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
+                let lastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
+                
+                var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + "&lastId=" + (lastId != "0" ? lastId : ""))!)
+                request.httpMethod = "GET"
+                
+                URLSession.shared.dataTask(with: request) {
+                    data, error, responce in
+                    
+                    guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
+                    
+                    self.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+                    let filtered = self.news.filter { $0.isShowOnMainPage ?? false }
+                    
+                    for (ind, item) in filtered.enumerated() {
+                        if ind > 3 {
+                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                        }
+                    }
+                    if (self.data[1]?.count ?? 0) < 2 {
+                        self.newsSize = CGSize(width: 0, height: 0)
+                    
+                    } else {
+                        self.newsSize = nil
+                    }
+                    
+                    DispatchQueue.main.sync {
+                        self.collection.reloadData()
+                    }
+                }.resume()
+                return
+            }
+            let decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
+            self.news = decodedNewsDict[0]!
+            for (ind, item) in decodedNewsDict[1]!.enumerated() {
+                if ind < 3 {
+                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                }
+            }
+            if (self.data[1]?.count ?? 0) < 2 {
+                self.newsSize = CGSize(width: 0, height: 0)
+                
+            } else {
+                self.newsSize = nil
+            }
+            DispatchQueue.main.sync {
+                self.collection.reloadData()
+            }
+        }
     }
     
     private func requestPay() {
@@ -619,6 +687,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
             let vc = segue.destination as! FinancePayVC
             vc.url_ = url
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toNews {
+            let vc = segue.destination as! NewsListVC
+            vc.data_ = news
         }
     }
     
@@ -627,6 +699,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchQuestions()
         fetchDeals()
         fetchDebt()
+        fetchNews()
     }
 }
 
@@ -676,7 +749,7 @@ private final class CellsHeaderData: MainDataProtocol {
 
 class SurveyCell: UICollectionViewCell {
     
-    @IBOutlet weak var title:       UILabel!
+    @IBOutlet weak var title:               UILabel!
     @IBOutlet private weak var questions:   UILabel!
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
@@ -693,6 +766,19 @@ class SurveyCell: UICollectionViewCell {
         
         title.text      = item.title
         questions.text  = item.question
+    }
+    
+    class func fromNib() -> SurveyCell? {
+        var cell: SurveyCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? SurveyCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        cell?.questions.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        return cell
     }
     
 }
@@ -849,6 +935,19 @@ final class RequestCell: UICollectionViewCell {
         if item.isBack {
             back.isHidden = false
         }
+    }
+    
+    class func fromNib() -> RequestCell? {
+        var cell: RequestCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? RequestCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        return cell
     }
 }
 

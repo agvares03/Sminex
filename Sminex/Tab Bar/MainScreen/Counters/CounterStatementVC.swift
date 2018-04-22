@@ -52,7 +52,7 @@ final class CounterStatementVC: UIViewController {
         count.bottomBorderColor = .clear
         count.nextDigitBottomBorderColor = .clear
         count.backColor = UIColor(white: 96/100, alpha: 1.0)
-        count.font = UIFont.systemFont(ofSize: 14, weight: .thin)
+        count.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         
         if value_?.fractionalNumber?.contains(find: "alse") ?? true {
             count.numberOfDigits = 5
@@ -101,16 +101,16 @@ final class CounterStatementVC: UIViewController {
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         
-        if isNeedToScroll() {
+        if isNeedToScrollMore() {
             scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 240.0)
-            scroll.contentOffset = CGPoint(x: 0, y: 140)
+            scroll.contentOffset = CGPoint(x: 0, y: 50)
         }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         
-        if isNeedToScroll() {
+        if isNeedToScrollMore() {
             scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - 240.0)
             scroll.contentOffset = CGPoint(x: 0, y: 0)
         }
