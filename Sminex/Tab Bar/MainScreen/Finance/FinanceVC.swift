@@ -29,7 +29,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        requestPay()
+        performSegue(withIdentifier: Segues.fromFinanceVC.toPay, sender: self)
     }
     
     private var backColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1.0)
@@ -325,39 +325,6 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         }.resume()
     }
     
-    private func requestPay() {
-        
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let password = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: login))
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password + "&amount=" + String(debt?.sumPay ?? 0.0))!)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error: ", with: "") ?? "", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            self.url = URLRequest(url: URL(string: String(data: data!, encoding: .utf8) ?? "")!)
-            
-            DispatchQueue.main.sync {
-                self.performSegue(withIdentifier: Segues.fromFinanceVC.toPay, sender: self)
-            }
-            
-            #if DEBUG
-            print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-        
-        }.resume()
-    }
-    
     // Качаем соль
     private func getSalt(login: String) -> Data {
         
@@ -464,8 +431,8 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             vc.data_ = calcs
         
         } else if segue.identifier == Segues.fromFinanceVC.toPay {
-            let vc = segue.destination as! FinancePayVC
-            vc.url_ = url
+            let vc = segue.destination as! FinancePayAcceptVC
+            vc.accountData_ = debt
         }
     }
 }
@@ -558,6 +525,7 @@ struct AccountBillsJson: JSONDecodable {
     let datePayed:  String?
     let datePay:    String?
     let codPay:     String?
+    let number:     String?
     let desc:       String?
     let sum:        Double?
     let numMonth:   Int?
@@ -572,6 +540,7 @@ struct AccountBillsJson: JSONDecodable {
         sum         = "sum"         <~~ json
         numMonth    = "num_month"   <~~ json
         numYear     = "num_year"    <~~ json
+        number      = "number"      <~~ json
     }
 }
 

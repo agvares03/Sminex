@@ -259,4 +259,9 @@ struct Segues {
         
         static let toNews               = "newsOne"
     }
+    
+    struct fromFinancePayAcceptVC {
+        
+        static let toPay                 = "toPay"
+    }
 }

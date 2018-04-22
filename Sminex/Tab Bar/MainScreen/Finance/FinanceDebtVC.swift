@@ -28,12 +28,11 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        requestPay()
+        performSegue(withIdentifier: Segues.fromFinanceDebtVC.toPay, sender: self)
     }
     
     open var data_: AccountBillsJson?
     private var receipts: [ReceiptsJson]?
-    private var url: URLRequest?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -182,39 +181,6 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         return salt!
     }
     
-    private func requestPay() {
-        
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let password = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: login))
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password + "&amount=" + String(data_?.sum ?? 0.0))!)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error: ", with: "") ?? "", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            self.url = URLRequest(url: URL(string: String(data: data!, encoding: .utf8) ?? "")!)
-            
-            DispatchQueue.main.sync {
-                self.performSegue(withIdentifier: Segues.fromFinanceDebtVC.toPay, sender: self)
-            }
-            
-            #if DEBUG
-            print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-            
-            }.resume()
-    }
-    
     private func startAnimation() {
         loader.isHidden     = false
         collection.isHidden = true
@@ -234,8 +200,8 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             vc.codePay_ = data_?.codPay
         
         } else if segue.identifier == Segues.fromFinanceDebtVC.toPay {
-            let vc = segue.destination as! FinancePayVC
-            vc.url_ = url
+            let vc = segue.destination as! FinancePayAcceptVC
+            vc.billsData_ = data_
         }
     }
 }

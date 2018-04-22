@@ -130,8 +130,8 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             navigationItem.title = "Восстановление пароля"
         }
         
-        showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
-        smsField.isSecureTextEntry = true
+//        showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
+//        smsField.isSecureTextEntry = true
         
         descText = descTxt.text ?? ""
         
