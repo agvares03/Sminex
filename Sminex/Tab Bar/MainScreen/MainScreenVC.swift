@@ -61,6 +61,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
+        
         let date1 = UserDefaults.standard.integer(forKey: "date1")
         let date2 = UserDefaults.standard.integer(forKey: "date2")
         canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false

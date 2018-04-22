@@ -329,7 +329,8 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                            roomsCount: answer[11],
                            residentialArea: answer[12],
                            totalArea: answer[13],
-                           strah: "0")
+                           strah: "0",
+                           buisness: answer[9])
             
             // отправим на сервер данные об ид. устройства для отправки уведомлений
             let token = Messaging.messaging().fcmToken

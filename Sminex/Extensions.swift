@@ -140,7 +140,8 @@ func saveGlobalData(date1:              String,
                     roomsCount:         String,
                     residentialArea:    String,
                     totalArea:          String,
-                    strah:              String) {
+                    strah:              String,
+                    buisness:           String) {
     
     let defaults = UserDefaults.standard
     defaults.setValue(date1, forKey: "date1")
@@ -157,6 +158,7 @@ func saveGlobalData(date1:              String,
     defaults.setValue(history_counters, forKey: "history_counters")
     defaults.setValue(adress, forKey: "adress")
     defaults.setValue(contactNumber, forKey: "contactNumber")
+    defaults.setValue(buisness, forKey: "buisness")
     defaults.synchronize()
 }
 
