@@ -54,13 +54,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
     private var deals:  [DealsJson] = []
-    private var news:   [NewsJson]  = [] {
-        didSet {
-            UserDefaults.standard.set(String(news.last?.newsId ?? 0), forKey: "newsLastId")
-            UserDefaults.standard.synchronize()
-            TemporaryHolder.instance.news = news
-        }
-    }
     private var dealsIndex = 0
     private var numSections = 0
     
@@ -597,8 +590,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
-                    self.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
-                    let filtered = self.news.filter { $0.isShowOnMainPage ?? false }
+                    TemporaryHolder.instance.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+                    UserDefaults.standard.set(String(TemporaryHolder.instance.news?.last?.newsId ?? 0), forKey: "newsLastId")
+                    UserDefaults.standard.synchronize()
+                    let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                     
                     for (ind, item) in filtered.enumerated() {
                         if ind < 3 {
@@ -620,7 +615,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             let decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
-            self.news = decodedNewsDict[0]!
+            TemporaryHolder.instance.news = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
                     self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
@@ -648,8 +643,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                 
-                self.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
-                let filtered = self.news.filter { $0.isShowOnMainPage ?? false }
+                TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
+                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.last?.newsId ?? 0), forKey: "newsLastId")
+                UserDefaults.standard.synchronize()
+                let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                 
                 for (ind, item) in filtered.enumerated() {
                     if ind < 3 {
@@ -703,10 +700,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
             let vc = segue.destination as! FinancePayAcceptVC
             vc.accountData_ = debt
-        
-        } else if segue.identifier == Segues.fromMainScreenVC.toNews {
-            let vc = segue.destination as! NewsListVC
-            vc.data_ = news
         }
     }
     

@@ -174,6 +174,19 @@ class FirstController: UIViewController {
             
             self.goToApp(login: login, pass: pass)
             }.resume()
+        getContacts(login: txtLogin, pwd: pwd)
+    }
+    
+    private func getContacts(login: String, pwd: String) {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_CONTACTS + "login=" + login + "&pwd=" + pwd)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            print(String(data: data!, encoding: .utf8) ?? "")
+        }
     }
     
     // Качаем соль

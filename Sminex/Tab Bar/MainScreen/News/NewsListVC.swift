@@ -24,9 +24,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if data_.count == 0 && TemporaryHolder.instance.news != nil {
-            data_ = TemporaryHolder.instance.news!
-        }
+        data_ = TemporaryHolder.instance.news!
         
         automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
@@ -85,9 +83,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                 }
                 return
             }
-            
             self.data_.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
-            
             if self.data_.count != 0 {
                 DispatchQueue.global(qos: .background).async {
                     let dataDict =
@@ -207,17 +203,17 @@ final class NewsJson: NSObject, JSONDecodable, NSCoding {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        shortContent       = aDecoder.decodeObject(forKey: "shortContent")  as? String
-        headerImage        = aDecoder.decodeObject(forKey: "headerImage")   as? String
-        dateStart          = aDecoder.decodeObject(forKey: "dateStart")     as? String
-        dateEnd            = aDecoder.decodeObject(forKey: "dateEnd")       as? String
-        created            = aDecoder.decodeObject(forKey: "created")       as? String
-        header             = aDecoder.decodeObject(forKey: "header")        as? String
-        text               = aDecoder.decodeObject(forKey: "text")          as? String
-        isShowOnMainPage   = aDecoder.decodeBool(forKey: "isShowOnMainPage")
-        isReaded           = aDecoder.decodeBool(forKey: "isReaded")
-        isDraft            = aDecoder.decodeBool(forKey: "isDraft")
-        newsId             = aDecoder.decodeInteger(forKey: "newsId")
+        shortContent       = aDecoder.decodeObject(forKey: "shortContent")      as? String
+        headerImage        = aDecoder.decodeObject(forKey: "headerImage")       as? String
+        dateStart          = aDecoder.decodeObject(forKey: "dateStart")         as? String
+        dateEnd            = aDecoder.decodeObject(forKey: "dateEnd")           as? String
+        created            = aDecoder.decodeObject(forKey: "created")           as? String
+        header             = aDecoder.decodeObject(forKey: "header")            as? String
+        text               = aDecoder.decodeObject(forKey: "text")              as? String
+        isShowOnMainPage   = aDecoder.decodeObject(forKey: "isShowOnMainPage")  as? Bool
+        isReaded           = aDecoder.decodeObject(forKey: "isReaded")          as? Bool
+        isDraft            = aDecoder.decodeObject(forKey: "isDraft")           as? Bool
+        newsId             = aDecoder.decodeObject(forKey: "newsId")            as? Int
     }
 }
 
