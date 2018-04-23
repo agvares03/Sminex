@@ -360,7 +360,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let isAnswered = rowComms[$0.id!]?.count == 0 ? false : true
                     
                     var date = $0.planDate!
-                    date.removeLast(9)
+                    if date != "" {
+                        date.removeLast(9)
+                    }
                     let lastComm = rowComms[$0.id!]?[(rowComms[$0.id!]?.count)! - 1]
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1

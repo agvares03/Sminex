@@ -83,19 +83,20 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
             if indexPath.row == 4 {
-                cell.display(title: "Архив квитанции", desc: ">")
+                cell.display(title: "Архив квитанции", desc: "")
+                cell.contentView.backgroundColor = .white
             
             } else {
                 cell.display(title: getNameAndMonth(receipts[indexPath.row].numMonth ?? 0) + " \(receipts[indexPath.row].numYear ?? 0)",
-                    desc: (String(receipts[indexPath.row].sum ?? 0.0)) + " >")
+                    desc: (String(receipts[indexPath.row].sum ?? 0.0)))
+                cell.contentView.backgroundColor = backColor
             }
-            cell.contentView.backgroundColor = backColor
             return cell
         
         } else if indexPath.section == 3 {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            cell.display(title: "История взаиморасчетов", desc: ">")
+            cell.display(title: "История взаиморасчетов", desc: "")
             cell.contentView.backgroundColor = .white
             return cell
         
@@ -109,7 +110,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 }
             }
             cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
-                desc: debt != 0.0 ? "Долг " + String(debt) + " >" : ">")
+                desc: debt != 0.0 ? "Долг \(debt)" : "")
             cell.contentView.backgroundColor = backColor
             return cell
         
@@ -170,7 +171,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.section == 0 {
-            return 210.0
+            return 220.0
         
         } else {
             return 50.0

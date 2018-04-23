@@ -98,8 +98,15 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         
         if indexPath.row == receipts?.count {
             return CGSize(width: view.frame.size.width, height: 100.0)
+        
         } else {
-            return CGSize(width: view.frame.size.width, height: 40.0)
+            let cell = FinanceDebtCell.fromNib()
+            let isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
+            cell?.display(title: receipts![indexPath.row].usluga ?? "",
+                         desc: String(receipts![indexPath.row].sum ?? 0.0),
+                         isBold: false)
+            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            return CGSize(width: view.frame.size.width, height: isBold ? size.height + 15 : size.height)
         }
     }
     
@@ -232,8 +239,20 @@ final class FinanceDebtCell: UICollectionViewCell {
         } else {
             self.title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .light)
             self.desc.font  = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .light)
-            self.title.textColor = .lightGray
+            self.title.textColor = .gray
         }
+    }
+    
+    class func fromNib() -> FinanceDebtCell? {
+        var cell: FinanceDebtCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? FinanceDebtCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 150
+        return cell
     }
 }
 

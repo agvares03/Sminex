@@ -79,9 +79,6 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
             messageVC.recipients = [phone]
             messageVC.messageComposeDelegate = self
             present(messageVC, animated: false, completion: nil)
-        
-        } else {
-            print("kfmdslkmfslk")
         }
     }
     

@@ -31,7 +31,16 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 100.0)
+        
+        let cell = FinanceCalcCell.fromNib()
+        if indexPath.row != data_.count {
+            cell?.display(data_[indexPath.row])
+            
+        } else {
+            cell?.display( AccountCalculationsJson(type: "Итого", sumAccrued: 0, sumDebt: 0, sumPay: 0) )
+        }
+        let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+        return CGSize(width: view.frame.size.width, height: size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -99,6 +108,18 @@ final class FinanceCalcCell: UICollectionViewCell {
             sumPay.font     = UIFont.systemFont(ofSize: sumPay.font.pointSize, weight: .light)
             title.font      = UIFont.systemFont(ofSize: title.font.pointSize, weight: .light)
         }
+    }
+    
+    class func fromNib() -> FinanceCalcCell? {
+        var cell: FinanceCalcCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? FinanceCalcCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 75
+        return cell
     }
 }
 
