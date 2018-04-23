@@ -24,6 +24,10 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if data_.count == 0 && TemporaryHolder.instance.news != nil {
+            data_ = TemporaryHolder.instance.news!
+        }
+        
         automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
         collection.delegate   = self
@@ -58,7 +62,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
         let lastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + "&lastId=" + (lastId != "0" ? lastId : ""))!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -84,16 +88,18 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
             
             self.data_.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
             
-            DispatchQueue.global(qos: .background).async {
-                let dataDict =
-                    [
-                    0 : self.data_,
-                    1 : self.data_.filter { $0.isShowOnMainPage ?? false }
+            if self.data_.count != 0 {
+                DispatchQueue.global(qos: .background).async {
+                    let dataDict =
+                        [
+                            0 : self.data_,
+                            1 : self.data_.filter { $0.isShowOnMainPage ?? false }
                     ]
-                let encoded = NSKeyedArchiver.archivedData(withRootObject: dataDict)
-                UserDefaults.standard.set(encoded, forKey: "newsList")
-                UserDefaults.standard.set(String(self.data_.last?.newsId ?? 0), forKey: "newsLastId")
-                UserDefaults.standard.synchronize()
+                    let encoded = NSKeyedArchiver.archivedData(withRootObject: dataDict)
+                    UserDefaults.standard.set(encoded, forKey: "newsList")
+                    UserDefaults.standard.set(String(self.data_.last?.newsId ?? 0), forKey: "newsLastId")
+                    UserDefaults.standard.synchronize()
+                }
             }
             
             #if DEBUG
@@ -158,7 +164,7 @@ struct NewsJsonData: JSONDecodable {
     }
 }
 
-struct NewsJson: JSONDecodable {
+final class NewsJson: NSObject, JSONDecodable, NSCoding {
     
     let shortContent:       String?
     let headerImage:        String?
@@ -172,7 +178,7 @@ struct NewsJson: JSONDecodable {
     let isDraft: 	        Bool?
     let newsId:             Int?
     
-    init?(json: JSON) {
+    init(json: JSON) {
         isShowOnMainPage    = "ShowOnMainPage"  <~~ json
         shortContent        = "ShortContent"    <~~ json
         headerImage         = "HeaderImage"     <~~ json
@@ -184,6 +190,34 @@ struct NewsJson: JSONDecodable {
         header              = "Header"          <~~ json
         newsId              = "NewsID"          <~~ json
         text                = "Text"            <~~ json
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(shortContent, forKey: "shortContent")
+        aCoder.encode(headerImage, forKey: "headerImage")
+        aCoder.encode(dateStart, forKey: "dateStart")
+        aCoder.encode(dateEnd, forKey: "dateEnd")
+        aCoder.encode(created, forKey: "created")
+        aCoder.encode(header, forKey: "header")
+        aCoder.encode(text, forKey: "text")
+        aCoder.encode(isShowOnMainPage, forKey: "isShowOnMainPage")
+        aCoder.encode(isReaded, forKey: "isReaded")
+        aCoder.encode(isDraft, forKey: "isDraft")
+        aCoder.encode(newsId, forKey: "newsId")
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        shortContent       = aDecoder.decodeObject(forKey: "shortContent")  as? String
+        headerImage        = aDecoder.decodeObject(forKey: "headerImage")   as? String
+        dateStart          = aDecoder.decodeObject(forKey: "dateStart")     as? String
+        dateEnd            = aDecoder.decodeObject(forKey: "dateEnd")       as? String
+        created            = aDecoder.decodeObject(forKey: "created")       as? String
+        header             = aDecoder.decodeObject(forKey: "header")        as? String
+        text               = aDecoder.decodeObject(forKey: "text")          as? String
+        isShowOnMainPage   = aDecoder.decodeBool(forKey: "isShowOnMainPage")
+        isReaded           = aDecoder.decodeBool(forKey: "isReaded")
+        isDraft            = aDecoder.decodeBool(forKey: "isDraft")
+        newsId             = aDecoder.decodeInteger(forKey: "newsId")
     }
 }
 

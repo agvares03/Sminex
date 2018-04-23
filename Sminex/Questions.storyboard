@@ -94,15 +94,24 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опросов пока нет" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AkE-Sm-eXn">
+                                <rect key="frame" x="16" y="80" width="343" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Ld1-3O-B7v">
                                 <rect key="frame" x="177" y="323" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="AkE-Sm-eXn" firstAttribute="leading" secondItem="Kbx-HD-tmM" secondAttribute="leadingMargin" id="TBs-XM-vyp"/>
+                            <constraint firstItem="AkE-Sm-eXn" firstAttribute="top" secondItem="iwf-BO-lKv" secondAttribute="bottom" constant="16" id="Zeu-f7-dSS"/>
                             <constraint firstItem="Ld1-3O-B7v" firstAttribute="centerX" secondItem="Kbx-HD-tmM" secondAttribute="centerX" id="dEc-Th-VL8"/>
                             <constraint firstItem="7lD-Vg-iIu" firstAttribute="top" secondItem="iwf-BO-lKv" secondAttribute="bottom" id="eC8-fb-gci"/>
                             <constraint firstItem="3GA-yK-apH" firstAttribute="top" secondItem="7lD-Vg-iIu" secondAttribute="bottom" id="gUI-ij-RB9"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="AkE-Sm-eXn" secondAttribute="trailing" id="wcX-EZ-99p"/>
                             <constraint firstAttribute="trailing" secondItem="7lD-Vg-iIu" secondAttribute="trailing" id="xRI-h9-dri"/>
                             <constraint firstItem="Ld1-3O-B7v" firstAttribute="centerY" secondItem="Kbx-HD-tmM" secondAttribute="centerY" id="ysL-5q-j6H"/>
                             <constraint firstItem="7lD-Vg-iIu" firstAttribute="leading" secondItem="Kbx-HD-tmM" secondAttribute="leading" id="zBp-xY-eSr"/>
@@ -120,6 +129,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collection" destination="7lD-Vg-iIu" id="0xb-Or-n0x"/>
+                        <outlet property="emptyLabel" destination="AkE-Sm-eXn" id="kxo-mR-9QA"/>
                         <outlet property="loader" destination="Ld1-3O-B7v" id="V1q-nJ-slw"/>
                         <segue destination="PVX-C6-6zy" kind="show" identifier="questionAnswers" id="3KC-dU-m8A"/>
                     </connections>

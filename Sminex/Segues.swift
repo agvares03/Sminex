@@ -264,4 +264,14 @@ struct Segues {
         
         static let toPay                 = "toPay"
     }
+    
+    struct fromMenuVC {
+        
+        static let toRequest         = "Request"
+        static let toSchet           = "schet"
+        static let toQuestions       = "questionTable"
+        static let toDeals           = "deals"
+        static let toFinance         = "finance"
+        static let toNews            = "news"
+    }
 }

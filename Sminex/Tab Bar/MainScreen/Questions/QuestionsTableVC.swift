@@ -13,6 +13,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
+    @IBOutlet private weak var emptyLabel:  UILabel!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -72,6 +73,15 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                     self.loader.isHidden = true
                     self.loader.stopAnimating()
                     self.collection.reloadData()
+                    
+                    if self.questions?.count == 0 {
+                        self.collection.isHidden = true
+                        self.emptyLabel.isHidden = false
+                    
+                    } else {
+                        self.collection.isHidden = false
+                        self.emptyLabel.isHidden = true
+                    }
                     
                     for (index, item) in (self.questions?.enumerated())! {
                         if item.name == self.performName_ {

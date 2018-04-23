@@ -55,6 +55,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBAction private func exitButtonPressed(_ sender: UIButton) {
         UserDefaults.standard.setValue("", forKey: "pass")
         UserDefaults.standard.removeObject(forKey: "accountIcon")
+        UserDefaults.standard.removeObject(forKey: "newsList")
         UserDefaults.standard.synchronize()
         present(UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
     }

@@ -54,7 +54,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
     private var deals:  [DealsJson] = []
-    private var news:   [NewsJson]  = []
+    private var news:   [NewsJson]  = [] {
+        didSet {
+            UserDefaults.standard.set(String(news.last?.newsId ?? 0), forKey: "newsLastId")
+            UserDefaults.standard.synchronize()
+            TemporaryHolder.instance.news = news
+        }
+    }
     private var dealsIndex = 0
     private var numSections = 0
     
@@ -338,7 +344,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 guard data != nil else { return }
                 
                 #if DEBUG
-                    print(String(data: data!, encoding: .utf8)!)
+//                    print(String(data: data!, encoding: .utf8)!)
                 #endif
                 
                 let xml = XML.parse(data!)
@@ -356,12 +362,16 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
                 
+                var commentCount = 0
                 rows.forEach {
                     let isAnswered = rowComms[$0.id!]?.count == 0 ? false : true
                     
                     var date = $0.planDate!
                     date.removeLast(9)
                     let lastComm = rowComms[$0.id!]?[(rowComms[$0.id!]?.count)! - 1]
+                    if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
+                        commentCount += 1
+                    }
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     returnArr.append( RequestCellData(title: $0.name!,
                                                       desc: rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
@@ -370,6 +380,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                       status: $0.status!,
                                                       isBack: isAnswered) )
                 }
+                TemporaryHolder.instance.menuRequests = commentCount
             }.resume()
         }
         
@@ -464,6 +475,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
                         self.data[0]![2] = SurveyCellData(title: filtered[filtered.count - 2].name!, question: "\(filtered[filtered.count - 2].questions?.count ?? 0) вопросов")
                     }
+                    TemporaryHolder.instance.menuQuesions = filtered.count
                 
                     DispatchQueue.main.sync {
                         self.collection.reloadData()
@@ -513,6 +525,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 imgs.append( $0.img ?? UIImage() )
             }
             self.data[2]![1] = StockCellData(images: imgs)
+            TemporaryHolder.instance.menuDeals = imgs.count
             
             #if DEBUG
             //                print(String(data: data!, encoding: .utf8) ?? "")
@@ -563,7 +576,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.synchronize()
             
             #if DEBUG
-            print(String(data: data!, encoding: .utf8)!)
+//            print(String(data: data!, encoding: .utf8)!)
             #endif
             
             }.resume()
@@ -575,9 +588,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
                 let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
-                let lastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
                 
-                var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + "&lastId=" + (lastId != "0" ? lastId : ""))!)
+                var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
                 request.httpMethod = "GET"
                 
                 URLSession.shared.dataTask(with: request) {
@@ -589,10 +601,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let filtered = self.news.filter { $0.isShowOnMainPage ?? false }
                     
                     for (ind, item) in filtered.enumerated() {
-                        if ind > 3 {
+                        if ind < 3 {
                             self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                         }
                     }
+                    
                     if (self.data[1]?.count ?? 0) < 2 {
                         self.newsSize = CGSize(width: 0, height: 0)
                     
@@ -613,6 +626,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                 }
             }
+            
             if (self.data[1]?.count ?? 0) < 2 {
                 self.newsSize = CGSize(width: 0, height: 0)
                 
@@ -622,6 +636,38 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             DispatchQueue.main.sync {
                 self.collection.reloadData()
             }
+            
+            let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
+            let lastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
+            
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
+            request.httpMethod = "GET"
+            
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
+                
+                guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
+                
+                self.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+                let filtered = self.news.filter { $0.isShowOnMainPage ?? false }
+                
+                for (ind, item) in filtered.enumerated() {
+                    if ind < 3 {
+                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                    }
+                }
+                
+                if (self.data[1]?.count ?? 0) < 2 {
+                    self.newsSize = CGSize(width: 0, height: 0)
+                    
+                } else {
+                    self.newsSize = nil
+                }
+                
+                DispatchQueue.main.sync {
+                    self.collection.reloadData()
+                }
+                }.resume()
         }
     }
 

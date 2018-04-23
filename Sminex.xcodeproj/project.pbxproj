@@ -101,6 +101,7 @@
 		6C170AC8207CCF0200C84BE6 /* Deals.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C170AC7207CCF0200C84BE6 /* Deals.storyboard */; };
 		6C170ACC207CD00E00C84BE6 /* DealsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C170ACB207CD00E00C84BE6 /* DealsListVC.swift */; };
 		6C170ACE207CDDB400C84BE6 /* DealsListDescVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C170ACD207CDDB400C84BE6 /* DealsListDescVC.swift */; };
+		6C1D5C11208D981000BEB826 /* MenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1D5C10208D981000BEB826 /* MenuVC.swift */; };
 		6C212AF5208C69CE008ABD0F /* FinancePayAcceptVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C212AF4208C69CE008ABD0F /* FinancePayAcceptVC.swift */; };
 		6C2387C22062052400F20190 /* Segues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2387C12062052400F20190 /* Segues.swift */; };
 		6C2D3288207F42D000F5F4C8 /* BarcodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2D3287207F42D000F5F4C8 /* BarcodeGenerator.swift */; };
@@ -274,6 +275,7 @@
 		6C170AC7207CCF0200C84BE6 /* Deals.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Deals.storyboard; sourceTree = "<group>"; };
 		6C170ACB207CD00E00C84BE6 /* DealsListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsListVC.swift; sourceTree = "<group>"; };
 		6C170ACD207CDDB400C84BE6 /* DealsListDescVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsListDescVC.swift; sourceTree = "<group>"; };
+		6C1D5C10208D981000BEB826 /* MenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuVC.swift; sourceTree = "<group>"; };
 		6C212AF4208C69CE008ABD0F /* FinancePayAcceptVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancePayAcceptVC.swift; sourceTree = "<group>"; };
 		6C2387C12062052400F20190 /* Segues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segues.swift; sourceTree = "<group>"; };
 		6C2D3287207F42D000F5F4C8 /* BarcodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeGenerator.swift; sourceTree = "<group>"; };
@@ -669,6 +671,14 @@
 			path = Deals;
 			sourceTree = "<group>";
 		};
+		6C1D5C0F208D97F400BEB826 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				6C1D5C10208D981000BEB826 /* MenuVC.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
 		6C425615206B71BE007E1BF6 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
@@ -764,6 +774,7 @@
 		6CA908132063A7D000CB78FE /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
+				6C1D5C0F208D97F400BEB826 /* Menu */,
 				6C7F90E720772DBC00CFA721 /* Account */,
 				6C5E78E02065054B00805EF1 /* MainScreen */,
 			);
@@ -1040,6 +1051,7 @@
 				6C5E78DF2064EF6F00805EF1 /* TemporaryHolder.swift in Sources */,
 				6C737FEF2080A2ED00AC0250 /* FinanceDebtVC.swift in Sources */,
 				41D9FBD71ED9563A00925972 /* Counters+CoreDataClass.swift in Sources */,
+				6C1D5C11208D981000BEB826 /* MenuVC.swift in Sources */,
 				6C6A36D4206102D00073FC2A /* RegistrationSminexEnterPassword.swift in Sources */,
 				6C7F90E920772DDA00CFA721 /* AccountSettingsVC.swift in Sources */,
 				6C2D328A207F834900F5F4C8 /* FinanceBarCodeVC.swift in Sources */,

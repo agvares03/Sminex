@@ -15,6 +15,22 @@ final class TemporaryHolder {
     
     public var requestTypes:            RequestType?
     public var contacts:                Contacts?
+    public var menuQuesions = 0 {
+        didSet {
+            NotificationCenter.default.post(name: NSNotification.Name("QuestionsMenu"), object: nil)
+        }
+    }
+    public var menuRequests = 0 {
+        didSet {
+            NotificationCenter.default.post(name: NSNotification.Name("RequestsMenu"), object: nil)
+        }
+    }
+    public var menuDeals    = 0 {
+        didSet {
+            NotificationCenter.default.post(name: NSNotification.Name("DealsMenu"), object: nil)
+        }
+    }
+    public var news: [NewsJson]?
     
     func choise(_ responce: JSON) {
         
