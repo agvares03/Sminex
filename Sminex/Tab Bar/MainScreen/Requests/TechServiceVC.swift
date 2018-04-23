@@ -335,7 +335,9 @@ final class ServiceHeader: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
+        if item.date != "" {
+            date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
+        }
         
         if item.images.count == 0 {
             imageConst.constant = 30
@@ -487,7 +489,9 @@ final class ServiceCommentCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date)!)
+        if item.date != "" {
+            date.text = dayDifference(from: dateFormatter.date(from: item.date)!)
+        }
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
         image.isUserInteractionEnabled = true

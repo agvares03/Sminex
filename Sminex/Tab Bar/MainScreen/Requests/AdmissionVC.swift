@@ -366,7 +366,9 @@ final class AdmissionHeader: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
+        if item.date != "" {
+            date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
+        }
         
         if item.images.count == 0 && item.imgsUrl.count == 0 {
             imgs.isHidden       = true

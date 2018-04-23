@@ -508,7 +508,9 @@ final class AppsUserCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
+        if item.date != "" {
+            date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
+        }
     }
     
     class func fromNib() -> AppsUserCell? {
