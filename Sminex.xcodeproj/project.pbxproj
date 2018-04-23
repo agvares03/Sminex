@@ -102,6 +102,8 @@
 		6C170ACC207CD00E00C84BE6 /* DealsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C170ACB207CD00E00C84BE6 /* DealsListVC.swift */; };
 		6C170ACE207CDDB400C84BE6 /* DealsListDescVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C170ACD207CDDB400C84BE6 /* DealsListDescVC.swift */; };
 		6C1D5C11208D981000BEB826 /* MenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1D5C10208D981000BEB826 /* MenuVC.swift */; };
+		6C1D5C14208DC9A600BEB826 /* ContactsJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1D5C13208DC9A600BEB826 /* ContactsJson.swift */; };
+		6C1D5C16208DD2E300BEB826 /* ContactsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1D5C15208DD2E300BEB826 /* ContactsVC.swift */; };
 		6C212AF5208C69CE008ABD0F /* FinancePayAcceptVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C212AF4208C69CE008ABD0F /* FinancePayAcceptVC.swift */; };
 		6C2387C22062052400F20190 /* Segues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2387C12062052400F20190 /* Segues.swift */; };
 		6C2D3288207F42D000F5F4C8 /* BarcodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2D3287207F42D000F5F4C8 /* BarcodeGenerator.swift */; };
@@ -276,6 +278,8 @@
 		6C170ACB207CD00E00C84BE6 /* DealsListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsListVC.swift; sourceTree = "<group>"; };
 		6C170ACD207CDDB400C84BE6 /* DealsListDescVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsListDescVC.swift; sourceTree = "<group>"; };
 		6C1D5C10208D981000BEB826 /* MenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuVC.swift; sourceTree = "<group>"; };
+		6C1D5C13208DC9A600BEB826 /* ContactsJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsJson.swift; sourceTree = "<group>"; };
+		6C1D5C15208DD2E300BEB826 /* ContactsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsVC.swift; sourceTree = "<group>"; };
 		6C212AF4208C69CE008ABD0F /* FinancePayAcceptVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancePayAcceptVC.swift; sourceTree = "<group>"; };
 		6C2387C12062052400F20190 /* Segues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segues.swift; sourceTree = "<group>"; };
 		6C2D3287207F42D000F5F4C8 /* BarcodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeGenerator.swift; sourceTree = "<group>"; };
@@ -679,6 +683,15 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		6C1D5C12208DC98F00BEB826 /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				6C1D5C15208DD2E300BEB826 /* ContactsVC.swift */,
+				6C1D5C13208DC9A600BEB826 /* ContactsJson.swift */,
+			);
+			path = Contacts;
+			sourceTree = "<group>";
+		};
 		6C425615206B71BE007E1BF6 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
@@ -774,6 +787,7 @@
 		6CA908132063A7D000CB78FE /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
+				6C1D5C12208DC98F00BEB826 /* Contacts */,
 				6C1D5C0F208D97F400BEB826 /* Menu */,
 				6C7F90E720772DBC00CFA721 /* Account */,
 				6C5E78E02065054B00805EF1 /* MainScreen */,
@@ -1031,12 +1045,14 @@
 				6CE2F4B620876A1100709242 /* NewsListVC.swift in Sources */,
 				6C356CE62089C0C1009BEE1F /* CurrentNews.swift in Sources */,
 				4111CA361EF4FBCB00BBEB7B /* Modal.swift in Sources */,
+				6C1D5C16208DD2E300BEB826 /* ContactsVC.swift in Sources */,
 				6C170ACC207CD00E00C84BE6 /* DealsListVC.swift in Sources */,
 				6C938C75206F4B9B00E34EA1 /* QuestionsTableVC.swift in Sources */,
 				41DFA8241ED3475700F15109 /* SettingsCons.swift in Sources */,
 				6CFB5C6C2083ADC40028D331 /* FinanceCalcsArchiveVC.swift in Sources */,
 				411B6CDF1EE6FF22001DCBC7 /* Comments+CoreDataProperties.swift in Sources */,
 				6CD3AD97206622AE001589B7 /* TechServiceVC.swift in Sources */,
+				6C1D5C14208DC9A600BEB826 /* ContactsJson.swift in Sources */,
 				6CD3AD9520661413001589B7 /* CreateRequestVC.swift in Sources */,
 				41EBEC881ED17BDF009F6A9D /* SWRevealViewController.m in Sources */,
 				41DFA8351ED3500400F15109 /* OSV_User.swift in Sources */,

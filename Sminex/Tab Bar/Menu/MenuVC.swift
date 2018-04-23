@@ -28,6 +28,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
         collection.delegate   = self
         

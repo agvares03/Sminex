@@ -31,6 +31,7 @@ final class TemporaryHolder {
         }
     }
     public var news: [NewsJson]?
+    public var contactsList: [ContactsJson] = []
     
     func choise(_ responce: JSON) {
         

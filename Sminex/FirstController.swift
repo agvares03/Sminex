@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseMessaging
 import Arcane
+import Gloss
 
 class FirstController: UIViewController {
     
@@ -185,8 +186,23 @@ class FirstController: UIViewController {
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
-            print(String(data: data!, encoding: .utf8) ?? "")
-        }
+            guard data != nil else { return }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in exit(0) } ) )
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            TemporaryHolder.instance.contactsList = ContactsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+            
+            #if DEBUG
+                print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+        }.resume()
     }
     
     // Качаем соль
