@@ -10,6 +10,7 @@ import UIKit
 
 final class FinancePayAcceptVC: UIViewController {
     
+    @IBOutlet private weak var offerLabel:  UILabel!
     @IBOutlet private weak var fieldTop:    NSLayoutConstraint!
     @IBOutlet private weak var loader:  UIActivityIndicatorView!
     @IBOutlet private weak var scroll: UIScrollView!
@@ -23,11 +24,13 @@ final class FinancePayAcceptVC: UIViewController {
     }
     
     @IBAction private func infoButtonPressed(_ sender: UIButton) {
-        
+        url = URLRequest(url: URL(string: "http://tst.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentDescription.aspx")!)
+        performSegue(withIdentifier: Segues.fromFinancePayAcceptVC.toPay, sender: self)
     }
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         startAnimation()
+        sumText = sumTextField.text ?? ""
         DispatchQueue.global(qos: .userInitiated).async {
             self.requestPay()
         }
@@ -36,19 +39,24 @@ final class FinancePayAcceptVC: UIViewController {
     open var accountData_: AccountDebtJson?
     open var billsData_: AccountBillsJson?
     private var url: URLRequest?
+    private var sumText = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        stopAnimation()
+        
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         
         if accountData_ == nil {
-            titleLabel.text = "Платеж для Лицевого счета №\(Int(billsData_?.sum ?? 0.0))"
+            sumTextField.text = String(format: "%.1f", billsData_?.sum ?? 0.0)
+            titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
             var date = billsData_?.datePay
             date?.removeLast(9)
             descLabel.text = "Оплата счета: \(billsData_?.number ?? "") от \(date ?? "")"
         
         } else {
+            sumTextField.text = String(format: "%.1f", accountData_?.sumPay ?? 0.0)
             titleLabel.text = "Платеж для Лицевого счета"
             descLabel.isHidden = true
             fieldTop.constant = 16
@@ -57,10 +65,27 @@ final class FinancePayAcceptVC: UIViewController {
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(viewTapped(_:)))
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap)
+        
+        let string              = "Нажимая кнопку «Оплатить», вы принимаете условия Публичной оферты"
+        let range               = (string as NSString).range(of: "Публичной оферты")
+        let attributedString    = NSMutableAttributedString(string: string)
+        
+        attributedString.addAttribute(.underlineStyle, value: NSNumber(value: 1), range: range)
+        attributedString.addAttribute(.underlineColor, value: UIColor.black, range: range)
+        offerLabel.attributedText = attributedString
+        
+        let offerTap = UITapGestureRecognizer(target: self, action: #selector(offerTapped(_:)))
+        offerLabel.isUserInteractionEnabled = true
+        offerLabel.addGestureRecognizer(offerTap)
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
+    }
+    
+    @objc private func offerTapped(_ sender: UITapGestureRecognizer) {
+        url = URLRequest(url: URL(string: "http://tst.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentOffer.aspx")!)
+        performSegue(withIdentifier: Segues.fromFinancePayAcceptVC.toPay, sender: self)
     }
     
     private func requestPay() {
@@ -68,7 +93,7 @@ final class FinancePayAcceptVC: UIViewController {
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let password = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: login))
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password + "&amount=" + (sumTextField.text ?? ""))!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password + "&amount=" + (sumText))!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
