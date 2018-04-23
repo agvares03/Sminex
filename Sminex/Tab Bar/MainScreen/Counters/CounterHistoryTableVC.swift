@@ -24,14 +24,14 @@ final class CounterHistoryTableVC: UIViewController, UICollectionViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tabBarController?.tabBar.selectedItem?.title = "Главная"
+//        tabBarController?.tabBar.selectedItem?.title = "Главная"
         collection.delegate   = self
         collection.dataSource = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tabBarController?.tabBar.selectedItem?.title = "Главная"
+//        tabBarController?.tabBar.selectedItem?.title = "Главная"
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
