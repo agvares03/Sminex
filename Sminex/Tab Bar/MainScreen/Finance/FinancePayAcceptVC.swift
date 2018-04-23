@@ -52,7 +52,9 @@ final class FinancePayAcceptVC: UIViewController {
             sumTextField.text = String(format: "%.1f", billsData_?.sum ?? 0.0)
             titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
             var date = billsData_?.datePay
-            date?.removeLast(9)
+            if (date?.count ?? 0) > 9 {
+                date?.removeLast(9)
+            }
             descLabel.text = "Оплата счета: \(billsData_?.number ?? "") от \(date ?? "")"
         
         } else {

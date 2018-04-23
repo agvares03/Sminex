@@ -335,7 +335,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     let isAnswered = self.rowComms[$0.id!]?.count == 0 ? false : true
                     
                     var date = $0.planDate!
-                    date.removeLast(9)
+                    if date.count > 9 {
+                        date.removeLast(9)
+                    }
                     
                     let lastComm = self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!

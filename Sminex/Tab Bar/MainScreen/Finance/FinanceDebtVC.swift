@@ -262,7 +262,9 @@ final class FinanceDebtPayCell: UICollectionViewCell {
     
     func display(_ data: AccountBillsJson) {
         var date = data.datePay
-        date?.removeLast(9)
+        if (date?.count ?? 0) > 9 {
+            date?.removeLast(9)
+        }
         self.dateLabel.text = "До " + (date ?? "")
     }
 }

@@ -563,7 +563,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             self.debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data!
             var datePay = self.debt?.datePay
-            datePay?.removeLast(9)
+            if (datePay?.count ?? 0) > 9 {
+                datePay?.removeLast(9)
+            }
             self.data[4]![1] = ForPayCellData(title: String(self.debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
             
             defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")

@@ -74,7 +74,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             cell.selectionStyle = .none
             if debt != nil {
                 var datePay = self.debt?.datePay
-                datePay?.removeLast(9)
+                if (datePay?.count ?? 0) > 9 {
+                    datePay?.removeLast(9)
+                }
                 cell.display(amount: String(debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
             }
             cell.contentView.backgroundColor = backColor
