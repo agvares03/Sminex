@@ -28,6 +28,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     
     open var canCount = true
     
+    private var barTitle = ""
     private var index = 0
     private var meterArr: [MeterValue] = [] {
         didSet {
@@ -50,6 +51,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        barTitle = tabBarController?.tabBar.selectedItem?.title ?? ""
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
@@ -62,7 +64,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tabBarController?.tabBar.selectedItem?.title = "Главная"
+        tabBarController?.tabBar.selectedItem?.title = barTitle
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

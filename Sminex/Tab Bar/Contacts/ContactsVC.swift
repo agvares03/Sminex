@@ -132,6 +132,7 @@ final class ContactsCell: UICollectionViewCell {
     @IBOutlet private weak var messageImage:    UIImageView!
     @IBOutlet private weak var phoneImage:      UIImageView!
     @IBOutlet private weak var emailImage:      UIImageView!
+    @IBOutlet private weak var sendButton:      UIButton!
     @IBOutlet private weak var title:           UILabel!
     @IBOutlet private weak var desc:            UILabel!
     @IBOutlet private weak var phone:           UILabel!
@@ -143,6 +144,13 @@ final class ContactsCell: UICollectionViewCell {
     
     fileprivate func display(_ item: ContactsJson, delegate: ContactsCellDelegate?) {
         self.delegate = delegate
+        
+        if item.name?.contains(find: "оддержка") ?? false {
+            sendButton.isHidden = false
+        
+        } else {
+            sendButton.isHidden = true
+        }
         
         title.text = item.name
         desc.text  = item.description
