@@ -96,7 +96,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchDeals()
         fetchRequests()
         fetchQuestions()
-        collection.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
+        collection.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         collection.delegate     = self
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false

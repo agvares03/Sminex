@@ -102,8 +102,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         edLogin.delegate = self
         edPass.delegate = self
         
-        btnEnter.isEnabled = false
-        btnEnter.alpha = 0.5
+        edLogin.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        edPass.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
         edPass.isSecureTextEntry = true
@@ -114,6 +114,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         
         edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
         edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
+        
+        if edLogin.text == "" {
+            btnEnter.isEnabled = false
+            btnEnter.alpha = 0.5
+        }
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -459,16 +464,19 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         defaults.synchronize()
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         
-        if edLogin.text != "" && edPass.text != "" {
-            btnEnter.isEnabled = true
-            btnEnter.alpha = 1
-        
-        } else {
+        if edLogin.text == "" || edPass.text == "" {
             btnEnter.isEnabled = false
             btnEnter.alpha = 0.5
+            
+        } else {
+            btnEnter.isEnabled = true
+            btnEnter.alpha = 1
         }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
         
 //        if string == "" {
 //
