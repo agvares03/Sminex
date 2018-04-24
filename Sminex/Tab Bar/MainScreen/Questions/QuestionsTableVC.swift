@@ -22,6 +22,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     open var delegate: MainScreenDelegate?
     open var performName_ = ""
     
+    private var refreshControl: UIRefreshControl?
     private var questions: [QuestionDataJson]? = []
     private var index = 0
     
@@ -32,6 +33,20 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         collection.delegate     = self
         collection.dataSource   = self
         
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+        }
+        
+        loader.isHidden = false
+        loader.startAnimating()
+        getQuestions()
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
         getQuestions()
     }
     
@@ -57,9 +72,6 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func getQuestions() {
         
-        loader.isHidden = false
-        loader.startAnimating()
-        
         let id = UserDefaults.standard.string(forKey: "id_account") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_QUESTIONS + "accID=" + id)!)
@@ -70,9 +82,15 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
             
             defer {
                 DispatchQueue.main.sync {
-                    self.loader.isHidden = true
-                    self.loader.stopAnimating()
                     self.collection.reloadData()
+                    self.loader.stopAnimating()
+                    self.loader.isHidden = true
+                    
+                    if #available(iOS 10.0, *) {
+                        self.collection.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                     
                     if self.questions?.count == 0 {
                         self.collection.isHidden = true

@@ -20,16 +20,35 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
     
     open var data_: [NewsJson] = []
     private var index = 0
+    private var refreshControl: UIRefreshControl?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        data_ = TemporaryHolder.instance.news!
+        if TemporaryHolder.instance.news != nil {
+            data_ = TemporaryHolder.instance.news!
+        }
         
         automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
         collection.delegate   = self
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+        }
+        
         startAnimation()
+        getNews()
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
+        if TemporaryHolder.instance.news != nil {
+            self.data_ = TemporaryHolder.instance.news!
+        }
         getNews()
     }
     
@@ -68,6 +87,11 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
             
             defer {
                 DispatchQueue.main.sync {
+                    if #available(iOS 10.0, *) {
+                        self.collection.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                     self.collection.reloadData()
                     self.stopAnimation()
                 }
@@ -93,7 +117,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                     ]
                     let encoded = NSKeyedArchiver.archivedData(withRootObject: dataDict)
                     UserDefaults.standard.set(encoded, forKey: "newsList")
-                    UserDefaults.standard.set(String(self.data_.last?.newsId ?? 0), forKey: "newsLastId")
+                    UserDefaults.standard.set(String(self.data_.first?.newsId ?? 0), forKey: "newsLastId")
                     UserDefaults.standard.synchronize()
                 }
             }

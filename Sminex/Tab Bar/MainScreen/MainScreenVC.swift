@@ -53,6 +53,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var newsSize:       CGSize?
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
+    private var refreshControl: UIRefreshControl?
     private var deals:  [DealsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
@@ -99,11 +100,28 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false
         
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+        }
+        
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent   = true
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
+        update()
+        if #available(iOS 10.0, *) {
+            collection.refreshControl?.endRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -595,7 +613,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
                     TemporaryHolder.instance.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
-                    UserDefaults.standard.set(String(TemporaryHolder.instance.news?.last?.newsId ?? 0), forKey: "newsLastId")
+                    UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                     UserDefaults.standard.synchronize()
                     let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                     
@@ -648,7 +666,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                 
                 TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
-                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.last?.newsId ?? 0), forKey: "newsLastId")
+                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                 UserDefaults.standard.synchronize()
                 let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                 
