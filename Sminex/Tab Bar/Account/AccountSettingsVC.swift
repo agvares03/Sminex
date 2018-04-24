@@ -53,6 +53,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     @IBAction private func exitButtonPressed(_ sender: UIButton) {
+        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "pass"), forKey: "exitPass")
+        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "login"), forKey: "exitLogin")
         UserDefaults.standard.setValue("", forKey: "pass")
         UserDefaults.standard.removeObject(forKey: "accountIcon")
         UserDefaults.standard.removeObject(forKey: "newsList")

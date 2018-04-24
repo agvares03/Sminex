@@ -112,6 +112,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         scroll.addGestureRecognizer(theTap)
         
+        edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
+        edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
+        
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -467,18 +470,18 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             btnEnter.alpha = 0.5
         }
         
-        if string == "" {
-
-            let ls_ind  = ls.index(ls.endIndex, offsetBy: -1)
-            let ls_end  = ls.substring(to: ls_ind)
-            ls          = ls_end
-
-            if ls_end == "" {
-                itsPhone = false
-            }
-        } else {
-            ls = ls + string
-        }
+//        if string == "" {
+//
+//            let ls_ind  = ls.index(ls.endIndex, offsetBy: -1)
+//            let ls_end  = ls.substring(to: ls_ind)
+//            ls          = ls_end
+//
+//            if ls_end == "" {
+//                itsPhone = false
+//            }
+//        } else {
+//            ls = ls + string
+//        }
 //
 //        // Определим телефон это или нет
 //        var first       = true
