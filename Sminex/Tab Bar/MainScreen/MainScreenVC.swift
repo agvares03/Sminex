@@ -604,10 +604,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if (datePay?.count ?? 0) > 9 {
                 datePay?.removeLast(9)
             }
-            self.data[4]![1] = ForPayCellData(title: String(self.debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
+            self.data[4]![1] = ForPayCellData(title: String(self.debt?.sumPay ?? 0.0) + " ₽", date: datePay ?? "")
             
             defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
-            defaults.setValue("До " + (datePay ?? ""), forKey: "ForPayDate")
+            defaults.setValue(datePay, forKey: "ForPayDate")
             defaults.synchronize()
             
             #if DEBUG
@@ -856,7 +856,12 @@ final class NewsCell: UICollectionViewCell {
         
         title.text  = item.title
         desc.text   = item.desc
-        date.text   = item.date
+        
+        if item.date != "" {
+            let df = DateFormatter()
+            df.dateFormat = "YYYY-MM-DD"
+            date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "DD MMMM")
+        }
     }
     
     class func fromNib() -> NewsCell? {
@@ -982,7 +987,7 @@ final class RequestCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.isBack {
             back.isHidden = false
@@ -1067,13 +1072,21 @@ final class ForPayCell: UICollectionViewCell {
     fileprivate func display(_ item: ForPayCellData) {
         
         title.text  = item.title
-        date.text   = item.date
         
         if item.title.contains(find: "-") {
             title.textColor = .green
         
         } else {
             title.textColor = .black
+        }
+        
+        if item.date != "" {
+            let df = DateFormatter()
+            df.dateFormat = "dd.MM.yyyy"
+            let currDate = df.date(from: item.date)
+            df.dateFormat = "dd MMMM"
+            df.locale = Locale(identifier: "Ru-ru")
+            date.text = "До " + df.string(from: currDate ?? Date())
         }
     }
 }
