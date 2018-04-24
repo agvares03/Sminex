@@ -96,6 +96,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchDeals()
         fetchRequests()
         fetchQuestions()
+        collection.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
         collection.delegate     = self
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false
@@ -116,11 +117,20 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
-        update()
-        if #available(iOS 10.0, *) {
-            collection.refreshControl?.endRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.fetchRequests()
+            self.fetchQuestions()
+            self.fetchDeals()
+            self.fetchDebt()
+            self.fetchNews()
+            DispatchQueue.main.async {
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
         }
     }
     
@@ -145,10 +155,16 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CellsHeader", for: indexPath) as! CellsHeader
         header.display(data[indexPath.section]![0] as! CellsHeaderData, delegate: self)
+        header.frame.size.width = view.frame.size.width - 32
+        header.frame.origin.x = 16
         
-        if header.title.text == "Опросы" && questionSize != nil {
-            header.frame.size = questionSize!
+        if header.title.text == "Акции и предложения" {
+            header.backgroundColor = .clear
+        
+        } else {
+            header.backgroundColor = .white
         }
+        
         return header
     }
     
@@ -160,37 +176,39 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let cell = SurveyCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-            return questionSize == nil ? CGSize(width: view.frame.size.width, height: size.height) : questionSize!
+            return questionSize == nil ? CGSize(width: view.frame.size.width - 32, height: size.height) : questionSize!
         
         } else if title == "Новости" {
             let cell = NewsCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "Акции и предложения" {
-            return CGSize(width: view.frame.size.width, height: 200.0)
+            return CGSize(width: view.frame.size.width - 32, height: 200.0)
         
         } else if title == "Заявки" {
             if indexPath.row == data[indexPath.section]!.count - 2 {
-                return CGSize(width: view.frame.size.width, height: 50.0)
+                return CGSize(width: view.frame.size.width - 32, height: 50.0)
             }
             let cell = RequestCell.fromNib()
-            cell?.display(data[indexPath.section]![indexPath.row + 1] as! RequestCellData)
+            if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
+                cell?.display(requestData)
+            }
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "К оплате" {
-            return CGSize(width: view.frame.size.width, height: 80.0)
+            return CGSize(width: view.frame.size.width - 32, height: 80.0)
         
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else {
-            return CGSize(width: view.frame.size.width, height: 100.0)
+            return CGSize(width: view.frame.size.width - 32, height: 100.0)
         }
     }
     
@@ -222,7 +240,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestCell", for: indexPath) as! RequestCell
-                cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestCellData)
+                if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
+                    cell.display(requestData)
+                }
                 return cell
             }
         
@@ -257,7 +277,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return newsSize!
             
         } else {
-            return CGSize(width: view.frame.size.width, height: 40.0)
+            return CGSize(width: view.frame.size.width, height: 55.0)
         }
     }
     
@@ -808,8 +828,8 @@ class SurveyCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
-        cell?.questions.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 55
+        cell?.questions.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 55
         return cell
     }
     
@@ -847,9 +867,9 @@ final class NewsCell: UICollectionViewCell {
                 cell = cellView
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 25
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
-        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
+        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
         return cell
     }
 }
@@ -977,8 +997,8 @@ final class RequestCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 55
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 55
         return cell
     }
 }
@@ -1097,8 +1117,8 @@ final class SchetCell: UICollectionViewCell {
                 cell = cellView
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 25
-        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
+        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
         return cell
     }
 }
