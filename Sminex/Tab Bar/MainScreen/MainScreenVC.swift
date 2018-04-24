@@ -165,6 +165,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             header.backgroundColor = .white
         }
         
+        if #available(iOS 11.0, *) {
+            header.clipsToBounds = false
+            header.layer.cornerRadius = 4
+            header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        } else {
+            let rectShape = CAShapeLayer()
+            rectShape.bounds = header.frame
+            rectShape.position = header.center
+            rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+            header.layer.mask = rectShape
+        }
+        
         return header
     }
     
@@ -219,11 +231,37 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if title == "Опросы" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SurveyCell", for: indexPath) as! SurveyCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else if title == "Новости" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCell", for: indexPath) as! NewsCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else if title == "Акции и предложения" {
@@ -236,6 +274,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if indexPath.row == data[indexPath.section]!.count - 2 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestAddCell", for: indexPath) as! RequestAddCell
                 cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestAddCellData, delegate: self)
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
                 return cell
                 
             } else {
@@ -249,11 +298,37 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if title == "К оплате" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ForPayCell", for: indexPath) as! ForPayCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! ForPayCellData)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else if title == "Счетчики" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ScetCell", for: indexPath) as! SchetCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData, delegate: self)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else {
@@ -786,6 +861,7 @@ final class CellsHeader: UICollectionReusableView {
             self.detail.setTitle("Все", for: .normal)
         }
     }
+    
 }
 
 private final class CellsHeaderData: MainDataProtocol {
