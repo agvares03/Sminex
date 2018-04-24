@@ -120,11 +120,12 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         if numberPhone_ != "" {
             txtNameLS.text  = "Номер телефона"
             NameLS.text     = numberPhone_
-            descTxt.text = "Отправлен на телефон \(numberPhone_) (действует в течение 10 минут). Запросить новый код можно через минуту"
+            descTxt.text    = "Отправлен на телефон \(numberPhone_) (действует в течение 10 минут). Запросить новый код можно через минуту"
             
         } else {
             txtNameLS.text  = "Номер лицевого счета"
             NameLS.text     = numberLs_
+            descTxt.text    = ""
         }
         
         if !isReg_ {
