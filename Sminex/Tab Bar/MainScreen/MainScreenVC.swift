@@ -185,7 +185,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "Акции и предложения" {
-            return CGSize(width: view.frame.size.width - 32, height: 200.0)
+            return CGSize(width: view.frame.size.width, height: 200.0)
         
         } else if title == "Заявки" {
             if indexPath.row == data[indexPath.section]!.count - 2 {
@@ -997,8 +997,8 @@ final class RequestCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 55
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 55
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 75
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 75
         return cell
     }
 }
