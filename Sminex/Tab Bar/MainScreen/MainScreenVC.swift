@@ -476,7 +476,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if date != "" {
                         date.removeLast(9)
                     }
-                    let lastComm = rowComms[$0.id!]?[(rowComms[$0.id!]?.count)! - 1]
+                    if (rowComms[$0.id!]?.count ?? 0) <= 0 { return }
+                    let lastComm = rowComms[$0.id!]?[(rowComms[$0.id!]?.count ?? 1) - 1]
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1
                     }

@@ -39,10 +39,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             // Если нет телефона у лиц. счета -      txtDesc = "По лицевому счету " + edLS + " не обнаружен привязанный телефон".
             // Если указанный телефон не обнаружен - txtDesc = "Телефон " + edLS + " не привязан ни к одному лицевому счету".
             // Если все ок - переходим на страницу ввода кода смс
-            
+
             if isReg_ {
                 registration()
-            
+
             } else {
                 forgotPass()
             }

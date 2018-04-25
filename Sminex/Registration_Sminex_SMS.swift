@@ -29,9 +29,9 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             descTxt.text = "Введите код доступа"
             return
         }
-    
+
         self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
-        
+
         startLoading()
 
         var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
@@ -162,6 +162,18 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         view.endEditing(true)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         
@@ -234,6 +246,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             
             vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
             vc.phone_ = response[1]
+            vc.isReg_ = isReg_
         }
     }
     

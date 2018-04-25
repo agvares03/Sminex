@@ -58,6 +58,7 @@ final class Server {
     static let PAY_ONLINE          = "PayOnline.ashx?"                 // Оплата счета
     static let GET_NEWS            = "GetNews.ashx?"                   // Получение списка новостей
     static let GET_CONTACTS        = "GetContacts.ashx?"               // Получение списка контактов
+    static let SEND_MESSAGE        = "SendEmailMessage.ashx?"          // Отправка сообщения в тех. поддержку
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

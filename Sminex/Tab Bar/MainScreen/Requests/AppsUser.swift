@@ -352,6 +352,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         date.removeLast(9)
                     }
                     
+                    if (self.rowComms[$0.id!]?.count ?? 0) <= 0 { return }
                     let lastComm = self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     self.data.append( AppsUserCellData(title: $0.name!,

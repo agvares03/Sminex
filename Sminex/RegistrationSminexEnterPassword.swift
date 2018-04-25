@@ -27,23 +27,23 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
         guard (passTextField.text?.count ?? 0) > 0 else {
-            
+
             descTxt.textColor = .red
             descTxt.text = "Заполните поле"
-            
+
             return
         }
-        
+
         startAnimation()
-        
+
         var request = URLRequest(url: URL(string: Server.SERVER + Server.CHANGE_PASSWRD + "login=" + login_ + "&pwd=" + (passTextField.text ?? ""))!)
         request.httpMethod = "GET"
-        
+
         URLSession.shared.dataTask(with: request) {
             data, response, error in
-            
+
             if error != nil {
-                
+
                 DispatchQueue.main.async(execute: {
                     self.stopAnimation()
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
@@ -53,22 +53,22 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                 })
                 return
             }
-            
+
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
-            
+
             #if DEBUG
                 print("responseString = \(self.responseString)")
             #endif
-            
+
             DispatchQueue.main.async {
-                
+
                 if self.responseString.contains(find: "error") {
                     self.stopAnimation()
                     self.descTxt.text = self.responseString.replacingOccurrences(of: "error:", with: "")
                     self.descTxt.textColor = .red
-                    
+
                 } else {
-                    
+
                     self.makeAuth()
                 }
             }
@@ -97,6 +97,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         }
     }
     
+    open var isReg_     = false
     open var login_     = ""
     open var phone_     = ""
     
@@ -132,6 +133,18 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.isNavigationBarHidden  = false
     }
     
     // Двигаем view вверх при показе клавиатуры
@@ -376,7 +389,13 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                 db.del_db(table_name: "Comments")
                 db.parse_Apps(login: login_, pass: passTextField.text ?? "", isCons: "0")
                 
-                performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toAppsUser, sender: self)
+                if !isReg_ {
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
+                
+                } else {
+                    performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toComplete, sender: self)
+                }
                 
             }
         }
@@ -411,6 +430,11 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     
+        if segue.identifier == Segues.fromRegistrationSminexEnterPassword.toComplete {
+            let vc = (segue.destination as! UINavigationController).topViewController as! AccountSettingsVC
+            vc.isReg_ = true
+        }
         
         // Поправим текущий UI перед переходом
         keyboardWillHide(sender: nil)

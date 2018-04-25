@@ -160,6 +160,7 @@ struct Segues {
         
         static let toAppCons         = "appsCons"
         static let toAppsUser        = "toAppsUser"
+        static let toComplete        = "toComplete"
     }
     
     struct fromMainScreenVC {
@@ -216,6 +217,7 @@ struct Segues {
         
         static let toChangePassword   = "accountChangePassword"
         static let toChangeNotific    = "changeNotifications"
+        static let toMain             = "toMain"
     }
     
     struct fromAccountChangePasswordVC {
