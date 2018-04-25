@@ -11,8 +11,11 @@ import UIKit
 final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet private weak var loader:              UIActivityIndicatorView!
+    @IBOutlet private weak var saveButtonTop:       NSLayoutConstraint!
     @IBOutlet private weak var scroll:              UIScrollView!
     @IBOutlet private weak var accountImageView:    UIImageView!
+    @IBOutlet private weak var changePasswordImg:   UIImageView!
+    @IBOutlet private weak var notificationsImg:    UIImageView!
     @IBOutlet private weak var familyNameField:     UITextField!
     @IBOutlet private weak var otchestvoField:  	UITextField!
     @IBOutlet private weak var contactNumber:       UITextField!
@@ -22,8 +25,12 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBOutlet private weak var lsLabel:             UITextField!
     @IBOutlet private weak var email:               UITextField!
     @IBOutlet private weak var saveButton:          UIButton!
+    @IBOutlet private weak var exitButton:          UIButton!
     @IBOutlet private weak var changePassword:  	UILabel!
     @IBOutlet private weak var notifications:   	UILabel!
+    @IBOutlet private weak var changePasswordTop:   UILabel!
+    @IBOutlet private weak var changePasswordBtm:   UILabel!
+    @IBOutlet private weak var notificationsBtm:    UILabel!
     
     @IBAction private func imageViewPressed(_ sender: UIButton) {
         
@@ -70,8 +77,23 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         editAccountInfo()
     }
     
+    open var isReg_ = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if isReg_ {
+            title                       = "Регистрация"
+            exitButton.isHidden         = true
+            changePassword.isHidden     = true
+            notifications.isHidden      = true
+            changePasswordImg.isHidden  = true
+            notificationsImg.isHidden   = true
+            changePasswordTop.isHidden  = true
+            changePasswordBtm.isHidden  = true
+            notificationsBtm.isHidden   = true
+            saveButtonTop.constant      = -130
+        }
         
         automaticallyAdjustsScrollViewInsets = false
         DispatchQueue.global(qos: .userInitiated).async {
@@ -158,12 +180,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             defer {
                 DispatchQueue.main.sync {
                     self.stopAnimator()
-                    
-                    #if DEBUG
-                    print(String(data: data!, encoding: .utf8)!)
-                    #endif
                 }
             }
+            guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
@@ -174,6 +193,17 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 }
                 return
             }
+            
+            if self.isReg_ {
+                DispatchQueue.main.sync {
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
+                }
+            }
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            #endif
         
         }.resume()
     }

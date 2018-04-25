@@ -10,6 +10,14 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--UITabBarController-An5-M4-dcq-->
+        <scene sceneID="h7l-k6-ue8">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="UITabBarController-An5-M4-dcq" id="koh-KA-KaD" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Blr-TC-Nhk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1625" y="-81"/>
+        </scene>
         <!--Настройки-->
         <scene sceneID="f2p-XG-acN">
             <objects>
@@ -396,20 +404,28 @@
                     <connections>
                         <outlet property="accountImageView" destination="Wm3-AY-FyS" id="tXE-1J-6gG"/>
                         <outlet property="changePassword" destination="0vS-Se-xHj" id="SNt-fl-onj"/>
+                        <outlet property="changePasswordBtm" destination="nwF-5b-aLm" id="Kcv-jV-x11"/>
+                        <outlet property="changePasswordImg" destination="FFa-TR-YGj" id="Q0B-4N-Jvd"/>
+                        <outlet property="changePasswordTop" destination="cPR-pn-5it" id="6N9-Fa-ima"/>
                         <outlet property="commentField" destination="njV-np-br0" id="kgq-eI-Njf"/>
                         <outlet property="contactNumber" destination="uVS-q1-m74" id="ZgM-6C-Btl"/>
                         <outlet property="email" destination="Ojg-U4-vQ0" id="YrH-qd-48j"/>
+                        <outlet property="exitButton" destination="swl-K5-Uui" id="aFT-AL-Gs1"/>
                         <outlet property="familyNameField" destination="cz6-fT-lyo" id="aP4-td-3Ak"/>
                         <outlet property="loader" destination="zIP-wF-Y55" id="PMe-Kd-Gfb"/>
                         <outlet property="lsLabel" destination="TT6-Aq-d3l" id="Tat-01-shN"/>
                         <outlet property="nameField" destination="wUp-Wt-zh4" id="xdv-IB-eeI"/>
                         <outlet property="notifications" destination="bGv-k6-3h2" id="BlL-YJ-0JN"/>
+                        <outlet property="notificationsBtm" destination="GPa-U4-BtV" id="FkP-mF-yf7"/>
+                        <outlet property="notificationsImg" destination="pe5-GI-cfi" id="xdm-Qx-Z6j"/>
                         <outlet property="otchestvoField" destination="UXq-D3-Nkq" id="fuc-g7-C86"/>
                         <outlet property="privNumber" destination="Fr5-5R-9B8" id="0bZ-zG-DW8"/>
                         <outlet property="saveButton" destination="hFh-vW-z4d" id="BYu-pp-bxg"/>
+                        <outlet property="saveButtonTop" destination="nUD-R8-5Bk" id="pbL-fx-Qcb"/>
                         <outlet property="scroll" destination="Zth-kM-Gil" id="puF-fT-ZQr"/>
                         <segue destination="hwT-0i-uGh" kind="show" identifier="accountChangePassword" id="DFv-Uq-9cP"/>
                         <segue destination="yV0-2P-hvS" kind="show" identifier="changeNotifications" id="gEN-JO-Tqj"/>
+                        <segue destination="koh-KA-KaD" kind="show" identifier="toMain" id="yYO-cf-yTl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ci-9i-wqJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
