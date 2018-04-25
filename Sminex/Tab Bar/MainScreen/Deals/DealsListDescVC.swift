@@ -128,9 +128,9 @@ final class DealsListDescHeader: UICollectionReusableView {
                 cell = view
             }
         }
-        cell?.titleLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 50
-        cell?.bodyLabel.preferredMaxLayoutWidth  = (cell?.frame.size.width ?? 0.0) - 50
-        cell?.linksLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 50
+        cell?.titleLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 75
+        cell?.bodyLabel.preferredMaxLayoutWidth  = (cell?.frame.size.width ?? 0.0) - 75
+        cell?.linksLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 75
         return cell
     }
 }
