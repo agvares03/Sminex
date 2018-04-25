@@ -13,11 +13,7 @@ import DeviceKit
 
 final class ViewController: UIViewController, UITextFieldDelegate {
     
-    // Картинка вверху
-    @IBOutlet private weak var fon_top:     UIImageView!
-    @IBOutlet private weak var new_face:    UIImageView!
-    @IBOutlet private weak var new_zamoc:   UIImageView!
-    
+    @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var edLogin:     UITextField!
     @IBOutlet private weak var edPass:      UITextField!
@@ -28,6 +24,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
+    @IBOutlet private weak var sprtLabel:   UILabel!
     @IBOutlet private weak var lsLabel:     UILabel!
     @IBOutlet private weak var lineForgot:  UILabel!
     @IBOutlet private weak var lineReg:     UILabel!
@@ -45,8 +42,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     // Долги - ДомЖилСервис
     private var debtDate       = "0"
     private var debtSum        = 0.0
-    private var debtSumAll    = 0.0
-    private var debtOverSum   = 0.0
+    private var debtSumAll     = 0.0
+    private var debtOverSum    = 0.0
     
     private var ls = ""
     
@@ -100,7 +97,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         edLogin.delegate = self
-        edPass.delegate = self
+        edPass.delegate  = self
         
         edLogin.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         edPass.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -123,6 +120,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        print((view.frame.size.height - sprtLabel.frame.origin.x))
+        print(view.frame.size.height)
+        print(sprtLabel.frame.origin.x)
+//        sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.x) - 100
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
@@ -131,6 +133,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
+        
+//        sprtTop.constant += 200
         
         if isNeedToScroll() {
             
@@ -146,6 +150,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
+        
+//        sprtTop.constant -= 200
         
         if isNeedToScroll() {
             view.frame.origin.y = 0
