@@ -936,8 +936,8 @@ final class NewsCell: UICollectionViewCell {
         
         if item.date != "" {
             let df = DateFormatter()
-            df.dateFormat = "YYYY-MM-DD"
-            date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "DD MMMM")
+            df.dateFormat = "yyyy-MM-dd"
+            date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
         }
     }
     
