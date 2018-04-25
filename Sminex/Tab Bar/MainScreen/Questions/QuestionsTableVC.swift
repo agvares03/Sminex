@@ -47,6 +47,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
+        emptyLabel.isHidden = true
         getQuestions()
     }
     
@@ -93,11 +94,9 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                     }
                     
                     if self.questions?.count == 0 {
-                        self.collection.isHidden = true
                         self.emptyLabel.isHidden = false
                     
                     } else {
-                        self.collection.isHidden = false
                         self.emptyLabel.isHidden = true
                     }
                     

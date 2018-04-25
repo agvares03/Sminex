@@ -39,6 +39,8 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
             date.text = dayDifference(from: df.date(from: data_?.dateStart ?? "") ?? Date(), style: "dd MMMM yyyy, hh:mm")
         }
         
+        print(data_?.headerImage)
+        
         if data_?.headerImage == nil || data_?.headerImage == "" {
             titleTop.constant = 16
             image.isHidden = true

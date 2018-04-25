@@ -137,6 +137,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 60.0)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 {
             return CGSize(width: view.frame.size.width, height: 100.0)
