@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import DeviceKit
 
 final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
+    @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var edLsTop:     NSLayoutConstraint!
     @IBOutlet private weak var btnGoTop:    NSLayoutConstraint!
     @IBOutlet private weak var edLS:        UITextField!
@@ -17,6 +19,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @IBOutlet private weak var backButton:  UIButton!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var txtDesc:     UILabel!
+    @IBOutlet private weak var sprtLabel:   UILabel!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var backView:    UIView!
     
@@ -32,26 +35,28 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     @IBAction private func btn_go_action(_ sender: UIButton) {
         
-        if edLS.text != "" {
-            self.startAnimation()
-            // Здесь мы проверяем есть ли лиц. счет или номер телефона
-            // Если нет лиц. счета -                 txtDesc = "Лицевой счет " + edLS + " не зарегистрирован".
-            // Если нет телефона у лиц. счета -      txtDesc = "По лицевому счету " + edLS + " не обнаружен привязанный телефон".
-            // Если указанный телефон не обнаружен - txtDesc = "Телефон " + edLS + " не привязан ни к одному лицевому счету".
-            // Если все ок - переходим на страницу ввода кода смс
-
-            if isReg_ {
-                registration()
-
-            } else {
-                forgotPass()
-            }
-        } else {
-            let alert = UIAlertController(title: "Ошибка", message: "Укажите лиц. счет или номер телефона, привязанного к лиц. счету", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true, completion: nil)
-        }
+        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
+        
+//        if edLS.text != "" {
+//            self.startAnimation()
+//            // Здесь мы проверяем есть ли лиц. счет или номер телефона
+//            // Если нет лиц. счета -                 txtDesc = "Лицевой счет " + edLS + " не зарегистрирован".
+//            // Если нет телефона у лиц. счета -      txtDesc = "По лицевому счету " + edLS + " не обнаружен привязанный телефон".
+//            // Если указанный телефон не обнаружен - txtDesc = "Телефон " + edLS + " не привязан ни к одному лицевому счету".
+//            // Если все ок - переходим на страницу ввода кода смс
+//
+//            if isReg_ {
+//                registration()
+//
+//            } else {
+//                forgotPass()
+//            }
+//        } else {
+//            let alert = UIAlertController(title: "Ошибка", message: "Укажите лиц. счет или номер телефона, привязанного к лиц. счету", preferredStyle: .alert)
+//            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//            alert.addAction(cancelAction)
+//            self.present(alert, animated: true, completion: nil)
+//        }
         
     }
     
@@ -205,6 +210,13 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         recognizer.delegate = self
         backView.addGestureRecognizer(recognizer)
         backView.isUserInteractionEnabled = true
+        
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 120
+        
+        } else {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 220
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -220,31 +232,22 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
+            
+        if !isNeedToScrollMore() {
+            sprtTop.constant -= 200
         
-        if isNeedToScroll() {
-            
-            if isNeedToScrollMore() {
-//                scroll.contentSize.height += 70
-//                scroll.contentOffset = CGPoint(x: 0, y: 130)
-            
-            } else {
-//                view.frame.origin.y = -70
-            }
+        } else {
+            sprtTop.constant -= 120
         }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         
-        if isNeedToScroll() {
-            
-            if isNeedToScrollMore() {
-//                scroll.contentSize.height -= 70
-//                scroll.contentOffset = CGPoint(x: 0, y: 0)
-                
-            } else {
-//                view.frame.origin.y = 0
-            }
+        if !isNeedToScrollMore() {
+            sprtTop.constant += 200
+        } else {
+            sprtTop.constant += 120
         }
     }
     
@@ -312,9 +315,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        // Поправим текущий UI перед переходом
-        keyboardWillHide(sender: nil)
+        view.endEditing(true)
         
         if segue.identifier == Segues.fromRegistrationSminex.toRegStep1 {
             

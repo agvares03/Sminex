@@ -13,6 +13,8 @@ import Arcane
 
 final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecognizerDelegate {
     
+    @IBOutlet private weak var sprtBtm:         NSLayoutConstraint!
+    @IBOutlet private weak var sprtTop:         NSLayoutConstraint!
     @IBOutlet private weak var saveButtonTop:   NSLayoutConstraint!
     @IBOutlet private weak var saveButton:      UIButton!
     @IBOutlet private weak var passTextField:   UITextField!
@@ -23,6 +25,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @IBOutlet private weak var backView:        UIView!
     @IBOutlet private weak var lsText:          UILabel!
     @IBOutlet private weak var lsDesc:          UILabel!
+    @IBOutlet private weak var sprtLabel:       UILabel!
     
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
@@ -129,6 +132,13 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         recognizer.delegate = self
         backView.isUserInteractionEnabled = true
         backView.addGestureRecognizer(recognizer)
+        
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 100
+            
+        } else {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 200
+        }
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
@@ -150,30 +160,24 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         
-        if isNeedToScroll() {
-            
-            if isNeedToScrollMore() {
-                scroll.contentSize.height += 30
-                scroll.contentOffset = CGPoint(x: 0, y: 30)
-            
-            } else {
-//                view.frame.origin.y = -50
-            }
+        if !isNeedToScrollMore() {
+            sprtTop.constant -= 200
+        
+        } else {
+            sprtTop.constant -= 100
+            sprtBtm.constant += 220
         }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         
-        if isNeedToScroll() {
+        if !isNeedToScrollMore() {
+            sprtTop.constant += 200
             
-            if isNeedToScrollMore() {
-                scroll.contentSize.height -= 30
-                scroll.contentOffset = CGPoint(x: 0, y: 0)
-                
-            } else {
-//                view.frame.origin.y = 0
-            }
+        } else {
+            sprtTop.constant += 100
+            sprtBtm.constant -= 220
         }
     }
     

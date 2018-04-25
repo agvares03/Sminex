@@ -10,9 +10,11 @@ import UIKit
 import FirebaseMessaging
 import Arcane
 import DeviceKit
+import Gloss
 
 final class ViewController: UIViewController, UITextFieldDelegate {
     
+    @IBOutlet private weak var sprtBtm:     NSLayoutConstraint!
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var edLogin:     UITextField!
@@ -49,6 +51,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction private func enter(_ sender: UIButton) {
         
+        view.endEditing(true)
         // Проверка на заполнение
         var ret     = false;
         var message = ""
@@ -121,10 +124,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        print((view.frame.size.height - sprtLabel.frame.origin.x))
-        print(view.frame.size.height)
-        print(sprtLabel.frame.origin.x)
-//        sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.x) - 100
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 75
+        
+        } else {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 170
+        }
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
@@ -134,7 +139,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         
-//        sprtTop.constant += 200
+        if !isNeedToScrollMore() {
+            sprtTop.constant -= 200
+        
+        } else {
+            sprtTop.constant -= 100
+            sprtBtm.constant += 200
+        }
         
         if isNeedToScroll() {
             
@@ -151,7 +162,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         
-//        sprtTop.constant -= 200
+        if !isNeedToScrollMore() {
+            sprtTop.constant += 200
+        
+        } else {
+            sprtTop.constant += 100
+            sprtBtm.constant -= 200
+        }
         
         if isNeedToScroll() {
             view.frame.origin.y = 0
@@ -423,10 +440,36 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             }.resume()
     }
     
+    private func getContacts(login: String, pwd: String) {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_CONTACTS + "login=" + login + "&pwd=" + pwd)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            TemporaryHolder.instance.contactsList = ContactsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            }.resume()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        // Поправим текущий UI перед переходом
-        keyboardWillHide(sender: nil)
+        view.endEditing(true)
         
         if segue.identifier == Segues.fromViewController.toForget {
             
@@ -437,6 +480,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             let regVC = segue.destination as! Registration_Sminex
             regVC.isReg_ = true
+        
+        } else if segue.identifier == Segues.fromViewController.toAppsUser {
+            let login = UserDefaults.standard.string(forKey: "login") ?? ""
+            getContacts(login: login, pwd: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: login)))
         }
         
     }

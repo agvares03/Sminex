@@ -67,11 +67,11 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         didSet {
             if imgs.count == 0 {
                 imgsHeight.constant = 1
-                sendButtonTop.constant += 100
+                sendButtonTop.constant += 149
             
             } else {
                 imgsHeight.constant = 150
-                sendButtonTop.constant -= 100
+                sendButtonTop.constant -= 150
             }
             drawImages()
         }
@@ -93,11 +93,15 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        sendButtonTop.constant = (view.frame.size.height / 2) - 100
-        
         problemTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         emailTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         lsTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            sendButtonTop.constant = (view.frame.size.height - sendButton.frame.origin.y) + 50
+        } else {
+            sendButtonTop.constant = (view.frame.size.height - sendButton.frame.origin.y) - 50
+        }
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -121,26 +125,71 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         
         scroll.contentSize.height += 200
         
-        if imgs.count != 0 {
-            sendButtonBottom.constant += 220
-        }
-        if !isNeedToScroll() && imgs.count == 0 { return }
+        if !isNeedToScroll() {
+            
+            if Device().isOneOf([.iPhone6, .iPhone6s, .simulator(.iPhone6), .simulator(.iPhone6s)]) && imgs.count != 0 {
+                sendButtonBottom.constant += 220
+                sendButtonTop.constant    -= 190
+                return
+            }
+            
+            sendButtonTop.constant -= 210
         
-        sendButtonTop.constant = 20
+        } else {
+            if !isNeedToScrollMore() {
+                if imgs.count == 0 {
+                    sendButtonTop.constant -= 210
+                    
+                } else {
+                    sendButtonBottom.constant += 60
+                    sendButtonTop.constant    -= 60
+                }
+            
+            } else {
+                if imgs.count == 0 {
+                    sendButtonTop.constant    -= 120
+                    sendButtonBottom.constant += 220
+                
+                } else {
+                    sendButtonBottom.constant += 220
+//                    sendButtonTop.constant    -= 60
+                }
+            }
+        }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         scroll.contentSize.height -= 200
-        if !isNeedToScroll() && imgs.count == 0 { return }
         
-        if imgs.count == 0 {
-            sendButtonTop.constant = (view.frame.size.height / 2) - 100
-        
-        } else {
+        if Device().isOneOf([.iPhone6, .iPhone6s, .simulator(.iPhone6), .simulator(.iPhone6s)]) && imgs.count != 0 {
             sendButtonBottom.constant -= 220
-            sendButtonTop.constant = (view.frame.size.height / 2) - 200
+            sendButtonTop.constant    += 190
+            return
+        }
+        
+        if !isNeedToScroll() {
+            sendButtonTop.constant += 210
+            
+        } else {
+            if !isNeedToScrollMore() {
+                if imgs.count == 0 {
+                    sendButtonTop.constant += 210
+                    
+                } else {
+                    sendButtonBottom.constant -= 60
+                    sendButtonTop.constant    += 60
+                }
+            } else {
+                if imgs.count == 0 {
+                    sendButtonTop.constant    += 120
+                    sendButtonBottom.constant -= 220
+                
+                } else {
+                    sendButtonBottom.constant -= 220
+                }
+            }
         }
     }
     

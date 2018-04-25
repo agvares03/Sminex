@@ -11,6 +11,8 @@ import DeviceKit
 
 final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
+    @IBOutlet private weak var sprtBottom:  NSLayoutConstraint!
+    @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var txtNameLS:   UILabel!
     @IBOutlet private weak var NameLS:      UILabel!
     @IBOutlet private weak var descTxt:     UILabel!
@@ -21,51 +23,54 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var againLabel:  UIButton!
     @IBOutlet private weak var againLine:   UILabel!
+    @IBOutlet private weak var sprtLabel:   UILabel!
     @IBOutlet private weak var backView:    UIView!
     
     @IBAction private func btn_go_touch(_ sender: UIButton) {
         
-        guard (smsField.text?.count ?? 0) >= 0 else {
-            descTxt.text = "Введите код доступа"
-            return
-        }
-
         self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
-
-        startLoading()
-
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
-        request.httpMethod = "GET"
-
-        if !isReg_ {
-            request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REM + "smsCode=" + (smsField.text ?? ""))!)
-            request.httpMethod = "GET"
-        }
-
-        URLSession.shared.dataTask(with: request) {
-            data, response, error in
-
-            if error != nil {
-
-                DispatchQueue.main.async {
-                    self.endLoading()
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-
-            self.responseString = String(data: data!, encoding: .utf8) ?? ""
-
-            #if DEBUG
-                print(self.responseString)
-            #endif
-
-            self.choise()
-
-            }.resume()
+        
+//        guard (smsField.text?.count ?? 0) >= 0 else {
+//            descTxt.text = "Введите код доступа"
+//            return
+//        }
+//
+//        self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
+//
+//        startLoading()
+//
+//        var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
+//        request.httpMethod = "GET"
+//
+//        if !isReg_ {
+//            request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REM + "smsCode=" + (smsField.text ?? ""))!)
+//            request.httpMethod = "GET"
+//        }
+//
+//        URLSession.shared.dataTask(with: request) {
+//            data, response, error in
+//
+//            if error != nil {
+//
+//                DispatchQueue.main.async {
+//                    self.endLoading()
+//                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+//                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//                    alert.addAction(cancelAction)
+//                    self.present(alert, animated: true, completion: nil)
+//                }
+//                return
+//            }
+//
+//            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+//
+//            #if DEBUG
+//                print(self.responseString)
+//            #endif
+//
+//            self.choise()
+//
+//            }.resume()
     }
     
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
@@ -153,7 +158,12 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         backView.isUserInteractionEnabled = true
         backView.addGestureRecognizer(recognizer)
         
-        
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 120
+            
+        } else {
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 220
+        }
         
         startTimer()
     }
@@ -177,30 +187,24 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         
-        if isNeedToScroll() {
-            
-            if isNeedToScrollMore() {
-                scroll.contentSize.height += 10
-                scroll.contentOffset = CGPoint(x: 0, y: 60)
-            
-            } else {
-//                view.frame.origin.y = -30
-            }
+        if !isNeedToScrollMore() {
+            sprtTop.constant -= 200
+        
+        } else {
+            sprtTop.constant    -= 120
+            sprtBottom.constant += 200
         }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         
-        if isNeedToScroll() {
+        if !isNeedToScrollMore() {
+            sprtTop.constant += 200
             
-            if isNeedToScrollMore() {
-                scroll.contentSize.height -= 10
-                scroll.contentOffset = CGPoint(x: 0, y: 0)
-            
-            } else {
-//                view.frame.origin.y = 0
-            }
+        } else {
+            sprtTop.constant    += 120
+            sprtBottom.constant -= 200
         }
     }
     
@@ -235,17 +239,15 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        // Поправим текущий UI перед переходом
-        keyboardWillHide(sender: nil)
+        view.endEditing(true)
         
         if segue.identifier == Segues.fromRegistrationSminexSMS.toEnterPassword {
             let vc = segue.destination as! RegistrationSminexEnterPassword
             
             let response = responseString.components(separatedBy: ";")
             
-            vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
-            vc.phone_ = response[1]
+//            vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
+//            vc.phone_ = response[1]
             vc.isReg_ = isReg_
         }
     }
