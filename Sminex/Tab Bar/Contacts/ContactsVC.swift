@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageUI
+import Gloss
 
 private protocol ContactsCellDelegate: class {
     func phonePressed(_ phone: String)
@@ -197,6 +198,30 @@ final class ContactsCell: UICollectionViewCell {
     }
 }
 
+
+final class ContactsDataJson: JSONDecodable {
+    
+    let data: [ContactsJson]?
+    
+    init?(json: JSON) {
+        data = "data" <~~ json
+    }
+}
+
+final class ContactsJson: JSONDecodable {
+    
+    let name: String?
+    let description: String?
+    let phone: String?
+    let email: String?
+    
+    init?(json: JSON) {
+        description = "Description" <~~ json
+        phone       = "Phone"       <~~ json
+        email       = "Email"       <~~ json
+        name        = "Name"        <~~ json
+    }
+}
 
 
 

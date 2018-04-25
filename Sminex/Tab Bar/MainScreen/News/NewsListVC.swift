@@ -158,7 +158,12 @@ final class NewsListCell: UICollectionViewCell {
         
         title.text  = item.header
         desc.text   = item.shortContent
-        date.text   = item.dateStart
+        
+        if item.dateStart != "" {
+            let df = DateFormatter()
+            df.dateFormat = "yyyy-MM-dd"
+            date.text = dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "dd MMMM")
+        }
     }
     
     class func fromNib() -> NewsListCell? {
@@ -170,7 +175,7 @@ final class NewsListCell: UICollectionViewCell {
             }
         }
         cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 25
-        cell?.desc.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 25
+        cell?.desc.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 150
         return cell
     }
 }

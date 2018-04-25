@@ -32,7 +32,12 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         webView.loadHTMLString(data_?.text ?? "", baseURL: nil)
         
         titleLabel.text = data_?.header
-        date.text = data_?.dateStart
+        
+        if data_?.dateStart != "" {
+            let df = DateFormatter()
+            df.dateFormat = "yyyy-MM-dd"
+            date.text = dayDifference(from: df.date(from: data_?.dateStart ?? "") ?? Date(), style: "dd MMMM yyyy, hh:mm")
+        }
         
         if data_?.headerImage == nil || data_?.headerImage == "" {
             titleTop.constant = 16
