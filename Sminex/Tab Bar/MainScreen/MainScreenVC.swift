@@ -502,6 +502,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if returnArr.count != 0 {
             ret.append(returnArr.popLast()!)
         }
+        if returnArr.count != 0 {
+            ret.append(returnArr.popLast()!)
+        }
         return ret
     }
     
@@ -574,15 +577,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     if filtered.count == 0 {
                         self.questionSize = CGSize(width: 0, height: 0)
-                    }
-                    if filtered.count == 1 {
+                    
+                    } else {
                         self.questionSize = nil
-                        self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
-                    }
-                    if filtered.count > 1 {
-                        self.questionSize = nil
-                        self.data[0]![1] = SurveyCellData(title: filtered.last?.name ?? "", question: "\(filtered.last?.questions?.count ?? 0) вопросов")
-                        self.data[0]![2] = SurveyCellData(title: filtered[filtered.count - 2].name!, question: "\(filtered[filtered.count - 2].questions?.count ?? 0) вопросов")
+                        var count = 1
+                        filtered.forEach {
+                            self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
+                            count += 1
+                        }
                     }
                     TemporaryHolder.instance.menuQuesions = filtered.count
                 
