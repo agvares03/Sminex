@@ -24,7 +24,7 @@ final class FinancePayAcceptVC: UIViewController {
     }
     
     @IBAction private func infoButtonPressed(_ sender: UIButton) {
-        url = URLRequest(url: URL(string: "http://tst.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentDescription.aspx")!)
+        url = URLRequest(url: URL(string: "http://client.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentDescriptionMobile.aspx")!)
         performSegue(withIdentifier: Segues.fromFinancePayAcceptVC.toPay, sender: self)
     }
     
@@ -86,7 +86,7 @@ final class FinancePayAcceptVC: UIViewController {
     }
     
     @objc private func offerTapped(_ sender: UITapGestureRecognizer) {
-        url = URLRequest(url: URL(string: "http://tst.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentOffer.aspx")!)
+        url = URLRequest(url: URL(string: "http://client.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentOffer.aspx")!)
         performSegue(withIdentifier: Segues.fromFinancePayAcceptVC.toPay, sender: self)
     }
     
