@@ -10,6 +10,7 @@ import UIKit
 import DeviceKit
 import FirebaseMessaging
 import Arcane
+import Gloss
 
 final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecognizerDelegate {
     
@@ -433,14 +434,42 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             }.resume()
     }
     
+    private func getContacts(login: String, pwd: String) {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_CONTACTS + "login=" + login + "&pwd=" + pwd)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            TemporaryHolder.instance.contactsList = ContactsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            }.resume()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     
+        
+        view.endEditing(true)
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        getContacts(login: login, pwd: getHash(pass: login, salt: getSalt(login: login)))
+        
         if segue.identifier == Segues.fromRegistrationSminexEnterPassword.toComplete {
             let vc = (segue.destination as! UINavigationController).topViewController as! AccountSettingsVC
             vc.isReg_ = true
         }
-        
-        // Поправим текущий UI перед переходом
-        keyboardWillHide(sender: nil)
     }
 }

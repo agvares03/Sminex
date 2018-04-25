@@ -276,4 +276,9 @@ struct Segues {
         static let toFinance         = "finance"
         static let toNews            = "news"
     }
+    
+    struct fromContactsVc {
+        
+        static let toSupport         = "authSupport"
+    }
 }

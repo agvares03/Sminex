@@ -20,6 +20,10 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
     
     @IBOutlet private weak var collection: UICollectionView!
     
+    @IBAction private func sendButtonPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: Segues.fromContactsVc.toSupport, sender: self)
+    }
+    
     private var data_: [ContactsJson] = []
     
     override func viewDidLoad() {
@@ -37,6 +41,13 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
         
         data_ = TemporaryHolder.instance.contactsList
         collection.reloadData()
+        navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.isNavigationBarHidden = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -129,7 +140,9 @@ final class ContactsHeader: UICollectionReusableView {
 
 final class ContactsCell: UICollectionViewCell {
     
-//    @IBOutlet private weak var phoneBottom:     NSLayoutConstraint!
+    @IBOutlet private weak var sendBtnHeight:   NSLayoutConstraint!
+    @IBOutlet private weak var phoneHeight:     NSLayoutConstraint!
+    @IBOutlet private weak var emailHeight:     NSLayoutConstraint!
     @IBOutlet private weak var messageImage:    UIImageView!
     @IBOutlet private weak var phoneImage:      UIImageView!
     @IBOutlet private weak var emailImage:      UIImageView!
@@ -148,21 +161,33 @@ final class ContactsCell: UICollectionViewCell {
         title.text = item.name
         desc.text  = item.description
         
+        if item.name?.contains(find: "оддержка") ?? false {
+            sendBtnHeight.constant = 40
+        
+        } else {
+            sendBtnHeight.constant = 0
+        }
+        
         if item.phone != nil && item.phone != "" {
+            phoneHeight.constant = 70.5
+            phoneView.isHidden   = false
+            
             if item.email != nil && item.email != "" {
-                emailView.isHidden  = false
-                phone.text          = item.phone
-                email.text          = item.email
+                emailView.isHidden   = false
+                emailHeight.constant = 75
+                phone.text           = item.phone
+                email.text           = item.email
             
             } else {
-                phone.text          = item.phone
-                emailView.isHidden  = true
-//                phoneBottom.constant = 25
+                phone.text           = item.phone
+                emailHeight.constant = 0
+                emailView.isHidden   = true
             }
         
         } else {
-            phoneView.isHidden  = true
-            email.text          = item.email
+            phoneView.isHidden   = true
+            phoneHeight.constant = 0
+            email.text           = item.email
         }
         
         messageImage.isUserInteractionEnabled = true

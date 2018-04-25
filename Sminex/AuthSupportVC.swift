@@ -67,19 +67,29 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         didSet {
             if imgs.count == 0 {
                 imgsHeight.constant = 1
-                sendButtonTop.constant += 149
+                sendButtonTop.constant = getPoint() + 149
+                
+                if isNeedToScrollMore() && tabBarController != nil {
+                    sendButtonTop.constant = getPoint() + 99
+                }
             
             } else {
                 imgsHeight.constant = 150
-                sendButtonTop.constant -= 150
+                sendButtonTop.constant = getPoint() - 150
+                
+                if isNeedToScrollMore() && tabBarController != nil {
+                    sendButtonTop.constant = getPoint() - 100
+                }
             }
             drawImages()
         }
     }
+    private var currPoint: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        currPoint = sendButton.frame.origin.y
         sendButton.isEnabled = false
         sendButton.alpha     = 0.5
         imgsHeight.constant  = 1
@@ -97,11 +107,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         emailTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         lsTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sendButtonTop.constant = (view.frame.size.height - sendButton.frame.origin.y) + 50
-        } else {
-            sendButtonTop.constant = (view.frame.size.height - sendButton.frame.origin.y) - 50
-        }
+        sendButtonTop.constant = getPoint()
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -138,21 +144,41 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         } else {
             if !isNeedToScrollMore() {
                 if imgs.count == 0 {
-                    sendButtonTop.constant -= 210
+                    if tabBarController == nil {
+                        sendButtonTop.constant -= 210
+                    } else {
+                        sendButtonTop.constant -= 180
+                    }
                     
                 } else {
-                    sendButtonBottom.constant += 60
-                    sendButtonTop.constant    -= 60
+                    if tabBarController == nil {
+                        sendButtonBottom.constant += 60
+                        sendButtonTop.constant    -= 60
+                    
+                    } else {
+                        sendButtonBottom.constant += 40
+                        sendButtonTop.constant    -= 40
+                    }
                 }
             
             } else {
                 if imgs.count == 0 {
-                    sendButtonTop.constant    -= 120
-                    sendButtonBottom.constant += 220
+                    if tabBarController == nil {
+                        sendButtonTop.constant    = getPoint() - 120
+                        sendButtonBottom.constant = getPoint() + 70
+                    
+                    } else {
+                        sendButtonTop.constant    = getPoint() - 100
+                        sendButtonBottom.constant = getPoint() + 50
+                    }
                 
                 } else {
-                    sendButtonBottom.constant += 220
-//                    sendButtonTop.constant    -= 60
+                    if tabBarController == nil {
+                        sendButtonBottom.constant = getPoint() + 120
+                    
+                    } else {
+                        sendButtonBottom.constant = getPoint() + 100
+                    }
                 }
             }
         }
@@ -175,19 +201,29 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         } else {
             if !isNeedToScrollMore() {
                 if imgs.count == 0 {
-                    sendButtonTop.constant += 210
+                    if tabBarController == nil {
+                        sendButtonTop.constant += 210
+                    } else {
+                        sendButtonTop.constant += 180
+                    }
                     
                 } else {
-                    sendButtonBottom.constant -= 60
-                    sendButtonTop.constant    += 60
+                    if tabBarController == nil {
+                        sendButtonBottom.constant -= 60
+                        sendButtonTop.constant    += 60
+                    
+                    } else {
+                        sendButtonBottom.constant -= 40
+                        sendButtonTop.constant    += 40
+                    }
                 }
             } else {
                 if imgs.count == 0 {
-                    sendButtonTop.constant    += 120
-                    sendButtonBottom.constant -= 220
-                
+                    sendButtonTop.constant = getPoint()
+                    sendButtonBottom.constant = 16
+                    
                 } else {
-                    sendButtonBottom.constant -= 220
+                    sendButtonBottom.constant = 16
                 }
             }
         }
@@ -203,6 +239,22 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         super.viewWillDisappear(animated)
         
         navigationController?.isNavigationBarHidden = true
+    }
+    
+    private func getPoint() -> CGFloat {
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            if tabBarController == nil {
+                return (view.frame.size.height - currPoint) + 50
+            } else {
+                return ((view.frame.size.height - currPoint) + 50) - 50
+            }
+        } else {
+            if tabBarController == nil {
+                return (view.frame.size.height - currPoint) - 50
+            } else {
+                return ((view.frame.size.height - currPoint) - 50) - 50
+            }
+        }
     }
     
     private func drawImages() {
