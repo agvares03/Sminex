@@ -120,10 +120,14 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         if numberPhone_ != "" {
             txtNameLS.text  = "Номер телефона"
             NameLS.text     = numberPhone_
+            let index = numberPhone_.index(numberPhone_.startIndex, offsetBy: 5)
+            let indexEnd  =  numberPhone_.index(before: numberPhone_.endIndex)
+            descTxt.text    = "Отправлен на телефон \(numberPhone_[index])*****\(numberPhone_[indexEnd]) (действует в течение 10 минут). Запросить новый код можно через минуту"
             
         } else {
             txtNameLS.text  = "Номер лицевого счета"
             NameLS.text     = numberLs_
+            descTxt.text    = ""
         }
         
         if !isReg_ {
@@ -149,9 +153,10 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         backView.isUserInteractionEnabled = true
         backView.addGestureRecognizer(recognizer)
         
+        
+        
         startTimer()
     }
-    
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)

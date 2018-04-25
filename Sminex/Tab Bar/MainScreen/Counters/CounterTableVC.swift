@@ -28,6 +28,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     
     open var canCount = true
     
+    private var refreshControl: UIRefreshControl?
     private var barTitle = ""
     private var index = 0
     private var meterArr: [MeterValue] = [] {
@@ -35,6 +36,12 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             DispatchQueue.main.sync {
                 self.collection.reloadData()
                 self.delegate?.stopAnimator()
+                
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    refreshControl?.endRefreshing()
+                }
             }
         }
     }
@@ -57,6 +64,21 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         collection.dataSource   = self
         delegate?.startAnimator()
         
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+            collection.alwaysBounceVertical = true
+        }
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.getCounters()
+        }
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
         DispatchQueue.global(qos: .userInteractive).async {
             self.getCounters()
         }

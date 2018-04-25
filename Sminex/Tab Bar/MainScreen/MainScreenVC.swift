@@ -53,6 +53,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var newsSize:       CGSize?
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
+    private var refreshControl: UIRefreshControl?
     private var deals:  [DealsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
@@ -95,15 +96,42 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchDeals()
         fetchRequests()
         fetchQuestions()
+        collection.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         collection.delegate     = self
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+        }
         
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent   = true
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.fetchRequests()
+            self.fetchQuestions()
+            self.fetchDeals()
+            self.fetchDebt()
+            self.fetchNews()
+            DispatchQueue.main.async {
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -127,10 +155,28 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CellsHeader", for: indexPath) as! CellsHeader
         header.display(data[indexPath.section]![0] as! CellsHeaderData, delegate: self)
+        header.frame.size.width = view.frame.size.width - 32
+        header.frame.origin.x = 16
         
-        if header.title.text == "Опросы" && questionSize != nil {
-            header.frame.size = questionSize!
+        if header.title.text == "Акции и предложения" {
+            header.backgroundColor = .clear
+        
+        } else {
+            header.backgroundColor = .white
         }
+        
+        if #available(iOS 11.0, *) {
+            header.clipsToBounds = false
+            header.layer.cornerRadius = 4
+            header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        } else {
+            let rectShape = CAShapeLayer()
+            rectShape.bounds = header.frame
+            rectShape.position = header.center
+            rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+            header.layer.mask = rectShape
+        }
+        
         return header
     }
     
@@ -142,37 +188,39 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let cell = SurveyCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-            return questionSize == nil ? CGSize(width: view.frame.size.width, height: size.height) : questionSize!
+            return questionSize == nil ? CGSize(width: view.frame.size.width - 32, height: size.height) : questionSize!
         
         } else if title == "Новости" {
             let cell = NewsCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "Акции и предложения" {
             return CGSize(width: view.frame.size.width, height: 200.0)
         
         } else if title == "Заявки" {
             if indexPath.row == data[indexPath.section]!.count - 2 {
-                return CGSize(width: view.frame.size.width, height: 50.0)
+                return CGSize(width: view.frame.size.width - 32, height: 50.0)
             }
             let cell = RequestCell.fromNib()
-            cell?.display(data[indexPath.section]![indexPath.row + 1] as! RequestCellData)
+            if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
+                cell?.display(requestData)
+            }
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "К оплате" {
-            return CGSize(width: view.frame.size.width, height: 80.0)
+            return CGSize(width: view.frame.size.width - 32, height: 80.0)
         
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else {
-            return CGSize(width: view.frame.size.width, height: 100.0)
+            return CGSize(width: view.frame.size.width - 32, height: 100.0)
         }
     }
     
@@ -183,11 +231,37 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if title == "Опросы" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SurveyCell", for: indexPath) as! SurveyCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else if title == "Новости" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCell", for: indexPath) as! NewsCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else if title == "Акции и предложения" {
@@ -200,22 +274,61 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if indexPath.row == data[indexPath.section]!.count - 2 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestAddCell", for: indexPath) as! RequestAddCell
                 cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestAddCellData, delegate: self)
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
                 return cell
                 
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestCell", for: indexPath) as! RequestCell
-                cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestCellData)
+                if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
+                    cell.display(requestData)
+                }
                 return cell
             }
         
         } else if title == "К оплате" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ForPayCell", for: indexPath) as! ForPayCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! ForPayCellData)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else if title == "Счетчики" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ScetCell", for: indexPath) as! SchetCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData, delegate: self)
+            if indexPath.row + 2 == data[indexPath.section]?.count {
+                if #available(iOS 11.0, *) {
+                    cell.clipsToBounds = false
+                    cell.layer.cornerRadius = 4
+                    cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                } else {
+                    let rectShape = CAShapeLayer()
+                    rectShape.bounds = cell.frame
+                    rectShape.position = cell.center
+                    rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                    cell.layer.mask = rectShape
+                }
+            }
             return cell
         
         } else {
@@ -239,7 +352,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return newsSize!
             
         } else {
-            return CGSize(width: view.frame.size.width, height: 40.0)
+            return CGSize(width: view.frame.size.width, height: 55.0)
         }
     }
     
@@ -566,10 +679,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if (datePay?.count ?? 0) > 9 {
                 datePay?.removeLast(9)
             }
-            self.data[4]![1] = ForPayCellData(title: String(self.debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
+            self.data[4]![1] = ForPayCellData(title: String(self.debt?.sumPay ?? 0.0) + " ₽", date: datePay ?? "")
             
             defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
-            defaults.setValue("До " + (datePay ?? ""), forKey: "ForPayDate")
+            defaults.setValue(datePay, forKey: "ForPayDate")
             defaults.synchronize()
             
             #if DEBUG
@@ -595,7 +708,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
                     TemporaryHolder.instance.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
-                    UserDefaults.standard.set(String(TemporaryHolder.instance.news?.last?.newsId ?? 0), forKey: "newsLastId")
+                    UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                     UserDefaults.standard.synchronize()
                     let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                     
@@ -648,7 +761,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                 
                 TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
-                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.last?.newsId ?? 0), forKey: "newsLastId")
+                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                 UserDefaults.standard.synchronize()
                 let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                 
@@ -700,6 +813,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = deals[dealsIndex]
+            vc.anotherDeals_ = Array(deals[0..<3])
         
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
             let vc = segue.destination as! FinancePayAcceptVC
@@ -747,6 +861,7 @@ final class CellsHeader: UICollectionReusableView {
             self.detail.setTitle("Все", for: .normal)
         }
     }
+    
 }
 
 private final class CellsHeaderData: MainDataProtocol {
@@ -789,8 +904,8 @@ class SurveyCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
-        cell?.questions.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 55
+        cell?.questions.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 55
         return cell
     }
     
@@ -817,7 +932,12 @@ final class NewsCell: UICollectionViewCell {
         
         title.text  = item.title
         desc.text   = item.desc
-        date.text   = item.date
+        
+        if item.date != "" {
+            let df = DateFormatter()
+            df.dateFormat = "YYYY-MM-DD"
+            date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "DD MMMM")
+        }
     }
     
     class func fromNib() -> NewsCell? {
@@ -828,9 +948,9 @@ final class NewsCell: UICollectionViewCell {
                 cell = cellView
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 25
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
-        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
+        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
         return cell
     }
 }
@@ -943,7 +1063,7 @@ final class RequestCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.isBack {
             back.isHidden = false
@@ -958,8 +1078,8 @@ final class RequestCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 25
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 75
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 75
         return cell
     }
 }
@@ -1028,13 +1148,21 @@ final class ForPayCell: UICollectionViewCell {
     fileprivate func display(_ item: ForPayCellData) {
         
         title.text  = item.title
-        date.text   = item.date
         
         if item.title.contains(find: "-") {
             title.textColor = .green
         
         } else {
             title.textColor = .black
+        }
+        
+        if item.date != "" {
+            let df = DateFormatter()
+            df.dateFormat = "dd.MM.yyyy"
+            let currDate = df.date(from: item.date)
+            df.dateFormat = "dd MMMM"
+            df.locale = Locale(identifier: "Ru-ru")
+            date.text = "До " + df.string(from: currDate ?? Date())
         }
     }
 }
@@ -1078,8 +1206,8 @@ final class SchetCell: UICollectionViewCell {
                 cell = cellView
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 25
-        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 25
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
+        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
         return cell
     }
 }

@@ -43,6 +43,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     open var isCreatingRequest_ = false
     open var delegate: MainScreenDelegate?
     
+    private var refreshControl: UIRefreshControl?
     private var typeName = ""
     private var reqId = ""
     private var responceString = ""
@@ -75,6 +76,18 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         if isCreatingRequest_ {
             addRequestPressed(nil)
         }
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+        }
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
+        getRequests()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -368,6 +381,11 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 DispatchQueue.main.sync {
                     if !isBackground {
                         self.collection.reloadData()
+                        if #available(iOS 10.0, *) {
+                            self.collection.refreshControl?.endRefreshing()
+                        } else {
+                            self.refreshControl?.endRefreshing()
+                        }
                         self.stopAnimatior()
                     }
                 }

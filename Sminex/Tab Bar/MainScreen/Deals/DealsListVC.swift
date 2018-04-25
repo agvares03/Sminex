@@ -51,7 +51,11 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 250.0)
+        
+        let cell = DealsListCell.fromNib()
+        cell?.display(data_[indexPath.row])
+        let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+        return CGSize(width: view.frame.size.width, height: size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -104,10 +108,12 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         if segue.identifier == Segues.fromDealsListVC.toDealsDesc {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = data_[index]
+            vc.anotherDeals_ = Array(data_[0..<3])
         
         } else if segue.identifier == Segues.fromDealsListVC.toDealsAnim {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = pressedData_!
+            vc.anotherDeals_ = Array(data_[0..<3])
         }
     }
     
@@ -135,6 +141,19 @@ final class DealsListCell: UICollectionViewCell {
         image.image         = item.img
         title.text          = item.name
         desc.text           = item.desc
+    }
+    
+    class func fromNib() -> DealsListCell? {
+        var cell: DealsListCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? DealsListCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 50
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 50
+        return cell
     }
 }
 
