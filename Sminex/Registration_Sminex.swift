@@ -282,21 +282,32 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     private func changeDescTextTo(isError: Bool, text: String? = nil) {
         
-        // Если доступно, изменяем с анимацией
-        // если нет, то без анимации
-        
         if isError {
             
             self.txtDesc.textColor = .red
             self.txtDesc.text = self.responseString.replacingOccurrences(of: "error: ", with: "")
-            
             self.changeGoButton(isEnabled: false)
+            
+            if self.txtDesc.text?.contains(find: "уже выслан") ?? false {
+                self.startTimer()
+            }
             
         } else {
             self.txtDesc.textColor = .gray
             self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text
             
             performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
+        }
+    }
+    
+    private func startTimer() {
+        DispatchQueue.global(qos: .background).async {
+            sleep(60)
+            DispatchQueue.main.async {
+                self.txtDesc.textColor = .gray
+                self.txtDesc.text = "Укажите лицевой счет или телефон, привязанный к лицевому счету"
+                self.changeGoButton(isEnabled: true)
+            }
         }
     }
     
