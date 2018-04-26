@@ -10,12 +10,13 @@ import UIKit
 
 final class CurrentNews: UIViewController, UIWebViewDelegate {
     
-    @IBOutlet private weak var titleTop:    NSLayoutConstraint!
-    @IBOutlet private weak var scroll:      UIScrollView!
-    @IBOutlet private weak var image:       UIImageView!
-    @IBOutlet private weak var webView:     UIWebView!
-    @IBOutlet private weak var titleLabel:  UILabel!
-    @IBOutlet private weak var date:        UILabel!
+    @IBOutlet private weak var webViewHeight:   NSLayoutConstraint!
+    @IBOutlet private weak var titleTop:        NSLayoutConstraint!
+    @IBOutlet private weak var scroll:          UIScrollView!
+    @IBOutlet private weak var image:           UIImageView!
+    @IBOutlet private weak var webView:         UIWebView!
+    @IBOutlet private weak var titleLabel:  	UILabel!
+    @IBOutlet private weak var date:        	UILabel!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -39,8 +40,6 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
             date.text = dayDifference(from: df.date(from: data_?.dateStart ?? "") ?? Date(), style: "dd MMMM yyyy, hh:mm")
         }
         
-        print(data_?.headerImage)
-        
         if data_?.headerImage == nil || data_?.headerImage == "" {
             titleTop.constant = 16
             image.isHidden = true
@@ -51,8 +50,7 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {
-        webView.frame.size.height = 1
-        webView.frame.size = webView.sizeThatFits(.zero)
-        scroll.contentSize.height += webView.frame.size.height
+        webViewHeight.constant     = webView.scrollView.contentSize.height
+        scroll.contentSize.height += webView.scrollView.contentSize.height
     }
 }

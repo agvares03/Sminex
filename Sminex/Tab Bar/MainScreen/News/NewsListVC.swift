@@ -162,7 +162,12 @@ final class NewsListCell: UICollectionViewCell {
         if item.dateStart != "" {
             let df = DateFormatter()
             df.dateFormat = "yyyy-MM-dd"
-            date.text = dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "dd MMMM")
+            if dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
+                date.text = dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "hh:mm")
+                
+            } else {
+                date.text = dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "dd MMMM")
+            }
         }
     }
     
@@ -175,7 +180,7 @@ final class NewsListCell: UICollectionViewCell {
             }
         }
         cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 25
-        cell?.desc.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 150
+        cell?.desc.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 160
         return cell
     }
 }
