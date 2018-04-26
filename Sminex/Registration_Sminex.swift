@@ -58,6 +58,17 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
     }
     
+    @IBAction private func callSupportButtonPressed(_ sender: UIButton) {
+        view.endEditing(true)
+        if let url = URL(string: "tel://74951911774") {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
+    
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
@@ -196,10 +207,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             edLsTop.constant  = 45
         }
         
-        // Подхватываем показ клавиатуры
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
         if !isReg_ {
             navigationItem.title = "Восстановление пароля"
         }
@@ -222,6 +229,16 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if !isFromApp_ {
             navigationController?.isNavigationBarHidden = false
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {

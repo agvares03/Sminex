@@ -71,6 +71,17 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             }.resume()
     }
     
+    @IBAction private func callSupportButtonPressed(_ sender: UIButton) {
+        view.endEditing(true)
+        if let url = URL(string: "tel://74951911774") {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
+    
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
         
         if smsField.isSecureTextEntry {
@@ -147,10 +158,6 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         
         smsField.delegate = self
         
-        // Подхватываем показ клавиатуры
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
         recognizer.delegate = self
         backView.isUserInteractionEnabled = true
@@ -174,12 +181,18 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         super.viewWillAppear(animated)
         
         navigationController?.isNavigationBarHidden = false
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         navigationController?.isNavigationBarHidden = true
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // Двигаем view вверх при показе клавиатуры

@@ -28,6 +28,17 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @IBOutlet private weak var lsDesc:          UILabel!
     @IBOutlet private weak var sprtLabel:       UILabel!
     
+    @IBAction private func callSupportButtonPressed(_ sender: UIButton) {
+        view.endEditing(true)
+        if let url = URL(string: "tel://74951911774") {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
+    
     @IBAction private func saveButtonPressed(_ sender: UIButton!) {
         
         guard (passTextField.text?.count ?? 0) > 0 else {
@@ -150,12 +161,18 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         super.viewWillAppear(animated)
         
         navigationController?.isNavigationBarHidden = false
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         navigationController?.isNavigationBarHidden  = false
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // Двигаем view вверх при показе клавиатуры

@@ -169,6 +169,7 @@ func getHash(pass: String, salt: Data) -> String {
         return ""
     }
     
+    guard Data(base64Encoded: salt) != nil && pass.data(using: .utf16LittleEndian) != nil else { return "" }
     let btl = pass.data(using: .utf16LittleEndian)!
     let bSalt = Data(base64Encoded: salt)!
     

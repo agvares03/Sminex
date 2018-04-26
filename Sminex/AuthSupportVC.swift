@@ -32,6 +32,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
+        view.endEditing(true)
         sendMessage()
     }
     
@@ -67,7 +68,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         didSet {
             if imgs.count == 0 {
                 imgsHeight.constant = 1
-                sendButtonTop.constant = getPoint() + 149
+                sendButtonTop.constant = getPoint()
                 
                 if isNeedToScrollMore() && tabBarController != nil {
                     sendButtonTop.constant = getPoint() + 99
@@ -99,10 +100,6 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap)
         
-        // Подхватываем показ клавиатуры
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
         problemTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         emailTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         lsTextView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -128,26 +125,28 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
-        
         scroll.contentSize.height += 200
         
         if !isNeedToScroll() {
             
             if Device().isOneOf([.iPhone6, .iPhone6s, .simulator(.iPhone6), .simulator(.iPhone6s)]) && imgs.count != 0 {
-                sendButtonBottom.constant += 220
-                sendButtonTop.constant    -= 190
+                sendButtonTop.constant    = 8
+                sendButtonBottom.constant = 200
                 return
-            }
             
-            sendButtonTop.constant -= 210
+            } else {
+                sendButtonTop.constant = getPoint() - 210
+            }
         
         } else {
+            
             if !isNeedToScrollMore() {
                 if imgs.count == 0 {
                     if tabBarController == nil {
-                        sendButtonTop.constant -= 210
+                        sendButtonTop.constant = getPoint() - 210
+                    
                     } else {
-                        sendButtonTop.constant -= 180
+                        sendButtonTop.constant = getPoint() - 180
                     }
                     
                 } else {
@@ -190,40 +189,33 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         scroll.contentSize.height -= 200
         
         if Device().isOneOf([.iPhone6, .iPhone6s, .simulator(.iPhone6), .simulator(.iPhone6s)]) && imgs.count != 0 {
-            sendButtonBottom.constant -= 220
-            sendButtonTop.constant    += 190
+            sendButtonBottom.constant = 16
+            sendButtonTop.constant    = getPoint() - 150
             return
         }
         
         if !isNeedToScroll() {
-            sendButtonTop.constant += 210
+            sendButtonTop.constant = getPoint()
             
         } else {
             if !isNeedToScrollMore() {
                 if imgs.count == 0 {
-                    if tabBarController == nil {
-                        sendButtonTop.constant += 210
-                    } else {
-                        sendButtonTop.constant += 180
-                    }
+                    sendButtonTop.constant = getPoint()
                     
                 } else {
+                    sendButtonBottom.constant = 16
+                    
                     if tabBarController == nil {
-                        sendButtonBottom.constant -= 60
-                        sendButtonTop.constant    += 60
+                        sendButtonTop.constant    = getPoint() - 210
                     
                     } else {
-                        sendButtonBottom.constant -= 40
-                        sendButtonTop.constant    += 40
+                        sendButtonTop.constant    = getPoint() - 180
                     }
                 }
             } else {
+                sendButtonBottom.constant = 16
                 if imgs.count == 0 {
                     sendButtonTop.constant = getPoint()
-                    sendButtonBottom.constant = 16
-                    
-                } else {
-                    sendButtonBottom.constant = 16
                 }
             }
         }
@@ -233,12 +225,19 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         super.viewWillAppear(animated)
         
         navigationController?.isNavigationBarHidden = false
+        
+        // Подхватываем показ клавиатуры
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         navigationController?.isNavigationBarHidden = true
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     private func getPoint() -> CGFloat {
@@ -293,11 +292,13 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
+        view.endEditing(true)
         imgs.remove(at: sender.tag)
     }
     
     @objc func imageTapped(_ sender: UITapGestureRecognizer) {
         
+        view.endEditing(true)
         let imageView = sender.view as! UIImageView
         let newImageView = UIImageView(image: imageView.image)
         newImageView.frame = UIScreen.main.bounds
@@ -328,7 +329,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
             guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                 DispatchQueue.main.sync {
                     self.present(alert, animated: true, completion: nil)

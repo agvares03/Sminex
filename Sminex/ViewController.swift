@@ -93,6 +93,17 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction private func callSupportButtonPressed(_ sender: UIButton) {
+        view.endEditing(true)
+        if let url = URL(string: "tel://+74951911774") {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
+    
     // Анимация перехода
     private var transitionManager = TransitionManager()
     
@@ -119,10 +130,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             btnEnter.isEnabled = false
             btnEnter.alpha = 0.5
         }
-        
-        // Подхватываем показ клавиатуры
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
             sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 75
@@ -184,8 +191,17 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         
         // Скроем верхний бар при появлении
-        
         navigationController?.isNavigationBarHidden = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     private func enter() {

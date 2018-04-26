@@ -169,6 +169,9 @@
                                                     <constraint firstAttribute="height" constant="40" id="bcn-WG-q6R"/>
                                                 </constraints>
                                                 <state key="normal" image="sminex_call"/>
+                                                <connections>
+                                                    <action selector="callSupportButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cDz-d6-QFp"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vJL-BB-Wcr">
                                                 <rect key="frame" x="314" y="284" width="40" height="40"/>
@@ -417,6 +420,9 @@
                                             <constraint firstAttribute="width" constant="40" id="gC7-en-p6j"/>
                                         </constraints>
                                         <state key="normal" image="sminex_call"/>
+                                        <connections>
+                                            <action selector="callSupportButtonPressed:" destination="0GA-rU-H4s" eventType="touchUpInside" id="hrL-mL-rKV"/>
+                                        </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Лицевой счет или телефон" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bRs-P8-Fnm">
                                         <rect key="frame" x="16" y="54" width="343" height="30"/>
@@ -614,6 +620,9 @@
                                             <constraint firstAttribute="height" constant="40" id="qt7-np-Qyq"/>
                                         </constraints>
                                         <state key="normal" image="sminex_call"/>
+                                        <connections>
+                                            <action selector="callSupportButtonPressed:" destination="okP-hc-Mwi" eventType="touchUpInside" id="rPn-eX-gZh"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f83-uc-0ue">
                                         <rect key="frame" x="319" y="240" width="40" height="40"/>
@@ -819,8 +828,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="btn_go_touch:" destination="okP-hc-Mwi" eventType="touchUpInside" id="s2X-45-kMN"/>
-                                            <action selector="sendButtonPressed:" destination="Iz6-Np-nOS" eventType="touchUpInside" id="BSJ-IU-MBQ"/>
+                                            <action selector="sendButtonPressed:" destination="Iz6-Np-nOS" eventType="touchUpInside" id="8sh-68-blJ"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aWP-Qf-6hU">
@@ -1051,6 +1059,9 @@
                                             <constraint firstAttribute="height" constant="40" id="YSS-Q2-0jd"/>
                                         </constraints>
                                         <state key="normal" image="sminex_call"/>
+                                        <connections>
+                                            <action selector="callSupportButtonPressed:" destination="ixU-3A-z1t" eventType="touchUpInside" id="OJC-OR-Cnr"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7O6-cm-kNy">
                                         <rect key="frame" x="319" y="238" width="40" height="40"/>
@@ -1190,7 +1201,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="pUi-B1-3Il"/>
-        <segue reference="8NT-S0-N1j"/>
+        <segue reference="3qZ-Q7-YhL"/>
         <segue reference="74p-PR-qrV"/>
     </inferredMetricsTieBreakers>
 </document>
