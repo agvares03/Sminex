@@ -83,7 +83,6 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                     self.descTxt.textColor = .red
 
                 } else {
-
                     self.makeAuth()
                 }
             }

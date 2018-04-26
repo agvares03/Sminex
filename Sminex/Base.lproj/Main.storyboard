@@ -802,19 +802,20 @@
                                                     <color key="pageIndicatorTintColor" red="0.0" green="0.4521484375" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                                                     <color key="currentPageIndicatorTintColor" red="0.015686274510000001" green="0.49019607840000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </pageControl>
-                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OAR-yO-AKL">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1wg-cf-UD5" customClass="FSPagerView" customModule="FSPagerView">
                                                     <rect key="frame" x="8" y="8" width="301" height="102"/>
-                                                </scrollView>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="pMW-jr-6Zr" firstAttribute="top" secondItem="OAR-yO-AKL" secondAttribute="bottom" constant="5" id="37t-Jm-C4R"/>
-                                            <constraint firstItem="OAR-yO-AKL" firstAttribute="leading" secondItem="pUe-QP-Vbe" secondAttribute="leadingMargin" id="4CX-9s-pgD"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="OAR-yO-AKL" secondAttribute="trailing" id="66L-D9-rKa"/>
+                                            <constraint firstItem="pMW-jr-6Zr" firstAttribute="top" secondItem="1wg-cf-UD5" secondAttribute="bottom" constant="5" id="AKj-ZX-Oct"/>
+                                            <constraint firstItem="1wg-cf-UD5" firstAttribute="top" secondItem="pUe-QP-Vbe" secondAttribute="topMargin" id="DKn-B9-uYj"/>
                                             <constraint firstAttribute="trailing" secondItem="pMW-jr-6Zr" secondAttribute="trailing" constant="50" id="Gvt-Ul-a69"/>
                                             <constraint firstItem="pMW-jr-6Zr" firstAttribute="leading" secondItem="pUe-QP-Vbe" secondAttribute="leading" constant="50" id="Ly7-PV-DlC"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="1wg-cf-UD5" secondAttribute="trailing" id="dfF-Sg-qsD"/>
                                             <constraint firstAttribute="bottom" secondItem="pMW-jr-6Zr" secondAttribute="bottom" id="jOK-By-kp0"/>
-                                            <constraint firstItem="OAR-yO-AKL" firstAttribute="top" secondItem="pUe-QP-Vbe" secondAttribute="topMargin" id="uxW-Zm-YAT"/>
+                                            <constraint firstItem="1wg-cf-UD5" firstAttribute="leading" secondItem="pUe-QP-Vbe" secondAttribute="leadingMargin" id="nZ3-Mp-4hi"/>
                                         </constraints>
                                         <size key="customSize" width="317" height="130"/>
                                         <userDefinedRuntimeAttributes>
@@ -824,8 +825,8 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <outlet property="scroll" destination="OAR-yO-AKL" id="oP4-JZ-R4a"/>
-                                            <outlet property="section" destination="pMW-jr-6Zr" id="cby-QU-xZv"/>
+                                            <outlet property="pageControl" destination="pMW-jr-6Zr" id="BIE-NX-gFa"/>
+                                            <outlet property="pagerView" destination="1wg-cf-UD5" id="BeF-Q2-Kvy"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ForPayCell" id="sPE-gb-plh" customClass="ForPayCell" customModule="Sminex" customModuleProvider="target">
@@ -1282,10 +1283,10 @@
         <image name="sminex_logo.png" width="582" height="126"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="8he-B8-Gnd"/>
-        <segue reference="Lrg-1z-tbA"/>
-        <segue reference="AB9-zB-ayT"/>
-        <segue reference="t3B-Fb-YCZ"/>
-        <segue reference="5gl-5c-IU0"/>
+        <segue reference="Ggi-Bk-Rzm"/>
+        <segue reference="efl-bX-pxf"/>
+        <segue reference="E5J-g1-PDx"/>
+        <segue reference="JHZ-fd-xvP"/>
+        <segue reference="7Ci-na-4TA"/>
     </inferredMetricsTieBreakers>
 </document>

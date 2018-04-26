@@ -13,6 +13,7 @@ target 'Sminex' do
     pod 'Firebase/Messaging'
     pod 'Firebase/Core'
     pod 'ExpyTableView'
+    pod 'FSPagerView'
     pod 'DeviceKit'
     pod 'Arcane'
     pod 'Gloss'

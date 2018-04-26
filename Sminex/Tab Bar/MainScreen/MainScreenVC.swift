@@ -9,6 +9,7 @@
 import UIKit
 import Gloss
 import SwiftyXMLParser
+import FSPagerView
 
 private protocol MainDataProtocol:  class {}
 private protocol CellsDelegate:    class {
@@ -976,71 +977,67 @@ final class NewsCellData: MainDataProtocol {
     }
 }
 
-final class StockCell: UICollectionViewCell, UIScrollViewDelegate {
+final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewDelegate {
     
-    @IBOutlet private weak var scroll:  UIScrollView!
-    @IBOutlet private weak var section: UIPageControl!
+    @IBOutlet private weak var pageControl: UIPageControl!
+    @IBOutlet private weak var pagerView:   FSPagerView! {
+        didSet {
+            self.pagerView.register(FSPagerViewCell.self, forCellWithReuseIdentifier: "cell")
+        }
+    }
     
+    private var imgs: [UIImage] = []
     private var delegate:   CellsDelegate?
     private var indexPath:  IndexPath?
     private var isLoading = false
     
+    public func numberOfItems(in pagerView: FSPagerView) -> Int {
+        return imgs.count
+    }
+    
+    public func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell {
+        let cell = pagerView.dequeueReusableCell(withReuseIdentifier: "cell", at: index)
+        cell.imageView?.image = imgs[index]
+        return cell
+    }
+    
     fileprivate func display(_ item: StockCellData, delegate: CellsDelegate? = nil, indexPath: IndexPath? = nil) {
         
+        pagerView.interitemSpacing = 20
+        pagerView.itemSize = CGSize(width: 300, height: pagerView.frame.size.height)
+        pagerView.dataSource = self
+        pagerView.delegate   = self
+        
         if item.images.count == 0, let imgData = UserDefaults.standard.data(forKey: "DealsImg"), let img = UIImage(data: imgData)  {
-            let image = UIImageView(frame: CGRect(x: 0, y: 0, width: 300, height: Int(scroll.frame.size.height)))
-            image.image = img
             isLoading = true
-            scroll.addSubview(image)
+            self.imgs = [img]
+            self.pageControl.numberOfPages = 1
+            self.pagerView.reloadData()
             
         } else if item.images.count != 0 {
-            var x = 0
             isLoading = false
+            self.imgs = item.images
+            self.pageControl.numberOfPages = self.imgs.count
+            self.pagerView.reloadData()
             
-            item.images.forEach {
-                let image    = UIImageView(frame: CGRect(x: x, y: 0, width: 300, height: Int(scroll.frame.size.height)))
-                x           += 320
-                image.image  = $0
-                scroll.addSubview(image)
-            }
             DispatchQueue.global(qos: .background).async {
                 UserDefaults.standard.setValue(UIImagePNGRepresentation(item.images.first!), forKey: "DealsImg")
                 UserDefaults.standard.synchronize()
             }
-            scroll.contentSize  = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
         }
-        scroll.delegate         = self
-        section.currentPage     = 0
-        section.numberOfPages   = item.images.count == 0 ? 1 : item.images.count
         
         self.delegate   = delegate
         self.indexPath  = indexPath
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
-        scroll.addGestureRecognizer(tap)
     }
     
-    @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
+    func pagerView(_ pagerView: FSPagerView, didSelectItemAt index: Int) {
         if !isLoading {
-            delegate?.stockCellPressed(currImg: section.currentPage)
+            delegate?.stockCellPressed(currImg: index)
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        section.currentPage = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width))
-        scroll.setContentOffset(CGPoint(x: 320 * section.currentPage, y: 0), animated: true)
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        section.currentPage = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width))
-        scroll.setContentOffset(CGPoint(x: 320 * section.currentPage, y: 0), animated: true)
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            section.currentPage = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width))
-            scroll.setContentOffset(CGPoint(x: 320 * section.currentPage, y: 0), animated: true)
-        }
+    func pagerViewDidScroll(_ pagerView: FSPagerView) {
+        pageControl.currentPage = pagerView.currentIndex
     }
 }
 
