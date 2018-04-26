@@ -46,9 +46,14 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         getQuestions()
     }
     
-    @objc private func refresh(_ sender: UIRefreshControl) {
+    @objc private func refresh(_ sender: UIRefreshControl?) {
         emptyLabel.isHidden = true
         getQuestions()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.refresh(nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

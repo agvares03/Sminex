@@ -227,21 +227,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
-            defer {
-                DispatchQueue.main.sync {
-                    self.stopAnimation()
-                    
-                    var userDefaults = UserDefaults.standard
-                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.answers)
-                    userDefaults.set(encodedData, forKey: String(self.question_?.id ?? 0))
-                    userDefaults.synchronize()
-                    
-                    self.delegate?.update()
-                    
-                    self.performSegue(withIdentifier: Segues.fromQuestionAnswerVC.toFinal, sender: self)
-                }
-            }
-            
+            guard data != nil else { return }
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "ОК", style: .default, handler: { (_) in } ) )
@@ -254,6 +240,20 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             #if DEBUG
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif
+            
+            DispatchQueue.main.async {
+                DispatchQueue.global(qos: .background).async {
+                    let userDefaults = UserDefaults.standard
+                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.answers)
+                    userDefaults.set(encodedData, forKey: String(self.question_?.id ?? 0))
+                    userDefaults.synchronize()
+                }
+                
+                self.stopAnimation()
+                self.delegate?.update()
+                self.performSegue(withIdentifier: Segues.fromQuestionAnswerVC.toFinal, sender: self)
+            }
+            
         }.resume()
         return
     }
