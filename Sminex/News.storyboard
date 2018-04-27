@@ -143,25 +143,26 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KMo-xe-wk7">
-                                        <rect key="frame" x="16" y="16" width="342" height="170"/>
+                                        <rect key="frame" x="16" y="16" width="343" height="170"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="170" id="CIK-j7-BnN"/>
+                                            <constraint firstAttribute="width" constant="343" id="Wcl-x3-7yD"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Солнечное замение на смотровой площадке" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b2e-Jp-W4K">
-                                        <rect key="frame" x="16" y="194" width="342" height="57.5"/>
+                                        <rect key="frame" x="16" y="194" width="343" height="57.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 марта 2017, 16:45" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tsy-ih-V8D">
-                                        <rect key="frame" x="16" y="259.5" width="342" height="17"/>
+                                        <rect key="frame" x="16" y="259.5" width="343" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Waa-tF-U6a">
-                                        <rect key="frame" x="16" y="284" width="342" height="1"/>
+                                        <rect key="frame" x="16" y="284" width="343" height="1"/>
                                         <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="gms-eL-Tc1"/>
@@ -169,20 +170,21 @@
                                     </webView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="KMo-xe-wk7" secondAttribute="trailing" constant="16" id="6AE-GV-jeM"/>
                                     <constraint firstItem="tsy-ih-V8D" firstAttribute="top" secondItem="b2e-Jp-W4K" secondAttribute="bottom" constant="8" id="BfO-HI-U2T"/>
                                     <constraint firstItem="Waa-tF-U6a" firstAttribute="trailing" secondItem="b2e-Jp-W4K" secondAttribute="trailing" id="GO7-2I-A13"/>
                                     <constraint firstItem="tsy-ih-V8D" firstAttribute="trailing" secondItem="b2e-Jp-W4K" secondAttribute="trailing" id="Hc4-Qw-zgB"/>
-                                    <constraint firstItem="KMo-xe-wk7" firstAttribute="trailing" secondItem="b2e-Jp-W4K" secondAttribute="trailing" id="IQ5-XW-IEG"/>
                                     <constraint firstItem="Waa-tF-U6a" firstAttribute="top" secondItem="tsy-ih-V8D" secondAttribute="bottom" constant="8" id="J3v-hT-htD"/>
                                     <constraint firstItem="b2e-Jp-W4K" firstAttribute="leading" secondItem="pi6-I5-0U0" secondAttribute="leading" constant="16" id="Ok5-T6-F4f"/>
+                                    <constraint firstItem="KMo-xe-wk7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="pi6-I5-0U0" secondAttribute="leading" constant="16" id="PQt-4W-spW"/>
                                     <constraint firstAttribute="trailing" secondItem="b2e-Jp-W4K" secondAttribute="trailing" constant="16" id="SWw-0N-3B8"/>
                                     <constraint firstItem="KMo-xe-wk7" firstAttribute="centerX" secondItem="pi6-I5-0U0" secondAttribute="centerX" id="VWa-6S-ZfJ"/>
                                     <constraint firstItem="tsy-ih-V8D" firstAttribute="leading" secondItem="b2e-Jp-W4K" secondAttribute="leading" id="cJG-XG-bUc"/>
                                     <constraint firstItem="KMo-xe-wk7" firstAttribute="top" secondItem="pi6-I5-0U0" secondAttribute="top" constant="16" id="fQT-iU-fab"/>
                                     <constraint firstItem="b2e-Jp-W4K" firstAttribute="top" secondItem="pi6-I5-0U0" secondAttribute="top" constant="194" id="hRj-DQ-ek9"/>
+                                    <constraint firstItem="b2e-Jp-W4K" firstAttribute="centerX" secondItem="pi6-I5-0U0" secondAttribute="centerX" id="jaB-vD-HkR"/>
                                     <constraint firstAttribute="bottom" secondItem="Waa-tF-U6a" secondAttribute="bottom" id="kYM-BG-Ygj"/>
                                     <constraint firstItem="Waa-tF-U6a" firstAttribute="leading" secondItem="b2e-Jp-W4K" secondAttribute="leading" id="lHb-eq-x0r"/>
-                                    <constraint firstItem="KMo-xe-wk7" firstAttribute="leading" secondItem="b2e-Jp-W4K" secondAttribute="leading" id="upi-ZY-9RZ"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
