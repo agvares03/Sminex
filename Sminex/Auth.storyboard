@@ -871,8 +871,12 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IlE-S7-1zI">
+                                        <rect key="frame" x="200" y="385" width="20" height="20"/>
+                                    </activityIndicatorView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="IlE-S7-1zI" firstAttribute="centerY" secondItem="9e5-FK-M1P" secondAttribute="centerY" id="26W-DZ-2qc"/>
                                     <constraint firstItem="YmK-eE-Jpn" firstAttribute="centerX" secondItem="Ju9-Rr-Fm8" secondAttribute="centerX" id="4Hy-VM-I2e"/>
                                     <constraint firstItem="z8l-yd-Khx" firstAttribute="top" secondItem="aWP-Qf-6hU" secondAttribute="bottom" constant="8" id="4hP-qe-fxb"/>
                                     <constraint firstItem="bvZ-g1-cz2" firstAttribute="top" secondItem="e2v-EM-Rsq" secondAttribute="bottom" constant="8" id="6hd-gf-zMV"/>
@@ -901,6 +905,7 @@
                                     <constraint firstItem="ndq-aT-Q8g" firstAttribute="trailing" secondItem="bvZ-g1-cz2" secondAttribute="trailing" id="tCU-Y1-p1l"/>
                                     <constraint firstItem="z8l-yd-Khx" firstAttribute="trailing" secondItem="YmK-eE-Jpn" secondAttribute="trailing" id="ve4-LG-EK4"/>
                                     <constraint firstItem="38c-g0-eM9" firstAttribute="trailing" secondItem="bvZ-g1-cz2" secondAttribute="trailing" id="wHc-KV-AmF"/>
+                                    <constraint firstItem="IlE-S7-1zI" firstAttribute="centerX" secondItem="9e5-FK-M1P" secondAttribute="centerX" id="y8t-Ga-OgW"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -925,6 +930,7 @@
                         <outlet property="emailTextView" destination="z8l-yd-Khx" id="cLE-Ae-hll"/>
                         <outlet property="imgsHeight" destination="a31-1B-XBB" id="bfh-Zj-lpI"/>
                         <outlet property="imgsScroll" destination="38c-g0-eM9" id="dQs-0u-32d"/>
+                        <outlet property="loader" destination="IlE-S7-1zI" id="oV1-dy-TUV"/>
                         <outlet property="lsTextView" destination="bvZ-g1-cz2" id="KSM-9y-68S"/>
                         <outlet property="problemTextView" destination="YmK-eE-Jpn" id="ogy-Fm-Ran"/>
                         <outlet property="scroll" destination="Ju9-Rr-Fm8" id="Y5Z-xN-cTg"/>

@@ -11,6 +11,7 @@ import DeviceKit
 
 final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBOutlet private weak var loader:              UIActivityIndicatorView!
     @IBOutlet private weak var sendButtonBottom:    NSLayoutConstraint!
     @IBOutlet private weak var sendButtonTop:       NSLayoutConstraint!
     @IBOutlet private weak var imgsHeight:          NSLayoutConstraint!
@@ -33,6 +34,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         view.endEditing(true)
+        startAnimation()
         sendMessage()
     }
     
@@ -330,6 +332,12 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
+            defer {
+                DispatchQueue.main.async {
+                    self.stopAnimation()
+                }
+            }
+            
             guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
@@ -359,6 +367,18 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         imgs.append(image)
         dismiss(animated: true, completion: nil)
+    }
+    
+    private func startAnimation() {
+        sendButton.alpha = 0
+        loader.isHidden  = false
+        loader.startAnimating()
+    }
+    
+    private func stopAnimation() {
+        loader.stopAnimating()
+        loader.isHidden  = true
+        sendButton.alpha = 1
     }
 }
 

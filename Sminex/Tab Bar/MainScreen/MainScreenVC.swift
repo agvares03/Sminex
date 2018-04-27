@@ -697,7 +697,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     private func fetchNews() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
             
             guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
