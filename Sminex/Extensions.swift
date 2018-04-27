@@ -210,6 +210,18 @@ func isNeedToScrollMore() -> Bool {
                              .simulator(Device.iPhone4s)])
 }
 
+func isPlusDevices() ->  Bool {
+    
+    return Device().isOneOf([.iPhone6Plus,
+                             .iPhone6sPlus,
+                             .iPhone7Plus,
+                             .iPhone8Plus,
+                             .simulator(.iPhone6Plus),
+                             .simulator(.iPhone6sPlus),
+                             .simulator(.iPhone7Plus),
+                             .simulator(.iPhone8Plus)])
+}
+
 func dayDifference(from date: Date, style: String? = nil) -> String
 {
     let calendar = NSCalendar.current

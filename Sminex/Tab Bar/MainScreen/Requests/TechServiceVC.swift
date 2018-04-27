@@ -146,7 +146,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
-        view.frame.origin.y = -250
+        if !isPlusDevices() {
+            view.frame.origin.y = -250
+        
+        } else {
+            view.frame.origin.y = -265
+        }
     }
     
     // И вниз при исчезновении

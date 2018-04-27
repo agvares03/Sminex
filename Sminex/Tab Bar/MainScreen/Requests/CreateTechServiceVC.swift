@@ -141,6 +141,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     private var data:   ServiceHeaderData?
     private var reqId:  String?
     private var constant: CGFloat = 0.0
+    private var btnConstant: CGFloat = 0.0
     private var imagesArr: [UIImage] = [] {
         didSet {
             drawImages()
@@ -151,6 +152,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         super.viewDidLoad()
         
         constant = btnConst.constant
+        btnConstant = sendBtn.frame.origin.y
         if isNeedToScrollMore() {
             btnConst.constant = 50
         }
@@ -174,6 +176,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        if !isNeedToScroll() {
+            btnConst.constant = (view.frame.size.height - btnConstant) + 50
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -191,6 +197,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if !picker.isHidden {
             dateButtonPressed(nil)
         }
+        
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 200.0)
         if isNeedToScroll() {
             if imagesArr.count != 0 {
@@ -201,12 +208,16 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 btnConst.constant  = -15
                 btnBottom.constant = 240
             }
+        
+        } else {
+            btnConst.constant = ((view.frame.size.height - btnConstant) + 50) - 220
         }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - 200.0)
+        
         if isNeedToScroll() {
             btnBottom.constant = 8
             if !isNeedToScrollMore() {
@@ -214,6 +225,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             } else {
                 btnConst.constant = 50
             }
+        } else {
+            btnConst.constant = (view.frame.size.height - btnConstant) + 50
         }
     }
     
