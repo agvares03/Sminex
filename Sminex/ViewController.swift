@@ -106,10 +106,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // Анимация перехода
     private var transitionManager = TransitionManager()
+    private var sprtTopConst: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        sprtTopConst = sprtLabel.frame.origin.y
         edLogin.delegate = self
         edPass.delegate  = self
         
@@ -129,13 +131,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         if edLogin.text == "" {
             btnEnter.isEnabled = false
             btnEnter.alpha = 0.5
-        }
-        
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 80
-        
-        } else {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 170
         }
     }
     
@@ -189,6 +184,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            sprtTop.constant = (view.frame.size.height - sprtTopConst) - 80
+            
+        } else {
+            sprtTop.constant = (view.frame.size.height - sprtTopConst) - 170
+        }
         
         // Скроем верхний бар при появлении
         navigationController?.isNavigationBarHidden = true

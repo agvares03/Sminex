@@ -249,7 +249,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if title == "Новости" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCell", for: indexPath) as! NewsCell
-            cell.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
+            cell.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData, isLast: data[indexPath.section]!.count == indexPath.row + 2)
             if indexPath.row + 2 == data[indexPath.section]?.count {
                 if #available(iOS 11.0, *) {
                     cell.clipsToBounds = false
@@ -924,11 +924,19 @@ private final class SurveyCellData: MainDataProtocol {
 
 final class NewsCell: UICollectionViewCell {
     
+    @IBOutlet private weak var divider: UILabel!
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var date:    UILabel!
     
-    fileprivate func display(_ item: NewsCellData) {
+    fileprivate func display(_ item: NewsCellData, isLast: Bool = false) {
+        
+        if isLast {
+            divider.isHidden = true
+        
+        } else {
+            divider.isHidden = false
+        }
         
         title.text  = item.title
         desc.text   = item.desc

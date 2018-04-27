@@ -35,6 +35,9 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     @IBAction private func btn_go_action(_ sender: UIButton) {
         
+        view.endEditing(true)
+//        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
+        
         if edLS.text != "" {
             self.startAnimation()
             // Здесь мы проверяем есть ли лиц. счет или номер телефона
@@ -55,7 +58,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
         }
-        
+
     }
     
     @IBAction private func callSupportButtonPressed(_ sender: UIButton) {
@@ -217,7 +220,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         backView.isUserInteractionEnabled = true
         
         if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 120
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 125
         
         } else {
             sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 220

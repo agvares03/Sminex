@@ -784,6 +784,7 @@
                                         <connections>
                                             <outlet property="date" destination="Bmk-EY-TnK" id="uUc-It-huv"/>
                                             <outlet property="desc" destination="MUO-S7-hXN" id="m9E-Gs-jtS"/>
+                                            <outlet property="divider" destination="Tgv-z0-wUp" id="htO-FU-MY8"/>
                                             <outlet property="title" destination="Yet-qa-pNG" id="Hks-bl-Z8Y"/>
                                         </connections>
                                     </collectionViewCell>
@@ -866,27 +867,14 @@
                                                         <action selector="payButtonPressed:" destination="1ZO-FU-KIK" eventType="touchUpInside" id="JnF-z5-k9P"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qls-pJ-33z">
-                                                    <rect key="frame" x="16" y="79" width="285" height="1"/>
-                                                    <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="1" id="rto-bi-7RD"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="Qls-pJ-33z" secondAttribute="bottom" id="0fr-w1-WGb"/>
                                             <constraint firstItem="xYb-OB-46r" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sPE-gb-plh" secondAttribute="leading" constant="150" id="5CI-e6-mCD"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="xYb-OB-46r" secondAttribute="trailing" id="6zP-0P-mGb"/>
                                             <constraint firstItem="xYb-OB-46r" firstAttribute="centerY" secondItem="0wV-y9-75H" secondAttribute="centerY" id="6zw-6a-AvU"/>
                                             <constraint firstItem="Z4h-rc-ntG" firstAttribute="trailing" secondItem="sPE-gb-plh" secondAttribute="trailingMargin" id="Hx0-Z2-wU9"/>
-                                            <constraint firstItem="Qls-pJ-33z" firstAttribute="leading" secondItem="Z4h-rc-ntG" secondAttribute="leading" id="KI7-Hh-MaS"/>
-                                            <constraint firstItem="Qls-pJ-33z" firstAttribute="trailing" secondItem="Z4h-rc-ntG" secondAttribute="trailing" id="Oh9-eb-Fru"/>
                                             <constraint firstItem="Z4h-rc-ntG" firstAttribute="top" relation="greaterThanOrEqual" secondItem="0wV-y9-75H" secondAttribute="bottom" constant="5" id="dOK-T6-Gfg"/>
                                             <constraint firstItem="Z4h-rc-ntG" firstAttribute="leading" secondItem="sPE-gb-plh" secondAttribute="leadingMargin" id="eld-qw-MKa"/>
                                             <constraint firstItem="0wV-y9-75H" firstAttribute="leading" secondItem="sPE-gb-plh" secondAttribute="leadingMargin" constant="8" id="lTt-Rv-a0b"/>

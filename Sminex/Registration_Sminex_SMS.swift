@@ -33,6 +33,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             return
         }
 
+        view.endEditing(true)
         startLoading()
 
         var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)
