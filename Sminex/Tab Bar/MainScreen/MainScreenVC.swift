@@ -450,10 +450,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 guard data != nil else { return }
                 
-                #if DEBUG
-//                    print(String(data: data!, encoding: .utf8)!)
-                #endif
-                
                 let xml = XML.parse(data!)
                 let requests = xml["Requests"]
                 let row = requests["Row"]

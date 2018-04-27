@@ -132,7 +132,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
         
         if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 75
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 80
         
         } else {
             sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 170
