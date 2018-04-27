@@ -319,7 +319,11 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     private func sendMessage() {
         
-        let url = "login=\(lsTextView.text ?? "")&text=\(problemTextView.text ?? "")&email=\(emailTextView.text ?? "")"
+        let login = lsTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let text  = problemTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        
+        let url = "login=\(login)&text=\(text)&mail=\(email)"
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
         request.httpMethod = "GET"
         
@@ -335,11 +339,19 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                     self.present(alert, animated: true, completion: nil)
                 }
                 return
+            
+            } else {
+                let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
             }
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif
+            
         }.resume()
     }
     
