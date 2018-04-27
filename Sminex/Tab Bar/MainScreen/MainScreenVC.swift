@@ -12,7 +12,7 @@ import SwiftyXMLParser
 import FSPagerView
 
 private protocol MainDataProtocol:  class {}
-private protocol CellsDelegate:    class {
+private protocol CellsDelegate:     class {
     func tapped(name: String)
     func pressed(at indexPath: IndexPath)
     func stockCellPressed(currImg: Int)

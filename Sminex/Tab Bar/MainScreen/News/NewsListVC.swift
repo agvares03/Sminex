@@ -77,7 +77,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
     private func getNews() {
         
         let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
-        let lastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
+        let lastId = TemporaryHolder.instance.newsLastId
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
         request.httpMethod = "GET"
@@ -108,6 +108,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                 return
             }
             self.data_.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
+            
             if self.data_.count != 0 {
                 DispatchQueue.global(qos: .background).async {
                     let dataDict =
@@ -118,6 +119,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                     let encoded = NSKeyedArchiver.archivedData(withRootObject: dataDict)
                     UserDefaults.standard.set(encoded, forKey: "newsList")
                     UserDefaults.standard.set(String(self.data_.first?.newsId ?? 0), forKey: "newsLastId")
+                    TemporaryHolder.instance.newsLastId = String(self.data_.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                 }
             }

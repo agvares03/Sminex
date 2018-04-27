@@ -92,6 +92,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loader.isHidden = true
         currPoint = sendButton.frame.origin.y
         sendButton.isEnabled = false
         sendButton.alpha     = 0.5

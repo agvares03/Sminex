@@ -13,6 +13,7 @@ final class TemporaryHolder {
     
     static let instance = TemporaryHolder()
     
+    public var newsLastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
     public var requestTypes:            RequestType?
     public var contacts:                Contacts?
     public var menuQuesions = 0 {
