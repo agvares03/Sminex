@@ -153,11 +153,12 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     open var delegate: AppsUserDelegate?
     private var reqId: String?
     private var data: AdmissionHeaderData?
+    private var btnConstant: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        btnConstant = sendButton.frame.origin.y
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         

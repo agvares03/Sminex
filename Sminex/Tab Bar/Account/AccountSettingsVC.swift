@@ -168,7 +168,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let adress  = UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? ""
         let login   = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? ""
         let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")
-        let pass    = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: UserDefaults.standard.string(forKey: "login")!))
+        let pass    = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: UserDefaults.standard.string(forKey: "login")!))
         
         let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&email=\(email)&additionalInfo=\(commentField.text ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
@@ -179,6 +179,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             
             defer {
                 DispatchQueue.main.sync {
+                    #if DEBUG
+                        print(String(data: data!, encoding: .utf8)!)
+                    #endif
                     self.stopAnimator()
                 }
             }
@@ -200,10 +203,6 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                     self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
                 }
             }
-            
-            #if DEBUG
-            print(String(data: data!, encoding: .utf8)!)
-            #endif
         
         }.resume()
     }

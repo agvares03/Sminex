@@ -178,7 +178,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         if !isNeedToScroll() {
-            btnConst.constant = (view.frame.size.height - btnConstant) + 50
+            btnConst.constant = getConstant()
         }
     }
     
@@ -210,7 +210,12 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             }
         
         } else {
-            btnConst.constant = ((view.frame.size.height - btnConstant) + 50) - 220
+            if !isXDevice() {
+                btnConst.constant = getConstant() - 220
+            
+            } else {
+                btnConst.constant = getConstant() - 240
+            }
         }
     }
     
@@ -226,7 +231,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 btnConst.constant = 50
             }
         } else {
-            btnConst.constant = (view.frame.size.height - btnConstant) + 50
+            btnConst.constant = getConstant()
         }
     }
     
@@ -486,5 +491,14 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             sendBtn.alpha       = 1
         }
         return true
+    }
+    
+    private func getConstant() -> CGFloat {
+        
+        if !isXDevice() {
+            return (view.frame.size.height - btnConstant) + 50
+        } else {
+            return (view.frame.size.height - btnConstant)
+        }
     }
 }

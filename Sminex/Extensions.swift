@@ -222,6 +222,12 @@ func isPlusDevices() ->  Bool {
                              .simulator(.iPhone8Plus)])
 }
 
+func isXDevice() -> Bool {
+    
+    return Device().isOneOf([.iPhoneX,
+                             .simulator(.iPhoneX)])
+}
+
 func dayDifference(from date: Date, style: String? = nil) -> String
 {
     let calendar = NSCalendar.current
