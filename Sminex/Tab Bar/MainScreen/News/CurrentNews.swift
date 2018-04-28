@@ -19,10 +19,16 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
     @IBOutlet private weak var date:        	UILabel!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
-        navigationController?.popViewController(animated: true)
+        if !isFromMain_ {
+            navigationController?.popViewController(animated: true)
+        
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     open var data_: NewsJson?
+    open var isFromMain_ = false
     
     override func viewDidLoad() {
         super.viewDidLoad()

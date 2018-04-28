@@ -151,6 +151,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         if segue.identifier == Segues.fromNewsList.toNews {
             let vc = segue.destination as! CurrentNews
             vc.data_ = tappedNews == nil ? data_[index] : tappedNews
+            vc.isFromMain_ = tappedNews != nil
             tappedNews = nil
         }
     }

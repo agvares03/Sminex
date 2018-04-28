@@ -354,8 +354,20 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     let lastComm = (self.rowComms[$0.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                    let isPerson = $0.name?.contains(find: "ропуск") ?? false
+                    
+                    var persons = ""
+                    if isPerson {
+                        self.rowPersons[$0.id!]?.forEach {
+                            
+                            if $0.fio != "" && $0.fio != nil {
+                                persons = persons + ", " + ($0.fio ?? "")
+                            }
+                        }
+                    }
+                    let descText = isPerson ? (persons == "" ? "Не указано" : persons) : $0.text ?? ""
                     self.data.append( AppsUserCellData(title: $0.name ?? "",
-                                                       desc: self.rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
+                                                       desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
                                                        icon: icon,
                                                        status: $0.status ?? "",
                                                        date: date,
@@ -363,14 +375,14 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                        type: $0.name ?? "")  )
                     if !isBackground {
                     db.setRequests(title: $0.name ?? "",
-                                   desc: self.rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
+                                   desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
                                    icon: icon,
                                    date: date,
                                    status: $0.status ?? "",
                                    isBack: isAnswered)
                     } else {
                         returnArr.append( RequestCellData(title: $0.name ?? "",
-                                                          desc: self.rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
+                                                          desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
                                                           icon: icon,
                                                           date: date,
                                                           status: $0.status ?? "",

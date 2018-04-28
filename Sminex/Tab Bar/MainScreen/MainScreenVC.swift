@@ -461,13 +461,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 let row = requests["Row"]
                 var rows: [Request] = []
                 var rowComms: [String : [RequestComment]]  = [:]
+                var rowPersons: [String : [RequestPerson]] = [:]
                 
                 row.forEach { row in
                     rows.append(Request(row: row))
                     rowComms[row.attributes["ID"]!] = []
+                    rowPersons[row.attributes["ID"]!] = []
                     
                     row["Comm"].forEach {
                         rowComms[row.attributes["ID"]!]?.append( RequestComment(row: $0) )
+                    }
+                    row["Persons"].forEach {
+                        rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
                     }
                 }
                 
@@ -484,8 +489,21 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         commentCount += 1
                     }
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                    let isPerson = $0.name?.contains(find: "ропуск") ?? false
+                    
+                    var persons = ""
+                    if isPerson {
+                        rowPersons[$0.id!]?.forEach {
+                            
+                            if $0.fio != "" && $0.fio != nil {
+                                persons = persons + ", " + ($0.fio ?? "")
+                            }
+                        }
+                    }
+                    let descText = isPerson ? (persons == "" ? "Не указано" : persons) : $0.text ?? ""
+                    
                     returnArr.append( RequestCellData(title: $0.name ?? "",
-                                                      desc: rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
+                                                      desc: rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
                                                       icon: icon,
                                                       date: date,
                                                       status: $0.status ?? "",
