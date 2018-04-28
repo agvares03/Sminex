@@ -136,7 +136,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             NameLS.text     = numberPhone_
             let index = numberPhone_.index(numberPhone_.startIndex, offsetBy: 5)
             let indexEnd  =  numberPhone_.index(before: numberPhone_.endIndex)
-            descTxt.text    = "Отправлен на телефон \(numberPhone_[index])*****\(numberPhone_[indexEnd]) (действует в течение 10 минут). Запросить новый код можно через минуту"
+            descTxt.text  = "Отправлен на телефон \(numberPhone_[numberPhone_.startIndex..<index])*****\(numberPhone_[indexEnd]) (действует в течение 10 минут). Запросить новый код можно через минуту"
             
         } else {
             txtNameLS.text  = "Номер лицевого счета"

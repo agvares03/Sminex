@@ -36,7 +36,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @IBAction private func btn_go_action(_ sender: UIButton) {
         
         view.endEditing(true)
-        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
+//        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
         
         if edLS.text != "" {
             self.startAnimation()
