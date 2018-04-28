@@ -562,32 +562,31 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 var filtered: [QuestionDataJson] = []
                 unfilteredData?.forEach { json in
                     
-                    var isContains = false
+                    var isContains = true
                     json.questions?.forEach {
-                        if $0.isCompleteByUser ?? true {
-                            isContains = true
+                        if !($0.isCompleteByUser ?? false) {
+                            isContains = false
                         }
                     }
                     if !isContains {
                         filtered.append(json)
                     }
+                }
+                if filtered.count == 0 {
+                    self.questionSize = CGSize(width: 0, height: 0)
                     
-                    if filtered.count == 0 {
-                        self.questionSize = CGSize(width: 0, height: 0)
-                    
-                    } else {
-                        self.questionSize = nil
-                        var count = 1
-                        filtered.forEach {
-                            self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
-                            count += 1
-                        }
+                } else {
+                    self.questionSize = nil
+                    var count = 1
+                    filtered.forEach {
+                        self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
+                        count += 1
                     }
-                    TemporaryHolder.instance.menuQuesions = filtered.count
+                }
+                TemporaryHolder.instance.menuQuesions = filtered.count
                 
-                    DispatchQueue.main.sync {
-                        self.collection.reloadData()
-                    }
+                DispatchQueue.main.sync {
+                    self.collection.reloadData()
                 }
                 
                 if unfilteredData?.count == 0 {

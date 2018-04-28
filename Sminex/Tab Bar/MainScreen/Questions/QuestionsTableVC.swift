@@ -122,8 +122,8 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                 
                 var isContains = false
                 json.questions?.forEach {
-                    if $0.isCompleteByUser ?? true {
-                        isContains = true
+                    if !($0.isCompleteByUser ?? false) {
+                        isContains = false
                     }
                 }
                 if !isContains {

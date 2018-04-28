@@ -482,7 +482,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         
         if segue.identifier == Segues.fromRegistrationSminexEnterPassword.toComplete {
             let vc = (segue.destination as! UINavigationController).topViewController as! AccountSettingsVC
-            vc.isReg_ = true
+            vc.isReg_          = true
+            vc.login_          = login_
+            vc.pass_           = passTextField.text ?? ""
+            vc.responceString_ = responseString
         }
     }
     
