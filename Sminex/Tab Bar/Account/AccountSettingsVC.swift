@@ -129,9 +129,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         lsLabel.text            = defaults.string(forKey: "login")
         
         let name                = defaults.string(forKey: "name")?.split(separator: " ")
-        familyNameField.text    = String(describing: name?[0] ?? "")
-        nameField.text          = String(describing: name?[1] ?? "")
-        otchestvoField.text     = String(describing: name?[2] ?? "")
+        familyNameField.text    = String(describing: name?[safe: 0] ?? "")
+        nameField.text          = String(describing: name?[safe: 1] ?? "")
+        otchestvoField.text     = String(describing: name?[safe: 2] ?? "")
         
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent   = true

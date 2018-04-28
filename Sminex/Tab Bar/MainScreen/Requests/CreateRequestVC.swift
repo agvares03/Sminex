@@ -104,7 +104,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                         self.uploadPhoto($0)
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.sync {
                         
                         self.endAnimator()
                         self.delegate?.update()
@@ -347,6 +347,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         let (responce, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
         
+        guard responce != nil else { return false }
         print(String(data: responce!, encoding: .utf8)!)
         
         if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {

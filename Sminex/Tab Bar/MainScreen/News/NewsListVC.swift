@@ -18,6 +18,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         navigationController?.popViewController(animated: true)
     }
     
+    open var tappedNews: NewsJson?
     open var data_: [NewsJson] = []
     private var index = 0
     private var refreshControl: UIRefreshControl?
@@ -39,6 +40,10 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
             collection.refreshControl = refreshControl
         } else {
             collection.addSubview(refreshControl!)
+        }
+        
+        if tappedNews != nil {
+            performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
         }
         
         startAnimation()
@@ -145,7 +150,8 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromNewsList.toNews {
             let vc = segue.destination as! CurrentNews
-            vc.data_ = data_[index]
+            vc.data_ = tappedNews == nil ? data_[index] : tappedNews
+            tappedNews = nil
         }
     }
 }

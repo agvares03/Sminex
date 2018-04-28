@@ -174,6 +174,7 @@ struct Segues {
         static let toFinance         = "finance"
         static let toFinancePay      = "pay"
         static let toNews            = "news"
+        static let toNewsWAnim       = "newsWAnim"
     }
     
     struct fromRequestTypeVC {

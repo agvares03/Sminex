@@ -55,6 +55,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
     private var refreshControl: UIRefreshControl?
+    private var tappedNews: NewsJson?
     private var deals:  [DealsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
@@ -364,6 +365,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
 //        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
 //            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
+        
+        } else if let cell = collection.cellForItem(at: indexPath) as? NewsCell {
+            tappedNews = TemporaryHolder.instance.news?[indexPath.row]
+            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
         }
     }
     
@@ -436,8 +441,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         group.enter()
         DispatchQueue.global(qos: .userInteractive).async {
             
-            let login = UserDefaults.standard.string(forKey: "login")!
-            let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: self.getSalt(login: login))
+            let login = UserDefaults.standard.string(forKey: "login") ?? ""
+            let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: login))
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"
@@ -467,23 +472,22 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 var commentCount = 0
                 rows.forEach {
-                    let isAnswered = rowComms[$0.id!]?.count == 0 ? false : true
+                    let isAnswered = (rowComms[$0.id!]?.count ?? 0) <= 0 ? false : true
                     
-                    var date = $0.planDate!
+                    var date = $0.planDate ?? ""
                     if date != "" {
                         date.removeLast(9)
                     }
-                    if (rowComms[$0.id!]?.count ?? 0) <= 0 { return }
-                    let lastComm = rowComms[$0.id!]?[(rowComms[$0.id!]?.count ?? 1) - 1]
+                    let lastComm = (rowComms[$0.id!]?.count ?? 0) <= 0 ? nil : rowComms[$0.id!]?[(rowComms[$0.id!]?.count ?? 1) - 1]
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1
                     }
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
-                    returnArr.append( RequestCellData(title: $0.name!,
-                                                      desc: rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
+                    returnArr.append( RequestCellData(title: $0.name ?? "",
+                                                      desc: rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
                                                       icon: icon,
                                                       date: date,
-                                                      status: $0.status!,
+                                                      status: $0.status ?? "",
                                                       isBack: isAnswered) )
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
@@ -552,8 +556,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_QUESTIONS + "accID=" + id)!)
             request.httpMethod = "GET"
-            
-            print(request.url)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -819,6 +821,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
             let vc = segue.destination as! FinancePayAcceptVC
             vc.accountData_ = debt
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toNewsWAnim {
+            let vc = segue.destination as! NewsListVC
+            vc.tappedNews = tappedNews
         }
     }
     

@@ -113,7 +113,7 @@ final class DealsListDescHeader: UICollectionReusableView {
             let df = DateFormatter()
             df.dateFormat = "YYYY-MM-DD"
             let date = df.date(from: data_?.dateStop ?? "2018-01-01")
-            df.dateFormat = "DD MMMM YYYY"
+            df.dateFormat = "dd MMMM yyyy"
             df.locale = Locale(identifier: "Ru-ru")
             dateLabel.text = df.string(from: date ?? Date())
         }

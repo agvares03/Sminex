@@ -31,7 +31,19 @@ final class TemporaryHolder {
             NotificationCenter.default.post(name: NSNotification.Name("DealsMenu"), object: nil)
         }
     }
-    public var news: [NewsJson]?
+    public var news: [NewsJson]? {
+        didSet {
+            self.news = news?.filter {
+                let df = DateFormatter()
+                df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+                let date = df.date(from: $0.dateEnd ?? "") ?? Date()
+                if date < Date() {
+                    return false
+                }
+                return true
+            }
+        }
+    }
     public var contactsList: [ContactsJson] = []
     
     func choise(_ responce: JSON) {

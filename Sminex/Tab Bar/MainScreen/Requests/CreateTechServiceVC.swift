@@ -126,7 +126,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                     self.imagesArr.forEach {
                         self.uploadPhoto($0)
                     }
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.sync {
                         
                         self.endAnimator()
                         self.delegate?.update()

@@ -345,36 +345,35 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.data = []
                 self.rows.forEach {
                    
-                    let isAnswered = self.rowComms[$0.id!]?.count == 0 ? false : true
+                    let isAnswered = (self.rowComms[$0.id!]?.count ?? 0) <= 0 ? false : true
                     
                     var date = $0.planDate!
                     if date.count > 9 {
                         date.removeLast(9)
                     }
                     
-                    if (self.rowComms[$0.id!]?.count ?? 0) <= 0 { return }
-                    let lastComm = self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
+                    let lastComm = (self.rowComms[$0.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
-                    self.data.append( AppsUserCellData(title: $0.name!,
-                                                       desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
+                    self.data.append( AppsUserCellData(title: $0.name ?? "",
+                                                       desc: self.rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
                                                        icon: icon,
-                                                       status: $0.status!,
+                                                       status: $0.status ?? "",
                                                        date: date,
                                                        isBack: isAnswered,
-                                                       type: $0.name!)  )
+                                                       type: $0.name ?? "")  )
                     if !isBackground {
-                    db.setRequests(title: $0.name!,
-                                   desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
+                    db.setRequests(title: $0.name ?? "",
+                                   desc: self.rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
                                    icon: icon,
                                    date: date,
-                                   status: $0.status!,
+                                   status: $0.status ?? "",
                                    isBack: isAnswered)
                     } else {
-                        returnArr.append( RequestCellData(title: $0.name!,
-                                                          desc: self.rowComms[$0.id!]?.count == 0 ? $0.text! : (lastComm?.text!)!,
+                        returnArr.append( RequestCellData(title: $0.name ?? "",
+                                                          desc: self.rowComms[$0.id!]?.count == 0 ? $0.text ?? "" : lastComm?.text ?? "",
                                                           icon: icon,
                                                           date: date,
-                                                          status: $0.status!,
+                                                          status: $0.status ?? "",
                                                           isBack: isAnswered) )
                     }
                 }
