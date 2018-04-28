@@ -116,10 +116,12 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     open var phone_     = ""
     
     private var responseString  = ""
+    private var const: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        const = sprtLabel.frame.origin.y
         stopAnimation()
         
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
@@ -144,12 +146,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         backView.isUserInteractionEnabled = true
         backView.addGestureRecognizer(recognizer)
         
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 100
-            
-        } else {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 200
-        }
+        sprtTop.constant = getConst()
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
@@ -178,10 +175,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @objc func keyboardWillShow(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant -= 200
-        
+            sprtTop.constant = getConst() - 210
+
         } else {
-            sprtTop.constant -= 100
+            sprtTop.constant = getConst() - 100
             sprtBtm.constant += 220
         }
     }
@@ -190,10 +187,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant += 200
+            sprtTop.constant = getConst()
             
         } else {
-            sprtTop.constant += 100
+            sprtTop.constant = getConst()
             sprtBtm.constant -= 220
         }
     }
@@ -486,6 +483,16 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         if segue.identifier == Segues.fromRegistrationSminexEnterPassword.toComplete {
             let vc = (segue.destination as! UINavigationController).topViewController as! AccountSettingsVC
             vc.isReg_ = true
+        }
+    }
+    
+    private func getConst() -> CGFloat {
+        
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            return (view.frame.size.height - const) - 100
+            
+        } else {
+            return (view.frame.size.height - const) - 200
         }
     }
 }

@@ -34,6 +34,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         }
 
         view.endEditing(true)
+//        self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
         startLoading()
 
         var request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REG + "smsCode=" + (smsField.text ?? ""))!)

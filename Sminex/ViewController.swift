@@ -24,7 +24,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var btnForgot:   UIButton!
     @IBOutlet private weak var showpswrd:   UIButton!
     
-    @IBOutlet private weak var indicator: UIActivityIndicatorView!
+    @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     
     @IBOutlet private weak var sprtLabel:   UILabel!
     @IBOutlet private weak var lsLabel:     UILabel!
