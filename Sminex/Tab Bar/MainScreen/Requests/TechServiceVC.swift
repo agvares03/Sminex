@@ -60,7 +60,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             DispatchQueue.global(qos: .userInteractive).async {
                 usleep(900000)
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.sync {
                     self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
                     self.endAnimator()
                 }

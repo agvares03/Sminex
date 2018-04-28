@@ -108,6 +108,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                     for (index, item) in (self.questions?.enumerated())! {
                         if item.name == self.performName_ {
                             self.index = index
+                            self.performName_ = ""
                             self.performSegue(withIdentifier: Segues.fromQuestionsTableVC.toQuestion, sender: self)
                         }
                     }

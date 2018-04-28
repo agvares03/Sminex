@@ -418,6 +418,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         if !isBackground {
             DispatchQueue.global(qos: .background).async {
+                print("kdmsalkm")
                 let res = self.getRequests()
                 var count = 1
                 sleep(2)
