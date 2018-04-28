@@ -517,7 +517,6 @@ final class AppsUserCell: UICollectionViewCell {
     
     fileprivate func display(_ item: AppsUserCellData) {
         
-        title.text      = item.title
         desc.text       = item.desc
         icon.image      = item.icon
         status.text     = item.status
@@ -526,8 +525,26 @@ final class AppsUserCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        if item.date != "" {
-            date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy")
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
+        
+        if item.isBack {
+            back.isHidden = false
+            
+        } else {
+            back.isHidden = true
+        }
+        
+        let currTitle = item.title
+        let titleDateString = currTitle.substring(fromIndex: currTitle.length - 19)
+        let df = DateFormatter()
+        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        if let titleDate = df.date(from: titleDateString) {
+            df.dateFormat = "dd MMMM"
+            df.locale = Locale(identifier: "Ru-ru")
+            title.text = String(currTitle.dropLast(19)) + "на " + df.string(from: titleDate)
+        
+        } else {
+            title.text = item.title
         }
     }
     

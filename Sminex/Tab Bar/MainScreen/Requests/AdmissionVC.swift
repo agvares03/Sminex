@@ -129,14 +129,17 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         collection.dataSource                   = self
         automaticallyAdjustsScrollViewInsets    = false
         
+        commentField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: commentField.frame.height))
+        commentField.rightViewMode = .always
+        
         let reconizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         reconizer.delegate              = self
         view.isUserInteractionEnabled   = true
         view.addGestureRecognizer(reconizer)
         
-        if name_ != nil {
-            title = name_
-        }
+//        if name_ != nil {
+//            title = name_
+//        }
         
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -371,10 +374,8 @@ final class AdmissionHeader: UICollectionViewCell {
         status.text         = item.status
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        if item.date != "" {
-            date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
-        }
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.images.count == 0 && item.imgsUrl.count == 0 {
             imgs.isHidden       = true

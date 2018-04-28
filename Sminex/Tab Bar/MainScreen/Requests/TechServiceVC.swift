@@ -119,6 +119,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         arr = comments_
         arr.insert(data_, at: 0)
         
+        commentField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: commentField.frame.height))
+        commentField.rightViewMode = .always
+        
         collection.delegate     = self
         collection.dataSource   = self
         
@@ -339,10 +342,8 @@ final class ServiceHeader: UICollectionViewCell {
         status.text = item.status
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        if item.date != "" {
-            date.text = dayDifference(from: dateFormatter.date(from: item.date)!, style: "dd.MM.yyyy HH:mm")
-        }
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.images.count == 0 {
             imageConst.constant = 30
