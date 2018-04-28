@@ -78,6 +78,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     open var isReg_ = false
+    open var responceString_ = ""
+    open var login_ = ""
+    open var pass_  = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,16 +162,20 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     private func editAccountInfo() {
+        var answers = isReg_ ? responceString_.split(separator: ";") : [""]
         
-        let phone   = privNumber.text?.stringByAddingPercentEncodingForRFC3986() ?? (UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986() ?? "")
-        let email   = self.email.text?.stringByAddingPercentEncodingForRFC3986() ?? (UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986() ?? "")
-        let area    = UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? ""
-        let rooms   = UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? ""
-        let total   = UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? ""
-        let adress  = UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? ""
-        let login   = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? ""
-        let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")
-        let pass    = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: UserDefaults.standard.string(forKey: "login")!))
+        let defPhone = isReg_ ? String(answers[answers.count - 2]) : (UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986() ?? "")
+        let defMail  = isReg_ ? String(answers[3]) : (UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986() ?? "")
+        let phone    = privNumber.text?.stringByAddingPercentEncodingForRFC3986() ?? defPhone
+        let email   = self.email.text?.stringByAddingPercentEncodingForRFC3986() ?? defMail
+        let area    = isReg_ ? String(answers[12]) : (UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? "")
+        let rooms   = isReg_ ? String(answers[11]) : (UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? "")
+        let total   = isReg_ ? String(answers[13]) : (UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? "")
+        let adress  = isReg_ ? String(answers[10]) : (UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? "")
+        let login   = isReg_ ? login_ : (UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? "")
+        let defName = isReg_ ? String(answers[6]) : (UserDefaults.standard.string(forKey: "name") ?? "")
+        let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (defName.stringByAddingPercentEncodingForRFC3986() ?? "")
+        let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
         
         let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&email=\(email)&additionalInfo=\(commentField.text ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
