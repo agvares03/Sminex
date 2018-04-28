@@ -120,7 +120,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
             var filtered: [QuestionDataJson] = []
             unfilteredData?.forEach { json in
                 
-                var isContains = false
+                var isContains = true
                 json.questions?.forEach {
                     if !($0.isCompleteByUser ?? false) {
                         isContains = false

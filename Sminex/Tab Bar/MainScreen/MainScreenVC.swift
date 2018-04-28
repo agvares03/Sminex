@@ -553,6 +553,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_QUESTIONS + "accID=" + id)!)
             request.httpMethod = "GET"
             
+            print(request.url)
+            
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
