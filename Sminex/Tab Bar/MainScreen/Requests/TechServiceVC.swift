@@ -494,10 +494,8 @@ final class ServiceCommentCell: UICollectionViewCell {
         desc.text   = item.desc
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        if item.date != "" {
-            date.text = dayDifference(from: dateFormatter.date(from: item.date)!)
-        }
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
         image.isUserInteractionEnabled = true
