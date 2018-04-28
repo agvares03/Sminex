@@ -11,14 +11,26 @@ import UIKit
 final class QuestionFinalVC: UIViewController {
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
-        let viewControllers = navigationController?.viewControllers
-        navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
+        if !isFromMain_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
+        
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
-        let viewControllers = navigationController?.viewControllers
-        navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
+        if !isFromMain_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
+        
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
     }
+    
+    open var isFromMain_ = false
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -21,7 +21,12 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         userDefaults.set(encodedData, forKey: String(question_?.id ?? 0))
         userDefaults.synchronize()
         
-        navigationController?.popViewController(animated: true)
+        if !isFromMain_ {
+            navigationController?.popViewController(animated: true)
+        
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
@@ -49,6 +54,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
+    open var isFromMain_ = false
     open var delegate: MainScreenDelegate?
     open var question_: QuestionDataJson?
     
@@ -256,6 +262,13 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             
         }.resume()
         return
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Segues.fromQuestionAnswerVC.toFinal {
+            let vc = segue.destination as! QuestionFinalVC
+            vc.isFromMain_ = isFromMain_
+        }
     }
 }
 

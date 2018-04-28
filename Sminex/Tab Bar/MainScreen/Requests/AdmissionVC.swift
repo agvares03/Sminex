@@ -528,7 +528,7 @@ final class AdmissionCommentCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "hh:mm"): dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
         comImg.isUserInteractionEnabled = true
