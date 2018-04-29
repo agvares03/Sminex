@@ -232,7 +232,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         if title == "Опросы" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SurveyCell", for: indexPath) as! SurveyCell
-            cell.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
+            cell.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self, isLast: data[indexPath.section]!.count == indexPath.row + 2)
             if indexPath.row + 2 == data[indexPath.section]?.count {
                 if #available(iOS 11.0, *) {
                     cell.clipsToBounds = false
@@ -905,6 +905,7 @@ class SurveyCell: UICollectionViewCell {
     
     @IBOutlet weak var title:               UILabel!
     @IBOutlet private weak var questions:   UILabel!
+    @IBOutlet private weak var divider:     UILabel!
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
         delegate?.pressed(at: indexPath!)
@@ -913,13 +914,14 @@ class SurveyCell: UICollectionViewCell {
     private var indexPath: IndexPath?
     private var delegate: CellsDelegate?
     
-    fileprivate func display(_ item: SurveyCellData, indexPath: IndexPath, delegate: CellsDelegate) {
+    fileprivate func display(_ item: SurveyCellData, indexPath: IndexPath, delegate: CellsDelegate, isLast: Bool = false) {
         
-        self.indexPath  = indexPath
-        self.delegate   = delegate
+        self.indexPath   = indexPath
+        self.delegate    = delegate
         
-        title.text      = item.title
-        questions.text  = item.question
+        title.text       = item.title
+        questions.text   = item.question
+        divider.isHidden = isLast
     }
     
     class func fromNib() -> SurveyCell? {
