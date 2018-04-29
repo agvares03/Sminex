@@ -366,7 +366,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
 //            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         
-        } else if let cell = collection.cellForItem(at: indexPath) as? NewsCell {
+        } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
             tappedNews = TemporaryHolder.instance.news?[indexPath.row]
             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
         }
@@ -731,6 +731,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     TemporaryHolder.instance.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
                     UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
+                    TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                     let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                     
@@ -750,6 +751,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     DispatchQueue.main.sync {
                         self.collection.reloadData()
                     }
+                    return
                 }.resume()
                 return
             }
@@ -772,7 +774,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             
             let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
-            let lastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
+            let lastId = TemporaryHolder.instance.newsLastId
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
             request.httpMethod = "GET"
@@ -784,6 +786,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
                 UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
+                TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                 UserDefaults.standard.synchronize()
                 let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                 
