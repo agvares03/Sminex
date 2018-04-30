@@ -286,7 +286,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     private func choice() {
         
-        DispatchQueue.main.sync {
+        DispatchQueue.main.async {
             
             if self.responseString == "1" {
                 

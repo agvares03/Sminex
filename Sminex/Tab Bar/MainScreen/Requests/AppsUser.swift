@@ -341,57 +341,56 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 db.deleteRequests()
                 }
                 
-                DispatchQueue.main.sync {
-                    self.data = []
-                    self.rows.forEach {
-                        
-                        let isAnswered = (self.rowComms[$0.id!]?.count ?? 0) <= 0 ? false : true
-                        
-                        var date = $0.planDate!
-                        if date.count > 9 {
-                            date.removeLast(9)
-                        }
-                        
-                        let lastComm = (self.rowComms[$0.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
-                        let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
-                        let isPerson = $0.name?.contains(find: "ропуск") ?? false
-                        
-                        var persons = ""
-                        if isPerson {
-                            self.rowPersons[$0.id!]?.forEach {
-                                
-                                if $0.fio != "" && $0.fio != nil {
-                                    persons = persons + ", " + ($0.fio ?? "")
-                                }
+                var newData: [AppsUserCellData] = []
+                self.rows.forEach {
+                   
+                    let isAnswered = (self.rowComms[$0.id!]?.count ?? 0) <= 0 ? false : true
+                    
+                    var date = $0.planDate!
+                    if date.count > 9 {
+                        date.removeLast(9)
+                    }
+                    
+                    let lastComm = (self.rowComms[$0.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[$0.id!]?[(self.rowComms[$0.id!]?.count)! - 1]
+                    let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                    let isPerson = $0.name?.contains(find: "ропуск") ?? false
+                    
+                    var persons = ""
+                    if isPerson {
+                        self.rowPersons[$0.id!]?.forEach {
+                            
+                            if $0.fio != "" && $0.fio != nil {
+                                persons = persons + ", " + ($0.fio ?? "")
                             }
                         }
-                        let descText = isPerson ? (persons == "" ? "Не указано" : persons) : $0.text ?? ""
-                        self.data.append( AppsUserCellData(title: $0.name ?? "",
-                                                           desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
-                                                           icon: icon,
-                                                           status: $0.status ?? "",
-                                                           date: date,
-                                                           isBack: isAnswered,
-                                                           type: $0.name ?? "")  )
-                        if !isBackground {
-                                db.setRequests(title: $0.name ?? "",
-                                               desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
-                                               icon: icon,
-                                               date: date,
-                                               status: $0.status ?? "",
-                                               isBack: isAnswered)
-                        } else {
-                            returnArr.append( RequestCellData(title: $0.name ?? "",
-                                                              desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
-                                                              icon: icon,
-                                                              date: date,
-                                                              status: $0.status ?? "",
-                                                              isBack: isAnswered) )
-                        }
+                    }
+                    let descText = isPerson ? (persons == "" ? "Не указано" : persons) : $0.text ?? ""
+                    newData.append( AppsUserCellData(title: $0.name ?? "",
+                                                     desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                                                     icon: icon,
+                                                     status: $0.status ?? "",
+                                                     date: date,
+                                                     isBack: isAnswered,
+                                                     type: $0.name ?? "")  )
+                    if !isBackground {
+                        db.setRequests(title: $0.name ?? "",
+                                       desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                                       icon: icon,
+                                       date: date,
+                                       status: $0.status ?? "",
+                                       isBack: isAnswered)
+                    } else {
+                        returnArr.append( RequestCellData(title: $0.name ?? "",
+                                                          desc: self.rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                                                          icon: icon,
+                                                          date: date,
+                                                          status: $0.status ?? "",
+                                                          isBack: isAnswered) )
                     }
                 }
                 
                 DispatchQueue.main.sync {
+                    self.data = newData
                     if !isBackground {
                         self.collection.reloadData()
                         if #available(iOS 10.0, *) {
