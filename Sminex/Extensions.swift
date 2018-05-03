@@ -141,9 +141,11 @@ func saveGlobalData(date1:              String,
                     residentialArea:    String,
                     totalArea:          String,
                     strah:              String,
-                    buisness:           String) {
+                    buisness:           String,
+                    lsNumber:           String) {
     
     let defaults = UserDefaults.standard
+    defaults.setValue(lsNumber, forKey: "login")
     defaults.setValue(date1, forKey: "date1")
     defaults.setValue(date2, forKey: "date2")
     defaults.setValue(can_count, forKey: "can_count")
