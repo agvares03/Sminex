@@ -122,6 +122,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     
     private var responseString  = ""
     private var descText        = ""
+    private var topConstant: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,13 +164,8 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         backView.isUserInteractionEnabled = true
         backView.addGestureRecognizer(recognizer)
         
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 120
-            
-        } else {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 220
-        }
-        
+        topConstant = sprtLabel.frame.origin.y
+        sprtTop.constant = getPoint()
         startTimer()
     }
     
@@ -199,10 +195,10 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     @objc func keyboardWillShow(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant -= 200
+            sprtTop.constant = getPoint() - 200
         
         } else {
-            sprtTop.constant    -= 120
+            sprtTop.constant    -= getPoint() - 120
             sprtBottom.constant += 200
         }
     }
@@ -211,10 +207,10 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant += 200
+            sprtTop.constant = getPoint()
             
         } else {
-            sprtTop.constant    += 120
+            sprtTop.constant    = getPoint()
             sprtBottom.constant -= 200
         }
     }
@@ -256,7 +252,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             let vc = segue.destination as! RegistrationSminexEnterPassword
             
             let response = responseString.components(separatedBy: ";")
-            
+
             vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
             vc.phone_ = response[1]
             vc.isReg_ = isReg_
@@ -394,5 +390,15 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             btn_go.alpha = 0.5
         }
         return true
+    }
+    
+    private func getPoint() -> CGFloat {
+        
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            return (view.frame.size.height - topConstant) - 120
+            
+        } else {
+            return (view.frame.size.height - topConstant) - 220
+        }
     }
 }
