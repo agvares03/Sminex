@@ -148,10 +148,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardWillShow(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant -= 200
+            sprtTop.constant = getPoint() - 200
         
         } else {
-            sprtTop.constant -= 100
+            sprtTop.constant = getPoint() - 100
             sprtBtm.constant += 200
         }
         
@@ -171,10 +171,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant += 200
+            sprtTop.constant = getPoint()
         
         } else {
-            sprtTop.constant += 100
+            sprtTop.constant = getPoint()
             sprtBtm.constant -= 200
         }
         
@@ -191,12 +191,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtTopConst) - 80
-            
-        } else {
-            sprtTop.constant = (view.frame.size.height - sprtTopConst) - 170
-        }
+        sprtTop.constant = getPoint()
         
         // Скроем верхний бар при появлении
         navigationController?.isNavigationBarHidden = true
@@ -490,6 +485,15 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             }.resume()
+    }
+    
+    private func getPoint() -> CGFloat {
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            return (view.frame.size.height - sprtTopConst) - 80
+            
+        } else {
+            return (view.frame.size.height - sprtTopConst) - 170
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

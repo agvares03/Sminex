@@ -153,15 +153,18 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     @objc func keyboardWillShow(sender: NSNotification?) {
         if !isPlusDevices() {
             view.frame.origin.y = -250
+            collection.contentInset.top = 250
         
         } else {
             view.frame.origin.y = -265
+            collection.contentInset.top = 265
         }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         view.frame.origin.y = 0
+        collection.contentInset.top = 0
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {

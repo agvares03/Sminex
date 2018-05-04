@@ -1000,9 +1000,17 @@ final class NewsCell: UICollectionViewCell {
                 cell = cellView
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 50
-        cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
+        if !isNeedToScroll() {
+            cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 45
+            cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) + 15
+            cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 45
+        
+        } else {
+            cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
+            cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 50
+            cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
+        }
+        
         return cell
     }
 }
