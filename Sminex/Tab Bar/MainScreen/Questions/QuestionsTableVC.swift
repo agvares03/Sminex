@@ -9,7 +9,11 @@
 import UIKit
 import Gloss
 
-final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+protocol QuestionTableDelegate {
+    func update()
+}
+
+final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, QuestionTableDelegate {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
@@ -134,6 +138,10 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
             }.resume()
     }
     
+    func update() {
+        getQuestions()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromQuestionsTableVC.toQuestion {
@@ -141,6 +149,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
             vc.question_ = questions?[index]
             vc.delegate = delegate
             vc.isFromMain_ = performName_ != ""
+            vc.questionDelegate = self
             performName_ = ""
         }
     }
@@ -155,10 +164,10 @@ final class QuestionsTableCell: UICollectionViewCell {
         
         title.text = item.name
         
-        var isAnswered = false
+        var isAnswered = true
         item.questions?.forEach {
-            if $0.isAcceptSomeAnswers ?? false {
-                isAnswered = true
+            if !($0.isCompleteByUser ?? false) {
+                isAnswered = false
             }
         }
         

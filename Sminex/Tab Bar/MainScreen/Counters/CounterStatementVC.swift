@@ -15,6 +15,7 @@ protocol CounterStatementDelegate: class {
 final class CounterStatementVC: UIViewController {
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
+    @IBOutlet private weak var goBottomConst:   NSLayoutConstraint!
     @IBOutlet private weak var goButtonConst:   NSLayoutConstraint!
     @IBOutlet private weak var count:           DigitInputView!
     @IBOutlet private weak var scroll:          UIScrollView!
@@ -48,11 +49,11 @@ final class CounterStatementVC: UIViewController {
         super.viewDidLoad()
         
         automaticallyAdjustsScrollViewInsets = false
-    
+        
         count.bottomBorderColor = .clear
         count.nextDigitBottomBorderColor = .clear
-        count.backColor = UIColor(white: 96/100, alpha: 1.0)
-        count.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        count.backColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
+        count.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         
         if value_?.fractionalNumber?.contains(find: "alse") ?? true {
             count.numberOfDigits = 5
@@ -72,7 +73,7 @@ final class CounterStatementVC: UIViewController {
         monthLabel.text = month_
         navigationController?.title = "Показания за " + month_!
         
-        outcomeLabel.text = (value_?.difference ?? "0") + " " + (value_?.units)! + "/мес."
+        outcomeLabel.text = "\(value_?.difference ?? "0") \(value_?.units ?? "")/мес."
         
         stopAnimator()
         
@@ -83,6 +84,7 @@ final class CounterStatementVC: UIViewController {
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        let _ = count.becomeFirstResponder()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,6 +106,11 @@ final class CounterStatementVC: UIViewController {
         if isNeedToScrollMore() {
             scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 240.0)
             scroll.contentOffset = CGPoint(x: 0, y: 50)
+        
+        } else {
+            if isNeedToScroll() {
+                goBottomConst.constant = 215
+            }
         }
     }
     
@@ -113,6 +120,11 @@ final class CounterStatementVC: UIViewController {
         if isNeedToScrollMore() {
             scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - 240.0)
             scroll.contentOffset = CGPoint(x: 0, y: 0)
+        
+        } else {
+            if isNeedToScroll() {
+                goBottomConst.constant = 8
+            }
         }
     }
     

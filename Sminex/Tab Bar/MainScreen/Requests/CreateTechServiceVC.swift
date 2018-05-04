@@ -342,8 +342,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         
         let (responce, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
         
-        print(String(data: responce!, encoding: .utf8)!)
-        
         if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
             DispatchQueue.main.sync {
                 
@@ -361,12 +359,14 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             
             self.reqId = String(data: responce!, encoding: .utf8)
             
-            DB().setRequests(title: "Техническое обслуживание" + formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
-                             desc: edProblem.text!,
-                             icon: UIImage(named: "processing_label")!,
-                             date: String(describing: data!.date),
-                             status: "В ОБРАБОТКЕ",
-                             isBack: false)
+            DispatchQueue.main.async {
+                DB().setRequests(title: "Техническое обслуживание" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                                 desc: self.edProblem.text!,
+                                 icon: UIImage(named: "processing_label")!,
+                                 date: String(describing: self.data!.date),
+                                 status: "В ОБРАБОТКЕ",
+                                 isBack: false)
+            }
             
             return true
         }

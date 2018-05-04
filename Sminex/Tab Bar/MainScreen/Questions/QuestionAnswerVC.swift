@@ -44,6 +44,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         if (currQuestion + 1) < question_?.questions?.count ?? 0 {
             collection.reloadData()
             currQuestion += 1
+            NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
         
         } else {
             
@@ -57,6 +58,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     open var isFromMain_ = false
     open var delegate: MainScreenDelegate?
     open var question_: QuestionDataJson?
+    open var questionDelegate: QuestionTableDelegate?
     
     private var currQuestion = 0
     private var answers: [Int:[Int]] = [:]
@@ -257,6 +259,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
                 
                 self.stopAnimation()
                 self.delegate?.update()
+                self.questionDelegate?.update()
                 self.performSegue(withIdentifier: Segues.fromQuestionAnswerVC.toFinal, sender: self)
             }
             
@@ -291,7 +294,13 @@ final class QuestionAnswerHeader: UICollectionReusableView {
                 cell = view
             }
         }
-        cell?.question.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 25) - 25
+        if !isNeedToScroll() {
+            cell?.question.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 25) - 50
+        
+        } else {
+            cell?.question.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 25) - 90
+        }
+        
         return cell
     }
 }
@@ -321,10 +330,14 @@ final class QuestionAnswerCell: UICollectionViewCell {
                 toggle.checked = true
                 toggle.backgroundColor  = blueColor
                 toggle.strokeColor      = .white
+                toggle.lineWidth        = 2
+                toggle.setBackgroundImage(nil, for: .normal)
             
             } else {
                 toggle.strokeColor  = blueColor
                 toggleView.isHidden = false
+                toggle.lineWidth    = 2
+                toggle.setBackgroundImage(nil, for: .normal)
             }
             checked                 = false
             isAccepted              = true
@@ -340,10 +353,14 @@ final class QuestionAnswerCell: UICollectionViewCell {
                 toggle.checked = false
                 toggle.strokeColor      = .darkGray
                 toggle.backgroundColor  = .white
+                toggle.lineWidth        = 1
+                toggle.setBackgroundImage(nil, for: .normal)
             
             } else {
                 toggle.strokeColor  = .lightGray
                 toggleView.isHidden = true
+                toggle.lineWidth    = 0
+                toggle.setBackgroundImage(UIImage(named: "ic_choice"), for: .normal)
             }
             isAccepted              = false
             checked                 = true
@@ -411,7 +428,7 @@ final class QuestionAnswerCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.question.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 50
+        cell?.question.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 120
         return cell
     }
 }

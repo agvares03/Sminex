@@ -76,7 +76,8 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
     }
     
     func phonePressed(_ phone: String) {
-        if let url = URL(string: "tel://" + phone) {
+        let newPhone = phone.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+        if let url = URL(string: "tel://" + newPhone) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
@@ -193,7 +194,11 @@ final class ContactsCell: UICollectionViewCell {
         messageImage.isUserInteractionEnabled = true
         phoneImage.isUserInteractionEnabled   = true
         emailImage.isUserInteractionEnabled   = true
+        email.isUserInteractionEnabled        = true
+        phone.isUserInteractionEnabled        = true
         
+        email.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(emailPressed(_:))) )
+        phone.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))) )
         messageImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(messagePressed(_:))) )
         phoneImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))) )
         emailImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(emailPressed(_:))) )

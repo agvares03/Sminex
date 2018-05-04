@@ -36,28 +36,28 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @IBAction private func btn_go_action(_ sender: UIButton) {
         
         view.endEditing(true)
-        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
+//        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
         
-//        if edLS.text != "" {
-//            self.startAnimation()
-//            // Здесь мы проверяем есть ли лиц. счет или номер телефона
-//            // Если нет лиц. счета -                 txtDesc = "Лицевой счет " + edLS + " не зарегистрирован".
-//            // Если нет телефона у лиц. счета -      txtDesc = "По лицевому счету " + edLS + " не обнаружен привязанный телефон".
-//            // Если указанный телефон не обнаружен - txtDesc = "Телефон " + edLS + " не привязан ни к одному лицевому счету".
-//            // Если все ок - переходим на страницу ввода кода смс
-//
-//            if isReg_ {
-//                registration()
-//
-//            } else {
-//                forgotPass()
-//            }
-//        } else {
-//            let alert = UIAlertController(title: "Ошибка", message: "Укажите лиц. счет или номер телефона, привязанного к лиц. счету", preferredStyle: .alert)
-//            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-//            alert.addAction(cancelAction)
-//            self.present(alert, animated: true, completion: nil)
-//        }
+        if edLS.text != "" {
+            self.startAnimation()
+            // Здесь мы проверяем есть ли лиц. счет или номер телефона
+            // Если нет лиц. счета -                 txtDesc = "Лицевой счет " + edLS + " не зарегистрирован".
+            // Если нет телефона у лиц. счета -      txtDesc = "По лицевому счету " + edLS + " не обнаружен привязанный телефон".
+            // Если указанный телефон не обнаружен - txtDesc = "Телефон " + edLS + " не привязан ни к одному лицевому счету".
+            // Если все ок - переходим на страницу ввода кода смс
+
+            if isReg_ {
+                registration()
+
+            } else {
+                forgotPass()
+            }
+        } else {
+            let alert = UIAlertController(title: "Ошибка", message: "Укажите лиц. счет или номер телефона, привязанного к лиц. счету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        }
 
     }
     
@@ -252,7 +252,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @objc func keyboardWillShow(sender: NSNotification?) {
             
         if !isNeedToScrollMore() {
-            sprtTop.constant -= 200
+            sprtTop.constant -= 205
         
         } else {
             sprtTop.constant -= 120
@@ -263,7 +263,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant += 200
+            sprtTop.constant += 205
         } else {
             sprtTop.constant += 120
         }
@@ -357,6 +357,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 vc.numberLs_ = edLS.text!
             }
             vc.isReg_ = isReg_
+            vc.phone_ = responseString
 
         }
     }

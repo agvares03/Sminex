@@ -98,7 +98,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchDeals()
         fetchRequests()
         fetchQuestions()
-        collection.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        collection.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 24, right: 0)
         collection.delegate     = self
         collection.dataSource   = self
         automaticallyAdjustsScrollViewInsets = false
@@ -112,10 +112,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
         
         // Поправим Navigation bar
-        navigationController?.navigationBar.isTranslucent   = true
-        navigationController?.navigationBar.backgroundColor = .white
-        navigationController?.navigationBar.tintColor       = .white
-        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
+        navigationController?.navigationBar.isTranslucent         = true
+        navigationController?.navigationBar.backgroundColor       = .white
+        navigationController?.navigationBar.tintColor             = .white
+        navigationController?.navigationBar.layer.shadowColor     = UIColor.lightGray.cgColor
+        navigationController?.navigationBar.layer.shadowOpacity   = 0.5
+        navigationController?.navigationBar.layer.shadowOffset    = CGSize(width: 0, height: 1.0)
+        navigationController?.navigationBar.layer.shadowRadius    = 1
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -141,6 +144,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -213,7 +223,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "К оплате" {
-            return CGSize(width: view.frame.size.width - 32, height: 80.0)
+            return CGSize(width: view.frame.size.width - 32, height: 118.0)
         
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()

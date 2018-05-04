@@ -340,18 +340,19 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: login))
         let comm = edComment.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(name_.stringByAddingPercentEncodingForRFC3986() ?? "Пропуск")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986()!)&responsiblePerson=\(String(describing: data!.gosti.stringByAddingPercentEncodingForRFC3986()!))&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(data?.date.stringByAddingPercentEncodingForRFC3986()! ?? "")&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(name_.stringByAddingPercentEncodingForRFC3986() ?? "Пропуск")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986()!)&responsiblePerson=\(String(describing: data!.gosti.stringByAddingPercentEncodingForRFC3986() ?? ""))&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(data?.date.stringByAddingPercentEncodingForRFC3986()! ?? "")&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
+        print(request.url)
+        
         let (responce, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
         
         guard responce != nil else { return false }
-        print(String(data: responce!, encoding: .utf8)!)
         
         if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
-            DispatchQueue.main.sync {
+            DispatchQueue.main.async {
                 
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
@@ -365,12 +366,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 print(String(data: responce!, encoding: .utf8)!)
             #endif
             
-            DB().setRequests(title: "Пропуск" + formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
-                             desc: edComment.text!,
-                             icon: UIImage(named: "processing_label")!,
-                             date: (data?.date)!,
-                             status: "В ОБРАБОТКЕ",
-                             isBack: false)
+            DispatchQueue.main.async {
+                DB().setRequests(title: "Пропуск" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                                 desc: self.edComment.text!,
+                                 icon: UIImage(named: "processing_label")!,
+                                 date: (self.data?.date)!,
+                                 status: "В ОБРАБОТКЕ",
+                                 isBack: false)
+            }
             
             return true
         }
