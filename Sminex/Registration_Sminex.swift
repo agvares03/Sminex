@@ -357,6 +357,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 vc.numberLs_ = edLS.text!
             }
             vc.isReg_ = isReg_
+            vc.phone_ = responseString
 
         }
     }
