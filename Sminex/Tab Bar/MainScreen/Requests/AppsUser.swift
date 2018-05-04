@@ -87,7 +87,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
-        getRequests()
+        DispatchQueue.main.async {
+            self.getRequests()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
