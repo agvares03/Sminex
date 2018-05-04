@@ -19,10 +19,12 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
     
     open var data_: DealsJson?
     open var anotherDeals_: [DealsJson] = []
+    private var displayDeals: [DealsJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        displayDeals = anotherDeals_.filter { return $0.id != data_?.id }
         automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
         collection.delegate   = self
@@ -39,13 +41,13 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return anotherDeals_.count
+        return displayDeals.count <= 3 ? displayDeals.count : 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DealsListDescCell", for: indexPath) as! DealsListDescCell
-        cell.display(anotherDeals_[indexPath.row])
+        cell.display(displayDeals[indexPath.row])
         return cell
     }
     
@@ -60,7 +62,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
         
         let storyboard = UIStoryboard(name: "Deals", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "dealDetails") as! DealsListDescVC
-        vc.data_ = anotherDeals_[indexPath.row]
+        vc.data_ = displayDeals[indexPath.row]
         vc.anotherDeals_ = anotherDeals_
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -128,9 +130,17 @@ final class DealsListDescHeader: UICollectionReusableView {
                 cell = view
             }
         }
-        cell?.titleLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 75
-        cell?.bodyLabel.preferredMaxLayoutWidth  = (cell?.frame.size.width ?? 0.0) - 75
-        cell?.linksLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 75
+        if isNeedToScroll() {
+            cell?.titleLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 90
+            cell?.bodyLabel.preferredMaxLayoutWidth  = (cell?.frame.size.width ?? 0.0) - 90
+            cell?.linksLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 90
+        
+        } else {
+            cell?.titleLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 40
+            cell?.bodyLabel.preferredMaxLayoutWidth  = (cell?.frame.size.width ?? 0.0) - 40
+            cell?.linksLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 40
+        }
+        
         return cell
     }
 }

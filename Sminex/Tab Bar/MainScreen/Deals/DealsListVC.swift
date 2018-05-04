@@ -108,12 +108,12 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         if segue.identifier == Segues.fromDealsListVC.toDealsDesc {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = data_[index]
-            vc.anotherDeals_ = Array(data_[0..<3])
+            vc.anotherDeals_ = data_
         
         } else if segue.identifier == Segues.fromDealsListVC.toDealsAnim {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = pressedData_!
-            vc.anotherDeals_ = Array(data_[0..<3])
+            vc.anotherDeals_ = data_
         }
     }
     

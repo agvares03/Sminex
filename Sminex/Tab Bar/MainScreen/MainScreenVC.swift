@@ -213,7 +213,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if title == "Заявки" {
             if indexPath.row == data[indexPath.section]!.count - 2 {
-                return CGSize(width: view.frame.size.width - 32, height: 50.0)
+                return CGSize(width: view.frame.size.width - 32, height: 70.0)
             }
             let cell = RequestCell.fromNib()
             if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
@@ -364,7 +364,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return newsSize!
             
         } else {
-            return CGSize(width: view.frame.size.width, height: 55.0)
+            return CGSize(width: view.frame.size.width, height: 50.0)
         }
     }
     
@@ -428,7 +428,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         if !isBackground {
             DispatchQueue.global(qos: .background).async {
-                print("kdmsalkm")
                 let res = self.getRequests()
                 var count = 1
                 sleep(2)
@@ -557,7 +556,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             if error != nil {
                 DispatchQueue.main.sync {
-                    
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
@@ -1003,7 +1001,7 @@ final class NewsCell: UICollectionViewCell {
             }
         }
         cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 50
         cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
         return cell
     }

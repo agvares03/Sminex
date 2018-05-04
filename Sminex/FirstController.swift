@@ -224,7 +224,6 @@ class FirstController: UIViewController {
             
             if error != nil {
                 DispatchQueue.main.sync {
-                    
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
