@@ -54,7 +54,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             commentField.text = ""
             commentField.placeholder = "Сообщение"
             view.endEditing(true)
-            delegate?.update()
+            DispatchQueue.main.async {
+                self.delegate?.update()
+            }
             
             // Подождем пока закроется клавиатура
             DispatchQueue.global(qos: .userInteractive).async {

@@ -514,8 +514,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func update() {
-        delegate?.update()
-        getRequests()
+        DispatchQueue.main.async {
+            self.delegate?.update()
+            self.getRequests()
+        }
     }
 }
 

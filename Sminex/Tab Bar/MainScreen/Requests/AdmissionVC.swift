@@ -82,7 +82,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             commentField.text = ""
             commentField.placeholder = "Сообщение"
             view.endEditing(true)
-            delegate?.update()
+            DispatchQueue.main.async {
+                self.delegate?.update()
+            }
             
             // Подождем пока закроется клваиатура
             DispatchQueue.global(qos: .userInteractive).async {
