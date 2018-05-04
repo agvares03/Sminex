@@ -131,7 +131,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         if edLogin.text == "" {
             btnEnter.isEnabled = false
             btnEnter.alpha = 0.5
+            lsLabel.isHidden = true
+        
+        } else {
+            lsLabel.isHidden = false
         }
+        
+        edLogin.becomeFirstResponder()
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
@@ -537,6 +543,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
+        
+        if edLogin.text == "" {
+            lsLabel.isHidden = true
+        
+        } else {
+            lsLabel.isHidden = false
+        }
         
         if edLogin.text == "" || edPass.text == "" {
             btnEnter.isEnabled = false

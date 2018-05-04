@@ -47,7 +47,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         }
         
         metValues.reversed().forEach {
-            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1) )
+            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: $0.valueInput ?? "") )
         }
         
         collection.delegate     = self
@@ -80,12 +80,14 @@ final class CounterHistoryCell: UICollectionViewCell {
     @IBOutlet private weak var month:   UILabel!
     @IBOutlet private weak var send:    UILabel!
     @IBOutlet private weak var outcome: UILabel!
+    @IBOutlet private weak var income:  UILabel!
     
     fileprivate func display(_ item: CounterHistoryCellData) {
         
         self.month.text     = item.month
         self.send.text      = item.send
         self.outcome.text   = item.outcome
+        self.income.text    = item.income
     }
 }
 
@@ -94,11 +96,13 @@ private final class CounterHistoryCellData {
     let month:      String
     let send:       String
     let outcome:    String
+    let income:     String
     
-    init(value: String?, previousValue: String?, period: Int) {
+    init(value: String?, previousValue: String?, period: Int, income: String) {
         
         send = value ?? ""
         outcome = previousValue ?? ""
+        self.income  = income
         
         if period == 1 {
             month = "Январь"

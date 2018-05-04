@@ -195,7 +195,12 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     @objc func keyboardWillShow(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant = getPoint() - 200
+            if !isNeedToScroll() {
+                sprtTop.constant = getPoint() - 210
+            
+            } else {
+                sprtTop.constant = getPoint() - 200
+            }
         
         } else {
             sprtTop.constant    -= getPoint() - 120
@@ -355,7 +360,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             } else {
                 self.descTxt.text           = self.descText
                 self.againLabel.isHidden    = true
-                self.againLine.isHidden     = false
+                self.againLine.isHidden     = true
                 self.startTimer()
             }
         }
@@ -374,7 +379,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             } else if self.responseString.contains("ok") {
                 self.descTxt.text           = self.descText
                 self.againLabel.isHidden    = true
-                self.againLine.isHidden     = false
+                self.againLine.isHidden     = true
                 self.startTimer()
             }
         }

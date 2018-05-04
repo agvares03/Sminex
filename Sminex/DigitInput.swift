@@ -168,7 +168,7 @@ open class DigitInputView: UIView {
         let extraSpace = frame.width - CGFloat(numberOfDigits - 1) * spacing - CGFloat(numberOfDigits) * characterWidth
         
         // font size should be less than the available vertical space
-        let fontSize = CGFloat(21)//characterHeight * 0.8
+        let fontSize = CGFloat(25)//characterHeight * 0.8
         
         let y = (frame.height - characterHeight) / 2
         for (index, label) in labels.enumerated() {
