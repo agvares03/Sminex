@@ -43,6 +43,7 @@
 		413CF9286F3F497C1198F3B9 /* Pods_Sminex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6E6EBF662F32D68C69BE89 /* Pods_Sminex.framework */; };
 		414F65651F1CAE910084DE4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4171BE681ECB369A00B9CDD7 /* Assets.xcassets */; };
 		4153B9C01F5A284A00C56045 /* Choice_UK_Street.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4153B9BF1F5A284A00C56045 /* Choice_UK_Street.swift */; };
+		416B6EF1209C47D500B4C049 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 416B6EF0209C47D500B4C049 /* GoogleService-Info.plist */; };
 		4171BE5F1ECB369A00B9CDD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4171BE5E1ECB369A00B9CDD7 /* AppDelegate.swift */; };
 		4171BE611ECB369A00B9CDD7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4171BE601ECB369A00B9CDD7 /* ViewController.swift */; };
 		4171BE641ECB369A00B9CDD7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4171BE621ECB369A00B9CDD7 /* Main.storyboard */; };
@@ -163,7 +164,7 @@
 		411942EC1F4964CE006E2E0F /* RegistrationAdress4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationAdress4.swift; sourceTree = "<group>"; };
 		411B6CC71EE3A7EC001DCBC7 /* Saldo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Saldo+CoreDataClass.swift"; path = "../Saldo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		411B6CC81EE3A7EC001DCBC7 /* Saldo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Saldo+CoreDataProperties.swift"; path = "../Saldo+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		411B6CCF1EE3D0BA001DCBC7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		411B6CCF1EE3D0BA001DCBC7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Sminex/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		411B6CD11EE3FFBD001DCBC7 /* DemoUC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DemoUC.entitlements; sourceTree = "<group>"; };
 		411B6CD21EE6FF22001DCBC7 /* Comments+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comments+CoreDataClass.swift"; sourceTree = "<group>"; };
 		411B6CD31EE6FF22001DCBC7 /* Comments+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comments+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -205,6 +206,7 @@
 		414F65731F1CC91F0084DE4A /* new_phone_gkrzs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_phone_gkrzs.png; sourceTree = "<group>"; };
 		414F65741F1CC91F0084DE4A /* new_zamok_gkrzs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_zamok_gkrzs.png; sourceTree = "<group>"; };
 		4153B9BF1F5A284A00C56045 /* Choice_UK_Street.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Choice_UK_Street.swift; sourceTree = "<group>"; };
+		416B6EF0209C47D500B4C049 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4171BE5B1ECB369A00B9CDD7 /* Sminex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sminex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4171BE5E1ECB369A00B9CDD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4171BE601ECB369A00B9CDD7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 		0721891521207E0883A53CCE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				411B6CCF1EE3D0BA001DCBC7 /* GoogleService-Info.plist */,
 				FA6E6EBF662F32D68C69BE89 /* Pods_Sminex.framework */,
 			);
 			name = Frameworks;
@@ -416,6 +419,7 @@
 				7B0CDB758529507CA39A7AB3 /* Pods */,
 				0721891521207E0883A53CCE /* Frameworks */,
 				4171BE6D1ECB369A00B9CDD7 /* Info.plist */,
+				416B6EF0209C47D500B4C049 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -434,7 +438,6 @@
 				4171BE761ECB3DFF00B9CDD7 /* Program */,
 				6C4C0A1020675B7C004EF2FF /* Storyboards */,
 				4171BE681ECB369A00B9CDD7 /* Assets.xcassets */,
-				411B6CCF1EE3D0BA001DCBC7 /* GoogleService-Info.plist */,
 				411B6CD11EE3FFBD001DCBC7 /* DemoUC.entitlements */,
 				4171BE781ECB401200B9CDD7 /* images */,
 			);
@@ -930,6 +933,7 @@
 				4171BE7A1ECB402F00B9CDD7 /* fon_top.png in Resources */,
 				4171BE7E1ECB41D300B9CDD7 /* new_zamok.png in Resources */,
 				6CE2F4B32087698700709242 /* News.storyboard in Resources */,
+				416B6EF1209C47D500B4C049 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -951,7 +955,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		5AC5004FAAD21A29ED9433A5 /* [CP] Copy Pods Resources */ = {
