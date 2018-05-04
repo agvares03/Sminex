@@ -71,7 +71,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             getRequestTypes()
         }
         
-        getRequests()
+        DispatchQueue.main.async {
+            self.getRequests()
+        }
         
         if isCreatingRequest_ {
             addRequestPressed(nil)
@@ -282,10 +284,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }.resume()
     }
     
-    @discardableResult
-    func getRequests(isBackground: Bool = false) -> [RequestCellData] {
+    func getRequests(isBackground: Bool = false) {
         
-        var returnArr: [RequestCellData] = []
         let group = DispatchGroup()
         group.enter()
         DispatchQueue.global(qos: .userInteractive).async {
@@ -383,13 +383,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                            status: curr.status ?? "",
                                            isBack: isAnswered)
                         }
-                    } else {
-                        returnArr.append( RequestCellData(title: curr.name ?? "",
-                                                          desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
-                                                          icon: icon,
-                                                          date: date,
-                                                          status: curr.status ?? "",
-                                                          isBack: isAnswered) )
                     }
                 }
                 
@@ -407,18 +400,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 }.resume()
         }
-        if isBackground {
-            group.wait()
-        }
-        var ret: [RequestCellData] = []
-        
-        if returnArr.count != 0 {
-            ret.append(returnArr.popLast()!)
-        }
-        if returnArr.count != 0 {
-            ret.append(returnArr.popLast()!)
-        }
-        return ret
     }
     
     // Качаем соль

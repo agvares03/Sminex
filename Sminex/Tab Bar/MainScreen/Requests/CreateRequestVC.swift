@@ -345,6 +345,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
+        print(request.url)
+        
         let (responce, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
         
         guard responce != nil else { return false }
