@@ -330,10 +330,14 @@ final class QuestionAnswerCell: UICollectionViewCell {
                 toggle.checked = true
                 toggle.backgroundColor  = blueColor
                 toggle.strokeColor      = .white
+                toggle.lineWidth        = 2
+                toggle.setBackgroundImage(nil, for: .normal)
             
             } else {
                 toggle.strokeColor  = blueColor
                 toggleView.isHidden = false
+                toggle.lineWidth    = 2
+                toggle.setBackgroundImage(nil, for: .normal)
             }
             checked                 = false
             isAccepted              = true
@@ -349,10 +353,14 @@ final class QuestionAnswerCell: UICollectionViewCell {
                 toggle.checked = false
                 toggle.strokeColor      = .darkGray
                 toggle.backgroundColor  = .white
+                toggle.lineWidth        = 1
+                toggle.setBackgroundImage(nil, for: .normal)
             
             } else {
                 toggle.strokeColor  = .lightGray
                 toggleView.isHidden = true
+                toggle.lineWidth    = 0
+                toggle.setBackgroundImage(UIImage(named: "ic_choice"), for: .normal)
             }
             isAccepted              = false
             checked                 = true
