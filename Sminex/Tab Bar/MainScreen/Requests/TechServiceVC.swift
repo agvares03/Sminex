@@ -54,15 +54,13 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             commentField.text = ""
             commentField.placeholder = "Сообщение"
             view.endEditing(true)
-            DispatchQueue.main.async {
-                self.delegate?.update()
-            }
+            delegate?.update()
             
             // Подождем пока закроется клавиатура
             DispatchQueue.global(qos: .userInteractive).async {
                 usleep(900000)
                 
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
                     self.endAnimator()
                 }

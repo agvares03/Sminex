@@ -142,7 +142,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     private func choice() {
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
             
             self.stopAnimation()
             
@@ -168,14 +168,13 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     private func choiceReg() {
         if (responseString.contains("error")) {
-            DispatchQueue.main.async {
+            DispatchQueue.main.sync {
                 self.stopAnimation()
                 self.changeDescTextTo(isError: true)
             }
         } else if (responseString.contains("ok")) {
-            DispatchQueue.main.async {
+            DispatchQueue.main.sync {
                 self.stopAnimation()
-                
                 self.changeDescTextTo(isError: false)
             }
         }
@@ -298,7 +297,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         } else {
             self.txtDesc.textColor = .gray
             self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text
-            
             performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
         }
     }

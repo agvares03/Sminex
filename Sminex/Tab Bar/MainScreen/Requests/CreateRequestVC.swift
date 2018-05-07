@@ -367,12 +367,12 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             #endif
             
             DispatchQueue.main.async {
-                DB().setRequests(title: "Пропуск" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                DB().setRequests(data: [RequestEntityData(title: "Пропуск" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
                                  desc: self.edComment.text!,
                                  icon: UIImage(named: "processing_label")!,
                                  date: (self.data?.date)!,
                                  status: "В ОБРАБОТКЕ",
-                                 isBack: false)
+                                 isBack: false)])
             }
             
             return true

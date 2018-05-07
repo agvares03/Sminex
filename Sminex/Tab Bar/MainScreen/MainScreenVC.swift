@@ -18,7 +18,7 @@ private protocol CellsDelegate:     class {
     func stockCellPressed(currImg: Int)
 }
 protocol MainScreenDelegate: class {
-    func update()
+    func update(method: String)
 }
 
 final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout, MainScreenDelegate {
@@ -203,7 +203,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return questionSize == nil ? CGSize(width: view.frame.size.width - 32, height: size.height) : questionSize!
         
         } else if title == "Новости" {
-            let cell = NewsCell.fromNib()
+            let cell = NewsCell.fromNib(viewWidth: view.frame.size.width)
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
             return CGSize(width: view.frame.size.width - 32, height: size.height)
@@ -362,7 +362,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if section == 1 && newsSize != nil {
             return newsSize!
-            
+        
         } else {
             return CGSize(width: view.frame.size.width, height: 50.0)
         }
@@ -608,10 +608,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                 } else {
                     self.questionSize = nil
-                    var count = 1
-                    filtered.forEach {
-                        self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
-                        count += 1
+                    DispatchQueue.main.sync {
+                        self.data.removeValue(forKey: 0)
+                        self.data[0] = [0:CellsHeaderData(title: "Опросы")]
+                        var count = 1
+                        filtered.forEach {
+                            self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
+                            count += 1
+                        }
                     }
                 }
                 TemporaryHolder.instance.menuQuesions = filtered.count
@@ -846,7 +850,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = deals[dealsIndex]
-            vc.anotherDeals_ = Array(deals[0..<3])
+            vc.anotherDeals_ = Array(deals.prefix(3))
         
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
             let vc = segue.destination as! FinancePayAcceptVC
@@ -858,12 +862,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
-    func update() {
-        fetchRequests(true)
-        fetchQuestions()
-        fetchDeals()
-        fetchDebt()
-        fetchNews()
+    func update(method: String) {
+        if method == "" {
+            fetchDeals()
+            fetchDebt()
+            fetchNews()
+            
+        } else if method == "Request" {
+            fetchRequests(true)
+        
+        } else if method == "Questions" {
+            fetchQuestions()
+        }
     }
 }
 
@@ -992,7 +1002,7 @@ final class NewsCell: UICollectionViewCell {
         }
     }
     
-    class func fromNib() -> NewsCell? {
+    class func fromNib(viewWidth: CGFloat) -> NewsCell? {
         var cell: NewsCell?
         let nibViews = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         nibViews?.forEach {
@@ -1001,9 +1011,9 @@ final class NewsCell: UICollectionViewCell {
             }
         }
         if !isNeedToScroll() {
-            cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 45
-            cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) + 15
-            cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 45
+            cell?.title.preferredMaxLayoutWidth = viewWidth - 55
+            cell?.desc.preferredMaxLayoutWidth  = viewWidth - 30
+            cell?.date.preferredMaxLayoutWidth  = viewWidth - 30
         
         } else {
             cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55

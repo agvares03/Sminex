@@ -338,12 +338,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                 }
                 
-                let db = DB()
-                if !isBackground {
-                db.deleteRequests()
-                }
-                
                 var newData: [AppsUserCellData] = []
+                var dbData: [RequestEntityData] = []
                 self.rows.forEach { curr in
                    
                     let isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
@@ -376,12 +372,12 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                      type: curr.name ?? "")  )
                     if !isBackground {
                         DispatchQueue.main.sync {
-                            db.setRequests(title: curr.name ?? "",
-                                           desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
-                                           icon: icon,
-                                           date: date,
-                                           status: curr.status ?? "",
-                                           isBack: isAnswered)
+                            dbData.append(RequestEntityData(title: curr.name ?? "",
+                                                            desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                                                            icon: icon,
+                                                            date: date,
+                                                            status: curr.status ?? "",
+                                                            isBack: isAnswered))
                         }
                     }
                 }
@@ -389,6 +385,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 DispatchQueue.main.sync {
                     self.data = newData
                     if !isBackground {
+                        let db = DB()
+                        db.deleteRequests()
+                        db.setRequests(data: dbData)
                         self.collection.reloadData()
                         if #available(iOS 10.0, *) {
                             self.collection.refreshControl?.endRefreshing()
@@ -496,7 +495,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func update() {
         DispatchQueue.main.async {
-            self.delegate?.update()
+            self.delegate?.update(method: "Request")
             self.getRequests()
         }
     }

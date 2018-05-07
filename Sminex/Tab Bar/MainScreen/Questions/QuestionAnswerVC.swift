@@ -38,7 +38,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         }
         guard answerArr.count != 0 else { return }
         
-        answers[(question_?.questions![currQuestion].groupId!)!] = answerArr
+        answers[(question_?.questions![currQuestion].id!)!] = answerArr
         
         isAccepted = false
         if (currQuestion + 1) < question_?.questions?.count ?? 0 {
@@ -222,6 +222,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         
         var json: [[String:Any]] = []
         
+        print(answers)
         answers.forEach { (arg) in
             let (key, value) = arg
             value.forEach {
@@ -231,6 +232,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         
         let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
         request.httpBody = jsonData
+        
+        print(request.url)
+        print(String(data: request.httpBody!, encoding: .utf8))
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -258,7 +262,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
                 }
                 
                 self.stopAnimation()
-                self.delegate?.update()
+                self.delegate?.update(method: "Questions")
                 self.questionDelegate?.update()
                 self.performSegue(withIdentifier: Segues.fromQuestionAnswerVC.toFinal, sender: self)
             }

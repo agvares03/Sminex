@@ -360,12 +360,12 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             self.reqId = String(data: responce!, encoding: .utf8)
             
             DispatchQueue.main.async {
-                DB().setRequests(title: "Техническое обслуживание" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                DB().setRequests(data: [RequestEntityData(title: "Техническое обслуживание" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
                                  desc: self.edProblem.text!,
                                  icon: UIImage(named: "processing_label")!,
                                  date: String(describing: self.data!.date),
                                  status: "В ОБРАБОТКЕ",
-                                 isBack: false)
+                                 isBack: false)])
             }
             
             return true

@@ -587,17 +587,21 @@ final class DB: NSObject, XMLParserDelegate {
         return ret
     }
     
-    func setRequests(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool) {
+    func setRequests(data: [RequestEntityData]) {
         
-        let managedObject = RequestEntity()
+        data.forEach {
+            let managedObject = RequestEntity()
         
-        managedObject.title = title
-        managedObject.desc = desc
-        managedObject.icon = UIImagePNGRepresentation(icon)
-        managedObject.date = date
-        managedObject.status = status
-        managedObject.isBack = isBack
-        CoreDataManager.instance.saveContext()
+            managedObject.title  = $0.title
+            managedObject.desc   = $0.desc
+            managedObject.icon   = UIImagePNGRepresentation($0.icon)
+            managedObject.date   = $0.date
+            managedObject.status = $0.status
+            managedObject.isBack = $0.isBack
+        }
+        DispatchQueue.main.async {
+            CoreDataManager.instance.saveContext()
+        }
     }
     
     func setQuestions(answerId: [Int], questionId: [Int], id: String) {
@@ -646,7 +650,17 @@ final class DB: NSObject, XMLParserDelegate {
                 print(error)
             #endif
         }
-        CoreDataManager.instance.saveContext()
+        DispatchQueue.main.async {
+            CoreDataManager.instance.saveContext()
+        }
     }
-    
+}
+
+struct RequestEntityData {
+    let title: String
+    let desc: String
+    let icon: UIImage
+    let date: String
+    let status: String
+    let isBack: Bool
 }

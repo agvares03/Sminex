@@ -234,7 +234,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     
     private func choise() {
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
             
             if self.responseString.contains(find: "error") {
                 self.descTxt.text       = self.responseString.replacingOccurrences(of: "error:", with: "")
