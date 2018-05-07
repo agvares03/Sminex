@@ -95,23 +95,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                        status: "В ОБРАБОТКЕ",
                                        images: images,
                                        imagesUrl: [])
-            
-            if uploadRequest() {
-                
-                DispatchQueue.global(qos: .userInteractive).async {
-                    
-                    self.images.forEach {
-                        self.uploadPhoto($0)
-                    }
-                    
-                    DispatchQueue.main.sync {
-                        
-                        self.endAnimator()
-                        self.delegate?.update()
-                        self.performSegue(withIdentifier: Segues.fromCreateRequest.toAdmission, sender: self)
-                    }
-                }
-            }
+            uploadRequest()
         }
     }
     
@@ -334,10 +318,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         sender.view?.removeFromSuperview()
     }
     
-    private func uploadRequest() -> Bool {
+    private func uploadRequest() {
         
         let login = UserDefaults.standard.string(forKey: "login")!
-        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: login))
+        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
         let comm = edComment.text ?? ""
         
         let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(name_.stringByAddingPercentEncodingForRFC3986() ?? "Пропуск")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986()!)&responsiblePerson=\(String(describing: data!.gosti.stringByAddingPercentEncodingForRFC3986() ?? ""))&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(data?.date.stringByAddingPercentEncodingForRFC3986()! ?? "")&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
@@ -345,80 +329,52 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
-        print(request.url)
-        
-        let (responce, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
-        
-        guard responce != nil else { return false }
-        
-        if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
-            DispatchQueue.main.async {
-                
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                alert.addAction(cancelAction)
-                self.present(alert, animated: true, completion: nil)
-                
-            }
-            return false
-        } else {
-            #if DEBUG
-                print(String(data: responce!, encoding: .utf8)!)
-            #endif
-            
-            DispatchQueue.main.async {
-                DB().setRequests(data: [RequestEntityData(title: "Пропуск" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
-                                 desc: self.edComment.text!,
-                                 icon: UIImage(named: "processing_label")!,
-                                 date: (self.data?.date)!,
-                                 status: "В ОБРАБОТКЕ",
-                                 isBack: false)])
-            }
-            
-            return true
-        }
-    }
-    
-    // Качаем соль
-    private func getSalt(login: String) -> Data {
-        
-        var salt: Data?
-        let queue = DispatchGroup()
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
-        request.httpMethod = "GET"
-        
-        queue.enter()
         URLSession.shared.dataTask(with: request) {
-            data, response, error in
+            responce, error, _ in
             
-            defer {
-                queue.leave()
+            guard responce != nil else {
+                DispatchQueue.main.async {
+                    self.endAnimator()
+                }
+                return
             }
-            
-            if error != nil {
-                DispatchQueue.main.sync {
+            if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
+                DispatchQueue.main.async {
                     
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
+                    
                 }
                 return
+            } else {
+                #if DEBUG
+                print(String(data: responce!, encoding: .utf8)!)
+                #endif
+                
+                DispatchQueue.main.async {
+                    DB().setRequests(data: [RequestEntityData(title: "Пропуск" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                                                              desc: self.edComment.text!,
+                                                              icon: UIImage(named: "processing_label")!,
+                                                              date: (self.data?.date)!,
+                                                              status: "В ОБРАБОТКЕ",
+                                                              isBack: false)])
+                }
+                DispatchQueue.global(qos: .userInteractive).async {
+                    
+                    self.images.forEach {
+                        self.uploadPhoto($0)
+                    }
+                    DispatchQueue.main.sync {
+                        
+                        self.endAnimator()
+                        self.delegate?.update()
+                        self.performSegue(withIdentifier: Segues.fromCreateRequest.toAdmission, sender: self)
+                    }
+                }
             }
-            
-            salt = data
-            
-            #if DEBUG
-                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
-            #endif
-            
-            self.reqId = String(data: data!, encoding: .utf8)
-            
-            }.resume()
-        
-        queue.wait()
-        return salt!
+        }.resume()
     }
     
     private func uploadPhoto(_ img: UIImage) {

@@ -209,17 +209,16 @@ class FirstController: UIViewController {
     private func getSalt(login: String) -> Data {
         
         var salt: Data?
-        let queue = DispatchGroup()
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
         request.httpMethod = "GET"
         
-        queue.enter()
+        TemporaryHolder.instance.SaltQueue.enter()
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
             defer {
-                queue.leave()
+                TemporaryHolder.instance.SaltQueue.leave()
             }
             
             if error != nil {
@@ -233,10 +232,11 @@ class FirstController: UIViewController {
             }
             
             salt = data
+            TemporaryHolder.instance.salt = data
             }.resume()
         
-        queue.wait()
-        return salt!
+        TemporaryHolder.instance.SaltQueue.wait()
+        return salt ?? Data()
     }
     
     private func goToApp(login: String, pass: String) {

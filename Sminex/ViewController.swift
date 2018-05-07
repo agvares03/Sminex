@@ -244,47 +244,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             }.resume()
     }
     
-    // Качаем соль
-    private func getSalt(login: String) -> Data {
-        
-        var salt: Data?
-        let queue = DispatchGroup()
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
-        request.httpMethod = "GET"
-        
-        queue.enter()
-        URLSession.shared.dataTask(with: request) {
-            data, response, error in
-        
-            defer {
-                queue.leave()
-            }
-            
-            if error != nil {
-                DispatchQueue.main.sync {
-                    
-                    self.stopIndicator()
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            salt = data
-            
-            #if DEBUG
-                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
-            #endif
-            
-            }.resume()
-        
-        queue.wait()
-        return salt!
-    }
-    
     private func choice() {
         
         DispatchQueue.main.async {
@@ -494,6 +453,40 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         } else {
             return (view.frame.size.height - sprtTopConst) - 170
         }
+    }
+    
+    // Качаем соль
+    private func getSalt(login: String) -> Data {
+        
+        var salt: Data?
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
+        
+        TemporaryHolder.instance.SaltQueue.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            defer {
+                TemporaryHolder.instance.SaltQueue.leave()
+            }
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            salt = data
+            TemporaryHolder.instance.salt = data
+            }.resume()
+        
+        TemporaryHolder.instance.SaltQueue.wait()
+        return salt ?? Data()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

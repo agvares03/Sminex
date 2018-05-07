@@ -73,26 +73,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         if img == nil {
             sendComment()
-            let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-            arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: commentField.text!, date: dateFormatter.string(from: Date()),commImg: img)  )
-            collection.reloadData()
-            img = nil
-            commentField.text = ""
-            commentField.placeholder = "Сообщение"
-            view.endEditing(true)
-            delegate?.update()
-            
-            // Подождем пока закроется клваиатура
-            DispatchQueue.global(qos: .userInteractive).async {
-                usleep(900000)
-                
-                DispatchQueue.main.async {
-                    self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
-                    self.endAnimating()
-                }
-            }
         } else {
             uploadPhoto(img!)
         }
@@ -217,26 +197,42 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     private func sendComment() {
         
-        let group = DispatchGroup()
-        let comm = commentField.text!.stringByAddingPercentEncodingForRFC3986()
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm!)!)
+        let comm = commentField.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm)!)
         request.httpMethod = "GET"
         
-        group.enter()
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
-            
-            defer {
-                group.leave()
-            }
             
             guard data != nil else { return }
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8)!)
             #endif
+            
+            DispatchQueue.main.async {
+                let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: self.img)  )
+                self.collection.reloadData()
+                self.img = nil
+                self.commentField.text = ""
+                self.commentField.placeholder = "Сообщение"
+                self.view.endEditing(true)
+                self.delegate?.update()
+                
+                // Подождем пока закроется клваиатура
+                DispatchQueue.global(qos: .userInteractive).async {
+                    usleep(900000)
+                    
+                    DispatchQueue.main.async {
+                        self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                        self.endAnimating()
+                    }
+                }
+            }
             }.resume()
-        group.wait()
     }
     
     private func uploadPhoto(_ img: UIImage) {

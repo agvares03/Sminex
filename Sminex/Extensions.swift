@@ -327,3 +327,48 @@ extension Collection where Indices.Iterator.Element == Index {
         return indices.contains(index) ? self[index] : nil
     }
 }
+
+func getSalt() -> Data {
+
+    if TemporaryHolder.instance.salt != nil {
+        return TemporaryHolder.instance.salt ?? Data()
+    
+    } else {
+        TemporaryHolder.instance.SaltQueue.wait()
+        if TemporaryHolder.instance.salt != nil {
+            return TemporaryHolder.instance.salt ?? Data()
+            
+        } else {
+            var salt: Data?
+            
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + (UserDefaults.standard.string(forKey: "login") ?? ""))!)
+            request.httpMethod = "GET"
+            
+            TemporaryHolder.instance.SaltQueue.enter()
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                defer {
+                    TemporaryHolder.instance.SaltQueue.leave()
+                }
+                salt = data
+                TemporaryHolder.instance.salt = data
+                }.resume()
+            
+            TemporaryHolder.instance.SaltQueue.wait()
+            return salt ?? Data()
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

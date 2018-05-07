@@ -118,22 +118,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                                      date: dateFormatter.string(from: picker.date),
                                      status: "В ОБРАБОТКЕ",
                                      images: imagesArr)
-            
-            if uploadRequest() {
-                
-                DispatchQueue.global(qos: .userInteractive).async {
-                    
-                    self.imagesArr.forEach {
-                        self.uploadPhoto($0)
-                    }
-                    DispatchQueue.main.sync {
-                        
-                        self.endAnimator()
-                        self.delegate?.update()
-                        self.performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
-                    }
-                }
-            }
+            uploadRequest()
         }
     }
     
@@ -329,10 +314,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         sender.view?.removeFromSuperview()
     }
     
-    private func uploadRequest() -> Bool {
+    private func uploadRequest() {
         
         let login = UserDefaults.standard.string(forKey: "login")!
-        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt(login: login))
+        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
         let comm = edProblem.text ?? ""
         
         let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\("Техническое обслуживание".stringByAddingPercentEncodingForRFC3986()!)&name=\("Техническое обслуживание \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=&responsiblePerson=&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(String(describing: data!.date).stringByAddingPercentEncodingForRFC3986()!)&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
@@ -340,36 +325,55 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
-        let (responce, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
-        
-        if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
-            DispatchQueue.main.sync {
-                
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                alert.addAction(cancelAction)
-                self.present(alert, animated: true, completion: nil)
-                
+        URLSession.shared.dataTask(with: request) {
+            responce, error, _ in
+            
+            guard responce != nil else {
+                DispatchQueue.main.async {
+                    self.endAnimator()
+                }
+                return
             }
-            return false
-        } else {
-            #if DEBUG
-                print(String(data: responce!, encoding: .utf8)!)
-            #endif
-            
-            self.reqId = String(data: responce!, encoding: .utf8)
-            
-            DispatchQueue.main.async {
-                DB().setRequests(data: [RequestEntityData(title: "Техническое обслуживание" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
-                                 desc: self.edProblem.text!,
-                                 icon: UIImage(named: "processing_label")!,
-                                 date: String(describing: self.data!.date),
-                                 status: "В ОБРАБОТКЕ",
-                                 isBack: false)])
+            if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
+                DispatchQueue.main.sync {
+                    
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+                return
+            } else {
+                #if DEBUG
+                    print(String(data: responce!, encoding: .utf8)!)
+                #endif
+                
+                self.reqId = String(data: responce!, encoding: .utf8)
+                
+                DispatchQueue.main.async {
+                    DB().setRequests(data: [RequestEntityData(title: "Техническое обслуживание" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
+                                                              desc: self.edProblem.text!,
+                                                              icon: UIImage(named: "processing_label")!,
+                                                              date: String(describing: self.data!.date),
+                                                              status: "В ОБРАБОТКЕ",
+                                                              isBack: false)])
+                }
+                
+                DispatchQueue.global(qos: .userInteractive).async {
+                    
+                    self.imagesArr.forEach {
+                        self.uploadPhoto($0)
+                    }
+                    DispatchQueue.main.sync {
+                        
+                        self.endAnimator()
+                        self.delegate?.update()
+                        self.performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
+                    }
+                }
             }
-            
-            return true
-        }
+        }.resume()
     }
     
     private func uploadPhoto(_ img: UIImage) {
@@ -402,46 +406,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         }
         group.wait()
         return
-    }
-    
-    // Качаем соль
-    private func getSalt(login: String) -> Data {
-        
-        var salt: Data?
-        let queue = DispatchGroup()
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
-        request.httpMethod = "GET"
-        
-        queue.enter()
-        URLSession.shared.dataTask(with: request) {
-            data, response, error in
-            
-            defer {
-                queue.leave()
-            }
-            
-            if error != nil {
-                DispatchQueue.main.sync {
-                    
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            salt = data
-            
-            #if DEBUG
-                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
-            #endif
-            
-            }.resume()
-        
-        queue.wait()
-        return salt!
     }
     
     private func formatDate(_ date: Date, format: String) -> String {

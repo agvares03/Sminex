@@ -13,6 +13,8 @@ final class TemporaryHolder {
     
     static let instance = TemporaryHolder()
     
+    public var salt: Data?
+    public let SaltQueue = DispatchGroup()
     public var newsLastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
     public var requestTypes:            RequestType?
     public var contacts:                Contacts?

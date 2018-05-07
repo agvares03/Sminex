@@ -26,6 +26,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     @IBAction private func addRequestPressed(_ sender: UIButton?) {
+        
         startAnimator()
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -290,7 +291,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         DispatchQueue.global(qos: .userInteractive).async {
         
             let login = UserDefaults.standard.string(forKey: "login")!
-            let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: self.getSalt(login: login))
+            let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"
@@ -398,46 +399,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 }.resume()
         }
-    }
-    
-    // Качаем соль
-    private func getSalt(login: String) -> Data {
-        
-        var salt: Data?
-        let queue = DispatchGroup()
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
-        request.httpMethod = "GET"
-        
-        queue.enter()
-        URLSession.shared.dataTask(with: request) {
-            data, response, error in
-            
-            defer {
-                queue.leave()
-            }
-            
-            if error != nil {
-                DispatchQueue.main.sync {
-                    
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            salt = data
-            
-            #if DEBUG
-                print("salt is = \(String(describing: String(data: data!, encoding: .utf8)))")
-            #endif
-            
-            }.resume()
-        
-        queue.wait()
-        return salt ?? Data()
     }
     
     private func startAnimator() {

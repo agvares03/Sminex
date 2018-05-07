@@ -45,26 +45,6 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         
         if img == nil {
             sendComment()
-            let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-            arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: commentField.text!, date: dateFormatter.string(from: Date()), image: img)  )
-            img = nil
-            collection.reloadData()
-            commentField.text = ""
-            commentField.placeholder = "Сообщение"
-            view.endEditing(true)
-            delegate?.update()
-            
-            // Подождем пока закроется клавиатура
-            DispatchQueue.global(qos: .userInteractive).async {
-                usleep(900000)
-                
-                DispatchQueue.main.async {
-                    self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
-                    self.endAnimator()
-                }
-            }
         } else {
             uploadPhoto(img!)
         }
@@ -205,25 +185,41 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     private func sendComment() {
         
-        var group = DispatchGroup()
         let comm = commentField.text!.stringByAddingPercentEncodingForRFC3986()
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm!)!)
         request.httpMethod = "GET"
         
-        group.enter()
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
-            
-            defer {
-                group.leave()
-            }
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
+            DispatchQueue.main.async {
+                let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: self.img)  )
+                self.img = nil
+                self.collection.reloadData()
+                self.commentField.text = ""
+                self.commentField.placeholder = "Сообщение"
+                self.view.endEditing(true)
+                self.delegate?.update()
+                
+                // Подождем пока закроется клавиатура
+                DispatchQueue.global(qos: .userInteractive).async {
+                    usleep(900000)
+                    
+                    DispatchQueue.main.async {
+                        self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                        self.endAnimator()
+                    }
+                }
+            }
+            
         }.resume()
-        group.wait()
     }
     
     private func uploadPhoto(_ img: UIImage) {
