@@ -805,7 +805,7 @@
                                                     <color key="currentPageIndicatorTintColor" red="0.015686274510000001" green="0.49019607840000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </pageControl>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1wg-cf-UD5" customClass="FSPagerView" customModule="FSPagerView">
-                                                    <rect key="frame" x="8" y="8" width="301" height="102"/>
+                                                    <rect key="frame" x="16" y="8" width="285" height="102"/>
                                                     <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
@@ -815,9 +815,9 @@
                                             <constraint firstItem="1wg-cf-UD5" firstAttribute="top" secondItem="pUe-QP-Vbe" secondAttribute="topMargin" id="DKn-B9-uYj"/>
                                             <constraint firstAttribute="trailing" secondItem="pMW-jr-6Zr" secondAttribute="trailing" constant="50" id="Gvt-Ul-a69"/>
                                             <constraint firstItem="pMW-jr-6Zr" firstAttribute="leading" secondItem="pUe-QP-Vbe" secondAttribute="leading" constant="50" id="Ly7-PV-DlC"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="1wg-cf-UD5" secondAttribute="trailing" id="dfF-Sg-qsD"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="1wg-cf-UD5" secondAttribute="trailing" constant="8" id="dfF-Sg-qsD"/>
                                             <constraint firstAttribute="bottom" secondItem="pMW-jr-6Zr" secondAttribute="bottom" id="jOK-By-kp0"/>
-                                            <constraint firstItem="1wg-cf-UD5" firstAttribute="leading" secondItem="pUe-QP-Vbe" secondAttribute="leadingMargin" id="nZ3-Mp-4hi"/>
+                                            <constraint firstItem="1wg-cf-UD5" firstAttribute="leading" secondItem="pUe-QP-Vbe" secondAttribute="leadingMargin" constant="8" id="nZ3-Mp-4hi"/>
                                         </constraints>
                                         <size key="customSize" width="317" height="130"/>
                                         <userDefinedRuntimeAttributes>
@@ -1024,13 +1024,13 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Счетчики" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="58k-aK-95U">
-                                            <rect key="frame" x="16" y="9" width="105" height="33"/>
+                                            <rect key="frame" x="16" y="15" width="105" height="35"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJN-bi-bzE">
-                                            <rect key="frame" x="274" y="9" width="30" height="33"/>
+                                            <rect key="frame" x="274" y="23" width="30" height="19"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="Все"/>
                                             <connections>
@@ -1041,9 +1041,9 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="ZJN-bi-bzE" secondAttribute="bottom" constant="8" id="1by-aZ-Jdq"/>
+                                        <constraint firstItem="58k-aK-95U" firstAttribute="top" relation="greaterThanOrEqual" secondItem="JnI-AZ-IOR" secondAttribute="top" constant="15" id="PEl-QD-cni"/>
                                         <constraint firstAttribute="trailing" secondItem="ZJN-bi-bzE" secondAttribute="trailing" constant="16" id="VcW-mC-VGv"/>
-                                        <constraint firstItem="58k-aK-95U" firstAttribute="top" relation="greaterThanOrEqual" secondItem="JnI-AZ-IOR" secondAttribute="top" priority="999" constant="5" id="aH9-qT-Lcm"/>
-                                        <constraint firstAttribute="bottom" secondItem="58k-aK-95U" secondAttribute="bottom" priority="998" constant="8" id="hoY-k7-6RL"/>
+                                        <constraint firstAttribute="bottom" secondItem="58k-aK-95U" secondAttribute="bottom" priority="998" id="hoY-k7-6RL"/>
                                         <constraint firstItem="ZJN-bi-bzE" firstAttribute="centerY" secondItem="58k-aK-95U" secondAttribute="centerY" id="ljT-tA-IQO"/>
                                         <constraint firstItem="58k-aK-95U" firstAttribute="leading" secondItem="JnI-AZ-IOR" secondAttribute="leading" constant="16" id="onI-gp-5PT"/>
                                         <constraint firstItem="ZJN-bi-bzE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="58k-aK-95U" secondAttribute="trailing" constant="20" id="rkK-YA-cw9"/>
