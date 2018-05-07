@@ -26,7 +26,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     @IBAction private func addRequestPressed(_ sender: UIButton?) {
-        
         startAnimator()
         
         DispatchQueue.global(qos: .userInteractive).async {
