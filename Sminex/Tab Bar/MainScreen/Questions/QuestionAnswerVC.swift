@@ -40,6 +40,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         
         answers[(question_?.questions![currQuestion].id!)!] = answerArr
         
+        print(answers)
         isAccepted = false
         if (currQuestion + 1) < question_?.questions?.count ?? 0 {
             collection.reloadData()
@@ -75,6 +76,8 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             answers = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) as! [Int:[Int]]
         }
         currQuestion = answers.count
+        
+        print(answers)
         
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
@@ -253,17 +256,16 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
+            UserDefaults.standard.removeObject(forKey: String(self.question_?.id ?? 0))
+            UserDefaults.standard.synchronize()
+            
             DispatchQueue.main.async {
-                DispatchQueue.global(qos: .background).async {
-                    let userDefaults = UserDefaults.standard
-                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.answers)
-                    userDefaults.set(encodedData, forKey: String(self.question_?.id ?? 0))
-                    userDefaults.synchronize()
-                }
                 
                 self.stopAnimation()
                 self.delegate?.update(method: "Questions")
-                self.questionDelegate?.update()
+                if !self.isFromMain_ {
+                    self.questionDelegate?.update()
+                }
                 self.performSegue(withIdentifier: Segues.fromQuestionAnswerVC.toFinal, sender: self)
             }
             

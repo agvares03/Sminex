@@ -112,7 +112,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             
             startAnimator()
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
             data = ServiceHeaderData(icon: UIImage(named: "account")!,
                                      problem: edProblem.text!,
                                      date: dateFormatter.string(from: picker.date),
@@ -438,8 +438,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if segue.identifier == Segues.fromCreateTechService.toService {
             let vc = segue.destination as! TechServiceVC
             vc.isCreate_ = true
-            vc.data_ = data!
-            vc.reqId_ = reqId!
+            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "")
+            vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }
     }

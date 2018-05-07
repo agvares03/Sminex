@@ -86,7 +86,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             
             startAnimator()
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
             data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                        gosti: edFio.text!,
                                        mobileNumber: edContact.text!,
@@ -426,8 +426,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if segue.identifier == Segues.fromCreateRequest.toAdmission {
             let vc = segue.destination as! AdmissionVC
             vc.isCreated_ = true
-            vc.data_ = data!
-            vc.reqId_ = reqId!
+            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", date: "", status: "", images: [], imagesUrl: [])
+            vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
             vc.name_ = name_
         }

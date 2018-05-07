@@ -371,8 +371,9 @@ final class AdmissionHeader: UICollectionViewCell {
         gosNumbers.text     = item.gosNumber
         status.text         = item.status
         
+        print(item.date)
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.images.count == 0 && item.imgsUrl.count == 0 {

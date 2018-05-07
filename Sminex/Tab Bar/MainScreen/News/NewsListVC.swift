@@ -170,7 +170,7 @@ final class NewsListCell: UICollectionViewCell {
         
         if item.dateStart != "" {
             let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd"
+            df.dateFormat = "dd.MM.yyyy hh:mm:ss"
             if dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
                 date.text = dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "hh:mm")
                 

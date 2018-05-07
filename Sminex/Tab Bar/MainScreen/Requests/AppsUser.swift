@@ -162,10 +162,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
-                                                         mobileNumber: row.phoneNum!,
+                                                         mobileNumber: row.phoneNum ?? "",
                                                          gosNumber: auto,
-                                                         date: row.planDate!,
-                                                         status: row.status!,
+                                                         date: row.planDate ?? "",
+                                                         status: row.status ?? "",
                                                          images: [],
                                                          imagesUrl: images)
                     self.admissionComm = []
@@ -181,9 +181,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         }
                         
                         self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
-                                                                             title: comm.name!,
-                                                                             comment: comm.text!,
-                                                                             date: comm.createdDate!,
+                                                                             title: comm.name ?? "",
+                                                                             comment: comm.text ?? "",
+                                                                             date: comm.createdDate ?? "",
                                                                              commImg: nil,
                                                                              commImgUrl: commImg) )
                     }
@@ -206,9 +206,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     
                     self.techService = ServiceHeaderData(icon: self.data[indexPath.row].icon,
-                                                         problem: row.text!,
-                                                         date: row.planDate!,
-                                                         status: row.status!,
+                                                         problem: row.text ?? "",
+                                                         date: row.planDate ?? "",
+                                                         status: row.status ?? "",
                                                          images: [],
                                                          imagesUrl: images)
                     

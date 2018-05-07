@@ -1024,13 +1024,13 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Счетчики" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="58k-aK-95U">
-                                            <rect key="frame" x="16" y="22" width="105" height="20"/>
+                                            <rect key="frame" x="16" y="9" width="105" height="33"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJN-bi-bzE">
-                                            <rect key="frame" x="274" y="22" width="30" height="20"/>
+                                            <rect key="frame" x="274" y="9" width="30" height="33"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="Все"/>
                                             <connections>
@@ -1042,7 +1042,7 @@
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="ZJN-bi-bzE" secondAttribute="bottom" constant="8" id="1by-aZ-Jdq"/>
                                         <constraint firstAttribute="trailing" secondItem="ZJN-bi-bzE" secondAttribute="trailing" constant="16" id="VcW-mC-VGv"/>
-                                        <constraint firstItem="58k-aK-95U" firstAttribute="top" secondItem="JnI-AZ-IOR" secondAttribute="top" priority="999" constant="22" id="aH9-qT-Lcm"/>
+                                        <constraint firstItem="58k-aK-95U" firstAttribute="top" relation="greaterThanOrEqual" secondItem="JnI-AZ-IOR" secondAttribute="top" priority="999" constant="5" id="aH9-qT-Lcm"/>
                                         <constraint firstAttribute="bottom" secondItem="58k-aK-95U" secondAttribute="bottom" priority="998" constant="8" id="hoY-k7-6RL"/>
                                         <constraint firstItem="ZJN-bi-bzE" firstAttribute="centerY" secondItem="58k-aK-95U" secondAttribute="centerY" id="ljT-tA-IQO"/>
                                         <constraint firstItem="58k-aK-95U" firstAttribute="leading" secondItem="JnI-AZ-IOR" secondAttribute="leading" constant="16" id="onI-gp-5PT"/>

@@ -39,10 +39,10 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         webView.loadHTMLString(data_?.text ?? "", baseURL: nil)
         
         titleLabel.text = data_?.header
-        
+        print(data_?.dateStart)
         if data_?.dateStart != "" {
             let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd"
+            df.dateFormat = "dd.MM.yyyy hh:mm:ss"
             date.text = dayDifference(from: df.date(from: data_?.dateStart ?? "") ?? Date(), style: "dd MMMM yyyy, hh:mm")
         }
         

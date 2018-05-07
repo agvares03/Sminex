@@ -170,12 +170,12 @@ open class OnOffButton: UIButton {
     fileprivate func unchekedAnimation() -> (strokeStart: CABasicAnimation, strokeEnd: CABasicAnimation) {
         let strokeStart = CABasicAnimation(keyPath: "strokeStart")
         strokeStart.toValue  = offStrokeStart
-        strokeStart.duration = 0.6
+        strokeStart.duration = 0.01
         strokeStart.timingFunction = CAMediaTimingFunction(controlPoints: 0.45, -0.2, 0.8, 0.65)
         
         let strokeEnd            = CABasicAnimation(keyPath: "strokeEnd")
         strokeEnd.toValue        = offStrokeEnd
-        strokeEnd.duration       = 0.6
+        strokeEnd.duration       = 0.01
         strokeEnd.timingFunction = CAMediaTimingFunction(controlPoints: 0.45, -0.2, 0.8, 0.65)
         
         return (strokeStart, strokeEnd)

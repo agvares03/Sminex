@@ -57,6 +57,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var refreshControl: UIRefreshControl?
     private var tappedNews: NewsJson?
     private var deals:  [DealsJson] = []
+    private var filteredNews: [NewsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
     
@@ -154,10 +155,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if data.keys.contains(section) {
-            return (data[section]?.count ?? 2) - 1
+        if section == 0 && questionSize != nil {
+            return 0
             
+        } else if section == 1 && newsSize != nil {
+            return 0
+        
+        } else if data.keys.contains(section) {
+            return (data[section]?.count ?? 2) - 1
+        
         } else {
             return 0
         }
@@ -200,7 +206,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let cell = SurveyCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-            return questionSize == nil ? CGSize(width: view.frame.size.width - 32, height: size.height) : questionSize!
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "Новости" {
             let cell = NewsCell.fromNib(viewWidth: view.frame.size.width)
@@ -358,10 +364,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 && questionSize != nil {
-            return questionSize!
+            return CGSize(width: 0.0, height: 0.0)
         
         } else if section == 1 && newsSize != nil {
-            return newsSize!
+            return CGSize(width: 0.0, height: 0.0)
         
         } else {
             return CGSize(width: view.frame.size.width, height: 50.0)
@@ -377,7 +383,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         
         } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
-            tappedNews = TemporaryHolder.instance.news?[indexPath.row]
+            tappedNews = self.filteredNews[indexPath.row]
             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
         }
     }
@@ -552,6 +558,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments)
                 let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
                 var filtered: [QuestionDataJson] = []
+                
                 unfilteredData?.forEach { json in
                     
                     var isContains = true
@@ -702,13 +709,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
-                    TemporaryHolder.instance.news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+                    let news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+                    TemporaryHolder.instance.news = news
                     UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
-                    let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
+                    self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                     
-                    for (ind, item) in filtered.enumerated() {
+                    for (ind, item) in self.filteredNews.enumerated() {
                         if ind < 3 {
                             self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                         }
@@ -761,9 +769,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                 TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                 UserDefaults.standard.synchronize()
-                let filtered = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
+                self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
                 
-                for (ind, item) in filtered.enumerated() {
+                for (ind, item) in self.filteredNews.enumerated() {
                     if ind < 3 {
                         self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                     }
@@ -824,6 +832,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func update(method: String) {
+        print(method)
         if method == "" {
             fetchDeals()
             fetchDebt()
@@ -953,7 +962,7 @@ final class NewsCell: UICollectionViewCell {
         
         if item.date != "" {
             let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd"
+            df.dateFormat = "dd.MM.yyyy hh:mm:ss"
             if dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
                 date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "hh:mm")
             
