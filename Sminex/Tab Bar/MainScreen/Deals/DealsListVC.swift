@@ -151,8 +151,8 @@ final class DealsListCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 50
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 50
+        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
         return cell
     }
 }

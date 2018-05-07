@@ -130,16 +130,9 @@ final class DealsListDescHeader: UICollectionReusableView {
                 cell = view
             }
         }
-        if isNeedToScroll() {
-            cell?.titleLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 90
-            cell?.bodyLabel.preferredMaxLayoutWidth  = (cell?.frame.size.width ?? 0.0) - 90
-            cell?.linksLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 90
-        
-        } else {
-            cell?.titleLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 40
-            cell?.bodyLabel.preferredMaxLayoutWidth  = (cell?.frame.size.width ?? 0.0) - 40
-            cell?.linksLabel.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 0.0) - 40
-        }
+        cell?.titleLabel.preferredMaxLayoutWidth = cell?.titleLabel.bounds.size.width ?? 0.0
+        cell?.bodyLabel.preferredMaxLayoutWidth  = cell?.bodyLabel.bounds.size.width ?? 0.0
+        cell?.linksLabel.preferredMaxLayoutWidth = cell?.linksLabel.bounds.size.width ?? 0.0
         
         return cell
     }

@@ -300,12 +300,7 @@ final class QuestionAnswerHeader: UICollectionReusableView {
                 cell = view
             }
         }
-        if !isNeedToScroll() {
-            cell?.question.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 25) - 50
-        
-        } else {
-            cell?.question.preferredMaxLayoutWidth = (cell?.frame.size.width ?? 25) - 90
-        }
+        cell?.question.preferredMaxLayoutWidth = cell?.question.bounds.size.width ?? 0.0
         
         return cell
     }
@@ -434,7 +429,7 @@ final class QuestionAnswerCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.question.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 120
+        cell?.question.preferredMaxLayoutWidth = cell?.question.bounds.size.width ?? 0.0
         return cell
     }
 }

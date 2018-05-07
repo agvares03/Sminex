@@ -188,8 +188,8 @@ final class NewsListCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 25
-        cell?.desc.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25.0) - 160
+        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
         return cell
     }
 }

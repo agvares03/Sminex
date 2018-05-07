@@ -284,8 +284,8 @@ final class CounterTableCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 120
-        cell?.desc.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 120
+        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
         return cell
     }
 }

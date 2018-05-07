@@ -42,11 +42,14 @@ class FirstController: UIViewController {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.CHECK_REGISTRATION)!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
             if error != nil {
                 DispatchQueue.main.async {
+                    print("activity")
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                         
@@ -61,6 +64,7 @@ class FirstController: UIViewController {
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
+            print("activity")
             #if DEBUG
                 print("responseString = \(self.responseString)")
             #endif
@@ -154,11 +158,14 @@ class FirstController: UIViewController {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + pwd)!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
             if error != nil {
                 DispatchQueue.main.async {
+                    print("enter")
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
@@ -169,6 +176,7 @@ class FirstController: UIViewController {
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
+            print("enter")
             #if DEBUG
                 print("responseString = \(self.responseString)")
             #endif
@@ -183,12 +191,15 @@ class FirstController: UIViewController {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_CONTACTS + "login=" + login + "&pwd=" + pwd)!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
             guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                print("contacts")
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in exit(0) } ) )
                 DispatchQueue.main.sync {
@@ -199,6 +210,7 @@ class FirstController: UIViewController {
             
             TemporaryHolder.instance.contactsList = ContactsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
             
+            print("contacts")
             #if DEBUG
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif
@@ -213,6 +225,8 @@ class FirstController: UIViewController {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         TemporaryHolder.instance.SaltQueue.enter()
         URLSession.shared.dataTask(with: request) {
             data, response, error in
@@ -223,6 +237,7 @@ class FirstController: UIViewController {
             
             if error != nil {
                 DispatchQueue.main.sync {
+                    print("salt")
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
@@ -262,14 +277,14 @@ class FirstController: UIViewController {
                                isCons: answer[5],
                                name: answer[6],
                                history_counters: answer[7],
-                               contactNumber: answer[answer.count - 3],
+                               contactNumber: answer[14],
                                adress: answer[10],
                                roomsCount: answer[11],
                                residentialArea: answer[12],
                                totalArea: answer[13],
                                strah: "0",
                                buisness: answer[9],
-                               lsNumber: answer.last ?? "")
+                               lsNumber: answer[safe: answer.count - 2] ?? "")
                 
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken

@@ -566,8 +566,8 @@ final class AdmissionCommentCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth   = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
-        cell?.comment.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
+        cell?.title.preferredMaxLayoutWidth   = cell?.title.bounds.size.width ?? 0.0
+        cell?.comment.preferredMaxLayoutWidth = cell?.comment.bounds.size.width ?? 0.0
         return cell
     }
 }

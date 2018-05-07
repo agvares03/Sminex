@@ -212,8 +212,8 @@ final class ContactsCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 65
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 65
+        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
         return cell
     }
     

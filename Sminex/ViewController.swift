@@ -277,14 +277,14 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                                isCons: answer[5],
                                name: answer[6],
                                history_counters: answer[7],
-                               contactNumber: answer[answer.count - 3],
+                               contactNumber: answer[14],
                                adress: answer[10],
                                roomsCount: answer[11],
                                residentialArea: answer[12],
                                totalArea: answer[13],
                                strah: "0",
                                buisness: answer[9],
-                               lsNumber: answer.last ?? "")
+                               lsNumber: answer[safe: answer.count - 2] ?? "")
                 
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken

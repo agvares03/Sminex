@@ -532,8 +532,8 @@ final class ServiceCommentCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 100
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 100
+        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
         return cell
     }
 }
