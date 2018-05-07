@@ -21,6 +21,8 @@ final class FinancePayVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(url_?.url)
+        
         automaticallyAdjustsScrollViewInsets = false
         webView.loadRequest(url_!)
     }

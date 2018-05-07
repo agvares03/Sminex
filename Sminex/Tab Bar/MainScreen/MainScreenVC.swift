@@ -553,8 +553,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_QUESTIONS + "accID=" + id)!)
             request.httpMethod = "GET"
             
-            print(request.url)
-            
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
@@ -612,8 +610,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")")!)
         request.httpMethod = "GET"
         
-        print(request.url)
-        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -662,8 +658,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_DEBT + "login=" + login + "&pwd=" + pass)!)
         request.httpMethod = "GET"
         
-        print(request.url)
-        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -711,8 +705,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
                 request.httpMethod = "GET"
-                
-                print(request.url)
                 
                 URLSession.shared.dataTask(with: request) {
                     data, error, responce in
@@ -990,15 +982,15 @@ final class NewsCell: UICollectionViewCell {
                 cell = cellView
             }
         }
-        if isPlusDevices() {
-            cell?.title.preferredMaxLayoutWidth = viewWidth - 75
-            cell?.desc.preferredMaxLayoutWidth  = viewWidth - 36
-            cell?.date.preferredMaxLayoutWidth  = viewWidth - 36
+        if !isNeedToScroll() {
+            cell?.title.preferredMaxLayoutWidth = viewWidth - 55
+            cell?.desc.preferredMaxLayoutWidth  = viewWidth - 30
+            cell?.date.preferredMaxLayoutWidth  = viewWidth - 30
             
         } else {
-            cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-            cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
-            cell?.date.preferredMaxLayoutWidth  = cell?.date.bounds.size.width ?? 0.0
+            cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 25) - 55
+            cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 50
+            cell?.date.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 25) - 55
         }
         return cell
     }
