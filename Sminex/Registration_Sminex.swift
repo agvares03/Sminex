@@ -172,7 +172,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 self.stopAnimation()
                 self.changeDescTextTo(isError: true)
             }
-        } else if (responseString.contains("ok")) {
+        } else {
             DispatchQueue.main.sync {
                 self.stopAnimation()
                 self.changeDescTextTo(isError: false)
