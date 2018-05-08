@@ -846,6 +846,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             fetchRequests(true)
         
         } else if method == "Questions" {
+            DispatchQueue.main.async {
+                self.data[0] = [0 : CellsHeaderData(title: "Опросы")]
+                self.collection.reloadData()
+            }
             fetchQuestions()
         }
     }
