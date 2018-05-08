@@ -206,9 +206,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    private func sendComment() {
+    private func sendComment(_ comment: String = "") {
         
-        let comm = commentField.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let comm = comment == "" ? commentField.text?.stringByAddingPercentEncodingForRFC3986() ?? "" : comment
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm)!)
         request.httpMethod = "GET"
         
@@ -250,6 +250,10 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
+        let comm = commentField.text ?? ""
+        if isSplit {
+            commentField.text = ""
+        }
         
         let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
@@ -299,7 +303,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.sendComment()
+                            self.sendComment(comm)
                         }
                     }
                 }

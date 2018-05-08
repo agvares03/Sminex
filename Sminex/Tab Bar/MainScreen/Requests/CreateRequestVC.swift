@@ -355,6 +355,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 #if DEBUG
                 print(String(data: responce!, encoding: .utf8)!)
                 #endif
+                self.reqId = String(data: responce!, encoding: .utf8)
                 
                 DispatchQueue.main.async {
                     DB().setRequests(data: [RequestEntityData(title: "Пропуск" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),

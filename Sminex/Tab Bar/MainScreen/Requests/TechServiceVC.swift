@@ -194,9 +194,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         }
     }
     
-    private func sendComment() {
+    private func sendComment(_ comment: String = "") {
         
-        let comm = commentField.text!.stringByAddingPercentEncodingForRFC3986()
+        let comm = comment == "" ? commentField.text!.stringByAddingPercentEncodingForRFC3986() : comment
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm!)!)
         request.httpMethod = "GET"
         
@@ -237,6 +237,10 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
+        let comm = commentField.text ?? ""
+        if isSplit {
+            commentField.text = ""
+        }
         
         let uid = UUID().uuidString
         print(uid)
@@ -267,27 +271,29 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                     self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: img, id: uid)  )
+                    
                     if !isSplit {
-                    self.collection.reloadData()
-                    self.img = nil
-                    self.commentField.text = ""
-                    self.commentField.placeholder = "Сообщение"
-                    self.view.endEditing(true)
-                    self.delegate?.update()
-                    
-                    // Подождем пока закроется клавиатура
-                    DispatchQueue.global(qos: .userInteractive).async {
-                        usleep(900000)
                         
-                        DispatchQueue.main.async {
-                            self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
-                            self.endAnimator()
+                        self.collection.reloadData()
+                        self.img = nil
+                        self.commentField.text = ""
+                        self.commentField.placeholder = "Сообщение"
+                        self.view.endEditing(true)
+                        self.delegate?.update()
+                        
+                        // Подождем пока закроется клавиатура
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            usleep(900000)
+                            
+                            DispatchQueue.main.async {
+                                self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                                self.endAnimator()
+                            }
                         }
-                    }
-                    
+                        
                     } else {
                         DispatchQueue.main.async {
-                            self.sendComment()
+                            self.sendComment(comm)
                         }
                     }
                     
