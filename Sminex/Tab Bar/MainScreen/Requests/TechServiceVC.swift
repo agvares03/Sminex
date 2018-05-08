@@ -20,6 +20,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     @IBOutlet private weak var collection:      UICollectionView!
     @IBOutlet private weak var commentField:    UITextField!
     @IBOutlet private weak var sendBtn:         UIButton!
+    @IBOutlet private weak var cameraButton:    UIButton!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         imgs = [:]
@@ -43,8 +44,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         }
         
         startAnimator()
-        
-        if img == nil {
+        if img != nil && commentField.text != "" {
+            uploadPhoto(img!, isSplit: true)
+            return
+            
+        } else if img == nil {
             sendComment()
         } else {
             uploadPhoto(img!)
@@ -53,6 +57,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     @IBAction private func cameraButtonPressed(_ sender: UIButton) {
         
+        if img != nil {
+            img = nil
+            cameraButton.alpha = 1
+            commentField.placeholder = "Сообщение"
+            return
+        }
         let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         action.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { (_) in
             
@@ -223,7 +233,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         }.resume()
     }
     
-    private func uploadPhoto(_ img: UIImage) {
+    private func uploadPhoto(_ img: UIImage, isSplit: Bool = false) {
         
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
@@ -242,12 +252,22 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 })
                 
                 upload.responseJSON { response in
+                    if response.response == nil || response.result.value == nil {
+                        let alert = UIAlertController(title: "Ошибка соединения", message: "Попробуйте позже", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
+                        DispatchQueue.main.async {
+                            self.endAnimator()
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                        return
+                    }
                     print(response.result.value!)
                     
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                     self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: img, id: uid)  )
+                    if !isSplit {
                     self.collection.reloadData()
                     self.img = nil
                     self.commentField.text = ""
@@ -262,6 +282,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                         DispatchQueue.main.async {
                             self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
                             self.endAnimator()
+                        }
+                    }
+                    
+                    } else {
+                        DispatchQueue.main.async {
+                            self.sendComment()
                         }
                     }
                     
@@ -288,7 +314,8 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         img = info[UIImagePickerControllerOriginalImage] as? UIImage
-        sendButtonPressed(nil)
+        commentField.placeholder = "Добавлена фотография"
+        cameraButton.alpha = 0.5
         dismiss(animated: true, completion: nil)
     }
     
@@ -324,6 +351,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
 final class ServiceHeader: UICollectionViewCell {
     
     @IBOutlet private weak var imageLoader: UIActivityIndicatorView!
+    @IBOutlet private weak var scrollTop:   NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var problem:     UILabel!
     @IBOutlet private weak var date:        UILabel!
@@ -348,12 +376,14 @@ final class ServiceHeader: UICollectionViewCell {
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.images.count == 0 {
-            imageConst.constant = 30
-            scroll.isHidden = true
+            imageConst.constant = 0
+            scrollTop.constant  = 0
+//            scroll.isHidden = true
         
         } else {
-            imageConst.constant = 186
-            scroll.isHidden = false
+            imageConst.constant = 150
+            scrollTop.constant  = 16
+//            scroll.isHidden = false
         }
         
         if item.imgsString.count == 0 {

@@ -326,7 +326,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         let text  = problemTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         
-        let url = "login=\(login)&text=\(text)&mail=\(email)"
+        let url = "login=\(login)&text=\(text)&phone=\(email)"
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
         request.httpMethod = "GET"
         

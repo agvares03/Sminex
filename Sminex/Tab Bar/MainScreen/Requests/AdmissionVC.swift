@@ -20,6 +20,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     @IBOutlet private weak var collection:      UICollectionView!
     @IBOutlet private weak var commentField:    UITextField!
     @IBOutlet private weak var sendBtn:         UIButton!
+    @IBOutlet private weak var cameraButton:    UIButton!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -35,6 +36,12 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBAction private func cameraPressed(_ sender: UIButton) {
         
+        if img != nil {
+            img = nil
+            cameraButton.alpha = 1
+            commentField.placeholder = "Сообщение"
+            return
+        }
         let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         action.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { (_) in
             
@@ -71,8 +78,11 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         startAnimating()
-        
-        if img == nil {
+        if img != nil && commentField.text != "" {
+            uploadPhoto(img!, isSplit: true)
+            return
+            
+        } else if img == nil {
             sendComment()
         } else {
             uploadPhoto(img!)
@@ -236,7 +246,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             }.resume()
     }
     
-    private func uploadPhoto(_ img: UIImage) {
+    private func uploadPhoto(_ img: UIImage, isSplit: Bool = false) {
         
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
@@ -254,26 +264,42 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                 })
                 
                 upload.responseJSON { response in
+                    if response.response == nil || response.result.value == nil {
+                        let alert = UIAlertController(title: "Ошибка соединения", message: "Попробуйте позже", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
+                        DispatchQueue.main.async {
+                            self.endAnimating()
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                        return
+                    }
                     print(response.result.value!)
                     
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
                     self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: img, id: uid)  )
-                    self.collection.reloadData()
-                    self.img = nil
-                    self.commentField.text = ""
-                    self.commentField.placeholder = "Сообщение"
-                    self.view.endEditing(true)
-                    self.delegate?.update()
                     
-                    // Подождем пока закроется клваиатура
-                    DispatchQueue.global(qos: .userInteractive).async {
-                        usleep(900000)
-                        
+                    if !isSplit {
+                        self.collection.reloadData()
+                        self.img = nil
+                        self.commentField.text = ""
+                        self.commentField.placeholder = "Сообщение"
+                        self.view.endEditing(true)
+                        self.delegate?.update()
+                    
+                        // Подождем пока закроется клваиатура
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            usleep(900000)
+                            
+                            DispatchQueue.main.async {
+                                self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                                self.endAnimating()
+                            }
+                        }
+                    } else {
                         DispatchQueue.main.async {
-                            self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
-                            self.endAnimating()
+                            self.sendComment()
                         }
                     }
                 }
@@ -300,7 +326,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         img = info[UIImagePickerControllerOriginalImage] as? UIImage
-        sendButtonPressed(nil)
+        commentField.placeholder = "Добавлена фотография"
+        cameraButton.alpha = 0.5
         dismiss(animated: true, completion: nil)
     }
     
@@ -334,8 +361,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
 final class AdmissionHeader: UICollectionViewCell {
     
     @IBOutlet private weak var imgsLoader:      UIActivityIndicatorView!
-    @IBOutlet private weak var imgsConst:       NSLayoutConstraint!
-    @IBOutlet private weak var gosConst:        NSLayoutConstraint!
+    @IBOutlet private weak var gosConstant:     NSLayoutConstraint!
+    @IBOutlet private weak var imgsHeight:      NSLayoutConstraint!
+    @IBOutlet private weak var imgsTop:         NSLayoutConstraint!
     @IBOutlet private weak var imgs:            UIScrollView!
     @IBOutlet private weak var image:           UIImageView!
     @IBOutlet private weak var gosti:           UILabel!
@@ -355,13 +383,13 @@ final class AdmissionHeader: UICollectionViewCell {
         imgsLoader.stopAnimating()
         
         if item.gosNumber == "" {
-            gosConst.constant   = 8
+            gosConstant.constant   = -35
             gosNumbers.isHidden = true
             gosLine.isHidden    = true
             gosTitle.isHidden   = true
         
         } else {
-            gosConst.constant   = 65
+            gosConstant.constant   = 14
             gosNumbers.isHidden = false
             gosLine.isHidden    = false
             gosTitle.isHidden   = false
@@ -379,12 +407,14 @@ final class AdmissionHeader: UICollectionViewCell {
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.images.count == 0 && item.imgsUrl.count == 0 {
-            imgs.isHidden       = true
-            imgsConst.constant  = 20
+//            imgs.isHidden       = true
+            imgsTop.constant = 0
+            imgsHeight.constant = 0
         
         } else if item.images.count != 0 {
-            imgs.isHidden       = false
-            imgsConst.constant  = 170
+//            imgs.isHidden       = false
+            imgsHeight.constant = 150
+            imgsTop.constant    = 16
             
             var x = 0.0
             item.images.forEach {

@@ -165,8 +165,10 @@ final class AccountHeader: UICollectionReusableView {
         holderLabel.text = defaults.string(forKey: "name")
         descLabel.text   = defaults.string(forKey: "accDesc")
         
-        holderPhoneLabel.isUserInteractionEnabled = true
-        holderPhoneLabel.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(holderPhonePressed(_:))) )
+        holderPhoneLabel.isUserInteractionEnabled  = true
+        comfortPhoneLabel.isUserInteractionEnabled = true
+        holderPhoneLabel.addGestureRecognizer(  UITapGestureRecognizer(target: self, action: #selector(holderPhonePressed(_:))) )
+        comfortPhoneLabel.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))))
         
         if TemporaryHolder.instance.bcImage != nil {
             bcImageView.image = TemporaryHolder.instance.bcImage
@@ -194,6 +196,17 @@ final class AccountHeader: UICollectionReusableView {
     @objc private func holderPhonePressed(_ sender: UITapGestureRecognizer) {
         let newPhone = holderPhoneLabel.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "") ?? ""
         if let url = URL(string: "tel://+" + newPhone) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
+    
+    @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
+        let phone = "+74951911774"
+        if let url = URL(string: "tel://" + phone) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
