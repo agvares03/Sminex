@@ -77,6 +77,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         editAccountInfo()
     }
     
+    @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     open var isReg_ = false
     open var responceString_ = ""
     open var login_ = ""
@@ -138,6 +142,27 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    @objc func keyboardWillShow(sender: NSNotification?) {
+        scroll.contentInset.bottom = 220
+    }
+    @objc func keyboardWillHide(sender: NSNotification?) {
+        scroll.contentInset.bottom = 0
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {

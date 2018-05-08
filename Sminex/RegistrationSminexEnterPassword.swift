@@ -273,7 +273,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         let txtLogin = login_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let txtPass = passTextField.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)))!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -344,23 +344,25 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             // авторизация на сервере - получение данных пользователя
             var answer = responseString.components(separatedBy: ";")
             
+            getBCImage(id: answer[safe: 17] ?? "")
             // сохраним значения в defaults
-            saveGlobalData(date1: answer[0],
-                           date2: answer[1],
-                           can_count: answer[2],
-                           mail: answer[3],
-                           id_account: answer[4],
-                           isCons: answer[5],
-                           name: answer[6],
-                           history_counters: answer[7],
-                           contactNumber: answer[14],
-                           adress: answer[10],
-                           roomsCount: answer[11],
-                           residentialArea: answer[12],
-                           totalArea: answer[13],
-                           strah: "0",
-                           buisness: answer[9],
-                           lsNumber: answer[safe: 14] ?? "")
+            saveGlobalData(date1:               answer[safe: 0]  ?? "",
+                           date2:               answer[safe: 1]  ?? "",
+                           can_count:           answer[safe: 2]  ?? "",
+                           mail:                answer[safe: 3]  ?? "",
+                           id_account:          answer[safe: 4]  ?? "",
+                           isCons:              answer[safe: 5]  ?? "",
+                           name:                answer[safe: 6]  ?? "",
+                           history_counters:    answer[safe: 7]  ?? "",
+                           contactNumber:       answer[safe: 14] ?? "",
+                           adress:              answer[safe: 10] ?? "",
+                           roomsCount:          answer[safe: 11] ?? "",
+                           residentialArea:     answer[safe: 12] ?? "",
+                           totalArea:           answer[safe: 13] ?? "",
+                           strah:               "0",
+                           buisness:            answer[safe: 9]  ?? "",
+                           lsNumber:            answer[safe: 16] ?? "",
+                           desc:                answer[safe: 15] ?? "")
             
             // отправим на сервер данные об ид. устройства для отправки уведомлений
             let token = Messaging.messaging().fcmToken

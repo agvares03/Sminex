@@ -22,6 +22,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     @IBOutlet private weak var sendBtn:         UIButton!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
+        imgs = [:]
         if isCreate_ {
             let viewControllers = navigationController?.viewControllers
             navigationController?.popToViewController(viewControllers![viewControllers!.count - 4], animated: true)
@@ -200,7 +201,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: self.img)  )
+                self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: self.img, id: UUID().uuidString)  )
                 self.img = nil
                 self.collection.reloadData()
                 self.commentField.text = ""
@@ -227,8 +228,10 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         
+        let uid = UUID().uuidString
+        print(uid)
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: "tech_file", fileName: "tech_file.jpg", mimeType: "image/jpg")
+            multipartFromdata.append(UIImagePNGRepresentation(img) ?? Data(), withName: uid, fileName: "\(uid).png", mimeType: "image/png")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
          
             switch result {
@@ -244,7 +247,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                    self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: img)  )
+                    self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: img, id: uid)  )
                     self.collection.reloadData()
                     self.img = nil
                     self.commentField.text = ""
@@ -493,7 +496,7 @@ final class ServiceCommentCell: UICollectionViewCell {
         desc.text   = item.desc
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "hh:mm") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
@@ -502,19 +505,29 @@ final class ServiceCommentCell: UICollectionViewCell {
         
         if item.imgUrl != nil {
             
-            imageLoader.isHidden = false
-            imageLoader.startAnimating()
-            DispatchQueue.global(qos: .userInitiated).async {
+            if imgs.keys.contains(item.id) {
+                self.image.image = imgs[item.id]
                 
-                var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + item.imgUrl!)!)
-                request.httpMethod = "GET"
+            } else {
                 
-                let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
-                
-                DispatchQueue.main.async {
-                    self.image.image = UIImage(data: data!)
-                    self.imageLoader.stopAnimating()
-                    self.imageLoader.isHidden = true
+                imageLoader.isHidden = false
+                imageLoader.startAnimating()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    
+                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + item.imgUrl!)!)
+                    request.httpMethod = "GET"
+                    
+                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+                    
+                    if data != nil {
+                        DispatchQueue.main.async {
+                            let imgDt = UIImage(data: data!)
+                            imgs[item.id] = imgDt
+                            self.image.image = imgDt
+                            self.imageLoader.stopAnimating()
+                            self.imageLoader.isHidden = true
+                        }
+                    }
                 }
             }
         }
@@ -532,8 +545,8 @@ final class ServiceCommentCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
+        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 100
+        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 100
         return cell
     }
 }
@@ -546,8 +559,9 @@ final class ServiceCommentCellData: TechServiceProtocol {
     let desc:   String
     let date:   String
     let imgUrl: String?
+    let id:     String
     
-    init(icon: UIImage, title: String, desc: String, date: String, image: UIImage? = nil, imageUrl: String? = nil) {
+    init(icon: UIImage, title: String, desc: String, date: String, image: UIImage? = nil, imageUrl: String? = nil, id: String) {
         
         self.icon   = icon
         self.title  = title
@@ -555,8 +569,11 @@ final class ServiceCommentCellData: TechServiceProtocol {
         self.date   = date
         self.image  = image
         self.imgUrl = imageUrl
+        self.id     = id
     }
 }
+
+private var imgs: [String:UIImage] = [:]
 
 
 

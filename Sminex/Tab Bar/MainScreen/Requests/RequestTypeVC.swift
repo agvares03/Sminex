@@ -20,6 +20,7 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
     
     private var typeName = ""
     private var data = TemporaryHolder.instance.requestTypes?.types
+    private var index = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,9 +43,11 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
         
         if  (name?.contains(find: "ропуск"))! {
             typeName = name ?? ""
+            index = indexPath.row
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateAdmission, sender: self)
         
         } else if name == "Техническое обслуживание" {
+            index = indexPath.row
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateServive, sender: self)
         }
     }
@@ -70,10 +73,12 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
             let vc = segue.destination as! CreateRequestVC
             vc.delegate = delegate
             vc.name_ = typeName
+            vc.type_ = data![index]
         
         } else if segue.identifier == Segues.fromRequestTypeVC.toCreateServive {
             let vc = segue.destination as! CreateTechServiceVC
             vc.delegate = delegate
+            vc.type_ = data![index]
         }
     }
 }

@@ -142,7 +142,8 @@ func saveGlobalData(date1:              String,
                     totalArea:          String,
                     strah:              String,
                     buisness:           String,
-                    lsNumber:           String) {
+                    lsNumber:           String,
+                    desc:               String) {
     
     let defaults = UserDefaults.standard
     defaults.setValue(lsNumber, forKey: "login")
@@ -161,6 +162,7 @@ func saveGlobalData(date1:              String,
     defaults.setValue(adress, forKey: "adress")
     defaults.setValue(contactNumber, forKey: "contactNumber")
     defaults.setValue(buisness, forKey: "buisness")
+    defaults.setValue(desc, forKey: "accDesc")
     defaults.synchronize()
 }
 
@@ -361,6 +363,23 @@ func getSalt() -> Data {
     }
 }
 
+func getBCImage(id: String) {
+    
+    TemporaryHolder.instance.bcQueue.enter()
+    DispatchQueue.global(qos: .background).async {
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BC_IMAGE + "guid=" + id)!)
+        request.httpMethod = "GET"
+        
+        let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+        if data != nil {
+            let data = String(data: data!, encoding: .utf8) ?? ""
+            if !data.contains(find: "not found") && !data.contains(find: "error") {
+                TemporaryHolder.instance.bcImage = UIImage(data: Data(base64Encoded: (data.replacingOccurrences(of: "data:image/png;base64,", with: "")))!)
+            }
+        }
+        TemporaryHolder.instance.bcQueue.leave()
+    }
+}
 
 
 

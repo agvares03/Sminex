@@ -282,4 +282,9 @@ struct Segues {
         
         static let toSupport         = "authSupport"
     }
+    
+    struct fromAccountVC {
+        
+        static let toSettings        = "settings"
+    }
 }

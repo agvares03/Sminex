@@ -13,8 +13,16 @@ final class TemporaryHolder {
     
     static let instance = TemporaryHolder()
     
-    public var salt: Data?
     public let SaltQueue = DispatchGroup()
+    public let bcQueue   = DispatchGroup()
+    public var salt: Data?
+    public var bcImage: UIImage? {
+        didSet {
+            if bcImage != nil {
+                UserDefaults.standard.setValue(UIImagePNGRepresentation(bcImage!), forKey: "BCImage")
+            }
+        }
+    }
     public var newsLastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
     public var requestTypes:            RequestType?
     public var contacts:                Contacts?

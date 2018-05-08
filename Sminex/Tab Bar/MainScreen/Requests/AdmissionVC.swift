@@ -23,6 +23,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
+        imgs = [:]
         if isCreated_ {
             let viewControllers = navigationController?.viewControllers
             navigationController?.popToViewController(viewControllers![viewControllers!.count - 4], animated: true)
@@ -213,8 +214,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             DispatchQueue.main.async {
                 let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: self.img)  )
+                dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
+                self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: self.img, id: UUID().uuidString)  )
                 self.collection.reloadData()
                 self.img = nil
                 self.commentField.text = ""
@@ -240,8 +241,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         let reqID = reqId_.stringByAddingPercentEncodingForRFC3986()
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         
+        let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: "tech_file", fileName: "tech_file.jpg", mimeType: "image/jpg")
+            multipartFromdata.append(UIImagePNGRepresentation(img)!, withName: uid, fileName: "\(uid).png", mimeType: "image/png")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
             
             switch result {
@@ -256,8 +258,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                     let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: img)  )
+                    dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
+                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: img, id: uid)  )
                     self.collection.reloadData()
                     self.img = nil
                     self.commentField.text = ""
@@ -526,7 +528,7 @@ final class AdmissionCommentCell: UICollectionViewCell {
         comment.text    = item.comment
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "hh:mm"): dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
@@ -534,6 +536,11 @@ final class AdmissionCommentCell: UICollectionViewCell {
         comImg.addGestureRecognizer(tap)
         
         if item.imgUrl != nil {
+            
+            if imgs.keys.contains(item.id) {
+                self.comImg.image = imgs[item.id]
+            }
+            
             imgsLoader.isHidden = false
             imgsLoader.startAnimating()
             
@@ -544,11 +551,14 @@ final class AdmissionCommentCell: UICollectionViewCell {
                 
                 let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
                 
-                guard data != nil else { return }
-                DispatchQueue.main.async {
-                    self.comImg.image = UIImage(data: data!)
-                    self.imgsLoader.isHidden = true
-                    self.imgsLoader.stopAnimating()
+                if data != nil {
+                    DispatchQueue.main.async {
+                        let imgDt = UIImage(data: data!)
+                        imgs[item.id] = imgDt
+                        self.comImg.image = imgDt
+                        self.imgsLoader.isHidden = true
+                        self.imgsLoader.stopAnimating()
+                    }
                 }
             }
         }
@@ -566,8 +576,8 @@ final class AdmissionCommentCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth   = cell?.title.bounds.size.width ?? 0.0
-        cell?.comment.preferredMaxLayoutWidth = cell?.comment.bounds.size.width ?? 0.0
+        cell?.title.preferredMaxLayoutWidth   = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
+        cell?.comment.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
         return cell
     }
 }
@@ -580,8 +590,9 @@ final class AdmissionCommentCellData: AdmissionProtocol {
     let comment:    String
     let date:       String
     let imgUrl:     String?
+    let id:         String
     
-    init(image: UIImage, title: String, comment: String, date: String, commImg: UIImage? = nil, commImgUrl: String? = nil) {
+    init(image: UIImage, title: String, comment: String, date: String, commImg: UIImage? = nil, commImgUrl: String? = nil, id: String) {
         
         self.img        = commImg
         self.image      = image
@@ -589,10 +600,11 @@ final class AdmissionCommentCellData: AdmissionProtocol {
         self.comment    = comment
         self.date       = date
         self.imgUrl     = commImgUrl
+        self.id         = id
     }
 }
 
-
+private var imgs: [String:UIImage] = [:]
 
 
 

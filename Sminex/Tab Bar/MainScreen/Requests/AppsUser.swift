@@ -137,14 +137,14 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     self.typeName = type
                     let row = self.rows[indexPath.row]
-                    var persons = ""
+                    var persons = row.responsiblePerson ?? ""
                     var auto = ""
-                    self.rowPersons[row.id!]?.forEach {
-                        
-                        if $0.fio != "" && $0.fio != nil {
-                            persons = persons + ", " + ($0.fio ?? "")
-                        }
-                    }
+//                    self.rowPersons[row.id!]?.forEach {
+//
+//                        if $0.fio != "" && $0.fio != nil {
+//                            persons = persons + ", " + ($0.fio ?? "")
+//                        }
+//                    }
                     self.rowAutos[row.id!]?.forEach {
                         
                         if $0.number != "" && $0.number != nil {
@@ -185,7 +185,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                                              comment: comm.text ?? "",
                                                                              date: comm.createdDate ?? "",
                                                                              commImg: nil,
-                                                                             commImgUrl: commImg) )
+                                                                             commImgUrl: commImg,
+                                                                             id: comm.id ?? "") )
                     }
                     
                     self.reqId = row.id ?? ""
@@ -225,11 +226,12 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         }
                         
                         self.techServiceComm.append( ServiceCommentCellData(icon: UIImage(named: "account")!,
-                                                                       title: comm.name!,
-                                                                       desc: comm.text!,
-                                                                       date: comm.createdDate!,
+                                                                       title: comm.name ?? "",
+                                                                       desc: comm.text ?? "",
+                                                                       date: comm.createdDate ?? "",
                                                                        image: nil,
-                                                                       imageUrl: commImg))
+                                                                       imageUrl: commImg,
+                                                                       id: comm.id ?? ""))
                     }
                     
                     self.reqId = row.id ?? ""
@@ -350,18 +352,18 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     
                     let lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
-                    let icon = !(curr.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                    let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     let isPerson = curr.name?.contains(find: "ропуск") ?? false
                     
-                    var persons = ""
-                    if isPerson {
-                        self.rowPersons[curr.id!]?.forEach {
-                            
-                            if $0.fio != "" && $0.fio != nil {
-                                persons = persons + ", " + ($0.fio ?? "")
-                            }
-                        }
-                    }
+                    let persons = curr.responsiblePerson ?? ""
+//                    if isPerson {
+//                        self.rowPersons[curr.id!]?.forEach {
+//
+//                            if $0.fio != "" && $0.fio != nil {
+//                                persons = persons + ", " + ($0.fio ?? "")
+//                            }
+//                        }
+//                    }
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
                     newData.append( AppsUserCellData(title: curr.name ?? "",
                                                      desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",

@@ -508,15 +508,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     let isPerson = $0.name?.contains(find: "ропуск") ?? false
                     
-                    var persons = ""
-                    if isPerson {
-                        rowPersons[$0.id!]?.forEach {
-                            
-                            if $0.fio != "" && $0.fio != nil {
-                                persons = persons + ", " + ($0.fio ?? "")
-                            }
-                        }
-                    }
+                    var persons = $0.responsiblePerson ?? ""
+//                    if isPerson {
+//                        rowPersons[$0.id!]?.forEach {
+//
+//                            if $0.fio != "" && $0.fio != nil {
+//                                persons = persons + ", " + ($0.fio ?? "")
+//                            }
+//                        }
+//                    }
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : $0.text ?? ""
                     
                     returnArr.append( RequestCellData(title: $0.name ?? "",
@@ -561,6 +561,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
                 var filtered: [QuestionDataJson] = []
                 
+                print(unfilteredData)
                 unfilteredData?.forEach { json in
                     
                     var isContains = true
@@ -589,6 +590,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
                 TemporaryHolder.instance.menuQuesions = filtered.count
+                print(filtered)
                 
                 DispatchQueue.main.sync {
                     self.collection.reloadData()

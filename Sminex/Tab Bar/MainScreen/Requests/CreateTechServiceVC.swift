@@ -123,6 +123,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     open var delegate: AppsUserDelegate?
+    open var type_:     RequestTypeStruct?
     private var data:   ServiceHeaderData?
     private var reqId:  String?
     private var constant: CGFloat = 0.0
@@ -320,10 +321,12 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
         let comm = edProblem.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\("Техническое обслуживание".stringByAddingPercentEncodingForRFC3986()!)&name=\("Техническое обслуживание \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=&responsiblePerson=&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(String(describing: data!.date).stringByAddingPercentEncodingForRFC3986()!)&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=&responsiblePerson=&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(String(describing: data!.date).stringByAddingPercentEncodingForRFC3986()!)&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
+        
+        print(request.url)
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in
@@ -383,8 +386,9 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         
         group.enter()
+        let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: "tech_file", fileName: "tech_file.jpg", mimeType: "image/jpg")
+            multipartFromdata.append(UIImagePNGRepresentation(img)!, withName: uid, fileName: "\(uid).png", mimeType: "image/png")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
             
             switch result {
