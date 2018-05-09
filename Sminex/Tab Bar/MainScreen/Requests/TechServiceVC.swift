@@ -484,6 +484,8 @@ final class ServiceHeaderData: TechServiceProtocol {
 final class ServiceCommentCell: UICollectionViewCell {
     
     @IBOutlet private weak var imageLoader: UIActivityIndicatorView!
+    @IBOutlet private      var imgsConst:   NSLayoutConstraint!
+    @IBOutlet private      var commConst:   NSLayoutConstraint!
     @IBOutlet private weak var image:       UIImageView!
     @IBOutlet private weak var icon:        UIImageView!
     @IBOutlet private weak var title:   	UILabel!
@@ -499,13 +501,17 @@ final class ServiceCommentCell: UICollectionViewCell {
         imageLoader.stopAnimating()
         
         if item.image != nil || item.imgUrl != nil {
-            image.image     = item.image
-            image.isHidden  = false
-            desc.isHidden   = true
+            image.image        = item.image
+            image.isHidden     = false
+            desc.isHidden      = true
+            imgsConst.isActive = false
+            commConst.isActive = true
         
         } else {
             image.isHidden  = true
             desc.isHidden   = false
+            imgsConst.isActive = true
+            commConst.isActive = false
         }
         
         if item.title == UserDefaults.standard.string(forKey: "name") ?? "" {
@@ -581,8 +587,8 @@ final class ServiceCommentCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 0.0) - 100
-        cell?.desc.preferredMaxLayoutWidth  = (cell?.contentView.frame.size.width ?? 0.0) - 100
+        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth  = cell?.title.bounds.size.width ?? 0.0
         return cell
     }
 }

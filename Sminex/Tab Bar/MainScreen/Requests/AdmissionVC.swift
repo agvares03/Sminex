@@ -514,6 +514,8 @@ final class AdmissionHeaderData: AdmissionProtocol {
 final class AdmissionCommentCell: UICollectionViewCell {
     
     @IBOutlet private weak var imgsLoader:  UIActivityIndicatorView!
+    @IBOutlet private      var imgsConst:   NSLayoutConstraint!
+    @IBOutlet private      var commConst:   NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var image:       UIImageView!
     @IBOutlet private weak var title:       UILabel!
@@ -529,13 +531,17 @@ final class AdmissionCommentCell: UICollectionViewCell {
         imgsLoader.stopAnimating()
         
         if item.img != nil || item.imgUrl != nil {
-            comment.isHidden = true
-            comImg.isHidden  = false
-            comImg.image     = item.img
+            comment.isHidden   = true
+            comImg.isHidden    = false
+            comImg.image       = item.img
+            imgsConst.isActive = false
+            commConst.isActive = true
         
         } else {
             comment.isHidden = false
             comImg.isHidden  = true
+            imgsConst.isActive = true
+            commConst.isActive = false
         }
         
         if item.title == UserDefaults.standard.string(forKey: "name") ?? "" {
@@ -610,8 +616,8 @@ final class AdmissionCommentCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth   = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
-        cell?.comment.preferredMaxLayoutWidth = (cell?.contentView.frame.size.width ?? 100.0) - 100.0
+        cell?.title.preferredMaxLayoutWidth   = cell?.title.bounds.size.width   ?? 0.0
+        cell?.comment.preferredMaxLayoutWidth = cell?.comment.bounds.size.width ?? 0.0
         return cell
     }
 }
