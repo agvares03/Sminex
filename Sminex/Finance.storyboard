@@ -393,14 +393,14 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FinanceDebtPayCell" id="t45-dt-j2j" customClass="FinanceDebtPayCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="80" width="375" height="100"/>
+                                        <rect key="frame" x="0.0" y="80" width="375" height="193"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="193"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hqd-5h-ze5">
-                                                    <rect key="frame" x="8" y="0.0" width="359" height="100"/>
+                                                    <rect key="frame" x="8" y="0.0" width="359" height="193"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63G-hh-1hh">
                                                             <rect key="frame" x="10" y="0.0" width="339" height="1"/>
@@ -412,12 +412,49 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0x1-XS-NWa">
+                                                            <rect key="frame" x="0.0" y="118" width="359" height="1"/>
+                                                            <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="1" id="qkm-KU-wbI"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="share_action" translatesAutoresizingMaskIntoConstraints="NO" id="sZ2-fl-3sy">
+                                                            <rect key="frame" x="97" y="138" width="27" height="27"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="27" id="95d-Ig-uOl"/>
+                                                                <constraint firstAttribute="height" constant="27" id="lnn-lo-dcc"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tfz-kh-Kz0">
+                                                            <rect key="frame" x="132" y="134" width="95" height="35"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <state key="normal" title="Поделиться"/>
+                                                            <connections>
+                                                                <action selector="shareButtonPressed:" destination="jEN-tK-MhP" eventType="touchUpInside" id="iRe-cb-KiW"/>
+                                                            </connections>
+                                                        </button>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="T8m-0A-ckN">
+                                                            <rect key="frame" x="169" y="141.5" width="20" height="20"/>
+                                                        </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="63G-hh-1hh" firstAttribute="leading" secondItem="hqd-5h-ze5" secondAttribute="leading" constant="10" id="0Ju-pK-GhP"/>
+                                                        <constraint firstItem="tfz-kh-Kz0" firstAttribute="centerX" secondItem="hqd-5h-ze5" secondAttribute="centerX" id="3YN-Lp-ick"/>
                                                         <constraint firstAttribute="trailing" secondItem="63G-hh-1hh" secondAttribute="trailing" constant="10" id="7EK-WT-9Mn"/>
+                                                        <constraint firstItem="0x1-XS-NWa" firstAttribute="leading" secondItem="hqd-5h-ze5" secondAttribute="leading" id="LuQ-Gc-qM6"/>
+                                                        <constraint firstItem="sZ2-fl-3sy" firstAttribute="top" secondItem="0x1-XS-NWa" secondAttribute="bottom" constant="19" id="QAd-jS-ROG"/>
+                                                        <constraint firstItem="tfz-kh-Kz0" firstAttribute="centerY" secondItem="sZ2-fl-3sy" secondAttribute="centerY" id="VQv-uG-ucA"/>
+                                                        <constraint firstItem="tfz-kh-Kz0" firstAttribute="leading" secondItem="sZ2-fl-3sy" secondAttribute="trailing" constant="8" id="Ye7-KD-ahf"/>
+                                                        <constraint firstItem="T8m-0A-ckN" firstAttribute="centerY" secondItem="tfz-kh-Kz0" secondAttribute="centerY" id="Zu6-gP-4FC"/>
+                                                        <constraint firstAttribute="trailing" secondItem="0x1-XS-NWa" secondAttribute="trailing" id="aUA-bQ-sea"/>
                                                         <constraint firstItem="63G-hh-1hh" firstAttribute="top" secondItem="hqd-5h-ze5" secondAttribute="top" id="iJc-Kt-rNt"/>
+                                                        <constraint firstItem="T8m-0A-ckN" firstAttribute="centerX" secondItem="tfz-kh-Kz0" secondAttribute="centerX" id="tUU-1m-Mnu"/>
+                                                        <constraint firstAttribute="bottom" secondItem="tfz-kh-Kz0" secondAttribute="bottom" constant="24" id="xDB-W7-3C7"/>
                                                     </constraints>
                                                 </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDa-YA-nRA">
@@ -441,7 +478,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*До 31.01.2018*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yi7-5b-9jg">
-                                                    <rect key="frame" x="18" y="78" width="84" height="13.5"/>
+                                                    <rect key="frame" x="18" y="78" width="84" height="13"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -473,6 +510,7 @@
                                             <constraint firstItem="fKM-fK-Spd" firstAttribute="centerY" secondItem="yi7-5b-9jg" secondAttribute="centerY" id="AMB-D7-3Ar"/>
                                             <constraint firstItem="yi7-5b-9jg" firstAttribute="leading" secondItem="gDa-YA-nRA" secondAttribute="leading" id="EKi-ae-pQ5"/>
                                             <constraint firstItem="hqd-5h-ze5" firstAttribute="leading" secondItem="t45-dt-j2j" secondAttribute="leading" constant="8" id="Mu4-Gi-rrl"/>
+                                            <constraint firstItem="0x1-XS-NWa" firstAttribute="top" secondItem="yi7-5b-9jg" secondAttribute="bottom" constant="27" id="WXe-TI-GTQ"/>
                                             <constraint firstItem="fKM-fK-Spd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yi7-5b-9jg" secondAttribute="trailing" constant="20" id="YOJ-eJ-vdD"/>
                                             <constraint firstItem="TJb-G3-Rf4" firstAttribute="trailing" secondItem="gDa-YA-nRA" secondAttribute="trailing" id="YqW-Hi-qMy"/>
                                             <constraint firstAttribute="trailing" secondItem="hqd-5h-ze5" secondAttribute="trailing" constant="8" id="e3n-9V-gQe"/>
@@ -482,9 +520,11 @@
                                             <constraint firstItem="gDa-YA-nRA" firstAttribute="leading" secondItem="t45-dt-j2j" secondAttribute="leadingMargin" constant="10" id="vrX-YY-xZB"/>
                                             <constraint firstItem="TJb-G3-Rf4" firstAttribute="leading" secondItem="fKM-fK-Spd" secondAttribute="trailing" constant="8" id="xKB-oO-YSV"/>
                                         </constraints>
-                                        <size key="customSize" width="375" height="100"/>
+                                        <size key="customSize" width="375" height="193"/>
                                         <connections>
                                             <outlet property="dateLabel" destination="yi7-5b-9jg" id="0pm-4C-Xcp"/>
+                                            <outlet property="shareButton" destination="tfz-kh-Kz0" id="jsT-iy-Iru"/>
+                                            <outlet property="shareLoader" destination="T8m-0A-ckN" id="DTC-Dw-rXR"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -1177,6 +1217,7 @@
     <resources>
         <image name="arrow_right" width="40" height="65"/>
         <image name="icQrCode" width="24" height="24"/>
+        <image name="share_action" width="27" height="27"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>

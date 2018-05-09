@@ -8,6 +8,12 @@
 
 import UIKit
 import Gloss
+import PDFKit
+
+protocol FinanceDebtPayCellDelegate {
+    func startShareAnimation()
+    func stopShareAnimation()
+}
 
 final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -31,8 +37,45 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         performSegue(withIdentifier: Segues.fromFinanceDebtVC.toPay, sender: self)
     }
     
+    @IBAction private func shareButtonPressed(_ sender: UIButton) {
+        delegate?.startShareAnimation()
+        if files == nil {
+            DispatchQueue.global(qos: .background).async {
+                self.filesGroup.wait()
+                
+                if (self.files?.count ?? 0) > 1 {
+                    let alert = UIAlertController(title: "Выберите файл", message: nil, preferredStyle: .actionSheet)
+                    self.files?.forEach { file in
+                        alert.addAction( UIAlertAction(title: file.fileName, style: .default, handler: { (_) in self.getShareFile(file) } ) )
+                    }
+                    DispatchQueue.main.async {
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    
+                } else {
+                    self.getShareFile(self.files?.first)
+                }
+            }
+            return
+        }
+        
+        if (files?.count ?? 0) > 1 {
+            let alert = UIAlertController(title: "Выберите файл", message: nil, preferredStyle: .actionSheet)
+            files?.forEach { file in
+                alert.addAction( UIAlertAction(title: file.fileName, style: .default, handler: { (_) in self.getShareFile(file) } ) )
+            }
+            present(alert, animated: true, completion: nil)
+        
+        } else {
+            self.getShareFile(files?.first)
+        }
+    }
+    
     open var data_: AccountBillsJson?
     private var receipts: [ReceiptsJson]?
+    private var files: [RecieptFilesJson]?
+    private var filesGroup = DispatchGroup()
+    private var delegate: FinanceDebtPayCellDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,10 +84,11 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         collection.dataSource   = self
         collection.delegate     = self
         
-        startAnimation()
         if data_ != nil {
+            self.startAnimation()
             DispatchQueue.global(qos: .userInitiated).async {
                 self.getDebt()
+                self.getShareElements()
             }
         }
     }
@@ -53,7 +97,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         guard receipts != nil else {
             return 0
         }
-        return receipts?.count != 0 ? (receipts?.count ?? 0) + 1 : 0
+        return receipts?.count != 0 ? (receipts?.count ?? 0) + 1 : 1
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -69,6 +113,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         if indexPath.row == receipts?.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtPayCell", for: indexPath) as! FinanceDebtPayCell
             cell.display(data_!)
+            delegate = cell
             return cell
         }
         
@@ -97,7 +142,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if indexPath.row == receipts?.count {
-            return CGSize(width: view.frame.size.width, height: 100.0)
+            return CGSize(width: view.frame.size.width, height: 193.0)
         
         } else {
             let cell = FinanceDebtCell.fromNib()
@@ -146,6 +191,88 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             #endif
         
         }.resume()
+    }
+    
+    private func getShareElements() {
+        
+        let login = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let pwd   = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
+        request.httpMethod = "GET"
+        
+        filesGroup.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                self.filesGroup.leave()
+            }
+            
+            guard data != nil else { return }
+            self.files = RecieptFilesDataJson.init(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data
+            
+            #if DEBUG
+                print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+        
+            }.resume()
+    }
+    
+    private func getShareFile(_ file: RecieptFilesJson?) {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_FILE + "fileId=\(file?.id ?? "")")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                DispatchQueue.main.async {
+                    self.delegate?.stopShareAnimation()
+                }
+            }
+            
+            guard data != nil else { return }
+            if file?.type == "png"
+                || file?.type == "jpeg"
+                || file?.type == "jpg"
+                || file?.fileName?.contains(find: ".png") ?? false
+                || file?.fileName?.contains(find: ".jpeg") ?? false
+                || file?.fileName?.contains(find: ".jpg") ?? false {
+                
+                let image = [UIImage(data: data!)!]
+                DispatchQueue.main.async {
+                    let activityViewController = UIActivityViewController(activityItems: image, applicationActivities: nil)
+                    activityViewController.popoverPresentationController?.sourceView = self.view
+                    self.present(activityViewController, animated: true, completion: nil)
+                }
+            
+            } else if file?.type == "pdf" || file?.fileName?.contains(find: ".pdf") ?? false {
+                if #available(iOS 11.0, *) {
+                    let pdf = [PDFDocument(data: data!)!]
+                    DispatchQueue.main.async {
+                        let activityViewController = UIActivityViewController(activityItems: pdf, applicationActivities: nil)
+                        activityViewController.popoverPresentationController?.sourceView = self.view
+                        self.present(activityViewController, animated: true, completion: nil)
+                    }
+                } else {
+                    var docURL = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last! as NSURL
+                    docURL = docURL.appendingPathComponent( "myDocument.pdf")! as NSURL
+                    try! data?.write(to: docURL as URL)
+                    DispatchQueue.main.async {
+                        let activityViewController = UIActivityViewController(activityItems: [docURL], applicationActivities: nil)
+                        activityViewController.popoverPresentationController?.sourceView = self.view
+                        self.present(activityViewController, animated: true, completion: nil)
+                    }
+                }
+            }
+ 
+            #if DEBUG
+                print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            
+            }.resume()
     }
     
     private func startAnimation() {
@@ -216,16 +343,31 @@ final class FinanceDebtCell: UICollectionViewCell {
     }
 }
 
-final class FinanceDebtPayCell: UICollectionViewCell {
+final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate {
     
-    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var shareLoader: UIActivityIndicatorView!
+    @IBOutlet private weak var shareButton: UIButton!
+    @IBOutlet private weak var dateLabel:   UILabel!
     
     func display(_ data: AccountBillsJson) {
+        self.stopShareAnimation()
         var date = data.datePay
         if (date?.count ?? 0) > 9 {
             date?.removeLast(9)
         }
         self.dateLabel.text = "До " + (date ?? "")
+    }
+    
+    func startShareAnimation() {
+        shareButton.isHidden = true
+        shareLoader.isHidden = false
+        shareLoader.startAnimating()
+    }
+    
+    func stopShareAnimation() {
+        shareLoader.stopAnimating()
+        shareLoader.isHidden = true
+        shareButton.isHidden = false
     }
 }
 
@@ -260,6 +402,28 @@ struct ReceiptsJson: JSONDecodable {
     }
 }
 
+struct RecieptFilesDataJson: JSONDecodable {
+    
+    let data: [RecieptFilesJson]?
+    
+    init?(json: JSON) {
+        data = "data" <~~ json
+    }
+}
+
+struct RecieptFilesJson: JSONDecodable {
+    
+    let fileName:   String?
+    let type:       String?
+    let id:         String?
+    
+    init?(json: JSON) {
+        
+        fileName = "FileName"   <~~ json
+        type     = "Type"       <~~ json
+        id       = "ID"         <~~ json
+    }
+}
 
 
 

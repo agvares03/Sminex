@@ -84,13 +84,13 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            if indexPath.row == 4 {
+            if indexPath.row == receipts.count + 1 || indexPath.row == 4 {
                 cell.display(title: "Архив квитанции", desc: "")
                 cell.contentView.backgroundColor = .white
             
             } else {
-                cell.display(title: getNameAndMonth(receipts[indexPath.row].numMonth ?? 0) + " \(receipts[indexPath.row].numYear ?? 0)",
-                    desc: (String(receipts[indexPath.row].sum ?? 0.0)))
+                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
+                    desc: (String(receipts[safe: indexPath.row - 1]?.sum ?? 0.0)))
                 cell.contentView.backgroundColor = backColor
             }
             return cell
@@ -190,7 +190,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         if indexPath.section == 1 {
             guard indexPath.row != 0 else { return }
             
-            if indexPath.row == 4 {
+            if indexPath.row == receipts.count + 1 || indexPath.row == 4 {
                 performSegue(withIdentifier: Segues.fromFinanceVC.toReceiptArchive, sender: self)
             }
             index = indexPath.row - 1
@@ -230,6 +230,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 }
             }
             
+            guard data != nil else { return }
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
@@ -257,6 +258,8 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         let url = Server.SERVER + Server.GET_BILLS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
         var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
         request.httpMethod = "GET"
+        
+        
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -299,6 +302,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
+            guard data != nil else { return }
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
@@ -376,7 +380,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         
         } else if segue.identifier == Segues.fromFinanceVC.toReceipts {
             let vc = segue.destination as! FinanceDebtVC
-            vc.data_ = receipts[index]
+            vc.data_ = receipts[safe: index]
         
         } else if segue.identifier == Segues.fromFinanceVC.toReceiptArchive {
             let vc = segue.destination as! FinanceDebtArchiveVC
