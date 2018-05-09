@@ -325,12 +325,24 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
         let comm = edComment.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("\(name_.stringByAddingPercentEncodingForRFC3986() ?? "") \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986() ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986() ?? "")&phonenum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986() ?? "")&responsiblePerson=\(data!.gosti.stringByAddingPercentEncodingForRFC3986() ?? "")&email=&isPaidEmergencyRequest=0&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=&clearAfterWork="
+        print(name_)
+        
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986() ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986() ?? "")&phonenum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986() ?? "")&responsiblePerson=\(data!.gosti.stringByAddingPercentEncodingForRFC3986() ?? "")&email=&isPaidEmergencyRequest=0&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=&clearAfterWork="
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
-        print(request.url)
+        var requestBody: [String:[Any]] = ["persons":[], "autos":[]]
+        let personsArr = edFio.text?.split(separator: ",")
+        let autosArr = gosNumber.text?.split(separator: ",")
+        personsArr?.forEach {
+            requestBody["persons"]?.append(["FIO":$0, "PassportData":""])
+        }
+        autosArr?.forEach {
+            requestBody["autos"]?.append(["Mark":"", "Color":"", "Number":$0, "Parking":""])
+        }
+        
+        request.httpBody = Data(try! JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted))
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in

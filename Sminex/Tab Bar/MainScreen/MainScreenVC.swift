@@ -463,8 +463,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"
             
-            print(request.url)
-            
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
@@ -508,7 +506,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     let isPerson = $0.name?.contains(find: "ропуск") ?? false
                     
-                    var persons = $0.responsiblePerson ?? ""
+                    let persons = $0.responsiblePerson ?? ""
 //                    if isPerson {
 //                        rowPersons[$0.id!]?.forEach {
 //
@@ -561,7 +559,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
                 var filtered: [QuestionDataJson] = []
                 
-                print(unfilteredData)
                 unfilteredData?.forEach { json in
                     
                     var isContains = true
@@ -590,7 +587,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
                 TemporaryHolder.instance.menuQuesions = filtered.count
-                print(filtered)
                 
                 DispatchQueue.main.sync {
                     self.collection.reloadData()

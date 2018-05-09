@@ -137,7 +137,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     self.typeName = type
                     let row = self.rows[indexPath.row]
-                    var persons = row.responsiblePerson ?? ""
+                    let persons = row.responsiblePerson ?? ""
                     var auto = ""
 //                    self.rowPersons[row.id!]?.forEach {
 //
@@ -149,6 +149,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         
                         if $0.number != "" && $0.number != nil {
                             auto = auto + ($0.number ?? "")
+                        }
+                        if $0.number != self.rowAutos[row.id!]?.last?.number {
+                            auto = auto + ", "
                         }
                     }
                     
@@ -331,13 +334,16 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         self.rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
                     }
                     
-                    row["Autos"].forEach {
-                        self.rowAutos[row.attributes["ID"]!]?.append( RequestAuto(row: $0) )
+                    row["Autos"].all?.forEach {
+                        $0.childElements.forEach {
+                            self.rowAutos[row.attributes["ID"]!]?.append( RequestAuto(row: $0) )
+                        }
                     }
                     
                     row["File"].forEach {
                         self.rowFiles.append( RequestFile(row: $0) )
                     }
+                    
                 }
                 
                 var newData: [AppsUserCellData] = []
@@ -681,7 +687,7 @@ struct RequestAuto {
     let number:     String?
     let parking:    String?
     
-    init(row: XML.Accessor) {
+    init(row: XML.Element) {
         
         id      = row.attributes["ID"]
         mark    = row.attributes["Mark"]
