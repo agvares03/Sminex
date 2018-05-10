@@ -119,6 +119,10 @@ final class DealsListDescHeader: UICollectionReusableView {
             df.locale = Locale(identifier: "Ru-ru")
             dateLabel.text = df.string(from: date ?? Date())
         }
+        
+        titleLabel.preferredMaxLayoutWidth = titleLabel.bounds.size.width
+        bodyLabel.preferredMaxLayoutWidth  = bodyLabel.bounds.size.width
+        linksLabel.preferredMaxLayoutWidth = linksLabel.bounds.size.width
     }
     
     class func fromNib() -> DealsListDescHeader? {
@@ -130,9 +134,9 @@ final class DealsListDescHeader: UICollectionReusableView {
                 cell = view
             }
         }
-        cell?.titleLabel.preferredMaxLayoutWidth = cell?.titleLabel.bounds.size.width ?? 0.0
-        cell?.bodyLabel.preferredMaxLayoutWidth  = cell?.bodyLabel.bounds.size.width ?? 0.0
-        cell?.linksLabel.preferredMaxLayoutWidth = cell?.linksLabel.bounds.size.width ?? 0.0
+//        cell?.titleLabel.preferredMaxLayoutWidth = cell?.titleLabel.bounds.size.width ?? 0.0
+//        cell?.bodyLabel.preferredMaxLayoutWidth  = cell?.bodyLabel.bounds.size.width  ?? 0.0
+//        cell?.linksLabel.preferredMaxLayoutWidth = cell?.linksLabel.bounds.size.width ?? 0.0
         
         return cell
     }

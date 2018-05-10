@@ -257,7 +257,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImagePNGRepresentation(img)!, withName: uid, fileName: "\(uid).png", mimeType: "image/png")
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
             
             switch result {

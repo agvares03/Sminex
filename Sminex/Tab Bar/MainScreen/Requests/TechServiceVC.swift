@@ -245,7 +245,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         let uid = UUID().uuidString
         print(uid)
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImagePNGRepresentation(img) ?? Data(), withName: uid, fileName: "\(uid).png", mimeType: "image/png")
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
          
             switch result {

@@ -221,7 +221,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if indexPath.row == data[indexPath.section]!.count - 2 {
                 return CGSize(width: view.frame.size.width - 32, height: 70.0)
             }
-            let cell = RequestCell.fromNib()
+            let cell = RequestCell.fromNib(viewSize: collection.frame.size.width)
             if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
                 cell?.display(requestData)
             }
@@ -1086,12 +1086,17 @@ private final class StockCellData: MainDataProtocol {
 
 final class RequestCell: UICollectionViewCell {
     
-    @IBOutlet private weak var title:   UILabel!
-    @IBOutlet private weak var desc:    UILabel!
-    @IBOutlet private weak var icon:    UIImageView!
-    @IBOutlet private weak var date:    UILabel!
-    @IBOutlet private weak var status:  UILabel!
-    @IBOutlet private weak var back:    UIView!
+    @IBOutlet private var backBottom:  NSLayoutConstraint!
+    @IBOutlet private var backTop:     NSLayoutConstraint!
+    @IBOutlet private var descTop:     NSLayoutConstraint!
+    @IBOutlet private var descBottom:  NSLayoutConstraint!
+    
+    @IBOutlet private weak var title:       UILabel!
+    @IBOutlet private weak var desc:        UILabel!
+    @IBOutlet private weak var icon:    	UIImageView!
+    @IBOutlet private weak var date:        UILabel!
+    @IBOutlet private weak var status:      UILabel!
+    @IBOutlet private weak var back:        UIView!
     
     fileprivate func display(_ item: RequestCellData) {
 
@@ -1105,9 +1110,17 @@ final class RequestCell: UICollectionViewCell {
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
 
         if item.isBack {
+            backTop.constant    = 6
+            backBottom.constant = 6
+            descTop.constant    = 12
+            descBottom.constant = 17
             back.isHidden = false
 
         } else {
+            backTop.constant    = 0
+            backBottom.constant = 0
+            descTop.constant    = 2
+            descBottom.constant = 10
             back.isHidden = true
         }
 
@@ -1122,7 +1135,7 @@ final class RequestCell: UICollectionViewCell {
         }
     }
     
-    class func fromNib() -> RequestCell? {
+    class func fromNib(viewSize: CGFloat) -> RequestCell? {
         var cell: RequestCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
@@ -1130,8 +1143,8 @@ final class RequestCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
+        cell?.title.preferredMaxLayoutWidth = viewSize - 32//cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth  = viewSize - 48//cell?.desc.bounds.size.width ?? 0.0
 
         return cell
     }
