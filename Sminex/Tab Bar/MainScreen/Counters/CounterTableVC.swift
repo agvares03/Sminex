@@ -31,20 +31,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     private var refreshControl: UIRefreshControl?
     private var barTitle = ""
     private var index = 0
-    private var meterArr: [MeterValue] = [] {
-        didSet {
-            DispatchQueue.main.sync {
-                self.collection.reloadData()
-                self.delegate?.stopAnimator()
-                
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    refreshControl?.endRefreshing()
-                }
-            }
-        }
-    }
+    private var meterArr: [MeterValue] = []
     
     private var periods: [CounterPeriod] = [] {
         didSet {
@@ -173,6 +160,17 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             self.periods = []
             period.forEach {
                 self.periods.append( CounterPeriod($0) )
+            }
+            
+            DispatchQueue.main.sync {
+                self.collection.reloadData()
+                self.delegate?.stopAnimator()
+                
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
             }
             
         }.resume()

@@ -10,13 +10,29 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="CVr-6w-li8">
+            <objects>
+                <navigationController storyboardIdentifier="settingsVC" id="mzb-B6-2Vm" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0CQ-mQ-uV1">
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Bbx-jf-Aw6" kind="relationship" relationship="rootViewController" id="Mzw-ib-sjs"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PzT-mz-gEv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1626" y="-179"/>
+        </scene>
         <!--UITabBarController-An5-M4-dcq-->
         <scene sceneID="h7l-k6-ue8">
             <objects>
                 <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="UITabBarController-An5-M4-dcq" id="koh-KA-KaD" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Blr-TC-Nhk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1625" y="-81"/>
+            <point key="canvasLocation" x="2490" y="52"/>
         </scene>
         <!--AccountVC-->
         <scene sceneID="PC5-E4-EcB">
@@ -41,10 +57,10 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AccountCell" id="0SF-GP-lMG" customClass="AccountCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="851" width="414" height="60"/>
+                                        <rect key="frame" x="0.0" y="851" width="414" height="73"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icSettings" translatesAutoresizingMaskIntoConstraints="NO" id="tpg-NN-R1a">
@@ -55,13 +71,13 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Настройки аккаунта" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Fjh-Ti-ER8">
-                                                    <rect key="frame" x="58.000000000000014" y="19.333333333333336" width="163.33333333333337" height="21"/>
+                                                    <rect key="frame" x="58.000000000000014" y="19.333333333333332" width="163.33333333333337" height="20.999999999999996"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right" translatesAutoresizingMaskIntoConstraints="NO" id="t4m-3n-qwz">
-                                                    <rect key="frame" x="392" y="24.333333333333336" width="8" height="13"/>
+                                                    <rect key="frame" x="392" y="24.333333333333332" width="8" height="12.999999999999996"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="13" id="EMg-w4-II9"/>
                                                         <constraint firstAttribute="width" constant="8" id="t5W-VQ-3ay"/>
@@ -107,10 +123,10 @@
                                             <constraint firstAttribute="bottom" secondItem="Bpu-Sr-DGO" secondAttribute="bottom" id="vnz-Ph-GTv"/>
                                             <constraint firstAttribute="trailing" secondItem="Bpu-Sr-DGO" secondAttribute="trailing" id="xuf-NC-JtM"/>
                                         </constraints>
-                                        <size key="customSize" width="414" height="60"/>
+                                        <size key="customSize" width="414" height="73"/>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AccountExitCell" id="aG5-vc-jIO" customClass="AccountExitCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="911" width="414" height="60"/>
+                                        <rect key="frame" x="0.0" y="924" width="414" height="60"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
@@ -1312,4 +1328,7 @@
         <image name="ic_show_password" width="22" height="15"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="2kf-Wh-UWR"/>
+    </inferredMetricsTieBreakers>
 </document>

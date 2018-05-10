@@ -49,9 +49,16 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         table.delegate      = self
         
         DispatchQueue.global(qos: .userInitiated).async {
-            self.getCalculations()
             self.getAccountDebt()
-            self.getBills()
+            TemporaryHolder.instance.calcsGroup.wait()
+            TemporaryHolder.instance.receiptsGroup.wait()
+            self.calcs = TemporaryHolder.instance.calcs
+            self.receipts = TemporaryHolder.instance.receipts
+            self.filteredCalcs = TemporaryHolder.instance.filteredCalcs
+            DispatchQueue.main.async {
+                self.table.reloadData()
+                self.stopAnimation()
+            }
         }
     }
     
@@ -224,9 +231,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             data, error, responce in
             
             defer {
-                DispatchQueue.main.sync {
-                    self.table.reloadData()
-                    self.stopAnimation()
+                DispatchQueue.main.async {
+//                    self.table.reloadData()
+//                    self.stopAnimation()
                 }
             }
             
@@ -241,94 +248,12 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 return
             }
             
-            self.debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data!
+            self.debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8)!)
             #endif
         
-        }.resume()
-    }
-    
-    private func getBills() {
-        
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
-        
-        let url = Server.SERVER + Server.GET_BILLS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
-        var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
-        request.httpMethod = "GET"
-        
-        
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            guard data != nil else {
-                return
-            }
-            
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            self.receipts = AccountBillsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
-            
-            #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-            
-            DispatchQueue.main.sync {
-                self.table.reloadData()
-            }
-        
-        }.resume()
-    }
-    
-    private func getCalculations() {
-        
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
-        
-        let url = Server.SERVER + Server.CALCULATIONS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
-        var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            guard data != nil else { return }
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-        
-            self.calcs = AccountCalculationsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!.reversed()
-            var currMonth = 0
-            self.filteredCalcs = self.calcs.filter {
-                if ($0.numMonthSet ?? 0) != currMonth {
-                    currMonth = ($0.numMonthSet ?? 0)
-                    return true
-                }
-                return false
-            }
-            DispatchQueue.main.sync {
-                self.table.reloadData()
-            }
-            
         }.resume()
     }
     

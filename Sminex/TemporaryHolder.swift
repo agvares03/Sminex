@@ -15,6 +15,8 @@ final class TemporaryHolder {
     
     public let SaltQueue = DispatchGroup()
     public let bcQueue   = DispatchGroup()
+    public let receiptsGroup = DispatchGroup()
+    public let calcsGroup = DispatchGroup()
     public var salt: Data?
     public var bcImage: UIImage? {
         didSet {
@@ -56,10 +58,81 @@ final class TemporaryHolder {
     }
     public var contactsList: [ContactsJson] = []
     
-    func choise(_ responce: JSON) {
+    public var receipts:      [AccountBillsJson]        = []
+    public var calcs:         [AccountCalculationsJson] = []
+    public var filteredCalcs: [AccountCalculationsJson] = []
+    
+    public func choise(_ responce: JSON) {
         
         requestTypes = RequestType(json: responce)
         contacts = Contacts(json: responce)
+    }
+    
+    public func getFinance() {
+        getBills()
+        getCalculations()
+    }
+    
+    private func getBills() {
+        
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        
+        let url = Server.SERVER + Server.GET_BILLS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
+        var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
+        request.httpMethod = "GET"
+        
+        receiptsGroup.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                self.receiptsGroup.leave()
+            }
+            guard data != nil else { return }
+            self.receipts = AccountBillsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data ?? []
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            
+            }.resume()
+    }
+    
+    private func getCalculations() {
+        
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        
+        let url = Server.SERVER + Server.CALCULATIONS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
+        var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
+        request.httpMethod = "GET"
+        
+        calcsGroup.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                self.calcsGroup.leave()
+            }
+            
+            guard data != nil else { return }
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            
+            self.calcs = AccountCalculationsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data?.reversed() ?? []
+            var currMonth = 0
+            self.filteredCalcs = self.calcs.filter {
+                if ($0.numMonthSet ?? 0) != currMonth {
+                    currMonth = ($0.numMonthSet ?? 0)
+                    return true
+                }
+                return false
+            }
+            
+            }.resume()
     }
     
     private init() { }

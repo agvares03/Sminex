@@ -288,6 +288,7 @@ class FirstController: UIViewController {
                                lsNumber:            answer[safe: 16] ?? "",
                                desc:                answer[safe: 15] ?? "")
                 
+                TemporaryHolder.instance.getFinance()
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken
                 if token != nil {

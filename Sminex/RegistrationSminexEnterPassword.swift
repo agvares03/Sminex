@@ -270,8 +270,8 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     private func makeAuth() {
         
         // Авторизация пользователя
-        let txtLogin = login_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
-        let txtPass = passTextField.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtLogin = login_.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let txtPass = passTextField.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
@@ -279,7 +279,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
-            if error != nil {
+            if error != nil || data == nil {
                 DispatchQueue.main.sync {
                     
                     self.stopAnimation()
@@ -364,6 +364,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                            lsNumber:            answer[safe: 16] ?? "",
                            desc:                answer[safe: 15] ?? "")
             
+            TemporaryHolder.instance.getFinance()
             // отправим на сервер данные об ид. устройства для отправки уведомлений
             let token = Messaging.messaging().fcmToken
             if token != nil {
