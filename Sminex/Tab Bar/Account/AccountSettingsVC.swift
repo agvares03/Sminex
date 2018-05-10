@@ -12,6 +12,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     
     @IBOutlet private weak var loader:              UIActivityIndicatorView!
     @IBOutlet private weak var saveButtonTop:       NSLayoutConstraint!
+    @IBOutlet private weak var backButton:          UIBarButtonItem!
     @IBOutlet private weak var scroll:              UIScrollView!
     @IBOutlet private weak var accountImageView:    UIImageView!
     @IBOutlet private weak var changePasswordImg:   UIImageView!
@@ -25,12 +26,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBOutlet private weak var lsLabel:             UITextField!
     @IBOutlet private weak var email:               UITextField!
     @IBOutlet private weak var saveButton:          UIButton!
-    @IBOutlet private weak var exitButton:          UIButton!
     @IBOutlet private weak var changePassword:  	UILabel!
     @IBOutlet private weak var notifications:   	UILabel!
     @IBOutlet private weak var changePasswordTop:   UILabel!
     @IBOutlet private weak var changePasswordBtm:   UILabel!
-    @IBOutlet private weak var notificationsBtm:    UILabel!
     
     @IBAction private func imageViewPressed(_ sender: UIButton) {
         
@@ -81,7 +80,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         navigationController?.popViewController(animated: true)
     }
     
-    open var isReg_ = false
+    open var isReg_ = true
     open var responceString_ = ""
     open var login_ = ""
     open var pass_  = ""
@@ -90,16 +89,16 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         super.viewDidLoad()
         
         if isReg_ {
-            title                       = "Регистрация"
-            exitButton.isHidden         = true
-            changePassword.isHidden     = true
-            notifications.isHidden      = true
-            changePasswordImg.isHidden  = true
-            notificationsImg.isHidden   = true
-            changePasswordTop.isHidden  = true
-            changePasswordBtm.isHidden  = true
-            notificationsBtm.isHidden   = true
-            saveButtonTop.constant      = -130
+            title                            = "Регистрация"
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.hidesBackButton   = true
+            changePassword.isHidden          = true
+            notifications.isHidden           = true
+            changePasswordImg.isHidden       = true
+            notificationsImg.isHidden        = true
+            changePasswordTop.isHidden       = true
+            changePasswordBtm.isHidden       = true
+            saveButtonTop.constant           = -90
         }
         
         automaticallyAdjustsScrollViewInsets = false
