@@ -24,9 +24,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         imgs = [:]
-        if isCreate_ {
+        if isCreate_{
             let viewControllers = navigationController?.viewControllers
             navigationController?.popToViewController(viewControllers![viewControllers!.count - 4], animated: true)
+        
+        } else if isFromMain_ {
+            navigationController?.popToRootViewController(animated: true)
         
         } else {
             navigationController?.popViewController(animated: true)
@@ -88,9 +91,10 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         present(action, animated: true, completion: nil)
     }
     
-    open var delegate: AppsUserDelegate?
-    open var reqId_    = ""
-    open var isCreate_ = false
+    open var delegate:   AppsUserDelegate?
+    open var reqId_      = ""
+    open var isCreate_   = false
+    open var isFromMain_ = false
     open var data_: ServiceHeaderData = ServiceHeaderData(icon: UIImage(named: "account")!,
                                                           problem: "Нас топят соседи! Не можем с ними связаться. Срочно вызвайте сантехника",
                                                           date: "9 сентября 10:00",

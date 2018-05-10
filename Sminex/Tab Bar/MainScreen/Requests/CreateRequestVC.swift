@@ -375,7 +375,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                                               icon: UIImage(named: "processing_label")!,
                                                               date: (self.data?.date)!,
                                                               status: "В ОБРАБОТКЕ",
-                                                              isBack: false)])
+                                                              isBack: false,
+                                                              id: self.reqId ?? "")])
                 }
                 DispatchQueue.global(qos: .userInteractive).async {
                     

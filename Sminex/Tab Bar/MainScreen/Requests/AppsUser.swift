@@ -40,6 +40,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    open var requestId_ = ""
     open var isCreatingRequest_ = false
     open var delegate: MainScreenDelegate?
     
@@ -377,7 +378,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                      status: curr.status ?? "",
                                                      date: date,
                                                      isBack: isAnswered,
-                                                     type: curr.name ?? "")  )
+                                                     type: curr.name ?? "",
+                                                     id: curr.id ?? "")  )
                     if !isBackground {
                         DispatchQueue.main.sync {
                             dbData.append(RequestEntityData(title: curr.name ?? "",
@@ -385,7 +387,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                             icon: icon,
                                                             date: date,
                                                             status: curr.status ?? "",
-                                                            isBack: isAnswered))
+                                                            isBack: isAnswered,
+                                                            id: curr.id ?? ""))
                         }
                     }
                 }
@@ -401,6 +404,17 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                             self.collection.refreshControl?.endRefreshing()
                         } else {
                             self.refreshControl?.endRefreshing()
+                        }
+                        
+                        if self.requestId_ != "" {
+                            print(self.requestId_)
+                            for (index, item) in self.data.enumerated() {
+                                print(item.id)
+                                if item.id == self.requestId_ {
+                                    self.collectionView(self.collection, didSelectItemAt: IndexPath(row: index, section: 0))
+//                                    self.collection.selectItem(at: IndexPath(row: index, section: 0), animated: false, scrollPosition: .centeredVertically)
+                                }
+                            }
                         }
                         self.stopAnimatior()
                     }
@@ -434,6 +448,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             vc.reqId_ = reqId
             vc.delegate = self
             vc.name_ = typeName
+            if self.requestId_ != "" {
+                self.requestId_ = ""
+                vc.isFromMain_ = true
+            }
         
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC
@@ -441,6 +459,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             vc.comments_ = techServiceComm
             vc.reqId_ = reqId
             vc.delegate = self
+            if self.requestId_ != "" {
+                self.requestId_ = ""
+                vc.isFromMain_ = true
+            }
         
         } else if segue.identifier == Segues.fromAppsUser.toRequestType {
             let vc = segue.destination as! RequestTypeVC
@@ -536,9 +558,10 @@ private final class AppsUserCellData {
     let icon:   UIImage
     let status: String
     let date:   String
+    let id:     String
     let isBack: Bool
     
-    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String) {
+    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String) {
         
         self.title  = title
         self.desc   = desc
@@ -547,6 +570,7 @@ private final class AppsUserCellData {
         self.date   = date
         self.isBack = isBack
         self.type   = type
+        self.id     = id
     }
 }
 

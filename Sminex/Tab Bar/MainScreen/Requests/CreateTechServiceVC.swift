@@ -360,7 +360,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                                                               icon: UIImage(named: "processing_label")!,
                                                               date: String(describing: self.data!.date),
                                                               status: "В ОБРАБОТКЕ",
-                                                              isBack: false)])
+                                                              isBack: false,
+                                                              id: self.reqId ?? "")])
                 }
                 
                 DispatchQueue.global(qos: .userInteractive).async {

@@ -29,6 +29,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let viewControllers = navigationController?.viewControllers
             navigationController?.popToViewController(viewControllers![viewControllers!.count - 4], animated: true)
         
+        } else if isFromMain_ {
+            navigationController?.popToRootViewController(animated: true)
+        
         } else {
             navigationController?.popViewController(animated: true)
         }
@@ -90,9 +93,10 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     open var name_: String?
-    open var delegate: AppsUserDelegate?
-    open var reqId_     = ""
-    open var isCreated_ = false
+    open var delegate:   AppsUserDelegate?
+    open var reqId_      = ""
+    open var isCreated_  = false
+    open var isFromMain_ = false
     open var data_: AdmissionHeaderData = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                                                 gosti: "А. Е. Филимонов, В. В. Иванова",
                                                                 mobileNumber: "+7 965 913 95 67",

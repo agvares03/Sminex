@@ -29,6 +29,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
     }
     
+    private var requestId  = ""
     private var surveyName = ""
     private var canCount = true
     private var data: [Int:[Int:MainDataProtocol]] = [
@@ -125,7 +126,20 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     @objc private func refresh(_ sender: UIRefreshControl) {
         
         DispatchQueue.global(qos: .userInitiated).async {
-            self.fetchRequests()
+            DispatchQueue.global(qos: .background).async {
+                let res = self.getRequests()
+                var count = 1
+                sleep(2)
+                DispatchQueue.main.sync {
+                    self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                    res.forEach {
+                        self.data[3]![count] = $0
+                        count += 1
+                    }
+                    self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                    self.collection.reloadData()
+                }
+            }
             self.fetchQuestions()
             self.fetchDeals()
             self.fetchDebt()
@@ -385,6 +399,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
             tappedNews = self.filteredNews[indexPath.row]
             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
+        
+        } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
+            self.requestId = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
+            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toRequestAnim, sender: self)
         }
     }
     
@@ -522,7 +540,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                       icon: icon,
                                                       date: date,
                                                       status: $0.status ?? "",
-                                                      isBack: isAnswered) )
+                                                      isBack: isAnswered,
+                                                      id: $0.id ?? "") )
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
             }.resume()
@@ -828,6 +847,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toNewsWAnim {
             let vc = segue.destination as! NewsListVC
             vc.tappedNews = tappedNews
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
+            let vc = segue.destination as! AppsUser
+            vc.requestId_ = self.requestId
         }
     }
     
@@ -1158,14 +1181,16 @@ final class RequestCellData: MainDataProtocol {
     let date:   String
     let status: String
     let isBack: Bool
+    let id:     String
     
-    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool) {
+    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String) {
         self.title  = title
         self.desc   = desc
         self.icon   = icon
         self.date   = date
         self.status = status
         self.isBack = isBack
+        self.id     = id
     }
 }
 

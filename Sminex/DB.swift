@@ -566,7 +566,8 @@ final class DB: NSObject, XMLParserDelegate {
                                             icon: UIImage(data: res.icon!)!,
                                             date: res.date!,
                                             status: res.status!,
-                                            isBack: res.isBack) )
+                                            isBack: res.isBack,
+                                            id: res.id ?? "") )
             }
         } catch let error {
             
@@ -598,6 +599,7 @@ final class DB: NSObject, XMLParserDelegate {
             managedObject.date   = $0.date
             managedObject.status = $0.status
             managedObject.isBack = $0.isBack
+            managedObject.id     = $0.id
         }
         DispatchQueue.main.async {
             CoreDataManager.instance.saveContext()
@@ -657,10 +659,11 @@ final class DB: NSObject, XMLParserDelegate {
 }
 
 struct RequestEntityData {
-    let title: String
-    let desc: String
-    let icon: UIImage
-    let date: String
+    let title:  String
+    let desc:   String
+    let icon:   UIImage
+    let date:   String
     let status: String
     let isBack: Bool
+    let id:     String
 }

@@ -21,5 +21,5 @@ extension RequestEntity {
     @NSManaged var isBack:  Bool
     @NSManaged var status:  String?
     @NSManaged var title:   String?
-    
+    @NSManaged var id:      String?
 }
