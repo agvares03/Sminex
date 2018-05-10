@@ -80,7 +80,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         navigationController?.popViewController(animated: true)
     }
     
-    open var isReg_ = true
+    open var isReg_ = false
     open var responceString_ = ""
     open var login_ = ""
     open var pass_  = ""
