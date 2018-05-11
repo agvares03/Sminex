@@ -551,61 +551,6 @@ final class DB: NSObject, XMLParserDelegate {
         return arr
     }
     
-    func getRequests() -> [RequestCellData] {
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RequestEntity")
-        var arr: [RequestCellData] = []
-        
-        do {
-            let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
-            for result in results {
-                let res = result as! RequestEntity
-                
-                arr.append( RequestCellData(title: res.title!,
-                                            desc: res.desc!,
-                                            icon: UIImage(data: res.icon!)!,
-                                            date: res.date!,
-                                            status: res.status!,
-                                            isBack: res.isBack,
-                                            id: res.id ?? "") )
-            }
-        } catch let error {
-            
-            #if DEBUG
-                print(error)
-            #endif
-        }
-        
-        var ret: [RequestCellData] = []
-        
-        if arr.count != 0 {
-            ret.append(arr.popLast()!)
-        }
-        if arr.count != 0 {
-            ret.append(arr.popLast()!)
-        }
-        
-        return ret
-    }
-    
-    func setRequests(data: [RequestEntityData]) {
-        
-        data.forEach {
-            let managedObject = RequestEntity()
-        
-            managedObject.title  = $0.title
-            managedObject.desc   = $0.desc
-            managedObject.icon   = UIImagePNGRepresentation($0.icon)
-            managedObject.date   = $0.date
-            managedObject.status = $0.status
-            managedObject.isBack = $0.isBack
-            managedObject.id     = $0.id
-        }
-        DispatchQueue.main.async {
-            CoreDataManager.instance.saveContext()
-        }
-    }
-    
     func setQuestions(answerId: [Int], questionId: [Int], id: String) {
         
         let managedObject = QuestionEntity()
@@ -635,26 +580,6 @@ final class DB: NSObject, XMLParserDelegate {
             #endif
         }
         CoreDataManager.instance.saveContext()
-    }
-    
-    func deleteRequests() {
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RequestEntity")
-        
-        do {
-            let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
-            for result in results {
-                CoreDataManager.instance.managedObjectContext.delete(result as! NSManagedObject)
-            }
-        } catch let error {
-            
-            #if DEBUG
-                print(error)
-            #endif
-        }
-        DispatchQueue.main.async {
-            CoreDataManager.instance.saveContext()
-        }
     }
 }
 

@@ -38,7 +38,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collection.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 20, right: 0)
+//        collection.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 20, right: 0)
         
         collection.dataSource = self
         collection.delegate   = self

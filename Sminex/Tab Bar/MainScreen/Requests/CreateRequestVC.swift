@@ -368,16 +368,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 print(String(data: responce!, encoding: .utf8)!)
                 #endif
                 self.reqId = String(data: responce!, encoding: .utf8)
-                
-                DispatchQueue.main.async {
-                    DB().setRequests(data: [RequestEntityData(title: "Пропуск" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
-                                                              desc: self.edComment.text!,
-                                                              icon: UIImage(named: "processing_label")!,
-                                                              date: (self.data?.date)!,
-                                                              status: "В ОБРАБОТКЕ",
-                                                              isBack: false,
-                                                              id: self.reqId ?? "")])
-                }
                 DispatchQueue.global(qos: .userInteractive).async {
                     
                     self.images.forEach {

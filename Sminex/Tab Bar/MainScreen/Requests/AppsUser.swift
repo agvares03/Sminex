@@ -348,7 +348,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 
                 var newData: [AppsUserCellData] = []
-                var dbData: [RequestEntityData] = []
                 self.rows.forEach { curr in
                    
                     let isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
@@ -379,26 +378,30 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                      date: date,
                                                      isBack: isAnswered,
                                                      type: curr.name ?? "",
-                                                     id: curr.id ?? "")  )
-                    if !isBackground {
-                        DispatchQueue.main.sync {
-                            dbData.append(RequestEntityData(title: curr.name ?? "",
-                                                            desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
-                                                            icon: icon,
-                                                            date: date,
-                                                            status: curr.status ?? "",
-                                                            isBack: isAnswered,
-                                                            id: curr.id ?? ""))
-                        }
-                    }
+                                                     id: curr.id ?? "",
+                                                     updateDate: curr.updateDate ?? "")  )
+                }
+                var firstArr = newData.filter {
+                        $0.status.contains(find: "обработке")
+                    ||  $0.status.contains(find: "Отправлена")
+                    ||  $0.status.contains(find: "к выполнению")
+                }
+                var secondArr = newData.filter {
+                            $0.status.contains(find: "Закрыто")
+                        ||  $0.status.contains(find: "Закрыта")
+                        ||  $0.status.contains(find: "Отклонена")
+                        ||  $0.status.contains(find: "Черновик")
                 }
                 
+                let df = DateFormatter()
+                df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+                firstArr  = firstArr.sorted  { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
+                secondArr = secondArr.sorted { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
+                
                 DispatchQueue.main.sync {
-                    self.data = newData
+                    self.data = firstArr
+                    self.data.append(contentsOf: secondArr)
                     if !isBackground {
-                        let db = DB()
-                        db.deleteRequests()
-                        db.setRequests(data: dbData)
                         self.collection.reloadData()
                         if #available(iOS 10.0, *) {
                             self.collection.refreshControl?.endRefreshing()
@@ -407,12 +410,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         }
                         
                         if self.requestId_ != "" {
-                            print(self.requestId_)
                             for (index, item) in self.data.enumerated() {
-                                print(item.id)
                                 if item.id == self.requestId_ {
                                     self.collectionView(self.collection, didSelectItemAt: IndexPath(row: index, section: 0))
-//                                    self.collection.selectItem(at: IndexPath(row: index, section: 0), animated: false, scrollPosition: .centeredVertically)
                                 }
                             }
                         }
@@ -552,25 +552,27 @@ final class AppsUserCell: UICollectionViewCell {
 
 private final class AppsUserCellData {
     
-    let type:   String
-    let title:  String
-    let desc:   String
-    let icon:   UIImage
-    let status: String
-    let date:   String
-    let id:     String
-    let isBack: Bool
+    let icon:       UIImage
+    let updateDate: String
+    let type:       String
+    let title:      String
+    let desc:       String
+    let status:     String
+    let date:       String
+    let id:         String
+    let isBack:     Bool
     
-    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String) {
+    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String) {
         
-        self.title  = title
-        self.desc   = desc
-        self.icon   = icon
-        self.status = status
-        self.date   = date
-        self.isBack = isBack
-        self.type   = type
-        self.id     = id
+        self.updateDate = updateDate
+        self.title      = title
+        self.desc       = desc
+        self.icon       = icon
+        self.status     = status
+        self.date       = date
+        self.isBack     = isBack
+        self.type       = type
+        self.id         = id
     }
 }
 
@@ -630,6 +632,7 @@ struct Request {
     let ipAddr: 	            String?
     let callUniqueID: 	        String?
     let flatNumber: 	        String?
+    let updateDate:             String?
     
     init(row: XML.Accessor) {
         isWait                  = row.attributes["isWait"]
@@ -686,6 +689,7 @@ struct Request {
         ipAddr                  = row.attributes["ip_addr"]
         callUniqueID            = row.attributes["CallUniqueID"]
         flatNumber              = row.attributes["FlatNumber"]
+        updateDate              = row.attributes["UpdatedDate"]
     }
 }
 

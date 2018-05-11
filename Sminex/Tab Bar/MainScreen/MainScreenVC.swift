@@ -441,29 +441,19 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
     }
     
-    private func fetchRequests(_ isBackground: Bool = false) {
+    private func fetchRequests() {
         
-        var count = 1
-        DB().getRequests().forEach {
-            data[3]![count] = $0
-            count += 1
-        }
-        data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-        
-        if !isBackground {
-            DispatchQueue.global(qos: .background).async {
-                let res = self.getRequests()
-                var count = 1
-                sleep(2)
-                DispatchQueue.main.sync {
-                    self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-                    res.forEach {
-                        self.data[3]![count] = $0
-                        count += 1
-                    }
-                    self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-                    self.collection.reloadData()
+        DispatchQueue.global(qos: .background).async {
+            let res = self.getRequests()
+            var count = 1
+            DispatchQueue.main.sync {
+                self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                res.forEach {
+                    self.data[3]![count] = $0
+                    count += 1
                 }
+                self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                self.collection.reloadData()
             }
         }
     }
@@ -478,7 +468,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let login = UserDefaults.standard.string(forKey: "login") ?? ""
             let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
             
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
             request.httpMethod = "GET"
             
             URLSession.shared.dataTask(with: request) {
@@ -525,14 +515,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let isPerson = $0.name?.contains(find: "ропуск") ?? false
                     
                     let persons = $0.responsiblePerson ?? ""
-//                    if isPerson {
-//                        rowPersons[$0.id!]?.forEach {
-//
-//                            if $0.fio != "" && $0.fio != nil {
-//                                persons = persons + ", " + ($0.fio ?? "")
-//                            }
-//                        }
-//                    }
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : $0.text ?? ""
                     
                     returnArr.append( RequestCellData(title: $0.name ?? "",
@@ -548,18 +530,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
         
         group.wait()
-        var ret: [RequestCellData] = []
-        
-        if returnArr.count != 0 {
-            ret.append(returnArr.popLast()!)
-        }
-        if returnArr.count != 0 {
-            ret.append(returnArr.popLast()!)
-        }
-        if returnArr.count != 0 {
-            ret.append(returnArr.popLast()!)
-        }
-        return ret
+        return returnArr
     }
     
     private func fetchQuestions() {
@@ -855,14 +826,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func update(method: String) {
-        print(method)
         if method == "" {
             fetchDeals()
             fetchDebt()
             fetchNews()
             
         } else if method == "Request" {
-            fetchRequests(true)
+            fetchRequests()
         
         } else if method == "Questions" {
             DispatchQueue.main.async {

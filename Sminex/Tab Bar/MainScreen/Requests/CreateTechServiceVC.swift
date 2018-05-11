@@ -326,8 +326,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
-        print(request.url)
-        
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in
             
@@ -353,17 +351,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 #endif
                 
                 self.reqId = String(data: responce!, encoding: .utf8)
-                
-                DispatchQueue.main.async {
-                    DB().setRequests(data: [RequestEntityData(title: "Техническое обслуживание" + self.formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"),
-                                                              desc: self.edProblem.text!,
-                                                              icon: UIImage(named: "processing_label")!,
-                                                              date: String(describing: self.data!.date),
-                                                              status: "В ОБРАБОТКЕ",
-                                                              isBack: false,
-                                                              id: self.reqId ?? "")])
-                }
-                
                 DispatchQueue.global(qos: .userInteractive).async {
                     
                     self.imagesArr.forEach {
