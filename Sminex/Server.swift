@@ -62,6 +62,7 @@ final class Server {
     static let GET_BC_IMAGE        = "GetBCImage.ashx?"                // Получение фотки Бизнес центра
     static let GET_BILL_FILES      = "GetBillFiles.ashx?"              // Получение списка файлов по квитанции
     static let DOWNLOAD_FILE       = "DownloadBillFile.ashx?"          // Скачать файл по квитанции
+    static let GET_SERVICES        = "GetPaidServices.ashx?"           // Получение списка услуг
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

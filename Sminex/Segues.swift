@@ -277,6 +277,8 @@ struct Segues {
         static let toDeals           = "deals"
         static let toFinance         = "finance"
         static let toNews            = "news"
+        static let toServicesUK      = "ukServices"
+        static let toSupport         = "support"
     }
     
     struct fromContactsVc {
@@ -287,5 +289,10 @@ struct Segues {
     struct fromAccountVC {
         
         static let toSettings        = "settings"
+    }
+    
+    struct fromServicesUKTableVC {
+        
+        static let toDesc            = "desc"
     }
 }

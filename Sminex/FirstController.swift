@@ -42,14 +42,11 @@ class FirstController: UIViewController {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.CHECK_REGISTRATION)!)
         request.httpMethod = "GET"
         
-        print(request.url)
-        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
             if error != nil {
                 DispatchQueue.main.async {
-                    print("activity")
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                         
@@ -64,7 +61,6 @@ class FirstController: UIViewController {
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
-            print("activity")
             #if DEBUG
                 print("responseString = \(self.responseString)")
             #endif
@@ -158,8 +154,6 @@ class FirstController: UIViewController {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + pwd + "&addBcGuid=1")!)
         request.httpMethod = "GET"
         
-        print(request.url)
-        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
@@ -190,8 +184,6 @@ class FirstController: UIViewController {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_CONTACTS + "login=" + login + "&pwd=" + pwd)!)
         request.httpMethod = "GET"
-        
-        print(request.url)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -224,8 +216,6 @@ class FirstController: UIViewController {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
         request.httpMethod = "GET"
-        
-        print(request.url)
         
         TemporaryHolder.instance.SaltQueue.enter()
         URLSession.shared.dataTask(with: request) {

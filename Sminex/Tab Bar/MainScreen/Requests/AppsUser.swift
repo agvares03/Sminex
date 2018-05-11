@@ -132,7 +132,13 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             DispatchQueue.main.async {
                 self.stopAnimatior()
                 
-                let type = self.data[indexPath.row].type
+                var type = self.data[indexPath.row].type
+                
+                TemporaryHolder.instance.requestTypes?.types?.forEach {
+                    if $0.id == type {
+                        type = $0.name ?? ""
+                    }
+                }
                 
                 if type.contains(find: "ропуск") {
                     
@@ -140,12 +146,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     let row = self.rows[indexPath.row]
                     let persons = row.responsiblePerson ?? ""
                     var auto = ""
-//                    self.rowPersons[row.id!]?.forEach {
-//
-//                        if $0.fio != "" && $0.fio != nil {
-//                            persons = persons + ", " + ($0.fio ?? "")
-//                        }
-//                    }
                     self.rowAutos[row.id!]?.forEach {
                         
                         if $0.number != "" && $0.number != nil {
@@ -362,14 +362,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     let isPerson = curr.name?.contains(find: "ропуск") ?? false
                     
                     let persons = curr.responsiblePerson ?? ""
-//                    if isPerson {
-//                        self.rowPersons[curr.id!]?.forEach {
-//
-//                            if $0.fio != "" && $0.fio != nil {
-//                                persons = persons + ", " + ($0.fio ?? "")
-//                            }
-//                        }
-//                    }
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
                     newData.append( AppsUserCellData(title: curr.name ?? "",
                                                      desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
@@ -377,7 +369,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                      status: curr.status ?? "",
                                                      date: date,
                                                      isBack: isAnswered,
-                                                     type: curr.name ?? "",
+                                                     type: curr.idType ?? "",
                                                      id: curr.id ?? "",
                                                      updateDate: curr.updateDate ?? "")  )
                 }

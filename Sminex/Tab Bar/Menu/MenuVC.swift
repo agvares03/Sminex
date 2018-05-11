@@ -165,7 +165,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
                 performSegue(withIdentifier: Segues.fromMenuVC.toRequest, sender: self)
             
             } else if indexPath.row == 1 {
-                // TODO
+                performSegue(withIdentifier: Segues.fromMenuVC.toServicesUK, sender: self)
             }
         
         } else if indexPath.section == 2 {
@@ -182,10 +182,18 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             }
         
         } else if indexPath.section == 3 {
-            // TODO
+            performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self)
         
         } else if indexPath.section == 4 {
             // TODO
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == Segues.fromMenuVC.toSupport {
+            let vc = segue.destination as! AuthSupportVC
+            vc.login_ = UserDefaults.standard.string(forKey: "login") ?? ""
         }
     }
 }

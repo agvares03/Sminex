@@ -65,7 +65,8 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
         present(action, animated: true, completion: nil)
     }
-    
+   
+    open var login_ = ""
     private var imgs: [UIImage] = [] {
         didSet {
             if imgs.count == 0 {
@@ -91,6 +92,10 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if login_ != "" {
+            self.lsTextView.text = login_
+        }
         
         loader.isHidden = true
         currPoint = sendButton.frame.origin.y
