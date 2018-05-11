@@ -371,7 +371,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                      isBack: isAnswered,
                                                      type: curr.idType ?? "",
                                                      id: curr.id ?? "",
-                                                     updateDate: curr.updateDate ?? "")  )
+                                                     updateDate: curr.updateDate != "" ? (curr.updateDate ?? "") : (curr.dateFrom ?? "")))
                 }
                 var firstArr = newData.filter {
                         $0.status.contains(find: "обработке")

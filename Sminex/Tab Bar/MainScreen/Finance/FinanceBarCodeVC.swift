@@ -13,7 +13,6 @@ final class FinanceBarCodeVC: UIViewController {
     @IBOutlet private weak var topLayout:   NSLayoutConstraint!
     @IBOutlet private weak var barcode:     UIImageView!
     @IBOutlet private weak var amount:  	UILabel!
-    @IBOutlet private weak var emptyLabel:  UILabel!
     
     open var data_:     AccountDebtJson?
     open var amount_:   Double?
@@ -26,22 +25,10 @@ final class FinanceBarCodeVC: UIViewController {
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap)
 
-//        barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: "12345", symbology: .qr, size: barcode.frame.size)!)
         if data_ != nil {
 
             amount.text = String(Int(data_?.sumPay ?? 0.0))
-
-            if data_?.codPay != nil && data_?.codPay != "" {
-                barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: data_?.codPay ?? "", symbology: .qr, size: barcode.frame.size)!)
-
-            } else {
-                #if DEBUG
-                    barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: "12345", symbology: .qr, size: barcode.frame.size)!)
-                #else
-                    emptyLabel.isHidden = false
-                    barcode.isHidden    = true
-                #endif
-            }
+            barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: data_?.codPay ?? "", symbology: .qr, size: barcode.frame.size)!)
 
         } else {
             amount.text = String(Int(amount_ ?? 0.0))
