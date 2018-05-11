@@ -20,12 +20,12 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     @IBAction private func barcodePreesed(_ sender: UIButton) {
-        if debt?.codPay != "" && debt?.codPay != nil {
+//        if debt?.codPay != "" && debt?.codPay != nil {
             performSegue(withIdentifier: Segues.fromFinanceVC.toBarcode, sender: self)
         
-        } else {
-            showToast(message: "Нет данных по QR-коду")
-        }
+//        } else {
+//            showToast(message: "Нет данных по QR-коду")
+//        }
     }
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
