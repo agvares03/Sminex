@@ -26,32 +26,32 @@ final class FinanceBarCodeVC: UIViewController {
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap)
 
-        barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: "12345", symbology: .qr, size: barcode.frame.size)!)
-//        if data_ != nil {
-//
-//            amount.text = String(Int(data_?.sumPay ?? 0.0))
-//
-//            if data_?.codPay != nil && data_?.codPay != "" {
-//                barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: data_?.codPay ?? "", symbology: .qr, size: barcode.frame.size)!)
-//
-//            } else {
-//                #if DEBUG
-//                    barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: "12345", symbology: .qr, size: barcode.frame.size)!)
-//                #else
-//                    emptyLabel.isHidden = false
-//                    barcode.isHidden    = true
-//                #endif
-//            }
-//
-//        } else {
-//            amount.text = String(Int(amount_ ?? 0.0))
-//            if codePay_ != nil && codePay_ != "" {
-//                barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: codePay_ ?? "", symbology: .qr, size: barcode.frame.size)!)
-//            }
-//        }
-//        if isNeedToScrollMore() {
-//            topLayout.constant = 50
-//        }
+//        barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: "12345", symbology: .qr, size: barcode.frame.size)!)
+        if data_ != nil {
+
+            amount.text = String(Int(data_?.sumPay ?? 0.0))
+
+            if data_?.codPay != nil && data_?.codPay != "" {
+                barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: data_?.codPay ?? "", symbology: .qr, size: barcode.frame.size)!)
+
+            } else {
+                #if DEBUG
+                    barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: "12345", symbology: .qr, size: barcode.frame.size)!)
+                #else
+                    emptyLabel.isHidden = false
+                    barcode.isHidden    = true
+                #endif
+            }
+
+        } else {
+            amount.text = String(Int(amount_ ?? 0.0))
+            if codePay_ != nil && codePay_ != "" {
+                barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: codePay_ ?? "", symbology: .qr, size: barcode.frame.size)!)
+            }
+        }
+        if isNeedToScrollMore() {
+            topLayout.constant = 50
+        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer) {
