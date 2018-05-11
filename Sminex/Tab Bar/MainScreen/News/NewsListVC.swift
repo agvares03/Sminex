@@ -8,6 +8,7 @@
 
 import UIKit
 import Gloss
+import DeviceKit
 
 final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -71,7 +72,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         let cell = NewsListCell.fromNib()
         cell?.display(data_[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width, height: !isNeedToScroll() ? size.height : size.height + 8)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -190,6 +191,7 @@ final class NewsListCell: UICollectionViewCell {
         }
         cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
         cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
+        
         return cell
     }
 }

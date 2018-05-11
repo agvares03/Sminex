@@ -44,7 +44,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             request = URLRequest(url: URL(string: Server.SERVER + Server.COMPLETE_REM + "smsCode=" + (smsField.text ?? ""))!)
             request.httpMethod = "GET"
         }
-
+        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
 

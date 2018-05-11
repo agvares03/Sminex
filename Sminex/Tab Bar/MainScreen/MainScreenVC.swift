@@ -56,6 +56,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
     private var refreshControl: UIRefreshControl?
+    private var mainScreenXml:  XML.Accessor?
     private var tappedNews: NewsJson?
     private var deals:  [DealsJson] = []
     private var filteredNews: [NewsJson] = []
@@ -480,6 +481,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 guard data != nil else { return }
                 
                 let xml = XML.parse(data!)
+                self.mainScreenXml = xml
                 let requests = xml["Requests"]
                 let row = requests["Row"]
                 var rows: [Request] = []
@@ -821,7 +823,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
             let vc = segue.destination as! AppsUser
-            vc.requestId_ = self.requestId
+            vc.requestId_ = requestId
+            vc.xml_ = mainScreenXml
         }
     }
     

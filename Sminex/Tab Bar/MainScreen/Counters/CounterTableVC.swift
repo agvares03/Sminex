@@ -32,14 +32,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     private var barTitle = ""
     private var index = 0
     private var meterArr: [MeterValue] = []
-    
-    private var periods: [CounterPeriod] = [] {
-        didSet {
-            DispatchQueue.main.sync {
-                self.collection.reloadData()
-            }
-        }
-    }
+    private var periods: [CounterPeriod] = []
     private var delegate: CounterVCDelegate?
     
     override func viewDidLoad() {
