@@ -38,12 +38,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBAction private func cameraPressed(_ sender: UIButton) {
         
-        if img != nil {
-            img = nil
-            cameraButton.alpha = 1
-            commentField.placeholder = "Сообщение"
-            return
-        }
         let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         action.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { (_) in
             
@@ -330,10 +324,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
         img = info[UIImagePickerControllerOriginalImage] as? UIImage
-        commentField.placeholder = "Добавлена фотография"
-        cameraButton.alpha = 0.5
+        sendButtonPressed(nil)
         dismiss(animated: true, completion: nil)
     }
     

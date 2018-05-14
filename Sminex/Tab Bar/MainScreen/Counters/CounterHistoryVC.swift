@@ -37,6 +37,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         var metValues: [MeterValue] = []
         
         period_?.forEach { period in
+            
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
                 if val.meterUniqueNum == data_?.meterUniqueNum {
@@ -49,6 +50,8 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         metValues.reversed().forEach {
             values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: $0.valueInput ?? "") )
         }
+        
+        values.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }
         
         collection.delegate     = self
         collection.dataSource   = self
