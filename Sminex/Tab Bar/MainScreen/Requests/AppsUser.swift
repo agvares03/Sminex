@@ -59,7 +59,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     private var techService: ServiceHeaderData?
     private var admissionComm: [AdmissionCommentCellData] = []
     private var techServiceComm: [ServiceCommentCellData] = []
-    private var rows: [Request] = []
+    private var rows: [String:Request] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,10 +70,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         startAnimator()
         
+        if TemporaryHolder.instance.requestTypes == nil {
+            getRequestTypes()
+        }
         if xml_ != nil {
-            if TemporaryHolder.instance.requestTypes == nil {
-                getRequestTypes()
-            }
             collection.alpha   = 0
             createButton.alpha = 0
             DispatchQueue.global().async {
@@ -141,9 +141,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.typeGroup.wait()
             
             DispatchQueue.main.async {
-                if self.requestId_ != "" {
-                    self.stopAnimatior()
-                }
+                self.stopAnimatior()
                 
                 var type = self.data[indexPath.row].type
                 
@@ -154,9 +152,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 
                 if type.contains(find: "ропуск") {
-                    
                     self.typeName = type
-                    let row = self.rows[indexPath.row]
+                    let row = self.rows[self.data[indexPath.row].id]!
                     let persons = row.responsiblePerson ?? ""
                     var auto = ""
                     self.rowAutos[row.id!]?.forEach {
@@ -211,8 +208,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     
                 } else if type.contains(find: "Техническое обслуживание") {
-                    
-                    let row = self.rows[indexPath.row]
+                    let row = self.rows[self.data[indexPath.row].id]!
                     
                     var images: [String] = []
                     
@@ -337,11 +333,11 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         let requests = xml["Requests"]
         
         let row = requests["Row"]
-        self.rows = []
+        self.rows.removeAll()
         
         row.forEach { row in
             
-            self.rows.append(Request(row: row))
+            self.rows[row.attributes["ID"]!] = Request(row: row)
             self.rowComms[row.attributes["ID"]!] = []
             self.rowPersons[row.attributes["ID"]!] = []
             self.rowAutos[row.attributes["ID"]!] = []
@@ -367,7 +363,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         
         var newData: [AppsUserCellData] = []
-        self.rows.forEach { curr in
+        self.rows.forEach { _, curr in
             
             let isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
             

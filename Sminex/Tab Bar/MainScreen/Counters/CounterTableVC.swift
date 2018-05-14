@@ -53,7 +53,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             collection.alwaysBounceVertical = true
         }
         
-        DispatchQueue.global(qos: .userInteractive).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             self.getCounters()
         }
     }
@@ -145,17 +145,19 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             let period = metersValues["Period"]
             let meterValue = period.last["MeterValue"]
             
-            self.meterArr = []
+            var newMeters: [MeterValue] = []
             meterValue.forEach {
-                self.meterArr.append( MeterValue($0, period: period.last.attributes["NumMonth"] ?? "1") )
+                newMeters.append( MeterValue($0, period: period.last.attributes["NumMonth"] ?? "1") )
             }
             
-            self.periods = []
+            var newPeriods: [CounterPeriod] = []
             period.forEach {
-                self.periods.append( CounterPeriod($0) )
+                newPeriods.append( CounterPeriod($0) )
             }
             
             DispatchQueue.main.sync {
+                self.meterArr = newMeters
+                self.periods  = newPeriods
                 self.collection.reloadData()
                 self.delegate?.stopAnimator()
                 

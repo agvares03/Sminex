@@ -182,7 +182,18 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             }
         
         } else if indexPath.section == 3 {
-            performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self)
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            alert.addAction( UIAlertAction(title: "Позвонить", style: .default, handler: { (_) in
+                if let url = URL(string: "tel://74951911774") {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+                } } ) )
+            alert.addAction( UIAlertAction(title: "Написать письмо", style: .default, handler: { (_) in self.performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self) } ) )
+            alert.addAction( UIAlertAction(title: "Отменить", style: .cancel, handler: { (_) in } ) )
+            present(alert, animated: true, completion: nil)
         
         } else if indexPath.section == 4 {
             // TODO
