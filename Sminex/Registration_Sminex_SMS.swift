@@ -48,11 +48,11 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         URLSession.shared.dataTask(with: request) {
             data, response, error in
 
-            if error != nil {
+            if error != nil || data == nil || (String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) {
 
                 DispatchQueue.main.async {
                     self.endLoading()
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Обратитесь в тех. поддержку", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
