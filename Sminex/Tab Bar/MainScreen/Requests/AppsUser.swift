@@ -157,7 +157,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     let persons = row.responsiblePerson ?? ""
                     var auto = ""
                     self.rowAutos[row.id!]?.forEach {
-                        
                         if $0.number != "" && $0.number != nil {
                             auto = auto + ($0.number ?? "")
                         }
@@ -168,7 +167,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     var images: [String] = []
                     self.rowFiles.forEach {
-                        
                         if self.dateTeck($0.dateTime!) == self.dateTeck(row.dateFrom!) {
                             images.append($0.fileId!)
                         }
@@ -178,7 +176,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
                                                          gosNumber: auto,
-                                                         date: row.planDate ?? "",
+                                                         date: (row.dateServiceDesired != "" ? row.dateServiceDesired : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
                                                          imagesUrl: images)
@@ -221,11 +219,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     self.techService = ServiceHeaderData(icon: self.data[indexPath.row].icon,
                                                          problem: row.text ?? "",
-                                                         date: row.planDate ?? "",
+                                                         date: row.dateFrom ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
                                                          imagesUrl: images)
-                    
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
                         
@@ -366,11 +363,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             let isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
             
-            var date = curr.planDate!
-            if date.count > 9 {
-                date.removeLast(9)
-            }
-            
             let lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
             let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
             let isPerson = curr.name?.contains(find: "ропуск") ?? false
@@ -381,11 +373,11 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                              desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
                                              icon: icon,
                                              status: curr.status ?? "",
-                                             date: date,
+                                             date: curr.updateDate ?? "",
                                              isBack: isAnswered,
                                              type: curr.idType ?? "",
                                              id: curr.id ?? "",
-                                             updateDate: curr.updateDate != "" ? (curr.updateDate ?? "") : (curr.dateFrom ?? "")))
+                                             updateDate: curr.updateDate ?? ""))
         }
         var firstArr = newData.filter {
             $0.status.contains(find: "обработке")
@@ -401,6 +393,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let df = DateFormatter()
         df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.isLenient = true
         firstArr  = firstArr.sorted  { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
         secondArr = secondArr.sorted { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
         
@@ -517,9 +510,12 @@ final class AppsUserCell: UICollectionViewCell {
         back.isHidden   = !item.isBack
         type            = item.type
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "hh:mm") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
+        let df = DateFormatter()
+        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.isLenient = true
+        date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
+            ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "hh:mm")
+            : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         if item.isBack {
             back.isHidden = false
@@ -530,7 +526,6 @@ final class AppsUserCell: UICollectionViewCell {
         
         let currTitle = item.title
         let titleDateString = currTitle.substring(fromIndex: currTitle.length - 19)
-        let df = DateFormatter()
         df.dateFormat = "dd.MM.yyyy hh:mm:ss"
         if let titleDate = df.date(from: titleDateString) {
             df.dateFormat = "dd MMMM"

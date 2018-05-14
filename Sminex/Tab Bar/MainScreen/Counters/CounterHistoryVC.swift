@@ -28,7 +28,6 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        tabBarController?.tabBar.selectedItem?.title = "Главная"
         res.text = data_?.name
         name.text = data_?.meterUniqueNum
         date.text = period_![0].year
@@ -55,11 +54,6 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         
         collection.delegate     = self
         collection.dataSource   = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        tabBarController?.tabBar.selectedItem?.title = "Главная"
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

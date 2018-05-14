@@ -201,6 +201,15 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                    self.endAnimator()
+                }
+                return
+            }
             #if DEBUG
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif

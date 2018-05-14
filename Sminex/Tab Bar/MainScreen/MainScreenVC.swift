@@ -505,10 +505,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 rows.forEach {
                     let isAnswered = (rowComms[$0.id!]?.count ?? 0) <= 0 ? false : true
                     
-                    var date = $0.planDate ?? ""
-                    if date != "" {
-                        date.removeLast(9)
-                    }
                     let lastComm = (rowComms[$0.id!]?.count ?? 0) <= 0 ? nil : rowComms[$0.id!]?[(rowComms[$0.id!]?.count ?? 1) - 1]
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1
@@ -522,7 +518,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     returnArr.append( RequestCellData(title: $0.name ?? "",
                                                       desc: rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
                                                       icon: icon,
-                                                      date: date,
+                                                      date: $0.updateDate ?? "",
                                                       status: $0.status ?? "",
                                                       isBack: isAnswered,
                                                       id: $0.id ?? "") )
@@ -1101,9 +1097,12 @@ final class RequestCell: UICollectionViewCell {
         icon.image  = item.icon
         status.text = item.status
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
+        let df = DateFormatter()
+        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.isLenient = true
+        date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
+            ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "")
+            : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
 
         if item.isBack {
             backTop.constant    = 6
@@ -1122,7 +1121,6 @@ final class RequestCell: UICollectionViewCell {
 
         let currTitle = item.title
         let titleDateString = currTitle.substring(fromIndex: currTitle.length - 19)
-        let df = DateFormatter()
         df.dateFormat = "dd.MM.yyyy hh:mm:ss"
         if let titleDate = df.date(from: titleDateString) {
             df.dateFormat = "dd MMMM"
