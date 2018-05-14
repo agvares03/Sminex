@@ -445,6 +445,8 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             #if DEBUG
                 print("token (add) = \(String(describing: self.responseString))")
             #endif
+            UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
+            UserDefaults.standard.synchronize()
             
             }.resume()
     }

@@ -47,7 +47,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dnc-9g-Q5f">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
                                 <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="2vw-Yb-bus">
                                     <size key="itemSize" width="414" height="89"/>
@@ -64,7 +64,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icSettings" translatesAutoresizingMaskIntoConstraints="NO" id="tpg-NN-R1a">
-                                                    <rect key="frame" x="16" y="15.333333333333332" width="30" height="29.999999999999996"/>
+                                                    <rect key="frame" x="16" y="15.333333333333336" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="XIB-Zq-lxE"/>
                                                         <constraint firstAttribute="width" constant="30" id="boC-Yx-VRz"/>
@@ -84,7 +84,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bpu-Sr-DGO">
-                                                    <rect key="frame" x="0.0" y="60.333333333333329" width="414" height="1"/>
+                                                    <rect key="frame" x="0.0" y="60.333333333333336" width="414" height="1"/>
                                                     <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="ku6-GU-W6Y"/>
@@ -119,8 +119,7 @@
                                             <constraint firstItem="t4m-3n-qwz" firstAttribute="top" secondItem="0SF-GP-lMG" secondAttribute="top" constant="24" id="epv-Am-owa"/>
                                             <constraint firstItem="Bpu-Sr-DGO" firstAttribute="top" secondItem="tpg-NN-R1a" secondAttribute="bottom" constant="15" id="p23-W7-08d"/>
                                             <constraint firstAttribute="trailing" secondItem="RFb-0M-aR9" secondAttribute="trailing" id="pRz-cI-p9H"/>
-                                            <constraint firstAttribute="bottom" secondItem="Bpu-Sr-DGO" secondAttribute="bottom" id="qsC-wO-pik"/>
-                                            <constraint firstAttribute="bottom" secondItem="Bpu-Sr-DGO" secondAttribute="bottom" id="vnz-Ph-GTv"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Bpu-Sr-DGO" secondAttribute="bottom" id="vnz-Ph-GTv"/>
                                             <constraint firstAttribute="trailing" secondItem="Bpu-Sr-DGO" secondAttribute="trailing" id="xuf-NC-JtM"/>
                                         </constraints>
                                         <size key="customSize" width="414" height="73"/>
@@ -534,7 +533,7 @@
                             <constraint firstAttribute="trailing" secondItem="Dnc-9g-Q5f" secondAttribute="trailing" id="MrV-nh-sy4"/>
                             <constraint firstItem="IVa-nv-Fv1" firstAttribute="top" secondItem="Dnc-9g-Q5f" secondAttribute="bottom" id="Pdq-SP-kSq"/>
                             <constraint firstItem="Dnc-9g-Q5f" firstAttribute="leading" secondItem="fEd-Ja-go5" secondAttribute="leading" id="Xf3-It-P9X"/>
-                            <constraint firstItem="Dnc-9g-Q5f" firstAttribute="top" secondItem="fEd-Ja-go5" secondAttribute="top" id="o1c-2p-5uA"/>
+                            <constraint firstItem="Dnc-9g-Q5f" firstAttribute="top" secondItem="Agq-LI-RZF" secondAttribute="bottom" id="o1c-2p-5uA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="g2Q-wy-69V"/>
@@ -1331,6 +1330,6 @@
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Mzw-ib-sjs"/>
+        <segue reference="2kf-Wh-UWR"/>
     </inferredMetricsTieBreakers>
 </document>

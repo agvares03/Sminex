@@ -111,10 +111,38 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     }
     
     private func exit() {
+        
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let deviceId = UserDefaults.standard.string(forKey: "googleToken") ?? ""
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.DELETE_CLIENT + "login=\(login)&pwd=\(pwd)&deviceid=\(deviceId)")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+            
+            #if DEBUG
+                print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            
+        }.resume()
+        
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "pass"), forKey: "exitPass")
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "login"), forKey: "exitLogin")
         UserDefaults.standard.setValue("", forKey: "pass")
         UserDefaults.standard.removeObject(forKey: "accountIcon")
+        UserDefaults.standard.removeObject(forKey: "googleToken")
         UserDefaults.standard.removeObject(forKey: "newsList")
         UserDefaults.standard.removeObject(forKey: "DealsImg")
         UserDefaults.standard.removeObject(forKey: "newsList")
