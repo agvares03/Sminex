@@ -821,6 +821,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let vc = segue.destination as! AppsUser
             vc.requestId_ = requestId
             vc.xml_ = mainScreenXml
+            vc.delegate = self
         }
     }
     
