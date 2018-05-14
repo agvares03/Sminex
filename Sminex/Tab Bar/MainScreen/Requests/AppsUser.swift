@@ -359,7 +359,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             row["File"].forEach {
                 self.rowFiles.append( RequestFile(row: $0) )
             }
-            
         }
         
         var newData: [AppsUserCellData] = []

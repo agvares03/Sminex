@@ -23,7 +23,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     @IBOutlet private weak var cameraButton:    UIButton!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
-        
         imgs = [:]
         if isCreated_ {
             let viewControllers = navigationController?.viewControllers
@@ -79,7 +78,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                 return
             }
         }
-        
         startAnimating()
         if img != nil && commentField.text != "" {
             uploadPhoto(img!, isSplit: true)
