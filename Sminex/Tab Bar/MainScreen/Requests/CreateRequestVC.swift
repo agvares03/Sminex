@@ -161,6 +161,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         edContact.delegate  = self
         edFio.delegate      = self
+        gosNumber.delegate  = self
+        edComment.delegate  = self
         
         title = "Пропуск"
         
@@ -452,6 +454,26 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         images.append(image)
         dismiss(animated: true, completion: nil)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if textField === edFio {
+            edContact.becomeFirstResponder()
+        
+        } else if textField === edContact {
+            if !gosNumber.isHidden {
+                gosNumber.becomeFirstResponder()
+            
+            } else {
+                edComment.becomeFirstResponder()
+            }
+        
+        } else if textField === gosNumber {
+            edComment.becomeFirstResponder()
+        }
+        
+        return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
