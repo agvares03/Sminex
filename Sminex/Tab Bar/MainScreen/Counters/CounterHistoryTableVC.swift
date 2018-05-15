@@ -50,7 +50,10 @@ final class CounterHistoryTableVC: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 60.0)
+        let cell = CounterHistoryTableCell.fromNib()
+        cell?.display(title: data_[indexPath.row].resource ?? "", desc: data_[indexPath.row].meterUniqueNum ?? "")
+        let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+        return CGSize(width: view.frame.size.width, height: size.height)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -75,4 +78,15 @@ final class CounterHistoryTableCell: UICollectionViewCell {
         self.desc.text  = desc
     }
     
+    class func fromNib() -> CounterHistoryTableCell? {
+        var cell: CounterHistoryTableCell?
+        Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)?.forEach {
+            if let view = $0 as? CounterHistoryTableCell {
+                cell = view
+            }
+        }
+        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
+        return cell
+    }
 }
