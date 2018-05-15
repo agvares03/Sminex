@@ -50,7 +50,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             var reqId = ""
     private var responceString = ""
     private let typeGroup      = DispatchGroup()
-            let prepareGroup   = DispatchGroup()
+            var prepareGroup: DispatchGroup? = nil
     private var data: [AppsUserCellData] = []
     private var rowComms: [String : [RequestComment]]  = [:]
     private var rowPersons: [String : [RequestPerson]] = [:]
@@ -65,7 +65,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        prepareGroup.enter()
+        prepareGroup?.enter()
         collection?.delegate                     = self
         collection?.dataSource                   = self
         automaticallyAdjustsScrollViewInsets    = false
@@ -325,6 +325,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 var type = self.data[indexPath.row].type
                 
+                print(type)
+                
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
@@ -356,7 +358,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
                                                          gosNumber: auto,
-                                                         date: (row.dateServiceDesired != "" ? row.dateServiceDesired : row.planDate) ?? "",
+                                                         date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
                                                          imagesUrl: images)
@@ -367,7 +369,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         
                         self.rowFiles.forEach {
                             
-                            if self.dateTeck($0.dateTime!) == self.dateTeck(comm.createdDate!) {
+                            if $0.fileId == comm.idFile {
                                 commImg = $0.fileId
                             }
                         }
@@ -385,7 +387,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     if self.collection != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toAdmission, sender: self)
                     }
-                    self.prepareGroup.leave()
+                    self.prepareGroup?.leave()
                     
                 } else if type.contains(find: "Техническое обслуживание") {
                     let row = self.rows[self.data[indexPath.row].id]!
@@ -401,7 +403,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                     self.techService = ServiceHeaderData(icon: self.data[indexPath.row].icon,
                                                          problem: row.text ?? "",
-                                                         date: (row.dateServiceDesired != "" ? row.dateServiceDesired : row.planDate) ?? "",
+                                                         date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
                                                          imagesUrl: images)
@@ -412,7 +414,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         
                         self.rowFiles.forEach {
                             
-                            if self.dateTeck($0.dateTime!) == self.dateTeck(comm.createdDate!) {
+                            if $0.fileId == comm.idFile {
                                 commImg = $0.fileId!
                             }
                         }
@@ -431,7 +433,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toService, sender: self)
                     }
                     
-                    self.prepareGroup.leave()
+                    self.prepareGroup?.leave()
                 }
             }
         }

@@ -184,7 +184,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         } else if indexPath.section == 3 {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             alert.addAction( UIAlertAction(title: "Позвонить", style: .default, handler: { (_) in
-                if let url = URL(string: "tel://74951911774") {
+                if let url = URL(string: "tel://+74957266791") {
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } else {

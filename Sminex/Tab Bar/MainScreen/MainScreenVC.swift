@@ -408,9 +408,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
             appsUser?.delegate = self
+            appsUser?.prepareGroup = DispatchGroup()
             appsUser?.viewDidLoad()
             DispatchQueue.global(qos: .userInitiated).async {
-                self.appsUser?.prepareGroup.wait()
+                self.appsUser?.prepareGroup?.wait()
                 DispatchQueue.main.async {
                     if self.appsUser?.admission != nil {
                         self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)

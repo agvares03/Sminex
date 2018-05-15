@@ -77,9 +77,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             uploadPhoto(img!, isSplit: true)
             return
             
-        } else if img == nil {
+        } else if img == nil && commentField.text != "" {
             sendComment()
-        } else {
+        } else if img != nil && commentField.text == "" {
             uploadPhoto(img!)
         }
     }
@@ -256,7 +256,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         let comm = commentField.text ?? ""
         if isSplit {
-            commentField.text = ""
+//            commentField.text = ""
         }
         
         let uid = UUID().uuidString
@@ -291,7 +291,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     if !isSplit {
                         self.collection.reloadData()
                         self.img = nil
-                        self.commentField.text = ""
+//                        self.commentField.text = ""
                         self.commentField.placeholder = "Сообщение"
                         self.view.endEditing(true)
                         self.delegate?.update()
@@ -307,6 +307,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                     } else {
                         DispatchQueue.main.async {
+                            self.img = nil
                             self.sendComment(comm)
                         }
                     }

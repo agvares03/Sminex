@@ -51,10 +51,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             uploadPhoto(img!, isSplit: true)
             return
             
-        } else if img == nil {
+        } else if img == nil && commentField.text != nil {
             sendComment()
-        } else {
+            return
+        } else if img != nil && commentField.text == nil {
             uploadPhoto(img!)
+            return
         }
     }
     
@@ -194,8 +196,8 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     private func sendComment(_ comment: String = "") {
         
-        let comm = comment == "" ? commentField.text!.stringByAddingPercentEncodingForRFC3986() : comment
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm!)!)
+        let comm = commentField.text!.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm)!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -246,7 +248,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         let comm = commentField.text ?? ""
         if isSplit {
-            commentField.text = ""
+//            commentField.text = ""
         }
         
         let uid = UUID().uuidString
@@ -281,9 +283,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     
                     if !isSplit {
                         
-                        self.collection.reloadData()
                         self.img = nil
-                        self.commentField.text = ""
+                        self.collection.reloadData()
+//                        self.commentField.text = ""
                         self.commentField.placeholder = "Сообщение"
                         self.view.endEditing(true)
                         self.delegate?.update()
@@ -300,6 +302,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                         
                     } else {
                         DispatchQueue.main.async {
+                            self.img = nil
                             self.sendComment(comm)
                         }
                     }
@@ -428,7 +431,9 @@ final class ServiceHeader: UICollectionViewCell {
                     
                     let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
                     
-                    rowImgs.append(UIImage(data: data!)!)
+                    if data != nil {
+                        rowImgs.append(UIImage(data: data!)!)
+                    }
                 }
                 
                 DispatchQueue.main.async {
