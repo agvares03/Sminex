@@ -265,19 +265,22 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                              isBack: isAnswered,
                                              type: curr.idType ?? "",
                                              id: curr.id ?? "",
-                                             updateDate: curr.updateDate ?? "",
+                                             updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
                                              stickTitle: isAnswered ? descText : ""))
         }
         var firstArr = newData.filter {
             $0.status.contains(find: "обработке")
                 ||  $0.status.contains(find: "Отправлена")
                 ||  $0.status.contains(find: "выполнению")
+                ||  $0.status.contains(find: "Черновик")
         }
         var secondArr = newData.filter {
             $0.status.contains(find: "Закрыто")
                 ||  $0.status.contains(find: "Закрыта")
                 ||  $0.status.contains(find: "Отклонена")
-                ||  $0.status.contains(find: "Черновик")
+                ||  $0.status.contains(find: "Оформленно")
+                ||  $0.status.contains(find: "Выдан")
+                ||  $0.status.contains(find: "Отклонено")
         }
         
         let df = DateFormatter()
