@@ -13,7 +13,7 @@
         <!--Пропуск-->
         <scene sceneID="ym7-b2-Nm6">
             <objects>
-                <viewController id="nGr-Se-ITa" customClass="AdmissionVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="admission" id="nGr-Se-ITa" customClass="AdmissionVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zK9-kp-miy"/>
                         <viewControllerLayoutGuide type="bottom" id="LfA-9N-tit"/>
@@ -105,8 +105,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Прибытие" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZj-bm-VDz">
-                                                    <rect key="frame" x="16" y="224" width="73" height="18"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Дата посещения" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZj-bm-VDz">
+                                                    <rect key="frame" x="16" y="224" width="119" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -401,7 +401,7 @@
         <!--Техническое обслуживание-->
         <scene sceneID="w0u-bn-JZS">
             <objects>
-                <viewController id="Poq-SC-Dnp" customClass="TechServiceVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="service" id="Poq-SC-Dnp" customClass="TechServiceVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="E5Q-vb-Sjl"/>
                         <viewControllerLayoutGuide type="bottom" id="e37-1J-5sG"/>
@@ -449,8 +449,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начало" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="03u-1D-IRJ">
-                                                    <rect key="frame" x="16" y="114" width="53" height="18"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Желаемая дата" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="03u-1D-IRJ">
+                                                    <rect key="frame" x="16" y="114" width="111.5" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -754,21 +754,21 @@
                                 <rect key="frame" x="0.0" y="23" width="320" height="450"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GBk-53-ksF">
-                                    <size key="itemSize" width="314" height="56"/>
+                                    <size key="itemSize" width="317" height="115"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AppsUserCell" id="tpU-of-SZG" customClass="AppsUserCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="1.5" y="0.0" width="317" height="100"/>
+                                        <rect key="frame" x="1.5" y="0.0" width="317" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="317" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="317" height="115"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vct-mt-8J6">
-                                                    <rect key="frame" x="11" y="25" width="293" height="34.5"/>
+                                                    <rect key="frame" x="11" y="46.5" width="293" height="34.5"/>
                                                     <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -786,38 +786,47 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста, другой номер. По указанному не берут трубку" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nd8-cq-Rz0">
-                                                    <rect key="frame" x="16" y="28" width="293" height="26.5"/>
+                                                    <rect key="frame" x="16" y="49.5" width="293" height="26.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-jJ-iNZ">
-                                                    <rect key="frame" x="8" y="82" width="10" height="10"/>
+                                                    <rect key="frame" x="8" y="97" width="10" height="10"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="10" id="TV3-S0-gn3"/>
                                                         <constraint firstAttribute="width" constant="10" id="ao4-El-2aN"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0iA-PT-qhI">
-                                                    <rect key="frame" x="26" y="82" width="59" height="10"/>
+                                                    <rect key="frame" x="26" y="97" width="59" height="10"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="8"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23:31" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yg0-4r-xRe">
-                                                    <rect key="frame" x="280.5" y="82" width="28.5" height="10"/>
+                                                    <rect key="frame" x="280.5" y="97" width="28.5" height="10"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="io9-0r-GFn">
-                                                    <rect key="frame" x="0.0" y="99" width="317" height="1"/>
+                                                    <rect key="frame" x="0.0" y="114" width="317" height="1"/>
                                                     <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="XzB-Cr-dF0"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста, другой номер. По указанному не берут трубку" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cce-4C-aBH">
+                                                    <rect key="frame" x="16" y="24" width="293" height="14.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="15" id="aPH-Dr-sEo"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -827,11 +836,12 @@
                                             <constraint firstItem="yg0-4r-xRe" firstAttribute="centerY" secondItem="0iA-PT-qhI" secondAttribute="centerY" id="6KA-8b-RcD"/>
                                             <constraint firstItem="yg0-4r-xRe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0iA-PT-qhI" secondAttribute="trailing" constant="50" id="7y3-Vw-9Hl"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="nd8-cq-Rz0" secondAttribute="trailing" id="BGf-VB-3aW"/>
-                                            <constraint firstItem="nd8-cq-Rz0" firstAttribute="top" secondItem="SMp-OZ-zCn" secondAttribute="bottom" constant="8" id="DCp-OA-rVn"/>
                                             <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="nd8-cq-Rz0" secondAttribute="bottom" constant="15" id="DsZ-8H-5sE"/>
                                             <constraint firstAttribute="bottom" secondItem="yg0-4r-xRe" secondAttribute="bottom" constant="8" id="F6Z-D9-ag1"/>
                                             <constraint firstItem="SMp-OZ-zCn" firstAttribute="top" secondItem="tpU-of-SZG" secondAttribute="top" id="FLK-o3-y1x"/>
                                             <constraint firstAttribute="bottom" secondItem="lGD-jJ-iNZ" secondAttribute="bottom" constant="8" id="FUC-7B-fU0"/>
+                                            <constraint firstItem="nd8-cq-Rz0" firstAttribute="top" secondItem="Cce-4C-aBH" secondAttribute="bottom" constant="11" id="JEj-sl-vCH"/>
+                                            <constraint firstItem="Cce-4C-aBH" firstAttribute="top" secondItem="SMp-OZ-zCn" secondAttribute="bottom" constant="4" id="OYZ-47-9ly"/>
                                             <constraint firstAttribute="trailing" secondItem="yg0-4r-xRe" secondAttribute="trailing" constant="8" id="QaZ-Zb-6kI"/>
                                             <constraint firstItem="0iA-PT-qhI" firstAttribute="centerY" secondItem="lGD-jJ-iNZ" secondAttribute="centerY" id="QxS-oT-geK"/>
                                             <constraint firstAttribute="trailing" secondItem="io9-0r-GFn" secondAttribute="trailing" id="RWw-1r-o6I"/>
@@ -844,16 +854,21 @@
                                             <constraint firstItem="Vct-mt-8J6" firstAttribute="top" secondItem="nd8-cq-Rz0" secondAttribute="top" constant="-3" id="jYg-op-Aif"/>
                                             <constraint firstItem="lGD-jJ-iNZ" firstAttribute="leading" secondItem="tpU-of-SZG" secondAttribute="leading" constant="8" id="kPh-fV-hUu"/>
                                             <constraint firstItem="Vct-mt-8J6" firstAttribute="leading" secondItem="nd8-cq-Rz0" secondAttribute="leading" constant="-5" id="kqU-09-Sfp"/>
+                                            <constraint firstItem="Cce-4C-aBH" firstAttribute="trailing" secondItem="nd8-cq-Rz0" secondAttribute="trailing" id="mGX-ow-kjU"/>
                                             <constraint firstItem="SMp-OZ-zCn" firstAttribute="leading" secondItem="tpU-of-SZG" secondAttribute="leading" constant="8" id="oWV-QU-z8r"/>
+                                            <constraint firstItem="Cce-4C-aBH" firstAttribute="leading" secondItem="nd8-cq-Rz0" secondAttribute="leading" id="rZ1-Lo-H8t"/>
                                             <constraint firstItem="Vct-mt-8J6" firstAttribute="bottom" secondItem="nd8-cq-Rz0" secondAttribute="bottom" constant="5" id="vdl-cY-seN"/>
                                         </constraints>
-                                        <size key="customSize" width="317" height="100"/>
+                                        <size key="customSize" width="317" height="115"/>
                                         <connections>
                                             <outlet property="back" destination="Vct-mt-8J6" id="T94-g9-cnz"/>
                                             <outlet property="date" destination="yg0-4r-xRe" id="tJ7-YY-B3E"/>
                                             <outlet property="desc" destination="nd8-cq-Rz0" id="MnW-sk-skx"/>
                                             <outlet property="icon" destination="lGD-jJ-iNZ" id="2eK-tK-4g2"/>
+                                            <outlet property="skTitleBottm" destination="JEj-sl-vCH" id="cN3-mc-uSt"/>
+                                            <outlet property="skTitleHeight" destination="aPH-Dr-sEo" id="1hB-xP-2f8"/>
                                             <outlet property="status" destination="0iA-PT-qhI" id="kqX-bf-WEb"/>
+                                            <outlet property="stickTitle" destination="Cce-4C-aBH" id="OrB-sX-8Pd"/>
                                             <outlet property="title" destination="SMp-OZ-zCn" id="nTA-Ot-6fY"/>
                                         </connections>
                                     </collectionViewCell>
@@ -897,7 +912,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c3w-Ne-98Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1538" y="-2082"/>
+            <point key="canvasLocation" x="-1539.375" y="-2082.0422535211269"/>
         </scene>
         <!--Категории заявки-->
         <scene sceneID="ebf-jY-bBy">
@@ -1033,8 +1048,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начало" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aNb-FK-4Ys">
-                                        <rect key="frame" x="8" y="69" width="56.5" height="19.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Желаемая дата" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aNb-FK-4Ys">
+                                        <rect key="frame" x="8" y="69" width="118" height="19.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -1299,8 +1314,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начало" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7y3-DI-PxW">
-                                        <rect key="frame" x="8" y="235" width="53" height="18"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Дата посещения" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7y3-DI-PxW">
+                                        <rect key="frame" x="8" y="235" width="119" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>

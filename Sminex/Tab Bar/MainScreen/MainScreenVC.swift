@@ -21,7 +21,7 @@ protocol MainScreenDelegate: class {
     func update(method: String)
 }
 
-final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout, MainScreenDelegate {
+final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout, MainScreenDelegate, AppsUserDelegate {
     
     @IBOutlet private weak var collection: UICollectionView!
     
@@ -62,6 +62,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var filteredNews: [NewsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
+    private var appsUser: AppsUser?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -403,7 +404,23 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
-            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toRequestAnim, sender: self)
+            appsUser = AppsUser()
+            appsUser?.requestId_ = requestId
+            appsUser?.xml_ = mainScreenXml
+            appsUser?.delegate = self
+            appsUser?.viewDidLoad()
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.appsUser?.prepareGroup.wait()
+                DispatchQueue.main.async {
+                    if self.appsUser?.admission != nil {
+                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
+                        
+                    } else if self.appsUser?.techService != nil {
+                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+                    }
+                }
+            }
+//            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toRequestAnim, sender: self)
         }
     }
     
@@ -822,7 +839,36 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.requestId_ = requestId
             vc.xml_ = mainScreenXml
             vc.delegate = self
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toAdmission {
+            let vc = segue.destination as! AdmissionVC
+            vc.data_ = (appsUser?.admission!)!
+            vc.comments_ = (appsUser?.admissionComm)!
+            vc.reqId_ = appsUser?.reqId ?? ""
+            vc.delegate = self
+            vc.name_ = appsUser?.typeName
+            if appsUser?.requestId_ != "" {
+                appsUser?.requestId_ = ""
+                appsUser?.xml_ = nil
+                vc.isFromMain_ = true
+            }
+            
+        } else if segue.identifier == Segues.fromMainScreenVC.toService {
+            let vc = segue.destination as! TechServiceVC
+            vc.data_ = (appsUser?.techService!)!
+            vc.comments_ = (appsUser?.techServiceComm)!
+            vc.reqId_ = appsUser?.reqId ?? ""
+            vc.delegate = self
+            if appsUser?.requestId_ != "" {
+                appsUser?.requestId_ = ""
+                appsUser?.xml_ = nil
+                vc.isFromMain_ = true
+            }
         }
+    }
+    
+    func update() {
+        update(method: "Request")
     }
     
     func update(method: String) {

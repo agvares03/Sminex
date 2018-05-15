@@ -48,7 +48,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         URLSession.shared.dataTask(with: request) {
             data, response, error in
 
-            if error != nil || data == nil || (String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) {
+            if error != nil || data == nil /*|| (String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false)*/ {
 
                 DispatchQueue.main.async {
                     self.endLoading()

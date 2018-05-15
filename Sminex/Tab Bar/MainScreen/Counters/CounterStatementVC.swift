@@ -67,7 +67,7 @@ final class CounterStatementVC: UIViewController {
         }
         
         dateLabel.text = date_
-        typeLabel.text = value_?.name
+        typeLabel.text = value_?.resource
         counterLabel.text = value_?.meterUniqueNum
         monthValLabel.text = value_?.previousValue
         monthLabel.text = month_

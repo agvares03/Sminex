@@ -28,7 +28,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        res.text = data_?.name
+        res.text = data_?.resource
         name.text = data_?.meterUniqueNum
         date.text = period_![0].year
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"

@@ -262,7 +262,7 @@ final class CounterTableCell: UICollectionViewCell {
     
     fileprivate func display(_ item: MeterValue) {
         
-        title.text = item.name
+        title.text = item.resource
         desc.text  = item.meterUniqueNum
         
         let value = String((item.value?.split(separator: ",")[0])!)

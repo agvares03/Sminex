@@ -171,6 +171,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         transportSwitch.addTarget(self, action: #selector(stateChanged(_:)), for: .valueChanged)
+        edContact.text = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -326,8 +327,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let login = UserDefaults.standard.string(forKey: "login")!
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
         let comm = edComment.text ?? ""
-        
-        print(name_)
         
         let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986() ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986() ?? "")&phonenum=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986() ?? "")&responsiblePerson=\(data!.gosti.stringByAddingPercentEncodingForRFC3986() ?? "")&email=&isPaidEmergencyRequest=0&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=&clearAfterWork="
         
