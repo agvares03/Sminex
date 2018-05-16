@@ -90,6 +90,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REGISTRATION_SMINEX + "identOrPhone=" + ls_for_zapros)!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
@@ -192,7 +194,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         indicator.isHidden = true
         
         if isFromApp_ {
-            navigationController?.isNavigationBarHidden = true
+            tabBarController?.tabBar.isHidden = true
+//            navigationController?.isNavigationBarHidden = true
             backView.isHidden   = true
             backButton.isHidden = true
             let login   = UserDefaults.standard.string(forKey: "login") ?? ""
@@ -228,9 +231,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !isFromApp_ {
-            navigationController?.isNavigationBarHidden = false
-        }
+        
+        navigationController?.isNavigationBarHidden = false
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)

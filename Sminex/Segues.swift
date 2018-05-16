@@ -178,6 +178,7 @@ struct Segues {
         static let toRequestAnim     = "requestAnim"
         static let toAdmission       = "admission"
         static let toService         = "service"
+        static let toDealsList       = "dealsList"
     }
     
     struct fromRequestTypeVC {

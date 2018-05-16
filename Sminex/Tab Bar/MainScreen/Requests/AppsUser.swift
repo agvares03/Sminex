@@ -284,8 +284,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         
         let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
         df.isLenient = true
+        df.timeZone = TimeZone(identifier: "GMT+3:00")
+        
         firstArr  = firstArr.sorted  { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
         secondArr = secondArr.sorted { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
         

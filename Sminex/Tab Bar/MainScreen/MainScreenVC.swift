@@ -40,7 +40,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             0 : CellsHeaderData(title: "Новости")
             ],
         2 : [
-            0 : CellsHeaderData(title: "Акции и предложения", isNeedDetail: false),
+            0 : CellsHeaderData(title: "Акции и предложения"),
             1 : StockCellData(images: [])
             ],
         3 : [
@@ -119,6 +119,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.isTranslucent         = true
         navigationController?.navigationBar.backgroundColor       = .white
         navigationController?.navigationBar.tintColor             = .white
+        navigationController?.navigationBar.barTintColor          = .white
         navigationController?.navigationBar.layer.shadowColor     = UIColor.lightGray.cgColor
         navigationController?.navigationBar.layer.shadowOpacity   = 0.5
         navigationController?.navigationBar.layer.shadowOffset    = CGSize(width: 0, height: 1.0)
@@ -159,6 +160,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        tabBarController?.tabBar.tintColor = .black
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
@@ -231,7 +233,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "Акции и предложения" {
-            return CGSize(width: view.frame.size.width, height: 200.0)
+            return CGSize(width: view.frame.size.width, height: 204.0)
         
         } else if title == "Заявки" {
             if indexPath.row == data[indexPath.section]!.count - 2 {
@@ -245,7 +247,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "К оплате" {
-            return CGSize(width: view.frame.size.width - 32, height: 118.0)
+            return CGSize(width: view.frame.size.width - 32, height: 110.0)
         
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()
@@ -444,8 +446,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if name == "Опросы" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestions, sender: self)
         
-//        } else if name == "Акции и предложения" {
-//            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
+        } else if name == "Акции и предложения" {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toDealsList, sender: self)
         
         } else if name == "К оплате" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
@@ -824,7 +826,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
             let vc = segue.destination as! DealsListDescVC
-            vc.data_ = deals[dealsIndex]
+            vc.data_ = deals[safe: dealsIndex]
             vc.anotherDeals_ = Array(deals.prefix(3))
         
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
@@ -865,6 +867,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 appsUser?.xml_ = nil
                 vc.isFromMain_ = true
             }
+        
+        } else if segue.identifier == Segues.fromMainScreenVC.toDealsList {
+            let vc = segue.destination as! DealsListVC
+            vc.data_ = deals
         }
     }
     
@@ -905,13 +911,13 @@ final class CellsHeader: UICollectionReusableView {
     fileprivate func display(_ item: CellsHeaderData, delegate: CellsDelegate? = nil) {
         
         title.text = item.title
-        
-        if !item.isNeedDetail {
-            detail.isHidden = true
-        
-        } else {
-            detail.isHidden = false
-        }
+//
+//        if !item.isNeedDetail {
+//            detail.isHidden = true
+//
+//        } else {
+//            detail.isHidden = false
+//        }
         
         self.delegate = delegate
         
@@ -1143,7 +1149,7 @@ final class RequestCell: UICollectionViewCell {
         title.text  = item.title
         desc.text   = item.desc
         icon.image  = item.icon
-        status.text = item.status
+        status.text = item.status.uppercased()
         
         let df = DateFormatter()
         df.dateFormat = "dd.MM.yyyy hh:mm:ss"
@@ -1163,7 +1169,7 @@ final class RequestCell: UICollectionViewCell {
             backTop.constant    = 0
             backBottom.constant = 0
             descTop.constant    = 2
-            descBottom.constant = 10
+            descBottom.constant = 8
             back.isHidden = true
         }
 
@@ -1185,8 +1191,14 @@ final class RequestCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = viewSize - 32//cell?.title.bounds.size.width ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth  = viewSize - 48//cell?.desc.bounds.size.width ?? 0.0
+        if isPlusDevices() {
+            cell?.title.preferredMaxLayoutWidth = viewSize - 32//cell?.title.bounds.size.width ?? 0.0 + 20
+            cell?.desc.preferredMaxLayoutWidth  = viewSize - 48//cell?.desc.bounds.size.width ?? 0.0 + 20
+        
+        } else {
+            cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+            cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width  ?? 0.0
+        }
 
         return cell
     }

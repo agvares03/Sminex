@@ -65,8 +65,12 @@ final class CounterStatementVC: UIViewController {
             descLabel1.isHidden = true
             goButtonConst.constant = 20
         }
+        goButton.isEnabled = false
+        goButton.alpha     = 0.5
         
-        dateLabel.text = date_
+        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        dateLabel.text = date_?.lowercased()
         typeLabel.text = value_?.resource
         counterLabel.text = value_?.meterUniqueNum
         monthValLabel.text = value_?.previousValue
@@ -85,6 +89,18 @@ final class CounterStatementVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         let _ = count.becomeFirstResponder()
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        
+        if count.text == "" {
+            goButton.isEnabled = false
+            goButton.alpha     = 0.5
+        
+        } else {
+            goButton.isEnabled = true
+            goButton.alpha     = 1
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -108,9 +124,10 @@ final class CounterStatementVC: UIViewController {
             scroll.contentOffset = CGPoint(x: 0, y: 50)
         
         } else {
-            if isNeedToScroll() {
-                goBottomConst.constant = 215
-            }
+//            if isNeedToScroll() {
+//                goBottomConst.constant = 215
+//            }
+            scroll.contentInset.bottom = 265
         }
     }
     
@@ -122,9 +139,10 @@ final class CounterStatementVC: UIViewController {
             scroll.contentOffset = CGPoint(x: 0, y: 0)
         
         } else {
-            if isNeedToScroll() {
-                goBottomConst.constant = 8
-            }
+//            if isNeedToScroll() {
+//                goBottomConst.constant = 8
+//            }
+            scroll.contentInset.bottom = 0
         }
     }
     

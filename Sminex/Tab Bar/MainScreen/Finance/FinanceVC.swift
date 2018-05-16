@@ -49,15 +49,15 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         table.delegate      = self
         
         DispatchQueue.global(qos: .userInitiated).async {
-            self.getAccountDebt()
             TemporaryHolder.instance.calcsGroup.wait()
             TemporaryHolder.instance.receiptsGroup.wait()
             self.calcs = TemporaryHolder.instance.calcs
             self.receipts = TemporaryHolder.instance.receipts
             self.filteredCalcs = TemporaryHolder.instance.filteredCalcs
+            self.getAccountDebt()
             DispatchQueue.main.async {
                 self.table.reloadData()
-                self.stopAnimation()
+//                self.stopAnimation()
             }
         }
     }
@@ -199,6 +199,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             
             if indexPath.row == receipts.count + 1 || indexPath.row == 4 {
                 performSegue(withIdentifier: Segues.fromFinanceVC.toReceiptArchive, sender: self)
+                return
             }
             index = indexPath.row - 1
             performSegue(withIdentifier: Segues.fromFinanceVC.toReceipts, sender: self)
@@ -208,6 +209,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             
             if indexPath.row == 4 {
                 performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
+                return
             }
             index = indexPath.row - 1
             performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
@@ -233,7 +235,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             defer {
                 DispatchQueue.main.async {
                     self.table.reloadData()
-//                    self.stopAnimation()
+                    self.stopAnimation()
                 }
             }
             

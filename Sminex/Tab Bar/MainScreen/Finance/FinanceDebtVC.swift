@@ -249,22 +249,13 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                 }
             
             } else if file?.type == "pdf" || file?.fileName?.contains(find: ".pdf") ?? false {
-                if #available(iOS 11.0, *) {
-                    let pdf = [PDFDocument(data: data!)!]
-                    DispatchQueue.main.async {
-                        let activityViewController = UIActivityViewController(activityItems: pdf, applicationActivities: nil)
-                        activityViewController.popoverPresentationController?.sourceView = self.view
-                        self.present(activityViewController, animated: true, completion: nil)
-                    }
-                } else {
-                    var docURL = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last! as NSURL
-                    docURL = docURL.appendingPathComponent( "myDocument.pdf")! as NSURL
-                    try! data?.write(to: docURL as URL)
-                    DispatchQueue.main.async {
-                        let activityViewController = UIActivityViewController(activityItems: [docURL], applicationActivities: nil)
-                        activityViewController.popoverPresentationController?.sourceView = self.view
-                        self.present(activityViewController, animated: true, completion: nil)
-                    }
+                var docURL = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last! as NSURL
+                docURL = docURL.appendingPathComponent( "myDocument.pdf")! as NSURL
+                try! data?.write(to: docURL as URL)
+                DispatchQueue.main.async {
+                    let activityViewController = UIActivityViewController(activityItems: [docURL], applicationActivities: nil)
+                    activityViewController.popoverPresentationController?.sourceView = self.view
+                    self.present(activityViewController, animated: true, completion: nil)
                 }
             }
  

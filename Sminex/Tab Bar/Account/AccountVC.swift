@@ -188,8 +188,8 @@ final class AccountHeader: UICollectionReusableView {
         lsLabel.text = defaults.string(forKey: "login")
         streetLabel.text = defaults.string(forKey: "adress")
         roomLabel.text = defaults.string(forKey: "roomsCount")
-        generalLabel.text = defaults.string(forKey: "totalArea")
-        habitableLabel.text = defaults.string(forKey: "residentialArea")
+        generalLabel.text = (defaults.string(forKey: "totalArea") ?? "") + " м²"
+        habitableLabel.text = (defaults.string(forKey: "residentialArea") ?? "") + " м²"
         holderPhoneLabel.text = defaults.string(forKey: "contactNumber")
         holderLabel.text = defaults.string(forKey: "name")
         descLabel.text   = defaults.string(forKey: "accDesc")

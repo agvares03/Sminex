@@ -28,7 +28,7 @@ final class FinanceBarCodeVC: UIViewController {
         if data_ != nil {
 
             amount.text = String(Int(data_?.sumPay ?? 0.0))
-            barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: data_?.codPay ?? "", symbology: .qr, size: barcode.frame.size)!)
+            barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: data_?.codPay?.stringByAddingPercentEncodingForRFC3986() ?? "", symbology: .qr, size: barcode.frame.size)!)
 
         } else {
             amount.text = String(Int(amount_ ?? 0.0))

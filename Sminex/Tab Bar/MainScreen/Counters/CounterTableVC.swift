@@ -21,6 +21,7 @@ protocol CounterVCDelegate: class {
 final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, UIGestureRecognizerDelegate, CounterTableCellDelegate, CounterStatementDelegate {
     
     @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var sendToDate: UILabel!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -56,6 +57,9 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         DispatchQueue.global(qos: .userInitiated).async {
             self.getCounters()
         }
+        
+        let date = UserDefaults.standard.integer(forKey: "date2")
+        sendToDate.text = date != 0 ? "Передавать до " + String(date) : ""
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -93,7 +97,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         let cell = CounterTableCell.fromNib()
         cell?.display(meterArr[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width, height: size.height - 15)
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

@@ -144,6 +144,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         navigationController?.navigationBar.isTranslucent   = true
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
+        navigationController?.navigationBar.barTintColor          = .white
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
         
         contactNumber.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)

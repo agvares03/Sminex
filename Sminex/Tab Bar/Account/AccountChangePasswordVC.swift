@@ -57,7 +57,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         
         guard (UserDefaults.standard.string(forKey: "pass") ?? "") == (oldPasswordField.text ?? "") else {
             wrongPassLabel.isHidden = false
-            forgotTop.constant = 30
+            forgotTop.constant = 50
             return
         }
         startAnimator()
@@ -90,6 +90,12 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         oldPasswordField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         newPasswordField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
+        newPasswordField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 18, height: newPasswordField.frame.height))
+        newPasswordField.rightViewMode = .always
+        
+        oldPasswordField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 18, height: oldPasswordField.frame.height))
+        oldPasswordField.rightViewMode = .always
+        
         activateSaveButton()
     }
     
@@ -99,6 +105,12 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         activateSaveButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
     }
     
     private func activateSaveButton() {
@@ -156,7 +168,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromAccountChangePasswordVC.toForgot {
-            let vc = (segue.destination as! UINavigationController).topViewController as! Registration_Sminex
+            let vc = segue.destination as! Registration_Sminex
             vc.isReg_       = false
             vc.isFromApp_   = true
         }

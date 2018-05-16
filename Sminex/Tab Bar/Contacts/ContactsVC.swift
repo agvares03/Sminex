@@ -72,7 +72,8 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
         let cell = ContactsCell.fromNib()
         cell?.display(data_[indexPath.row], delegate: self)
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        let isSupport = data_[indexPath.row].name?.contains(find: "оддержка") ?? false
+        return CGSize(width: view.frame.size.width, height: isSupport ? size.height + 5 : size.height - 18)
     }
     
     func phonePressed(_ phone: String) {
@@ -163,7 +164,7 @@ final class ContactsCell: UICollectionViewCell {
         desc.text  = item.description
         
         if item.name?.contains(find: "оддержка") ?? false {
-            sendBtnHeight.constant = 40
+            sendBtnHeight.constant = 45
         
         } else {
             sendBtnHeight.constant = 0

@@ -61,6 +61,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         navigationController?.navigationBar.isTranslucent   = true
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
+        navigationController?.navigationBar.barTintColor          = .white
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
     }
     
@@ -223,11 +224,23 @@ final class MenuCell: UICollectionViewCell {
     @IBOutlet private weak var icon:             UIImageView!
     @IBOutlet private weak var notification:     UILabel!
     @IBOutlet private weak var title:            UILabel!
+    @IBOutlet private weak var divider:          UILabel!
     @IBOutlet private weak var notificationView: UIView!
     
     func display(_ item: MenuCellData) {
         title.text = item.title
         icon.image = item.icon
+        
+        if item.title == "Показания счетчиков"
+            || item.title == "Услуги Службы комфорта"
+            || item.title == "Опросы"
+            || item.title == "Акции и предложения" {
+            
+            divider.isHidden = true
+        
+        } else {
+            divider.isHidden = true
+        }
         
         if item.notification != "" {
             notification.text = item.notification
