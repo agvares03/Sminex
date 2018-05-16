@@ -47,6 +47,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        collection.reloadData()
         navigationController?.isNavigationBarHidden = true
     }
     

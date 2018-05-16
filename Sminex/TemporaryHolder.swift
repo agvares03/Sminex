@@ -90,11 +90,14 @@ final class TemporaryHolder {
                 self.receiptsGroup.leave()
             }
             guard data != nil else { return }
-            self.receipts = AccountBillsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data ?? []
             
             #if DEBUG
             print(String(data: data!, encoding: .utf8) ?? "")
             #endif
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.receipts = AccountBillsData(json: json!)!.data ?? []
+            }
             
             }.resume()
     }
@@ -122,14 +125,16 @@ final class TemporaryHolder {
             print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
-            self.calcs = AccountCalculationsData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data?.reversed() ?? []
-            var currMonth = 0
-            self.filteredCalcs = self.calcs.filter {
-                if ($0.numMonthSet ?? 0) != currMonth {
-                    currMonth = ($0.numMonthSet ?? 0)
-                    return true
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.calcs = AccountCalculationsData(json: json!)!.data?.reversed() ?? []
+                var currMonth = 0
+                self.filteredCalcs = self.calcs.filter {
+                    if ($0.numMonthSet ?? 0) != currMonth {
+                        currMonth = ($0.numMonthSet ?? 0)
+                        return true
+                    }
+                    return false
                 }
-                return false
             }
             
             }.resume()

@@ -410,6 +410,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          status: row.status ?? "",
                                                          images: [],
                                                          imagesUrl: images)
+                    
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
                         

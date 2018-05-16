@@ -37,6 +37,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // Какая регистрация будет
     open var roleReg_ = ""
+    open var isFromSettings_ = false
     
     private let textForgot      = ""
     private var responseString  = ""
@@ -207,15 +208,16 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    private func enter() {
+    func enter(login: String? = nil, pass: String? = nil) {
         
-        startIndicator()
-        
+        if !isFromSettings_ {
+            startIndicator()
+        }
         // Авторизация пользователя
-        let txtLogin = edLogin.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
-        let txtPass = edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtLogin = login == nil ? edLogin.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let txtPass = pass == nil ? edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)) + "&addBcGuid=1")!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -224,11 +226,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             if error != nil {
                 DispatchQueue.main.sync {
                     
-                    self.stopIndicator()
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
+                    if !self.isFromSettings_ {
+                        self.stopIndicator()
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
                 return
             }
@@ -247,23 +251,23 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private func choice() {
         
         DispatchQueue.main.async {
+            if !self.isFromSettings_ {
+                self.stopIndicator()
+            }
             
             if self.responseString == "1" {
-                
-                self.stopIndicator()
                 let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
                 
             } else if self.responseString == "2" || self.responseString.contains("error") {
-                
-                self.stopIndicator()
                 self.errorLabel.isHidden = false
                 
             } else {
-                
-                self.errorLabel.isHidden = true
+                if !self.isFromSettings_ {
+                    self.errorLabel.isHidden = true
+                }
                 
                 // авторизация на сервере - получение данных пользователя
                 var answer = self.responseString.components(separatedBy: ";")
@@ -312,31 +316,33 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                     db.del_db(table_name: "Ls")
                     db.parse_Houses()
                     
-                    self.performSegue(withIdentifier: Segues.fromViewController.toAppsCons, sender: self)
+                    if !self.isFromSettings_ {
+                        self.performSegue(withIdentifier: Segues.fromViewController.toAppsCons, sender: self)
+                    }
                     
                 } else {                         // пользователь
                     
-                    // ПОКАЗАНИЯ СЧЕТЧИКОВ
-                    // Удалим данные из базы данных
-                    db.del_db(table_name: "Counters")
-                    // Получим данные в базу данных
-                    db.parse_Countrers(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", history: answer[7])
-                    
-                    // ВЕДОМОСТЬ (Пока данные тестовые)
-                    // Удалим данные из базы данных
-                    db.del_db(table_name: "Saldo")
-                    // Получим данные в базу данных
-                    db.parse_OSV(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "")
-                    
-                    // ЗАЯВКИ С КОММЕНТАРИЯМИ
-                    db.del_db(table_name: "Applications")
-                    db.del_db(table_name: "Comments")
-                    db.parse_Apps(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", isCons: "0")
-                    
-                    self.performSegue(withIdentifier: Segues.fromViewController.toAppsUser, sender: self)
-                    
+                    if !self.isFromSettings_ {
+                        // ПОКАЗАНИЯ СЧЕТЧИКОВ
+                        // Удалим данные из базы данных
+                        db.del_db(table_name: "Counters")
+                        // Получим данные в базу данных
+                        db.parse_Countrers(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", history: answer[7])
+                        
+                        // ВЕДОМОСТЬ (Пока данные тестовые)
+                        // Удалим данные из базы данных
+                        db.del_db(table_name: "Saldo")
+                        // Получим данные в базу данных
+                        db.parse_OSV(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "")
+                        
+                        // ЗАЯВКИ С КОММЕНТАРИЯМИ
+                        db.del_db(table_name: "Applications")
+                        db.del_db(table_name: "Comments")
+                        db.parse_Apps(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", isCons: "0")
+                        
+                        self.performSegue(withIdentifier: Segues.fromViewController.toAppsUser, sender: self)
+                    }
                 }
-                self.stopIndicator()
             }
         }
     }

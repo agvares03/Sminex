@@ -30,6 +30,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBOutlet private weak var notifications:   	UILabel!
     @IBOutlet private weak var changePasswordTop:   UILabel!
     @IBOutlet private weak var changePasswordBtm:   UILabel!
+    @IBOutlet private weak var lisevoyLabel:        UILabel!
+    @IBOutlet private weak var phoneLabel:          UILabel!
+    @IBOutlet private weak var contactLabel:        UILabel!
+    @IBOutlet private weak var emailLabel:          UILabel!
     
     @IBAction private func imageViewPressed(_ sender: UIButton) {
         
@@ -141,6 +145,11 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
+        
+        contactNumber.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        privNumber.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        email.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        lsLabel.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -209,14 +218,15 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             data, error, responce in
             
             defer {
-                DispatchQueue.main.sync {
-                    #if DEBUG
-                        print(String(data: data!, encoding: .utf8)!)
-                    #endif
+                DispatchQueue.main.async {
                     self.stopAnimator()
                 }
             }
             guard data != nil else { return }
+            
+            #if DEBUG
+                print(String(data: data!, encoding: .utf8)!)
+            #endif
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
@@ -233,6 +243,11 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
                 }
+            
+            } else {
+                let vc = ViewController()
+                vc.isFromSettings_ = true
+                vc.enter(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pass") ?? "")
             }
         
         }.resume()
@@ -283,5 +298,34 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         loader.stopAnimating()
         loader.isHidden = true
         saveButton.isHidden = false
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        
+        if contactNumber.text == "" {
+            contactLabel.isHidden = true
+            
+        } else {
+            contactLabel.isHidden = false
+        }
+        
+        if privNumber.text == "" {
+            phoneLabel.isHidden = true
+            
+        } else {
+            phoneLabel.isHidden = false
+        }
+        if lsLabel.text == "" {
+            lisevoyLabel.isHidden = true
+            
+        } else {
+            lisevoyLabel.isHidden = false
+        }
+        if email.text == "" {
+            emailLabel.isHidden = true
+            
+        } else {
+            emailLabel.isHidden = false
+        }
     }
 }
