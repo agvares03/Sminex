@@ -1029,15 +1029,14 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vOE-Qv-UR7">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Описание" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tx2-bd-3wj">
+                                    <textView opaque="NO" contentMode="scaleToFill" text="Описание" translatesAutoresizingMaskIntoConstraints="NO" id="Tx2-bd-3wj">
                                         <rect key="frame" x="8" y="8" width="304.5" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="9Gl-av-UiX"/>
                                         </constraints>
-                                        <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                    </textField>
+                                    </textView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oby-Mm-9qZ">
                                         <rect key="frame" x="8" y="100.5" width="304.5" height="1"/>
                                         <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1188,6 +1187,7 @@
                         <outlet property="btnBottom" destination="SJt-lL-7yc" id="oBd-tF-R0a"/>
                         <outlet property="btnConst" destination="UUO-su-UGD" id="XYT-ri-H1u"/>
                         <outlet property="dateBtn" destination="A8Q-cY-OWT" id="Fx9-Cf-hDV"/>
+                        <outlet property="edConst" destination="9Gl-av-UiX" id="hmA-8z-22N"/>
                         <outlet property="edProblem" destination="Tx2-bd-3wj" id="XWE-zV-Lur"/>
                         <outlet property="imageConst" destination="YMr-FT-lxf" id="mw0-DO-nC4"/>
                         <outlet property="images" destination="5s6-mf-vci" id="ZFI-um-h5Y"/>

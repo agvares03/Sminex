@@ -298,6 +298,7 @@ struct MeterValue {
     let valueInput: 	    String?
     let previousPeriod:     String?
     let period:             String?
+    let guid:               String?
     
     init(_ row: XML.Accessor, period: String) {
         
@@ -314,6 +315,7 @@ struct MeterValue {
         value               = row.attributes["Value"]
         valueInput          = row.attributes["ValueInput"]
         previousPeriod      = row.attributes["PreviousPeriod"]
+        guid                = row.attributes["GUID"]
     }
 }
 

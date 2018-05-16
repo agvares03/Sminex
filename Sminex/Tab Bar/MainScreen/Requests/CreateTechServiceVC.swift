@@ -9,16 +9,17 @@
 import UIKit
 import Alamofire
 
-final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
+    @IBOutlet private weak var edConst:     NSLayoutConstraint!
     @IBOutlet private weak var btnBottom:   NSLayoutConstraint!
     @IBOutlet private weak var btnConst:    NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var picker:      UIDatePicker!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var images:      UIScrollView!
-    @IBOutlet private weak var edProblem:   UITextField!
+    @IBOutlet private weak var edProblem:   UITextView!
     @IBOutlet private weak var dateBtn:     UIButton!
     @IBOutlet private weak var sendBtn:     UIButton!
     @IBOutlet private weak var pickerLine:  UILabel!
@@ -105,21 +106,15 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         
         viewTapped(nil)
-        if edProblem.text == "" {
-            edProblem.placeholder = "Введите текст"
-        
-        } else {
-            
-            startAnimator()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
-            data = ServiceHeaderData(icon: UIImage(named: "account")!,
-                                     problem: edProblem.text!,
-                                     date: dateFormatter.string(from: picker.date),
-                                     status: "В ОБРАБОТКЕ",
-                                     images: imagesArr)
-            uploadRequest()
-        }
+        startAnimator()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        data = ServiceHeaderData(icon: UIImage(named: "account")!,
+                                 problem: edProblem.text!,
+                                 date: dateFormatter.string(from: picker.date),
+                                 status: "В ОБРАБОТКЕ",
+                                 images: imagesArr)
+        uploadRequest()
     }
     
     open var delegate: AppsUserDelegate?
@@ -166,6 +161,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if !isNeedToScroll() {
             btnConst.constant = getConstant()
         }
+        
+        edProblem.text = "Описание"
+        edProblem.textColor = UIColor.lightGray
+        edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -187,11 +186,11 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 200.0)
         if isNeedToScroll() {
             if imagesArr.count != 0 {
-                btnConst.constant  = 35
+                btnConst.constant  = 25
                 btnBottom.constant = 215
             
             } else {
-                btnConst.constant  = -15
+                btnConst.constant  = -25
                 btnBottom.constant = 240
             }
         
@@ -321,7 +320,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
         let comm = edProblem.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=&responsiblePerson=&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(String(describing: data!.date).stringByAddingPercentEncodingForRFC3986()!)&dateServiceDesired=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&clearAfterWork="
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonesum=&responsiblePerson=&email=&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork="
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -436,19 +435,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         }
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        if edProblem.text == "" {
-            sendBtn.isEnabled   = false
-            sendBtn.alpha       = 0.5
-        
-        } else {
-            sendBtn.isEnabled   = true
-            sendBtn.alpha       = 1
-        }
-        return true
-    }
-    
     private func getConstant() -> CGFloat {
         
         if !isXDevice() {
@@ -457,4 +443,53 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             return (view.frame.size.height - btnConstant)
         }
     }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        if text == "\n" && (textView.text as NSString).replacingCharacters(in: range, with: text).components(separatedBy: .newlines).count < 3 {
+            edConst.constant += 16
+        }
+        
+        let currentText:String = textView.text
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
+        
+        if updatedText.isEmpty {
+            textView.text = "Placeholder"
+            textView.textColor = UIColor.lightGray
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+        
+        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+            textView.textColor = UIColor.black
+            textView.text = text
+        
+        } else {
+            return true
+        }
+        return false
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        
+        if edProblem.text == "" || edProblem.text.count == 1 {
+            sendBtn.isEnabled   = false
+            sendBtn.alpha       = 0.5
+            
+        } else {
+            sendBtn.isEnabled   = true
+            sendBtn.alpha       = 1
+        }
+        
+        if (textView.text as NSString).components(separatedBy: .newlines).count < 3 {
+            edConst.constant = textView.contentSize.height
+        }
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if self.view.window != nil {
+            if textView.textColor == UIColor.lightGray {
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
+        }
+    }
+    
 }

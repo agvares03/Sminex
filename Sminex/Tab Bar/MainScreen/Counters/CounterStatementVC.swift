@@ -139,7 +139,7 @@ final class CounterStatementVC: UIViewController {
             let edLogin = UserDefaults.standard.string(forKey: "login") ?? ""
             let edPass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
             
-            var strNumber = value_?.meterUniqueNum ?? ""
+            var strNumber = value_?.guid ?? ""
             
             let urlPath = Server.SERVER + Server.ADD_METER
                 + "login=" + edLogin.stringByAddingPercentEncodingForRFC3986()!

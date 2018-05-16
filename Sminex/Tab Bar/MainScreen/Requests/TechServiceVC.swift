@@ -51,10 +51,10 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             uploadPhoto(img!, isSplit: true)
             return
             
-        } else if img == nil && commentField.text != nil {
+        } else if img == nil && commentField.text != "" {
             sendComment()
             return
-        } else if img != nil && commentField.text == nil {
+        } else if img != nil && commentField.text == "" {
             uploadPhoto(img!)
             return
         }
