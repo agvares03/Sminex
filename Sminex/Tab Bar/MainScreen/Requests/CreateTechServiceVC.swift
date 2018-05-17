@@ -325,8 +325,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
-        print(request.url)
-        
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in
             

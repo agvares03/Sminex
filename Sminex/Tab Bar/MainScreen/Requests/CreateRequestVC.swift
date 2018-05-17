@@ -333,8 +333,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
-        print(request.url)
-        
         var requestBody: [String:[Any]] = ["persons":[], "autos":[]]
         let personsArr = edFio.text?.split(separator: ",")
         let autosArr = gosNumber.text?.split(separator: ",")
