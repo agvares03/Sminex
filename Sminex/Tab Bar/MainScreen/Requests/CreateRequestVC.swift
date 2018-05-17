@@ -343,7 +343,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             requestBody["autos"]?.append(["Mark":"", "Color":"", "Number":$0, "Parking":""])
         }
         
-        request.httpBody = Data(try! JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted))
+        if let json = try? JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted) {
+            request.httpBody = Data(json)
+        }
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in

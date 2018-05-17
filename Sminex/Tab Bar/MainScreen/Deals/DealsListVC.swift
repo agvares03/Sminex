@@ -95,7 +95,9 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
                 return
             }
             
-            self.data_ = (DealsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data)!
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.data_ = (DealsDataJson(json: json!)?.data)!
+            }
             
             #if DEBUG
 //                print(String(data: data!, encoding: .utf8) ?? "")

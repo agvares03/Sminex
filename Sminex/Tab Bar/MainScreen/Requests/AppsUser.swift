@@ -178,7 +178,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.present(alert, animated: true, completion: nil)
                     
                 } else {
-                    TemporaryHolder.instance.choise(try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)
+                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                        TemporaryHolder.instance.choise(json!)
+                    }
                 }
             }
             }.resume()
@@ -231,8 +233,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.rowComms[row.attributes["ID"]!]?.append( RequestComment(row: $0) )
             }
             
-            row["Persons"].forEach {
-                self.rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
+            row["Persons"].all?.forEach {
+                $0.childElements.forEach {
+                    self.rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
+                }
             }
             
             row["Autos"].all?.forEach {
@@ -255,7 +259,19 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
             let isPerson = curr.name?.contains(find: "ропуск") ?? false
             
-            let persons = curr.responsiblePerson ?? ""
+            var persons = curr.responsiblePerson ?? ""
+            
+            if persons == "" {
+                self.rowPersons[curr.id ?? ""]?.forEach {
+                    if $0.id == self.rowPersons[curr.id ?? ""]?.last?.id {
+                        persons += ($0.fio ?? "") + " "
+                        
+                    } else {
+                        persons += ($0.fio ?? "") + ", "
+                    }
+                }
+            }
+            
             let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
             newData.append( AppsUserCellData(title: curr.name ?? "",
                                              desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
@@ -330,8 +346,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 var type = self.data[indexPath.row].type
                 
-                print(type)
-                
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
@@ -341,7 +355,19 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 if type.contains(find: "ропуск") {
                     self.typeName = type
                     let row = self.rows[self.data[indexPath.row].id]!
-                    let persons = row.responsiblePerson ?? ""
+                    var persons = row.responsiblePerson ?? ""
+                    
+                    if persons == "" {
+                        self.rowPersons[row.id ?? ""]?.forEach {
+                            if $0.id == self.rowPersons[row.id ?? ""]?.last?.id {
+                                persons += ($0.fio ?? "") + " "
+                            
+                            } else {
+                                persons += ($0.fio ?? "") + ", "
+                            }
+                        }
+                    }
+                    
                     var auto = ""
                     self.rowAutos[row.id!]?.forEach {
                         if $0.number != "" && $0.number != nil {
@@ -741,7 +767,7 @@ struct RequestPerson {
     let fio:            String?
     let passportData:   String?
     
-    init(row: XML.Accessor) {
+    init(row: XML.Element) {
         
         id = row.attributes["ID"]
         fio = row.attributes["FIO"]

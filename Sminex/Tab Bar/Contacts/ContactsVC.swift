@@ -165,6 +165,7 @@ final class ContactsCell: UICollectionViewCell {
         
         if item.name?.contains(find: "оддержка") ?? false {
             sendBtnHeight.constant = 45
+            item.email = ""
         
         } else {
             sendBtnHeight.constant = 0
@@ -244,7 +245,7 @@ final class ContactsJson: JSONDecodable {
     let name: String?
     let description: String?
     let phone: String?
-    let email: String?
+    var email: String?
     
     init?(json: JSON) {
         description = "Description" <~~ json

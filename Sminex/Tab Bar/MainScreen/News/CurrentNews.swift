@@ -39,7 +39,6 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         webView.loadHTMLString(data_?.text ?? "", baseURL: nil)
         
         titleLabel.text = data_?.header
-        print(data_?.dateStart)
         if data_?.dateStart != "" {
             let df = DateFormatter()
             df.dateFormat = "dd.MM.yyyy hh:mm:ss"
@@ -58,5 +57,13 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
     func webViewDidFinishLoad(_ webView: UIWebView) {
         webViewHeight.constant     = webView.scrollView.contentSize.height
         scroll.contentSize.height += webView.scrollView.contentSize.height
+    }
+    
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if navigationType == UIWebViewNavigationType.linkClicked {
+            UIApplication.shared.openURL(request.url!)
+            return false
+        }
+        return true
     }
 }

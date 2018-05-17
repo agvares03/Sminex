@@ -250,7 +250,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 return
             }
             
-            self.debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.debt = AccountDebtData(json: json!)?.data
+            }
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8)!)

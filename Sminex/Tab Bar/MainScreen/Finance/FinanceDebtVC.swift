@@ -184,7 +184,9 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                 return
             }
             
-            self.receipts = ReceiptsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.receipts = ReceiptsDataJson(json: json!)?.data
+            }
             
             #if DEBUG
                 print(String.init(data: data!, encoding: .utf8) ?? "")
@@ -201,6 +203,8 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         filesGroup.enter()
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -210,11 +214,14 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
             
             guard data != nil else { return }
-            self.files = RecieptFilesDataJson.init(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data
             
             #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
+            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.files = RecieptFilesDataJson.init(json: json!)?.data
+            }
         
             }.resume()
     }

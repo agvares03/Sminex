@@ -472,7 +472,9 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                 return
             }
             
-            TemporaryHolder.instance.contactsList = ContactsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                TemporaryHolder.instance.contactsList = ContactsDataJson(json: json!)!.data!
+            }
             
             #if DEBUG
             print(String(data: data!, encoding: .utf8) ?? "")

@@ -244,7 +244,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 cell?.display(requestData)
             }
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width - 32, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height + 3)
         
         } else if title == "К оплате" {
             return CGSize(width: view.frame.size.width - 32, height: 110.0)
@@ -401,7 +401,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         
         } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
-            tappedNews = self.filteredNews[indexPath.row]
+            tappedNews = self.filteredNews[safe: indexPath.row]
             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
         
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
@@ -516,32 +516,46 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     row["Comm"].forEach {
                         rowComms[row.attributes["ID"]!]?.append( RequestComment(row: $0) )
                     }
-                    row["Persons"].forEach {
-                        rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
+                    row["Persons"].all?.forEach {
+                        $0.childElements.forEach {
+                            rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
+                        }
                     }
                 }
                 
                 var commentCount = 0
-                rows.forEach {
-                    let isAnswered = (rowComms[$0.id!]?.count ?? 0) <= 0 ? false : true
+                rows.forEach { row in
+                    let isAnswered = (rowComms[row.id!]?.count ?? 0) <= 0 ? false : true
                     
-                    let lastComm = (rowComms[$0.id!]?.count ?? 0) <= 0 ? nil : rowComms[$0.id!]?[(rowComms[$0.id!]?.count ?? 1) - 1]
+                    let lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1
                     }
-                    let icon = !($0.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
-                    let isPerson = $0.name?.contains(find: "ропуск") ?? false
+                    let icon = !(row.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                    let isPerson = row.name?.contains(find: "ропуск") ?? false
                     
-                    let persons = $0.responsiblePerson ?? ""
-                    let descText = isPerson ? (persons == "" ? "Не указано" : persons) : $0.text ?? ""
+                    var persons = row.responsiblePerson ?? ""
                     
-                    returnArr.append( RequestCellData(title: $0.name ?? "",
-                                                      desc: rowComms[$0.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                    if persons == "" {
+                        rowPersons[row.id ?? ""]?.forEach { person in
+                            if person.id == rowPersons[row.id ?? ""]?.last?.id {
+                                persons += (person.fio ?? "") + " "
+                                
+                            } else {
+                                persons += (person.fio ?? "") + ", "
+                            }
+                        }
+                    }
+                    
+                    let descText = isPerson ? (persons == "" ? "Не указано" : persons) : row.text ?? ""
+                    
+                    returnArr.append( RequestCellData(title: row.name ?? "",
+                                                      desc: rowComms[row.id!]?.count == 0 ? descText : lastComm?.text ?? "",
                                                       icon: icon,
-                                                      date: $0.updateDate ?? "",
-                                                      status: $0.status ?? "",
+                                                      date: row.updateDate ?? "",
+                                                      status: row.status ?? "",
                                                       isBack: isAnswered,
-                                                      id: $0.id ?? "") )
+                                                      id: row.id ?? "") )
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
             }.resume()
@@ -636,7 +650,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             
-            self.deals = (DealsDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data)!
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.deals = (DealsDataJson(json: json!)?.data)!
+            }
             var imgs: [UIImage] = []
             
             self.deals.forEach {
@@ -684,7 +700,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             
-            self.debt = AccountDebtData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data!
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.debt = AccountDebtData(json: json!)?.data!
+            }
             var datePay = self.debt?.datePay
             if (datePay?.count ?? 0) > 9 {
                 datePay?.removeLast(9)
@@ -717,8 +735,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
-                    let news = NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!
-                    TemporaryHolder.instance.news = news
+                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                        let news = NewsJsonData(json: json!)!.data!
+                        TemporaryHolder.instance.news = news
+                    }
                     UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
@@ -773,7 +793,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                 
-                TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
+                }
                 UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                 TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                 UserDefaults.standard.synchronize()
@@ -1169,7 +1191,7 @@ final class RequestCell: UICollectionViewCell {
             backTop.constant    = 0
             backBottom.constant = 0
             descTop.constant    = 2
-            descBottom.constant = 8
+            descBottom.constant = 12
             back.isHidden = true
         }
 

@@ -576,20 +576,20 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W6K-BX-A4o">
-                                                    <rect key="frame" x="16" y="130.5" width="14" height="11"/>
+                                                    <rect key="frame" x="16" y="130.5" width="14" height="14"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="11" id="jMk-i8-2ze"/>
+                                                        <constraint firstAttribute="height" constant="14" id="jMk-i8-2ze"/>
                                                         <constraint firstAttribute="width" constant="14" id="zMB-MR-XDA"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tbM-dO-Uwy">
-                                                    <rect key="frame" x="36" y="128.5" width="89.5" height="16"/>
+                                                    <rect key="frame" x="36" y="130" width="89.5" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Сегодня" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wdo-oe-Mde">
-                                                    <rect key="frame" x="241" y="127" width="60" height="18"/>
+                                                    <rect key="frame" x="241" y="128.5" width="60" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -618,7 +618,7 @@
                                             <constraint firstItem="AeY-jT-Lvb" firstAttribute="leading" secondItem="9Bs-S2-7Fp" secondAttribute="leading" constant="5" id="SJF-5z-MWN"/>
                                             <constraint firstItem="AeY-jT-Lvb" firstAttribute="top" secondItem="9Bs-S2-7Fp" secondAttribute="bottom" constant="12" id="VND-KF-LzX"/>
                                             <constraint firstItem="9yD-HI-nwM" firstAttribute="bottom" secondItem="AeY-jT-Lvb" secondAttribute="bottom" constant="6" id="ZuP-8h-obf"/>
-                                            <constraint firstItem="4tp-e2-vQ0" firstAttribute="top" relation="greaterThanOrEqual" secondItem="W6K-BX-A4o" secondAttribute="bottom" priority="500" constant="19" id="boT-pQ-Xgd"/>
+                                            <constraint firstItem="4tp-e2-vQ0" firstAttribute="top" relation="greaterThanOrEqual" secondItem="W6K-BX-A4o" secondAttribute="bottom" priority="1" constant="3" id="boT-pQ-Xgd"/>
                                             <constraint firstItem="4tp-e2-vQ0" firstAttribute="trailing" secondItem="Wdo-oe-Mde" secondAttribute="trailing" id="cdL-aV-YzD"/>
                                             <constraint firstItem="Wdo-oe-Mde" firstAttribute="trailing" secondItem="9Bs-S2-7Fp" secondAttribute="trailing" id="fRb-0H-eNd"/>
                                             <constraint firstAttribute="bottom" secondItem="4tp-e2-vQ0" secondAttribute="bottom" id="hZH-Ic-B6O"/>
@@ -817,6 +817,9 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="175" id="YKF-Mc-qiO"/>
                                                     </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                         </view>
@@ -1318,7 +1321,7 @@
                 <viewControllerPlaceholder storyboardName="Deals" id="W5r-NX-ZHd" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YSY-Rc-Vdl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2670" y="-1054"/>
+            <point key="canvasLocation" x="2736" y="-1005"/>
         </scene>
         <!--admission-->
         <scene sceneID="4W4-P6-xRW">

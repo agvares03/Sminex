@@ -113,7 +113,9 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                 }
                 return
             }
-            self.data_.append(contentsOf: NewsJsonData(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)!.data!)
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.data_.append(contentsOf: NewsJsonData(json: json!)!.data!)
+            }
             
             if self.data_.count != 0 {
                 DispatchQueue.global(qos: .background).async {

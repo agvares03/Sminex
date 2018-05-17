@@ -215,7 +215,7 @@ final class AccountHeader: UICollectionReusableView {
                 
                 } else {
                     DispatchQueue.main.async {
-                        self.bcImageView.image = UIImage(named: "bcImg")
+//                        self.bcImageView.image = UIImage(named: "bcImg")
                     }
                 }
             }

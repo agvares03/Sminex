@@ -335,6 +335,8 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -345,6 +347,10 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
             }
             
             guard data != nil else { return }
+            
+            #if DEBUG
+                print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
@@ -361,10 +367,6 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                     self.present(alert, animated: true, completion: nil)
                 }
             }
-            
-            #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
             
         }.resume()
     }

@@ -81,7 +81,9 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
                 return
             }
             
-            self.data = ServicesUKDataJson(json: try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON)?.data ?? []
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.data = ServicesUKDataJson(json: json!)?.data ?? []
+            }
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8) ?? "")
