@@ -724,6 +724,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global(qos: .userInitiated).async {
             let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
             
+            print("newsIdId =" + (UserDefaults.standard.string(forKey: "newsLastId") ?? ""))
+            
             guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
                 let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
                 
@@ -736,8 +738,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                        let news = NewsJsonData(json: json!)!.data!
-                        TemporaryHolder.instance.news = news
+                        TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
                     }
                     UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)

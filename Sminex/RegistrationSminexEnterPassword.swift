@@ -343,6 +343,9 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             
         } else {
             
+            UserDefaults.standard.setValue(passTextField.text ?? "", forKey: "pass")
+            UserDefaults.standard.synchronize()
+            
             // авторизация на сервере - получение данных пользователя
             var answer = responseString.components(separatedBy: ";")
             
@@ -485,6 +488,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         view.endEditing(true)
+        UserDefaults.standard.synchronize()
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         getContacts(login: login, pwd: getHash(pass: login, salt: getSalt(login: login)))
         

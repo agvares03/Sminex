@@ -189,7 +189,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
             
             #if DEBUG
-                print(String.init(data: data!, encoding: .utf8) ?? "")
+                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
             #endif
         
         }.resume()
@@ -202,8 +202,6 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
         request.httpMethod = "GET"
-        
-        print(request.url)
         
         filesGroup.enter()
         URLSession.shared.dataTask(with: request) {

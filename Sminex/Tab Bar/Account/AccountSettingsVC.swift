@@ -198,16 +198,16 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     private func editAccountInfo() {
         var answers = isReg_ ? responceString_.split(separator: ";") : [""]
         
-        let defPhone = isReg_ ? String(answers[answers.count - 2]) : (UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986() ?? "")
-        let defMail  = isReg_ ? String(answers[3]) : (UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986() ?? "")
+        let defPhone = isReg_ ? String(answers[safe: 14] ?? "") : (UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986() ?? "")
+        let defMail  = isReg_ ? String(answers[safe: 3]  ?? "") : (UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986() ?? "")
         let phone    = privNumber.text?.stringByAddingPercentEncodingForRFC3986() ?? defPhone
         let email   = self.email.text?.stringByAddingPercentEncodingForRFC3986() ?? defMail
-        let area    = isReg_ ? String(answers[12]) : (UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? "")
-        let rooms   = isReg_ ? String(answers[11]) : (UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? "")
-        let total   = isReg_ ? String(answers[13]) : (UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? "")
-        let adress  = isReg_ ? String(answers[10]) : (UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? "")
+        let area    = isReg_ ? String(answers[safe: 12] ?? "") : (UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? "")
+        let rooms   = isReg_ ? String(answers[safe: 11] ?? "") : (UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? "")
+        let total   = isReg_ ? String(answers[safe: 13] ?? "") : (UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? "")
+        let adress  = isReg_ ? String(answers[safe: 10] ?? "") : (UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? "")
         let login   = isReg_ ? login_ : (UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? "")
-        let defName = isReg_ ? String(answers[6]) : (UserDefaults.standard.string(forKey: "name") ?? "")
+        let defName = isReg_ ? String(answers[safe: 6] ?? "") : (UserDefaults.standard.string(forKey: "name") ?? "")
         let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (defName.stringByAddingPercentEncodingForRFC3986() ?? "")
         let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
         
@@ -240,7 +240,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             }
             
             if self.isReg_ {
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
                 }
