@@ -175,7 +175,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @objc func keyboardWillShow(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant = getConst() - 215
+            sprtTop.constant = getConst() - 220
 
         } else {
             sprtTop.constant = getConst() - 100
