@@ -454,7 +454,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         
         if updatedText.isEmpty {
-            textView.text = "Placeholder"
+            textView.text = "Описание"
             textView.textColor = UIColor.lightGray
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
         

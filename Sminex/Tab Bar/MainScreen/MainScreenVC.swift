@@ -737,7 +737,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                        TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
                         TemporaryHolder.instance.news = NewsJsonData(json: json!)!.data!
                     }
                     UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
