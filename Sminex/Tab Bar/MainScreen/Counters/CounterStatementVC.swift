@@ -55,15 +55,22 @@ final class CounterStatementVC: UIViewController {
         count.backColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
         count.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         
-        if value_?.fractionalNumber?.contains(find: "alse") ?? true {
-            count.numberOfDigits = 5
+        if value_?.resource?.contains(find: "лектроэнергия") ?? false {
+            count.isEnergy = true
+            count.numberOfDigits = 6
             count.acceptableCharacters = "1234567890"
         
         } else {
-            count.acceptableCharacters = "1234567890."
-            count.numberOfDigits = 8
-            descLabel1.isHidden = true
-            goButtonConst.constant = 20
+            if value_?.fractionalNumber?.contains(find: "alse") ?? true {
+                count.numberOfDigits = 5
+                count.acceptableCharacters = "1234567890"
+                
+            } else {
+                count.acceptableCharacters = "1234567890."
+                count.numberOfDigits = 8
+                descLabel1.isHidden = true
+                goButtonConst.constant = 20
+            }
         }
         goButton.isEnabled = false
         goButton.alpha     = 0.5

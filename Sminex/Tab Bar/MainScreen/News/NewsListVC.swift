@@ -85,7 +85,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
         let lastId = TemporaryHolder.instance.newsLastId
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + "&lastId=" + lastId)!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -104,7 +104,6 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
             }
             
             guard data != nil else { return }
-            
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )

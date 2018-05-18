@@ -25,6 +25,8 @@ open class DigitInputView: UIView {
         
     }
     
+    open var isEnergy: Bool = false
+    
     /**
      The color of the line under each digit
      */
@@ -343,11 +345,19 @@ extension DigitInputView: UITextFieldDelegate {
             return false
         }
         
-        if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 7 {
-            return false
-            
-        } else if !(acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 5 {
-            return false
+        if !isEnergy {
+        
+            if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 7 {
+                return false
+                
+            } else if !(acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 5 {
+                return false
+            }
+        
+        } else {
+            if (textField.text?.length ?? 0) >= 6 {
+                return false
+            }
         }
         
         if !(acceptableCharacters?.contains(find: string) ?? true) {
