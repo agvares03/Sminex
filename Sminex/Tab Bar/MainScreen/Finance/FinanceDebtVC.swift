@@ -203,6 +203,8 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         filesGroup.enter()
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -239,6 +241,16 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
             
             guard data != nil else { return }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка", message: "Файл отсутсвует на сервере", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
             if file?.type == "png"
                 || file?.type == "jpeg"
                 || file?.type == "jpg"
