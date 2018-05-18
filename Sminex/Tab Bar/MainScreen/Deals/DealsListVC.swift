@@ -134,9 +134,11 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
 
 final class DealsListCell: UICollectionViewCell {
     
-    @IBOutlet private weak var image:   UIImageView!
-    @IBOutlet private weak var title:   UILabel!
-    @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet         weak var imageHeight: NSLayoutConstraint!
+    @IBOutlet         weak var imageWidth:  NSLayoutConstraint!
+    @IBOutlet private weak var image:       UIImageView!
+    @IBOutlet private weak var title:       UILabel!
+    @IBOutlet private weak var desc:        UILabel!
     
     fileprivate func display(_ item: DealsJson) {
         
@@ -155,6 +157,21 @@ final class DealsListCell: UICollectionViewCell {
         }
         cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
         cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
+        
+        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+        if (300.0...350.0).contains(points) {
+            cell?.imageWidth.constant  = 288
+            cell?.imageHeight.constant = 144
+            
+        } else if (350.0...400.0).contains(points) {
+            cell?.imageWidth.constant  = 343
+            cell?.imageHeight.constant = 170
+            
+        } else {
+            cell?.imageWidth.constant  = 382
+            cell?.imageHeight.constant = 191
+        }
+
         return cell
     }
 }

@@ -49,7 +49,7 @@ final class FinancePayAcceptVC: UIViewController {
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         
         if accountData_ == nil {
-            sumTextField.text = String(format: "%.1f", billsData_?.sum ?? 0.0)
+            sumTextField.text = String(format: "%.1f", (billsData_?.sum ?? 0.0) - (billsData_?.payment_sum ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
             var date = billsData_?.datePay
             if (date?.count ?? 0) > 9 {
@@ -58,7 +58,7 @@ final class FinancePayAcceptVC: UIViewController {
             descLabel.text = "Оплата счета: \(billsData_?.number ?? "") от \(date ?? "")"
         
         } else {
-            sumTextField.text = String(format: "%.1f", accountData_?.sumPay ?? 0.0)
+            sumTextField.text = String(format: "%.1f", (accountData_?.sumPay ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета"
             descLabel.isHidden = true
             fieldTop.constant = 16

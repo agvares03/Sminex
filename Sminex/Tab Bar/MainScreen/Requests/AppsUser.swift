@@ -222,115 +222,123 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         let row = requests["Row"]
         self.rows.removeAll()
         
-        row.forEach { row in
+        DispatchQueue.global(qos: .userInitiated).async {
             
-            self.rows[row.attributes["ID"]!] = Request(row: row)
-            self.rowComms[row.attributes["ID"]!] = []
-            self.rowPersons[row.attributes["ID"]!] = []
-            self.rowAutos[row.attributes["ID"]!] = []
-            
-            row["Comm"].forEach {
-                self.rowComms[row.attributes["ID"]!]?.append( RequestComment(row: $0) )
-            }
-            
-            row["Persons"].all?.forEach {
-                $0.childElements.forEach {
-                    self.rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
+            row.forEach { row in
+                
+                self.rows[row.attributes["ID"]!] = Request(row: row)
+                self.rowComms[row.attributes["ID"]!] = []
+                self.rowPersons[row.attributes["ID"]!] = []
+                self.rowAutos[row.attributes["ID"]!] = []
+                
+                row["Comm"].forEach {
+                    self.rowComms[row.attributes["ID"]!]?.append( RequestComment(row: $0) )
                 }
-            }
-            
-            row["Autos"].all?.forEach {
-                $0.childElements.forEach {
-                    self.rowAutos[row.attributes["ID"]!]?.append( RequestAuto(row: $0) )
-                }
-            }
-            
-            row["File"].forEach {
-                self.rowFiles.append( RequestFile(row: $0) )
-            }
-        }
-        
-        var newData: [AppsUserCellData] = []
-        self.rows.forEach { _, curr in
-            
-            let isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
-            
-            let lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
-            let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
-            let isPerson = curr.name?.contains(find: "ропуск") ?? false
-            
-            var persons = curr.responsiblePerson ?? ""
-            
-            if persons == "" {
-                self.rowPersons[curr.id ?? ""]?.forEach {
-                    if $0.id == self.rowPersons[curr.id ?? ""]?.last?.id {
-                        persons += ($0.fio ?? "") + " "
-                        
-                    } else {
-                        persons += ($0.fio ?? "") + ", "
+                
+                row["Persons"].all?.forEach {
+                    $0.childElements.forEach {
+                        self.rowPersons[row.attributes["ID"]!]?.append( RequestPerson(row: $0)  )
                     }
                 }
+                
+                row["Autos"].all?.forEach {
+                    $0.childElements.forEach {
+                        self.rowAutos[row.attributes["ID"]!]?.append( RequestAuto(row: $0) )
+                    }
+                }
+                
+                row["File"].forEach {
+                    self.rowFiles.append( RequestFile(row: $0) )
+                }
             }
             
-            let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
-            newData.append( AppsUserCellData(title: curr.name ?? "",
-                                             desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
-                                             icon: icon,
-                                             status: curr.status ?? "",
-                                             date: curr.updateDate ?? "",
-                                             isBack: isAnswered,
-                                             type: curr.idType ?? "",
-                                             id: curr.id ?? "",
-                                             updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                             stickTitle: isAnswered ? descText : ""))
-        }
-        var firstArr = newData.filter {
-            $0.status.contains(find: "обработке")
-                ||  $0.status.contains(find: "Отправлена")
-                ||  $0.status.contains(find: "выполнению")
-                ||  $0.status.contains(find: "Черновик")
-        }
-        var secondArr = newData.filter {
-            $0.status.contains(find: "Закрыто")
-                ||  $0.status.contains(find: "Закрыта")
-                ||  $0.status.contains(find: "Отклонена")
-                ||  $0.status.contains(find: "Оформленно")
-                ||  $0.status.contains(find: "Выдан")
-                ||  $0.status.contains(find: "Отклонено")
-        }
-        
-        let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        df.isLenient = true
-        df.timeZone = TimeZone(identifier: "GMT+3:00")
-        
-        firstArr  = firstArr.sorted  { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
-        secondArr = secondArr.sorted { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
-        
-        DispatchQueue.main.sync {
-            self.data = firstArr
-            self.data.append(contentsOf: secondArr)
-            self.collection?.reloadData()
-            
-            if self.requestId_ != "" {
-                for (index, item) in self.data.enumerated() {
-                    if item.id == self.requestId_ {
-                        if self.collection != nil {
-                            self.collectionView(self.collection!, didSelectItemAt: IndexPath(row: index, section: 0))
-                        
+            var newData: [AppsUserCellData] = []
+            self.rows.forEach { _, curr in
+                
+                let isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
+                
+                let lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
+                let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                let isPerson = curr.name?.contains(find: "ропуск") ?? false
+                
+                var persons = ""//curr.responsiblePerson ?? ""
+                
+                if persons == "" {
+                    self.rowPersons[curr.id ?? ""]?.forEach {
+                        if $0.id == self.rowPersons[curr.id ?? ""]?.last?.id {
+                            persons += ($0.fio ?? "") + " "
+                            
                         } else {
-                            self.prepareTapped(IndexPath(row: index, section: 0))
+                            persons += ($0.fio ?? "") + ", "
                         }
                     }
                 }
+                
+                let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
+                newData.append( AppsUserCellData(title: curr.name ?? "",
+                                                 desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                                                 icon: icon,
+                                                 status: curr.status ?? "",
+                                                 date: curr.updateDate ?? "",
+                                                 isBack: isAnswered,
+                                                 type: curr.idType ?? "",
+                                                 id: curr.id ?? "",
+                                                 updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
+                                                 stickTitle: isAnswered ? descText : ""))
+            }
+            var firstArr = newData.filter {
+                $0.status.contains(find: "обработке")
+                    ||  $0.status.contains(find: "Отправлена")
+                    ||  $0.status.contains(find: "выполнению")
+                    ||  $0.status.contains(find: "Черновик")
+            }
+            var secondArr = newData.filter {
+                $0.status.contains(find: "Закрыто")
+                    ||  $0.status.contains(find: "Закрыта")
+                    ||  $0.status.contains(find: "Отклонена")
+                    ||  $0.status.contains(find: "Оформленно")
+                    ||  $0.status.contains(find: "Выдан")
+                    ||  $0.status.contains(find: "Отклонено")
+            }
             
-            } else {
-                self.stopAnimatior()
-                if #available(iOS 10.0, *) {
-                    self.collection?.refreshControl?.endRefreshing()
+            let df = DateFormatter()
+            df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            df.isLenient = true
+            df.timeZone = TimeZone(identifier: "GMT+3:00")
+            
+            firstArr  = firstArr.sorted  { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
+            secondArr = secondArr.sorted { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
+            firstArr.append(contentsOf: secondArr)
+            
+            DispatchQueue.main.sync {
+                self.createButton?.isUserInteractionEnabled = false
+                self.data = firstArr
+                self.collection?.reloadData()
+                
+                if self.requestId_ != "" {
+                    for (index, item) in self.data.enumerated() {
+                        if item.id == self.requestId_ {
+                            if self.collection != nil {
+                                self.collectionView(self.collection!, didSelectItemAt: IndexPath(row: index, section: 0))
+                                
+                            } else {
+                                self.prepareTapped(IndexPath(row: index, section: 0))
+                            }
+                        }
+                    }
+                    
                 } else {
-                    self.refreshControl?.endRefreshing()
+                    self.stopAnimatior()
+                    if #available(iOS 10.0, *) {
+                        self.collection?.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                 }
+            }
+            sleep(2)
+            DispatchQueue.main.async {
+                self.createButton?.isUserInteractionEnabled = true
             }
         }
     }

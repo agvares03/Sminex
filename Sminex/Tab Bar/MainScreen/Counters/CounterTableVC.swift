@@ -105,7 +105,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CounterTableHeaderCell", for: indexPath) as! CounterTableHeaderCell
         
         if periods.count > 0 {
-            header.display(getNameAndMonth(periods.last?.numMonth ?? "1") + " " + (periods[0].year ?? ""), delegate: self)
+            header.display(getNameAndMonth(periods.first?.numMonth ?? "1") + " " + (periods.first?.year ?? ""), delegate: self)
         
         } else {
             header.display("", delegate: self)
@@ -129,6 +129,8 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_METERS + "login=" + login.stringByAddingPercentEncodingForRFC3986()! + "&pwd=" + pass)!)
         request.httpMethod = "GET"
         
+        print(request.url)
+        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -146,12 +148,13 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             
             let xml = XML.parse(data!)
             let metersValues = xml["MetersValues"]
-            let period = metersValues["Period"]
-            let meterValue = period.last["MeterValue"]
+            let period = metersValues["Period"].reversed()
+            guard period.count != 0 else { return }
+            let meterValue = period.first!["MeterValue"]
             
             var newMeters: [MeterValue] = []
             meterValue.forEach {
-                newMeters.append( MeterValue($0, period: period.last.attributes["NumMonth"] ?? "1") )
+                newMeters.append( MeterValue($0, period: period.first?.attributes["NumMonth"] ?? "1") )
             }
             
             var newPeriods: [CounterPeriod] = []

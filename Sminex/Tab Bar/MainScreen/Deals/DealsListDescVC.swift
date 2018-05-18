@@ -8,6 +8,7 @@
 
 import UIKit
 import Gloss
+import UIScreenExtension
 
 final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -87,6 +88,8 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
 
 final class DealsListDescHeader: UICollectionReusableView {
     
+    @IBOutlet         weak var imageHeight:    NSLayoutConstraint!
+    @IBOutlet         weak var imageWidth:     NSLayoutConstraint!
     @IBOutlet private weak var image:          UIImageView!
     @IBOutlet private weak var titleLabel:     UILabel!
     @IBOutlet private weak var dateLabel:      UILabel!
@@ -123,6 +126,7 @@ final class DealsListDescHeader: UICollectionReusableView {
         titleLabel.preferredMaxLayoutWidth = titleLabel.bounds.size.width
         bodyLabel.preferredMaxLayoutWidth  = bodyLabel.bounds.size.width
         linksLabel.preferredMaxLayoutWidth = linksLabel.bounds.size.width
+        
     }
     
     class func fromNib() -> DealsListDescHeader? {

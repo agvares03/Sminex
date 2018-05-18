@@ -50,7 +50,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 registration()
 
             } else {
-                forgotPass()
+                performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
+//                forgotPass()
             }
         } else {
             let alert = UIAlertController(title: "Ошибка", message: "Укажите лиц. счет или номер телефона, привязанного к лиц. счету", preferredStyle: .alert)
@@ -89,8 +90,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REGISTRATION_SMINEX + "identOrPhone=" + ls_for_zapros)!)
         request.httpMethod = "GET"
-        
-        print(request.url)
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in
@@ -253,7 +252,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @objc func keyboardWillShow(sender: NSNotification?) {
             
         if !isNeedToScrollMore() {
-            sprtTop.constant -= 205
+            sprtTop.constant -= 200
         
         } else {
             sprtTop.constant -= 120
@@ -264,7 +263,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         if !isNeedToScrollMore() {
-            sprtTop.constant += 205
+            sprtTop.constant += 200
         } else {
             sprtTop.constant += 120
         }

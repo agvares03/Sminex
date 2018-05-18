@@ -64,7 +64,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsListCell", for: indexPath) as! NewsListCell
-        cell.display(data_[indexPath.row])
+        cell.display(data_[safe: indexPath.row])
         return cell
     }
     
@@ -116,8 +116,9 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
-                        self.data_.append(contentsOf: newsArr)
-                        TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
+                        TemporaryHolder.instance.news?.append(contentsOf: newsArr)
+                        self.data_ = TemporaryHolder.instance.news!
+                        
                     }
                 }
             }
@@ -172,19 +173,21 @@ final class NewsListCell: UICollectionViewCell {
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var date:    UILabel!
     
-    func display(_ item: NewsJson) {
+    func display(_ item: NewsJson?) {
         
-        title.text  = item.header
-        desc.text   = item.shortContent
+        guard item != nil else { return }
         
-        if item.dateStart != "" {
+        title.text  = item?.header
+        desc.text   = item?.shortContent
+        
+        if item?.dateStart != "" {
             let df = DateFormatter()
             df.dateFormat = "dd.MM.yyyy hh:mm:ss"
-            if dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
-                date.text = dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "hh:mm")
+            if dayDifference(from: df.date(from: item?.dateStart ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
+                date.text = dayDifference(from: df.date(from: item?.dateStart ?? "") ?? Date(), style: "hh:mm")
                 
             } else {
-                date.text = dayDifference(from: df.date(from: item.dateStart ?? "") ?? Date(), style: "dd MMMM")
+                date.text = dayDifference(from: df.date(from: item?.dateStart ?? "") ?? Date(), style: "dd MMMM")
             }
         }
     }

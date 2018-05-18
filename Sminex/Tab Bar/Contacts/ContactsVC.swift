@@ -154,6 +154,7 @@ final class ContactsCell: UICollectionViewCell {
     @IBOutlet private weak var email:           UILabel!
     @IBOutlet private weak var phoneView:       UIView!
     @IBOutlet private weak var emailView:       UIView!
+    @IBOutlet private weak var cellView:        UIView!
     
     private var delegate: ContactsCellDelegate?
     
@@ -204,6 +205,10 @@ final class ContactsCell: UICollectionViewCell {
         messageImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(messagePressed(_:))) )
         phoneImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))) )
         emailImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(emailPressed(_:))) )
+        
+        
+        cornerRadius = 16
+        dropShadow(superview: self)
     }
     
     class func fromNib() -> ContactsCell? {

@@ -42,6 +42,7 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ad2-72-PnO">
                                                     <rect key="frame" x="15" y="5" width="345" height="140"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="width" constant="345" id="G8F-iz-Fhd"/>
                                                         <constraint firstAttribute="height" constant="140" id="vcE-ZA-CZo"/>
                                                     </constraints>
                                                 </imageView>
@@ -70,23 +71,24 @@
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="ad2-72-PnO" secondAttribute="trailing" constant="15" id="5oF-mh-vhF"/>
-                                            <constraint firstItem="ad2-72-PnO" firstAttribute="leading" secondItem="PXu-bd-L4d" secondAttribute="leading" constant="15" id="A0H-bZ-Fz0"/>
                                             <constraint firstAttribute="trailing" secondItem="hAs-wB-B8b" secondAttribute="trailing" id="JGU-yk-fql"/>
-                                            <constraint firstItem="Xme-e3-8Hq" firstAttribute="trailing" secondItem="ad2-72-PnO" secondAttribute="trailing" id="NFX-Kz-1ko"/>
                                             <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="MmS-EO-e8y" secondAttribute="bottom" constant="5" id="Nvd-nL-OQw"/>
                                             <constraint firstItem="hAs-wB-B8b" firstAttribute="leading" secondItem="PXu-bd-L4d" secondAttribute="leading" id="XVZ-66-7Bb"/>
                                             <constraint firstItem="MmS-EO-e8y" firstAttribute="leading" secondItem="Xme-e3-8Hq" secondAttribute="leading" id="aoG-XL-to4"/>
                                             <constraint firstAttribute="bottom" secondItem="hAs-wB-B8b" secondAttribute="bottom" id="bgj-Si-2QK"/>
-                                            <constraint firstItem="Xme-e3-8Hq" firstAttribute="leading" secondItem="ad2-72-PnO" secondAttribute="leading" id="i27-KE-JFv"/>
+                                            <constraint firstItem="Xme-e3-8Hq" firstAttribute="leading" secondItem="PXu-bd-L4d" secondAttribute="leadingMargin" constant="7" id="gon-By-y2a"/>
                                             <constraint firstItem="MmS-EO-e8y" firstAttribute="top" secondItem="Xme-e3-8Hq" secondAttribute="bottom" constant="8" id="jpM-Z0-U1w"/>
                                             <constraint firstItem="ad2-72-PnO" firstAttribute="top" secondItem="PXu-bd-L4d" secondAttribute="top" constant="5" id="kRg-kA-h4d"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="Xme-e3-8Hq" secondAttribute="trailing" constant="7" id="kdT-Ta-ztH"/>
                                             <constraint firstItem="Xme-e3-8Hq" firstAttribute="top" secondItem="ad2-72-PnO" secondAttribute="bottom" constant="8" id="n8j-mO-MsM"/>
+                                            <constraint firstItem="ad2-72-PnO" firstAttribute="centerX" secondItem="PXu-bd-L4d" secondAttribute="centerX" id="pai-wr-Wsl"/>
                                             <constraint firstItem="MmS-EO-e8y" firstAttribute="trailing" secondItem="Xme-e3-8Hq" secondAttribute="trailing" id="x0q-Kd-Do1"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="desc" destination="MmS-EO-e8y" id="RN2-ck-tb4"/>
                                             <outlet property="image" destination="ad2-72-PnO" id="ivQ-BW-Lnu"/>
+                                            <outlet property="imageHeight" destination="vcE-ZA-CZo" id="FYd-h8-ps1"/>
+                                            <outlet property="imageWidth" destination="G8F-iz-Fhd" id="JTl-Vl-CQi"/>
                                             <outlet property="title" destination="Xme-e3-8Hq" id="3fz-6V-2bg"/>
                                         </connections>
                                     </collectionViewCell>
@@ -206,6 +208,7 @@
                                             <rect key="frame" x="16" y="16" width="343" height="150"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="150" id="IsZ-a0-kmx"/>
+                                                <constraint firstAttribute="width" constant="343" id="xAd-Lw-Pdk"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 марта 2017, 16:45" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8W-SK-ih4">
@@ -214,7 +217,7 @@
                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Соцсети:" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gT5-zm-eit">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Перейти на сайт: " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gT5-zm-eit">
                                             <rect key="frame" x="16" y="489" width="343" height="19.5"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                             <nil key="textColor"/>
@@ -256,15 +259,15 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="NEW-s2-YmT" secondAttribute="bottom" id="1Fm-h7-PuX"/>
-                                        <constraint firstItem="l8T-ct-Y3g" firstAttribute="leading" secondItem="YBv-Br-DEz" secondAttribute="leading" constant="16" id="6on-PA-9rP"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="XNt-hV-Msm" secondAttribute="trailing" constant="8" id="3gg-0S-u4q"/>
                                         <constraint firstItem="gT5-zm-eit" firstAttribute="leading" secondItem="f1X-yr-xhl" secondAttribute="leading" id="9Iw-F6-0g6"/>
                                         <constraint firstItem="z8W-SK-ih4" firstAttribute="leading" secondItem="XNt-hV-Msm" secondAttribute="leading" id="9sr-i7-WWs"/>
                                         <constraint firstItem="nq9-Kk-VWV" firstAttribute="top" secondItem="gT5-zm-eit" secondAttribute="bottom" constant="24" id="C44-Sk-oc0"/>
                                         <constraint firstItem="XNt-hV-Msm" firstAttribute="top" secondItem="l8T-ct-Y3g" secondAttribute="bottom" constant="16" id="DYj-33-afE"/>
                                         <constraint firstItem="nq9-Kk-VWV" firstAttribute="leading" secondItem="YBv-Br-DEz" secondAttribute="leading" id="EQG-IZ-mrs"/>
-                                        <constraint firstAttribute="trailing" secondItem="l8T-ct-Y3g" secondAttribute="trailing" constant="16" id="IOS-Xg-oN4"/>
                                         <constraint firstItem="f1X-yr-xhl" firstAttribute="leading" secondItem="XNt-hV-Msm" secondAttribute="leading" id="KIO-U6-DnF"/>
                                         <constraint firstItem="z8W-SK-ih4" firstAttribute="top" secondItem="XNt-hV-Msm" secondAttribute="bottom" constant="8" id="OJm-91-7ml"/>
+                                        <constraint firstItem="XNt-hV-Msm" firstAttribute="leading" secondItem="YBv-Br-DEz" secondAttribute="leadingMargin" constant="8" id="OlM-N7-wlT"/>
                                         <constraint firstItem="NEW-s2-YmT" firstAttribute="top" secondItem="nq9-Kk-VWV" secondAttribute="bottom" constant="24" id="T4K-MV-HHH"/>
                                         <constraint firstItem="XNt-hV-Msm" firstAttribute="trailing" secondItem="l8T-ct-Y3g" secondAttribute="trailing" id="U6Y-Vd-2Cx"/>
                                         <constraint firstItem="f1X-yr-xhl" firstAttribute="trailing" secondItem="XNt-hV-Msm" secondAttribute="trailing" id="XoJ-BK-9MP"/>
@@ -281,6 +284,8 @@
                                         <outlet property="bodyLabel" destination="f1X-yr-xhl" id="Kjf-wh-pvN"/>
                                         <outlet property="dateLabel" destination="z8W-SK-ih4" id="HWT-TC-kGh"/>
                                         <outlet property="image" destination="l8T-ct-Y3g" id="D1e-9w-y3R"/>
+                                        <outlet property="imageHeight" destination="IsZ-a0-kmx" id="STu-3R-Fit"/>
+                                        <outlet property="imageWidth" destination="xAd-Lw-Pdk" id="Gqo-MQ-Rlb"/>
                                         <outlet property="linksLabel" destination="gT5-zm-eit" id="8Ec-we-we1"/>
                                         <outlet property="titleLabel" destination="XNt-hV-Msm" id="8dL-oD-z95"/>
                                     </connections>

@@ -129,6 +129,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
         edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
         
+        // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent         = true
         navigationController?.navigationBar.backgroundColor       = .white
         navigationController?.navigationBar.tintColor             = .white

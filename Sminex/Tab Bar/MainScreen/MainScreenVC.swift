@@ -534,7 +534,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let icon = !(row.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     let isPerson = row.name?.contains(find: "ропуск") ?? false
                     
-                    var persons = row.responsiblePerson ?? ""
+                    var persons = ""//row.responsiblePerson ?? ""
                     
                     if persons == "" {
                         rowPersons[row.id ?? ""]?.forEach { person in
@@ -577,47 +577,48 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 data, error, responce in
                 
                 guard data != nil else { return }
-                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments)
-                let unfilteredData = QuestionsJson(json: json! as! JSON)?.data
-                var filtered: [QuestionDataJson] = []
-                
-                unfilteredData?.forEach { json in
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    let unfilteredData = QuestionsJson(json: json!)?.data
+                    var filtered: [QuestionDataJson] = []
                     
-                    var isContains = true
-                    json.questions?.forEach {
-                        if !($0.isCompleteByUser ?? false) {
-                            isContains = false
+                    unfilteredData?.forEach { json in
+                        
+                        var isContains = true
+                        json.questions?.forEach {
+                            if !($0.isCompleteByUser ?? false) {
+                                isContains = false
+                            }
+                        }
+                        if !isContains {
+                            filtered.append(json)
                         }
                     }
-                    if !isContains {
-                        filtered.append(json)
-                    }
-                }
-                if filtered.count == 0 {
-                    self.questionSize = CGSize(width: 0, height: 0)
-                    
-                } else {
-                    self.questionSize = nil
-                    DispatchQueue.main.sync {
-                        self.data.removeValue(forKey: 0)
-                        self.data[0] = [0:CellsHeaderData(title: "Опросы")]
-                        var count = 1
-                        filtered.forEach {
-                            self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
-                            count += 1
-                        }
-                    }
-                }
-                TemporaryHolder.instance.menuQuesions = filtered.count
-                
-                DispatchQueue.main.sync {
-                    self.collection.reloadData()
-                }
-                
-                if unfilteredData?.count == 0 {
-                    DispatchQueue.main.sync {
+                    if filtered.count == 0 {
                         self.questionSize = CGSize(width: 0, height: 0)
+                        
+                    } else {
+                        self.questionSize = nil
+                        DispatchQueue.main.sync {
+                            self.data.removeValue(forKey: 0)
+                            self.data[0] = [0:CellsHeaderData(title: "Опросы")]
+                            var count = 1
+                            filtered.forEach {
+                                self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
+                                count += 1
+                            }
+                        }
+                    }
+                    TemporaryHolder.instance.menuQuesions = filtered.count
+                    
+                    DispatchQueue.main.sync {
                         self.collection.reloadData()
+                    }
+                    
+                    if unfilteredData?.count == 0 {
+                        DispatchQueue.main.sync {
+                            self.questionSize = CGSize(width: 0, height: 0)
+                            self.collection.reloadData()
+                        }
                     }
                 }
                 
@@ -707,7 +708,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if (datePay?.count ?? 0) > 9 {
                 datePay?.removeLast(9)
             }
-            self.data[4]![1] = ForPayCellData(title: String(self.debt?.sumPay ?? 0.0) + " ₽", date: datePay ?? "")
+            self.data[4]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay ?? "")
             
             defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
             defaults.setValue(datePay, forKey: "ForPayDate")
@@ -724,8 +725,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global(qos: .userInitiated).async {
             let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
             
-            print("newsIdId =" + (UserDefaults.standard.string(forKey: "newsLastId") ?? ""))
-            
             guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
                 let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
                 
@@ -739,6 +738,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                         TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
+                        TemporaryHolder.instance.news = NewsJsonData(json: json!)!.data!
                     }
                     UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
@@ -772,28 +772,28 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                 }
             }
-            
+
             if (self.data[1]?.count ?? 0) < 2 {
                 self.newsSize = CGSize(width: 0, height: 0)
-                
+
             } else {
                 self.newsSize = nil
             }
             DispatchQueue.main.sync {
                 self.collection.reloadData()
             }
-            
+
             let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
             let lastId = TemporaryHolder.instance.newsLastId
-            
+
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
             request.httpMethod = "GET"
-            
+
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
-                
+
                 guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
-                
+
                 if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                     TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
                 }
@@ -801,20 +801,20 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                 UserDefaults.standard.synchronize()
                 self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
-                
+
                 for (ind, item) in self.filteredNews.enumerated() {
                     if ind < 3 {
                         self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                     }
                 }
-                
+
                 if (self.data[1]?.count ?? 0) < 2 {
                     self.newsSize = CGSize(width: 0, height: 0)
-                    
+
                 } else {
                     self.newsSize = nil
                 }
-                
+
                 DispatchQueue.main.sync {
                     self.collection.reloadData()
                 }
@@ -1107,9 +1107,20 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
     fileprivate func display(_ item: StockCellData, delegate: CellsDelegate? = nil, indexPath: IndexPath? = nil) {
         
         pagerView.interitemSpacing = 20
-        pagerView.itemSize = CGSize(width: 300, height: pagerView.frame.size.height)
         pagerView.dataSource = self
         pagerView.delegate   = self
+        
+        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+        if (300.0...350.0).contains(points) {
+            pagerView.itemSize = CGSize(width: 288, height: 144)
+            
+        } else if (350.0...400.0).contains(points) {
+            pagerView.itemSize = CGSize(width: 343, height: 170)
+            
+        } else {
+            pagerView.itemSize = CGSize(width: 382, height: 191)
+        }
+
         
         if item.images.count == 0, let imgData = UserDefaults.standard.data(forKey: "DealsImg"), let img = UIImage(data: imgData)  {
             isLoading = true

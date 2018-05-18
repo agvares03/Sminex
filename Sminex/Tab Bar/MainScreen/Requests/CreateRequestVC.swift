@@ -288,7 +288,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 imgScroll.addSubview(deleteButton)
                 
                 let image = UIImageView(frame: CGRect(x: x + 135.0, y: 5.0, width: 10.0, height: 10.0))
-                image.image = UIImage(named: "close_ic")
+                image.image = UIImage(named: "rossNavbar")
                 imgScroll.addSubview(image)
                 
                 x += 160

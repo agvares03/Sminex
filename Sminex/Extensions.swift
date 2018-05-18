@@ -381,9 +381,71 @@ func getBCImage(id: String) {
     }
 }
 
+extension Formatter {
+    
+    static let withSeparator: NumberFormatter = {
+        
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = " "
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+}
+
+extension Double {
+    
+    var formattedWithSeparator: String {
+        
+        return Formatter.withSeparator.string(for: self) ?? ""
+    }
+}
+
+extension BinaryInteger {
+    
+    var formattedWithSeparator: String {
+        
+        return Formatter.withSeparator.string(for: self) ?? ""
+    }
+}
 
 
 
+extension UIView {
+    // Note: the method needs the view from which the context is taken as an argument.
+    func dropShadow(superview: UIView) {
+        // Get context from superview
+        UIGraphicsBeginImageContext(self.bounds.size)
+        superview.drawHierarchy(in: CGRect(x: -self.frame.minX, y: -self.frame.minY, width: superview.bounds.width, height: superview.bounds.height), afterScreenUpdates: true)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        // Add a UIImageView with the image from the context as a subview
+        let imageView = UIImageView(frame: self.bounds)
+        imageView.image = image
+        imageView.layer.cornerRadius = self.layer.cornerRadius
+        imageView.clipsToBounds = true
+        self.addSubview(imageView)
+        
+        // Bring the background color to the front, alternatively set it as UIColor(white: 1, alpha: 0.2)
+        let brighter = UIView(frame: self.bounds)
+        brighter.backgroundColor = self.backgroundColor ?? UIColor(white: 1, alpha: 0.05)
+        brighter.layer.cornerRadius = self.layer.cornerRadius
+        brighter.clipsToBounds = true
+        self.addSubview(brighter)
+        
+        // Set the shadow
+        self.layer.masksToBounds = false
+        self.layer.shadowColor = UIColor.darkGray.cgColor
+        self.layer.shadowOffset = CGSize(width: 1, height: 2)
+        self.layer.shadowOpacity = 0.1
+        var shadowRect = bounds
+        shadowRect.origin.y += 5
+        shadowRect.origin.x += 10
+        shadowRect.size.width -= 20
+        shadowRect.size.height -= 10
+        self.layer.shadowPath = UIBezierPath(roundedRect: shadowRect, cornerRadius: self.layer.cornerRadius).cgPath
+    }
+}
 
 
 

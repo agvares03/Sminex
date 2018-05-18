@@ -190,16 +190,16 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 btnBottom.constant = 215
             
             } else {
-                btnConst.constant  = -25
+                btnConst.constant  = -65
                 btnBottom.constant = 240
             }
         
         } else {
             if !isXDevice() {
-                btnConst.constant = getConstant() - 220
+                btnConst.constant = getConstant() - 235
             
             } else {
-                btnConst.constant = getConstant() - 240
+                btnConst.constant = getConstant() - 275
             }
         }
     }
@@ -211,7 +211,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if isNeedToScroll() {
             btnBottom.constant = 8
             if !isNeedToScrollMore() {
-                btnConst.constant = constant
+                btnConst.constant = getConstant()//constant
             } else {
                 btnConst.constant = 50
             }
@@ -280,7 +280,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 images.addSubview(deleteButton)
                 
                 let image = UIImageView(frame: CGRect(x: x + 135.0, y: 5.0, width: 10.0, height: 10.0))
-                image.image = UIImage(named: "close_ic")
+                image.image = UIImage(named: "rossNavbar")
                 images.addSubview(image)
                 
                 x += 160

@@ -54,9 +54,10 @@ final class TemporaryHolder {
                 }
                 return true
             }
-            let newNews = self.news?.filter { (n) in self.news?.filter{ $0.header==n.header }.count == 1 }
-            print(newNews)
-            self.news = newNews
+            if news != nil {
+                let newNews = self.news?.filter { (n) in self.news?.filter{ $0.header==n.header || $0.created==n.created }.count == 1 }
+                self.news = newNews
+            }
         }
     }
     public var contactsList: [ContactsJson] = []

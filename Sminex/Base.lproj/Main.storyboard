@@ -102,7 +102,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Akj-bn-uot">
                                 <rect key="frame" x="0.0" y="20" width="320" height="499"/>
                                 <color key="backgroundColor" white="0.97999999999999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="4" minimumInteritemSpacing="4" id="2Y9-V2-HTk">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="2Y9-V2-HTk">
                                     <size key="itemSize" width="320" height="351"/>
                                     <size key="headerReferenceSize" width="50" height="100"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -278,7 +278,6 @@
                                                         <constraint firstItem="1QD-6t-Zcx" firstAttribute="leading" secondItem="j1Q-iw-JfH" secondAttribute="leading" id="vnG-Va-j8E"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                             <real key="value" value="4"/>
                                                         </userDefinedRuntimeAttribute>
@@ -292,7 +291,11 @@
                                             <constraint firstAttribute="trailingMargin" secondItem="pUE-ud-H2n" secondAttribute="trailing" constant="8" id="KAm-do-QWe"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="pUE-ud-H2n" secondAttribute="bottom" id="onI-cg-cQ4"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <outlet property="cellView" destination="pUE-ud-H2n" id="Yb0-FW-zyS"/>
                                             <outlet property="desc" destination="j1Q-iw-JfH" id="wum-0U-swX"/>
                                             <outlet property="email" destination="har-Sh-CCj" id="gXg-Rb-Nwz"/>
                                             <outlet property="emailHeight" destination="jLx-18-ICS" id="DOd-2J-vHV"/>

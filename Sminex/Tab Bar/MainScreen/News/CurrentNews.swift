@@ -10,6 +10,8 @@ import UIKit
 
 final class CurrentNews: UIViewController, UIWebViewDelegate {
     
+    @IBOutlet private weak var imageHeight:     NSLayoutConstraint!
+    @IBOutlet private weak var imageWidth:      NSLayoutConstraint!
     @IBOutlet private weak var webViewHeight:   NSLayoutConstraint!
     @IBOutlet private weak var titleTop:        NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
@@ -52,6 +54,21 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         } else {
             image.image = UIImage(data: Data(base64Encoded: (data_?.headerImage?.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)!)
         }
+        
+        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+        if (300.0...350.0).contains(points) {
+            imageWidth.constant  = 288
+            imageHeight.constant = 144
+            
+        } else if (350.0...400.0).contains(points) {
+            imageWidth.constant  = 343
+            imageHeight.constant = 170
+            
+        } else {
+            imageWidth.constant  = 382
+            imageHeight.constant = 191
+        }
+
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {

@@ -8,6 +8,7 @@ target 'Sminex' do
     # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
     use_frameworks!
     
+    pod 'UIScreenExtension', :git => 'https://github.com/marchv/UIScreenExtension'
     pod 'SwiftyXMLParser', :git => 'https://github.com/yahoojapan/SwiftyXMLParser.git'
     pod 'Alamofire', '~> 4.7'
     pod 'Firebase/Messaging'

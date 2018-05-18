@@ -121,7 +121,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         let isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
         if !isBold {
         cell.display(title: receipts![indexPath.row].usluga ?? "",
-                     desc: String(receipts![indexPath.row].sum ?? 0.0),
+                     desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                      isBold: isBold)
         
         } else {
@@ -133,7 +133,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                 sum += ($0.sum ?? 0.0)
             }
             cell.display(title: receipts![indexPath.row].usluga ?? "",
-                         desc: String(sum),
+                         desc: (sum).formattedWithSeparator,
                          isBold: isBold)
         }
         return cell
@@ -148,7 +148,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             let cell = FinanceDebtCell.fromNib()
             let isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
             cell?.display(title: receipts![indexPath.row].usluga ?? "",
-                         desc: String(receipts![indexPath.row].sum ?? 0.0),
+                         desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                          isBold: false)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
             return CGSize(width: view.frame.size.width, height: isBold ? size.height + 15 : size.height)
@@ -286,7 +286,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceDebtVC.toBarcode {
             let vc = segue.destination as! FinanceBarCodeVC
-            vc.amount_ = data_?.sum
+            vc.amount_ = (data_?.sum ?? 0.0) - (data_?.payment_sum ?? 0.0)
             vc.codePay_ = data_?.codPay
         
         } else if segue.identifier == Segues.fromFinanceDebtVC.toPay {

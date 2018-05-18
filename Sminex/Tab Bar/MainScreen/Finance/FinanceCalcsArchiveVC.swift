@@ -62,7 +62,7 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
             }
         }
         cell.display(title: getNameAndMonth(filteredData[indexPath.row].numMonthSet ?? 0) + " \(filteredData[indexPath.row].numYearSet ?? 0)",
-            desc: debt != 0.0 ? "Долг \(debt)" : "")
+            desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
         return cell
     }
     

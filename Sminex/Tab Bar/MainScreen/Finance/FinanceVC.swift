@@ -84,7 +84,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 if (datePay?.count ?? 0) > 9 {
                     datePay?.removeLast(9)
                 }
-                cell.display(amount: String(debt?.sumPay ?? 0.0) + " ₽", date: "До " + (datePay ?? ""))
+                cell.display(amount: (debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: "До " + (datePay ?? ""))
             }
             cell.contentView.backgroundColor = backColor
             return cell
@@ -97,7 +97,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             
             } else {
                 cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
-                    desc: (String(receipts[safe: indexPath.row - 1]?.sum ?? 0.0)))
+                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
                 cell.contentView.backgroundColor = backColor
             }
             return cell
@@ -119,7 +119,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 }
             }
             cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
-                desc: debt != 0.0 ? "Долг \(debt)" : "")
+                desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
             cell.contentView.backgroundColor = backColor
             return cell
         
@@ -417,15 +417,16 @@ struct AccountBillsData: JSONDecodable {
 
 struct AccountBillsJson: JSONDecodable {
     
-    let idReceipts: String?
-    let datePayed:  String?
-    let datePay:    String?
-    let codPay:     String?
-    let number:     String?
-    let desc:       String?
-    let sum:        Double?
-    let numMonth:   Int?
-    let numYear: 	Int?
+    let idReceipts:     String?
+    let datePayed:      String?
+    let datePay:        String?
+    let codPay:         String?
+    let number:         String?
+    let desc:           String?
+    let sum:            Double?
+    let payment_sum:    Double?
+    let numMonth:       Int?
+    let numYear: 	    Int?
     
     init?(json: JSON) {
         idReceipts  = "id_receipts" <~~ json
@@ -437,6 +438,7 @@ struct AccountBillsJson: JSONDecodable {
         numMonth    = "num_month"   <~~ json
         numYear     = "num_year"    <~~ json
         number      = "number"      <~~ json
+        payment_sum = "payment_sum" <~~ json
     }
 }
 
