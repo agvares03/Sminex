@@ -50,8 +50,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 registration()
 
             } else {
-                performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
-//                forgotPass()
+//                performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
+                forgotPass()
             }
         } else {
             let alert = UIAlertController(title: "Ошибка", message: "Укажите лиц. счет или номер телефона, привязанного к лиц. счету", preferredStyle: .alert)
