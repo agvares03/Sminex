@@ -108,7 +108,7 @@ final class DealsListDescHeader: UICollectionReusableView {
         titleLabel.text = data_?.name
         bodyLabel.text = data_?.body
         if data_?.link != "" {
-            linksLabel.text = "Соцсети: \(data_?.link ?? "")"
+            linksLabel.text = "Перейти на сайт: \(data_?.link ?? "")"
         
         } else {
             linksLabel.text = ""
