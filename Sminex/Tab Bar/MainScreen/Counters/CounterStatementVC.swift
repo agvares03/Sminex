@@ -62,8 +62,6 @@ final class CounterStatementVC: UIViewController {
         
 //        } else {
         
-        print(value_?.fractionalNumber)
-        
             if value_?.fractionalNumber?.contains(find: "alse") ?? true {
                 count.isEnergy = true
                 count.numberOfDigits = 6

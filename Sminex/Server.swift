@@ -18,7 +18,7 @@ final class Server {
     static let REGISTRATION        = "RegisterSimple.ashx?"            // Регистрация
     static let FORGOT              = "remember.ashx?"                  // Забыли пароль
     static let ENTER               = "AutenticateUserAndroid.ashx?"    // Авторизация пользователя
-    static let GET_METERS          = "GetMeterValuesNew.ashx?"            // Получить показания по счетчикам
+    static let GET_METERS          = "GetMeterValuesNew.ashx?"         // Получить показания по счетчикам
     static let ADD_METER           = "AddMeterValue.ashx?"             // Добавить показание по счетчику
     static let GET_APPS_COMM       = "GetRequestWithMessages.ashx?"    // Получить заявки с комментариями
     static let SEND_COMM           = "chatAddMessage.ashx?"            // Добавить комментарий по заявке
