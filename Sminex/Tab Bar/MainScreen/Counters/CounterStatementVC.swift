@@ -12,7 +12,7 @@ protocol CounterStatementDelegate: class {
     func update()
 }
 
-final class CounterStatementVC: UIViewController {
+final class CounterStatementVC: UIViewController, CounterDelegate {
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var goBottomConst:   NSLayoutConstraint!
@@ -55,14 +55,16 @@ final class CounterStatementVC: UIViewController {
         count.backColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
         count.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         
-        if value_?.resource?.contains(find: "лектроэнергия") ?? false {
-            count.isEnergy = true
-            count.numberOfDigits = 6
-            count.acceptableCharacters = "1234567890"
+//        if value_?.resource?.contains(find: "лектроэнергия") ?? false {
+//            count.isEnergy = true
+//            count.numberOfDigits = 6
+//            count.acceptableCharacters = "1234567890"
         
-        } else {
+//        } else {
+        
             if value_?.fractionalNumber?.contains(find: "alse") ?? true {
-                count.numberOfDigits = 5
+                count.isEnergy = true
+                count.numberOfDigits = 6
                 count.acceptableCharacters = "1234567890"
                 
             } else {
@@ -71,11 +73,10 @@ final class CounterStatementVC: UIViewController {
                 descLabel1.isHidden = true
                 goButtonConst.constant = 20
             }
-        }
+//        }
         goButton.isEnabled = false
         goButton.alpha     = 0.5
-        
-        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        count.delegate     = self
         
         dateLabel.text = date_?.lowercased()
         typeLabel.text = value_?.resource
@@ -96,9 +97,11 @@ final class CounterStatementVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         let _ = count.becomeFirstResponder()
+        
+//        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    func textFieldDidChange(_ textField: UITextField) {
         
         if count.text == "" {
             goButton.isEnabled = false
@@ -174,6 +177,8 @@ final class CounterStatementVC: UIViewController {
             
             var request = URLRequest(url: URL(string: urlPath)!)
             request.httpMethod = "GET"
+            
+            print(request.url)
             
             URLSession.shared.dataTask(with: request) {
                 data, response, error in

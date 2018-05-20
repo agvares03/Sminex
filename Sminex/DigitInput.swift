@@ -12,6 +12,10 @@ public enum DigitInputViewAnimationType: Int {
     case none, dissolve, spring
 }
 
+public protocol CounterDelegate {
+    func textFieldDidChange(_ textField: UITextField)
+}
+
 open class DigitInputView: UIView {
     
     /**
@@ -109,6 +113,8 @@ open class DigitInputView: UIView {
     
     fileprivate var underlineHeight: CGFloat = 4
     fileprivate var spacing: CGFloat = 8
+    
+    open var delegate: CounterDelegate?
     
     override open var canBecomeFirstResponder: Bool {
         
@@ -269,6 +275,7 @@ open class DigitInputView: UIView {
         
         guard let textField = textField, let text = textField.text else { return }
         
+        delegate?.textFieldDidChange(textField)
         for item in labels {
             item.text = "0"
         }
