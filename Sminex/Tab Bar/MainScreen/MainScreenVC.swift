@@ -1081,6 +1081,7 @@ final class NewsCellData: MainDataProtocol {
 
 final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewDelegate {
     
+    @IBOutlet private weak var pagerHeight: NSLayoutConstraint!
     @IBOutlet private weak var pageControl: UIPageControl!
     @IBOutlet private weak var pagerView:   FSPagerView! {
         didSet {
@@ -1112,12 +1113,15 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
         if (300.0...350.0).contains(points) {
             pagerView.itemSize = CGSize(width: 288, height: 144)
+            pagerHeight.constant = 144
             
         } else if (350.0...400.0).contains(points) {
             pagerView.itemSize = CGSize(width: 343, height: 170)
+            pagerHeight.constant = 170
             
         } else {
             pagerView.itemSize = CGSize(width: 382, height: 191)
+            pagerHeight.constant = 191
         }
 
         

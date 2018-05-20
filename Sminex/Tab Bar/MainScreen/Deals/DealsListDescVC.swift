@@ -138,6 +138,21 @@ final class DealsListDescHeader: UICollectionReusableView {
                 cell = view
             }
         }
+        
+        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+        if (300.0...350.0).contains(points) {
+            cell?.imageWidth.constant  = 288
+            cell?.imageHeight.constant = 144
+            
+        } else if (350.0...400.0).contains(points) {
+            cell?.imageWidth.constant  = 343
+            cell?.imageHeight.constant = 170
+            
+        } else {
+            cell?.imageWidth.constant  = 382
+            cell?.imageHeight.constant = 191
+        }
+        
 //        cell?.titleLabel.preferredMaxLayoutWidth = cell?.titleLabel.bounds.size.width ?? 0.0
 //        cell?.bodyLabel.preferredMaxLayoutWidth  = cell?.bodyLabel.bounds.size.width  ?? 0.0
 //        cell?.linksLabel.preferredMaxLayoutWidth = cell?.linksLabel.bounds.size.width ?? 0.0
