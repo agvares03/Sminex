@@ -29,6 +29,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
         automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
         collection.delegate   = self
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,6 +97,13 @@ final class DealsListDescHeader: UICollectionReusableView {
     @IBOutlet private weak var bodyLabel:      UILabel!
     @IBOutlet private weak var linksLabel:     UILabel!
     
+    open var link_obj:String = "";
+    
+    @objc func tapFunction(sender:UITapGestureRecognizer) {
+        let url = NSURL(string: link_obj)!
+        UIApplication.shared.openURL(url as URL)
+    }
+    
     func display(_ data_: DealsJson?) {
         
         if data_?.img != nil {
@@ -107,8 +115,15 @@ final class DealsListDescHeader: UICollectionReusableView {
         
         titleLabel.text = data_?.name
         bodyLabel.text = data_?.body
+        
         if data_?.link != "" {
-            linksLabel.text = "Перейти на сайт: \(data_?.link ?? "")"
+            // Сделаем Перейти на сайт кликабельным
+            let tap = UITapGestureRecognizer(target: self, action: #selector(DealsListDescHeader.tapFunction))
+            linksLabel.text = "Перейти на сайт"
+            linksLabel.isUserInteractionEnabled = true
+            linksLabel.addGestureRecognizer(tap)
+            link_obj = (data_?.link)!
+//            linksLabel.text = "Перейти на сайт: \(data_?.link ?? "")"
         
         } else {
             linksLabel.text = ""

@@ -420,10 +420,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         
                     } else if self.appsUser?.techService != nil {
                         self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+                    } else {
+                        
                     }
                 }
             }
-//            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toRequestAnim, sender: self)
+//
         }
     }
     
@@ -1112,8 +1114,8 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
         if (300.0...350.0).contains(points) {
-            pagerView.itemSize = CGSize(width: 288, height: 144)
-            pagerHeight.constant = 144
+            pagerView.itemSize = CGSize(width: 288, height: 174)
+            pagerHeight.constant = 174
             
         } else if (350.0...400.0).contains(points) {
             pagerView.itemSize = CGSize(width: 343, height: 170)
