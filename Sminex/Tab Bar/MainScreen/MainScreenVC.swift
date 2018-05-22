@@ -1114,7 +1114,7 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
         if (300.0...350.0).contains(points) {
-            pagerView.itemSize = CGSize(width: 288, height: 174)
+            pagerView.itemSize = CGSize(width: 343, height: 174)
             pagerHeight.constant = 174
             
         } else if (350.0...400.0).contains(points) {

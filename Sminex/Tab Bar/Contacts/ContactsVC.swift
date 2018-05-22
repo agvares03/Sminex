@@ -208,7 +208,7 @@ final class ContactsCell: UICollectionViewCell {
         
         
         cornerRadius = 16
-        dropShadow(superview: self)
+//        dropShadow(superview: self)
     }
     
     class func fromNib() -> ContactsCell? {
