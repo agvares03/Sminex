@@ -57,7 +57,7 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
         var debt = 0.0
         let currDate = (filteredData[indexPath.row].numMonthSet, filteredData[indexPath.row].numYearSet)
         data_.forEach {
-            if ($0.numMonthSet, $0.numYearSet) == currDate {
+            if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
                 debt += ($0.sumDebt ?? 0.0)
             }
         }
@@ -71,7 +71,7 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
             let vc = segue.destination as! FinanceCalcVC
             let date = (filteredData[index].numMonthSet, filteredData[index].numYearSet)
             vc.data_ = data_.filter {
-                return date == ($0.numMonthSet, $0.numYearSet)
+                return (date.0 == $0.numMonthSet && date.1 == $0.numYearSet)
             }
         }
     }

@@ -31,6 +31,8 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
         
+        
+        
         var answerArr: [Int] = []
         
         selectedAnswers.forEach {
@@ -150,7 +152,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @objc func keyboardWillShow(sender: NSNotification?) {
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap!)
-        view.frame.origin.y = -250
+        view.frame.origin.y = -125
     }
     
     // И вниз при исчезновении
@@ -173,11 +175,25 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
-        
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerHeader", for: indexPath) as! QuestionAnswerHeader
-        header.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
-        return header
+        switch kind {
+            
+        case UICollectionElementKindSectionHeader:
+            isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerHeader", for: indexPath) as! QuestionAnswerHeader
+            header.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
+            return header
+            
+        case UICollectionElementKindSectionFooter:
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerFooter", for: indexPath) as! QuestionAnswerFooter
+            footer.textView.delegate = self
+            footer.textView.text = ""
+            recomendationArray.append("")
+            return footer
+            
+        default:
+            
+            assert(false, "Unexpected element kind")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -226,11 +242,25 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         var json: [[String:Any]] = []
         
         print(answers)
+        
+        var isManyValue = false
+        var index = 0
+        
         answers.forEach { (arg) in
             let (key, value) = arg
+            isManyValue = false
+            
             value.forEach {
-                json.append( ["QuestionID":key, "AnswerID":$0, "Comment":""] )
+                if isManyValue {
+                    json.append( ["QuestionID":key, "AnswerID":$0, "Comment": ""] )
+                } else {
+                    json.append( ["QuestionID":key, "AnswerID":$0, "Comment": recomendationArray[index] ] )
+                }
+                
+                isManyValue = true
             }
+            
+            index += 1
         }
         
         let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
@@ -287,7 +317,6 @@ final class QuestionAnswerHeader: UICollectionReusableView {
     @IBOutlet private weak var title:       UILabel!
     
     fileprivate func display(_ item: QuestionJson, currentQuestion: Int, questionCount: Int) {
-        
         question.text = item.question
         title.text = "\(currentQuestion + 1) из \(questionCount)"
     }
@@ -303,6 +332,16 @@ final class QuestionAnswerHeader: UICollectionReusableView {
         cell?.question.preferredMaxLayoutWidth = cell?.question.bounds.size.width ?? 0.0
         
         return cell
+    }
+}
+
+
+final class QuestionAnswerFooter: UICollectionReusableView {
+    @IBOutlet weak var textView: UITextView!{
+        didSet{
+            textView.layer.borderWidth = 1
+            textView.layer.borderColor = UIColor.black.cgColor
+        }
     }
 }
 
@@ -437,3 +476,21 @@ final class QuestionAnswerCell: UICollectionViewCell {
 var isSomeAnswers   = false
 var isAccepted      = false
 var selectedAnswers: [Int] = []
+
+var recomendationArray: [String] = []
+
+
+//------------------------------------------------------------------
+
+
+extension QuestionAnswerVC : UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+            recomendationArray.removeLast()
+            recomendationArray.append(textView.text)
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+}

@@ -114,7 +114,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             var debt = 0.0
             let currDate = (filteredCalcs[indexPath.row - 1].numMonthSet, filteredCalcs[indexPath.row - 1].numYearSet)
             calcs.forEach {
-                if ($0.numMonthSet, $0.numYearSet) == currDate {
+                if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
                     debt += ($0.sumDebt ?? 0.0)
                 }
             }
@@ -319,7 +319,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             let vc = segue.destination as! FinanceCalcVC
             let date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
             vc.data_ = calcs.filter {
-                return date == ($0.numMonthSet, $0.numYearSet)
+                return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }
         
         } else if segue.identifier == Segues.fromFinanceVC.toCalcsArchive {
