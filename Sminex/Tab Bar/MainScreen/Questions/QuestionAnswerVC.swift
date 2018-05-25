@@ -193,6 +193,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         default:
             
             assert(false, "Unexpected element kind")
+            return UICollectionReusableView()
         }
     }
     
