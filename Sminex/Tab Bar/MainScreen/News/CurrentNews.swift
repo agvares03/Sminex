@@ -44,8 +44,15 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         titleLabel.text = data_?.header
         if data_?.dateStart != "" {
             let df = DateFormatter()
-            df.dateFormat = "dd.MM.yyyy hh:mm:ss"
-            date.text = dayDifference(from: df.date(from: data_?.dateStart ?? "") ?? Date(), style: "dd MMMM yyyy, hh:mm")
+            df.locale = Locale(identifier: "en_US_POSIX")
+            df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            //date.text = dayDifference(from: df.date(from: data_?.dateStart ?? "") ?? Date(), style: "dd MMMM yyyy, hh:mm")
+            if dayDifference(from: df.date(from: data_?.dateStart ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
+                date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "HH:mm")
+                
+            } else {
+                date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "dd MMMM")
+            }
         }
         
         if data_?.headerImage == nil || data_?.headerImage == "" {

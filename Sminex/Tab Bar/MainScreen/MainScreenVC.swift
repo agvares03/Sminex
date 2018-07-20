@@ -1209,7 +1209,7 @@ final class NewsCell: UICollectionViewCell {
             df.dateFormat = "dd.MM.yyyy HH:mm:ss"
             if dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
 //            if dayDifference(from: df.date(from: item.date)!, style: "dd MMMM").contains(find: "Сегодня") {
-                date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "hh:mm")
+                date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "HH:mm")
             
             } else {
                 date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
