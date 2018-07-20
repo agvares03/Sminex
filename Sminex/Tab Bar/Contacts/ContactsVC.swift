@@ -73,7 +73,22 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
         cell?.display(data_[indexPath.row], delegate: self)
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
         let isSupport = data_[indexPath.row].name?.contains(find: "оддержка") ?? false
-        return CGSize(width: view.frame.size.width, height: isSupport ? size.height + 5 : size.height - 18)
+//        return CGSize(width: view.frame.size.width, height: isSupport ? size.height + 5 : size.height - 18)
+        
+        if (data_[indexPath.row].name?.contains(find: "Предложения"))! {
+            if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+                (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+                (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+                (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+                (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+                (UIDevice.current.modelName.contains(find: "iPhone SE")) {
+//                          ||  (UIDevice.current.modelName.contains(find: "Simulator")) {
+                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
+            }
+            return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
+        }
+        
+        return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
     }
     
     func phonePressed(_ phone: String) {
@@ -178,7 +193,7 @@ final class ContactsCell: UICollectionViewCell {
             
             if item.email != nil && item.email != "" {
                 emailView.isHidden   = false
-                emailHeight.constant = 75
+                emailHeight.constant = 50 //75
                 phone.text           = item.phone
                 email.text           = item.email
             

@@ -187,12 +187,24 @@ final class AccountHeader: UICollectionReusableView {
         bcName.text = defaults.string(forKey: "buisness")
         lsLabel.text = defaults.string(forKey: "login")
         streetLabel.text = defaults.string(forKey: "adress")
+        if (defaults.string(forKey: "adress") == "-") {
+            streetLabel.text = " "
+        }
         roomLabel.text = defaults.string(forKey: "roomsCount")
+        if (defaults.string(forKey: "roomsCount") == "-") {
+            roomLabel.text = " "
+        }
         generalLabel.text = (defaults.string(forKey: "totalArea") ?? "") + " м²"
         habitableLabel.text = (defaults.string(forKey: "residentialArea") ?? "") + " м²"
         holderPhoneLabel.text = defaults.string(forKey: "contactNumber")
+        if (defaults.string(forKey: "contactNumber") == "-") {
+            holderPhoneLabel.text = " "
+        }
         holderLabel.text = defaults.string(forKey: "name")
         descLabel.text   = defaults.string(forKey: "accDesc")
+        if (defaults.string(forKey: "accDesc") == "-") {
+            descLabel.text = " "
+        }
         
         holderPhoneLabel.isUserInteractionEnabled  = true
         comfortPhoneLabel.isUserInteractionEnabled = true

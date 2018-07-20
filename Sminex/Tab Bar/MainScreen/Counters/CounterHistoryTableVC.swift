@@ -53,7 +53,26 @@ final class CounterHistoryTableVC: UIViewController, UICollectionViewDelegate, U
         let cell = CounterHistoryTableCell.fromNib()
         cell?.display(title: data_[indexPath.row].resource ?? "", desc: data_[indexPath.row].meterUniqueNum ?? "")
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        
+        // Разное определение высоты для разных устройств
+//        var numb_to_move:CGFloat = 15;
+//        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+//            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+//            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+//            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+//            (UIDevice.current.modelName.contains(find: "iPhone 5s")) { //||
+////            (UIDevice.current.modelName.contains(find: "Simulator")) {
+//            numb_to_move = -10;
+//        }
+//
+//        if (size.height < 78) {
+//            return CGSize(width: view.frame.size.width, height: 78 - numb_to_move)
+//        } else {
+//            return CGSize(width: view.frame.size.width, height: size.height - numb_to_move)
+//        }
+        
+        return CGSize(width: view.frame.size.width, height: 78)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

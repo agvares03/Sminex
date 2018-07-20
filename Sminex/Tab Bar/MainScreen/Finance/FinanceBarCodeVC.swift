@@ -27,13 +27,16 @@ final class FinanceBarCodeVC: UIViewController {
 
         if data_ != nil {
 
-            amount.text = String(Int(data_?.sumPay ?? 0.0))
+            amount.text = String(Double(data_?.sumPay ?? 0.0))
             barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: data_?.codPay?.stringByAddingPercentEncodingForRFC3986() ?? "", symbology: .qr, size: barcode.frame.size)!)
 
         } else {
-            amount.text = String(Int(amount_ ?? 0.0))
+            amount.text = String(Double(amount_ ?? 0.0))
             if codePay_ != nil && codePay_ != "" {
-                barcode.image = UIImage(ciImage: BarcodeGenerator.generate(from: codePay_ ?? "", symbology: .qr, size: barcode.frame.size)!)
+                let img: CIImage? = BarcodeGenerator.generate(from: codePay_ ?? "", symbology: .qr, size: barcode.frame.size)!
+                if img != nil {
+                    barcode.image = UIImage(ciImage: img!)
+                }
             }
         }
         if isNeedToScrollMore() {

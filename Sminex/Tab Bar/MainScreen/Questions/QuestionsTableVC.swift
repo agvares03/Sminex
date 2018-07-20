@@ -72,7 +72,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 65.0)
+        return CGSize(width: view.frame.size.width, height: 85.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -172,9 +172,26 @@ final class QuestionsTableCell: UICollectionViewCell {
             }
         }
         
+        var txt = " вопроса"
+        let col_questions = (item.questions?.count)!
+        if (col_questions > 4) {
+            txt = " вопросов"
+        } else if (col_questions == 1) {
+            txt = " вопрос"
+        }
+        if (col_questions > 20) {
+            let ostatok = col_questions % 10
+            if (ostatok > 4) {
+                txt = " вопросов"
+            } else if ostatok == 1 {
+                txt = " вопрос"
+            } else {
+                txt = " вопроса"
+            }
+        }
         desc.text = (isAnswered)
             ? "Вы начали опрос"
-            : String(item.questions?.count ?? 0) + " вопросов"
+            : String(item.questions?.count ?? 0) + txt
         desc.textColor = (isAnswered)
             ? .gray
             : UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1)

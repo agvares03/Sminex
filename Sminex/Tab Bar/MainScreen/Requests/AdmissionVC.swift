@@ -102,6 +102,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     private var arr: [AdmissionProtocol] = []
     private var img: UIImage?
     
+    private var refreshControl: UIRefreshControl?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -124,13 +126,37 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         view.isUserInteractionEnabled   = true
         view.addGestureRecognizer(reconizer)
         
-//        if name_ != nil {
-//            title = name_
-//        }
-        
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+        }
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .background).async {
+                sleep(2)
+                DispatchQueue.main.sync {
+
+                }
+            }
+
+            DispatchQueue.main.async {
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
+        }
     }
     
     // Двигаем view вверх при показе клавиатуры

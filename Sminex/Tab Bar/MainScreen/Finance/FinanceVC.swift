@@ -85,6 +85,26 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                     datePay?.removeLast(9)
                 }
                 cell.display(amount: (debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: "До " + (datePay ?? ""))
+            } else {
+                // Значит запрос не прошел
+                let dateFormatter = DateFormatter()
+                let date = Date()
+                dateFormatter.dateFormat = "dd.MM.yyyy"
+                
+                let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
+                let startOfMonth = Calendar.current.date(from: comp)!
+                
+                var comps2 = DateComponents()
+                comps2.month = 1
+                comps2.day = -1
+                let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)
+                let dateText = dateFormatter.string(from: endOfMonth!)
+                
+                let datePay = dateText
+//                if (datePay.count) > 9 {
+//                    datePay.removeLast(8)
+//                }
+                cell.display(amount: (debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: "До " + (datePay))
             }
             cell.contentView.backgroundColor = backColor
             return cell
@@ -96,17 +116,23 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 cell.contentView.backgroundColor = .white
             
             } else {
+//                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
+//                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
+                
                 cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
-                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
+                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0)).formattedWithSeparator)
                 cell.contentView.backgroundColor = backColor
             }
             return cell
         
         } else if indexPath.section == 3 {
-            
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            cell.display(title: "История взаиморасчетов", desc: "")
-            cell.contentView.backgroundColor = .white
+            if (self.calcs.count == 0) {
+                cell.display(title: "", desc: "")
+            } else {
+                cell.display(title: "История взаиморасчетов", desc: "")
+                cell.contentView.backgroundColor = .white
+            }
             return cell
         
         } else {
@@ -245,8 +271,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
                 
                 DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
+//                    self.present(alert, animated: true, completion: nil)
                 }
+
                 return
             }
             
@@ -356,8 +383,17 @@ final class FinanceSectionCell: UITableViewCell {
 
 final class FinanceHeaderCell: UITableViewCell {
     
+    @IBOutlet weak var heigth_cell: NSLayoutConstraint!
+    
     @IBOutlet private weak var amount: UILabel!
     @IBOutlet private weak var date: UILabel!
+    
+    @IBOutlet weak var pay_button: UIButton!    
+    @IBOutlet weak var pay_QR: UIButton!
+    @IBOutlet weak var pay_QR_image: UIImageView!
+    
+    @IBOutlet weak var isPayed: NSLayoutConstraint!
+    @IBOutlet weak var heigthPayed: NSLayoutConstraint!
     
     @IBAction private func barcodePressed(_ sender: UIButton) {
     }
@@ -365,6 +401,30 @@ final class FinanceHeaderCell: UITableViewCell {
     func display(amount: String, date: String) {
         self.amount.text    = amount
         self.date.text      = date
+        
+        let defaults = UserDefaults.standard
+        pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
+        pay_QR.isHidden       = defaults.bool(forKey: "denyOnlinePayments")
+        pay_QR_image.isHidden = defaults.bool(forKey: "denyOnlinePayments")
+        if (defaults.bool(forKey: "denyTotalOnlinePayments")) {
+            pay_button.isHidden   = true
+            pay_QR.isHidden       = true
+            pay_QR_image.isHidden = true
+            
+            isPayed.constant      = 35
+            heigthPayed.constant  = 150
+
+        } else if (defaults.bool(forKey: "denyOnlinePayments")) {
+            
+            isPayed.constant      = 35
+            heigthPayed.constant  = 150
+            
+        }
+        
+        // Выводить или нет кнопку QR-код
+        pay_QR.isHidden           = !defaults.bool(forKey: "denyQRCode")
+        pay_QR_image.isHidden     = !defaults.bool(forKey: "denyQRCode")
+        
     }
 }
 
@@ -373,10 +433,14 @@ final class FinanceCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet weak var img: UIImageView!
     
     func display(title: String, desc: String) {
         self.title.text = title
         self.desc.text  = desc
+        if (title == "") {
+            img.image = nil
+        }
         
     }
 }
@@ -417,28 +481,32 @@ struct AccountBillsData: JSONDecodable {
 
 struct AccountBillsJson: JSONDecodable {
     
-    let idReceipts:     String?
-    let datePayed:      String?
-    let datePay:        String?
-    let codPay:         String?
-    let number:         String?
-    let desc:           String?
-    let sum:            Double?
-    let payment_sum:    Double?
-    let numMonth:       Int?
-    let numYear: 	    Int?
+    let idReceipts:            String?
+    let datePayed:             String?
+    let datePay:               String?
+    let codPay:                String?
+    let number:                String?
+    let desc:                  String?
+    let sum:                   Double?
+    let payment_sum:           Double?
+    let numMonth:              Int?
+    let numYear: 	           Int?
+    let permit_online_payment: Bool?
+    let number_eng:            String?
     
     init?(json: JSON) {
-        idReceipts  = "id_receipts" <~~ json
-        datePayed   = "date_payed"  <~~ json
-        datePay     = "date_pay"    <~~ json
-        codPay      = "cod_pay"     <~~ json
-        desc        = "desc"        <~~ json
-        sum         = "sum"         <~~ json
-        numMonth    = "num_month"   <~~ json
-        numYear     = "num_year"    <~~ json
-        number      = "number"      <~~ json
-        payment_sum = "payment_sum" <~~ json
+        idReceipts            = "id_receipts" <~~ json
+        datePayed             = "date_payed"  <~~ json
+        datePay               = "date_pay"    <~~ json
+        codPay                = "cod_pay"     <~~ json
+        desc                  = "desc"        <~~ json
+        sum                   = "sum"         <~~ json
+        numMonth              = "num_month"   <~~ json
+        numYear               = "num_year"    <~~ json
+        number                = "number"      <~~ json
+        payment_sum           = "payment_sum" <~~ json
+        permit_online_payment = "permit_online_payment"  <~~ json
+        number_eng            = "number_eng"  <~~ json
     }
 }
 

@@ -41,7 +41,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     open var requestId_ = ""
-    open var isCreatingRequest_ = false
+    public var isCreatingRequest_ = false
     open var delegate: MainScreenDelegate?
     open var xml_: XML.Accessor?
     
@@ -291,11 +291,11 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     ||  $0.status.contains(find: "Отправлена")
                     ||  $0.status.contains(find: "выполнению")
                     ||  $0.status.contains(find: "Черновик")
+                    ||  $0.status.contains(find: "Закрыта")
+                    ||  $0.status.contains(find: "Закрыто")
             }
             var secondArr = newData.filter {
-                $0.status.contains(find: "Закрыто")
-                    ||  $0.status.contains(find: "Закрыта")
-                    ||  $0.status.contains(find: "Отклонена")
+                $0.status.contains(find: "Отклонена")
                     ||  $0.status.contains(find: "Оформленно")
                     ||  $0.status.contains(find: "Выдан")
                     ||  $0.status.contains(find: "Отклонено")
@@ -339,6 +339,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             sleep(2)
             DispatchQueue.main.async {
                 self.createButton?.isUserInteractionEnabled = true
+                self.createButton?.isHidden = false
             }
         }
     }
@@ -354,10 +355,16 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 var type = self.data[indexPath.row].type
                 
+                // Это костыль - думать, как лучше сделать.
+                type = ""
+                
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
                     }
+                }
+                if (type == "") {
+                    type = "Гостевой пропуск"
                 }
                 
                 if type.contains(find: "ропуск") {
@@ -542,6 +549,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func update() {
+        self.createButton?.isHidden = true
         DispatchQueue.main.async {
             self.delegate?.update(method: "Request")
             self.getRequests()
@@ -697,7 +705,7 @@ struct Request {
     let idHouseProfile: 	    String?
     let isProcessing:           String?
     let onlyForConsultant: 	    String?
-    let name:                   String?
+    var name:                   String?
     let clearAfterWork: 	    String?
     let idDepartment:           String?
     let comment: 	            String?
@@ -755,6 +763,11 @@ struct Request {
         isProcessing            = row.attributes["IsProcessing"]
         onlyForConsultant       = row.attributes["onlyForConsultant"]
         name                    = row.attributes["name"]
+        if (name?.contains("Техническ"))! {
+            name                = "Техническое обслуживание"
+        } else {
+            name                = "Гостевой пропуск"
+        }
         clearAfterWork          = row.attributes["ClearAfterWork"]
         idDepartment            = row.attributes["id_department"]
         comment                 = row.attributes["Comment"]

@@ -72,7 +72,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         let cell = NewsListCell.fromNib()
         cell?.display(data_[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: !isNeedToScroll() ? size.height : size.height + 8)
+        return CGSize(width: view.frame.size.width, height: !isNeedToScroll() ? size.height : size.height + 16)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -104,6 +104,9 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
             }
             
             guard data != nil else { return }
+            
+            print(String(data: data!, encoding: .utf8) ?? "")
+            
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
@@ -117,6 +120,16 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                     if newsArr.count != 0 {
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)
                         self.data_ = TemporaryHolder.instance.news!
+                        
+                        DispatchQueue.main.sync {
+                            if #available(iOS 10.0, *) {
+                                self.collection.refreshControl?.endRefreshing()
+                            } else {
+                                self.refreshControl?.endRefreshing()
+                            }
+                            self.collection.reloadData()
+                            self.stopAnimation()
+                        }
                         
                     }
                 }
@@ -181,12 +194,13 @@ final class NewsListCell: UICollectionViewCell {
         
         if item?.dateStart != "" {
             let df = DateFormatter()
-            df.dateFormat = "dd.MM.yyyy hh:mm:ss"
-            if dayDifference(from: df.date(from: item?.dateStart ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
-                date.text = dayDifference(from: df.date(from: item?.dateStart ?? "") ?? Date(), style: "hh:mm")
+            df.locale = Locale(identifier: "en_US_POSIX")
+            df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            if dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
+                date.text = dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "hh:mm")
                 
             } else {
-                date.text = dayDifference(from: df.date(from: item?.dateStart ?? "") ?? Date(), style: "dd MMMM")
+                date.text = dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "dd MMMM")
             }
         }
     }

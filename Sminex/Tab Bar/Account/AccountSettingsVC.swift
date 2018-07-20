@@ -131,9 +131,27 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         
         let defaults            = UserDefaults.standard
         email.text              = defaults.string(forKey: "mail")
+        if (defaults.string(forKey: "mail") == "-") {
+            email.text          = ""
+        }
+        
         contactNumber.text      = defaults.string(forKey: "contactNumber")
-        privNumber.text         = defaults.string(forKey: "contactNumber")
+        if (defaults.string(forKey: "contactNumber") == "-") {
+            contactNumber.text  = ""
+        }
+        privNumber.text         = defaults.string(forKey: "phone_user")
+        if (defaults.string(forKey: "phone_user") == "-") {
+            privNumber.text     = ""
+        }
         lsLabel.text            = defaults.string(forKey: "login")
+        if (defaults.string(forKey: "login") == "-") {
+            lsLabel.text        = ""
+        }
+        
+        commentField.text       = defaults.string(forKey: "accDesc")
+        if (defaults.string(forKey: "accDesc") == "-") {
+            commentField.text   = ""
+        }
         
         let name                = defaults.string(forKey: "name")?.split(separator: " ")
         familyNameField.text    = String(describing: name?[safe: 0] ?? "")
@@ -200,7 +218,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         
         let defPhone = isReg_ ? String(answers[safe: 14] ?? "") : (UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986() ?? "")
         let defMail  = isReg_ ? String(answers[safe: 3]  ?? "") : (UserDefaults.standard.string(forKey: "mail")?.stringByAddingPercentEncodingForRFC3986() ?? "")
-        let phone    = privNumber.text?.stringByAddingPercentEncodingForRFC3986() ?? defPhone
+        let phone    = privNumber.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let phone_contact = contactNumber.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let email   = self.email.text?.stringByAddingPercentEncodingForRFC3986() ?? defMail
         let area    = isReg_ ? String(answers[safe: 12] ?? "") : (UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? "")
         let rooms   = isReg_ ? String(answers[safe: 11] ?? "") : (UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? "")
@@ -210,8 +229,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let defName = isReg_ ? String(answers[safe: 6] ?? "") : (UserDefaults.standard.string(forKey: "name") ?? "")
         let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (defName.stringByAddingPercentEncodingForRFC3986() ?? "")
         let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
+        let comment_txt = commentField.text?.stringByAddingPercentEncodingForRFC3986()
         
-        let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&email=\(email)&additionalInfo=\(commentField.text ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
+        let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&businessPhone=\(phone_contact)&email=\(email)&additionalInfo=\(comment_txt ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         

@@ -90,7 +90,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
 final class DealsListDescHeader: UICollectionReusableView {
     
     @IBOutlet         weak var imageHeight:    NSLayoutConstraint!
-    @IBOutlet         weak var imageWidth:     NSLayoutConstraint!
+    @IBOutlet weak var imageWidth: NSLayoutConstraint!
     @IBOutlet private weak var image:          UIImageView!
     @IBOutlet private weak var titleLabel:     UILabel!
     @IBOutlet private weak var dateLabel:      UILabel!
@@ -142,6 +142,37 @@ final class DealsListDescHeader: UICollectionReusableView {
         bodyLabel.preferredMaxLayoutWidth  = bodyLabel.bounds.size.width
         linksLabel.preferredMaxLayoutWidth = linksLabel.bounds.size.width
         
+        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5s")) {
+//          ||  (UIDevice.current.modelName.contains(find: "Simulator")) {
+            
+            imageWidth.constant  = 304
+            imageHeight.constant = 150
+            
+        } else {
+            
+            let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+            if (300.0...320.0).contains(points) {
+                imageWidth.constant  = 288
+                imageHeight.constant = 144
+                
+            } else if (320.0...350.0).contains(points) {
+                imageWidth.constant  = 304
+                imageHeight.constant = 170
+                
+            } else if (350.0...400.0).contains(points) {
+                imageWidth.constant  = 343
+                imageHeight.constant = 144
+                
+            } else {
+                imageWidth.constant  = 382
+                imageHeight.constant = 175
+            }
+        } 
+        
     }
     
     class func fromNib() -> DealsListDescHeader? {
@@ -154,19 +185,18 @@ final class DealsListDescHeader: UICollectionReusableView {
             }
         }
         
-        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (300.0...350.0).contains(points) {
-            cell?.imageWidth.constant  = 288
-            cell?.imageHeight.constant = 144
-            
-        } else if (350.0...400.0).contains(points) {
-            cell?.imageWidth.constant  = 343
-            cell?.imageHeight.constant = 170
-            
-        } else {
-            cell?.imageWidth.constant  = 382
-            cell?.imageHeight.constant = 191
-        }
+//        if (300.0...350.0).contains(points) {
+//            cell?.imageWidth.constant  = 343
+//            cell?.imageHeight.constant = 174
+//
+//        } else if (350.0...400.0).contains(points) {
+//            cell?.imageWidth.constant  = 343
+//            cell?.imageHeight.constant = 170
+//
+//        } else {
+//            cell?.imageWidth.constant  = 382
+//            cell?.imageHeight.constant = 191
+//        }
         
 //        cell?.titleLabel.preferredMaxLayoutWidth = cell?.titleLabel.bounds.size.width ?? 0.0
 //        cell?.bodyLabel.preferredMaxLayoutWidth  = cell?.bodyLabel.bounds.size.width  ?? 0.0

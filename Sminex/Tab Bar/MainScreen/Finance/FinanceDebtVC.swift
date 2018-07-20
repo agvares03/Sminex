@@ -84,13 +84,18 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         collection.dataSource   = self
         collection.delegate     = self
         
-        if data_ != nil {
-            self.startAnimation()
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.getDebt()
-                self.getShareElements()
+        let defaults = UserDefaults.standard
+        if (defaults.bool(forKey: "denyInvoiceFiles")) {
+            
+        } else {
+            if data_ != nil {
+                self.startAnimation()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.getDebt()
+                    self.getShareElements()
+                }
             }
-        }
+        }        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -103,7 +108,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceDebtHeader", for: indexPath) as! FinanceDebtHeader
-        header.dispay(getNameAndMonth(data_?.numMonth ?? 0) + " \(data_?.numYear ?? 0)")
+        header.dispay(getNameAndMonth(data_?.numMonth ?? 0) + " \(data_?.numYear ?? 0)", (String(format:"%.2f", (data_?.sum)!) ))
         return header
         
     }
@@ -142,6 +147,10 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if indexPath.row == receipts?.count {
+            let defaults = UserDefaults.standard
+            if (defaults.bool(forKey: "denyInvoiceFiles")) {
+                return CGSize(width: view.frame.size.width, height: 80.0)
+            }
             return CGSize(width: view.frame.size.width, height: 193.0)
         
         } else {
@@ -243,7 +252,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка", message: "Файл отсутсвует на сервере", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Ошибка", message: "Файл отсутствует на сервере", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                 DispatchQueue.main.async {
                     self.present(alert, animated: true, completion: nil)
@@ -311,9 +320,11 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
 final class FinanceDebtHeader: UICollectionReusableView {
     
     @IBOutlet private weak var title: UILabel!
+    @IBOutlet private weak var obj_sum: UILabel!
     
-    func dispay(_ title: String) {
+    func dispay(_ title: String, _ obj_sum: String) {
         self.title.text = title
+        self.obj_sum.text = obj_sum
     }
 }
 
@@ -356,6 +367,9 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
     @IBOutlet private weak var shareLoader: UIActivityIndicatorView!
     @IBOutlet private weak var shareButton: UIButton!
     @IBOutlet private weak var dateLabel:   UILabel!
+    @IBOutlet weak var pay_button: UIButton!
+    @IBOutlet weak var pay_QR: UIButton!
+    @IBOutlet weak var pay_QR_image: UIImageView!
     
     func display(_ data: AccountBillsJson) {
         self.stopShareAnimation()
@@ -364,6 +378,23 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
             date?.removeLast(9)
         }
         self.dateLabel.text = "До " + (date ?? "")
+        
+        let defaults = UserDefaults.standard
+        pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
+//        pay_QR.isHidden       = defaults.bool(forKey: "denyOnlinePayments")
+//        pay_QR_image.isHidden = defaults.bool(forKey: "denyOnlinePayments")
+        
+        // Если оплаты разрешены, проверим - можно ли оплачивать конкретно эту квитанцию
+        if (!defaults.bool(forKey: "denyOnlinePayments")) {
+            pay_button.isHidden    = !data.permit_online_payment!
+//            pay_QR.isHidden        = !data.permit_online_payment!
+//            pay_QR_image.isHidden  = !data.permit_online_payment!
+        }
+        
+        // Выводить или нет кнопку QR-код
+        pay_QR.isHidden           = !defaults.bool(forKey: "denyQRCode")
+        pay_QR_image.isHidden     = !defaults.bool(forKey: "denyQRCode")        
+        
     }
     
     func startShareAnimation() {

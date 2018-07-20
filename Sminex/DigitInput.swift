@@ -21,7 +21,7 @@ open class DigitInputView: UIView {
     /**
      The number of digits to show, which will be the maximum length of the final string
      */
-    open var numberOfDigits: Int = 4 {
+    open var numberOfDigits: Int = 5 {
         
         didSet {
             setup()
@@ -97,8 +97,8 @@ open class DigitInputView: UIView {
             guard let textField = textField else { return "" }
             var txt = textField.text ?? ""
             
-            if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 4 {
-                txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 4))
+            if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 5 {
+                txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 5))
             }
             return txt
             
@@ -282,8 +282,8 @@ open class DigitInputView: UIView {
         
         var txt = textField.text ?? ""
         
-        if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 4 {
-            txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 4))
+        if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 5 {
+            txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 5))
         }
         
         for (index, item) in txt.reversed().enumerated() {
@@ -354,7 +354,7 @@ extension DigitInputView: UITextFieldDelegate {
         
         if !isEnergy {
         
-            if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 7 {
+            if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 8 {
                 return false
                 
             } else if !(acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 5 {

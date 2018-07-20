@@ -21,8 +21,9 @@ class BarcodeGenerator {
                         size: CGSize) -> CIImage? {
         let filterName = symbology.rawValue
         
-        guard let data = string.data(using: .ascii),
-            let filter = CIFilter(name: filterName) else {
+//        guard let data = string.data(using: .ascii),
+        guard let data = string.data(using: .utf8),
+         let filter = CIFilter(name: filterName) else {
                 return nil
         }
         

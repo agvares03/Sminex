@@ -18,6 +18,9 @@ struct Segues {
         static let toChooiseUk      = "choice_uk"
         static let toLogin          = "login"
         static let toAppsCons       = "AppsCons"
+        
+        // Временно перекинем на новое окно
+        static let toNewMain        = "newMain"
     }
     
     struct fromViewController {

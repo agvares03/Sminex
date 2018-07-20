@@ -42,7 +42,7 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+    
         let cell = ServicesUKTableCell.fromNib()
         let data = self.data[safe: indexPath.row]
         cell?.display(data?.name ?? "", desc: data?.desc ?? "", amount: data?.cost ?? "")

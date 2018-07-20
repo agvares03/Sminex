@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import Alamofire
 
-final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate {
     
     @IBOutlet private weak var collection:  UICollectionView!
     @IBOutlet private weak var res:         UILabel!
     @IBOutlet private weak var name:        UILabel!
     @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var outcome:     UILabel!
+    
+    @IBOutlet private weak var picker:      UIPickerView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -25,11 +28,18 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     
     private var values: [CounterHistoryCellData] = []
     
+    var fraction:       String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Выбор года - уберем с экрана
+        picker.isHidden = true
+        
+        fraction = data_?.fractionalNumber
+        
         res.text = data_?.resource
-        name.text = data_?.meterUniqueNum
+        name.text = "Счетчик " + (data_?.meterUniqueNum)!
         date.text = period_![0].year
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"
         
@@ -48,7 +58,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         }
         
         metValues.forEach {
-            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: $0.valueInput ?? "") )
+           values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: $0.valueInput ?? "", fraction: fraction!) )
         }
         
         values.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }
@@ -83,24 +93,33 @@ final class CounterHistoryCell: UICollectionViewCell {
     fileprivate func display(_ item: CounterHistoryCellData) {
         
         self.month.text     = item.month
-        self.send.text      = item.send
-        self.outcome.text   = item.outcome
-        self.income.text    = item.income
+        if item.fractionNumber.contains(find: "alse") {
+            self.send.text      = item.send.replacingOccurrences(of: ",00", with: "")
+            self.outcome.text   = item.outcome.replacingOccurrences(of: ",00", with: "")
+            self.income.text    = item.income.replacingOccurrences(of: ",00", with: "")
+        } else {
+            self.send.text      = item.send
+            self.outcome.text   = item.outcome
+            self.income.text    = item.income
+        }
     }
 }
 
 private final class CounterHistoryCellData {
     
-    let month:      String
-    let send:       String
-    let outcome:    String
-    let income:     String
+    let month:           String
+    let send:            String
+    let outcome:         String
+    let income:          String
+    let fractionNumber:  String
     
-    init(value: String?, previousValue: String?, period: Int, income: String) {
+    init(value: String?, previousValue: String?, period: Int, income: String, fraction: String) {
         
         send = value ?? ""
         outcome = previousValue ?? ""
         self.income  = income
+        
+        self.fractionNumber = fraction
         
         if period == 1 {
             month = "Январь"

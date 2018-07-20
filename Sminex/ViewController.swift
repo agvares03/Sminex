@@ -157,46 +157,83 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
+        var height_top:CGFloat = 370// высота верхних элементов
+        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone SE")){ //||
+//            (UIDevice.current.modelName.contains(find: "Simulator")) {
+            height_top = 345;
+        } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
+            (UIDevice.current.modelName.contains(find: "Phone 6s Plus")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 7")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 7 Plus")) {
+            height_top = 355;
+        }
         
+        
+        let userInfo = sender?.userInfo
+        let kbFrameSize = (userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let numb_to_move:CGFloat = kbFrameSize.height
+//        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
+
         if !isNeedToScrollMore() {
-            sprtTop.constant = getPoint() - 200
-        
+            sprtTop.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
+
         } else {
             sprtTop.constant = getPoint() - 100
             sprtBtm.constant += 200
         }
-        
+
         if isNeedToScroll() {
-            
+
             if isNeedToScrollMore() {
                 scroll.contentOffset = CGPoint(x: 0, y: 100)
                 scroll.contentSize.height += 50
-            
+
             } else {
 //                view.frame.origin.y = -60
             }
         }
+        
+        
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         
+        var numb_to_move:CGFloat = 240;
+        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+            (UIDevice.current.modelName.contains(find: "Simulator")) {
+            numb_to_move = 200;
+        }
+
         if !isNeedToScrollMore() {
             sprtTop.constant = getPoint()
-        
+
         } else {
             sprtTop.constant = getPoint()
-            sprtBtm.constant -= 200
+            sprtBtm.constant -= numb_to_move
         }
-        
+
         if isNeedToScroll() {
             view.frame.origin.y = 0
-            
+
             if isNeedToScrollMore() {
                 scroll.contentOffset = CGPoint(x: 0, y: 0)
                 scroll.contentSize.height -= 50
             }
         }
+        
+//        scroll.contentOffset = CGPoint.zero
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -292,7 +329,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                                isCons:              answer[safe: 5]  ?? "",
                                name:                answer[safe: 6]  ?? "",
                                history_counters:    answer[safe: 7]  ?? "",
-                               contactNumber:       answer[safe: 14] ?? "",
+                               phone:               answer[safe: 14] ?? "",
+                               contactNumber:       answer[safe: 18] ?? "",
                                adress:              answer[safe: 10] ?? "",
                                roomsCount:          answer[safe: 11] ?? "",
                                residentialArea:     answer[safe: 12] ?? "",
@@ -451,11 +489,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             guard data != nil else { return }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
+//                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+//                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+//                DispatchQueue.main.sync {
+//                    self.present(alert, animated: true, completion: nil)
+//                }
                 return
             }
             
@@ -496,10 +534,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             if error != nil {
                 DispatchQueue.main.sync {
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
+//                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+//                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//                    alert.addAction(cancelAction)
+//                    self.present(alert, animated: true, completion: nil)
                 }
                 return
             }

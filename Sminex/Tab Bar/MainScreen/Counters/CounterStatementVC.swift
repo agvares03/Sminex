@@ -39,6 +39,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
     }
     
     open var month_:        String?
+    open var year_:         String?
     open var date_:         String?
     open var value_:        MeterValue?
     open weak var delegate: CounterStatementDelegate?
@@ -47,7 +48,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         automaticallyAdjustsScrollViewInsets = false
         
         count.bottomBorderColor = .clear
@@ -69,23 +70,33 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 
             } else {
                 count.acceptableCharacters = "1234567890."
-                count.numberOfDigits = 8
-                descLabel1.isHidden = true
-                goButtonConst.constant = 20
+                count.numberOfDigits = 9
+                descLabel1.text = "Реальное показание 00012345.678 --> необходимо ввести как 12345.678"
+//                goButtonConst.constant = 20
             }
 //        }
         goButton.isEnabled = false
         goButton.alpha     = 0.5
         count.delegate     = self
         
-        dateLabel.text = date_?.lowercased()
-        typeLabel.text = value_?.resource
-        counterLabel.text = value_?.meterUniqueNum
-        monthValLabel.text = value_?.previousValue
-        monthLabel.text = month_
-        navigationController?.title = "Показания за " + month_!
+        // Выведем текущую дату в формате
+        let date = NSDate()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        let dateString = dateFormatter.string(from: date as Date)
         
-        outcomeLabel.text = "\(value_?.difference ?? "0") \(value_?.units ?? "")/мес."
+        dateLabel.text = dateString //date_?.lowercased()
+        typeLabel.text = value_?.resource
+        counterLabel.text = "Счетчик " + (value_?.meterUniqueNum)!
+        // Округлим прошлое показание счетчика
+        let round_value = value_?.previousValue?.replacingOccurrences(of: ",00", with: "")
+        monthValLabel.text = round_value
+        let previousMonth = Calendar.current.date(byAdding: .month, value: -1, to: Date())
+        monthLabel.text = getMonth(date: previousMonth!)   // month_
+//        navigationController?.title = "Показания за " + month_! + " " + year_!
+        self.title = "Показания за " + month_! + " " + year_!
+        
+        outcomeLabel.text = "\(value_?.difference?.replacingOccurrences(of: ",00", with: "") ?? "0") \(value_?.units ?? "")/мес."
         
         stopAnimator()
         
@@ -99,6 +110,42 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         let _ = count.becomeFirstResponder()
         
 //        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+    }
+    
+    func getMonth(date: Date) -> String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM"
+        let str_date = formatter.string(from: date as Date)
+        return get_strMonth(str_date: str_date)
+    }
+    
+    func get_strMonth(str_date: String) -> String {
+        if (str_date == "01") {
+            return "Январь"
+        } else if (str_date == "02") {
+            return "Февраль"
+        } else if (str_date == "03") {
+            return "Март"
+        } else if (str_date == "04") {
+            return "Апрель"
+        } else if (str_date == "05") {
+            return "Май"
+        } else if (str_date == "06") {
+            return "Июнь"
+        } else if (str_date == "07") {
+            return "Июль"
+        } else if (str_date == "08") {
+            return "Август"
+        } else if (str_date == "09") {
+            return "Сентябрь"
+        } else if (str_date == "10") {
+            return "Октябрь"
+        } else if (str_date == "11") {
+            return "Ноябрь"
+        } else if (str_date == "12") {
+            return "Декабрь"
+        }
+        return ""
     }
     
     func textFieldDidChange(_ textField: UITextField) {

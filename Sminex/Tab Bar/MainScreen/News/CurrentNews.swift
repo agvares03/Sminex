@@ -38,7 +38,8 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         automaticallyAdjustsScrollViewInsets = false
         webView.delegate = self
         webView.scrollView.isScrollEnabled = false
-        webView.loadHTMLString(data_?.text ?? "", baseURL: nil)
+        let txt = "<div font-size:16px;'>" + (data_?.text)!
+        webView.loadHTMLString(txt, baseURL: nil)
         
         titleLabel.text = data_?.header
         if data_?.dateStart != "" {
@@ -56,10 +57,12 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         }
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (300.0...350.0).contains(points) {
+        if (300.0...320.0).contains(points) {
             imageWidth.constant  = 288
             imageHeight.constant = 144
-            
+        } else if (320.0...350.0).contains(points) {
+            imageWidth.constant  = 343
+            imageHeight.constant = 170
         } else if (350.0...400.0).contains(points) {
             imageWidth.constant  = 343
             imageHeight.constant = 170

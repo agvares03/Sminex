@@ -13,6 +13,10 @@ import Gloss
 
 class FirstController: UIViewController {
     
+    private var business_center_info: Bool?
+    private var busines_center_denyInvoiceFiles: Bool?
+    private var busines_center_denyTotalOnlinePayments: Bool?
+    
     @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
     private var window: UIWindow?
@@ -89,12 +93,54 @@ class FirstController: UIViewController {
                     
                 } else {
                     
+                    // Получим данные по Бизнес-центру (выводить или нет Оплаты)
+                    self.get_info_business_center()
+                    
                     // Если в памяти есть логин и пароль, сразу зайдем в приложение
                     self.goToApps();
                     
                 }
             }
         }
+    }
+    
+    private func get_info_business_center() {
+        
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
+                
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
+                self.busines_center_denyInvoiceFiles = Business_Center_Data(json: json!)?.DenyInvoiceFiles
+                self.busines_center_denyTotalOnlinePayments = Business_Center_Data(json: json!)?.DenyTotalOnlinePayments
+            }
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            #endif
+            
+            let defaults = UserDefaults.standard
+            defaults.set(self.business_center_info, forKey: "denyOnlinePayments")
+            defaults.set(self.busines_center_denyInvoiceFiles, forKey: "denyInvoiceFiles")
+            defaults.set(self.busines_center_denyTotalOnlinePayments, forKey: "denyTotalOnlinePayments")
+            defaults.synchronize()
+            
+        }.resume()
     }
     
     private func goToApps() {
@@ -270,7 +316,8 @@ class FirstController: UIViewController {
                                isCons:              answer[safe: 5]  ?? "",
                                name:                answer[safe: 6]  ?? "",
                                history_counters:    answer[safe: 7]  ?? "",
-                               contactNumber:       answer[safe: 14] ?? "",
+                               phone:               answer[safe: 14] ?? "",
+                               contactNumber:       answer[safe: 18] ?? "",
                                adress:              answer[safe: 10] ?? "",
                                roomsCount:          answer[safe: 11] ?? "",
                                residentialArea:     answer[safe: 12] ?? "",
@@ -326,6 +373,7 @@ class FirstController: UIViewController {
                     db.parse_Apps(login: login, pass: pass, isCons: "0")
                     
                     self.performSegue(withIdentifier: Segues.fromFirstController.toAppsUserNow, sender: self)
+//                    self.performSegue(withIdentifier: Segues.fromFirstController.toNewMain, sender: self)
                     
                 }
             }
@@ -361,4 +409,19 @@ class FirstController: UIViewController {
             
             }.resume()
     }
+    
+    // Объект для парса json-данных по БЦ
+    struct Business_Center_Data: JSONDecodable {
+        
+        let DenyOnlinePayments: Bool?
+        let DenyInvoiceFiles: Bool?
+        let DenyTotalOnlinePayments: Bool?
+        
+        init?(json: JSON) {
+            DenyOnlinePayments = "denyOnlinePayments"    <~~ json
+            DenyInvoiceFiles   = "denyInvoiceFiles"    <~~ json
+            DenyTotalOnlinePayments = "denyTotalOnlinePayments"    <~~ json
+        }
+    }
+    
 }

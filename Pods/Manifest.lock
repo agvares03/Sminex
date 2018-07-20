@@ -1,31 +1,32 @@
 PODS:
-  - Alamofire (4.7.2)
+  - Alamofire (4.7.3)
   - Arcane (1.2.1)
   - DeviceKit (1.7.0)
   - ExpyTableView (1.0)
-  - Firebase/Core (4.13.0):
-    - FirebaseAnalytics (= 4.2.0)
-    - FirebaseCore (= 4.0.20)
-  - Firebase/Messaging (4.13.0):
-    - Firebase/Core
-    - FirebaseMessaging (= 2.2.0)
-  - FirebaseAnalytics (4.2.0):
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
+  - Firebase/Core (5.4.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 5.0.1)
+  - Firebase/CoreOnly (5.4.0):
+    - FirebaseCore (= 5.0.5)
+  - Firebase/Messaging (5.4.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (= 3.0.3)
+  - FirebaseAnalytics (5.0.1):
+    - FirebaseCore (~> 5.0)
+    - FirebaseInstanceID (~> 3.0)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - nanopb (~> 0.3)
-  - FirebaseCore (4.0.20):
+  - FirebaseCore (5.0.5):
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-  - FirebaseInstanceID (2.0.10):
-    - FirebaseCore (~> 4.0)
-  - FirebaseMessaging (2.2.0):
-    - FirebaseAnalytics (~> 4.1)
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
+  - FirebaseInstanceID (3.1.1):
+    - FirebaseCore (~> 5.0)
+  - FirebaseMessaging (3.0.3):
+    - FirebaseCore (~> 5.0)
+    - FirebaseInstanceID (~> 3.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
-    - Protobuf (~> 3.5)
+    - Protobuf (~> 3.1)
   - FSPagerView (0.7.1)
-  - Gloss (2.0.0)
+  - Gloss (2.0.1)
   - GoogleToolboxForMac/Defines (2.1.4)
   - GoogleToolboxForMac/Logger (2.1.4):
     - GoogleToolboxForMac/Defines (= 2.1.4)
@@ -36,9 +37,12 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - Protobuf (3.5.0)
+  - Protobuf (3.6.0)
   - SwiftyXMLParser (4.1.0)
   - UIScreenExtension (0.0.2)
+  - YandexMobileMetrica (3.1.2):
+    - YandexMobileMetrica/Static (= 3.1.2)
+  - YandexMobileMetrica/Static (3.1.2)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
@@ -51,9 +55,10 @@ DEPENDENCIES:
   - Gloss
   - SwiftyXMLParser (from `https://github.com/yahoojapan/SwiftyXMLParser.git`)
   - UIScreenExtension (from `https://github.com/marchv/UIScreenExtension`)
+  - YandexMobileMetrica
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Alamofire
     - Arcane
     - DeviceKit
@@ -68,6 +73,7 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - nanopb
     - Protobuf
+    - YandexMobileMetrica
 
 EXTERNAL SOURCES:
   SwiftyXMLParser:
@@ -84,23 +90,24 @@ CHECKOUT OPTIONS:
     :git: https://github.com/marchv/UIScreenExtension
 
 SPEC CHECKSUMS:
-  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Arcane: 870689a8ba7145a7dec0c2d7d7836b50c9f12636
   DeviceKit: 6a5bdeb103c03757bb94aef1ccb01e08bc8ef4ee
   ExpyTableView: 75fe6494d4613fd3dc4bd965cce6e14cec7e2223
-  Firebase: 5ec5e863d269d82d66b4bf56856726f8fb8f0fb3
-  FirebaseAnalytics: 7ef69e76a5142f643aeb47c780e1cdce4e23632e
-  FirebaseCore: 90cb1c53d69b556f112a1bf72b5fcfaad7650790
-  FirebaseInstanceID: 8d20d890d65c917f9f7d9950b6e10a760ad34321
-  FirebaseMessaging: 75cdb862e86c30e0913a2ff307e48d49357c5b73
+  Firebase: d66f4f29c23f22d96808d9abc174d81d8eee968f
+  FirebaseAnalytics: b3628aea54c50464c32c393fb2ea032566e7ecc2
+  FirebaseCore: 42b3267233bd21a5abd54117ccc38ca3dd0f8e83
+  FirebaseInstanceID: f3f0657372592ecdfdfe2cac604a5a75758376a6
+  FirebaseMessaging: f43eb0c0e1da096e659de6f713038e74862a62cd
   FSPagerView: 958aba39684e1573755ddcfcc29f7eebb8413cee
-  Gloss: b67617f327406adfd47adf20172d00680a3a31bd
+  Gloss: 1e8743f8de1fbe14a97f220ff901cba91ae5f8f8
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
+  Protobuf: 0fc0ad8bec688b2a3017a139953e01374fedbd5f
   SwiftyXMLParser: b5a79fb8a730903703d0a92d30752a0b05158967
   UIScreenExtension: 01da75cfff48e87ff8c9b443c335019641b36eaa
+  YandexMobileMetrica: ff500f48d993433fc9b30ffbf611b7502518aceb
 
-PODFILE CHECKSUM: 8a42d4ff2fa6c9afe8c2441f79c0a65bb2c5081c
+PODFILE CHECKSUM: 560bca013f33a1ed4db10f6edfbf71cca29b4b24
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3

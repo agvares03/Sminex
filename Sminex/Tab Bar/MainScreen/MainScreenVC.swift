@@ -23,6 +23,16 @@ protocol MainScreenDelegate: class {
 
 final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout, MainScreenDelegate, AppsUserDelegate {
     
+    private var business_center_info: Bool?
+    private var busines_center_denyInvoiceFiles: Bool?
+    private var busines_center_denyTotalOnlinePayments: Bool?
+    // выводить или нет qr-код
+    private var busines_center_denyQRCode: Bool?
+    
+    // Можно ли добавить транспорт в пропуск
+    private var business_center_PassSingle: Bool?
+    private var business_center_PassSingleWithAuto: Bool?
+    
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
@@ -50,9 +60,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             ],
         5 : [
             0 : CellsHeaderData(title: "Счетчики"),
+            1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")],
+        6 : [
+            0 : CellsHeaderData(title: "Версия"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
+//            1 : VersionCellData()]]
     private var questionSize:   CGSize?
     private var newsSize:       CGSize?
+    private var dealsSize:      CGSize?
+    private var debtSize:       CGSize?
     private var url:            URLRequest?
     private var debt:           AccountDebtJson?
     private var refreshControl: UIRefreshControl?
@@ -66,6 +82,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Получим данные по Бизнес-центру (выводить или нет Оплаты)
+        get_info_business_center()
         
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         
@@ -172,13 +191,59 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
     }
     
+    private func get_info_business_center() {
+        
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
+                
+                DispatchQueue.main.sync {
+//                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
+                self.busines_center_denyInvoiceFiles = Business_Center_Data(json: json!)?.DenyInvoiceFiles
+                self.busines_center_denyTotalOnlinePayments = Business_Center_Data(json: json!)?.DenyTotalOnlinePayments
+                
+                self.busines_center_denyQRCode = Business_Center_Data(json: json!)?.DenyQRCode
+                
+                self.business_center_PassSingle = Business_Center_Data(json: json!)?.DenyIssuanceOfPassSingle
+                self.business_center_PassSingleWithAuto = Business_Center_Data(json: json!)?.DenyIssuanceOfPassSingleWithAuto
+            }
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            #endif
+            
+            let defaults = UserDefaults.standard
+            defaults.set(self.business_center_info, forKey: "denyOnlinePayments")
+            defaults.set(self.busines_center_denyInvoiceFiles, forKey: "denyInvoiceFiles")
+            defaults.set(self.busines_center_denyTotalOnlinePayments, forKey: "denyTotalOnlinePayments")
+            defaults.set(self.busines_center_denyQRCode, forKey: "denyQRCode")
+            defaults.set(self.business_center_PassSingle, forKey: "denyIssuanceOfPassSingle")
+            defaults.set(self.business_center_PassSingleWithAuto, forKey: "denyIssuanceOfPassSingleWithAuto")
+            defaults.synchronize()
+            
+            }.resume()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 && questionSize != nil {
             return 0
             
         } else if section == 1 && newsSize != nil {
             return 0
-        
         } else if data.keys.contains(section) {
             return (data[section]?.count ?? 2) - 1
         
@@ -187,33 +252,62 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
+    func remove(index: Int) {
+        self.data.removeValue(forKey: index)
+        
+        let indexPath = IndexPath(row: index, section: 0)
+        collection.performBatchUpdates({
+            collection.deleteItems(at: [indexPath])
+        }, completion: {
+            (finished: Bool) in
+            self.collection.reloadItems(at: self.collection.indexPathsForVisibleItems)
+        })
+    }
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CellsHeader", for: indexPath) as! CellsHeader
-        header.display(data[indexPath.section]![0] as! CellsHeaderData, delegate: self)
-        header.frame.size.width = view.frame.size.width - 32
-        header.frame.origin.x = 16
+//        if kind == UICollectionElementKindSectionHeader {
         
-        if header.title.text == "Акции и предложения" {
-            header.backgroundColor = .clear
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CellsHeader", for: indexPath) as! CellsHeader
+//        if  indexPath.section != 4 && self.debtSize == nil{
+            header.display(data[indexPath.section]![0] as! CellsHeaderData, delegate: self)
+//        } else {
+//            header.frame.size.height = 0
+//        }
+            header.frame.size.width = view.frame.size.width - 32
+            header.frame.origin.x = 16
+            
+            if header.title.text == "Акции и предложения" {
+                header.backgroundColor = .clear
+            } else if header.title.text == "Версия" {
+                header.backgroundColor = .clear
+                header.title.text = ""
+            }  else {
+                header.backgroundColor = .white
+            }
+            
+            if #available(iOS 11.0, *) {
+                header.clipsToBounds = false
+                header.layer.cornerRadius = 4
+                header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            } else {
+                let rectShape = CAShapeLayer()
+                rectShape.bounds = header.frame
+                rectShape.position = header.center
+                rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+                header.layer.mask = rectShape
+            }
+            
+            return header
+
+//        } else {
+            
+//            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "EnableCell", for: indexPath) as! EnableCell
+//            footer.display("")
+//            return footer
+            
+//        }
         
-        } else {
-            header.backgroundColor = .white
-        }
-        
-        if #available(iOS 11.0, *) {
-            header.clipsToBounds = false
-            header.layer.cornerRadius = 4
-            header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        } else {
-            let rectShape = CAShapeLayer()
-            rectShape.bounds = header.frame
-            rectShape.position = header.center
-            rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
-            header.layer.mask = rectShape
-        }
-        
-        return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -233,8 +327,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: size.height)
         
         } else if title == "Акции и предложения" {
-            return CGSize(width: view.frame.size.width, height: 204.0)
-        
+            if (self.dealsSize == nil) {
+//                self.dealsSize = CGSize(width: view.frame.size.width, height: 204.0)
+                return CGSize(width: view.frame.size.width, height: 0.0)
+            } else {
+                return CGSize(width: view.frame.size.width, height: 204.0)
+            }
         } else if title == "Заявки" {
             if indexPath.row == data[indexPath.section]!.count - 2 {
                 return CGSize(width: view.frame.size.width - 32, height: 70.0)
@@ -248,13 +346,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if title == "К оплате" {
             return CGSize(width: view.frame.size.width - 32, height: 110.0)
-        
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
             return CGSize(width: view.frame.size.width - 32, height: size.height)
-        
+        } else if title == "Версия" {
+
+            return CGSize(width: view.frame.size.width - 32, height: 0.0)
+            
         } else {
             return CGSize(width: view.frame.size.width - 32, height: 100.0)
         }
@@ -301,9 +401,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return cell
         
         } else if title == "Акции и предложения" {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StockCell", for: indexPath) as! StockCell
-            cell.display(data[indexPath.section]![indexPath.row + 1] as! StockCellData, delegate: self, indexPath: indexPath)
-            return cell
+            
+//            if (self.dealsSize == nil) {
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EnableCell", for: indexPath) as! EnableCell
+//                return cell
+//            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StockCell", for: indexPath) as! StockCell
+                cell.display(data[indexPath.section]![indexPath.row + 1] as! StockCellData, delegate: self, indexPath: indexPath)
+                return cell
+//            }
         
         } else if title == "Заявки" {
             
@@ -366,6 +472,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
             return cell
+            
+        } else if title == "Версия" {
+
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VersionCell", for: indexPath) as! VersionCell
+            return cell
         
         } else {
             return SurveyCell()
@@ -386,7 +497,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if section == 1 && newsSize != nil {
             return CGSize(width: 0.0, height: 0.0)
-        
+        } else if section == 2 && dealsSize == nil {
+            return CGSize(width: 0.0, height: 0.0)
         } else {
             return CGSize(width: view.frame.size.width, height: 50.0)
         }
@@ -397,8 +509,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             surveyName = cell.title.text ?? ""
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestionAnim, sender: self)
         
-//        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
-//            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
+        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
         
         } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
             tappedNews = self.filteredNews[safe: indexPath.row]
@@ -605,7 +717,26 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             self.data[0] = [0:CellsHeaderData(title: "Опросы")]
                             var count = 1
                             filtered.forEach {
-                                self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0) вопросов")
+                                
+                                var txt = " вопроса"
+                                let col_questions = ($0.questions?.count)!
+                                if (col_questions > 4) {
+                                    txt = " вопросов"
+                                } else if (col_questions == 1) {
+                                    txt = " вопрос"
+                                }
+                                if (col_questions > 20) {
+                                    let ostatok = col_questions % 10
+                                    if (ostatok > 4) {
+                                        txt = " вопросов"
+                                    } else if ostatok == 1 {
+                                        txt = " вопрос"
+                                    } else {
+                                        txt = " вопроса"
+                                    }
+                                }
+                                
+                                self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
                                 count += 1
                             }
                         }
@@ -648,7 +779,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                 
                 DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
+//                    self.present(alert, animated: true, completion: nil)
                 }
                 return
             }
@@ -658,15 +789,21 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             var imgs: [UIImage] = []
             
-            self.deals.forEach {
-                imgs.append( $0.img ?? UIImage() )
+            if (self.deals.count == 0) {
+                self.dealsSize = nil
+                
+            } else {
+                self.dealsSize = CGSize(width: 0, height: 0)
+                self.deals.forEach {
+                    imgs.append( $0.img ?? UIImage() )
+                }
+                self.data[2]![1] = StockCellData(images: imgs)
+                TemporaryHolder.instance.menuDeals = imgs.count
+                
+                #if DEBUG
+                //                print(String(data: data!, encoding: .utf8) ?? "")
+                #endif
             }
-            self.data[2]![1] = StockCellData(images: imgs)
-            TemporaryHolder.instance.menuDeals = imgs.count
-            
-            #if DEBUG
-            //                print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
             
             }.resume()
     }
@@ -698,8 +835,34 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
                 
                 DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
+//                    self.present(alert, animated: true, completion: nil)
                 }
+                
+//                self.data.removeValue(forKey: 4)
+                
+                let dateFormatter = DateFormatter()
+                let date = Date()
+                dateFormatter.dateFormat = "dd.MM.yyyy"
+                
+                let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
+                let startOfMonth = Calendar.current.date(from: comp)!
+                
+                var comps2 = DateComponents()
+                comps2.month = 1
+                comps2.day = -1
+                let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)
+                let dateText = dateFormatter.string(from: endOfMonth!)
+                
+                var datePay = dateText
+                if (datePay.count) > 9 {
+                    datePay.removeLast(8)
+                }
+                self.data[4]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay)
+                
+                defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
+                defaults.setValue(datePay, forKey: "ForPayDate")
+                defaults.synchronize()
+                
                 return
             }
             
@@ -748,7 +911,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     for (ind, item) in self.filteredNews.enumerated() {
                         if ind < 3 {
-                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+//                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                         }
                     }
                     
@@ -770,7 +934,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             TemporaryHolder.instance.news = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
-                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+//                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                 }
             }
 
@@ -805,7 +970,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 
                 for (ind, item) in self.filteredNews.enumerated() {
                     if ind < 3 {
-                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+//                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                     }
                 }
 
@@ -947,10 +1113,13 @@ final class CellsHeader: UICollectionReusableView {
         
         if item.title == "К оплате" || item.title ==  "Счетчики" {
             self.detail.setTitle("Подробнее", for: .normal)
-        
+        } else if item.title == "Версия" {
+            self.detail.setTitleColor(UIColor.black, for: .normal)
+            self.detail.setTitle("ver. 1.51", for: .normal)
         } else {
             self.detail.setTitle("Все", for: .normal)
         }
+        
     }
     
 }
@@ -987,6 +1156,7 @@ class SurveyCell: UICollectionViewCell {
         title.text       = item.title
         questions.text   = item.question
         divider.isHidden = isLast
+
     }
     
     class func fromNib() -> SurveyCell? {
@@ -1036,14 +1206,17 @@ final class NewsCell: UICollectionViewCell {
         
         if item.date != "" {
             let df = DateFormatter()
-            df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+            df.locale = Locale(identifier: "en_US_POSIX")
+            df.dateFormat = "dd.MM.yyyy HH:mm:ss"
             if dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
+//            if dayDifference(from: df.date(from: item.date)!, style: "dd MMMM").contains(find: "Сегодня") {
                 date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "hh:mm")
             
             } else {
                 date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
             }
         }
+        
     }
     
     class func fromNib(viewWidth: CGFloat) -> NewsCell? {
@@ -1081,6 +1254,13 @@ final class NewsCellData: MainDataProtocol {
     }
 }
 
+final class EnableCell: UICollectionReusableView {
+    
+    fileprivate func display(_ item: String) {
+        
+    }
+}
+
 final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewDelegate {
     
     @IBOutlet private weak var pagerHeight: NSLayoutConstraint!
@@ -1113,7 +1293,11 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         pagerView.delegate   = self
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (300.0...350.0).contains(points) {
+        if (300.0...320.0).contains(points) {
+            pagerView.itemSize = CGSize(width: 288, height: 144)
+            pagerHeight.constant = 144
+            
+        } else if (320.0...350.0).contains(points) {
             pagerView.itemSize = CGSize(width: 343, height: 174)
             pagerHeight.constant = 174
             
@@ -1147,6 +1331,8 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         
         self.delegate   = delegate
         self.indexPath  = indexPath
+        
+        
     }
     
     func pagerView(_ pagerView: FSPagerView, didSelectItemAt index: Int) {
@@ -1220,6 +1406,7 @@ final class RequestCell: UICollectionViewCell {
             df.locale = Locale(identifier: "Ru-ru")
             title.text = String(currTitle.dropLast(19)) + "на " + df.string(from: titleDate)
         }
+        
     }
     
     class func fromNib(viewSize: CGFloat) -> RequestCell? {
@@ -1264,12 +1451,33 @@ final class RequestCellData: MainDataProtocol {
     }
 }
 
+// Выведем версию приложения внизу
+final class VersionCell: UICollectionViewCell {
+    
+    class func fromNib() -> VersionCell? {
+        var cell: VersionCell?
+        let nibViews = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        nibViews?.forEach {
+            if let cellView = $0 as? VersionCell {
+                cell = cellView
+            }
+        }
+        return cell
+    }
+    
+}
+
 final class RequestAddCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UIButton!
     @IBOutlet private weak var button:  UIButton!
     
     @IBAction private func pressed(_ sender: UIButton!) {
+        delegate?.tapped(name: "Добавить заявку")
+    }
+    
+    
+    @IBAction func addRequestByTitle(_ sender: Any) {
         delegate?.tapped(name: "Добавить заявку")
     }
     
@@ -1308,6 +1516,12 @@ final class ForPayCell: UICollectionViewCell {
     
     fileprivate func display(_ item: ForPayCellData) {
         
+        let defaults = UserDefaults.standard
+        pay.isHidden = defaults.bool(forKey: "denyOnlinePayments")
+        if (defaults.bool(forKey: "denyTotalOnlinePayments")) {
+            pay.isHidden = true
+        }
+        
         title.text  = item.title
         
         if item.title.contains(find: "-") {
@@ -1325,7 +1539,20 @@ final class ForPayCell: UICollectionViewCell {
             df.locale = Locale(identifier: "Ru-ru")
             date.text = "До " + df.string(from: currDate ?? Date())
         }
+        
+        func fromNib() -> ForPayCell? {
+            var cell: ForPayCell?
+            let nibViews = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+            nibViews?.forEach {
+                if let cellView = $0 as? ForPayCell {
+                    cell = cellView
+                }
+            }
+
+            return cell
+        }
     }
+    
 }
 
 private final class ForPayCellData: MainDataProtocol {
@@ -1357,6 +1584,7 @@ final class SchetCell: UICollectionViewCell {
         date.text  = item.date
         
         self.delegate = delegate
+
     }
     
     class func fromNib() -> SchetCell? {
@@ -1371,6 +1599,35 @@ final class SchetCell: UICollectionViewCell {
         cell?.date.preferredMaxLayoutWidth  = cell?.date.bounds.size.width ?? 0.0
         return cell
     }
+}
+
+// Объект для парса json-данных по БЦ
+struct Business_Center_Data: JSONDecodable {
+    
+    let DenyOnlinePayments: Bool?
+    let DenyInvoiceFiles: Bool?
+    let DenyTotalOnlinePayments: Bool?
+    
+    let DenyQRCode: Bool?
+    
+    let DenyIssuanceOfPassSingle: Bool?
+    let DenyIssuanceOfPassSingleWithAuto: Bool?
+    
+    init?(json: JSON) {
+        DenyOnlinePayments                = "denyOnlinePayments"                  <~~ json
+        DenyInvoiceFiles                  = "denyInvoiceFiles"                    <~~ json
+        DenyTotalOnlinePayments           = "denyTotalOnlinePayments"             <~~ json
+        
+        DenyQRCode                        = "denyQRCode"                          <~~ json
+        
+        DenyIssuanceOfPassSingle          = "denyIssuanceOfPassSingle"            <~~ json
+        DenyIssuanceOfPassSingleWithAuto  = "denyIssuanceOfPassSingleWithAuto"    <~~ json
+    }
+}
+
+// Вывод версии
+private final class VersionCellData: MainDataProtocol {
+    
 }
 
 private final class SchetCellData: MainDataProtocol {

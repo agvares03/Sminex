@@ -35,7 +35,8 @@ final class FinanceDebtArchiveVC: UIViewController, UICollectionViewDelegate, UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtArchiveCell", for: indexPath) as! FinanceDebtArchiveCell
-        cell.display(title: getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
+//        cell.display(title: getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
+        cell.display(title: getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0)).formattedWithSeparator))
         return cell
     }
     

@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SwiftyXMLParser
 
 private protocol TechServiceProtocol: class { }
 private protocol TechServiceCellsProtocol: class {
@@ -101,6 +102,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     private var arr:    [TechServiceProtocol]    = []
     private var img:    UIImage?
     
+    private var rowComms: [String : [RequestComment]]  = [:]
+    private var rowFiles:   [RequestFile] = []
+    
+    private var refreshControl: UIRefreshControl?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -124,6 +130,109 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         // Подхватываем показ клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            collection.refreshControl = refreshControl
+        } else {
+            collection.addSubview(refreshControl!)
+        }
+        
+    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .background).async {
+                sleep(2)
+                
+                // Получим комментарии по одной заявке
+                let defaults = UserDefaults.standard
+                let login = defaults.string(forKey: "login")
+                let pass = defaults.string(forKey: "pass")
+                
+                var url_str = Server.SERVER
+                url_str = url_str + Server.GET_COMM_ID
+                url_str = url_str + "login=" + (login?.stringByAddingPercentEncodingForRFC3986())!
+                url_str = url_str + "&pwd=" + getHash(pass: pass!, salt: Sminex.getSalt())
+                url_str = url_str + "&id=" + self.reqId_
+                var request = URLRequest(url: URL(string:  url_str)!)
+                request.httpMethod = "GET"
+                
+                URLSession.shared.dataTask(with: request) {
+                    data, error, responce in
+                    
+                    guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                        let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                        DispatchQueue.main.async {
+                            self.present(alert, animated: true, completion: nil)
+                            self.endAnimator()
+                        }
+                        return
+                    }
+                    #if DEBUG
+                    print(String(data: data!, encoding: .utf8) ?? "")
+                    #endif
+                    
+                    DispatchQueue.main.async {
+                        let xml = XML.parse(data!)
+                        self.parse(xml: xml)
+                        
+                        self.img = nil
+                        self.collection.reloadData()
+                        self.commentField.text = ""
+                        self.commentField.placeholder = "Сообщение"
+                        self.view.endEditing(true)
+                        self.delegate?.update()
+                        
+                        // Подождем пока закроется клавиатура
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            usleep(900000)
+                            
+                            DispatchQueue.main.async {
+                                self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                                self.endAnimator()
+                            }
+                        }
+                    }
+                    
+                    }.resume()
+                
+            }
+            
+            DispatchQueue.main.async {
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
+        }
+    }
+    
+    func parse(xml: XML.Accessor) {
+        let requests = xml["Messages"]
+        let row = requests["Comm"]
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            
+            let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            
+            let uid = UUID().uuidString
+            print(uid)
+            
+            row.forEach { row in
+                // Непонятно пока - надо рыть!!
+//                let text_comm = row.attributes.valueForKeyPath(keyPath: "text")
+//                self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: text_comm! as! String, date: row[1].text!, image: self.img, id: uid)  )
+                self.rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
+
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

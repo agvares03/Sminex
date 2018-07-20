@@ -11,9 +11,11 @@ import Alamofire
 
 final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBOutlet weak var isTransport: NSLayoutConstraint!
+    @IBOutlet weak var transportTitle: UILabel!
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var imageConst:      NSLayoutConstraint!
-    @IBOutlet private weak var commentConst:    NSLayoutConstraint!
+    @IBOutlet weak var commentConst: NSLayoutConstraint!
     @IBOutlet private weak var sendBtnConst:    NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
@@ -37,11 +39,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
     }
     
-    @IBAction private func datePickerButtonPressed(_ sender: UIButton?) {
-        
+    @IBAction private func datePickerPressed(_ sender: UIButton?) {
         if sender != nil {
             viewTapped(nil)
         }
+        
         if picker.isHidden {
             
             if imgScroll.isHidden {
@@ -56,20 +58,21 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             
         } else {
             
-            if imgScroll.isHidden {
-                sendBtnConst.constant   = 15
-            
-            } else {
-                sendBtnConst.constant   = 170
-                imageConst.constant     = 5
-            }
-            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd MMMM HH:mm"
             
             dateField.setTitle(dateFormatter.string(from: picker.date), for: .normal)
             picker.isHidden         = true
             pickerLine.isHidden     = true
+            
+            if imgScroll.isHidden {
+                sendBtnConst.constant   = 15
+                
+            } else {
+                sendBtnConst.constant   = 170
+                imageConst.constant     = 5
+            }
+            
         }
     }
     
@@ -172,6 +175,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         transportSwitch.addTarget(self, action: #selector(stateChanged(_:)), for: .valueChanged)
         edContact.text = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+        
+        let defaults = UserDefaults.standard
+        if (defaults.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) {
+            // Уберем автомобиль из пропуска
+            isTransport.constant = 8
+            transportSwitch.isHidden = true
+            transportTitle.isHidden = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -188,7 +199,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @objc func keyboardWillShow(sender: NSNotification?) {
         
         if !picker.isHidden {
-            datePickerButtonPressed(nil)
+            datePickerPressed(nil)
         }
         
         if isNeedToScroll() {
@@ -216,9 +227,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
         view.endEditing(true)
-        if !picker.isHidden {
-            datePickerButtonPressed(nil)
-        }
+//        if !picker.isHidden {
+//            datePickerPressed(nil)
+//        }
     }
     
     @objc private func stateChanged(_ sender: UISwitch) {

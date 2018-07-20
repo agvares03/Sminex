@@ -79,33 +79,39 @@ final class TemporaryHolder {
     
     private func getBills() {
         
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let defaults = UserDefaults.standard
+        if (defaults.bool(forKey: "denyInvoiceFiles")) {
+            
+        } else {
+            let login = UserDefaults.standard.string(forKey: "login") ?? ""
+            let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+            
+            let url = Server.SERVER + Server.GET_BILLS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
+            var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
+            request.httpMethod = "GET"
+            
+            print(request.url)
+            
+            receiptsGroup.enter()
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
+                
+                defer {
+                    self.receiptsGroup.leave()
+                }
+                guard data != nil else { return }
+                
+                #if DEBUG
+                print(String(data: data!, encoding: .utf8) ?? "")
+                #endif
+                
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    self.receipts = AccountBillsData(json: json!)!.data ?? []
+                }
+                
+                }.resume()
+        }
         
-        let url = Server.SERVER + Server.GET_BILLS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
-        var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
-        request.httpMethod = "GET"
-        
-        print(request.url)
-        
-        receiptsGroup.enter()
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            defer {
-                self.receiptsGroup.leave()
-            }
-            guard data != nil else { return }
-            
-            #if DEBUG
-            print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-            
-            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                self.receipts = AccountBillsData(json: json!)!.data ?? []
-            }
-            
-            }.resume()
     }
     
     private func getCalculations() {

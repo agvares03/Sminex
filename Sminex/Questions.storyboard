@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tmH-zp-1G4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tmH-zp-1G4">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,36 +26,27 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="pew-D8-im6">
-                                    <size key="itemSize" width="371" height="65"/>
+                                    <size key="itemSize" width="371" height="95"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="QuestionsTableCell" id="y7D-3o-bkx" customClass="QuestionsTableCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="2" y="0.0" width="371" height="65"/>
+                                        <rect key="frame" x="2" y="0.0" width="371" height="95"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="371" height="65"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="371" height="95"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Bdo-dr-P5R">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Bdo-dr-P5R">
                                                     <rect key="frame" x="16" y="15" width="186" height="17"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 вопросов" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QJI-Ir-sas">
-                                                    <rect key="frame" x="16" y="37" width="186" height="10"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="10" id="ukK-Ue-jzg"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                    <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EbK-2z-SAi">
-                                                    <rect key="frame" x="0.0" y="64" width="371" height="1"/>
+                                                    <rect key="frame" x="16" y="94" width="355" height="1"/>
                                                     <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="6I8-5b-UmX"/>
@@ -65,28 +56,37 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right" translatesAutoresizingMaskIntoConstraints="NO" id="OUQ-7R-BUL">
-                                                    <rect key="frame" x="355" y="26" width="8" height="13"/>
+                                                    <rect key="frame" x="349" y="41" width="8" height="13"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="8" id="Lvc-st-A5W"/>
                                                         <constraint firstAttribute="height" constant="13" id="thP-8G-xY7"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="10 вопросов" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QJI-Ir-sas">
+                                                    <rect key="frame" x="20" y="54" width="186" height="15"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="15" id="ukK-Ue-jzg"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="OUQ-7R-BUL" firstAttribute="centerY" secondItem="y7D-3o-bkx" secondAttribute="centerY" id="DJf-PF-ANV"/>
+                                            <constraint firstItem="EbK-2z-SAi" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leading" constant="16" id="3Ee-LX-La9"/>
+                                            <constraint firstItem="OUQ-7R-BUL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bdo-dr-P5R" secondAttribute="trailing" constant="20" id="7Le-sa-0x9"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="OUQ-7R-BUL" secondAttribute="trailing" constant="6" id="H1Y-rb-Lac"/>
+                                            <constraint firstItem="OUQ-7R-BUL" firstAttribute="centerY" secondItem="y7D-3o-bkx" secondAttribute="centerY" id="JGY-Ph-3WE"/>
                                             <constraint firstAttribute="trailing" secondItem="EbK-2z-SAi" secondAttribute="trailing" id="Pht-gn-feH"/>
                                             <constraint firstItem="QJI-Ir-sas" firstAttribute="trailing" secondItem="Bdo-dr-P5R" secondAttribute="trailing" id="QD3-JT-qEs"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="OUQ-7R-BUL" secondAttribute="trailing" id="Uj2-zi-XeT"/>
                                             <constraint firstItem="Bdo-dr-P5R" firstAttribute="top" secondItem="y7D-3o-bkx" secondAttribute="top" constant="15" id="g8g-jJ-ACV"/>
-                                            <constraint firstItem="QJI-Ir-sas" firstAttribute="top" secondItem="Bdo-dr-P5R" secondAttribute="bottom" constant="5" id="hYt-v7-8ka"/>
-                                            <constraint firstItem="EbK-2z-SAi" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leading" id="m41-ZO-xx6"/>
+                                            <constraint firstItem="QJI-Ir-sas" firstAttribute="top" secondItem="Bdo-dr-P5R" secondAttribute="bottom" constant="8" id="hYt-v7-8ka"/>
                                             <constraint firstItem="QJI-Ir-sas" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leadingMargin" constant="8" id="mSX-fC-G6a"/>
                                             <constraint firstAttribute="bottom" secondItem="EbK-2z-SAi" secondAttribute="bottom" id="o7i-d3-LUU"/>
                                             <constraint firstItem="Bdo-dr-P5R" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leadingMargin" constant="8" id="wmf-wL-99T"/>
-                                            <constraint firstItem="OUQ-7R-BUL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bdo-dr-P5R" secondAttribute="trailing" constant="20" id="xfw-UA-8wc"/>
                                         </constraints>
-                                        <size key="customSize" width="371" height="65"/>
+                                        <size key="customSize" width="371" height="95"/>
                                         <connections>
                                             <outlet property="desc" destination="QJI-Ir-sas" id="pYl-B4-ji2"/>
                                             <outlet property="title" destination="Bdo-dr-P5R" id="he7-qM-G0L"/>
@@ -95,8 +95,8 @@
                                 </cells>
                             </collectionView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опросов пока нет" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AkE-Sm-eXn">
-                                <rect key="frame" x="16" y="80" width="343" height="19.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <rect key="frame" x="16" y="80" width="335" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -111,7 +111,7 @@
                             <constraint firstItem="Ld1-3O-B7v" firstAttribute="centerX" secondItem="Kbx-HD-tmM" secondAttribute="centerX" id="dEc-Th-VL8"/>
                             <constraint firstItem="7lD-Vg-iIu" firstAttribute="top" secondItem="iwf-BO-lKv" secondAttribute="bottom" id="eC8-fb-gci"/>
                             <constraint firstItem="3GA-yK-apH" firstAttribute="top" secondItem="7lD-Vg-iIu" secondAttribute="bottom" id="gUI-ij-RB9"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="AkE-Sm-eXn" secondAttribute="trailing" id="wcX-EZ-99p"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="AkE-Sm-eXn" secondAttribute="trailing" constant="8" id="wcX-EZ-99p"/>
                             <constraint firstAttribute="trailing" secondItem="7lD-Vg-iIu" secondAttribute="trailing" id="xRI-h9-dri"/>
                             <constraint firstItem="Ld1-3O-B7v" firstAttribute="centerY" secondItem="Kbx-HD-tmM" secondAttribute="centerY" id="ysL-5q-j6H"/>
                             <constraint firstItem="7lD-Vg-iIu" firstAttribute="leading" secondItem="Kbx-HD-tmM" secondAttribute="leading" id="zBp-xY-eSr"/>
@@ -244,7 +244,7 @@
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой выриант использования лобби-бара является для Вас предпочтительным" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cTU-kd-Nbf">
                                             <rect key="frame" x="24" y="30.5" width="335" height="164.5"/>
-                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="31"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -287,6 +287,7 @@
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cm2-CX-99r">
                                                     <rect key="frame" x="10" y="57" width="339" height="81"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

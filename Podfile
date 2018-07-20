@@ -18,5 +18,6 @@ target 'Sminex' do
     pod 'DeviceKit'
     pod 'Arcane'
     pod 'Gloss'
+    pod 'YandexMobileMetrica'
     
 end

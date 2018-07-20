@@ -159,9 +159,13 @@ final class DealsListCell: UICollectionViewCell {
         cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (300.0...350.0).contains(points) {
+        if (300.0...320.0).contains(points) {
             cell?.imageWidth.constant  = 288
             cell?.imageHeight.constant = 144
+            
+        } else if (320.0...350.0).contains(points) {
+            cell?.imageWidth.constant  = 302
+            cell?.imageHeight.constant = 151
             
         } else if (350.0...400.0).contains(points) {
             cell?.imageWidth.constant  = 343

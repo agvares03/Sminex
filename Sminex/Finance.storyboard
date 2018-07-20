@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1x1-nX-OL3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1x1-nX-OL3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -49,7 +49,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E2P-yC-SMJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-438" y="-2606"/>
+            <point key="canvasLocation" x="-436" y="-2606"/>
         </scene>
         <!--JAZZ by SMINEX-->
         <scene sceneID="TSM-P3-sGY">
@@ -110,7 +110,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="auq-da-F8r">
                                         <rect key="frame" x="16" y="266" width="343" height="40"/>
-                                        <color key="backgroundColor" red="0.015686274510000001" green="0.3921568627" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="keJ-Hh-LGR"/>
                                         </constraints>
@@ -459,7 +459,7 @@
                                                 </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDa-YA-nRA">
                                                     <rect key="frame" x="18" y="13" width="339" height="35"/>
-                                                    <color key="backgroundColor" red="0.015686274510000001" green="0.3921568627" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="e2b-bj-tlm"/>
                                                     </constraints>
@@ -523,6 +523,9 @@
                                         <size key="customSize" width="375" height="193"/>
                                         <connections>
                                             <outlet property="dateLabel" destination="yi7-5b-9jg" id="0pm-4C-Xcp"/>
+                                            <outlet property="pay_QR" destination="fKM-fK-Spd" id="nUU-gT-OFc"/>
+                                            <outlet property="pay_QR_image" destination="TJb-G3-Rf4" id="SSJ-xa-nWM"/>
+                                            <outlet property="pay_button" destination="gDa-YA-nRA" id="yPG-VX-Tqw"/>
                                             <outlet property="shareButton" destination="tfz-kh-Kz0" id="jsT-iy-Iru"/>
                                             <outlet property="shareLoader" destination="T8m-0A-ckN" id="DTC-Dw-rXR"/>
                                         </connections>
@@ -533,19 +536,28 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Август 2017*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DqZ-yK-Pih">
-                                            <rect key="frame" x="8" y="8" width="359" height="34"/>
+                                            <rect key="frame" x="8" y="8" width="228" height="34"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="157,00 Р" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aik-gg-Mnn">
+                                            <rect key="frame" x="238" y="15" width="113" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailingMargin" secondItem="DqZ-yK-Pih" secondAttribute="trailing" id="Ijx-qQ-3tF"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="DqZ-yK-Pih" secondAttribute="trailing" constant="131" id="Ijx-qQ-3tF"/>
                                         <constraint firstItem="DqZ-yK-Pih" firstAttribute="top" secondItem="FXX-vd-6fS" secondAttribute="topMargin" id="ODd-ZM-lYn"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="aik-gg-Mnn" secondAttribute="trailing" constant="16" id="Uz9-Tw-Ofp"/>
                                         <constraint firstItem="DqZ-yK-Pih" firstAttribute="leading" secondItem="FXX-vd-6fS" secondAttribute="leadingMargin" id="bsG-VL-SQj"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="DqZ-yK-Pih" secondAttribute="bottom" id="otA-XC-pmP"/>
+                                        <constraint firstItem="aik-gg-Mnn" firstAttribute="centerY" secondItem="DqZ-yK-Pih" secondAttribute="centerY" id="ucs-Ja-o9y"/>
                                     </constraints>
                                     <connections>
+                                        <outlet property="obj_sum" destination="aik-gg-Mnn" id="NIJ-5P-ooV"/>
                                         <outlet property="title" destination="DqZ-yK-Pih" id="2bO-BY-nUM"/>
                                     </connections>
                                 </collectionReusableView>
@@ -599,7 +611,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FinanceSectionCell" rowHeight="50" id="xt9-fK-e7D" customClass="FinanceSectionCell" customModule="Sminex" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FinanceSectionCell" rowHeight="50" id="xt9-fK-e7D" customClass="FinanceSectionCell" customModule="Sminex" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xt9-fK-e7D" id="A54-b3-DeT">
@@ -635,7 +647,7 @@
                                             <outlet property="title" destination="FJ8-2s-Uux" id="vY4-vB-i5i"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FinanceHeaderCell" rowHeight="220" id="R3b-Ci-bi3" customClass="FinanceHeaderCell" customModule="Sminex" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FinanceHeaderCell" rowHeight="220" id="R3b-Ci-bi3" customClass="FinanceHeaderCell" customModule="Sminex" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="78" width="375" height="220"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="R3b-Ci-bi3" id="rEu-yY-4QN">
@@ -659,7 +671,7 @@
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IGR-fh-ZkV">
                                                             <rect key="frame" x="20" y="98.5" width="315" height="35"/>
-                                                            <color key="backgroundColor" red="0.015686274510000001" green="0.3921568627" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="35" id="k9b-Wb-PsB"/>
                                                             </constraints>
@@ -718,6 +730,7 @@
                                                         <constraint firstItem="IGR-fh-ZkV" firstAttribute="leading" secondItem="0Ao-MH-D4K" secondAttribute="leading" id="fXZ-pp-ZXN"/>
                                                         <constraint firstItem="XXx-T6-Rmn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="bwG-Mu-38N" secondAttribute="trailing" constant="20" id="gXt-5G-H6o"/>
                                                         <constraint firstItem="YHQ-jg-v5t" firstAttribute="leading" secondItem="V8I-Tv-aEa" secondAttribute="leading" constant="20" id="jJc-LP-H1q"/>
+                                                        <constraint firstItem="bwG-Mu-38N" firstAttribute="top" secondItem="0Ao-MH-D4K" secondAttribute="bottom" constant="85" id="jvK-mV-jxY"/>
                                                         <constraint firstAttribute="height" constant="200" id="lW1-lG-hth"/>
                                                         <constraint firstItem="YHQ-jg-v5t" firstAttribute="top" secondItem="V8I-Tv-aEa" secondAttribute="top" constant="20" id="mXj-wF-shs"/>
                                                         <constraint firstItem="bwG-Mu-38N" firstAttribute="top" secondItem="IGR-fh-ZkV" secondAttribute="bottom" constant="35" id="o0U-Q8-sfx"/>
@@ -737,14 +750,21 @@
                                                 <constraint firstAttribute="trailing" secondItem="V8I-Tv-aEa" secondAttribute="trailing" constant="10" id="Qk7-eL-RjJ"/>
                                                 <constraint firstItem="V8I-Tv-aEa" firstAttribute="leading" secondItem="rEu-yY-4QN" secondAttribute="leading" constant="10" id="ULc-JV-Mzk"/>
                                                 <constraint firstItem="V8I-Tv-aEa" firstAttribute="top" secondItem="rEu-yY-4QN" secondAttribute="top" constant="5" id="gzc-OA-Gt6"/>
+                                                <constraint firstAttribute="bottom" secondItem="V8I-Tv-aEa" secondAttribute="bottom" constant="14.5" id="oTh-Bx-rC3"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="amount" destination="0Ao-MH-D4K" id="QNv-Dm-RHj"/>
                                             <outlet property="date" destination="bwG-Mu-38N" id="QxM-2b-3vl"/>
+                                            <outlet property="heigthPayed" destination="lW1-lG-hth" id="N9F-Pi-Cfh"/>
+                                            <outlet property="heigth_cell" destination="lW1-lG-hth" id="hdR-ab-UzA"/>
+                                            <outlet property="isPayed" destination="jvK-mV-jxY" id="fqp-zq-bGR"/>
+                                            <outlet property="pay_QR" destination="XXx-T6-Rmn" id="52P-hM-Xeo"/>
+                                            <outlet property="pay_QR_image" destination="7wt-5K-hNa" id="TWr-Ji-gBS"/>
+                                            <outlet property="pay_button" destination="IGR-fh-ZkV" id="f9U-Ye-fnl"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FinanceCell" rowHeight="50" id="89u-au-acg" customClass="FinanceCell" customModule="Sminex" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FinanceCell" rowHeight="50" id="89u-au-acg" customClass="FinanceCell" customModule="Sminex" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="298" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="89u-au-acg" id="blD-8k-JOL">
@@ -786,6 +806,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="desc" destination="JKm-LP-l1r" id="jCc-Xi-G6d"/>
+                                            <outlet property="img" destination="sJy-1S-Wlq" id="STD-v8-BQp"/>
                                             <outlet property="title" destination="wO8-B0-DJx" id="5wW-oO-rUX"/>
                                         </connections>
                                     </tableViewCell>

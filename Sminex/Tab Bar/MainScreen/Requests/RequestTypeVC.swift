@@ -13,7 +13,14 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
-        navigationController?.popViewController(animated: true)
+        
+        let AppsUserDelegate = self.delegate as! AppsUser
+        
+        if (AppsUserDelegate.isCreatingRequest_) {
+            navigationController?.popToRootViewController(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     open var delegate: AppsUserDelegate?
@@ -22,8 +29,12 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
     private var data = TemporaryHolder.instance.requestTypes?.types
     private var index = 0
     
+    var flag: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        flag = false
         
         automaticallyAdjustsScrollViewInsets = false
         
@@ -35,9 +46,15 @@ final class RequestTypeVC: UIViewController, UICollectionViewDelegate, UICollect
         super.viewWillAppear(animated)
         
         tabBarController?.tabBar.isHidden = false
+        
+        flag = false
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        // Исключим многократное касание
+        if self.flag { return }
+        self.flag = true
         
         let name = data![indexPath.row].name
         

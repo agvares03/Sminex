@@ -38,7 +38,8 @@ final class FinancePayAcceptVC: UIViewController {
     
     open var accountData_: AccountDebtJson?
     open var billsData_: AccountBillsJson?
-    private var url: URLRequest?
+    private var url: URLRequest!
+    private var str_url: String!
     private var sumText = ""
     
     override func viewDidLoad() {
@@ -49,7 +50,7 @@ final class FinancePayAcceptVC: UIViewController {
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         
         if accountData_ == nil {
-            sumTextField.text = String(format: "%.1f", (billsData_?.sum ?? 0.0) - (billsData_?.payment_sum ?? 0.0))
+            sumTextField.text = String(format: "%.2f", (billsData_?.sum ?? 0.0) - (billsData_?.payment_sum ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
             var date = billsData_?.datePay
             if (date?.count ?? 0) > 9 {
@@ -58,7 +59,7 @@ final class FinancePayAcceptVC: UIViewController {
             descLabel.text = "Оплата счета: \(billsData_?.number ?? "") от \(date ?? "")"
         
         } else {
-            sumTextField.text = String(format: "%.1f", (accountData_?.sumPay ?? 0.0))
+            sumTextField.text = String(format: "%.2f", (accountData_?.sumPay ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета"
             descLabel.isHidden = true
             fieldTop.constant = 16
@@ -95,7 +96,16 @@ final class FinancePayAcceptVC: UIViewController {
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let password = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password + "&amount=" + (sumText))!)
+        let number_bills = billsData_?.number_eng
+        let date_bills   = billsData_?.datePay
+        var url_str = Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password
+        url_str = url_str + "&amount=" + sumText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        if (number_bills != nil) {
+            url_str = url_str + "&invoiceNumber=" + number_bills!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+            url_str = url_str + "&date=" + date_bills!.replacingOccurrences(of: " 00:00:00", with: "").addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        }
+        
+        var request = URLRequest(url: URL(string: url_str)!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -117,7 +127,18 @@ final class FinancePayAcceptVC: UIViewController {
                 return
             }
             
-            self.url = URLRequest(url: URL(string: String(data: data!, encoding: .utf8) ?? "")!)
+//            self.str_url = String(data: data!, encoding: .utf8)!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
+//            self.str_url = self.str_url.replacingOccurrences(of: "https%3A", with: "https:")
+            
+            // Костыль
+            self.str_url = String(data: data!, encoding: .utf8)!//.replacingOccurrences(of: " ", with: "")
+            
+//            let index = self.str_url.index(self.str_url.startIndex, offsetBy: 39)
+//            var str1 = self.str_url.substring(to: index)
+//            var str2 = self.str_url.suffix(self.str_url.length - 39)
+//
+//            self.str_url = str1 + str2.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
+            self.url = URLRequest(url: URL(string: self.str_url)!)
             
             DispatchQueue.main.sync {
                 self.performSegue(withIdentifier: Segues.fromFinancePayAcceptVC.toPay, sender: self)

@@ -21,7 +21,6 @@ protocol CounterVCDelegate: class {
 final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, UIGestureRecognizerDelegate, CounterTableCellDelegate, CounterStatementDelegate {
     
     @IBOutlet private weak var collection: UICollectionView!
-    @IBOutlet private weak var sendToDate: UILabel!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -58,8 +57,6 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             self.getCounters()
         }
         
-        let date = UserDefaults.standard.integer(forKey: "date2")
-        sendToDate.text = date != 0 ? "Передавать до " + String(date) : ""
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -97,20 +94,64 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         let cell = CounterTableCell.fromNib()
         cell?.display(meterArr[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height - 15)
+        
+        // Разное определение высоты для разных устройств
+        var numb_to_move:CGFloat = 25;
+        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+            (UIDevice.current.modelName.contains(find: "Simulator")) {
+            numb_to_move = 15;
+        }
+        
+        if (size.height < 78) {
+            if (size.height < 71) {
+                return CGSize(width: view.frame.size.width, height: size.height)
+            } else {
+                return CGSize(width: view.frame.size.width, height: 78 - numb_to_move)
+            }
+        } else {
+            return CGSize(width: view.frame.size.width, height: size.height - numb_to_move)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CounterTableHeaderCell", for: indexPath) as! CounterTableHeaderCell
-        
-        if periods.count > 0 {
-            header.display(getNameAndMonth(periods.first?.numMonth ?? "1") + " " + (periods.first?.year ?? ""), delegate: self)
-        
+        if kind == UICollectionElementKindSectionHeader {
+            
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CounterTableHeaderCell", for: indexPath) as! CounterTableHeaderCell
+            
+            if periods.count > 0 {
+                header.display(getNameAndMonth(periods.first?.numMonth ?? "1") + " " + (periods.first?.year ?? ""), delegate: self)
+                
+            } else {
+                header.display("", delegate: self)
+            }
+            return header
+            
         } else {
-            header.display("", delegate: self)
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CounterTableFooterCell", for: indexPath) as! CounterTableFooterCell
+            footer.display("", PeriodsCount: periods.count)
+            return footer
         }
-        return header
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        if let headerView = collectionView.visibleSupplementaryViews(ofKind: UICollectionElementKindSectionHeader).first as? CounterTableHeaderCell {
+            headerView.layoutIfNeeded()
+            
+            if periods.count > 0 {
+                return CGSize(width: collectionView.frame.width, height: 60)
+            } else {
+                return CGSize(width: collectionView.frame.width, height: 0)
+            }
+        }
+        
+        return CGSize(width: 0, height: 0)
     }
     
     func pressed(_ named: String) {
@@ -129,7 +170,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_METERS + "login=" + login.stringByAddingPercentEncodingForRFC3986()! + "&pwd=" + pass)!)
         request.httpMethod = "GET"
         
-        print(request.url)
+//        print(request.url)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -149,7 +190,18 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             let xml = XML.parse(data!)
             let metersValues = xml["MetersValues"]
             let period = metersValues["Period"].reversed()
-            guard period.count != 0 else { return }
+            guard period.count != 0 else {
+                DispatchQueue.main.sync {
+                    self.collection.reloadData()
+                    self.delegate?.stopAnimator()
+                    if #available(iOS 10.0, *) {
+                        self.collection.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
+                }
+                return
+            }
             let meterValue = period.first!["MeterValue"]
             
             var newMeters: [MeterValue] = []
@@ -173,6 +225,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
                 } else {
                     self.refreshControl?.endRefreshing()
                 }
+                
             }
             
         }.resume()
@@ -214,8 +267,10 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             
             let vc = segue.destination as! CounterStatementVC
             vc.value_   = meterArr[index]
-            vc.month_   = getNameAndMonth(periods.last?.numMonth ?? "1")
-            vc.date_    =  date[0] + " " + getNameAndMonth(periods[0].numMonth ?? "1") + " " + (periods[0].year ?? "")
+//            vc.month_   = getNameAndMonth(periods.last?.numMonth ?? "1")
+            vc.month_   = getNameAndMonth(periods[0].numMonth ?? "1")
+            vc.year_    = periods[0].year ?? ""
+            vc.date_    = date[0] + " " + getNameAndMonth(periods[0].numMonth ?? "1") + " " + (periods[0].year ?? "")
             vc.delegate = self
         
         } else if segue.identifier == Segues.fromCounterTableVC.toHistory {
@@ -260,6 +315,42 @@ final class CounterTableHeaderCell: UICollectionReusableView, CounterVCDelegate 
         self.history.isHidden = true
     }
 }
+
+final class CounterTableFooterCell: UICollectionReusableView, CounterVCDelegate {
+    func startAnimator() {
+    }
+    
+    func stopAnimator() {
+    }
+    
+    @IBOutlet weak var sendTo: UILabel!
+    
+    fileprivate func display(_ item: String, PeriodsCount: Int) {
+        
+        let dateFormatter = DateFormatter()
+        let date = Date()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        
+        let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
+        let startOfMonth = Calendar.current.date(from: comp)!
+        
+        var comps2 = DateComponents()
+        comps2.month = 1
+        comps2.day = -1
+        let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)
+        let dateText = dateFormatter.string(from: endOfMonth!)
+        
+        if PeriodsCount > 0 {
+            sendTo.text = "Передать до " + dateText
+        } else {
+            sendTo.text = "Нет данных по приборам учета"
+        }
+        
+    }
+    
+}
+
+
 
 final class CounterTableCell: UICollectionViewCell {
     
