@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3AB975EC2101933C009DEBC5 /* NewsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */; };
+		3AB975F02101968E009DEBC5 /* NewsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB975EF2101968E009DEBC5 /* NewsTableCell.swift */; };
 		4111CA361EF4FBCB00BBEB7B /* Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4111CA351EF4FBCB00BBEB7B /* Modal.swift */; };
 		4111CA381EF4FC1800BBEB7B /* AddCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4111CA371EF4FC1800BBEB7B /* AddCom.swift */; };
 		411942ED1F4964CE006E2E0F /* RegistrationAdress4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411942EC1F4964CE006E2E0F /* RegistrationAdress4.swift */; };
@@ -29,7 +31,7 @@
 		411B6CF21EE71C6A001DCBC7 /* AddAppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411B6CF11EE71C6A001DCBC7 /* AddAppUser.swift */; };
 		411B6CF41EE722C4001DCBC7 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411B6CF31EE722C4001DCBC7 /* AppUser.swift */; };
 		411B6CF61EE7268F001DCBC7 /* fon_app.png in Resources */ = {isa = PBXBuildFile; fileRef = 411B6CF51EE7268F001DCBC7 /* fon_app.png */; };
-		4124DE8D20FF128A00C41290 /* NewsListVC_Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4124DE8C20FF128A00C41290 /* NewsListVC_Table.swift */; };
+		4124DE8D20FF128A00C41290 /* NewsListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4124DE8C20FF128A00C41290 /* NewsListTVC.swift */; };
 		4136BD141EEBAC7B000EAE37 /* ic_comm_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 4136BD131EEBAC7B000EAE37 /* ic_comm_action.png */; };
 		4136BD161EEBAD30000EAE37 /* ic_close_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 4136BD151EEBAD30000EAE37 /* ic_close_action.png */; };
 		4136BD181EEBAD58000EAE37 /* ic_action_files_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4136BD171EEBAD58000EAE37 /* ic_action_files_grey.png */; };
@@ -160,6 +162,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableCell.xib; sourceTree = "<group>"; };
+		3AB975EF2101968E009DEBC5 /* NewsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableCell.swift; sourceTree = "<group>"; };
 		410775181F204C1C0064BCDC /* ic_ok_app_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_ok_app_white.png; sourceTree = "<group>"; };
 		4111589E1F1CE56A002F6074 /* fon_app_gkrzs.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fon_app_gkrzs.jpg; sourceTree = "<group>"; };
 		4111589F1F1CE56A002F6074 /* fon_counters_gkrzs.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fon_counters_gkrzs.jpg; sourceTree = "<group>"; };
@@ -186,7 +190,7 @@
 		411B6CF11EE71C6A001DCBC7 /* AddAppUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAppUser.swift; sourceTree = "<group>"; };
 		411B6CF31EE722C4001DCBC7 /* AppUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		411B6CF51EE7268F001DCBC7 /* fon_app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fon_app.png; sourceTree = "<group>"; };
-		4124DE8C20FF128A00C41290 /* NewsListVC_Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListVC_Table.swift; sourceTree = "<group>"; };
+		4124DE8C20FF128A00C41290 /* NewsListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListTVC.swift; sourceTree = "<group>"; };
 		4136BD131EEBAC7B000EAE37 /* ic_comm_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_comm_action.png; sourceTree = "<group>"; };
 		4136BD151EEBAD30000EAE37 /* ic_close_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close_action.png; sourceTree = "<group>"; };
 		4136BD171EEBAD58000EAE37 /* ic_action_files_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_action_files_grey.png; sourceTree = "<group>"; };
@@ -362,6 +366,30 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3AB975EA2101931C009DEBC5 /* Xibs */ = {
+			isa = PBXGroup;
+			children = (
+				3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */,
+			);
+			path = Xibs;
+			sourceTree = "<group>";
+		};
+		3AB975ED21019673009DEBC5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3AB975EE2101967A009DEBC5 /* Cells */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3AB975EE2101967A009DEBC5 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3AB975EF2101968E009DEBC5 /* NewsTableCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		411B6CC61EE3A6E5001DCBC7 /* OSV */ = {
 			isa = PBXGroup;
 			children = (
@@ -441,6 +469,7 @@
 		4171BE5D1ECB369A00B9CDD7 /* Sminex */ = {
 			isa = PBXGroup;
 			children = (
+				3AB975ED21019673009DEBC5 /* Models */,
 				4171BE771ECB3E1000B9CDD7 /* DB */,
 				4171BE761ECB3DFF00B9CDD7 /* Program */,
 				6C4C0A1020675B7C004EF2FF /* Storyboards */,
@@ -735,6 +764,7 @@
 		6C4C0A1020675B7C004EF2FF /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				3AB975EA2101931C009DEBC5 /* Xibs */,
 				6C68E56020A587A70025B42F /* ServicesUK.storyboard */,
 				6CE2F4B22087698700709242 /* News.storyboard */,
 				6C62C270207F317400B5EA11 /* Finance.storyboard */,
@@ -837,7 +867,7 @@
 			isa = PBXGroup;
 			children = (
 				6CE2F4B520876A1100709242 /* NewsListVC.swift */,
-				4124DE8C20FF128A00C41290 /* NewsListVC_Table.swift */,
+				4124DE8C20FF128A00C41290 /* NewsListTVC.swift */,
 				6C356CE52089C0C1009BEE1F /* CurrentNews.swift */,
 			);
 			path = News;
@@ -882,11 +912,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0930;
-				ORGANIZATIONNAME = "The Best";
+				ORGANIZATIONNAME = "Anton Barbyshev";
 				TargetAttributes = {
 					4171BE5A1ECB369A00B9CDD7 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = R84LGLRB92;
+						DevelopmentTeam = UH3H8ESKET;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -939,6 +969,7 @@
 				6C4C0A0D20675A83004EF2FF /* Requests.storyboard in Resources */,
 				4171BE6C1ECB369A00B9CDD7 /* LaunchScreen.storyboard in Resources */,
 				419CBB1C1EF206A600E07021 /* menu_osv.png in Resources */,
+				3AB975EC2101933C009DEBC5 /* NewsTableCell.xib in Resources */,
 				41DBC5A21ECC8F94004BDB9B /* new_mail.png in Resources */,
 				419CBB1A1EF2069700E07021 /* menu_cost.png in Resources */,
 				41D2BF5B1F8CA76500D915A5 /* circled_chevron_down.png in Resources */,
@@ -1040,7 +1071,8 @@
 			files = (
 				6C7F90EB2077365000CFA721 /* AccountChangePasswordVC.swift in Sources */,
 				41DFA8311ED34FBA00F15109 /* AppsUser.swift in Sources */,
-				4124DE8D20FF128A00C41290 /* NewsListVC_Table.swift in Sources */,
+				3AB975F02101968E009DEBC5 /* NewsTableCell.swift in Sources */,
+				4124DE8D20FF128A00C41290 /* NewsListTVC.swift in Sources */,
 				411B6CF41EE722C4001DCBC7 /* AppUser.swift in Sources */,
 				6C212AF5208C69CE008ABD0F /* FinancePayAcceptVC.swift in Sources */,
 				411B6CDE1EE6FF22001DCBC7 /* Comments+CoreDataClass.swift in Sources */,
@@ -1281,7 +1313,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sminex/DemoUC.entitlements;
-				DEVELOPMENT_TEAM = R84LGLRB92;
+				DEVELOPMENT_TEAM = UH3H8ESKET;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
@@ -1300,7 +1332,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sminex.sminex;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sminex.sminex1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sminex/DemoUC-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1317,7 +1349,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sminex/DemoUC.entitlements;
-				DEVELOPMENT_TEAM = R84LGLRB92;
+				DEVELOPMENT_TEAM = UH3H8ESKET;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
@@ -1336,7 +1368,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sminex.sminex;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sminex.sminex1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sminex/DemoUC-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;

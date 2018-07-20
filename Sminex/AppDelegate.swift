@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 import UserNotifications
-import Firebase
+//import Firebase
 import FirebaseInstanceID
 import FirebaseMessaging
 import YandexMobileMetrica
@@ -37,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         application.registerForRemoteNotifications()
-        
-        FirebaseApp.configure()
+        // TODO: - Uncomment this before release
+        //FirebaseApp.configure()
         
         // Инициализация AppMetrica SDK
 //        YMMYandexMetrica.activate(with: YMMYandexMetricaConfiguration.init(apiKey: "5e18cb69-5852-4a9e-9229-c2a2b7c1bf52")!)

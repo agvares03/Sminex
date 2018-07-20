@@ -1024,7 +1024,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.accountData_ = debt
         
         } else if segue.identifier == Segues.fromMainScreenVC.toNewsWAnim {
-            let vc = segue.destination as! NewsListVC
+            let vc = segue.destination as! NewsListTVC
             vc.tappedNews = tappedNews
         
         } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
@@ -1156,7 +1156,6 @@ class SurveyCell: UICollectionViewCell {
         title.text       = item.title
         questions.text   = item.question
         divider.isHidden = isLast
-
     }
     
     class func fromNib() -> SurveyCell? {
