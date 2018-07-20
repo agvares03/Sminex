@@ -69,7 +69,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         super.viewWillAppear(animated)
         tabBarController?.tabBar.selectedItem?.title = barTitle
     }
-    
+ 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return meterArr.count
     }
@@ -151,7 +151,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             }
         }
         
-        return CGSize(width: 0, height: 0)
+        return CGSize(width: collectionView.frame.width, height: 60)
     }
     
     func pressed(_ named: String) {
