@@ -90,8 +90,11 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 73)
         
-        let cell = CounterTableCell.fromNib()
+        // Цель нижеследующей логики не понятна, поэтому закоментирована
+        
+        /*let cell = CounterTableCell.fromNib()
         cell?.display(meterArr[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
         
@@ -114,7 +117,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             }
         } else {
             return CGSize(width: view.frame.size.width, height: size.height - numb_to_move)
-        }
+        }*/
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -375,8 +378,8 @@ final class CounterTableCell: UICollectionViewCell {
                 cell = view
             }
         }
-        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
+        //cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+        //cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
         return cell
     }
 }
