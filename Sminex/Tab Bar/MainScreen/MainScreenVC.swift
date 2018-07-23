@@ -499,6 +499,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: 0.0, height: 0.0)
         } else if section == 2 && dealsSize == nil {
             return CGSize(width: 0.0, height: 0.0)
+        } else if section == 2 {
+            return CGSize(width: view.frame.size.width, height: 35.0)
         } else {
             return CGSize(width: view.frame.size.width, height: 50.0)
         }

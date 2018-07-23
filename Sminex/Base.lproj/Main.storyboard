@@ -971,6 +971,7 @@
                                                 </view>
                                             </subviews>
                                         </view>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="pMW-jr-6Zr" firstAttribute="top" secondItem="1wg-cf-UD5" secondAttribute="bottom" constant="5" id="AKj-ZX-Oct"/>
                                             <constraint firstItem="1wg-cf-UD5" firstAttribute="top" secondItem="pUe-QP-Vbe" secondAttribute="topMargin" id="DKn-B9-uYj"/>
@@ -1222,13 +1223,17 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Счетчики" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="PmD-6b-UfH">
-                                            <rect key="frame" x="16" y="15" width="105" height="35"/>
+                                            <rect key="frame" x="16" y="19" width="105" height="27"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HZ-z6-MVp">
-                                            <rect key="frame" x="330" y="23" width="30" height="19"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HZ-z6-MVp">
+                                            <rect key="frame" x="324" y="23" width="35" height="19"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="35" id="p7o-eE-fIQ"/>
+                                                <constraint firstAttribute="height" constant="19" id="tJW-qG-qLF"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="Все"/>
                                             <connections>
@@ -1238,13 +1243,11 @@
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstItem="9HZ-z6-MVp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="PmD-6b-UfH" secondAttribute="trailing" constant="10" id="31I-mh-NIk"/>
-                                        <constraint firstAttribute="bottom" secondItem="PmD-6b-UfH" secondAttribute="bottom" priority="998" id="IQx-rf-tq0"/>
-                                        <constraint firstItem="PmD-6b-UfH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="D0e-Q5-olP" secondAttribute="top" constant="15" id="PLX-2i-dUm"/>
-                                        <constraint firstAttribute="bottom" secondItem="9HZ-z6-MVp" secondAttribute="bottom" constant="8" id="VDe-DI-6t6"/>
-                                        <constraint firstAttribute="trailing" secondItem="9HZ-z6-MVp" secondAttribute="trailing" constant="16" id="dhI-N9-6lu"/>
-                                        <constraint firstItem="9HZ-z6-MVp" firstAttribute="centerY" secondItem="PmD-6b-UfH" secondAttribute="centerY" id="gZa-Kg-crc"/>
+                                        <constraint firstAttribute="bottom" secondItem="PmD-6b-UfH" secondAttribute="bottom" priority="998" constant="4" id="IQx-rf-tq0"/>
+                                        <constraint firstItem="9HZ-z6-MVp" firstAttribute="centerY" secondItem="PmD-6b-UfH" secondAttribute="centerY" id="O3Y-Kf-HCj"/>
                                         <constraint firstItem="PmD-6b-UfH" firstAttribute="leading" secondItem="D0e-Q5-olP" secondAttribute="leading" constant="16" id="p28-oN-wBg"/>
+                                        <constraint firstAttribute="bottom" secondItem="9HZ-z6-MVp" secondAttribute="bottom" constant="8" id="uf1-hO-CDk"/>
+                                        <constraint firstAttribute="trailing" secondItem="9HZ-z6-MVp" secondAttribute="trailing" constant="16" id="vf1-Kb-fQi"/>
                                     </constraints>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -1554,7 +1557,7 @@
         <segue reference="Ggi-Bk-Rzm"/>
         <segue reference="efl-bX-pxf"/>
         <segue reference="QLh-38-2Hc"/>
-        <segue reference="t3B-Fb-YCZ"/>
+        <segue reference="JHZ-fd-xvP"/>
         <segue reference="7Ci-na-4TA"/>
     </inferredMetricsTieBreakers>
 </document>
