@@ -10,7 +10,7 @@ import UIKit
 
 protocol PhotosCellDelegate: class {
     func photoDidDelete(index: Int)
-    func photoDidOpen(index: Int)
+    func photoDidOpen(sender: PhotoCell)
 }
 
 class PhotosCell: UITableViewCell {
@@ -54,15 +54,19 @@ extension PhotosCell: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.photoDidOpen(index: indexPath.row)
+        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell {
+            delegate?.photoDidOpen(sender: cell)
+        }
     }
     
 }
 
 extension PhotosCell: PhotoCellDelegate {
     
-    func deleteTap() {
-        
+    func deleteTap(sender: UICollectionViewCell) {
+        if let iP = collectionView.indexPath(for: sender) {
+            delegate?.photoDidDelete(index: iP.row)
+        }
     }
     
 }

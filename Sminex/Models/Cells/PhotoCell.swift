@@ -9,14 +9,14 @@
 import UIKit
 
 protocol PhotoCellDelegate: class {
-    func deleteTap()
+    func deleteTap(sender: UICollectionViewCell)
 }
 
 class PhotoCell: UICollectionViewCell {
     
     // MARK: Outlets
     
-    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
     
     // MARK: Properties
     
@@ -31,7 +31,14 @@ class PhotoCell: UICollectionViewCell {
     // MARK: Actions
     
     @IBAction private func delete() {
-        delegate?.deleteTap()
+        delegate?.deleteTap(sender: self)
+    }
+    
+    // MARK: View lifecycle
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.layer.cornerRadius = 6
     }
     
 }

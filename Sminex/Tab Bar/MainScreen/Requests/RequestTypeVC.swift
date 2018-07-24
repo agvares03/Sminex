@@ -62,7 +62,7 @@ class RequestTypeVC: UIViewController {
                 vc.type_ = data[index]
             }
         case Segues.fromRequestTypeVC.toCreateServive:
-            if let vc = segue.destination as? CreateTechServiceVC, let index = sender as? Int {
+            if let vc = segue.destination as? NewTechServiceVC, let index = sender as? Int {
                 vc.delegate = delegate
                 vc.type_ = data[index]
             }

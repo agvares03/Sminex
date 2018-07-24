@@ -8,6 +8,8 @@
 
 import UIKit
 import AFDateHelper
+import Alamofire
+import SimpleImageViewer
 
 private enum ContentType {
     case detailsText
@@ -21,15 +23,42 @@ class NewTechServiceVC: UIViewController {
     // MARK: Outlets
     
     @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var loader: UIActivityIndicatorView!
+    @IBOutlet private weak var sendBtn: UIButton!
+    @IBOutlet private weak var btnViewConstraint: NSLayoutConstraint!
     
     // MARK: Properties
     
+    var type_: RequestTypeStruct?
+    var delegate: AppsUserDelegate?
+    
+    private var reqId:  String?
     private var contents: [ContentType] = [.detailsText, .time]
-    private var detailText = ""
+    private var detailText = "" {
+        didSet {
+            if detailText.count == 0 {
+                sendBtn.isEnabled = false
+                sendBtn.alpha = 0.5
+            } else {
+                sendBtn.isEnabled  = true
+                sendBtn.alpha = 1
+            }
+        }
+    }
     private var date = Date()
+    private var data: ServiceHeaderData?
     private var images = [UIImage]() {
         didSet {
-            
+            if images.count != 0 && oldValue.count == 0 {
+                contents.append(.photos)
+                tableView.reloadData()
+            } else if images.count == 0 {
+                contents.removeLast()
+                tableView.reloadData()
+            } else {
+                let rows = tableView.numberOfRows(inSection: 0)
+                tableView.reloadRows(at: [IndexPath(row: rows - 1, section: 0)], with: .fade)
+            }
         }
     }
     
@@ -38,6 +67,126 @@ class NewTechServiceVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
+        endAnimator()
+        
+        sendBtn.isEnabled = false
+        sendBtn.alpha = 0.5
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    // MARK: Functions
+    
+    // Двигаем view вверх при показе клавиатуры
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let info = notification.userInfo!
+        let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+        btnViewConstraint.constant = (keyboardSize?.height)!
+    }
+    
+    // И вниз при исчезновении
+    @objc func keyboardWillHide() {
+        btnViewConstraint.constant = 0
+    }
+    
+    // MARK: Private functions
+    
+    private func startAnimator() {
+        sendBtn.isHidden = true
+        loader.isHidden = false
+        loader.startAnimating()
+    }
+    
+    private func endAnimator() {
+        sendBtn.isHidden = false
+        loader.stopAnimating()
+        loader.isHidden = true
+    }
+    
+    private func uploadRequest() {
+        
+        let login = UserDefaults.standard.string(forKey: "login")!
+        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
+        let comm = detailText
+        
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")"
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        
+        URLSession.shared.dataTask(with: request) {
+            responce, error, _ in
+            
+            guard responce != nil else {
+                DispatchQueue.main.async {
+                    self.endAnimator()
+                }
+                return
+            }
+            if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
+                DispatchQueue.main.sync {
+                    
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+                return
+            } else {
+                #if DEBUG
+                print(String(data: responce!, encoding: .utf8)!)
+                #endif
+                
+                self.reqId = String(data: responce!, encoding: .utf8)
+                DispatchQueue.global(qos: .userInteractive).async {
+                    
+                    self.images.forEach {
+                        self.uploadPhoto($0)
+                    }
+                    DispatchQueue.main.sync {
+                        
+                        self.endAnimator()
+                        self.delegate?.update()
+                        self.performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
+                    }
+                }
+            }
+            }.resume()
+    }
+    
+    private func uploadPhoto(_ img: UIImage) {
+        
+        let group = DispatchGroup()
+        let reqID = reqId?.stringByAddingPercentEncodingForRFC3986()
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
+        
+        group.enter()
+        let uid = UUID().uuidString
+        Alamofire.upload(multipartFormData: { multipartFromdata in
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
+        }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
+            
+            switch result {
+            case .success(let upload, _, _):
+                
+                upload.uploadProgress(closure: { (progress) in
+                    print("Upload Progress: \(progress.fractionCompleted)")
+                })
+                
+                upload.responseJSON { response in
+                    print(response.result.value!)
+                    group.leave()
+                    
+                }
+                
+            case .failure(let encodingError):
+                print(encodingError)
+            }
+        }
+        group.wait()
+        return
     }
 
     // MARK: Actions
@@ -51,12 +200,70 @@ class NewTechServiceVC: UIViewController {
         present(action, animated: true, completion: nil)
     }
     
+    @IBAction private func cameraButtonPressed(_ sender: UIButton) {
+        
+        view.endEditing(true)
+        
+        let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        action.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { (_) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = .photoLibrary;
+                imagePicker.allowsEditing = true
+                self.present(imagePicker, animated: true, completion: nil)
+            }
+        }))
+        action.addAction(UIAlertAction(title: "Сделать фото", style: .default, handler: { (_) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = .camera;
+                imagePicker.allowsEditing = false
+                self.present(imagePicker, animated: true, completion: nil)
+            }
+        }))
+        action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
+        present(action, animated: true, completion: nil)
+    }
+    
+    @IBAction private func sendButtonPressed(_ sender: UIButton) {
+        
+        view.endEditing(true)
+        startAnimator()
+        data = ServiceHeaderData(icon: UIImage(named: "account")!,
+                                 problem: detailText,
+                                 date: date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")),
+                                 status: "В ОБРАБОТКЕ",
+                                 images: images)
+        uploadRequest()
+    }
+    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        if segue.identifier == Segues.fromCreateTechService.toService {
+            let vc = segue.destination as! TechServiceVC
+            vc.isCreate_ = true
+            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "")
+            vc.reqId_ = reqId ?? ""
+            vc.delegate = delegate
+        }
     }
 
+}
+
+extension NewTechServiceVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        images.append(image)
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 extension NewTechServiceVC: UITableViewDataSource, UITableViewDelegate {
@@ -88,6 +295,7 @@ extension NewTechServiceVC: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PhotosCell", for: indexPath) as! PhotosCell
             cell.delegate = self
             cell.configure(images: images)
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
             return cell
         }
     }
@@ -116,7 +324,7 @@ extension NewTechServiceVC: UITableViewDataSource, UITableViewDelegate {
         case .chooseTime:
             height = 150
         case .photos:
-            height = 166
+            height = 176
         }
         return height
     }
@@ -150,11 +358,17 @@ extension NewTechServiceVC: DatePickerCellDelegate {
 extension NewTechServiceVC: PhotosCellDelegate {
     
     func photoDidDelete(index: Int) {
-        
+        images.remove(at: index)
     }
     
-    func photoDidOpen(index: Int) {
+    func photoDidOpen(sender: PhotoCell) {
+        let configuration = ImageViewerConfiguration { config in
+            config.imageView = sender.imageView
+        }
         
+        let imageViewerController = ImageViewerController(configuration: configuration)
+        
+        present(imageViewerController, animated: true)
     }
     
 }

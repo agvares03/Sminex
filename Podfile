@@ -21,6 +21,7 @@ target 'Sminex' do
     pod 'YandexMobileMetrica'
     pod 'UITextView+Placeholder'
     pod 'AFDateHelper'
+    pod 'SimpleImageViewer'
     
 end
 
