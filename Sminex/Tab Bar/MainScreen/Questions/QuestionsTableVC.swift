@@ -164,14 +164,14 @@ final class QuestionsTableCell: UICollectionViewCell {
     fileprivate func display(_ item: QuestionDataJson) {
         
         title.text = item.name
-        
+        /*
         var isAnswered = true
         item.questions?.forEach {
             if !($0.isCompleteByUser ?? false) {
                 isAnswered = false
             }
         }
-        
+        */
         var txt = " вопроса"
         let col_questions = (item.questions?.count)!
         if (col_questions > 4) {
@@ -189,6 +189,14 @@ final class QuestionsTableCell: UICollectionViewCell {
                 txt = " вопроса"
             }
         }
+        
+        var isAnswered = false
+        let defaults = UserDefaults.standard
+        let array = defaults.array(forKey: "PollsStarted") as? [Int] ?? [Int]()
+        if array.contains(item.id!) {
+            isAnswered = true
+        }
+        
         desc.text = (isAnswered)
             ? "Вы начали опрос"
             : String(item.questions?.count ?? 0) + txt

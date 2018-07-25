@@ -31,7 +31,13 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
         
-        
+        // Добавляем опрос в список начатых опросов
+        let defaults = UserDefaults.standard
+        var array = defaults.array(forKey: "PollsStarted") as? [Int] ?? [Int]()
+        if !array.contains(question_!.id!) {
+            array.append(question_!.id!)
+            defaults.set(array, forKey: "PollsStarted")
+        }
         
         var answerArr: [Int] = []
         
@@ -289,6 +295,17 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             
             UserDefaults.standard.removeObject(forKey: String(self.question_?.id ?? 0))
             UserDefaults.standard.synchronize()
+            
+            // Удаляем из списка начатых опросов
+            var array = UserDefaults.standard.array(forKey: "PollsStarted") as? [Int] ?? [Int]()
+            if array.contains(self.question_!.id!) {
+                 if let index = array.index(where: { (id) -> Bool in
+                    id == self.question_!.id!
+                 }) {
+                    array.remove(at: index)
+                }
+                UserDefaults.standard.set(array, forKey: "PollsStarted")
+            }
             
             DispatchQueue.main.async {
                 
