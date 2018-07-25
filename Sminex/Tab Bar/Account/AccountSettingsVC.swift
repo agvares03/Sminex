@@ -270,7 +270,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 vc.isFromSettings_ = true
                 vc.enter(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pass") ?? "")
                 let alert = UIAlertController(title: nil, message: "Изменения успешно сохранены!", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                    self.navigationController?.popViewController(animated: true)
+                } ) )
                 DispatchQueue.main.async {
                     self.present(alert, animated: true, completion: nil)
                 }
