@@ -720,6 +720,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             var count = 1
                             filtered.forEach {
                                 
+                                
+                                
                                 var txt = " вопроса"
                                 let col_questions = ($0.questions?.count)!
                                 if (col_questions > 4) {
@@ -738,7 +740,19 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                     }
                                 }
                                 
-                                self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
+                                var isAnsvered = false
+                                let defaults = UserDefaults.standard
+                                let array = defaults.array(forKey: "PollsStarted") as? [Int] ?? [Int]()
+                                if array.contains($0.id!) {
+                                    isAnsvered = true
+                                }
+                                
+                                if isAnsvered {
+                                    self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "Вы начали опрос")
+                                } else {
+                                    self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
+                                }
+                                
                                 count += 1
                             }
                         }

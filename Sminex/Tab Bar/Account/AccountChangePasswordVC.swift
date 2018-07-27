@@ -57,7 +57,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         
         guard (UserDefaults.standard.string(forKey: "pass") ?? "") == (oldPasswordField.text ?? "") else {
             wrongPassLabel.isHidden = false
-            forgotTop.constant = 50
+            forgotTop.constant = 32
             return
         }
         startAnimator()
@@ -87,6 +87,12 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         oldPasswordField.delegate = self
         newPasswordField.delegate = self
         
+        if #available(iOS 10, *) {
+            // Disables the password autoFill accessory view.
+            oldPasswordField.textContentType = UITextContentType("")
+            newPasswordField.textContentType = UITextContentType("")
+        }
+        
         oldPasswordField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         newPasswordField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
@@ -111,6 +117,19 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         
         tabBarController?.tabBar.isHidden = false
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let info = notification.userInfo!
+        let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+        self.saveButtonBottom.constant = (keyboardSize?.height)!
+    }
+    
+    @objc func keyboardWillHide() {
+        self.saveButtonBottom.constant = 18
     }
     
     private func activateSaveButton() {
