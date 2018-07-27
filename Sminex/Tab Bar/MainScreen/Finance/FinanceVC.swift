@@ -206,6 +206,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.section == 0 {
+            if UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments") {
+                return 177
+            }
             return 220.0
         
         } else {

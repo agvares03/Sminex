@@ -345,7 +345,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: size.height + 3)
         
         } else if title == "К оплате" {
-            return CGSize(width: view.frame.size.width - 32, height: 110.0)
+            if busines_center_denyTotalOnlinePayments == true || business_center_info == true {
+                return CGSize(width: view.frame.size.width - 32, height: 67.0)
+            } else {
+                return CGSize(width: view.frame.size.width - 32, height: 110.0)
+            }
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData)
