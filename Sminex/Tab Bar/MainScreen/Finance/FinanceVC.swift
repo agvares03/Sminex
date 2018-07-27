@@ -422,8 +422,8 @@ final class FinanceHeaderCell: UITableViewCell {
         }
         
         // Выводить или нет кнопку QR-код
-        pay_QR.isHidden           = !defaults.bool(forKey: "denyQRCode")
-        pay_QR_image.isHidden     = !defaults.bool(forKey: "denyQRCode")
+        pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
+        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
         
     }
 }

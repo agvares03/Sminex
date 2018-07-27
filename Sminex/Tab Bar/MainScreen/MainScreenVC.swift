@@ -1616,30 +1616,6 @@ final class SchetCell: UICollectionViewCell {
     }
 }
 
-// Объект для парса json-данных по БЦ
-struct Business_Center_Data: JSONDecodable {
-    
-    let DenyOnlinePayments: Bool?
-    let DenyInvoiceFiles: Bool?
-    let DenyTotalOnlinePayments: Bool?
-    
-    let DenyQRCode: Bool?
-    
-    let DenyIssuanceOfPassSingle: Bool?
-    let DenyIssuanceOfPassSingleWithAuto: Bool?
-    
-    init?(json: JSON) {
-        DenyOnlinePayments                = "denyOnlinePayments"                  <~~ json
-        DenyInvoiceFiles                  = "denyInvoiceFiles"                    <~~ json
-        DenyTotalOnlinePayments           = "denyTotalOnlinePayments"             <~~ json
-        
-        DenyQRCode                        = "denyQRCode"                          <~~ json
-        
-        DenyIssuanceOfPassSingle          = "denyIssuanceOfPassSingle"            <~~ json
-        DenyIssuanceOfPassSingleWithAuto  = "denyIssuanceOfPassSingleWithAuto"    <~~ json
-    }
-}
-
 // Вывод версии
 private final class VersionCellData: MainDataProtocol {
     
