@@ -138,6 +138,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         contactNumber.text      = defaults.string(forKey: "contactNumber")
         if (defaults.string(forKey: "contactNumber") == "-") {
             contactNumber.text  = ""
+            contactLabel.isHidden = true
         }
         privNumber.text         = defaults.string(forKey: "phone_user")
         if (defaults.string(forKey: "phone_user") == "-") {
