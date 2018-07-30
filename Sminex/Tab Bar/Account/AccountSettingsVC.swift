@@ -133,6 +133,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         email.text              = defaults.string(forKey: "mail")
         if (defaults.string(forKey: "mail") == "-") {
             email.text          = ""
+            emailLabel.isHidden = true
         }
         
         contactNumber.text      = defaults.string(forKey: "contactNumber")
