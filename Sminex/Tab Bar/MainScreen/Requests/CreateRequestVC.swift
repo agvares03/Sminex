@@ -167,6 +167,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         gosNumber.delegate  = self
         edComment.delegate  = self
         
+        gosNumber.autocapitalizationType = .none
+        
         title = "Пропуск"
         
         // Подхватываем показ клавиатуры

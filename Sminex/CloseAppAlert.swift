@@ -12,7 +12,7 @@ import CoreData
 protocol CloseAppDelegate : class {
     func closeAppDone(closeApp: CloseAppAlert)
 }
-
+@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class CloseAppAlert: UIViewController, FloatRatingViewDelegate {
     
     open weak var delegate: CloseAppDelegate?

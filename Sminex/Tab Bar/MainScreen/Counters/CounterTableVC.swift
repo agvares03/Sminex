@@ -173,7 +173,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_METERS + "login=" + login.stringByAddingPercentEncodingForRFC3986()! + "&pwd=" + pass)!)
         request.httpMethod = "GET"
         
-//        print(request.url)
+        print(request.url)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in

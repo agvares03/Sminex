@@ -12,7 +12,7 @@ import CoreData
 protocol ShowAppDelegate : class {
     func showAppDone(showApp: AppUser)
 }
-
+@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class AppUser: UIViewController, UITableViewDelegate, UITableViewDataSource, CloseAppDelegate {
     // Картинки на подмену
     @IBOutlet private weak var view_btn:  UIView!

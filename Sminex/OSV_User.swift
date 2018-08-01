@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-
+@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class OSV_User: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet private weak var fon_app: UIImageView!

@@ -54,7 +54,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
                 imagePicker.sourceType = .camera;
-                imagePicker.allowsEditing = false
+                imagePicker.allowsEditing = true
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }))
@@ -133,11 +133,13 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         email.text              = defaults.string(forKey: "mail")
         if (defaults.string(forKey: "mail") == "-") {
             email.text          = ""
+            emailLabel.isHidden = true
         }
         
         contactNumber.text      = defaults.string(forKey: "contactNumber")
         if (defaults.string(forKey: "contactNumber") == "-") {
             contactNumber.text  = ""
+            contactLabel.isHidden = true
         }
         privNumber.text         = defaults.string(forKey: "phone_user")
         if (defaults.string(forKey: "phone_user") == "-") {
@@ -205,7 +207,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let image = info[UIImagePickerControllerEditedImage] as! UIImage
         accountImageView.image = image
         DispatchQueue.global(qos: .background).async {
             UserDefaults.standard.setValue(UIImagePNGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128))), forKey: "accountIcon")

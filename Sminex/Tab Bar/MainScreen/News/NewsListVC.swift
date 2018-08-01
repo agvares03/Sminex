@@ -9,7 +9,7 @@
 import UIKit
 import Gloss
 import DeviceKit
-
+@available(*, deprecated, message: "Заменен на NewsListTVC. Данный класс будет удален в будущих сборках")
 final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
