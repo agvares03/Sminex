@@ -207,7 +207,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         
         if indexPath.section == 0 {
             if UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments") {
-                return 177
+                return 160
             }
             return 220.0
         
