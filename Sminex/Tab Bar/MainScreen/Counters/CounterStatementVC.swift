@@ -38,6 +38,8 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         sendCount()
     }
     
+    open var period_: [CounterPeriod]?
+    
     open var month_:        String?
     open var year_:         String?
     open var date_:         String?
@@ -111,6 +113,30 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         let _ = count.becomeFirstResponder()
         
 //        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        var metValues: [MeterValue] = []
+        
+        period_?.forEach { period in
+            
+            guard period.year == period_?.first?.year else { return }
+            period.perXml["MeterValue"].forEach {
+                let val = MeterValue($0, period: period.numMonth ?? "1")
+                if val.meterUniqueNum == value_?.meterUniqueNum {
+                    metValues.append(val)
+                    
+                }
+            }
+        }
+        
+        metValues.forEach {
+            if Float($0.value?.replacingOccurrences(of: ",", with: ".") ?? "0")! > Float(0) {
+                monthValLabel.text = $0.value
+                return
+            }
+        }
+        
+        
+        
     }
     
     func getMonth(date: Date) -> String{
@@ -216,6 +242,10 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
             let edPass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
             
             var strNumber = value_?.guid ?? ""
+            
+            
+            print("###: ")
+            print(count.text.stringByAddingPercentEncodingForRFC3986()!)
             
             let urlPath = Server.SERVER + Server.ADD_METER
                 + "login=" + edLogin.stringByAddingPercentEncodingForRFC3986()!

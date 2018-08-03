@@ -95,11 +95,13 @@ open class DigitInputView: UIView {
         get {
             
             guard let textField = textField else { return "" }
-            var txt = textField.text ?? ""
+            var txt = textField.text!
             
-            if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 5 {
-                txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 5))
+            if acceptableCharacters!.contains(find: ".") {
+                let string = labels.map { $0.text! }.joined()
+                return String(Float(string)!)
             }
+            
             return txt
             
         }
@@ -257,6 +259,9 @@ open class DigitInputView: UIView {
             underlines.append(underline)
         }
         
+        if numberOfDigits == 9 {
+            labels[5].text = "."
+        }
     }
     
     /**
@@ -280,10 +285,50 @@ open class DigitInputView: UIView {
             item.text = "0"
         }
         
-        var txt = textField.text ?? ""
+        var txt = textField.text!
         
-        if acceptableCharacters?.contains(find: ".") ?? false && txt.length > 5 {
-            txt.insert(".", at: txt.index(txt.startIndex, offsetBy: 5))
+        if numberOfDigits == 9 {
+            
+            print("didChange: " + (textField.text ?? "empty"))
+            
+            
+            if txt.contains(find: ".") == false  {
+                if txt.length <= 5 {
+                    for _ in 0 ..< 3 {
+                        txt.insert("0", at: txt.endIndex)
+                    }
+                } else if txt.length <= 8 {
+                    for _ in 0 ..< 8 - txt.length {
+                        txt.insert("0", at: txt.endIndex)
+                    }
+                }
+                txt.insert(".", at: txt.index(txt.endIndex, offsetBy: -3))
+            } else {
+                for _ in 0 ..< 3 - txt.substring(fromIndex: txt.index(after: txt.index(of: ".")!).encodedOffset).length {
+                    txt.insert("0", at: txt.endIndex)
+                }
+            }
+            
+            if txt.hasPrefix("00") {
+                textField.text!.remove(at: txt.startIndex)
+            }
+            
+            if txt.contains(find: ".") && txt.length > 1 {
+                if let index = txt.index(of: ".") {
+                    let substring = txt.substring(toIndex: index.encodedOffset)
+                    if substring != "" {
+                        if Int(substring)! > 0 && txt.first! == "0" {
+                            textField.text!.remove(at: txt.startIndex)
+                        }
+                    }
+                    
+                }
+            }
+            
+//            if !txt.contains(find: ".") {
+//
+//            }
+            
         }
         
         for (index, item) in txt.reversed().enumerated() {
@@ -303,7 +348,6 @@ open class DigitInputView: UIView {
             // set the next digit bottom border color
             underlines[nextIndex - 1].backgroundColor = nextDigitBottomBorderColor
         }
-        
     }
     
     /// Changes the text of a DigitLabel with animation
@@ -353,12 +397,23 @@ extension DigitInputView: UITextFieldDelegate {
         }
         
         if !isEnergy {
-        
-            if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 8 {
+            
+            if string == "." && (textField.text?.length ?? 0) > 5{
+                return false
+            }
+            
+            if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text ?? "").length >= 8 {
+                
                 return false
                 
             } else if !(acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 5 {
                 return false
+            }
+            
+            if textField.text!.contains(find: ".") {
+                if textField.text!.substring(fromIndex: textField.text!.index(after: textField.text!.index(of: ".")!).encodedOffset).length > 2 {
+                    return false
+                }
             }
         
         } else {
@@ -387,6 +442,7 @@ extension DigitInputView: UITextFieldDelegate {
             return false
         }
         
+        
         if acceptableCharacters.contains(string) {
             textField.text = (textField.text ?? "") + string
             didChange()
@@ -394,7 +450,6 @@ extension DigitInputView: UITextFieldDelegate {
         }
         
         return false
-        
     }
     
 }
