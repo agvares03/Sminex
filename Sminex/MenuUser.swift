@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 class MenuUser: UITableViewController {
 
     override func viewDidLoad() {

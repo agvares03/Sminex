@@ -381,19 +381,19 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
         
         let defaults = UserDefaults.standard
         pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
-//        pay_QR.isHidden       = defaults.bool(forKey: "denyOnlinePayments")
-//        pay_QR_image.isHidden = defaults.bool(forKey: "denyOnlinePayments")
+        pay_QR.isHidden       = defaults.bool(forKey: "denyOnlinePayments")
+        pay_QR_image.isHidden = defaults.bool(forKey: "denyOnlinePayments")
         
         // Если оплаты разрешены, проверим - можно ли оплачивать конкретно эту квитанцию
         if (!defaults.bool(forKey: "denyOnlinePayments")) {
             pay_button.isHidden    = !data.permit_online_payment!
-//            pay_QR.isHidden        = !data.permit_online_payment!
-//            pay_QR_image.isHidden  = !data.permit_online_payment!
+            pay_QR.isHidden        = !data.permit_online_payment!
+            pay_QR_image.isHidden  = !data.permit_online_payment!
         }
         
         // Выводить или нет кнопку QR-код
-        pay_QR.isHidden           = !defaults.bool(forKey: "denyQRCode")
-        pay_QR_image.isHidden     = !defaults.bool(forKey: "denyQRCode")        
+        pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
+        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")        
         
     }
     

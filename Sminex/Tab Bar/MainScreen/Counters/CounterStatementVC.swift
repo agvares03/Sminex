@@ -98,7 +98,8 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
 //        navigationController?.title = "Показания за " + month_! + " " + year_!
         self.title = "Показания за " + month_! + " " + year_!
         
-        outcomeLabel.text = "\(value_?.difference?.replacingOccurrences(of: ",00", with: "") ?? "0") \(value_?.units ?? "")/мес."
+        outcomeLabel.text = "\(value_?.difference?.replacingOccurrences(of: ",00", with: "") ?? "0") \(value_?.units ?? "")"
+        //outcomeLabel.text = "\(value_?.difference?.replacingOccurrences(of: ",00", with: "") ?? "0") \(value_?.units ?? "")/мес."
         
         stopAnimator()
         

@@ -8,84 +8,63 @@
 
 import UIKit
 
-final class CounterHistoryTableVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class CounterHistoryTableVC: UIViewController {
     
     @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var tableView: UITableView!
+    
+    // MARK: Properties
+    
+    open var data_: [MeterValue] = []
+    open var period_: [CounterPeriod]?
+    
+    // MARK: View lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.tableFooterView = UIView()
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 73
+    }
+    
+    // MARK: Actions
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
     
-    open var data_: [MeterValue] = []
-    open var period_: [CounterPeriod]?
-    
-    private var row = 0
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-//        tabBarController?.tabBar.selectedItem?.title = "Главная"
-        collection.delegate   = self
-        collection.dataSource = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        tabBarController?.tabBar.selectedItem?.title = "Главная"
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data_.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CounterHistoryTableCell", for: indexPath) as! CounterHistoryTableCell
-        cell.display(title: data_[indexPath.row].resource ?? "", desc: data_[indexPath.row].meterUniqueNum ?? "")
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        row = indexPath.row
-        performSegue(withIdentifier: Segues.fromCounterHistoryTableVC.toHistory, sender: self)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell = CounterHistoryTableCell.fromNib()
-        cell?.display(title: data_[indexPath.row].resource ?? "", desc: data_[indexPath.row].meterUniqueNum ?? "")
-        let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        
-        // Разное определение высоты для разных устройств
-//        var numb_to_move:CGFloat = 15;
-//        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
-//            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
-//            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
-//            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
-//            (UIDevice.current.modelName.contains(find: "iPhone 5s")) { //||
-////            (UIDevice.current.modelName.contains(find: "Simulator")) {
-//            numb_to_move = -10;
-//        }
-//
-//        if (size.height < 78) {
-//            return CGSize(width: view.frame.size.width, height: 78 - numb_to_move)
-//        } else {
-//            return CGSize(width: view.frame.size.width, height: size.height - numb_to_move)
-//        }
-        
-        return CGSize(width: view.frame.size.width, height: 78)
-        
-    }
+    // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == Segues.fromCounterHistoryTableVC.toHistory {
+        if segue.identifier == Segues.fromCounterHistoryTableVC.toHistory, let index = sender as? Int {
             let vc = segue.destination as! CounterHistoryVC
-            vc.data_ = data_[row]
+            vc.data_ = data_[index]
             vc.period_ = period_
         }
     }
 }
 
+extension CounterHistoryTableVC: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data_.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCounterCell", for: indexPath) as! HistoryCounterCell
+        cell.configure(title: data_[indexPath.row].resource ?? "", counterName: data_[indexPath.row].meterUniqueNum ?? "")
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: Segues.fromCounterHistoryTableVC.toHistory, sender: indexPath.row)
+    }
+    
+}
 
+@available(*, deprecated, message: "Use HistoryCounterCell instead")
 final class CounterHistoryTableCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UILabel!

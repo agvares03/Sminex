@@ -62,7 +62,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor       = .white
         navigationController?.navigationBar.barTintColor          = .white
-        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
+        //navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
     }
     
     override func viewWillAppear(_ animated: Bool) {

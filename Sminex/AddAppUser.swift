@@ -12,7 +12,7 @@ import CoreData
 protocol AddAppDelegate : class {
     func addAppDone(addApp: AddAppUser)
 }
-
+@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class AddAppUser: UITableViewController {
     
     // id аккаунта текущего

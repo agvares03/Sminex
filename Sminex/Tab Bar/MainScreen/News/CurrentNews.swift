@@ -51,7 +51,7 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
                 date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "HH:mm")
                 
             } else {
-                date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "dd MMMM")
+                date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "dd MMMM, HH:mm")
             }
         }
         
