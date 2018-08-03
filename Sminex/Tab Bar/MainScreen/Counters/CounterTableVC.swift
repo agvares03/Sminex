@@ -270,11 +270,13 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             
             let vc = segue.destination as! CounterStatementVC
             vc.value_   = meterArr[index]
+            vc.period_ = periods
 //            vc.month_   = getNameAndMonth(periods.last?.numMonth ?? "1")
             vc.month_   = getNameAndMonth(periods[0].numMonth ?? "1")
             vc.year_    = periods[0].year ?? ""
             vc.date_    = date[0] + " " + getNameAndMonth(periods[0].numMonth ?? "1") + " " + (periods[0].year ?? "")
             vc.delegate = self
+            
         
         } else if segue.identifier == Segues.fromCounterTableVC.toHistory {
             let vc     = segue.destination as! CounterHistoryTableVC
