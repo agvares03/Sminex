@@ -151,6 +151,9 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             if (defaults.bool(forKey: "denyInvoiceFiles")) {
                 return CGSize(width: view.frame.size.width, height: 80.0)
             }
+            if (UserDefaults.standard.bool(forKey: "denyOnlinePayments")) {
+                return CGSize(width: view.frame.size.width, height: 133.0)
+            }
             return CGSize(width: view.frame.size.width, height: 193.0)
         
         } else {
@@ -365,6 +368,7 @@ final class FinanceDebtCell: UICollectionViewCell {
 final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate {
     
     @IBOutlet private weak var shareLoader: UIActivityIndicatorView!
+    @IBOutlet private weak var dateTopConstraint: NSLayoutConstraint!
     @IBOutlet private weak var shareButton: UIButton!
     @IBOutlet private weak var dateLabel:   UILabel!
     @IBOutlet weak var pay_button: UIButton!
@@ -389,6 +393,12 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
             pay_button.isHidden    = !data.permit_online_payment!
             pay_QR.isHidden        = !data.permit_online_payment!
             pay_QR_image.isHidden  = !data.permit_online_payment!
+        }
+        
+        if pay_button.isHidden == true {
+            dateTopConstraint.constant = 28
+        } else {
+            dateTopConstraint.constant = 78
         }
         
         // Выводить или нет кнопку QR-код
