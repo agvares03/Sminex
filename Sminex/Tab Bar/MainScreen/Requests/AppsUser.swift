@@ -353,16 +353,17 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             DispatchQueue.main.async {
                 self.stopAnimatior()
                 
-                var type = self.data[indexPath.row].type
+                let selectedId = self.data[indexPath.row].type
                 
                 // Это костыль - думать, как лучше сделать.
-                type = ""
+                var type = ""
                 
-                TemporaryHolder.instance.requestTypes?.types?.forEach {
-                    if $0.id == type {
-                        type = $0.name ?? ""
-                    }
+                let filteredTypes = TemporaryHolder.instance.requestTypes?.types?.filter { $0.id == selectedId }
+                
+                if let filteredType = filteredTypes?.first {
+                    type = filteredType.name ?? ""
                 }
+                
                 if (type == "") {
                     type = "Гостевой пропуск"
                 }
