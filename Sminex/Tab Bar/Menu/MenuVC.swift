@@ -186,11 +186,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             alert.addAction( UIAlertAction(title: "Позвонить", style: .default, handler: { (_) in
                 if let url = URL(string: "tel://+74957266791") {
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                } else {
-                    UIApplication.shared.openURL(url)
-                }
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } } ) )
             alert.addAction( UIAlertAction(title: "Написать письмо", style: .default, handler: { (_) in self.performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self) } ) )
             alert.addAction( UIAlertAction(title: "Отменить", style: .cancel, handler: { (_) in } ) )

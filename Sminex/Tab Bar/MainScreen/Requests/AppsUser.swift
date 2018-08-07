@@ -94,11 +94,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             refreshControl = UIRefreshControl()
             refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-            if #available(iOS 10.0, *) {
-                collection?.refreshControl = refreshControl
-            } else {
-                collection?.addSubview(refreshControl!)
-            }
+            collection?.refreshControl = refreshControl
         }
     }
     
@@ -329,11 +325,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                 } else {
                     self.stopAnimatior()
-                    if #available(iOS 10.0, *) {
-                        self.collection?.refreshControl?.endRefreshing()
-                    } else {
-                        self.refreshControl?.endRefreshing()
-                    }
+                    self.collection?.refreshControl?.endRefreshing()
                 }
             }
             sleep(2)

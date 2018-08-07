@@ -94,11 +94,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
     func phonePressed(_ phone: String) {
         let newPhone = phone.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
         if let url = URL(string: "tel://" + newPhone) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
@@ -128,11 +124,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
                 
                 if let url = URL(string:UIApplicationOpenSettingsURLString), UIApplication.shared.canOpenURL(url) {
                     
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(url, options: [:]) { (_) in }
-                    } else {
-                        UIApplication.shared.openURL(url)
-                    }
+                    UIApplication.shared.open(url, options: [:]) { (_) in }
                 }
             } ) )
             alert.addAction( UIAlertAction(title: "Отменить", style: .default, handler: { (_) in } ) )

@@ -25,13 +25,9 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     
     @IBAction private func sminexButtonPressed(_ sender: UIButton) {
         if let url = URL(string: "http://www.sminex.com") {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url,
-                                          options: [:],
-                                          completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            UIApplication.shared.open(url,
+                                      options: [:],
+                                      completionHandler: nil)
         }
     }
     
@@ -237,22 +233,14 @@ final class AccountHeader: UICollectionReusableView {
     @objc private func holderPhonePressed(_ sender: UITapGestureRecognizer) {
         let newPhone = holderPhoneLabel.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "") ?? ""
         if let url = URL(string: "tel://+" + newPhone) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
         let phone = "+74951911774"
         if let url = URL(string: "tel://" + phone) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     

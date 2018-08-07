@@ -39,11 +39,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            collection.refreshControl = refreshControl
-        } else {
-            collection.addSubview(refreshControl!)
-        }
+        collection.refreshControl = refreshControl
         
         loader.isHidden = false
         loader.startAnimating()
@@ -96,11 +92,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                     self.loader.stopAnimating()
                     self.loader.isHidden = true
                     
-                    if #available(iOS 10.0, *) {
-                        self.collection.refreshControl?.endRefreshing()
-                    } else {
-                        self.refreshControl?.endRefreshing()
-                    }
+                    self.collection.refreshControl?.endRefreshing()
                     
                     if self.questions?.count == 0 {
                         self.emptyLabel.isHidden = false

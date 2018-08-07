@@ -132,11 +132,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            collection.refreshControl = refreshControl
-        } else {
-            collection.addSubview(refreshControl!)
-        }
+        collection.refreshControl = refreshControl
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -150,11 +146,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             }
 
             DispatchQueue.main.async {
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
-                }
+                self.collection.refreshControl?.endRefreshing()
             }
         }
     }

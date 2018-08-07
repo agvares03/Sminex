@@ -128,11 +128,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            collection.refreshControl = refreshControl
-        } else {
-            collection.addSubview(refreshControl!)
-        }
+        collection.refreshControl = refreshControl
         
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent         = true
@@ -167,11 +163,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             self.fetchDebt()
             self.fetchNews()
             DispatchQueue.main.async {
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
-                }
+                self.collection.refreshControl?.endRefreshing()
             }
         }
     }

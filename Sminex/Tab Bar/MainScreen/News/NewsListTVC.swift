@@ -35,11 +35,7 @@ class NewsListTVC: UIViewController {
         
         rControl = UIRefreshControl()
         rControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = rControl
-        } else {
-            tableView.addSubview(rControl!)
-        }
+        tableView.refreshControl = rControl
         
         if TemporaryHolder.instance.news != nil {
             data = TemporaryHolder.instance.news!
@@ -75,11 +71,7 @@ class NewsListTVC: UIViewController {
             
             defer {
                 DispatchQueue.main.sync {
-                    if #available(iOS 10.0, *) {
-                        self.tableView.refreshControl?.endRefreshing()
-                    } else {
-                        self.rControl?.endRefreshing()
-                    }
+                    self.tableView.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
                     self.stopAnimation()
                 }
@@ -104,11 +96,7 @@ class NewsListTVC: UIViewController {
                         self.data = TemporaryHolder.instance.news!
                         
                         DispatchQueue.main.sync {
-                            if #available(iOS 10.0, *) {
-                                self.tableView.refreshControl?.endRefreshing()
-                            } else {
-                                self.rControl?.endRefreshing()
-                            }
+                            self.tableView.refreshControl?.endRefreshing()
                             self.tableView.reloadData()
                             self.stopAnimation()
                         }

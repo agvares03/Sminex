@@ -46,12 +46,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            collection.refreshControl = refreshControl
-        } else {
-            collection.addSubview(refreshControl!)
-            collection.alwaysBounceVertical = true
-        }
+        collection.refreshControl = refreshControl
         
         DispatchQueue.global(qos: .userInitiated).async {
             self.getCounters()
@@ -197,11 +192,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
                 DispatchQueue.main.sync {
                     self.collection.reloadData()
                     self.delegate?.stopAnimator()
-                    if #available(iOS 10.0, *) {
-                        self.collection.refreshControl?.endRefreshing()
-                    } else {
-                        self.refreshControl?.endRefreshing()
-                    }
+                    self.collection.refreshControl?.endRefreshing()
                 }
                 return
             }
@@ -223,11 +214,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
                 self.collection.reloadData()
                 self.delegate?.stopAnimator()
                 
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
-                }
+                self.collection.refreshControl?.endRefreshing()
                 
             }
             

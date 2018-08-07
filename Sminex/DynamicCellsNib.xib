@@ -695,7 +695,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Премиум-квартал Jazz" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="C1s-qF-Gro">
-                    <rect key="frame" x="109" y="187" width="197" height="21.5"/>
+                    <rect key="frame" x="29" y="187" width="357" height="21.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -1811,68 +1811,6 @@
                 <outlet property="title" destination="rtK-QM-Woz" id="C22-3C-M7W"/>
             </connections>
             <point key="canvasLocation" x="-85" y="-404"/>
-        </collectionViewCell>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CounterHistoryTableCell" id="6H2-hj-i5t" customClass="CounterHistoryTableCell" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="373" height="60"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="373" height="60"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Горячая вода*" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Gbt-DH-LaC">
-                        <rect key="frame" x="24" y="5" width="120.5" height="20.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*ГВС 283411*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7no-ky-R0P">
-                        <rect key="frame" x="24" y="30.5" width="89" height="14.5"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="15" id="SF8-8B-Ses"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right" translatesAutoresizingMaskIntoConstraints="NO" id="2Q0-Bd-v7e">
-                        <rect key="frame" x="341" y="23.5" width="8" height="13"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="13" id="fVf-dl-aM4"/>
-                            <constraint firstAttribute="width" constant="8" id="gBT-Gy-fg9"/>
-                        </constraints>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FUz-Xs-PcG">
-                        <rect key="frame" x="0.0" y="59" width="373" height="1"/>
-                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="S3T-Ju-9ap"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </subviews>
-            </view>
-            <constraints>
-                <constraint firstItem="FUz-Xs-PcG" firstAttribute="top" relation="greaterThanOrEqual" secondItem="7no-ky-R0P" secondAttribute="bottom" constant="3" id="0Cz-Nw-BDY"/>
-                <constraint firstAttribute="trailing" secondItem="FUz-Xs-PcG" secondAttribute="trailing" id="5Yy-Kp-mqn"/>
-                <constraint firstItem="Gbt-DH-LaC" firstAttribute="top" secondItem="6H2-hj-i5t" secondAttribute="topMargin" constant="5" id="6KE-gL-E2a"/>
-                <constraint firstItem="2Q0-Bd-v7e" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Gbt-DH-LaC" secondAttribute="trailing" constant="15" id="8pa-82-lql"/>
-                <constraint firstItem="FUz-Xs-PcG" firstAttribute="leading" secondItem="6H2-hj-i5t" secondAttribute="leading" id="96x-4w-5En"/>
-                <constraint firstItem="Gbt-DH-LaC" firstAttribute="leading" secondItem="6H2-hj-i5t" secondAttribute="leadingMargin" constant="8" id="Aoe-hP-1yW"/>
-                <constraint firstItem="7no-ky-R0P" firstAttribute="leading" secondItem="Gbt-DH-LaC" secondAttribute="leading" id="Bxi-q7-y88"/>
-                <constraint firstItem="2Q0-Bd-v7e" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="7no-ky-R0P" secondAttribute="trailing" constant="10" id="KZc-jV-RkU"/>
-                <constraint firstItem="2Q0-Bd-v7e" firstAttribute="centerY" secondItem="6H2-hj-i5t" secondAttribute="centerY" id="fTn-sf-Glo"/>
-                <constraint firstAttribute="bottom" secondItem="FUz-Xs-PcG" secondAttribute="bottom" id="gYG-P9-EMk"/>
-                <constraint firstItem="7no-ky-R0P" firstAttribute="top" secondItem="Gbt-DH-LaC" secondAttribute="bottom" constant="5" id="v11-E3-U6V"/>
-                <constraint firstAttribute="trailingMargin" secondItem="2Q0-Bd-v7e" secondAttribute="trailing" constant="8" id="wcg-g7-OrV"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="veH-sL-eGP"/>
-            <connections>
-                <outlet property="desc" destination="7no-ky-R0P" id="LOt-w0-PLk"/>
-                <outlet property="title" destination="Gbt-DH-LaC" id="B7T-Qc-uBp"/>
-            </connections>
-            <point key="canvasLocation" x="345" y="1735"/>
         </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SurveyCell" id="rZp-Qq-rgZ" customClass="SurveyCell" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="317" height="128"/>

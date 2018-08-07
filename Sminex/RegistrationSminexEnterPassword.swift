@@ -31,11 +31,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     @IBAction private func callSupportButtonPressed(_ sender: UIButton) {
         view.endEditing(true)
         if let url = URL(string: "tel://74951911774") {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     

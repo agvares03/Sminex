@@ -115,37 +115,24 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @objc private func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         guard currQuestion != 0 else { return }
         
-        if #available(iOS 10.0, *) {
-            UIViewPropertyAnimator(duration: 0, curve: .linear) {
-                self.collection.frame.origin.x = recognizer.location(in: self.view).x
-            }.startAnimation()
-        } else {
+        UIViewPropertyAnimator(duration: 0, curve: .linear) {
             self.collection.frame.origin.x = recognizer.location(in: self.view).x
-        }
+            }.startAnimation()
         
         if recognizer.state == .ended {
             if recognizer.location(in: view).x > 100 {
                 currQuestion -= 1
                 collection.alpha = 0
                 collection.frame.origin.x = 0
-                if #available(iOS 10.0, *) {
-                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
-                        self.collection.alpha = 1
+                UIViewPropertyAnimator(duration: 0, curve: .linear) {
+                    self.collection.alpha = 1
                     }.startAnimation()
-                } else {
-                    collection.alpha = 1
-                }
                 collection.reloadData()
                 
             } else {
-                if #available(iOS 10.0, *) {
-                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
-                        self.collection.frame.origin.x = 0
+                UIViewPropertyAnimator(duration: 0, curve: .linear) {
+                    self.collection.frame.origin.x = 0
                     }.startAnimation()
-                    
-                } else {
-                    collection.frame.origin.x = 0
-                }
             }
         }
     }

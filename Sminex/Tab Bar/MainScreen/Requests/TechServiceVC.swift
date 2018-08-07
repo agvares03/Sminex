@@ -133,11 +133,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
-            collection.refreshControl = refreshControl
-        } else {
-            collection.addSubview(refreshControl!)
-        }
+        collection.refreshControl = refreshControl
         
     }
     
@@ -203,11 +199,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             }
             
             DispatchQueue.main.async {
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
-                }
+                self.collection.refreshControl?.endRefreshing()
             }
         }
     }

@@ -65,11 +65,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @IBAction private func callSupportButtonPressed(_ sender: UIButton) {
         view.endEditing(true)
         if let url = URL(string: "tel://74951911774") {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
@@ -319,26 +315,16 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         // если нет, то без анимации
         if !isEnabled {
             
-            if #available(iOS 10.0, *) {
-                UIViewPropertyAnimator(duration: 0, curve: .easeInOut) {
-                    self.btn_go.isEnabled = false
-                    self.btn_go.alpha = 0.5
-                    }.startAnimation()
-            } else {
-                btn_go.isEnabled = false
+            UIViewPropertyAnimator(duration: 0, curve: .easeInOut) {
+                self.btn_go.isEnabled = false
                 self.btn_go.alpha = 0.5
-            }
+                }.startAnimation()
         } else {
             
-            if #available(iOS 10.0, *) {
-                UIViewPropertyAnimator(duration: 0, curve: .easeInOut) {
-                    self.btn_go.isEnabled = true
-                    self.btn_go.alpha = 1
-                    }.startAnimation()
-            } else {
-                btn_go.isEnabled = true
+            UIViewPropertyAnimator(duration: 0, curve: .easeInOut) {
+                self.btn_go.isEnabled = true
                 self.btn_go.alpha = 1
-            }
+                }.startAnimation()
         }
     }
     

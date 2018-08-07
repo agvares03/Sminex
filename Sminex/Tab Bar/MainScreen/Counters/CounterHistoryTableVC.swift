@@ -10,7 +10,6 @@ import UIKit
 
 final class CounterHistoryTableVC: UIViewController {
     
-    @IBOutlet private weak var collection: UICollectionView!
     @IBOutlet private weak var tableView: UITableView!
     
     // MARK: Properties
@@ -62,29 +61,4 @@ extension CounterHistoryTableVC: UITableViewDataSource, UITableViewDelegate {
         performSegue(withIdentifier: Segues.fromCounterHistoryTableVC.toHistory, sender: indexPath.row)
     }
     
-}
-
-@available(*, deprecated, message: "Use HistoryCounterCell instead")
-final class CounterHistoryTableCell: UICollectionViewCell {
-    
-    @IBOutlet private weak var title:   UILabel!
-    @IBOutlet private weak var desc:    UILabel!
-    
-    func display(title: String, desc: String) {
-        
-        self.title.text = title
-        self.desc.text  = desc
-    }
-    
-    class func fromNib() -> CounterHistoryTableCell? {
-        var cell: CounterHistoryTableCell?
-        Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)?.forEach {
-            if let view = $0 as? CounterHistoryTableCell {
-                cell = view
-            }
-        }
-        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
-        return cell
-    }
 }
