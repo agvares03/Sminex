@@ -81,8 +81,14 @@ class NewTechServiceVC: UIViewController {
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(notification: NSNotification) {
         let info = notification.userInfo!
-        let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-        btnViewConstraint.constant = (keyboardSize?.height)!
+        if let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size {
+            if isXDevice() {
+                btnViewConstraint.constant = keyboardSize.height - 35
+            } else {
+                btnViewConstraint.constant = keyboardSize.height
+            }
+        }
+        
     }
     
     // И вниз при исчезновении
