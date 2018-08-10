@@ -356,14 +356,14 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 var type = self.data[indexPath.row].type
                 
                 // Это костыль - думать, как лучше сделать.
-                type = ""
-                
+                var itsNever: Bool = false
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
+                        itsNever = true
                     }
                 }
-                if (type == "") {
+                if (!itsNever) {
                     type = "Гостевой пропуск"
                 }
                 

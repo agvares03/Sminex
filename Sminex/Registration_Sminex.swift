@@ -186,8 +186,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
         edLS.delegate = self;
         
-        let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
-        view.addGestureRecognizer(theTap)
+//        let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
+//        view.addGestureRecognizer(theTap)
         
         edLS.text = ls
         indicator.isHidden = true
@@ -244,9 +244,9 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
-        view.endEditing(true)
-    }
+//    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
+//        view.endEditing(true)
+//    }
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
