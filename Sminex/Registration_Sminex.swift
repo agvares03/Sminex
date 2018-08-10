@@ -35,10 +35,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     @IBAction private func btn_go_action(_ sender: UIButton) {
         
-        view.endEditing(true)
 //        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
         
         if edLS.text != "" {
+            view.endEditing(true)
             self.startAnimation()
             // Здесь мы проверяем есть ли лиц. счет или номер телефона
             // Если нет лиц. счета -                 txtDesc = "Лицевой счет " + edLS + " не зарегистрирован".
@@ -186,8 +186,8 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
         edLS.delegate = self;
         
-//        let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
-//        view.addGestureRecognizer(theTap)
+        let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
+        view.addGestureRecognizer(theTap)
         
         edLS.text = ls
         indicator.isHidden = true
@@ -233,41 +233,41 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
         navigationController?.isNavigationBarHidden = false
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-//    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
-//        view.endEditing(true)
-//    }
+    @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
+        view.endEditing(true)
+    }
     
     // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification?) {
-            
-        if !isNeedToScrollMore() {
-            sprtTop.constant -= 200
-        
-        } else {
-            sprtTop.constant -= 120
-        }
-    }
+//    @objc func keyboardWillShow(sender: NSNotification?) {
+//
+//        if !isNeedToScrollMore() {
+//            sprtTop.constant -= 200
+//
+//        } else {
+//            sprtTop.constant -= 120
+//        }
+//    }
     
     // И вниз при исчезновении
-    @objc func keyboardWillHide(sender: NSNotification?) {
-        
-        if !isNeedToScrollMore() {
-            sprtTop.constant += 200
-        } else {
-            sprtTop.constant += 120
-        }
-    }
+//    @objc func keyboardWillHide(sender: NSNotification?) {
+//
+//        if !isNeedToScrollMore() {
+//            sprtTop.constant += 200
+//        } else {
+//            sprtTop.constant += 120
+//        }
+//    }
     
     private func startAnimation() {
         indicator.isHidden = false
@@ -358,6 +358,23 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             vc.isReg_ = isReg_
             vc.phone_ = responseString
 
+        }
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if !isNeedToScrollMore() {
+            sprtTop.constant -= 200
+            
+        } else {
+            sprtTop.constant -= 120
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if !isNeedToScrollMore() {
+            sprtTop.constant += 200
+        } else {
+            sprtTop.constant += 120
         }
     }
     

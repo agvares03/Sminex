@@ -8,6 +8,7 @@
 
 import UIKit
 import DeviceKit
+import Alamofire
 
 final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -325,8 +326,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         sender.view?.removeFromSuperview()
     }
     
-    private func sendMessage() {
-        
+    private func sendMessage() {        
         let login = lsTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let text  = problemTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
@@ -334,24 +334,24 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         let url = "login=\(login)&text=\(text)&phone=\(email)"
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
         request.httpMethod = "GET"
-        
+
         print(request.url)
-        
+
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
-            
+
             defer {
                 DispatchQueue.main.async {
                     self.stopAnimation()
                 }
             }
-            
+
             guard data != nil else { return }
-            
+
             #if DEBUG
                 print(String(data: data!, encoding: .utf8) ?? "")
             #endif
-            
+
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
@@ -359,7 +359,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                     self.present(alert, animated: true, completion: nil)
                 }
                 return
-            
+
             } else {
                 let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
@@ -367,7 +367,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                     self.present(alert, animated: true, completion: nil)
                 }
             }
-            
+
         }.resume()
     }
     
