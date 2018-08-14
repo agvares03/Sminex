@@ -82,7 +82,11 @@ class NewTechServiceVC: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         let info = notification.userInfo!
         let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-        btnViewConstraint.constant = (keyboardSize?.height)!
+        if !isXDevice() {
+            btnViewConstraint.constant = (keyboardSize?.height)!
+        }else{
+            btnViewConstraint.constant = ((keyboardSize?.height)! - 40)
+        }
     }
     
     // И вниз при исчезновении
@@ -194,7 +198,7 @@ class NewTechServiceVC: UIViewController {
     @IBAction private func cancelButtonPressed(_ sender: UIBarButtonItem) {
         
         view.endEditing(true)
-        let action = UIAlertController(title: "Удалить заявку?", message: "Изменения не сохранятся", preferredStyle: .alert)
+        let action = UIAlertController(title: "Удалить заявку? ", message: "Изменения не сохранятся", preferredStyle: .alert)
         action.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (_) in }))
         action.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { (_) in self.navigationController?.popViewController(animated: true) }))
         present(action, animated: true, completion: nil)

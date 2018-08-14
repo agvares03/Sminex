@@ -591,7 +591,11 @@ SOFTWARE.
 
 
 
-## GoogleToolboxForMac
+## GoogleAppMeasurement
+
+Copyright 2018 Google
+
+## GoogleUtilities
 
 
                                  Apache License
