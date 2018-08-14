@@ -81,8 +81,8 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
                 (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
                 (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
                 (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-                (UIDevice.current.modelName.contains(find: "iPhone SE")) {
-//                          ||  (UIDevice.current.modelName.contains(find: "Simulator")) {
+                (UIDevice.current.modelName.contains(find: "iPhone SE"))
+                          ||  (UIDevice.current.modelName.contains(find: "Simulator")) {
                 return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
             }
             return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
