@@ -24,6 +24,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     @IBOutlet private weak var sendBtn:     UIButton!
     @IBOutlet private weak var pickerLine:  UILabel!
     
+    
     @IBAction private func cancelButtonPressed(_ sender: UIBarButtonItem) {
         
         viewTapped(nil)
@@ -131,7 +132,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         constant = btnConst.constant
         btnConstant = sendBtn.frame.origin.y
         if isNeedToScrollMore() {
@@ -197,9 +197,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         } else {
             if !isXDevice() {
                 btnConst.constant = getConstant() - 235
-            
             } else {
-                btnConst.constant = getConstant() - 275
+                btnConst.constant = getConstant() - 280
             }
         }
     }
