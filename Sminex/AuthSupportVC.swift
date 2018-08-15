@@ -23,6 +23,8 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet private weak var lsTextView:          UITextField!
     @IBOutlet private weak var sendButton:          UIButton!
     
+    private var reqId: String?
+    
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
         view.endEditing(true)
@@ -66,7 +68,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
         present(action, animated: true, completion: nil)
     }
-   
+    
     open var login_ = ""
     private var imgs: [UIImage] = [] {
         didSet {
@@ -77,7 +79,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                 if isNeedToScrollMore() && tabBarController != nil {
                     sendButtonTop.constant = getPoint() + 99
                 }
-            
+                
             } else {
                 imgsHeight.constant = 150
                 sendButtonTop.constant = getPoint() - 150
@@ -142,18 +144,18 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                 sendButtonTop.constant    = 8
                 sendButtonBottom.constant = 200
                 return
-            
+                
             } else {
                 sendButtonTop.constant = getPoint() - 210
             }
-        
+            
         } else {
             
             if !isNeedToScrollMore() {
                 if imgs.count == 0 {
                     if tabBarController == nil {
                         sendButtonTop.constant = getPoint() - 210
-                    
+                        
                     } else {
                         sendButtonTop.constant = getPoint() - 180
                     }
@@ -162,28 +164,28 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                     if tabBarController == nil {
                         sendButtonBottom.constant += 60
                         sendButtonTop.constant    -= 60
-                    
+                        
                     } else {
                         sendButtonBottom.constant += 40
                         sendButtonTop.constant    -= 40
                     }
                 }
-            
+                
             } else {
                 if imgs.count == 0 {
                     if tabBarController == nil {
                         sendButtonTop.constant    = getPoint() - 120
                         sendButtonBottom.constant = getPoint() + 70
-                    
+                        
                     } else {
                         sendButtonTop.constant    = getPoint() - 100
                         sendButtonBottom.constant = getPoint() + 50
                     }
-                
+                    
                 } else {
                     if tabBarController == nil {
                         sendButtonBottom.constant = getPoint() + 120
-                    
+                        
                     } else {
                         sendButtonBottom.constant = getPoint() + 100
                     }
@@ -216,7 +218,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                     
                     if tabBarController == nil {
                         sendButtonTop.constant    = getPoint() - 210
-                    
+                        
                     } else {
                         sendButtonTop.constant    = getPoint() - 180
                     }
@@ -326,49 +328,64 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         sender.view?.removeFromSuperview()
     }
     
-    private func sendMessage() {        
+    private func sendMessage() {
+        
         let login = lsTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let text  = problemTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         
         let url = "login=\(login)&text=\(text)&phone=\(email)"
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
-        request.httpMethod = "GET"
-
+        request.httpMethod = "POST"
+        
         print(request.url)
-
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-
-            defer {
-                DispatchQueue.main.async {
-                    self.stopAnimation()
-                }
-            }
-
-            guard data != nil else { return }
-
-            #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-
-            } else {
+        
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject: imgs.map { UIImageJPEGRepresentation($0, 0.5) } )
+        
+        Alamofire.upload(encodedData, to: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!, method: .post, headers: nil).response { response in
+            
+            if response.response?.statusCode == 200 {
                 let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
+                self.present(alert, animated: true, completion: nil)
+                debugPrint(response)
+            } else {
+                
+                self.showAlert(message: response.response?.description ?? "", title: "Ошибка сервера")
             }
-
-        }.resume()
+        }
+    }
+    
+    private func uploadPhoto(_ img: UIImage) {
+        let group = DispatchGroup()
+        let reqID = reqId?.stringByAddingPercentEncodingForRFC3986()
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
+        
+        group.enter()
+        let uid = UUID().uuidString
+        Alamofire.upload(multipartFormData: { multipartFromdata in
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
+        }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
+            
+            switch result {
+            case .success(let upload, _, _):
+                
+                upload.uploadProgress(closure: { (progress) in
+                    print("Upload Progress: \(progress.fractionCompleted)")
+                })
+                
+                upload.responseJSON { response in
+                    print(response.result.value!)
+                    group.leave()
+                    
+                }
+                
+            case .failure(let encodingError):
+                print(encodingError)
+            }
+        }
+        group.wait()
+        return
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -389,21 +406,3 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         sendButton.alpha = 1
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

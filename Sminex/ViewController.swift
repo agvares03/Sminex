@@ -14,6 +14,7 @@ import Gloss
 
 final class ViewController: UIViewController, UITextFieldDelegate {
     
+    @IBOutlet weak var heigth_top_logo: NSLayoutConstraint!
     @IBOutlet private weak var sprtBtm:     NSLayoutConstraint!
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var scroll:      UIScrollView!
@@ -201,7 +202,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
 //                view.frame.origin.y = -60
             }
         }
-        
         
     }
     
