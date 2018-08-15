@@ -224,7 +224,7 @@ open class DigitInputView: UIView {
             addSubview(textField!)
         }
         
-        textField?.keyboardType = .numberPad
+        textField?.keyboardType = .decimalPad
         
         // Since this function isn't called frequently, we just remove everything
         // and recreate them. Don't need to optimize it.

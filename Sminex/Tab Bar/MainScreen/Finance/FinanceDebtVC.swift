@@ -367,6 +367,8 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
     @IBOutlet private weak var shareLoader: UIActivityIndicatorView!
     @IBOutlet private weak var shareButton: UIButton!
     @IBOutlet private weak var dateLabel:   UILabel!
+    @IBOutlet private weak var btnConst:   NSLayoutConstraint!
+    @IBOutlet private weak var btnConst1:   NSLayoutConstraint!
     @IBOutlet weak var pay_button: UIButton!
     @IBOutlet weak var pay_QR: UIButton!
     @IBOutlet weak var pay_QR_image: UIImageView!
@@ -393,7 +395,12 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
         
         // Выводить или нет кнопку QR-код
         pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
-        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")        
+        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
+        
+        if pay_button.isHidden {
+            btnConst.constant = 5
+            btnConst1.constant = 0
+        }
         
     }
     
