@@ -226,6 +226,7 @@ open class DigitInputView: UIView {
         
         textField?.keyboardType = .decimalPad
         
+        
         // Since this function isn't called frequently, we just remove everything
         // and recreate them. Don't need to optimize it.
         
@@ -259,7 +260,7 @@ open class DigitInputView: UIView {
             underlines.append(underline)
         }
         
-        if numberOfDigits == 9 {
+        if numberOfDigits == 9{
             labels[5].text = "."
         }
     }
@@ -292,7 +293,7 @@ open class DigitInputView: UIView {
             print("didChange: " + (textField.text ?? "empty"))
             
             
-            if txt.contains(find: ".") == false  {
+            if (txt.contains(find: ".") == false){
                 if txt.length <= 5 {
                     for _ in 0 ..< 3 {
                         txt.insert("0", at: txt.endIndex)
@@ -313,7 +314,7 @@ open class DigitInputView: UIView {
                 textField.text!.remove(at: txt.startIndex)
             }
             
-            if txt.contains(find: ".") && txt.length > 1 {
+            if (txt.contains(find: ".")) && txt.length > 1 {
                 if let index = txt.index(of: ".") {
                     let substring = txt.substring(toIndex: index.encodedOffset)
                     if substring != "" {
@@ -321,7 +322,6 @@ open class DigitInputView: UIView {
                             textField.text!.remove(at: txt.startIndex)
                         }
                     }
-                    
                 }
             }
             
@@ -398,7 +398,7 @@ extension DigitInputView: UITextFieldDelegate {
         
         if !isEnergy {
             
-            if string == "." && (textField.text?.length ?? 0) > 5{
+            if (string == ".") && (textField.text?.length ?? 0) > 5{
                 return false
             }
             
@@ -410,7 +410,7 @@ extension DigitInputView: UITextFieldDelegate {
                 return false
             }
             
-            if textField.text!.contains(find: ".") {
+            if (textField.text!.contains(find: ".")) {
                 if textField.text!.substring(fromIndex: textField.text!.index(after: textField.text!.index(of: ".")!).encodedOffset).length > 2 {
                     return false
                 }
@@ -426,10 +426,10 @@ extension DigitInputView: UITextFieldDelegate {
             return false
         }
         
-        if string == "." && (textField.text ?? "").contains(find: ".") {
+        if (string == "." && (textField.text ?? "").contains(find: ".")){
             return false
         
-        } else if string == "." && !(textField.text ?? "").contains(find: ".") {
+        } else if (string == "." && !(textField.text ?? "").contains(find: ".")){
             
             textField.text = (textField.text ?? "") + string
             didChange()
@@ -458,7 +458,7 @@ final class DigitLabel: UILabel {
     
     override var text: String? {
         didSet {
-            if text == "." {
+            if (text == "."){
                 self.backgroundColor = .clear
             } else {
                 self.backgroundColor = UIColor(white: 96/100, alpha: 1.0)
