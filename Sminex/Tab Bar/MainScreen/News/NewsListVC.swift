@@ -11,7 +11,7 @@ import Gloss
 import DeviceKit
 @available(*, deprecated, message: "Заменен на NewsListTVC. Данный класс будет удален в будущих сборках")
 final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
+
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
     
@@ -67,7 +67,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         cell.display(data_[safe: indexPath.row])
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cell = NewsListCell.fromNib()
         cell?.display(data_[indexPath.row])
@@ -75,10 +75,12 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         return CGSize(width: view.frame.size.width, height: !isNeedToScroll() ? size.height : size.height + 16)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UITableView, didSelectItemAt indexPath: IndexPath) {
         index = indexPath.row
         performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
     }
+    
+    
     
     private func getNews() {
         
@@ -180,31 +182,31 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
 }
 
 final class NewsListCell: UICollectionViewCell {
-    
-    @IBOutlet private weak var title: 	UILabel!
+
+    @IBOutlet private weak var title:     UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var date:    UILabel!
-    
+
     func display(_ item: NewsJson?) {
-        
+
         guard item != nil else { return }
-        
+
         title.text  = item?.header
         desc.text   = item?.shortContent
-        
+
         if item?.dateStart != "" {
             let df = DateFormatter()
             df.locale = Locale(identifier: "en_US_POSIX")
             df.dateFormat = "dd.MM.yyyy HH:mm:ss"
             if dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
                 date.text = dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "hh:mm")
-                
+
             } else {
                 date.text = dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "dd MMMM")
             }
         }
     }
-    
+
     class func fromNib() -> NewsListCell? {
         var cell: NewsListCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
@@ -215,10 +217,12 @@ final class NewsListCell: UICollectionViewCell {
         }
         cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
         cell?.desc.preferredMaxLayoutWidth = cell?.desc.bounds.size.width ?? 0.0
-        
+
         return cell
     }
 }
+
+
 
 struct NewsJsonData: JSONDecodable {
     
@@ -285,18 +289,3 @@ final class NewsJson: NSObject, JSONDecodable, NSCoding {
         newsId             = aDecoder.decodeObject(forKey: "newsId")            as? Int
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

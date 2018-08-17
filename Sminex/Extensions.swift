@@ -441,6 +441,7 @@ extension Formatter {
         let formatter = NumberFormatter()
         formatter.groupingSeparator = " "
         formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         return formatter
     }()
 }

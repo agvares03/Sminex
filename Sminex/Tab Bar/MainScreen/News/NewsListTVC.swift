@@ -65,9 +65,11 @@ class NewsListTVC: UIViewController {
     private func getNews() {
         
         let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
-        let lastId = TemporaryHolder.instance.newsLastId
+//        let lastId = TemporaryHolder.instance.newsLastId
+        let lastId = "0"
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + "&lastId=" + lastId)!)
+        print("REQUEST = \(request)")
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
