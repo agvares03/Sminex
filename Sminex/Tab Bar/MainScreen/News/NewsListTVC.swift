@@ -56,6 +56,7 @@ class NewsListTVC: UIViewController {
     @objc private func refresh(_ sender: UIRefreshControl) {
         if TemporaryHolder.instance.news != nil {
             self.data = TemporaryHolder.instance.news!
+//            self.data = []
         }
         getNews()
     }
@@ -63,10 +64,8 @@ class NewsListTVC: UIViewController {
     // MARK: Private functions
     
     private func getNews() {
-        
         let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
-//        let lastId = TemporaryHolder.instance.newsLastId
-        let lastId = "0"
+        let lastId = TemporaryHolder.instance.newsLastId
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + "&lastId=" + lastId)!)
         print("REQUEST = \(request)")

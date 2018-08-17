@@ -910,11 +910,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global(qos: .userInitiated).async {
             let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
             
-            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
+//            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
                 let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
                 
                 var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
                 request.httpMethod = "GET"
+                print("REQUEST = \(request)")
                 
                 URLSession.shared.dataTask(with: request) {
                     data, error, responce in
@@ -925,6 +926,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         TemporaryHolder.instance.news = NewsJsonData(json: json!)!.data!
                     }
                     UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
+                    
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                     self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
@@ -948,8 +950,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                     return
                 }.resume()
-                return
-            }
+//                return
+//            }
             let decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
             TemporaryHolder.instance.news = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
@@ -969,43 +971,45 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.collection.reloadData()
             }
 
-            let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
-            let lastId = TemporaryHolder.instance.newsLastId
-
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
-            request.httpMethod = "GET"
-
-            URLSession.shared.dataTask(with: request) {
-                data, error, responce in
-
-                guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
-
-                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                    TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
-                }
-                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
-                TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
-                UserDefaults.standard.synchronize()
-                self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
-
-                for (ind, item) in self.filteredNews.enumerated() {
-                    if ind < 3 {
-//                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                    }
-                }
-
-                if (self.data[1]?.count ?? 0) < 2 {
-                    self.newsSize = CGSize(width: 0, height: 0)
-
-                } else {
-                    self.newsSize = nil
-                }
-
-                DispatchQueue.main.sync {
-                    self.collection.reloadData()
-                }
-                }.resume()
+//            let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
+//            let lastId = TemporaryHolder.instance.newsLastId
+//
+////            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
+//            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
+//            request.httpMethod = "GET"
+//            print("REQUEST = \(request)")
+//
+//            URLSession.shared.dataTask(with: request) {
+//                data, error, responce in
+//
+//                guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
+//
+//                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+//                    TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
+//                }
+//                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
+//                TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
+//                UserDefaults.standard.synchronize()
+//                self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
+//
+//                for (ind, item) in self.filteredNews.enumerated() {
+//                    if ind < 3 {
+////                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+//                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+//                    }
+//                }
+//
+//                if (self.data[1]?.count ?? 0) < 2 {
+//                    self.newsSize = CGSize(width: 0, height: 0)
+//
+//                } else {
+//                    self.newsSize = nil
+//                }
+//
+//                DispatchQueue.main.sync {
+//                    self.collection.reloadData()
+//                }
+//                }.resume()
         }
     }
 
