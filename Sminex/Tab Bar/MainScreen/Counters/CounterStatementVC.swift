@@ -71,7 +71,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 count.acceptableCharacters = "1234567890"
                 
             } else {
-                count.acceptableCharacters = "1234567890."
+                count.acceptableCharacters = "1234567890,"
                 count.numberOfDigits = 9
                 descLabel1.text = "Реальное показание 00012345.678 --> необходимо ввести как 12345.678"
 //                goButtonConst.constant = 20
@@ -236,7 +236,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
     
     // Передача показаний
     private func sendCount() {
-        if count.text != "" && count.text.last != "." {
+        if count.text != "" && count.text.last != "," {
             
             let edLogin = UserDefaults.standard.string(forKey: "login") ?? ""
             let edPass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
@@ -246,12 +246,13 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
             
             print("###: ")
             print(count.text.stringByAddingPercentEncodingForRFC3986()!)
+            let newCount = count.text.replacingOccurrences(of: ",", with: ".")
             
             let urlPath = Server.SERVER + Server.ADD_METER
                 + "login=" + edLogin.stringByAddingPercentEncodingForRFC3986()!
                 + "&pwd=" + edPass
                 + "&meterID=" + strNumber.stringByAddingPercentEncodingForRFC3986()!
-                + "&val=" + count.text.stringByAddingPercentEncodingForRFC3986()!
+                + "&val=" + newCount
             
             var request = URLRequest(url: URL(string: urlPath)!)
             request.httpMethod = "GET"
@@ -322,9 +323,11 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 
             } else if self.responseString == "5" {
                 self.delegate?.update()
+                let newCount1 = self.count.text.replacingOccurrences(of: ",", with: ".")
+                print(self.count.text)
                 self.monthValLabel.text    = (self.self.value_?.fractionalNumber?.contains(find: "alse") ?? true)
-                                                ? String(describing: Int(self.count.text)!)
-                                                : String(describing: Float(self.count.text)!)
+                                                ? String(describing: Int(newCount1)!)
+                                                : String(describing: Float(newCount1)!)
                 self.count.textField?.text = ""
                 self.count.setup()
             }

@@ -224,7 +224,7 @@ open class DigitInputView: UIView {
             addSubview(textField!)
         }
         
-        textField?.keyboardType = UIKeyboardType.alphabet
+        textField?.keyboardType = .decimalPad
         
         
         // Since this function isn't called frequently, we just remove everything
@@ -261,7 +261,7 @@ open class DigitInputView: UIView {
         }
         
         if numberOfDigits == 9{
-            labels[5].text = "."
+            labels[5].text = ","
         }
     }
     
@@ -288,12 +288,13 @@ open class DigitInputView: UIView {
         
         var txt = textField.text!
         
+        
         if numberOfDigits == 9 {
             
             print("didChange: " + (textField.text ?? "empty"))
             
             
-            if (txt.contains(find: ".") == false){
+            if (txt.contains(find: ",") == false){
                 if txt.length <= 5 {
                     for _ in 0 ..< 3 {
                         txt.insert("0", at: txt.endIndex)
@@ -303,9 +304,9 @@ open class DigitInputView: UIView {
                         txt.insert("0", at: txt.endIndex)
                     }
                 }
-                txt.insert(".", at: txt.index(txt.endIndex, offsetBy: -3))
+                txt.insert(",", at: txt.index(txt.endIndex, offsetBy: -3))
             } else {
-                for _ in 0 ..< 3 - txt.substring(fromIndex: txt.index(after: txt.index(of: ".")!).encodedOffset).length {
+                for _ in 0 ..< 3 - txt.substring(fromIndex: txt.index(after: txt.index(of: ",")!).encodedOffset).length {
                     txt.insert("0", at: txt.endIndex)
                 }
             }
@@ -314,8 +315,8 @@ open class DigitInputView: UIView {
                 textField.text!.remove(at: txt.startIndex)
             }
             
-            if (txt.contains(find: ".")) && txt.length > 1 {
-                if let index = txt.index(of: ".") {
+            if (txt.contains(find: ",")) && txt.length > 1 {
+                if let index = txt.index(of: ",") {
                     let substring = txt.substring(toIndex: index.encodedOffset)
                     if substring != "" {
                         if Int(substring)! > 0 && txt.first! == "0" {
@@ -325,7 +326,7 @@ open class DigitInputView: UIView {
                 }
             }
             
-//            if !txt.contains(find: ".") {
+//            if !txt.contains(find: ",") {
 //
 //            }
             
@@ -382,6 +383,8 @@ open class DigitInputView: UIView {
 }
 
 
+
+
 // MARK: TextField Delegate
 extension DigitInputView: UITextFieldDelegate {
     
@@ -398,20 +401,20 @@ extension DigitInputView: UITextFieldDelegate {
         
         if !isEnergy {
             
-            if (string == ".") && (textField.text?.length ?? 0) > 5{
+            if (string == ",") && (textField.text?.length ?? 0) > 5{
                 return false
             }
             
-            if (acceptableCharacters?.contains(find: ".") ?? false) && (textField.text ?? "").length >= 8 {
+            if (acceptableCharacters?.contains(find: ",") ?? false) && (textField.text ?? "").length >= 8 {
                 
                 return false
                 
-            } else if !(acceptableCharacters?.contains(find: ".") ?? false) && (textField.text?.length ?? 0) >= 5 {
+            } else if !(acceptableCharacters?.contains(find: ",") ?? false) && (textField.text?.length ?? 0) >= 5 {
                 return false
             }
             
-            if (textField.text!.contains(find: ".")) {
-                if textField.text!.substring(fromIndex: textField.text!.index(after: textField.text!.index(of: ".")!).encodedOffset).length > 2 {
+            if (textField.text!.contains(find: ",")) {
+                if textField.text!.substring(fromIndex: textField.text!.index(after: textField.text!.index(of: ",")!).encodedOffset).length > 2 {
                     return false
                 }
             }
@@ -426,10 +429,10 @@ extension DigitInputView: UITextFieldDelegate {
             return false
         }
         
-        if (string == "." && (textField.text ?? "").contains(find: ".")){
+        if (string == "," && (textField.text ?? "").contains(find: ",")){
             return false
         
-        } else if (string == "." && !(textField.text ?? "").contains(find: ".")){
+        } else if (string == "," && !(textField.text ?? "").contains(find: ",")){
             
             textField.text = (textField.text ?? "") + string
             didChange()
@@ -458,7 +461,7 @@ final class DigitLabel: UILabel {
     
     override var text: String? {
         didSet {
-            if (text == "."){
+            if (text == ","){
                 self.backgroundColor = .clear
             } else {
                 self.backgroundColor = UIColor(white: 96/100, alpha: 1.0)

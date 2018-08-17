@@ -168,6 +168,19 @@
 		6CFB5C6E2083AFF40028D331 /* FinanceCalcVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB5C6D2083AFF40028D331 /* FinanceCalcVC.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1C5AEB9D2126B26B00D9FF49 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		3A5ADBBA210C49950012F6DB /* HistoryCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCounterCell.swift; sourceTree = "<group>"; };
 		3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableCell.xib; sourceTree = "<group>"; };
@@ -926,6 +939,7 @@
 				4171BE591ECB369A00B9CDD7 /* Resources */,
 				8157CDB438B62F3F0A57F740 /* [CP] Embed Pods Frameworks */,
 				DDB1628890B2795063497E25 /* [CP] Copy Pods Resources */,
+				1C5AEB9D2126B26B00D9FF49 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -942,7 +956,7 @@
 		4171BE531ECB369A00B9CDD7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0940;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Anton Barbyshev";
 				TargetAttributes = {
@@ -1373,6 +1387,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sminex/DemoUC.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = R84LGLRB92;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1409,6 +1424,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sminex/DemoUC.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = R84LGLRB92;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
