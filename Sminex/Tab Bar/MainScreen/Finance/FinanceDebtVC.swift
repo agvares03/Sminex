@@ -148,6 +148,19 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         
         if indexPath.row == receipts?.count {
             let defaults = UserDefaults.standard
+            if (!defaults.bool(forKey: "denyOnlinePayments")) {
+                let kek = !(data_?.permit_online_payment!)!
+                if kek == true{
+                    return CGSize(width: view.frame.size.width, height: 130.0)
+                    
+                }
+            }
+            
+            return CGSize(width: view.frame.size.width, height: 193.0)
+            
+        }
+        if indexPath.row == receipts?.count {
+            let defaults = UserDefaults.standard
             if (defaults.bool(forKey: "denyInvoiceFiles")) {
                 return CGSize(width: view.frame.size.width, height: 80.0)
             }
@@ -383,6 +396,7 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
         
         let defaults = UserDefaults.standard
         pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
+        print(pay_button.isHidden)
         pay_QR.isHidden       = defaults.bool(forKey: "denyOnlinePayments")
         pay_QR_image.isHidden = defaults.bool(forKey: "denyOnlinePayments")
         
@@ -391,17 +405,15 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
             pay_button.isHidden    = !data.permit_online_payment!
             pay_QR.isHidden        = !data.permit_online_payment!
             pay_QR_image.isHidden  = !data.permit_online_payment!
+            
         }
         
         // Выводить или нет кнопку QR-код
         pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
         pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
-        
         if pay_button.isHidden {
-            btnConst.constant = 5
             btnConst1.constant = 0
         }
-        
     }
     
     func startShareAnimation() {
@@ -470,19 +482,3 @@ struct RecieptFilesJson: JSONDecodable {
         id       = "ID"         <~~ json
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
