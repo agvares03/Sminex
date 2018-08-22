@@ -72,7 +72,7 @@ final class AccountNotificationsVC: UIViewController {
                 data, error, responce in
                 
                 #if DEBUG
-                    print(String(data: data!, encoding: .utf8) ?? "")
+//                    print(String(data: data!, encoding: .utf8) ?? "")
                 #endif
                 
             }.resume()

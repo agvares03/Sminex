@@ -8,8 +8,10 @@
 
 import UIKit
 import Alamofire
+import SwiftyXMLParser
 
 private protocol AdmissionProtocol: class {}
+private var mainScreenXml:  XML.Accessor?
 private protocol AdmissionCellsProtocol: class {
     func imageTapped(_ sender: UITapGestureRecognizer)
 }
@@ -143,12 +145,18 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.global(qos: .background).async {
+                self.getMessages()
                 sleep(2)
                 DispatchQueue.main.sync {
-
+//                    self.data[IndexPath] = [0 : CellsHeaderData(title: "Заявки")]
+//                    res.forEach {
+//                        self.data_[IndexPath]![count] = $0
+//                        count += 1
+//                    }
+//                    self.data[IndexPath]![count] = RequestAddCellData(title: "Добавить заявку")
+                    self.collection.reloadData()
                 }
             }
-
             DispatchQueue.main.async {
                 if #available(iOS 10.0, *) {
                     self.collection.refreshControl?.endRefreshing()
@@ -228,11 +236,68 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    func getMessages(){
+            
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_COMM_ID + "login=" + login + "&pwd=" + pass + "&id=" + self.reqId_)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            
+            let xml = XML.parse(data!)
+            var index = 1
+            let requests = xml["Messages"]
+            let row1 = requests["Request"]
+            let row2 = requests["Comm"]
+            var rows: [String : [Request]] = [:]
+            var rowComms: [String : [RequestComment]]  = [:]
+            row1.forEach { row in
+                rows[row.attributes["Status"]!]?.append(Request(row: row))
+                rowComms[row.attributes["ID"]!] = []
+                row2.forEach { row in
+                    rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["CreatedDate"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["id_Author"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["id_file"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["isHidden"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["id_request"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["Name"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["PhoneNum"]!]?.append( RequestComment(row: row) )
+                    index += 1
+                    self.arr = self.comments_
+                    self.arr.insert(self.data_, at: 0)
+                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                    if index < self.arr.count{
+                        self.arr.removeLast()
+                    }
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+                self.commentField.text = ""
+                self.commentField.placeholder = "Сообщение"
+                self.view.endEditing(true)
+                self.delegate?.update()
+                self.collection.scrollToItem(at: IndexPath(item: self.collection.numberOfItems(inSection: 0) - 1, section: 0), at: .top, animated: true)
+                self.endAnimating()
+            }
+            
+            }.resume()
+    }
+    
     private func sendComment(_ comment: String = "") {
         
         let comm = comment == "" ? commentField.text?.stringByAddingPercentEncodingForRFC3986() ?? "" : comment
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_COMM + "reqID=" + reqId_ + "&text=" + comm)!)
         request.httpMethod = "GET"
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -353,9 +418,11 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     private func endAnimating() {
-        sendBtn.isHidden = false
-        loader.stopAnimating()
-        loader.isHidden = true
+        DispatchQueue.main.async {
+            self.sendBtn.isHidden = false
+            self.loader.stopAnimating()
+            self.loader.isHidden = true
+        }
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
