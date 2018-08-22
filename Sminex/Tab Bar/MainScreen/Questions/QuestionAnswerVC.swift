@@ -7,6 +7,9 @@
 //
 
 import UIKit
+var currQuestion = 0
+var kek: [Int] = []
+var i = Int()
 
 final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     
@@ -20,6 +23,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: answers)
         userDefaults.set(encodedData, forKey: String(question_?.id ?? 0))
         userDefaults.synchronize()
+        i = 0
         
         if !isFromMain_ {
             navigationController?.popViewController(animated: true)
@@ -45,12 +49,14 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             answerArr.append((question_?.questions![currQuestion].answers![$0].id)!)
         }
         guard answerArr.count != 0 else { return }
-        
         answers[(question_?.questions![currQuestion].id!)!] = answerArr
-        
         print(answers)
         isAccepted = false
         if (currQuestion + 1) < question_?.questions?.count ?? 0 {
+            if answers.count > currQuestion + 1{
+                kek = answers[(question_?.questions![currQuestion + 1].id!)!]!
+            }
+            i = 0
             collection.reloadData()
             currQuestion += 1
             NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
@@ -69,13 +75,11 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     open var question_: QuestionDataJson?
     open var questionDelegate: QuestionTableDelegate?
     
-    private var currQuestion = 0
     private var answers: [Int:[Int]] = [:]
     private var tap: UITapGestureRecognizer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         stopAnimation()
         navigationItem.title    = question_?.name
         
@@ -83,9 +87,12 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         if decoded != nil {
             answers = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) as! [Int:[Int]]
         }
-        currQuestion = answers.count
-        
+//        currQuestion = answers.count
+        currQuestion = 0
+        print("=")
         print(answers)
+        kek = answers[(question_?.questions![currQuestion].id!)!] ?? [0]
+        print(kek)
         
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
@@ -247,7 +254,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         request.httpMethod = "POST"
         
         var json: [[String:Any]] = []
-        
+        print("=====")
         print(answers)
         
         var isManyValue = false
@@ -369,6 +376,9 @@ final class QuestionAnswerCell: UICollectionViewCell {
     @IBOutlet private weak var field:       UITextField!
     @IBOutlet private weak var question:    UILabel!
     @IBOutlet private weak var toggleView:  UIView!
+    open var question_: QuestionDataJson?
+    
+    
     
     @objc fileprivate func didTapOnOffButton(_ sender: UITapGestureRecognizer? = nil) {
         
@@ -381,8 +391,17 @@ final class QuestionAnswerCell: UICollectionViewCell {
             if isAccepted && checked { return }
             if !isAccepted { isAccepted = true }
         }
-        if checked {
-            selectedAnswers.append(index)
+        
+        
+        if checked || ((currIndex == index + 1) && (i < kek.count)){
+            if (currIndex == index + 1) && (selectedAnswers.count < kek.count){
+                i += 1
+                selectedAnswers.append(index)
+            }
+            if checked{
+                selectedAnswers.append(index)
+            }
+            print(selectedAnswers)
             
             if isSomeAnswers {
                 toggle.checked = true
@@ -399,8 +418,9 @@ final class QuestionAnswerCell: UICollectionViewCell {
             }
             checked                 = false
             isAccepted              = true
+            currIndex = 0
             
-        } else {
+        }else {
             
             for (ind, item) in selectedAnswers.enumerated() {
                 if item == index {
@@ -423,15 +443,25 @@ final class QuestionAnswerCell: UICollectionViewCell {
             isAccepted              = false
             checked                 = true
         }
+        if i == kek.count{
+            i = 0
+        }
     }
     
     private let blueColor = UIColor(red: 0/255, green: 100/255, blue: 255/255, alpha: 1)
     fileprivate var checked  = false
     private var index = 0
+    private var currIndex = 0
     
     fileprivate func display(_ item: QuestionsTextJson, index: Int) {
         self.index = index
         
+        kek.forEach {
+            if item.id == $0{
+                currIndex = index + 1
+//                print(currIndex)
+            }
+        }
         toggle.checked = false
         
         if !isSomeAnswers {
