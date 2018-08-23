@@ -276,7 +276,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //        }
             header.frame.size.width = view.frame.size.width - 32
             header.frame.origin.x = 16
-            
+        
             if header.title.text == "Акции и предложения" {
                 header.backgroundColor = .clear
             } else if header.title.text == "Версия" {
@@ -1186,6 +1186,15 @@ final class CellsHeader: UICollectionReusableView {
     fileprivate func display(_ item: CellsHeaderData, delegate: CellsDelegate? = nil) {
         
         title.text = item.title
+        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
+            (UIDevice.current.modelName.contains(find: "Simulator iPhone SE")) {
+            title.font = title.font.withSize(20)
+        }
 //
 //        if !item.isNeedDetail {
 //            detail.isHidden = true
