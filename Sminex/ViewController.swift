@@ -158,14 +158,15 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
-        var height_top:CGFloat = 350// высота верхних элементов
+        var height_top:CGFloat = 370// высота верхних элементов
         if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
             (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
-            (UIDevice.current.modelName.contains(find: "Simulator iPhone SE")) {
+            (UIDevice.current.modelName.contains(find: "Simulator")) {
+            print("iPhone")
             height_top = 345
         } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
