@@ -156,7 +156,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
             (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
             (UIDevice.current.modelName.contains(find: "Simulator")){
-            edConst.constant -= 16
+            edConst.constant -= 32
         } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
@@ -227,17 +227,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         var height_top:CGFloat = 370// высота верхних элементов
-        let userInfo = sender?.userInfo
-        let kbFrameSize = (userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let numb_to_move:CGFloat = kbFrameSize.height
         if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
             (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
-            (UIDevice.current.modelName.contains(find: "Simulator")) {
-            height_top = 300
+            (UIDevice.current.modelName.contains(find: "Simulator")){
+            height_top = 270
         } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
@@ -245,14 +242,17 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             (UIDevice.current.modelName.contains(find: "iPhone 7")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 7 Plus")){
             height_top = 390
-        } else if UIDevice.current.modelName.contains(find: "iPhone X") {
+        } else if UIDevice.current.modelName.contains(find: "iPhone X")  {
             height_top = 450
         }
         
+        
+        let userInfo = sender?.userInfo
+        let kbFrameSize = (userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let numb_to_move:CGFloat = kbFrameSize.height
         //        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
         if !isNeedToScrollMore() {
             sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
-
         } else {
             sendBtnConst.constant = getPoint() - 150
         }
