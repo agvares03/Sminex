@@ -116,6 +116,18 @@ final class DealsListDescHeader: UICollectionReusableView {
         titleLabel.text = data_?.name
         bodyLabel.text = data_?.body
         
+        func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+            bodyLabel.numberOfLines = 0
+            bodyLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+            bodyLabel.font = font
+            bodyLabel.text = text
+            
+            bodyLabel.sizeToFit()
+            return bodyLabel.frame.height
+        }
+        
+        let font = UIFont(name: "Helvetica", size: 16.0)
+        
         if data_?.link != "" {
             // Сделаем Перейти на сайт кликабельным
             let tap = UITapGestureRecognizer(target: self, action: #selector(DealsListDescHeader.tapFunction))
@@ -140,6 +152,8 @@ final class DealsListDescHeader: UICollectionReusableView {
         
         titleLabel.preferredMaxLayoutWidth = titleLabel.bounds.size.width
         bodyLabel.preferredMaxLayoutWidth  = bodyLabel.bounds.size.width
+        let height = heightForView(text: bodyLabel.text!, font: font!, width: bodyLabel.preferredMaxLayoutWidth)
+        bodyLabel.bounds.size.height = height
         linksLabel.preferredMaxLayoutWidth = linksLabel.bounds.size.width
         
         if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
