@@ -8,7 +8,8 @@
 
 import UIKit
 import DeviceKit
-
+import Gloss
+var ls1:[String] = []
 final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
@@ -110,7 +111,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             #if DEBUG
                 print("responseString = \(self.responseString)")
             #endif
-            self.choiceReg()
+            self.choice()
         }.resume()
     }
     
@@ -159,12 +160,71 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             } else if self.responseString == "xxx" {
                 self.changeDescTextTo(isError: true, text: "Ошибка сервера. Попробуйте позже")
             
+            } else if self.responseString == "error:  Найдено более одного лицевого счёта. Для уточнения введите номер лицевого счёта."{
+                self.getLSforNumber()
             } else if self.responseString.contains("error") {
                 self.changeDescTextTo(isError: true, text: self.responseString.replacingOccurrences(of: "error:", with: ""))
             } else {
                 self.changeDescTextTo(isError: false)
             }
         }
+    }
+    private func getLSforNumber(){
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_PHONE + "phone=" + self.edLS.text!)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.stopAnimation()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+//            print("responseString = \(self.responseString)")
+            #endif
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                // Получим список ЛС
+                ls1 = json["data"] as! [String]
+            } catch let error {
+                
+                #if DEBUG
+                print(error)
+                #endif
+            }
+            self.showLS()
+            }.resume()
+    }
+    
+    private func showLS(){
+        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счёт", preferredStyle: .actionSheet)
+        ls1.forEach {
+            let text = $0
+            action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
+                self.ls = text
+                self.edLS.text = text
+                if self.isReg_ {
+                    self.registration()
+                    
+                } else {
+                    self.forgotPass()
+                }
+            }))
+        }
+        action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
+        present(action, animated: true, completion: nil)
     }
     
     private func choiceReg() {
