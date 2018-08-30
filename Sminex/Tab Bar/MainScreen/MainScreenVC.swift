@@ -982,7 +982,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     data, error, responce in
                     
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
-                    
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                         TemporaryHolder.instance.news = NewsJsonData(json: json!)!.data!
                     }

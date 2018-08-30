@@ -48,7 +48,6 @@ class NewsListTVC: UIViewController {
         if tappedNews != nil {
             performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
         }
-        
         startAnimation()
         getNews()
     }
@@ -56,9 +55,8 @@ class NewsListTVC: UIViewController {
     @objc private func refresh(_ sender: UIRefreshControl) {
         if TemporaryHolder.instance.news != nil {
             self.data = TemporaryHolder.instance.news!
-//            self.data = []
         }
-        getNews()
+        getAllNews()
     }
     
     // MARK: Private functions
@@ -66,7 +64,6 @@ class NewsListTVC: UIViewController {
     private func getNews() {
         let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
         let lastId = TemporaryHolder.instance.newsLastId
-        
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + "&lastId=" + lastId)!)
         print("REQUEST = \(request)")
         request.httpMethod = "GET"
@@ -87,8 +84,7 @@ class NewsListTVC: UIViewController {
             }
             
             guard data != nil else { return }
-            
-            print(String(data: data!, encoding: .utf8) ?? "")
+//            print(String(data: data!, encoding: .utf8) ?? "")
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
@@ -103,7 +99,79 @@ class NewsListTVC: UIViewController {
                     if newsArr.count != 0 {
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)
                         self.data = TemporaryHolder.instance.news!
+                        DispatchQueue.main.sync {
+                            if #available(iOS 10.0, *) {
+                                self.tableView.refreshControl?.endRefreshing()
+                            } else {
+                                self.rControl?.endRefreshing()
+                            }
+                            self.tableView.reloadData()
+                            self.stopAnimation()
+                        }
                         
+                    }
+                }
+            }
+            
+            if self.data.count != 0 {
+                DispatchQueue.global(qos: .background).async {
+                    UserDefaults.standard.set(String(self.data.first?.newsId ?? 0), forKey: "newsLastId")
+                    TemporaryHolder.instance.newsLastId = String(self.data.first?.newsId ?? 0)
+                    UserDefaults.standard.synchronize()
+                    let dataDict =
+                        [
+                            0 : self.data,
+                            1 : self.data.filter { $0.isShowOnMainPage ?? false }
+                    ]
+                    let encoded = NSKeyedArchiver.archivedData(withRootObject: dataDict)
+                    UserDefaults.standard.set(encoded, forKey: "newsList")
+                    UserDefaults.standard.synchronize()
+                }
+            }
+            
+            #if DEBUG
+            //print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            }.resume()
+    }
+    private func getAllNews() {
+        let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
+        print("REQUEST = \(request)")
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            defer {
+                DispatchQueue.main.sync {
+                    if #available(iOS 10.0, *) {
+                        self.tableView.refreshControl?.endRefreshing()
+                    } else {
+                        self.rControl?.endRefreshing()
+                    }
+                    self.tableView.reloadData()
+                    self.stopAnimation()
+                }
+            }
+            
+            guard data != nil else { return }
+            //            print(String(data: data!, encoding: .utf8) ?? "")
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            TemporaryHolder.instance.news?.removeAll()
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                if let newsArr = NewsJsonData(json: json!)?.data {
+                    if newsArr.count != 0 {
+                        TemporaryHolder.instance.news?.append(contentsOf: newsArr)
+                        self.data = TemporaryHolder.instance.news!
                         DispatchQueue.main.sync {
                             if #available(iOS 10.0, *) {
                                 self.tableView.refreshControl?.endRefreshing()
