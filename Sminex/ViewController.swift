@@ -164,8 +164,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
-            (UIDevice.current.modelName.contains(find: "Simulator")) {
+            (UIDevice.current.modelName.contains(find: "iPhone SE")) {
             height_top = 345
         } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
@@ -176,6 +175,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             height_top = 355
         } else if UIDevice.current.modelName.contains(find: "iPhone X") {
             height_top = 385
+        } else if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
+            height_top = 345
         }
         
         
