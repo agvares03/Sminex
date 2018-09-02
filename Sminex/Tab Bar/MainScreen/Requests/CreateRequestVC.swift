@@ -8,8 +8,9 @@
 
 import UIKit
 import Alamofire
+import DeviceKit
 
-final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var isTransport: NSLayoutConstraint!
     @IBOutlet weak var transportTitle: UILabel!
@@ -17,13 +18,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var imageConst:      NSLayoutConstraint!
     @IBOutlet weak var commentConst: NSLayoutConstraint!
     @IBOutlet private weak var sendBtnConst:    NSLayoutConstraint!
+    @IBOutlet weak var edConst: NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
     @IBOutlet private weak var picker:          UIDatePicker!
     @IBOutlet private weak var edFio:           UITextField!
     @IBOutlet private weak var edContact:       UITextField!
     @IBOutlet private weak var gosNumber:       UITextField!
-    @IBOutlet private weak var edComment:       UITextField!
+    @IBOutlet private weak var edComment: UITextView!
     @IBOutlet private weak var dateField:       UIButton!
     @IBOutlet private weak var sendButton:      UIButton!
     @IBOutlet private weak var transportSwitch: UISwitch!
@@ -46,11 +48,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         if picker.isHidden {
             
-            if imgScroll.isHidden {
-                sendBtnConst.constant   = 180
-                
-            } else {
-                sendBtnConst.constant   = 340
+            if !imgScroll.isHidden {
+//                sendBtnConst.constant   = 180
+//
+//            } else {
+//                sendBtnConst.constant   = 340
                 imageConst.constant     = 180
             }
             picker.isHidden         = false
@@ -65,11 +67,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             picker.isHidden         = true
             pickerLine.isHidden     = true
             
-            if imgScroll.isHidden {
-                sendBtnConst.constant   = 15
-                
-            } else {
-                sendBtnConst.constant   = 170
+            if !imgScroll.isHidden {
+//                sendBtnConst.constant   = 15
+//
+//            } else {
+//                sendBtnConst.constant   = 170
                 imageConst.constant     = 5
             }
             
@@ -142,10 +144,30 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     private var reqId: String?
     private var data: AdmissionHeaderData?
     private var btnConstant: CGFloat = 0.0
+    private var sprtTopConst: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if  (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
+            (UIDevice.current.modelName.contains(find: "Simulator")){
+            edConst.constant -= 32
+        } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
+            (UIDevice.current.modelName.contains(find: "Phone 6s Plus")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 7")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 7 Plus")){
+            edConst.constant -= 16
+        } else if (UIDevice.current.modelName.contains(find: "iPhone X")) {
+            edConst.constant += 16
+        }
+        sprtTopConst = pickerLine.frame.origin.y
         btnConstant = sendButton.frame.origin.y
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
@@ -185,10 +207,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             transportSwitch.isHidden = true
             transportTitle.isHidden = true
         }
+        
+        edComment.text = "Примечания"
+        edComment.textColor = UIColor.lightGray
+        edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        sendBtnConst.constant = getPoint()
         tabBarController?.tabBar.isHidden = true
     }
     
@@ -199,9 +226,43 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
+        var height_top:CGFloat = 370// высота верхних элементов
+        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
+            (UIDevice.current.modelName.contains(find: "Simulator")){
+            height_top = 270
+        } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
+            (UIDevice.current.modelName.contains(find: "Phone 6s Plus")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 7")) ||
+            (UIDevice.current.modelName.contains(find: "iPhone 7 Plus")){
+            height_top = 390
+        } else if UIDevice.current.modelName.contains(find: "iPhone X")  {
+            height_top = 450
+        }
+        
+        
+        let userInfo = sender?.userInfo
+        let kbFrameSize = (userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let numb_to_move:CGFloat = kbFrameSize.height
+        //        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
+        if !isNeedToScrollMore() {
+            sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
+        } else {
+            sendBtnConst.constant = getPoint() - 150
+        }
         
         if !picker.isHidden {
             datePickerPressed(nil)
+        }
+        
+        if gosNumber.isHidden == false{
+            sendBtnConst.constant = sendBtnConst.constant - 55
         }
         
         if isNeedToScroll() {
@@ -216,6 +277,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
+        if !isNeedToScrollMore() {
+            sendBtnConst.constant = getPoint()
+        } else {
+            sendBtnConst.constant = getPoint()
+        }
+        
+        if gosNumber.isHidden == false{
+            sendBtnConst.constant = sendBtnConst.constant - 55
+        }
         
         if isNeedToScroll() {
             if images.count != 0 {
@@ -234,17 +304,28 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //        }
     }
     
+    private func getPoint() -> CGFloat {
+        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+            return (view.frame.size.height - sprtTopConst + 80)
+            
+        } else {
+            return (view.frame.size.height - sprtTopConst + 45) - 50
+        }
+    }
+    
     @objc private func stateChanged(_ sender: UISwitch) {
         
-        if sender.isOn {
+        if sender.isOn{
             commentConst.constant   = 65
             gosNumber.isHidden      = false
             gosLine.isHidden        = false
+            sendBtnConst.constant = sendBtnConst.constant - 55
         
         } else {
             commentConst.constant   = 8
             gosNumber.isHidden      = true
             gosLine.isHidden        = true
+            sendBtnConst.constant = getPoint()
         }
     }
     
@@ -255,11 +336,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             
             if !picker.isHidden {
                 imageConst.constant = 8
-                sendBtnConst.constant = 350
+//                sendBtnConst.constant = 350
                 scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 350)
                 
             } else {
-                sendBtnConst.constant = 8
+//                sendBtnConst.constant = 8
                 scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 170)
             }
 
@@ -268,11 +349,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             
             if !picker.isHidden {
                 imageConst.constant = 180
-                sendBtnConst.constant = 350
+//                sendBtnConst.constant = 350
                 scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 350)
             
             } else {
-                sendBtnConst.constant = 170
+//                sendBtnConst.constant = 170
                 scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 170)
             }
             
@@ -471,22 +552,22 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
+
         if textField === edFio {
             edContact.becomeFirstResponder()
-        
+
         } else if textField === edContact {
             if !gosNumber.isHidden {
                 gosNumber.becomeFirstResponder()
-            
+
             } else {
                 edComment.becomeFirstResponder()
             }
-        
+
         } else if textField === gosNumber {
             edComment.becomeFirstResponder()
         }
-        
+
         return true
     }
     
@@ -502,5 +583,34 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
         
         return true
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        
+        let currentText:String = textView.text
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
+        
+        if updatedText.isEmpty {
+            textView.text = "Примечания"
+            textView.textColor = UIColor.lightGray
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            
+        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+            textView.textColor = UIColor.black
+            textView.text = text
+            
+        } else {
+            return true
+        }
+        return false
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if self.view.window != nil {
+            if textView.textColor == UIColor.lightGray {
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
+        }
     }
 }

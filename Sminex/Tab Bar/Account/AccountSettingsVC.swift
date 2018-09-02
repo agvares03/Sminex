@@ -207,7 +207,13 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image = info[UIImagePickerControllerEditedImage] as! UIImage
+        var image : UIImage!
+        if let img = info[UIImagePickerControllerEditedImage] as? UIImage{
+            image = img
+        }
+        else if let img = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            image = img
+        }
         accountImageView.image = image
         DispatchQueue.global(qos: .background).async {
             UserDefaults.standard.setValue(UIImagePNGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128))), forKey: "accountIcon")

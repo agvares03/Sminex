@@ -9,6 +9,7 @@
 import UIKit
 import MessageUI
 import Gloss
+import DeviceKit
 
 private protocol ContactsCellDelegate: class {
     func phonePressed(_ phone: String)
@@ -81,9 +82,15 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
                 (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
                 (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
                 (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-                (UIDevice.current.modelName.contains(find: "iPhone SE")) ||  (UIDevice.current.modelName.contains(find: "Simulator iPhone 7")) ||  (UIDevice.current.modelName.contains(find: "Simulator iPhone 6")) || (UIDevice.current.modelName.contains(find: "Simulator iPhone 8")) ||  (UIDevice.current.modelName.contains(find: "Simulator iPhone X")) ||  (UIDevice.current.modelName.contains(find: "Simulator iPhone 7 PLus")) ||  (UIDevice.current.modelName.contains(find: "Simulator iPhone 8 Plus")){
+                (UIDevice.current.modelName.contains(find: "iPhone SE")){
                 return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
             }
+            if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
+                print("iPhoneX")
+                
+                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
+            }
+            
             return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
         }
         

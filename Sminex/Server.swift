@@ -54,6 +54,7 @@ final class Server {
     static let CONFIGURE_NOTIFY    = "SetNotifySettings.ashx?"         // Изменение настроек уведомлении
     static let PROPOSALS           = "GetProposals.ashx?"              // Получение списка акции
     static let ACCOUNT_DEBT        = "GetAccountDebt.ashx?"            // Баланс аккаунта
+    static let ACCOUNT_PHONE       = "GetAccountsByPhoneNumber.ashx?"  // Получить список ЛС по номеру телефона
     static let GET_BILLS           = "GetAccountBills.ashx?"           // Получение списка квитанции
     static let CALCULATIONS        = "GetAccountCalculations.ashx?"    // Получение списка взаиморасчетов
     static let PAY_ONLINE          = "PayOnline.ashx?"                 // Оплата счета

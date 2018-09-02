@@ -72,6 +72,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
 
             #if DEBUG
+                print("=====")
                 print("responseString = \(self.responseString)")
             #endif
 
@@ -131,6 +132,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         passTextField.isSecureTextEntry = true
         
         lsText.text = login_
+        print("PHONE: ", phone_)
         lsDesc.text = lsDesc.text! + " " + phone_
         
         if isNeedToScrollMore() {
