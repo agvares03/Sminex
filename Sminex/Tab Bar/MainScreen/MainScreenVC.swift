@@ -283,6 +283,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 header.backgroundColor = .clear
                 header.title.text = ""
             }  else {
+                header.layer.shadowColor = UIColor.black.cgColor
+                header.layer.shadowOpacity = 0.5
+                header.layer.shadowOffset = CGSize(width: 0, height: -1)
+                header.layer.shadowRadius = 2
                 header.backgroundColor = .white
             }
             
@@ -297,8 +301,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
                 header.layer.mask = rectShape
             }
-            
-            return header
+        return header
 
 //        } else {
             
@@ -384,10 +387,22 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     cell.layer.mask = rectShape
                 }
             }
+            cell.layer.shadowColor = UIColor.black.cgColor
+            cell.layer.shadowOpacity = 0.5
+            cell.layer.shadowOffset = CGSize(width: 0, height: 1)
+            cell.layer.shadowRadius = 2
+            cell.layer.masksToBounds = false
+            cell.layer.shadowPath = UIBezierPath(roundedRect:cell.bounds, cornerRadius:cell.contentView.layer.cornerRadius).cgPath
             return cell
         
         } else if title == "Новости" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCell", for: indexPath) as! NewsCell
+            cell.layer.shadowColor = UIColor.black.cgColor
+            cell.layer.shadowOpacity = 0.5
+            cell.layer.shadowOffset = CGSize(width: 0, height: 1)
+            cell.layer.shadowRadius = 2
+            cell.layer.masksToBounds = false
+            cell.layer.shadowPath = UIBezierPath(roundedRect:cell.bounds, cornerRadius:cell.contentView.layer.cornerRadius).cgPath
             cell.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData, isLast: data[indexPath.section]!.count == indexPath.row + 2)
             if indexPath.row + 2 == data[indexPath.section]?.count {
                 if #available(iOS 11.0, *) {
@@ -402,6 +417,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     cell.layer.mask = rectShape
                 }
             }
+            
             return cell
         
         } else if title == "Акции и предложения" {
@@ -412,7 +428,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //            } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StockCell", for: indexPath) as! StockCell
                 cell.display(data[indexPath.section]![indexPath.row + 1] as! StockCellData, delegate: self, indexPath: indexPath)
-                return cell
+            return cell
 //            }
         
         } else if title == "Заявки" {
@@ -431,6 +447,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     rectShape.path = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomRight , .bottomLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
                     cell.layer.mask = rectShape
                 }
+//                cell.layer.shadowColor = UIColor.black.cgColor
+//                cell.layer.shadowOpacity = 0.5
+//                cell.layer.shadowOffset = CGSize(width: 0, height: 1)
+//                cell.layer.shadowRadius = 2
                 return cell
                 
             } else {
@@ -438,6 +458,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
                     cell.display(requestData)
                 }
+                cell.layer.shadowColor = UIColor.black.cgColor
+                cell.layer.shadowOpacity = 0.5
+                cell.layer.shadowOffset = CGSize(width: 0, height: 1)
+                cell.layer.shadowRadius = 2
+                cell.layer.masksToBounds = false
+                cell.layer.shadowPath = UIBezierPath(roundedRect:cell.bounds, cornerRadius:cell.contentView.layer.cornerRadius).cgPath
                 return cell
             }
         
@@ -457,6 +483,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     cell.layer.mask = rectShape
                 }
             }
+//            cell.layer.shadowColor = UIColor.black.cgColor
+//            cell.layer.shadowOpacity = 0.5
+//            cell.layer.shadowOffset = CGSize(width: 0, height: 1)
+//            cell.layer.shadowRadius = 2
             return cell
         
         } else if title == "Счетчики" {
@@ -475,6 +505,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     cell.layer.mask = rectShape
                 }
             }
+//            cell.layer.shadowColor = UIColor.black.cgColor
+//            cell.layer.shadowOpacity = 0.5
+//            cell.layer.shadowOffset = CGSize(width: 0, height: 1)
+//            cell.layer.shadowRadius = 2
             return cell
             
         } else if title == "Версия" {

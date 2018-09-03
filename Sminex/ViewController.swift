@@ -35,6 +35,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     // Признак того, вводим мы телефон или нет
     private var itsPhone = false
+    private var LoginText = ""
+    private var ls2:[String] = []
     
     // Какая регистрация будет
     open var roleReg_ = ""
@@ -49,7 +51,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private var debtSumAll     = 0.0
     private var debtOverSum    = 0.0
     
-    private var ls = ""
+//    private vals = ""
     
     @IBAction private func enter(_ sender: UIButton) {
         
@@ -74,12 +76,85 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
         } else {
             
-            // Сохраним значения
-            saveUsersDefaults()
-            
-            // Запрос - получение данных !!!
-            enter()
+            if itsPhone{
+                self.getLSforNumber()
+            }else{
+                // Сохраним значения
+                saveUsersDefaults()
+                
+                // Запрос - получение данных !!!
+                enter()
+            }
         }
+    }
+    
+    private func getLSforNumber(){
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_PHONE + "phone=" + self.edLogin.text!)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+            //            print("responseString = \(self.responseString)")
+            #endif
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                // Получим список ЛС
+                self.ls2 = json["data"] as! [String]
+            } catch let error {
+                
+                #if DEBUG
+                print(error)
+                #endif
+            }
+            }.resume()
+        if self.ls2.count > 1{
+            self.showLS()
+        }else{
+            self.ls2.forEach {
+                let text = $0
+                self.LoginText = text
+                self.edLogin.text = text
+                // Сохраним значения
+                self.saveUsersDefaults()
+                // Запрос - получение данных !!!
+                self.enter()
+            }
+        }
+    }
+    
+    private func showLS(){
+        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счёт", preferredStyle: .actionSheet)
+        self.ls2.forEach {
+            let text = $0
+            action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
+                self.LoginText = text
+                self.edLogin.text = text
+                // Сохраним значения
+                self.itsPhone = false
+                self.saveUsersDefaults()
+                
+                // Запрос - получение данных !!!
+                self.enter()
+            }))
+        }
+        action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
+        present(action, animated: true, completion: nil)
     }
     
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
@@ -625,208 +700,45 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
-        
+        LoginText = edLogin.text!
 //        if string == "" {
 //
-//            let ls_ind  = ls.index(ls.endIndex, offsetBy: -1)
-//            let ls_end  = ls.substring(to: ls_ind)
-//            ls          = ls_end
-//
-//            if ls_end == "" {
+//            let ls_ind = LoginText.index(LoginText.endIndex, offsetBy: -1)
+//            let ls_end = LoginText.substring(to: ls_ind)
+//            LoginText = ls_end
+//            if (ls_end == "") {
 //                itsPhone = false
 //            }
 //        } else {
-//            ls = ls + string
+//
+//            LoginText = LoginText + string
 //        }
 //
-//        // Определим телефон это или нет
-//        var first       = true
-//        var ls_1_end    = ""
+        // определим телефон это или нет
+        var ls_1_end = ""
+        if (LoginText.count < 1) {
+            ls_1_end = ""
+        } else {
+            let ls_1 = LoginText.index(LoginText.startIndex, offsetBy: 1)
+            ls_1_end = LoginText.substring(to: ls_1)
+        }
+
+        var ls_12_end = ""
+        if (LoginText.count < 2) {
+            ls_12_end = ""
+        } else {
+            let ls_12 = LoginText.index(LoginText.startIndex, offsetBy: 2)
+            ls_12_end = LoginText.substring(to: ls_12)
+        }
+        if (ls_1_end == "+") {
+            itsPhone = true
+        }
+        if (!itsPhone) {
+            if (ls_12_end == "89") || (ls_12_end == "79") {
+                itsPhone = true
+            }
+        }
 //
-//        if ls.count < 1 {
-//            ls_1_end = ""
-//
-//        } else {
-//            let ls_1 = ls.index(ls.startIndex, offsetBy: 1)
-//            ls_1_end = ls.substring(to: ls_1)
-//        }
-//
-//        var ls_12_end = ""
-//        if ls.count < 2 {
-//            ls_12_end = ""
-//        } else {
-//            let ls_12 = ls.index(ls.startIndex, offsetBy: 2)
-//            ls_12_end = ls.substring(to: ls_12)
-//        }
-//        if ls_1_end == "+" {
-//            itsPhone = true
-//        }
-//        if !itsPhone {
-//            if ls_12_end == "89" || ls_12_end == "79" {
-//                itsPhone = true
-//            }
-//        }
-//
-//        var new_ls: String = ""
-//        first = true
-//        var j: Int = 1
-//
-//        ls.forEach {
-//
-//            if first {
-//                new_ls = String($0)
-//                first = false
-//
-//            } else {
-//                if itsPhone {
-//                    if ls_1_end == "+" {
-//                        if j == 2 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 3 {
-//                            new_ls = new_ls + "(" + String($0)
-//                        } else if j == 4 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 5 {
-//                            new_ls = new_ls + String($0) + ")"
-//                        } else if j == 6 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 7 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 8 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 9 {
-//                            new_ls = new_ls + "-" + String($0)
-//                        } else if j == 10 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 11 {
-//                            new_ls = new_ls + "_" + String($0)
-//                        } else if j == 12 {
-//                            new_ls = new_ls + String($0)
-//                        } else {
-//                            new_ls = new_ls + String($0)
-//                        }
-//                    } else {
-//                        if j == 2 {
-//                            new_ls = new_ls + "(" + String($0)
-//                        } else if j == 3 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 4 {
-//                            new_ls = new_ls + String($0) + ")"
-//                        } else if j == 5 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 6 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 7 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 8 {
-//                            new_ls = new_ls + "-" + String($0)
-//                        } else if j == 9 {
-//                            new_ls = new_ls + String($0)
-//                        } else if j == 10 {
-//                            new_ls = new_ls + "-" + String($0)
-//                        } else if j == 11 {
-//                            new_ls = new_ls + String($0)
-//                        } else {
-//                            new_ls = new_ls + String($0)
-//                        }
-//                    }
-//                } else {
-//                    new_ls = new_ls + String($0)
-//                }
-//            }
-//            j = j + 1
-//        }
-//
-//        if itsPhone {
-//            if ls_1_end == "+" {
-//                if j == 2 {
-//                    new_ls = new_ls + "*(***)***-**-**"
-//                } else if j == 3 {
-//                    new_ls = new_ls + "(***)***-**-**"
-//                } else if j == 4 {
-//                    new_ls = new_ls + "**)***-**-**"
-//                } else if j == 5 {
-//                    new_ls = new_ls + "*)***-**-**"
-//                } else if j == 6 {
-//                    new_ls = new_ls + "***-**-**"
-//                } else if j == 7 {
-//                    new_ls = new_ls + "**-**-**"
-//                } else if j == 8 {
-//                    new_ls = new_ls + "*-**-**"
-//                } else if j == 9 {
-//                    new_ls = new_ls + "-**-**"
-//                } else if j == 10 {
-//                    new_ls = new_ls + "*-**"
-//                } else if j == 11 {
-//                    new_ls = new_ls + "-**"
-//                } else if j == 12 {
-//                    new_ls = new_ls + "*"
-//                }
-//            } else {
-//                if j == 3 {
-//                    new_ls = new_ls + "**)***-**-**"
-//                } else if j == 4 {
-//                    new_ls = new_ls + "*)***-**-**"
-//                } else if j == 5 {
-//                    new_ls = new_ls + "***-**-**"
-//                } else if j == 6 {
-//                    new_ls = new_ls + "**-**-**"
-//                } else if j == 7 {
-//                    new_ls = new_ls + "*-**-**"
-//                } else if j == 8 {
-//                    new_ls = new_ls + "-**-**"
-//                } else if j == 9 {
-//                    new_ls = new_ls + "*-**"
-//                } else if j == 10 {
-//                    new_ls = new_ls + "-**"
-//                } else if j == 11 {
-//                    new_ls = new_ls + "*"
-//                }
-//            }
-//        }
-//
-//        textField.text = new_ls
-//
-//        // Установим курсор, если это телефон
-//        if itsPhone {
-//            var jj = j
-//            if ls_1_end == "+" {
-//                if j == 2 {
-//                    jj = 1
-//                }
-//                if j > 5 {
-//                    jj = j + 1
-//                }
-//                if j > 8 {
-//                    jj = j + 2
-//                }
-//                if j > 10 {
-//                    jj = j + 3
-//                }
-//            } else {
-//                if j > 4 {
-//                    jj = j + 1
-//                }
-//                if j > 7 {
-//                    jj = j + 2
-//                }
-//                if j > 9 {
-//                    jj = j + 3
-//                }
-//            }
-//            if let newPosition = textField.position(from: textField.beginningOfDocument, offset: jj) {
-//                textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
-//            }
-//        }
-//
-//        // Установим тип - для номера телефона - только цифры
-//        if itsPhone {
-//            textField.keyboardType = UIKeyboardType.phonePad
-//        } else {
-//            textField.keyboardType = UIKeyboardType.default
-//        }
-//        textField.reloadInputViews()
-        
         return true
         
     }

@@ -85,11 +85,12 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     private func registration() {
         var ls_for_zapros = ls.replacingOccurrences(of: "+", with: "")
         ls_for_zapros = ls.replacingOccurrences(of: " ", with: "")
-        if (itsPhone) {
-            ls_for_zapros = "7" + ls_for_zapros.substring(fromIndex: 1)
-        }
+//        if (itsPhone) {
+//            ls_for_zapros = "7" + ls_for_zapros.substring(fromIndex: 1)
+//        }
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REGISTRATION_SMINEX + "identOrPhone=" + ls_for_zapros)!)
+        print(request)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -204,7 +205,21 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 print(error)
                 #endif
             }
-            self.showLS()
+            if ls1.count > 1{
+                self.showLS()
+            }else{
+                ls1.forEach {
+                    let text = $0
+                    self.ls = text
+                    self.edLS.text = text
+                    if self.isReg_ {
+                        self.registration()
+                    } else {
+                        self.forgotPass()
+                    }
+                }
+            }
+            
             }.resume()
     }
     
