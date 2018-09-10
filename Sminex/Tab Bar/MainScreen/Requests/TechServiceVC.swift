@@ -213,9 +213,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     }
     
     func parse(xml: XML.Accessor) {
+        var index = 1
         let requests = xml["Messages"]
-        let row = requests["Comm"]
-        
+        let row1 = requests["Request"]
+        let row2 = requests["Comm"]
+        var rows: [String : [Request]] = [:]
+        var rowComms: [String : [RequestComment]]  = [:]
         DispatchQueue.global(qos: .userInitiated).async {
             
             let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
@@ -224,14 +227,31 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             
             let uid = UUID().uuidString
             print(uid)
-            
-            row.forEach { row in
-                // Непонятно пока - надо рыть!!
-//                let text_comm = row.attributes.valueForKeyPath(keyPath: "text")
-//                self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: text_comm! as! String, date: row[1].text!, image: self.img, id: uid)  )
-                self.rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
-
+            row1.forEach { row1 in
+                rows[row1.attributes["Status"]!]?.append(Request(row: row1))
+                rowComms[row1.attributes["ID"]!] = []
+                let status = row1.attributes["Status"]!
+                row2.forEach { row in
+                    rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["CreatedDate"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["id_Author"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["id_file"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["isHidden"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["id_request"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["Name"]!]?.append( RequestComment(row: row) )
+                    rowComms[row.attributes["PhoneNum"]!]?.append( RequestComment(row: row) )
+                    index += 1
+                    self.arr = self.comments_
+                    self.arr.insert(self.data_, at: 0)
+                    self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: row.attributes["Name"]!, desc: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+//                    self.arr.append( ServiceCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                    if index < self.arr.count{
+                        self.arr.removeLast()
+                    }
+                }
             }
+            
         }
     }
     

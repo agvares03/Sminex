@@ -53,22 +53,25 @@ class CustomAlertViewController: UIViewController {
     }
     
     func tappedCell() {
+        let login1 = UserDefaults.standard.string(forKey: "login")
         tapped = data[index]
         let ident: String = (tapped?.ident)! as String
-        let alert = UIAlertController(title: "Авторизация", message: "Введите пароль для \(ident)", preferredStyle: .alert)
-        alert.addTextField { (textField) in
-            textField.text = ""
+        if login1 != ident{
+            let alert = UIAlertController(title: "Авторизация", message: "Введите пароль для \(ident)", preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.text = ""
+                textField.placeholder = "Пароль"
+            }
+            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) -> Void in}))
+            alert.addAction(UIAlertAction(title: "Войти", style: .default, handler: { (_) -> Void in
+                let password = alert.textFields![0]
+                self.edLoginText = ident
+                self.edPassText = password.text!
+                print(self.edLoginText, self.edPassText)
+                self.exit()
+            }))
+            self.present(alert, animated: true, completion: nil)
         }
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) -> Void in}))
-        alert.addAction(UIAlertAction(title: "Войти", style: .default, handler: { (_) -> Void in
-            let password = alert.textFields![0]
-            self.edLoginText = ident
-            self.edPassText = password.text!
-            print(self.edLoginText, self.edPassText)
-            self.exit()
-//            self.performSegue(withIdentifier: "login_activity", sender: self)
-        }))
-        self.present(alert, animated: true, completion: nil)
     }
     
     private func getAllLS(login: String? = nil, pass: String? = nil){

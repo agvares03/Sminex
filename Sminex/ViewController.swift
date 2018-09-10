@@ -240,7 +240,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         scroll.endEditing(true)
     }
     func enter2() {
-        
+        DispatchQueue.global(qos: .background).async {
+            sleep(1)
+            self.saveUsersDefaults()
+            // Запрос - получение данных !!!
+            self.enter()
+        }
     }
     
     // Двигаем view вверх при показе клавиатуры
@@ -262,7 +267,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             height_top = 355
         } else if UIDevice.current.modelName.contains(find: "iPhone X") {
             height_top = 385
-        } else if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
+        }
+        else if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone4s || Device() == .simulator(.iPhone4s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) {
             height_top = 345
         }
         
@@ -351,10 +357,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             startIndicator()
         }
         // Авторизация пользователя
-        let txtLogin = login == nil ? edLogin.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        let txtPass = pass == nil ? edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
+        DispatchQueue.main.async {
+        let txtLogin = login == nil ? self.edLogin.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let txtPass = pass == nil ? self.edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -376,14 +383,15 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
-            #if DEBUG
-                print("responseString = \(self.responseString)")
-            
-            #endif
+//            #if DEBUG
+//                print("responseString = \(self.responseString)")
+//
+//            #endif
             
             self.choice()
             
             }.resume()
+        }
     }
     
     private func choice() {
@@ -409,7 +417,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 
                 // авторизация на сервере - получение данных пользователя
                 var answer = self.responseString.components(separatedBy: ";")
-                print(answer)
+//                print(answer)
                 
                 getBCImage(id: answer[safe: 17] ?? "")
                 // сохраним значения в defaults
@@ -664,14 +672,16 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func startIndicator() {
-        self.btnEnter.isHidden      = true
-        self.btnForgot.isHidden     = true
-        self.btnReg.isHidden        = true
-        self.lineForgot.isHidden    = true
-        self.lineReg.isHidden       = true
-        
-        self.indicator.startAnimating()
-        self.indicator.isHidden     = false
+        DispatchQueue.main.async {
+            self.btnEnter.isHidden      = true
+            self.btnForgot.isHidden     = true
+            self.btnReg.isHidden        = true
+            self.lineForgot.isHidden    = true
+            self.lineReg.isHidden       = true
+            
+            self.indicator.startAnimating()
+            self.indicator.isHidden     = false
+        }
     }
     
     private func stopIndicator() {
@@ -688,8 +698,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private func saveUsersDefaults() {
         let defaults = UserDefaults.standard
 //        defaults.setValue(edLogin.text!, forKey: "login")
-        defaults.setValue(edPass.text!, forKey: "pass")
-        defaults.synchronize()
+        DispatchQueue.main.async {
+            defaults.setValue(self.edPass.text!, forKey: "pass")
+            defaults.synchronize()
+        }
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
