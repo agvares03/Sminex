@@ -14,6 +14,7 @@ import Gloss
 
 final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecognizerDelegate {
     
+    @IBOutlet weak var didntEnter: UILabel!
     @IBOutlet private weak var sprtBtm:         NSLayoutConstraint!
     @IBOutlet private weak var sprtTop:         NSLayoutConstraint!
     @IBOutlet private weak var saveButtonTop:   NSLayoutConstraint!
@@ -113,6 +114,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     }
     
     open var isReg_     = false
+    open var isNew      = false
     open var login_     = ""
     open var phone_     = ""
     
@@ -130,7 +132,9 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         
         showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
         passTextField.isSecureTextEntry = true
-        
+        if isNew{
+            didntEnter.text = "Не можете добавить ЛС?"
+        }
         lsText.text = login_
         print("PHONE: ", phone_)
         lsDesc.text = lsDesc.text! + " " + phone_

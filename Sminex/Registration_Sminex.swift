@@ -12,6 +12,7 @@ import Gloss
 var ls1:[String] = []
 final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
+    @IBOutlet weak var didntEnter: UILabel!
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var edLsTop:     NSLayoutConstraint!
     @IBOutlet private weak var btnGoTop:    NSLayoutConstraint!
@@ -24,6 +25,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var backView:    UIView!
     
+    open var isNew      = false
     open var isReg_     = true
     open var isFromApp_ = false
     
@@ -192,7 +194,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//            print("responseString = \(self.responseString)")
+            print("responseString = \(self.responseString)")
             #endif
             
             do {
@@ -263,7 +265,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         view.addGestureRecognizer(theTap)
-        
+        if isNew{
+            edLS.placeholder = "Лицевой счёт"
+            didntEnter.text = "Не можете добавить ЛС?"
+        }
         edLS.text = ls
         indicator.isHidden = true
         
@@ -286,15 +291,23 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             edLsTop.constant  = 45
         }
         
-        if !isReg_ {
+        if !isReg_ && !isNew {
             navigationItem.title = "Восстановление пароля"
         }
-        
+        if isNew && isReg_{
+            navigationItem.title = "Новый лицевой счёт"
+        }
+        if self.isNew{
+            self.txtDesc.textColor = .gray
+            self.txtDesc.text = "Укажите ваш лицевой счет"
+        }else{
+            self.txtDesc.textColor = .gray
+            self.txtDesc.text = "Укажите лицевой счет или телефон, привязанный к лицевому счету"
+        }
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
         recognizer.delegate = self
         backView.addGestureRecognizer(recognizer)
         backView.isUserInteractionEnabled = true
-        
         if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
             sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 125
         
@@ -305,7 +318,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        edLS.becomeFirstResponder()
         navigationController?.isNavigationBarHidden = false
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -371,8 +384,13 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             }
             
         } else {
-            self.txtDesc.textColor = .gray
-            self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text
+            if isNew{
+                self.txtDesc.textColor = .gray
+                self.txtDesc.text = text == nil ? "Укажите ваш лицевой счёт" : text
+            }else{
+                self.txtDesc.textColor = .gray
+                self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text
+            }
             performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
         }
     }
@@ -381,8 +399,13 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         DispatchQueue.global(qos: .background).async {
             sleep(60)
             DispatchQueue.main.async {
-                self.txtDesc.textColor = .gray
-                self.txtDesc.text = "Укажите лицевой счет или телефон, привязанный к лицевому счету"
+                if self.isNew{
+                    self.txtDesc.textColor = .gray
+                    self.txtDesc.text = "Укажите ваш лицевой счет"
+                }else{
+                    self.txtDesc.textColor = .gray
+                    self.txtDesc.text = "Укажите лицевой счет или телефон, привязанный к лицевому счету"
+                }
                 self.changeGoButton(isEnabled: true)
             }
         }
@@ -431,6 +454,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 vc.numberLs_ = edLS.text!
             }
             vc.isReg_ = isReg_
+            vc.isNew  = isNew
             vc.phone_ = responseString
 
         }

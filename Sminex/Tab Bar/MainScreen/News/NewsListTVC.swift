@@ -130,7 +130,7 @@ class NewsListTVC: UIViewController {
             }
             
             #if DEBUG
-            //print(String(data: data!, encoding: .utf8) ?? "")
+            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             }.resume()
     }
@@ -168,6 +168,7 @@ class NewsListTVC: UIViewController {
             }
             TemporaryHolder.instance.news?.removeAll()
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                print("JSON: ",json)
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)

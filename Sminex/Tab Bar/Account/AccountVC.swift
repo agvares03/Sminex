@@ -13,7 +13,10 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func lsButtonPressed(_ sender: UIButton) {
-        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomAlertViewController") as! CustomAlertViewController
+        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        self.addChildViewController(vc)
+        self.view.addSubview(vc.view)
     }
     
     @IBAction private func exitButtonPressed(_ sender: UIButton) {
@@ -112,7 +115,8 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     }
     
     private func exit() {
-        
+        TemporaryHolder.instance.log = ""
+        TemporaryHolder.instance.pas = ""
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
         let deviceId = UserDefaults.standard.string(forKey: "googleToken") ?? ""

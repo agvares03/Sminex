@@ -224,7 +224,7 @@ final class DB: NSObject, XMLParserDelegate {
                                                         var bill_pay      = ""
                                                         var bill_total    = ""
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-                                                        print(json)
+                                                        print("JSON",json)
                                                         if let json_bills = json["data"] {
                                                             let int_end = (json_bills.count)!-1
                                                             if (int_end < 0) {

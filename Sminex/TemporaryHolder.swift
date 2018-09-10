@@ -61,6 +61,9 @@ final class TemporaryHolder {
         }
     }
     public var contactsList: [ContactsJson] = []
+    public var allLS: [AllLSJson] = []
+    public var log = ""
+    public var pas = ""
     
     public var receipts:      [AccountBillsJson]        = []
     public var calcs:         [AccountCalculationsJson] = []

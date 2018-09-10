@@ -120,6 +120,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                 return
             }
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                print("JSON: ", json)
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)

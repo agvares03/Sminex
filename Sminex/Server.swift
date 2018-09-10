@@ -26,6 +26,7 @@ final class Server {
     static let ADD_APP             = "AddRequest_Android.ashx?"        // Создание заявки
     static let CLOSE_APP           = "chatCloseReq.ashx?"              // Закрытие заявки
     static let SEND_ID_GOOGLE      = "RegisterClientDevice.ashx?"      // Передача ид устройства для уведомлений
+    static let GET_ALL_ACCOUNTS    = "GetAllAccounts.ashx?"             // Получить данные всех аккаунтов
     static let GET_HOUSES          = "GetAllAccountsData.ashx"         // Получить данные о домах и квартирах
     static let GET_APP             = "LockRequest.ashx?"               // Принять заявку (консультант)
     static let OK_APP              = "PerformRequest.ashx?"            // Выполнить заявку (консультант)

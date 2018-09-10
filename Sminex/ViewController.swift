@@ -18,8 +18,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var sprtBtm:     NSLayoutConstraint!
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var scroll:      UIScrollView!
-    @IBOutlet private weak var edLogin:     UITextField!
-    @IBOutlet private weak var edPass:      UITextField!
+    @IBOutlet weak var edLogin:     UITextField!
+    @IBOutlet weak var edPass:      UITextField!
     @IBOutlet private weak var btnReg:      UIButton!
     @IBOutlet private weak var btnEnter:    UIButton!
     @IBOutlet private weak var btnForgot:   UIButton!
@@ -34,6 +34,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var errorLabel:  UILabel!
     
     // Признак того, вводим мы телефон или нет
+    var edLog = ""
+    var edPas = ""
     private var itsPhone = false
     private var LoginText = ""
     private var ls2:[String] = []
@@ -187,7 +189,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(TemporaryHolder.instance.log, TemporaryHolder.instance.pas)
         sprtTopConst = sprtLabel.frame.origin.y
         edLogin.delegate = self
         edPass.delegate  = self
@@ -202,9 +204,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         scroll.addGestureRecognizer(theTap)
         
-        edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
-        edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
-        
+        if (TemporaryHolder.instance.log != ""){
+            edLogin.text = TemporaryHolder.instance.log
+            edPass.text  = TemporaryHolder.instance.pas
+        }else{
+            edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
+            edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
+        }
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent         = true
         navigationController?.navigationBar.backgroundColor       = .white
@@ -225,10 +231,16 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
         
         edLogin.becomeFirstResponder()
+        if (TemporaryHolder.instance.log != ""){
+            self.enter2()
+        }
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         scroll.endEditing(true)
+    }
+    func enter2() {
+        
     }
     
     // Двигаем view вверх при показе клавиатуры

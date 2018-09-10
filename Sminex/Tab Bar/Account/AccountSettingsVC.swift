@@ -85,6 +85,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     open var isReg_ = false
+    open var isNew  = false
     open var responceString_ = ""
     open var login_ = ""
     open var pass_  = ""

@@ -11,6 +11,7 @@ import DeviceKit
 
 final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
+    @IBOutlet weak var didntEnter: UILabel!
     @IBOutlet private weak var sprtBottom:  NSLayoutConstraint!
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var txtNameLS:   UILabel!
@@ -111,14 +112,14 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         
         if isReg_ {
             registration()
-        
-        } else {
+        }else {
             forgotPass()
         }
     }
     
     open var isPhone_     = false
     open var isReg_       = false
+    open var isNew        = false
     open var numberPhone_ = ""
     open var numberLs_    = ""
     open var phone_       = ""
@@ -147,8 +148,12 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         
          descTxt.text    = "Отправлен на телефон \(phone_) (действует в течение 10 минут). Запросить новый код можно через минуту"
         
-        if !isReg_ {
+        if !isReg_ && !isNew {
             navigationItem.title = "Восстановление пароля"
+        }
+        if isNew && isReg_{
+            navigationItem.title = "Новый лицевой счёт"
+            didntEnter.text = "Не можете добавить ЛС?"
         }
         
 //        showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
@@ -263,6 +268,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             vc.login_ = response[0].replacingOccurrences(of: "ok: ", with: "")
             vc.phone_ = response[1]
             vc.isReg_ = isReg_
+            vc.isNew  = isNew
         }
     }
     
