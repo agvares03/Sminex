@@ -248,7 +248,11 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             data, error, responce in
             
             guard data != nil else { return }
+            let responseString = String(data: data!, encoding: .utf8) ?? ""
             
+            #if DEBUG
+            print("responseString = \(responseString)")
+            #endif
             let xml = XML.parse(data!)
             var index = 1
             let requests = xml["Messages"]
@@ -256,9 +260,10 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let row2 = requests["Comm"]
             var rows: [String : [Request]] = [:]
             var rowComms: [String : [RequestComment]]  = [:]
-            row1.forEach { row in
-                rows[row.attributes["Status"]!]?.append(Request(row: row))
-                rowComms[row.attributes["ID"]!] = []
+            row1.forEach { row1 in
+                rows[row1.attributes["Status"]!]?.append(Request(row: row1))
+                rowComms[row1.attributes["ID"]!] = []
+                let status = row1.attributes["Status"]!                
                 row2.forEach { row in
                     rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )

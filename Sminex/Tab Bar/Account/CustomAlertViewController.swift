@@ -8,6 +8,7 @@
 
 import UIKit
 import Gloss
+import DeviceKit
 
 class CustomAlertViewController: UIViewController {
     private var data: [AllLSJson] = []
@@ -160,19 +161,66 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if data.count == 0{
-            self.tableView.isHidden = true
-        }else if data.count == 1{
-            self.tableView.isHidden = false
-            self.tableConst.constant = 207
-        }else if data.count == 2{
-            self.tableView.isHidden = false
-            self.tableConst.constant = 138
-        }else if data.count == 3{
-            self.tableView.isHidden = false
-            self.tableConst.constant = 69
-        }else if data.count >= 4{
-            self.tableView.isHidden = false
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) {
+            if data.count == 0{
+                self.tableView.isHidden = true
+            }else if data.count == 1{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 110
+            }else if data.count == 2{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 41
+            }else if data.count >= 3{
+                self.tableView.isHidden = false
+            }
+        }else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX){
+            if data.count == 0{
+                self.tableView.isHidden = true
+            }else if data.count == 1{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 207 + 87
+            }else if data.count == 2{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 138 + 87
+            }else if data.count == 3{
+                self.tableConst.constant = 69 + 87
+                self.tableView.isHidden = false
+            }else if data.count >= 4{
+                self.tableView.isHidden = false
+            }
+        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus){
+            if data.count == 0{
+                self.tableView.isHidden = true
+            }else if data.count == 1{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 207 + 69
+            }else if data.count == 2{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 138 + 69
+            }else if data.count == 3{
+                self.tableConst.constant = 69 + 69
+                self.tableView.isHidden = false
+            }else if data.count == 4{
+                self.tableConst.constant = 69
+                self.tableView.isHidden = false
+            }else if data.count >= 4{
+                self.tableView.isHidden = false
+            }
+        }else{
+            if data.count == 0{
+                self.tableView.isHidden = true
+            }else if data.count == 1{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 207
+            }else if data.count == 2{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 138
+            }else if data.count == 3{
+                self.tableView.isHidden = false
+                self.tableConst.constant = 69
+            }else if data.count >= 4{
+                self.tableView.isHidden = false
+            }
         }
         return data.count
     }
