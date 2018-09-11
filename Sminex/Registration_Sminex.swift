@@ -338,7 +338,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     // Двигаем view вверх при показе клавиатуры
 //    @objc func keyboardWillShow(sender: NSNotification?) {
-//
 //        if !isNeedToScrollMore() {
 //            sprtTop.constant -= 200
 //
@@ -478,11 +477,10 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
-        
-        if ls.count < 2 {
-            changeGoButton(isEnabled: false)
-        } else {
+        if ls.count >= 2 || string.characters.count > 1 {
             changeGoButton(isEnabled: true)
+        } else {
+            changeGoButton(isEnabled: false)
         }
         
         if string == "" {

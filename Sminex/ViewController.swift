@@ -722,9 +722,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
 //
 //            LoginText = LoginText + string
 //        }
-//
         // определим телефон это или нет
         var ls_1_end = ""
+        
         if (LoginText.count < 1) {
             ls_1_end = ""
         } else {
@@ -741,8 +741,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
         if (ls_1_end == "+") {
             itsPhone = true
-        }
-        if (!itsPhone) {
+        }else if (string.characters.count > 1){
+            itsPhone = true
+        }else if (!itsPhone) {
             if (ls_12_end == "89") || (ls_12_end == "79") {
                 itsPhone = true
             }
