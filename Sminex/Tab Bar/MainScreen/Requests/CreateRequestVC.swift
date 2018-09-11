@@ -154,17 +154,19 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
-            (UIDevice.current.modelName.contains(find: "Simulator")){
-            edConst.constant -= 32
+            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+            edConst.constant -= 22
         } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
-            (UIDevice.current.modelName.contains(find: "Phone 6s Plus")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 7")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 7 Plus")){
-            edConst.constant -= 16
-        } else if (UIDevice.current.modelName.contains(find: "iPhone X")) {
+            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
+            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
+            edConst.constant -= 22
+        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
+            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
+            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
+            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+            edConst.constant += 16
+        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
             edConst.constant += 16
         }
         sprtTopConst = pickerLine.frame.origin.y
@@ -215,6 +217,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        edFio.becomeFirstResponder()
         sendBtnConst.constant = getPoint()
         tabBarController?.tabBar.isHidden = true
     }
@@ -232,17 +235,19 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
-            (UIDevice.current.modelName.contains(find: "Simulator")){
-            height_top = 270
+            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+            height_top = 252
         } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
             (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
-            (UIDevice.current.modelName.contains(find: "Phone 6s Plus")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 7")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 7 Plus")){
+            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
+            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
             height_top = 390
-        } else if UIDevice.current.modelName.contains(find: "iPhone X")  {
+        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
+            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
+            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
+            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+            height_top = 425
+        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX)  {
             height_top = 450
         }
         
@@ -325,7 +330,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             commentConst.constant   = 8
             gosNumber.isHidden      = true
             gosLine.isHidden        = true
-            sendBtnConst.constant = getPoint()
+            sendBtnConst.constant = sendBtnConst.constant + 55
         }
     }
     

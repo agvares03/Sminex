@@ -251,25 +251,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         var height_top:CGFloat = 370// высота верхних элементов
-        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone SE")) {
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone4s || Device() == .simulator(.iPhone4s) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .iPhone4 || Device() == .simulator(.iPhone4) {
             height_top = 345
-        } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 6 Plus")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
-            (UIDevice.current.modelName.contains(find: "Phone 6s Plus")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 7")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 7 Plus")) {
+        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) || Device() == .iPhone6s || Device() == .simulator(.iPhone6s) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone7 || Device() == .simulator(.iPhone7) || Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus){
             height_top = 355
-        } else if UIDevice.current.modelName.contains(find: "iPhone X") {
+        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
             height_top = 385
-        }
-        else if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone4s || Device() == .simulator(.iPhone4s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) {
-            height_top = 345
         }
         
         
@@ -303,18 +290,16 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @objc func keyboardWillHide(sender: NSNotification?) {
         
         var numb_to_move:CGFloat = 240;
-        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-            (UIDevice.current.modelName.contains(find: "Simulator")) {
+        if Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
+            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
+            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
+            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
+            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
+            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
             numb_to_move = 200;
         }
-
         if !isNeedToScrollMore() {
             sprtTop.constant = getPoint()
-
         } else {
             sprtTop.constant = getPoint()
             sprtBtm.constant -= numb_to_move

@@ -164,7 +164,7 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) {
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .simulator(.iPhone5) || Device() == .iPhone4 || Device() == .simulator(.iPhone4) || Device() == .simulator(.iPhone4s) || Device() == .iPhone5c || Device() == .simulator(.iPhone4s){
             if data.count == 0{
                 self.tableView.isHidden = true
             }else if data.count == 1{
@@ -191,7 +191,7 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
             }else if data.count >= 4{
                 self.tableView.isHidden = false
             }
-        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus){
+        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
             if data.count == 0{
                 self.tableView.isHidden = true
             }else if data.count == 1{

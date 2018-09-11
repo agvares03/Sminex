@@ -77,12 +77,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
 //        return CGSize(width: view.frame.size.width, height: isSupport ? size.height + 5 : size.height - 18)
         
         if (data_[indexPath.row].name?.contains(find: "Предложения"))! {
-            if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
-                (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
-                (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
-                (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
-                (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-                (UIDevice.current.modelName.contains(find: "iPhone SE")){
+            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone4s || Device() == .simulator(.iPhone4s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c){
                 return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
             }
             if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
