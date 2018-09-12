@@ -122,6 +122,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "identOrPhone=" + edLS.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
         request.httpMethod = "GET"
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in
@@ -308,16 +309,18 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         recognizer.delegate = self
         backView.addGestureRecognizer(recognizer)
         backView.isUserInteractionEnabled = true
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 125
-        
-        } else {
+        if Device() == .iPhoneX && Device() == .simulator(.iPhoneX) {
             sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 220
+        } else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 140
+        } else{
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 125
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
         edLS.becomeFirstResponder()
         navigationController?.isNavigationBarHidden = false
         
@@ -327,6 +330,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
         
 //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)

@@ -234,7 +234,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        tabBarController?.tabBar.isHidden = true
         navigationController?.isNavigationBarHidden = false
         
         // Подхватываем показ клавиатуры
@@ -244,7 +244,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = true
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)

@@ -182,7 +182,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        tabBarController?.tabBar.isHidden = true
         navigationController?.isNavigationBarHidden = false
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -191,7 +191,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = true
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)

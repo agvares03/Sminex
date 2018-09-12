@@ -161,7 +161,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        tabBarController?.tabBar.isHidden = true
         navigationController?.isNavigationBarHidden = false
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -170,7 +170,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden  = false
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
