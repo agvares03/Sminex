@@ -406,12 +406,13 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     }
     
     private func getPoint() -> CGFloat {
-        
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            return (view.frame.size.height - topConstant) - 120
-            
-        } else {
+        if Device() == .iPhoneX && Device() == .simulator(.iPhoneX) {
             return (view.frame.size.height - topConstant) - 220
+            
+        } else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+            return (view.frame.size.height - topConstant) - 135
+        } else {
+            return (view.frame.size.height - topConstant) - 120
         }
     }
 }

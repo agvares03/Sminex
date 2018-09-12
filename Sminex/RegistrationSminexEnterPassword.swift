@@ -509,12 +509,13 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     }
     
     private func getConst() -> CGFloat {
-        
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            return (view.frame.size.height - const) - 100
-            
-        } else {
+        if Device() == .iPhoneX && Device() == .simulator(.iPhoneX) {
             return (view.frame.size.height - const) - 200
+            
+        } else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+            return (view.frame.size.height - const) - 115
+        } else {
+            return (view.frame.size.height - const) - 100
         }
     }
 }
