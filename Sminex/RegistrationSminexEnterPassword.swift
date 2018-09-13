@@ -136,6 +136,9 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             didntEnter.text = "Не можете добавить ЛС?"
         }
         lsText.text = login_
+        if !phone_.contains(find: "+") && phone_.prefix(1) != "8"{
+            phone_ = "+" + phone_
+        }
         print("PHONE: ", phone_)
         lsDesc.text = lsDesc.text! + " " + phone_
         

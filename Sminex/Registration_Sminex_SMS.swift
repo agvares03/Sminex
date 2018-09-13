@@ -145,7 +145,6 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             NameLS.text     = numberLs_
             descTxt.text    = ""
         }
-        
          descTxt.text    = "Отправлен на телефон \(phone_) (действует в течение 10 минут). Запросить новый код можно через минуту"
         
         if !isReg_ && !isNew {
