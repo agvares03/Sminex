@@ -1446,7 +1446,7 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
                 UserDefaults.standard.synchronize()
             }
         }
-        
+        self.pagerView.automaticSlidingInterval = 3.0
         self.delegate   = delegate
         self.indexPath  = indexPath
         
