@@ -409,8 +409,8 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
         }
         
         // Выводить или нет кнопку QR-код
-        pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
-        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
+//        pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
+//        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
         if pay_button.isHidden {
             btnConst1.constant = 0
         }

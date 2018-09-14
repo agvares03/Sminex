@@ -423,6 +423,7 @@ final class FinanceHeaderCell: UITableViewCell {
             heigthPayed.constant  = 150
             
         }
+        print(defaults.bool(forKey: "denyQRCode"))
         
         // Выводить или нет кнопку QR-код
         pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
