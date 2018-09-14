@@ -79,6 +79,12 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
 //        }
         goButton.isEnabled = false
         goButton.alpha     = 0.5
+        if !UserDefaults.standard.bool(forKey: "didntSchet"){
+            goButton.isHidden = true
+        }
+        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+            goButton.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
+        }
         count.delegate     = self
         
         // Выведем текущую дату в формате
@@ -342,6 +348,12 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
     
     private func stopAnimator() {
         goButton.isHidden = false
+        if !UserDefaults.standard.bool(forKey: "didntSchet"){
+            goButton.isHidden = true
+        }
+        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+            goButton.isHidden   = true
+        }
         loader.stopAnimating()
         loader.isHidden = true
     }

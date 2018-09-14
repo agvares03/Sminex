@@ -33,6 +33,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var business_center_PassSingle: Bool?
     private var business_center_PassSingleWithAuto: Bool?
     
+    private var business_center_OnlyViewMeterReadings: Bool?
+    
+    private var busines_center_dayFrom: Int?
+    private var busines_center_dayTo: Int?
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
@@ -87,35 +91,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         get_info_business_center()
         
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
-        
-        let date1 = UserDefaults.standard.integer(forKey: "date1")
-        let date2 = UserDefaults.standard.integer(forKey: "date2")
         canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
-        
-        if date1 == 0 && date2 == 0 {
-            data[5]![1] = SchetCellData(title: "Показания передавать можно", date: "Передача показаний возможна в любой день текущего месяца")
-        
-        } else {   
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "LLLL"
-            var day = DateComponents()
-            day.day = date2 - 1
-            let date = Calendar.current.date(byAdding: day, to: dateFormatter.date(from: dateFormatter.string(from: Date()))!)
-            dateFormatter.locale = Locale(identifier: "Ru-ru")
-            dateFormatter.dateFormat = date2 < 10 ? "d LLLL" : "dd LLLL"
-            
-            let leftDays = date1 - date2
-            
-            if leftDays == 1 {
-                data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
-                
-            } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
-                data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
-                
-            } else {
-                data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(date1) по \(dateFormatter.string(from: date!))")
-            }
-        }
         fetchNews()
         fetchDebt()
         fetchDeals()
@@ -222,7 +198,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -246,6 +222,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 self.business_center_PassSingle = Business_Center_Data(json: json!)?.DenyIssuanceOfPassSingle
                 self.business_center_PassSingleWithAuto = Business_Center_Data(json: json!)?.DenyIssuanceOfPassSingleWithAuto
+                
+                self.business_center_OnlyViewMeterReadings = Business_Center_Data(json: json!)?.OnlyViewMeterReadings
+                
+                self.busines_center_dayFrom = Business_Center_Data(json: json!)?.DayFrom
+                self.busines_center_dayTo = Business_Center_Data(json: json!)?.DayTo
             }
             
             #if DEBUG
@@ -259,9 +240,117 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.set(self.busines_center_denyQRCode, forKey: "denyQRCode")
             defaults.set(self.business_center_PassSingle, forKey: "denyIssuanceOfPassSingle")
             defaults.set(self.business_center_PassSingleWithAuto, forKey: "denyIssuanceOfPassSingleWithAuto")
+            defaults.set(self.business_center_OnlyViewMeterReadings, forKey: "onlyViewMeterReadings")
+            defaults.set(self.busines_center_dayFrom, forKey: "meterReadingsDayFrom")
+            defaults.set(self.busines_center_dayTo, forKey: "meterReadingsDayTo")
+            defaults.set(false, forKey: "didntSchet")
             defaults.synchronize()
-            
             }.resume()
+        let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
+        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+        
+        if (dateFrom == 0 && dateTo == 0) && !(UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")) {
+            let now = NSDate()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "LLLL yyyy"
+            dateFormatter.setLocalizedDateFormatFromTemplate("Ru-ru")
+            let nameOfMonth = dateFormatter.string(from: now as Date)
+            data[5]![1] = SchetCellData(title: "", date: "Передача показаний за \(nameOfMonth)")
+            
+        } else {
+            let dateFormatter = DateFormatter()
+            let currentDate = Date()
+            let userCalendar = Calendar.current
+            let requestedComponents: Set<Calendar.Component> = [
+                .year,
+                .month,
+                .day,
+                .hour,
+                .minute,
+                .second
+            ]
+            let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDate)
+            
+            var leftDays = dateFrom - dateTimeComponents.day!
+            var startDate = userCalendar.date(from: dateTimeComponents)
+            var endDate = userCalendar.date(from: dateTimeComponents)
+            if dateFrom > dateTo{
+                var dateComponents = DateComponents()
+                dateComponents.year = dateTimeComponents.year!
+                dateComponents.month = dateTimeComponents.month! + 1
+                dateComponents.day = dateTo
+                let userCalendar = Calendar.current
+                endDate = userCalendar.date(from: dateComponents)
+            }else{
+                var dateComponents = DateComponents()
+                dateComponents.year = dateTimeComponents.year!
+                dateComponents.month = dateTimeComponents.month!
+                dateComponents.day = dateTo
+                let userCalendar = Calendar.current
+                endDate = userCalendar.date(from: dateComponents)
+            }
+            if dateFrom != 0{
+                var dateComponents = DateComponents()
+                dateComponents.year = dateTimeComponents.year!
+                dateComponents.month = dateTimeComponents.month!
+                dateComponents.day = dateFrom
+                let userCalendar = Calendar.current
+                startDate = userCalendar.date(from: dateComponents)
+            }
+            dateFormatter.dateFormat = dateTo < 10 ? "d MMMM" : "dd MMMM"
+            dateFormatter.locale = Locale(identifier: "Ru-ru")
+            if leftDays <= 0{
+                UserDefaults.standard.set(true, forKey: "didntSchet")
+                UserDefaults.standard.synchronize()
+                if dateTimeComponents.day! > dateTo{
+                    if dateTimeComponents.month! == 1 || dateTimeComponents.month! == 3 || dateTimeComponents.month! == 5 || dateTimeComponents.month! == 7 || dateTimeComponents.month! == 8 || dateTimeComponents.month! == 10 || dateTimeComponents.month! == 12{
+                        leftDays = (31 - (dateTimeComponents.day! - 1)) + dateTo
+                    }else if dateTimeComponents.month! == 2{
+                        leftDays = (28 - (dateTimeComponents.day! - 1)) + dateTo
+                    }else{
+                        leftDays = (30 - (dateTimeComponents.day! - 1)) + dateTo
+                    }
+                    if leftDays == 1 {
+                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                        
+                    } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
+                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                        
+                    } else {
+                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                    }
+                }else{
+                    leftDays = dateTo - dateTimeComponents.day!
+                    if leftDays == 1 {
+                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                        
+                    } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
+                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                        
+                    } else {
+                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                    }
+                }
+            }else if leftDays == 1 {
+                if dateTimeComponents.day! > dateTo{
+                    data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) день", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                }else{
+                    data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) день", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                }
+            } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
+                if dateTimeComponents.day! > dateTo{
+                    data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дня", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                }else{
+                    data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дня", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                }
+            } else {
+                if dateTimeComponents.day! > dateTo{
+                    data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дней", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                }else{
+                    data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дней", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                }
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -378,7 +467,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData)
-            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+            var size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+            if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+                size.height = 15
+            }
             return CGSize(width: view.frame.size.width - 32, height: size.height)
         } else if title == "Версия" {
 
@@ -486,7 +578,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return cell
         
         } else if title == "Счетчики" {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ScetCell", for: indexPath) as! SchetCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SchetCell", for: indexPath) as! SchetCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData, delegate: self)
             if indexPath.row + 2 == data[indexPath.section]?.count {
                 if #available(iOS 11.0, *) {
@@ -1697,12 +1789,19 @@ final class SchetCell: UICollectionViewCell {
     private var delegate: CellsDelegate?
     
     fileprivate func display(_ item: SchetCellData, delegate: CellsDelegate? = nil) {
-        
         title.text = item.title
         date.text  = item.date
         
         self.delegate = delegate
-
+        if !UserDefaults.standard.bool(forKey: "didntSchet") {
+            button.isEnabled = UserDefaults.standard.bool(forKey: "didntSchet")
+            button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.6)
+        }
+        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+            title.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
+            date.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
+            button.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
+        }
     }
     
     class func fromNib() -> SchetCell? {
@@ -1734,6 +1833,3 @@ private final class SchetCellData: MainDataProtocol {
         self.date  = date
     }
 }
-
-
-

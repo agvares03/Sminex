@@ -21,6 +21,11 @@ struct Business_Center_Data: JSONDecodable {
     let DenyIssuanceOfPassSingle: Bool?
     let DenyIssuanceOfPassSingleWithAuto: Bool?
     
+    let OnlyViewMeterReadings: Bool?
+    
+    let DayFrom: Int?
+    let DayTo: Int?
+    
     init?(json: JSON) {
         DenyOnlinePayments                = "denyOnlinePayments"                  <~~ json
         DenyInvoiceFiles                  = "denyInvoiceFiles"                    <~~ json
@@ -30,5 +35,10 @@ struct Business_Center_Data: JSONDecodable {
         
         DenyIssuanceOfPassSingle          = "denyIssuanceOfPassSingle"            <~~ json
         DenyIssuanceOfPassSingleWithAuto  = "denyIssuanceOfPassSingleWithAuto"    <~~ json
+        
+        OnlyViewMeterReadings             = "onlyViewMeterReadings"               <~~ json
+        
+        DayFrom                           = "meterReadingsDayFrom"                <~~ json
+        DayTo                             = "meterReadingsDayTo"                  <~~ json
     }
 }
