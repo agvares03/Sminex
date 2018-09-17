@@ -46,13 +46,12 @@ class CustomAlertViewController: UIViewController {
         self.view.removeFromSuperview()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "newLS" {
-            let regVC = segue.destination as! Registration_Sminex
-            regVC.isReg_ = true
-            regVC.isNew = true
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "newLS" {
+//            let regVC = segue.destination as! AddLS
+//            regVC.isNew = true
+//        }
+//    }
     
     func tappedCell() {
         let login1 = UserDefaults.standard.string(forKey: "login")

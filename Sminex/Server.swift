@@ -26,7 +26,6 @@ final class Server {
     static let ADD_APP             = "AddRequest_Android.ashx?"        // Создание заявки
     static let CLOSE_APP           = "chatCloseReq.ashx?"              // Закрытие заявки
     static let SEND_ID_GOOGLE      = "RegisterClientDevice.ashx?"      // Передача ид устройства для уведомлений
-    static let GET_ALL_ACCOUNTS    = "GetAllAccounts.ashx?"             // Получить данные всех аккаунтов
     static let GET_HOUSES          = "GetAllAccountsData.ashx"         // Получить данные о домах и квартирах
     static let GET_APP             = "LockRequest.ashx?"               // Принять заявку (консультант)
     static let OK_APP              = "PerformRequest.ashx?"            // Выполнить заявку (консультант)
@@ -56,6 +55,10 @@ final class Server {
     static let PROPOSALS           = "GetProposals.ashx?"              // Получение списка акции
     static let ACCOUNT_DEBT        = "GetAccountDebt.ashx?"            // Баланс аккаунта
     static let ACCOUNT_PHONE       = "GetAccountsByPhoneNumber.ashx?"  // Получить список ЛС по номеру телефона
+    static let GET_ALL_ACCOUNTS    = "GetAllAccounts.ashx?"            // Получить данные всех аккаунтов
+    static let CHECK_ACCOUNT       = "CheckAccountExists.ashx?"        // Проверка нового ЛС
+    static let NEW_ACCOUNT_SMS     = "AddAccountSendSMSCode.ashx?"     // Отправить СМС с кодом для нового ЛС
+    static let ADD_NEW_LS          = "AddAccountToParentAccount.ashx?" // Добавить ЛС
     static let GET_BILLS           = "GetAccountBills.ashx?"           // Получение списка квитанции
     static let CALCULATIONS        = "GetAccountCalculations.ashx?"    // Получение списка взаиморасчетов
     static let PAY_ONLINE          = "PayOnline.ashx?"                 // Оплата счета
