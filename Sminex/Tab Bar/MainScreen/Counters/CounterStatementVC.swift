@@ -133,14 +133,15 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 }
             }
         }
-        
+        print(metValues)
+        var a = [String]()
         metValues.forEach {
             if Float($0.value?.replacingOccurrences(of: ",", with: ".") ?? "0")! > Float(0) {
-                monthValLabel.text = $0.value
+                a.append($0.value!)
                 return
             }
         }
-        
+        monthValLabel.text = a[1]
         
         
     }

@@ -266,7 +266,7 @@ open class DigitInputView: UIView {
         }
         
         if numberOfDigits == 9{
-            labels[5].text = ","
+            labels[5].text = "."
         }
     }
     
@@ -291,15 +291,13 @@ open class DigitInputView: UIView {
             item.text = "0"
         }
         
-        var txt = textField.text!
-        
-        
+        var txt = textField.text!.replacingOccurrences(of: ",", with: ".")
         if numberOfDigits == 9 {
             
             print("didChange: " + (textField.text ?? "empty"))
             
             
-            if (txt.contains(find: ",") == false){
+            if (txt.contains(find: ".") == false){
                 if txt.length <= 5 {
                     for _ in 0 ..< 3 {
                         txt.insert("0", at: txt.endIndex)
@@ -309,9 +307,9 @@ open class DigitInputView: UIView {
                         txt.insert("0", at: txt.endIndex)
                     }
                 }
-                txt.insert(",", at: txt.index(txt.endIndex, offsetBy: -3))
+                txt.insert(".", at: txt.index(txt.endIndex, offsetBy: -3))
             } else {
-                for _ in 0 ..< 3 - txt.substring(fromIndex: txt.index(after: txt.index(of: ",")!).encodedOffset).length {
+                for _ in 0 ..< 3 - txt.substring(fromIndex: txt.index(after: txt.index(of: ".")!).encodedOffset).length {
                     txt.insert("0", at: txt.endIndex)
                 }
             }
@@ -320,8 +318,8 @@ open class DigitInputView: UIView {
                 textField.text!.remove(at: txt.startIndex)
             }
             
-            if (txt.contains(find: ",")) && txt.length > 1 {
-                if let index = txt.index(of: ",") {
+            if (txt.contains(find: ".")) && txt.length > 1 {
+                if let index = txt.index(of: ".") {
                     let substring = txt.substring(toIndex: index.encodedOffset)
                     if substring != "" {
                         if Int(substring)! > 0 && txt.first! == "0" {
@@ -394,7 +392,7 @@ open class DigitInputView: UIView {
 extension DigitInputView: UITextFieldDelegate {
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
+//        let string = string.replacingOccurrences(of: ",", with: ".")
         let char = string.cString(using: .utf8)
         let isBackSpace = strcmp(char, "\\b")
         if isBackSpace == -92, let text = textField.text {
@@ -405,7 +403,6 @@ extension DigitInputView: UITextFieldDelegate {
         }
         
         if !isEnergy {
-            
             if (string == ",") && (textField.text?.length ?? 0) > 5{
                 return false
             }
@@ -466,7 +463,7 @@ final class DigitLabel: UILabel {
     
     override var text: String? {
         didSet {
-            if (text == ","){
+            if (text == "."){
                 self.backgroundColor = .clear
             } else {
                 self.backgroundColor = UIColor(white: 96/100, alpha: 1.0)
