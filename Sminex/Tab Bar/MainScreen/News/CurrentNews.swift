@@ -29,8 +29,8 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         }
     }
     
-    open var data_: NewsJson?
-    open var isFromMain_ = false
+    public var data_: NewsJson?
+    public var isFromMain_ = false
     
     override func viewDidLoad() {
         super.viewDidLoad()

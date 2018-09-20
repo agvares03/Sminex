@@ -18,6 +18,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var imageConst:      NSLayoutConstraint!
     @IBOutlet weak var commentConst: NSLayoutConstraint!
     @IBOutlet private weak var sendBtnConst:    NSLayoutConstraint!
+    @IBOutlet weak var sendViewConst: NSLayoutConstraint!
     @IBOutlet weak var edConst: NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
@@ -149,15 +150,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if  (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+        if  Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
+            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
+            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
+            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
+            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
             Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
             edConst.constant -= 22
-        } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
+        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
+            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
             Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
             Device() == .iPhone8 || Device() == .simulator(.iPhone8){
             edConst.constant -= 22
@@ -218,7 +219,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         edFio.becomeFirstResponder()
-        sendBtnConst.constant = getPoint()
+//        sendBtnConst.constant = getPoint()
+        sendViewConst.constant = getPoint()
         tabBarController?.tabBar.isHidden = true
     }
     
@@ -230,25 +232,25 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         var height_top:CGFloat = 370// высота верхних элементов
-        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
+        if Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
+            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
+            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
+            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
+            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
             Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-            height_top = 252
-        } else if (UIDevice.current.modelName.contains(find: "iPhone 6")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 6s")) ||
+            height_top = 267
+        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
+            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
             Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
             Device() == .iPhone8 || Device() == .simulator(.iPhone8){
-            height_top = 390
+            height_top = 405
         }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
             Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
             Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
             Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            height_top = 425
+            height_top = 445
         } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX)  {
-            height_top = 450
+            height_top = 470
         }
         
         
@@ -257,9 +259,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let numb_to_move:CGFloat = kbFrameSize.height
         //        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
         if !isNeedToScrollMore() {
-            sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
+//            sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
+            sendViewConst.constant = view.frame.size.height - numb_to_move - height_top
         } else {
-            sendBtnConst.constant = getPoint() - 150
+//            sendBtnConst.constant = getPoint() - 150
+            sendViewConst.constant = getPoint() - 150
         }
         
         if !picker.isHidden {
@@ -267,7 +271,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
         
         if gosNumber.isHidden == false{
-            sendBtnConst.constant = sendBtnConst.constant - 55
+//            sendBtnConst.constant = sendBtnConst.constant - 55
+            sendViewConst.constant = sendBtnConst.constant - 57
         }
         
         if isNeedToScroll() {
@@ -283,13 +288,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         if !isNeedToScrollMore() {
-            sendBtnConst.constant = getPoint()
+//            sendBtnConst.constant = getPoint()
+            sendViewConst.constant = getPoint()
         } else {
-            sendBtnConst.constant = getPoint()
+//            sendBtnConst.constant = getPoint()
+            sendViewConst.constant = getPoint()
         }
         
         if gosNumber.isHidden == false{
-            sendBtnConst.constant = sendBtnConst.constant - 55
+//            sendBtnConst.constant = sendBtnConst.constant - 55
+            sendViewConst.constant = sendViewConst.constant - 55
         }
         
         if isNeedToScroll() {
@@ -310,11 +318,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     private func getPoint() -> CGFloat {
-        if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
-            return (view.frame.size.height - sprtTopConst + 80)
-            
+        if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
+            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
+            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
+            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+            return (view.frame.size.height - sprtTopConst + 60) - 35
+        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX){
+            return (view.frame.size.height - sprtTopConst + 45) - 70
         } else {
-            return (view.frame.size.height - sprtTopConst + 45) - 50
+            return (view.frame.size.height - sprtTopConst + 60)
         }
     }
     
@@ -324,13 +336,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             commentConst.constant   = 65
             gosNumber.isHidden      = false
             gosLine.isHidden        = false
-            sendBtnConst.constant = sendBtnConst.constant - 55
+//            sendBtnConst.constant = sendBtnConst.constant - 55
+            sendViewConst.constant = sendViewConst.constant - 57
         
         } else {
             commentConst.constant   = 8
             gosNumber.isHidden      = true
             gosLine.isHidden        = true
-            sendBtnConst.constant = sendBtnConst.constant + 55
+//            sendBtnConst.constant = sendBtnConst.constant + 55
+            sendViewConst.constant = sendViewConst.constant + 57
         }
     }
     

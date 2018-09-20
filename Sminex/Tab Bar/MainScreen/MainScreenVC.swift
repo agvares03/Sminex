@@ -230,7 +230,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             
             #if DEBUG
-            print(String(data: data!, encoding: .utf8)!)
+//            print(String(data: data!, encoding: .utf8)!)
             #endif
             
             let defaults = UserDefaults.standard
@@ -253,7 +253,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let now = NSDate()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "LLLL yyyy"
-            dateFormatter.setLocalizedDateFormatFromTemplate("Ru-ru")
+//            dateFormatter.setLocalizedDateFormatFromTemplate("ru-Ru")
             let nameOfMonth = dateFormatter.string(from: now as Date)
             data[5]![1] = SchetCellData(title: "", date: "Передача показаний за \(nameOfMonth)")
             

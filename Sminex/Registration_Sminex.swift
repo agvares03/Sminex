@@ -25,9 +25,9 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var backView:    UIView!
     
-    open var isNew      = false
-    open var isReg_     = true
-    open var isFromApp_ = false
+    public var isNew      = false
+    public var isReg_     = true
+    public var isFromApp_ = false
     
     private var responseString = ""
     

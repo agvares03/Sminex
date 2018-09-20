@@ -40,10 +40,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    open var requestId_ = ""
+    public var requestId_ = ""
     public var isCreatingRequest_ = false
-    open var delegate: MainScreenDelegate?
-    open var xml_: XML.Accessor?
+    public var delegate: MainScreenDelegate?
+    public var xml_: XML.Accessor?
     
     private var refreshControl: UIRefreshControl?
             var typeName = ""
@@ -167,7 +167,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print(self.responceString)
+//                print(self.responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -207,7 +207,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 guard data != nil else { return }
                 
                 #if DEBUG
-                    print(String(data: data!, encoding: .utf8)!)
+//                    print(String(data: data!, encoding: .utf8)!)
                 #endif
                 
                 let xml = XML.parse(data!)

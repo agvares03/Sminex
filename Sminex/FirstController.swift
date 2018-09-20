@@ -66,7 +66,7 @@ class FirstController: UIViewController {
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print("responseString = \(self.responseString)")
+//                print("responseString = \(self.responseString)")
             #endif
             
             self.choice()
@@ -131,7 +131,7 @@ class FirstController: UIViewController {
             }
             
             #if DEBUG
-            print(String(data: data!, encoding: .utf8)!)
+//            print(String(data: data!, encoding: .utf8)!)
             #endif
             
             let defaults = UserDefaults.standard
@@ -218,7 +218,7 @@ class FirstController: UIViewController {
             
             print("enter")
             #if DEBUG
-                print("responseString = \(self.responseString)")
+//                print("responseString = \(self.responseString)")
             #endif
             
             self.goToApp(login: login, pass: pass)
@@ -252,7 +252,7 @@ class FirstController: UIViewController {
             
             print("contacts")
             #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
+//                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
         }.resume()
     }
@@ -402,7 +402,7 @@ class FirstController: UIViewController {
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print("token (add) = \(String(describing: self.responseString))")
+//                print("token (add) = \(String(describing: self.responseString))")
             #endif
             UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
             UserDefaults.standard.synchronize()

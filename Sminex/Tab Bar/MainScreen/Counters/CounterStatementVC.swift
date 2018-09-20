@@ -264,8 +264,6 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
             var request = URLRequest(url: URL(string: urlPath)!)
             request.httpMethod = "GET"
             
-            print(request.url)
-            
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
                 
@@ -289,7 +287,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                    print("responseString = \(self.responseString)")
+//                    print("responseString = \(self.responseString)")
                 #endif
                 
                 self.choice()

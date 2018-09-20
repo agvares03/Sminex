@@ -83,7 +83,7 @@ final class AppUser: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                    print("responseString = \(self.responseString)")
+//                    print("responseString = \(self.responseString)")
                 #endif
                 
                 self.choice(text: addComm)
