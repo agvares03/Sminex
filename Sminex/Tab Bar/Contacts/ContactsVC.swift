@@ -81,8 +81,6 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
                 return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 30)
             }
             if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
-                print("iPhoneX")
-                
                 return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
             }
             

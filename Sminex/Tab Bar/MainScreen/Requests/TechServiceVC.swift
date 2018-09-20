@@ -231,6 +231,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 rows[row1.attributes["Status"]!]?.append(Request(row: row1))
                 rowComms[row1.attributes["ID"]!] = []
                 let status = row1.attributes["Status"]!
+                self.data_.status = status
                 row2.forEach { row in
                     rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )
@@ -606,7 +607,7 @@ final class ServiceHeaderData: TechServiceProtocol {
     let icon:       UIImage
     let problem:    String
     let date:       String
-    let status:     String
+    var status:     String
     let images:     [UIImage]
     let imgsString: [String]
     
