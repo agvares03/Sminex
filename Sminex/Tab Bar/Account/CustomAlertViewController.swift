@@ -9,6 +9,7 @@
 import UIKit
 import Gloss
 import DeviceKit
+import FirebaseMessaging
 
 class CustomAlertViewController: UIViewController {
     private var data: [AllLSJson] = []
@@ -16,6 +17,14 @@ class CustomAlertViewController: UIViewController {
     private var index = 0
     var edLoginText = String()
     var edPassText = String()
+    
+    private var responseString  = ""
+    
+    // Долги - ДомЖилСервис
+    private var debtDate       = "0"
+    private var debtSum        = 0.0
+    private var debtSumAll     = 0.0
+    private var debtOverSum    = 0.0
 
     @IBOutlet weak var backView: UIView!
     @IBOutlet weak var viewConst: NSLayoutConstraint!
@@ -82,7 +91,7 @@ class CustomAlertViewController: UIViewController {
         let txtLogin = login == nil ? login1?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let txtPass = pass == nil ? pwd?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_ALL_ACCOUNTS + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? getSalt() : Sminex.getSalt())))!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_ALL_ACCOUNTS + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? Sminex.getSalt() : Sminex.getSalt())))!)
         request.httpMethod = "GET"
         print(request)
         URLSession.shared.dataTask(with: request) {
@@ -119,7 +128,7 @@ class CustomAlertViewController: UIViewController {
     
     private func exit() {
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: Sminex.getSalt())
         let deviceId = UserDefaults.standard.string(forKey: "googleToken") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.DELETE_CLIENT + "login=\(login)&pwd=\(pwd)&deviceid=\(deviceId)")!)
@@ -129,18 +138,17 @@ class CustomAlertViewController: UIViewController {
             data, error, responce in
             
             guard data != nil else { return }
+//            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+//                let alert = UIAlertController(title: "Ошибка сервера", message: "попробуйте позже", preferredStyle: .alert)
+//                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+//                DispatchQueue.main.async {
+//                    self.present(alert, animated: true, completion: nil)
+//                }
+//            }
             
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
-            
-            #if DEBUG
-            //                print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
+//            #if DEBUG
+//                            print(String(data: data!, encoding: .utf8) ?? "")
+//            #endif
             
             }.resume()
         
@@ -156,7 +164,288 @@ class CustomAlertViewController: UIViewController {
         UserDefaults.standard.synchronize()
         TemporaryHolder.instance.log = self.edLoginText
         TemporaryHolder.instance.pas = self.edPassText
-        present(UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
+        self.enter()
+        self.saveUsersDefaults()
+    }
+    
+    func enter(login: String? = nil, pass: String? = nil) {
+        
+        // Авторизация пользователя
+        DispatchQueue.main.async {
+            let txtLogin = login == nil ? self.edLoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
+            let txtPass = pass == nil ? self.edPassText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
+            request.httpMethod = "GET"
+            print(request)
+            
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+
+                if error != nil {
+                    DispatchQueue.main.sync {
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                self.responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+//                #if DEBUG
+//                    print("responseString = \(self.responseString)")
+//                #endif
+                
+                self.choice()
+                
+                }.resume()
+        }
+    }
+    
+    private func choice() {
+        
+        DispatchQueue.main.async {
+            print("responseString = \(self.responseString)")
+            if self.responseString != "1"{
+                
+                // авторизация на сервере - получение данных пользователя
+                var answer = self.responseString.components(separatedBy: ";")
+                //                print(answer)
+                
+                getBCImage(id: answer[safe: 17] ?? "")
+                // сохраним значения в defaults
+                saveGlobalData(date1:               answer[safe: 0]  ?? "",
+                               date2:               answer[safe: 1]  ?? "",
+                               can_count:           answer[safe: 2]  ?? "",
+                               mail:                answer[safe: 3]  ?? "",
+                               id_account:          answer[safe: 4]  ?? "",
+                               isCons:              answer[safe: 5]  ?? "",
+                               name:                answer[safe: 6]  ?? "",
+                               history_counters:    answer[safe: 7]  ?? "",
+                               phone:               answer[safe: 14] ?? "",
+                               contactNumber:       answer[safe: 18] ?? "",
+                               adress:              answer[safe: 10] ?? "",
+                               roomsCount:          answer[safe: 11] ?? "",
+                               residentialArea:     answer[safe: 12] ?? "",
+                               totalArea:           answer[safe: 13] ?? "",
+                               strah:               "0",
+                               buisness:            answer[safe: 9]  ?? "",
+                               lsNumber:            answer[safe: 16] ?? "",
+                               desc:                answer[safe: 15] ?? "")
+                
+                TemporaryHolder.instance.getFinance()
+                // отправим на сервер данные об ид. устройства для отправки уведомлений
+                let token = Messaging.messaging().fcmToken
+                if token != nil {
+                    self.sendAppId(id_account: answer[4], token: token!)
+                }
+                
+                // Экземпляр класса DB
+                let db = DB()
+                
+                // Если пользователь - окно пользователя, если консультант - другое окно
+                if answer[5] == "1" {          // консультант
+                    
+                    // ЗАЯВКИ С КОММЕНТАРИЯМИ
+                    db.del_db(table_name: "Comments")
+                    db.del_db(table_name: "Applications")
+                    db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "1")
+                    
+                    // Дома, квартиры, лицевые счета
+                    db.del_db(table_name: "Houses")
+                    db.del_db(table_name: "Flats")
+                    db.del_db(table_name: "Ls")
+                    db.parse_Houses()
+                    
+                    self.performSegue(withIdentifier: Segues.fromViewController.toAppsCons, sender: self)
+                    
+                } else {                         // пользователь
+                    // ПОКАЗАНИЯ СЧЕТЧИКОВ
+                    // Удалим данные из базы данных
+                    db.del_db(table_name: "Counters")
+                    // Получим данные в базу данных
+                    db.parse_Countrers(login: self.edLoginText, pass: self.edPassText, history: answer[7])
+                    
+                    // ВЕДОМОСТЬ (Пока данные тестовые)
+                    // Удалим данные из базы данных
+                    db.del_db(table_name: "Saldo")
+                    // Получим данные в базу данных
+                    db.parse_OSV(login: self.edLoginText, pass: self.edPassText)
+                    
+                    // ЗАЯВКИ С КОММЕНТАРИЯМИ
+                    db.del_db(table_name: "Applications")
+                    db.del_db(table_name: "Comments")
+                    db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "0")
+                    
+                    self.tabBarController?.selectedIndex = 0
+                    self.removeFromParentViewController()
+                    self.view.removeFromSuperview()
+                }
+            }
+            else if self.responseString == "1" {
+                let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+
+            }
+        }
+    }
+    
+    // Получим данные о долгах (ДомЖилСервис)
+    private func getDebt(login: String) {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_DEBT + "ident=" + login)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil || data == nil {
+                return
+            }
+            
+            // распарсим полученный json с долгами, загоним его в память
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                
+                if let j_object = json["data"] {
+                    if let j_date = j_object["Date"] {
+                        self.debtDate = j_date as! String
+                    }
+                    if let j_sum = j_object["Sum"] {
+                        self.debtSum = Double(truncating: j_sum as! NSNumber)
+                    }
+                    if let j_over_sum = j_object["SumOverhaul"] {
+                        self.debtOverSum = Double(truncating: j_over_sum as! NSNumber)
+                    }
+                    if let j_sum_all = j_object["SumAll"] {
+                        self.debtSumAll = Double(truncating: j_sum_all as! NSNumber)
+                    }
+                }
+                
+                self.saveToStorageDebt()
+                
+            } catch let error {
+                
+                #if DEBUG
+                print(error)
+                #endif
+            }
+            
+            }.resume()
+    }
+    
+    private func saveToStorageDebt() {
+        let defaults = UserDefaults.standard
+        defaults.setValue(debtDate, forKey: "debt_date")
+        defaults.setValue(debtSum, forKey: "debt_sum")
+        defaults.setValue(debtOverSum, forKey: "debt_over_sum")
+        defaults.setValue(debtSumAll, forKey: "debt_sum_all")
+        defaults.synchronize()
+    }
+    
+    // Отправка ид для оповещений
+    private func sendAppId(id_account: String, token: String) {
+        let urlPath = Server.SERVER + Server.SEND_ID_GOOGLE +
+            "cid=" + id_account +
+            "&did=" + token +
+            "&os=" + "iOS" +
+            "&version=" + UIDevice.current.systemVersion +
+            "&model=" + UIDevice.current.model
+        let url = URL(string: urlPath)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                return
+            }
+            
+            self.responseString = String(data: data!, encoding: .utf8)!
+            
+            #if DEBUG
+            print("token (add) = \(String(describing: self.responseString))")
+            #endif
+            UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
+            UserDefaults.standard.synchronize()
+            
+            }.resume()
+    }
+    
+    private func getContacts(login: String, pwd: String) {
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_CONTACTS + "login=" + login + "&pwd=" + pwd)!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                //                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                //                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                //                DispatchQueue.main.sync {
+                //                    self.present(alert, animated: true, completion: nil)
+                //                }
+                return
+            }
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                TemporaryHolder.instance.contactsList = ContactsDataJson(json: json!)!.data!
+            }
+            
+            #if DEBUG
+            //            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            }.resume()
+    }
+    
+    // Качаем соль
+    private func getSalt(login: String) -> Data {
+        
+        var salt: Data?
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
+        
+        TemporaryHolder.instance.SaltQueue.enter()
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            defer {
+                TemporaryHolder.instance.SaltQueue.leave()
+            }
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    //                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    //                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    //                    alert.addAction(cancelAction)
+                    //                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            salt = data
+            TemporaryHolder.instance.salt = data
+            }.resume()
+        
+        TemporaryHolder.instance.SaltQueue.wait()
+        return salt ?? Data()
+    }
+    
+    private func saveUsersDefaults() {
+        let defaults = UserDefaults.standard
+        //        defaults.setValue(edLogin.text!, forKey: "login")
+        DispatchQueue.main.async {
+            defaults.setValue(self.edPassText, forKey: "pass")
+            defaults.synchronize()
+        }
     }
 }
 
