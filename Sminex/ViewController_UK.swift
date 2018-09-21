@@ -134,7 +134,7 @@ class ViewController_UK: UIViewController {
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print("responseString = \(self.responseString)")
+//                print("responseString = \(self.responseString)")
             #endif
             
             self.choice()
@@ -246,7 +246,7 @@ class ViewController_UK: UIViewController {
             self.responseString = String(data: data!, encoding: .utf8)!
             
             #if DEBUG
-                print("token (add) = \(String(describing: self.responseString))")
+//                print("token (add) = \(String(describing: self.responseString))")
             #endif
             
             }.resume()

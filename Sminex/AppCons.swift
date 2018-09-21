@@ -214,7 +214,7 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                    print("responseString = \(self.responseString)")
+//                    print("responseString = \(self.responseString)")
                 #endif
                 
                 self.choiceGetApp()
@@ -258,7 +258,7 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print("responseString = \(self.responseString)")
+//                print("responseString = \(self.responseString)")
             #endif
             self.choiceConsApp(name_cons: new_cons_name)
             }.resume()
@@ -298,7 +298,7 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                    print("responseString = \(self.responseString)")
+//                    print("responseString = \(self.responseString)")
                 #endif
                 
                 self.choiceOkApp()
@@ -341,7 +341,7 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                    print("responseString = \(self.responseString)")
+//                    print("responseString = \(self.responseString)")
                 #endif
                 
                 self.choiceCloseApp()
@@ -610,7 +610,7 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                    print("responseString = \(self.responseString)")
+//                    print("responseString = \(self.responseString)")
                 #endif
                 
                 self.choiceSendComm(text: (addComm))

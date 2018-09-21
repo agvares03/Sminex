@@ -46,8 +46,6 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             request.httpMethod = "GET"
         }
         
-        print(request.url)
-        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
 

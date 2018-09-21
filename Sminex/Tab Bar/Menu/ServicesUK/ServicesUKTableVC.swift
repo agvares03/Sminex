@@ -86,7 +86,7 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
             }
             
             #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
+//                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
         }.resume()

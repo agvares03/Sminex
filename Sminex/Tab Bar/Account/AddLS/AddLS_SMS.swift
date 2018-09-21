@@ -45,10 +45,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ADD_NEW_LS + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)&address=\(address)&smsCode=\(smsCode)")!)
         print(request)
         
-        request.httpMethod = "GET"
-        
-        print(request.url)
-        
+        request.httpMethod = "GET"        
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             

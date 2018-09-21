@@ -133,14 +133,15 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 }
             }
         }
-        
+        print(metValues)
+        var a = [String]()
         metValues.forEach {
             if Float($0.value?.replacingOccurrences(of: ",", with: ".") ?? "0")! > Float(0) {
-                monthValLabel.text = $0.value
+                a.append($0.value!)
                 return
             }
         }
-        
+        monthValLabel.text = a[1]
         
         
     }
@@ -263,8 +264,6 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
             var request = URLRequest(url: URL(string: urlPath)!)
             request.httpMethod = "GET"
             
-            print(request.url)
-            
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
                 
@@ -288,7 +287,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                    print("responseString = \(self.responseString)")
+//                    print("responseString = \(self.responseString)")
                 #endif
                 
                 self.choice()

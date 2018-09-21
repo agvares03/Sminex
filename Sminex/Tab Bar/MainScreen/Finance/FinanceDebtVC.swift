@@ -211,7 +211,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
             
             #if DEBUG
-                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
+//                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
             #endif
         
         }.resume()
@@ -238,7 +238,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             guard data != nil else { return }
             
             #if DEBUG
-            print(String(data: data!, encoding: .utf8) ?? "")
+//            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
@@ -299,7 +299,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
  
             #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
+//                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             }.resume()
@@ -409,8 +409,11 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
         }
         
         // Выводить или нет кнопку QR-код
-//        pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
-//        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
+        if defaults.bool(forKey: "denyQRCode"){
+            pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
+            pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
+        }
+        
         if pay_button.isHidden {
             btnConst1.constant = 0
         }

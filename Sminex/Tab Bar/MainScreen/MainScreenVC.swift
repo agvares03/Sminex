@@ -230,7 +230,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             
             #if DEBUG
-            print(String(data: data!, encoding: .utf8)!)
+//            print(String(data: data!, encoding: .utf8)!)
             #endif
             
             let defaults = UserDefaults.standard
@@ -243,17 +243,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.set(self.business_center_OnlyViewMeterReadings, forKey: "onlyViewMeterReadings")
             defaults.set(self.busines_center_dayFrom, forKey: "meterReadingsDayFrom")
             defaults.set(self.busines_center_dayTo, forKey: "meterReadingsDayTo")
-            defaults.set(false, forKey: "didntSchet")
             defaults.synchronize()
             }.resume()
         let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
         let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
-        
+        UserDefaults.standard.set(false, forKey: "didntSchet")
+        UserDefaults.standard.synchronize()
         if (dateFrom == 0 && dateTo == 0) && !(UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")) {
             let now = NSDate()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "LLLL yyyy"
-            dateFormatter.setLocalizedDateFormatFromTemplate("Ru-ru")
+//            dateFormatter.setLocalizedDateFormatFromTemplate("ru-Ru")
             let nameOfMonth = dateFormatter.string(from: now as Date)
             data[5]![1] = SchetCellData(title: "", date: "Передача показаний за \(nameOfMonth)")
             
@@ -1793,9 +1793,13 @@ final class SchetCell: UICollectionViewCell {
         date.text  = item.date
         
         self.delegate = delegate
-        if !UserDefaults.standard.bool(forKey: "didntSchet") {
+        UserDefaults.standard.synchronize()
+        if UserDefaults.standard.bool(forKey: "didntSchet") == false {
             button.isEnabled = UserDefaults.standard.bool(forKey: "didntSchet")
             button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.6)
+        }else{
+            button.isEnabled = UserDefaults.standard.bool(forKey: "didntSchet")
+            button.backgroundColor = button.backgroundColor?.withAlphaComponent(1.0)
         }
         if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             title.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")

@@ -263,7 +263,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             row1.forEach { row1 in
                 rows[row1.attributes["Status"]!]?.append(Request(row: row1))
                 rowComms[row1.attributes["ID"]!] = []
-                let status = row1.attributes["Status"]!                
+                let status = row1.attributes["Status"]!
+                self.data_.status = status
                 row2.forEach { row in
                     rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )
@@ -278,6 +279,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     self.arr = self.comments_
                     self.arr.insert(self.data_, at: 0)
                     self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                    print(self.arr)
                     if index < self.arr.count{
                         self.arr.removeLast()
                     }
@@ -596,7 +598,7 @@ final class AdmissionHeaderData: AdmissionProtocol {
     let mobileNumber:   String
     let gosNumber:      String
     let date:           String
-    let status:         String
+    var status:         String
     
     init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, date: String, status: String, images: [UIImage], imagesUrl: [String]) {
         
