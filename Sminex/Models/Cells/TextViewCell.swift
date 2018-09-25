@@ -19,7 +19,6 @@ class TextViewCell: UITableViewCell, UITextViewDelegate {
     weak var delegate: TextViewCellDelegate?
     
     // MARK: - UITextViewDelegate
-
     func textViewDidChange(_ textView: UITextView) {
         delegate?.textViewCell(cell: self, didChangeText: textView.text)
     }

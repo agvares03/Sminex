@@ -76,6 +76,10 @@ class NewTechServiceVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        edFio.becomeFirstResponder()
+    }
     // MARK: Functions
     
     // Двигаем view вверх при показе клавиатуры
@@ -83,9 +87,9 @@ class NewTechServiceVC: UIViewController {
         let info = notification.userInfo!
         let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
         if !isXDevice() {
-            btnViewConstraint.constant = (keyboardSize?.height)!
+            btnViewConstraint.constant = (keyboardSize?.height)! - 10
         }else{
-            btnViewConstraint.constant = ((keyboardSize?.height)! - 40)
+            btnViewConstraint.constant = ((keyboardSize?.height)! - 45)
         }
     }
     
