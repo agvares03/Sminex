@@ -70,9 +70,11 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gdq-yz-XW5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
                         </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
@@ -1309,7 +1311,9 @@
         <scene sceneID="NSz-os-ddU">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="GYN-oO-AFS" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Главная" image="main" id="xfQ-fY-4vn"/>
+                    <tabBarItem key="tabBarItem" title="Главная" image="main" selectedImage="main" id="xfQ-fY-4vn">
+                        <color key="badgeColor" name="windowFrameTextColor" catalog="System" colorSpace="catalog"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Sq5-Ii-FvZ">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -1548,10 +1552,10 @@
         <image name="sminex_logo.png" width="582" height="126"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ggi-Bk-Rzm"/>
-        <segue reference="efl-bX-pxf"/>
-        <segue reference="QLh-38-2Hc"/>
-        <segue reference="JHZ-fd-xvP"/>
-        <segue reference="7Ci-na-4TA"/>
+        <segue reference="8he-B8-Gnd"/>
+        <segue reference="Lrg-1z-tbA"/>
+        <segue reference="AB9-zB-ayT"/>
+        <segue reference="t3B-Fb-YCZ"/>
+        <segue reference="5gl-5c-IU0"/>
     </inferredMetricsTieBreakers>
 </document>

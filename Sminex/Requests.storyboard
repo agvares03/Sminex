@@ -1004,7 +1004,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="AeQ-TY-jTv">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="175.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="175.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="9" minimumInteritemSpacing="9" id="Vta-6Y-Nxd">
                                                         <size key="itemSize" width="166" height="156"/>
@@ -1129,7 +1129,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="mH7-Ne-P9i">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="149.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="554041686.75675201">
                                                         <!--2018-07-23 12:28:06 +0000-->
                                                     </date>
@@ -1450,9 +1450,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3a-Tv-6vG">
                                         <rect key="frame" x="0.0" y="544" width="375" height="59"/>
                                         <subviews>
-                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="xE7-cg-Krh">
-                                                <rect key="frame" x="67.5" y="19.5" width="20" height="20"/>
-                                            </activityIndicatorView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lnn-sf-Rif">
                                                 <rect key="frame" x="16" y="18.5" width="29" height="22"/>
                                                 <constraints>
@@ -1493,8 +1490,6 @@
                                             <constraint firstItem="lnn-sf-Rif" firstAttribute="leading" secondItem="m3a-Tv-6vG" secondAttribute="leading" constant="16" id="JvX-I1-caD"/>
                                             <constraint firstAttribute="height" constant="59" id="M2z-fJ-xtt"/>
                                             <constraint firstAttribute="bottom" secondItem="pbL-HG-NwE" secondAttribute="bottom" constant="12" id="VEz-dP-u7x"/>
-                                            <constraint firstItem="xE7-cg-Krh" firstAttribute="centerY" secondItem="pbL-HG-NwE" secondAttribute="centerY" constant="2.5" id="cKA-pD-NUu"/>
-                                            <constraint firstItem="xE7-cg-Krh" firstAttribute="centerX" secondItem="pbL-HG-NwE" secondAttribute="centerX" constant="-131" id="h2j-qm-VWH"/>
                                             <constraint firstItem="lnn-sf-Rif" firstAttribute="centerY" secondItem="pbL-HG-NwE" secondAttribute="centerY" constant="2.5" id="yNE-9v-qtB"/>
                                         </constraints>
                                     </view>

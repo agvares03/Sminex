@@ -94,7 +94,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_PHONE + "phone=" + self.edLogin.text!)!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
@@ -111,13 +111,32 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            //            print("responseString = \(self.responseString)")
+//                        print("ArrLS = \(self.responseString)")
             #endif
             
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
                 // Получим список ЛС
                 self.ls2 = json["data"] as! [String]
+                if self.ls2.count > 1{
+                    self.showLS()
+                }else if self.ls2.count == 0{
+                    // Сохраним значения
+                    self.LoginText = self.edLogin.text!
+                    self.saveUsersDefaults()
+                    // Запрос - получение данных !!!
+                    self.enter()
+                }else{
+                    self.ls2.forEach {
+                        let text = $0
+                        self.LoginText = text
+                        self.edLogin.text = text
+                        // Сохраним значения
+                        self.saveUsersDefaults()
+                        // Запрос - получение данных !!!
+                        self.enter()
+                    }
+                }
             } catch let error {
                 
                 #if DEBUG
@@ -125,19 +144,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 #endif
             }
             }.resume()
-        if self.ls2.count > 1{
-            self.showLS()
-        }else{
-            self.ls2.forEach {
-                let text = $0
-                self.LoginText = text
-                self.edLogin.text = text
-                // Сохраним значения
-                self.saveUsersDefaults()
-                // Запрос - получение данных !!!
-                self.enter()
-            }
-        }
     }
     
     private func showLS(){
@@ -146,9 +152,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             let text = $0
             action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
                 self.LoginText = text
-                self.edLogin.text = text
+//                self.edLogin.text = text
                 // Сохраним значения
-                self.itsPhone = false
+//                self.itsPhone = false
                 self.saveUsersDefaults()
                 
                 // Запрос - получение данных !!!
@@ -231,21 +237,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
         
         edLogin.becomeFirstResponder()
-        if (TemporaryHolder.instance.log != ""){
-            self.enter2()
-        }
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         scroll.endEditing(true)
-    }
-    func enter2() {
-        DispatchQueue.global(qos: .background).async {
-            sleep(1)
-            self.saveUsersDefaults()
-            // Запрос - получение данных !!!
-            self.enter()
-        }
     }
     
     // Двигаем view вверх при показе клавиатуры
@@ -342,13 +337,16 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             startIndicator()
         }
         // Авторизация пользователя
+        if !itsPhone{
+            self.LoginText = self.edLogin.text!
+        }
         DispatchQueue.main.async {
-        let txtLogin = login == nil ? self.edLogin.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let txtLogin = login == nil ? self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let txtPass = pass == nil ? self.edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
         
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, response, error in
         
@@ -368,10 +366,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
-//            #if DEBUG
-//                print("responseString = \(self.responseString)")
-//
-//            #endif
+            #if DEBUG
+                print("responseString = \(self.responseString)")
+            #endif
             
             self.choice()
             
@@ -441,7 +438,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                     // ЗАЯВКИ С КОММЕНТАРИЯМИ
                     db.del_db(table_name: "Comments")
                     db.del_db(table_name: "Applications")
-                    db.parse_Apps(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", isCons: "1")
+                    db.parse_Apps(login: self.LoginText, pass: self.edPass.text ?? "", isCons: "1")
                     
                     // Дома, квартиры, лицевые счета
                     db.del_db(table_name: "Houses")
@@ -460,18 +457,18 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                         // Удалим данные из базы данных
                         db.del_db(table_name: "Counters")
                         // Получим данные в базу данных
-                        db.parse_Countrers(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", history: answer[7])
+                        db.parse_Countrers(login: self.LoginText, pass: self.edPass.text ?? "", history: answer[7])
                         
                         // ВЕДОМОСТЬ (Пока данные тестовые)
                         // Удалим данные из базы данных
                         db.del_db(table_name: "Saldo")
                         // Получим данные в базу данных
-                        db.parse_OSV(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "")
+                        db.parse_OSV(login: self.LoginText, pass: self.edPass.text ?? "")
                         
                         // ЗАЯВКИ С КОММЕНТАРИЯМИ
                         db.del_db(table_name: "Applications")
                         db.del_db(table_name: "Comments")
-                        db.parse_Apps(login: self.edLogin.text ?? "", pass: self.edPass.text ?? "", isCons: "0")
+                        db.parse_Apps(login: self.LoginText, pass: self.edPass.text ?? "", isCons: "0")
                         
                         self.performSegue(withIdentifier: Segues.fromViewController.toAppsUser, sender: self)
                     }
@@ -741,10 +738,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
         if (ls_1_end == "+") {
             itsPhone = true
-        }else if (string.characters.count > 1){
+        }else if (string.characters.count == 10 || string.characters.count == 11 || string.characters.count == 12){
             itsPhone = true
         }else if (!itsPhone) {
             if (ls_12_end == "89") || (ls_12_end == "79") {
+                itsPhone = true
+            }
+            if (ls_1_end == "9") && (LoginText.count == 10) {
                 itsPhone = true
             }
         }

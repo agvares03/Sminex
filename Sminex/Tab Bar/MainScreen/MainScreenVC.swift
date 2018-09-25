@@ -86,7 +86,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Получим данные по Бизнес-центру (выводить или нет Оплаты)
         get_info_business_center()
         

@@ -94,9 +94,9 @@ final class CounterHistoryCell: UICollectionViewCell {
         
         self.month.text     = item.month
         if item.fractionNumber.contains(find: "alse") {
-            self.send.text      = item.send.replacingOccurrences(of: ",000", with: "")
-            self.outcome.text   = item.outcome.replacingOccurrences(of: ",000", with: "")
-            self.income.text    = item.income.replacingOccurrences(of: ",000", with: "")
+            self.send.text      = item.send.replacingOccurrences(of: ",00", with: "")
+            self.outcome.text   = item.outcome.replacingOccurrences(of: ",00", with: "")
+            self.income.text    = item.income.replacingOccurrences(of: ",00", with: "")
         } else {
             self.send.text      = item.send
             self.outcome.text   = item.outcome

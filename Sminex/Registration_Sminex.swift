@@ -195,7 +195,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            print("responseString = \(self.responseString)")
+            print("ArrLS = \(self.responseString)")
             #endif
             
             do {
@@ -481,7 +481,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
-        if ls.count >= 2 || string.characters.count > 1 {
+        if ls.count >= 2 || (string.characters.count == 10 || string.characters.count == 11 || string.characters.count == 12) {
             changeGoButton(isEnabled: true)
         } else {
             changeGoButton(isEnabled: false)
@@ -519,8 +519,12 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if (ls_1_end == "+") {
             itsPhone = true
         }
+        print(ls_12_end)
         if (!itsPhone) {
             if (ls_12_end == "89") || (ls_12_end == "79") {
+                itsPhone = true
+            }
+            if (ls_1_end == "9") && (ls.count == 10) {
                 itsPhone = true
             }
         }

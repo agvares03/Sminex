@@ -141,8 +141,9 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 return
             }
         }
-        monthValLabel.text = a[1]
-        
+        if a.count > 1{
+           monthValLabel.text = a[1]
+        }
         
     }
     

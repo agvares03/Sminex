@@ -279,7 +279,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     self.arr = self.comments_
                     self.arr.insert(self.data_, at: 0)
                     self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
-                    print(self.arr)
                     if index < self.arr.count{
                         self.arr.removeLast()
                     }

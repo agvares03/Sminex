@@ -43,7 +43,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
-                imagePicker.sourceType = .photoLibrary;
+                imagePicker.sourceType = .photoLibrary
                 imagePicker.allowsEditing = true
                 self.present(imagePicker, animated: true, completion: nil)
             }
@@ -53,13 +53,17 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
-                imagePicker.sourceType = .camera;
+                imagePicker.sourceType = .camera
                 imagePicker.allowsEditing = true
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }))
         action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
         present(action, animated: true, completion: nil)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
     @IBAction private func exitButtonPressed(_ sender: UIButton) {
@@ -176,14 +180,13 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        tabBarController?.tabBar.isHidden = false
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
