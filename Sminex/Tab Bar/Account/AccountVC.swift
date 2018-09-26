@@ -115,10 +115,8 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     }
     
     private func exit() {
-        TemporaryHolder.instance.log = ""
-        TemporaryHolder.instance.pas = ""
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let deviceId = UserDefaults.standard.string(forKey: "googleToken") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.DELETE_CLIENT + "login=\(login)&pwd=\(pwd)&deviceid=\(deviceId)")!)

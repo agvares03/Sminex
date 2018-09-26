@@ -115,7 +115,7 @@ class NewTechServiceVC: UIViewController {
     private func uploadRequest() {
         
         let login = UserDefaults.standard.string(forKey: "login")!
-        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
+        let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm = detailText
         
         let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")"

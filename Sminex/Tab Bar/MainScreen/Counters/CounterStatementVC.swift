@@ -247,7 +247,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         if count.text != "" && count.text.last != "," {
             
             let edLogin = UserDefaults.standard.string(forKey: "login") ?? ""
-            let edPass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+            let edPass = UserDefaults.standard.string(forKey: "pwd") ?? ""
             
             var strNumber = value_?.guid ?? ""
             

@@ -67,33 +67,43 @@ class CustomAlertViewController: UIViewController {
         tapped = data[index]
         let ident: String = (tapped?.ident)! as String
         if login1 != ident{
-            let alert = UIAlertController(title: "Авторизация", message: "Введите пароль для \(ident)", preferredStyle: .alert)
-            alert.addTextField { (textField) in
-                textField.text = ""
-                textField.placeholder = "Пароль"
-            }
-            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) -> Void in}))
-            alert.addAction(UIAlertAction(title: "Войти", style: .default, handler: { (_) -> Void in
-                let password = alert.textFields![0]
+            var request = URLRequest(url: URL(string: Server.SERVER + "GetPwdHashByIdent.ashx?" + "ident=" + ident)!)
+            request.httpMethod = "GET"
+//            print(request)
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                let responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+//                print("responseString = \(responseString)")
+                #endif
                 self.edLoginText = ident
-                self.edPassText = password.text!
-                print(self.edLoginText, self.edPassText)
-                self.exit()
-            }))
-            self.present(alert, animated: true, completion: nil)
+                self.edPassText = responseString
+                self.enter()
+                }.resume()
         }
     }
     
     private func getAllLS(login: String? = nil, pass: String? = nil){
         TemporaryHolder.instance.allLS.removeAll()
         let login1 = UserDefaults.standard.string(forKey: "login")
-        let pwd = UserDefaults.standard.string(forKey: "pass")
+        let pwd = UserDefaults.standard.string(forKey: "pwd")
         let txtLogin = login == nil ? login1?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        let txtPass = pass == nil ? pwd?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_ALL_ACCOUNTS + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? Sminex.getSalt() : Sminex.getSalt())))!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_ALL_ACCOUNTS + "login=" + txtLogin + "&pwd=" + pwd!)!)
         request.httpMethod = "GET"
-        print(request)
+//        print(request)
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
@@ -110,7 +120,7 @@ class CustomAlertViewController: UIViewController {
             let responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            print("responseString = \(responseString)")
+//            print("responseString = \(responseString)")
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 if let lsArr = AllLSJsonData(json: json!)?.data {
@@ -128,7 +138,7 @@ class CustomAlertViewController: UIViewController {
     
     private func exit() {
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: Sminex.getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let deviceId = UserDefaults.standard.string(forKey: "googleToken") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.DELETE_CLIENT + "login=\(login)&pwd=\(pwd)&deviceid=\(deviceId)")!)
@@ -138,23 +148,10 @@ class CustomAlertViewController: UIViewController {
             data, error, responce in
             
             guard data != nil else { return }
-//            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-//                let alert = UIAlertController(title: "Ошибка сервера", message: "попробуйте позже", preferredStyle: .alert)
-//                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-//                DispatchQueue.main.async {
-//                    self.present(alert, animated: true, completion: nil)
-//                }
-//            }
-            
-//            #if DEBUG
-//                            print(String(data: data!, encoding: .utf8) ?? "")
-//            #endif
-            
             }.resume()
         
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "pass"), forKey: "exitPass")
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "login"), forKey: "exitLogin")
-        UserDefaults.standard.setValue("", forKey: "pass")
         UserDefaults.standard.removeObject(forKey: "accountIcon")
         UserDefaults.standard.removeObject(forKey: "googleToken")
         UserDefaults.standard.removeObject(forKey: "newsList")
@@ -162,9 +159,7 @@ class CustomAlertViewController: UIViewController {
         UserDefaults.standard.removeObject(forKey: "newsList")
         UserDefaults.standard.removeObject(forKey: "newsLastId")
         UserDefaults.standard.synchronize()
-        TemporaryHolder.instance.log = self.edLoginText
-        TemporaryHolder.instance.pas = self.edPassText
-        self.enter()
+        self.choice()
         self.saveUsersDefaults()
     }
     
@@ -174,9 +169,9 @@ class CustomAlertViewController: UIViewController {
         DispatchQueue.main.async {
             let txtLogin = login == nil ? self.edLoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
             let txtPass = pass == nil ? self.edPassText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + txtPass.stringByAddingPercentEncodingForRFC3986()! + "&addBcGuid=1")!)
             request.httpMethod = "GET"
-            print(request)
+//            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
@@ -196,9 +191,16 @@ class CustomAlertViewController: UIViewController {
 //                #if DEBUG
 //                    print("responseString = \(self.responseString)")
 //                #endif
-                
-                self.choice()
-                
+                if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                    self.responseString = self.responseString.replacingOccurrences(of: "error:  ", with: "")
+                    let alert = UIAlertController(title: "Ошибка сервера", message: self.responseString, preferredStyle: .alert)
+                    alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                    DispatchQueue.main.async {
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }else{
+                   self.exit()
+                }
                 }.resume()
         }
     }
@@ -206,7 +208,7 @@ class CustomAlertViewController: UIViewController {
     private func choice() {
         
         DispatchQueue.main.async {
-            print("responseString = \(self.responseString)")
+//            print("responseString = \(self.responseString)")
             if self.responseString != "1"{
                 
                 // авторизация на сервере - получение данных пользователя
@@ -368,7 +370,7 @@ class CustomAlertViewController: UIViewController {
             self.responseString = String(data: data!, encoding: .utf8)!
             
             #if DEBUG
-            print("token (add) = \(String(describing: self.responseString))")
+//            print("token (add) = \(String(describing: self.responseString))")
             #endif
             UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
             UserDefaults.standard.synchronize()
@@ -443,7 +445,8 @@ class CustomAlertViewController: UIViewController {
         let defaults = UserDefaults.standard
         //        defaults.setValue(edLogin.text!, forKey: "login")
         DispatchQueue.main.async {
-            defaults.setValue(self.edPassText, forKey: "pass")
+//            defaults.setValue(self.edPassText, forKey: "pass")
+            defaults.setValue(self.edPassText.stringByAddingPercentEncodingForRFC3986()!, forKey: "pwd")
             defaults.synchronize()
         }
     }

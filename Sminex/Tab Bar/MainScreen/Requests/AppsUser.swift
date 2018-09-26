@@ -193,7 +193,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         DispatchQueue.global(qos: .userInteractive).async {
         
             let login = UserDefaults.standard.string(forKey: "login")!
-            let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass")!, salt: getSalt())
+            let pass  = UserDefaults.standard.string(forKey: "pwd") ?? ""
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"

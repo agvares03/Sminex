@@ -338,7 +338,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
         request.httpMethod = "POST"
         
-        print(request.url)
+//        print(request.url)
         
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: imgs.map { UIImageJPEGRepresentation($0, 0.5) } )
         
@@ -371,11 +371,11 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
             case .success(let upload, _, _):
                 
                 upload.uploadProgress(closure: { (progress) in
-                    print("Upload Progress: \(progress.fractionCompleted)")
+//                    print("Upload Progress: \(progress.fractionCompleted)")
                 })
                 
                 upload.responseJSON { response in
-                    print(response.result.value!)
+//                    print(response.result.value!)
                     group.leave()
                     
                 }

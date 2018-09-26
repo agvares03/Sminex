@@ -27,9 +27,9 @@ final class DB: NSObject, XMLParserDelegate {
             }
         } catch {
             
-            #if DEBUG
-                print(error)
-            #endif
+//            #if DEBUG
+//                print(error)
+//            #endif
         }
         CoreDataManager.instance.saveContext()
     }
@@ -45,18 +45,17 @@ final class DB: NSObject, XMLParserDelegate {
             urlPath = urlPath + "&onlyCurrent=1"
         }
         let url: NSURL = NSURL(string: urlPath)!
-        
         parser = XMLParser(contentsOf: url as URL)!
         parser.delegate = self
         let success:Bool = parser.parse()
         
-        #if DEBUG
-            if success {
-                print("parse success!")
-            } else {
-                print("parse failure!")
-            }
-        #endif
+//        #if DEBUG
+//            if success {
+//                print("parse success!")
+//            } else {
+//                print("parse failure!")
+//            }
+//        #endif
         
         // сохраним последние значения Месяц-Год в глобальных переменных
         save_month_year(month: self.currMonth, year: self.currYear)
@@ -116,9 +115,9 @@ final class DB: NSObject, XMLParserDelegate {
             }
             CoreDataManager.instance.saveContext()
             id_app                        = attributeDict["ID"]!
-            #if DEBUG
-                print(id_app)
-            #endif
+//            #if DEBUG
+//                print(id_app)
+//            #endif
         } else if (elementName == "Comm") {
             // Запишем комментарии в БД
             let managedObject = Comments()
@@ -224,7 +223,7 @@ final class DB: NSObject, XMLParserDelegate {
                                                         var bill_pay      = ""
                                                         var bill_total    = ""
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-                                                        print("JSON",json)
+//                                                        print("JSON",json)
                                                         if let json_bills = json["data"] {
                                                             let int_end = (json_bills.count)!-1
                                                             if (int_end < 0) {
@@ -285,9 +284,9 @@ final class DB: NSObject, XMLParserDelegate {
                                                         }
                                                     } catch {
                                                         
-                                                        #if DEBUG
-                                                            print(error)
-                                                        #endif
+//                                                        #if DEBUG
+//                                                            print(error)
+//                                                        #endif
                                                     }
                                                     
                                                     let defaults = UserDefaults.standard
@@ -360,13 +359,13 @@ final class DB: NSObject, XMLParserDelegate {
         parser.delegate = self
         let success     = parser.parse()
         
-        #if DEBUG
-            if success {
-                print("parse success!")
-            } else {
-                print("parse failure!")
-            }
-        #endif
+//        #if DEBUG
+//            if success {
+//                print("parse success!")
+//            } else {
+//                print("parse failure!")
+//            }
+//        #endif
         
         //        }
     }
@@ -416,9 +415,9 @@ final class DB: NSObject, XMLParserDelegate {
 //                                                        }
                                                     } catch let error as NSError {
                                                         
-                                                        #if DEBUG
-                                                            print(error)
-                                                        #endif
+//                                                        #if DEBUG
+//                                                            print(error)
+//                                                        #endif
                                                     }
                                                 }
                                  
@@ -438,13 +437,13 @@ final class DB: NSObject, XMLParserDelegate {
         parser.delegate = self
         let success:Bool = parser.parse()
         
-        #if DEBUG
-            if success {
-                print("parse success!")
-            } else {
-                print("parse failure!")
-            }
-        #endif
+//        #if DEBUG
+//            if success {
+//                print("parse success!")
+//            } else {
+//                print("parse failure!")
+//            }
+//        #endif
     }
     
     // ОТДЕЛЬНЫЕ ПРОЦЕДУРЫ РАБОТЫ С БД
@@ -521,9 +520,9 @@ final class DB: NSObject, XMLParserDelegate {
             }
         } catch {
             
-            #if DEBUG
-                print(error)
-            #endif
+//            #if DEBUG
+//                print(error)
+//            #endif
         }
         CoreDataManager.instance.saveContext()
     }
@@ -543,9 +542,9 @@ final class DB: NSObject, XMLParserDelegate {
             
         } catch let error {
             
-            #if DEBUG
-                print(error)
-            #endif
+//            #if DEBUG
+//                print(error)
+//            #endif
         }
         
         return arr
@@ -575,9 +574,9 @@ final class DB: NSObject, XMLParserDelegate {
         
         } catch let error {
             
-            #if DEBUG
-                print(error)
-            #endif
+//            #if DEBUG
+//                print(error)
+//            #endif
         }
         CoreDataManager.instance.saveContext()
     }

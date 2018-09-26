@@ -38,7 +38,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         //        self.performSegue(withIdentifier: Segues.fromRegistrationSminexSMS.toEnterPassword, sender: self)
         startLoading()
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let code = self.code.stringByAddingPercentEncodingForRFC3986() ?? ""
         let address = UserDefaults.standard.string(forKey: "adress") ?? ""
         let smsCode = smsField.text?.stringByAddingPercentEncodingForRFC3986() ?? ""

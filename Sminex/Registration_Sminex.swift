@@ -92,7 +92,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
 //        }
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REGISTRATION_SMINEX + "identOrPhone=" + ls_for_zapros)!)
-        print(request)
+//        print(request)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -111,9 +111,9 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
-            #if DEBUG
-                print("responseString = \(self.responseString)")
-            #endif
+//            #if DEBUG
+//                print("responseString = \(self.responseString)")
+//            #endif
             self.choice()
         }.resume()
     }
@@ -122,7 +122,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "identOrPhone=" + edLS.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
         request.httpMethod = "GET"
-        print(request)
+//        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in
@@ -138,9 +138,9 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
-            #if DEBUG
-                print("responseString = \(self.responseString)")
-            #endif
+//            #if DEBUG
+//                print("responseString = \(self.responseString)")
+//            #endif
             self.choice()
             
             }.resume()
@@ -194,9 +194,9 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
-            #if DEBUG
-            print("ArrLS = \(self.responseString)")
-            #endif
+//            #if DEBUG
+//            print("ArrLS = \(self.responseString)")
+//            #endif
             
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
@@ -519,7 +519,6 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if (ls_1_end == "+") {
             itsPhone = true
         }
-        print(ls_12_end)
         if (!itsPhone) {
             if (ls_12_end == "89") || (ls_12_end == "79") {
                 itsPhone = true

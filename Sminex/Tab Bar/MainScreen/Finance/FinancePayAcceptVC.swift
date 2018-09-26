@@ -94,11 +94,11 @@ final class FinancePayAcceptVC: UIViewController {
     private func requestPay() {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let password = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         let number_bills = billsData_?.number_eng
         let date_bills   = billsData_?.datePay
-        var url_str = Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + password
+        var url_str = Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + pwd
         url_str = url_str + "&amount=" + sumText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
         if (number_bills != nil) {
             url_str = url_str + "&invoiceNumber=" + number_bills!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!

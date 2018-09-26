@@ -195,7 +195,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(TemporaryHolder.instance.log, TemporaryHolder.instance.pas)
         sprtTopConst = sprtLabel.frame.origin.y
         edLogin.delegate = self
         edPass.delegate  = self
@@ -210,13 +209,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         scroll.addGestureRecognizer(theTap)
         
-        if (TemporaryHolder.instance.log != ""){
-            edLogin.text = TemporaryHolder.instance.log
-            edPass.text  = TemporaryHolder.instance.pas
-        }else{
-            edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
-            edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
-        }
+        edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
+        edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent         = true
         navigationController?.navigationBar.backgroundColor       = .white
@@ -346,8 +340,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
-        print(request)
-        URLSession.shared.dataTask(with: request) {
+            print(request)
+            URLSession.shared.dataTask(with: request) {
             data, response, error in
         
             if error != nil {
@@ -678,10 +672,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func saveUsersDefaults() {
+        let pwd = getHash(pass: self.edPass.text!, salt: getSalt(login: self.edLogin.text!))
         let defaults = UserDefaults.standard
 //        defaults.setValue(edLogin.text!, forKey: "login")
         DispatchQueue.main.async {
             defaults.setValue(self.edPass.text!, forKey: "pass")
+            defaults.setValue(pwd, forKey: "pwd")
             defaults.synchronize()
         }
     }

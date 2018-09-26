@@ -253,7 +253,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     private func getAccountDebt() {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_DEBT + "login=" + login + "&pwd=" + pass)!)
         request.httpMethod = "GET"

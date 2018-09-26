@@ -724,7 +724,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global(qos: .userInteractive).async {
             
             let login = UserDefaults.standard.string(forKey: "login") ?? ""
-            let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+            let pass  = UserDefaults.standard.string(forKey: "pwd") ?? ""
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
             request.httpMethod = "GET"
@@ -952,7 +952,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         self.data[4]![1] = ForPayCellData(title: defaults.string(forKey: "ForPayTitle") ?? "", date: defaults.string(forKey: "ForPayDate") ?? "")
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_DEBT + "login=" + login + "&pwd=" + pass)!)
         request.httpMethod = "GET"
@@ -1032,7 +1032,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
                 request.httpMethod = "GET"
-                print("REQUEST = \(request)")
+//                print("REQUEST = \(request)")
                 
                 URLSession.shared.dataTask(with: request) {
                     data, error, responce in
@@ -1093,8 +1093,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
                 request.httpMethod = "GET"
-                print("REQUEST = \(request)")
-                
+//                print("REQUEST = \(request)")
+            
                 URLSession.shared.dataTask(with: request) {
                     data, error, responce in
                     

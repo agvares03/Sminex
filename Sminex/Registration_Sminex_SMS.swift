@@ -64,7 +64,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
 
             #if DEBUG
-                print(self.responseString)
+//                print(self.responseString)
             #endif
 
             self.choise()

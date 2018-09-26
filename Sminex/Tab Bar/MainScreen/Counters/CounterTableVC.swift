@@ -168,8 +168,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     private func getCounters() {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pass =  getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
-        
+        let pass =  UserDefaults.standard.string(forKey: "pwd") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_METERS + "login=" + login.stringByAddingPercentEncodingForRFC3986()! + "&pwd=" + pass)!)
         request.httpMethod = "GET"
         

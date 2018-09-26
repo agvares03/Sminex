@@ -155,7 +155,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 var url_str = Server.SERVER
                 url_str = url_str + Server.GET_COMM_ID
                 url_str = url_str + "login=" + (login?.stringByAddingPercentEncodingForRFC3986())!
-                url_str = url_str + "&pwd=" + getHash(pass: pass!, salt: Sminex.getSalt())
+                url_str = url_str + "&pwd=" + UserDefaults.standard.string(forKey: "pwd")!
                 url_str = url_str + "&id=" + self.reqId_
                 var request = URLRequest(url: URL(string:  url_str)!)
                 request.httpMethod = "GET"

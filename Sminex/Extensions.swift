@@ -229,9 +229,7 @@ func getHash(pass: String, salt: Data) -> String {
     guard Data(base64Encoded: salt) != nil && pass.data(using: .utf16LittleEndian) != nil else { return "" }
     let btl = pass.data(using: .utf16LittleEndian)!
     let bSalt = Data(base64Encoded: salt)!
-    
     var bAll = bSalt + btl
-    
     var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
     bAll.withUnsafeBytes {
         _ = CC_SHA1($0, CC_LONG(bAll.count), &digest)

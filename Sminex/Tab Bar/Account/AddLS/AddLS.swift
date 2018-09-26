@@ -78,10 +78,10 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
     
     private func checkLS() {
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let code = edLS.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.CHECK_ACCOUNT + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)")!)
-        print(request)
+//        print(request)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -101,7 +101,7 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            print("responseString = \(self.responseString)")
+//            print("responseString = \(self.responseString)")
             #endif
             self.choice()
             }.resume()
@@ -135,10 +135,10 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
     
     private func sendSMS() {
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let code = edLS.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.NEW_ACCOUNT_SMS + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)")!)
-        print(request)
+//        print(request)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -157,7 +157,7 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             #if DEBUG
-            print("responseString = \(self.responseString)")
+//            print("responseString = \(self.responseString)")
             #endif
             self.choiceSMS()
             }.resume()

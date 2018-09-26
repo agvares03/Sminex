@@ -147,7 +147,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     private func changePass() {
         
         let login   = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        let oldPass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let oldPass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.CHANGE_PASSWRD + "isChg=1&login=\(login)&pwd=\(newPasswordField.text ?? "")&oldPwd=\(oldPass)")!)
         request.httpMethod = "GET"

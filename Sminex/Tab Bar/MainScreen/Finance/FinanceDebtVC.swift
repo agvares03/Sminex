@@ -180,10 +180,10 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     private func getDebt() {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pass = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let id = data_?.idReceipts?.stringByAddingPercentEncodingForRFC3986() ?? ""
         
-        let url = Server.SERVER + Server.GET_BILLS_SERVICES + "login=" + login + "&pwd=" + pass + "&id_receipts=" + id
+        let url = Server.SERVER + Server.GET_BILLS_SERVICES + "login=" + login + "&pwd=" + pwd + "&id_receipts=" + id
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         
@@ -220,7 +220,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     private func getShareElements() {
         
         let login = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        let pwd   = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd   = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
         request.httpMethod = "GET"

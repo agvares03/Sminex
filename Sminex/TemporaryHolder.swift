@@ -62,8 +62,6 @@ final class TemporaryHolder {
     }
     public var contactsList: [ContactsJson] = []
     public var allLS: [AllLSJson] = []
-    public var log = ""
-    public var pas = ""
     
     public var receipts:      [AccountBillsJson]        = []
     public var calcs:         [AccountCalculationsJson] = []
@@ -87,13 +85,13 @@ final class TemporaryHolder {
             
         } else {
             let login = UserDefaults.standard.string(forKey: "login") ?? ""
-            let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+            let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
             
             let url = Server.SERVER + Server.GET_BILLS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
             var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
             request.httpMethod = "GET"
             
-            print(request.url)
+//            print(request.url)
             
             receiptsGroup.enter()
             URLSession.shared.dataTask(with: request) {
@@ -120,7 +118,7 @@ final class TemporaryHolder {
     private func getCalculations() {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         let url = Server.SERVER + Server.CALCULATIONS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
         var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)

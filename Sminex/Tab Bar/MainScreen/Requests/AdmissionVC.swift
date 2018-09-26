@@ -239,7 +239,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     func getMessages(){
             
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pass  = getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt())
+        let pass  = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_COMM_ID + "login=" + login + "&pwd=" + pass + "&id=" + self.reqId_)!)
         request.httpMethod = "GET"
