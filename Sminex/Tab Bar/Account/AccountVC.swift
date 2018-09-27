@@ -121,7 +121,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.DELETE_CLIENT + "login=\(login)&pwd=\(pwd)&deviceid=\(deviceId)")!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -136,7 +136,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
             }
             
             #if DEBUG
-//                print(String(data: data!, encoding: .utf8) ?? "")
+                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
         }.resume()

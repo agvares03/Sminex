@@ -419,6 +419,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 TemporaryHolder.instance.getFinance()
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken
+                print(token)
                 if token != nil {
                     self.sendAppId(id_account: answer[4], token: token!)
                 }

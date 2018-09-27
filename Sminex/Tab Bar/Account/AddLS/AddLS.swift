@@ -28,24 +28,27 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
     open var isFromApp_ = false
     
     private var responseString = ""
-    
     private var ls = ""
     
     // Признак того, вводим мы телефон или нет
     private var itsPhone = false
     
     @IBAction private func btn_go_action(_ sender: UIButton) {
-        
-        //        performSegue(withIdentifier: Segues.fromRegistrationSminex.toRegStep1, sender: self)
-        
-        if edLS.text != "" {
+        var didntAdd = false
+        TemporaryHolder.instance.allLS.forEach {
+            let item: AllLSJson = $0
+            let ident = item.ident!
+            if ident == edLS.text{
+                didntAdd = true
+            }
+        }
+        if didntAdd == true{
+            self.txtDesc.textColor = .red
+            self.txtDesc.text = "Лицевой счёт уже добавлен"
+            self.changeGoButton(isEnabled: false)
+        }else if edLS.text != "" {
             view.endEditing(true)
             self.startAnimation()
-            // Здесь мы проверяем есть ли лиц. счет или номер телефона
-            // Если нет лиц. счета -                 txtDesc = "Лицевой счет " + edLS + " не зарегистрирован".
-            // Если нет телефона у лиц. счета -      txtDesc = "По лицевому счету " + edLS + " не обнаружен привязанный телефон".
-            // Если указанный телефон не обнаружен - txtDesc = "Телефон " + edLS + " не привязан ни к одному лицевому счету".
-            // Если все ок - переходим на страницу ввода кода смс
             
             checkLS()
         } else {
@@ -101,7 +104,7 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//            print("responseString = \(self.responseString)")
+            print("responseString = \(self.responseString)")
             #endif
             self.choice()
             }.resume()

@@ -69,7 +69,7 @@ class CustomAlertViewController: UIViewController {
         if login1 != ident{
             var request = URLRequest(url: URL(string: Server.SERVER + "GetPwdHashByIdent.ashx?" + "ident=" + ident)!)
             request.httpMethod = "GET"
-//            print(request)
+            print(request)
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
                 
@@ -86,7 +86,7 @@ class CustomAlertViewController: UIViewController {
                 let responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-//                print("responseString = \(responseString)")
+                print("responseString = \(responseString)")
                 #endif
                 self.edLoginText = ident
                 self.edPassText = responseString
@@ -117,7 +117,7 @@ class CustomAlertViewController: UIViewController {
                 return
             }
             
-            let responseString = String(data: data!, encoding: .utf8) ?? ""
+//            let responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
 //            print("responseString = \(responseString)")
@@ -163,6 +163,26 @@ class CustomAlertViewController: UIViewController {
         self.saveUsersDefaults()
     }
     
+    private func deleteLS(code: String) {
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
+        let code = code.stringByAddingPercentEncodingForRFC3986() ?? ""
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + "DeleteAccountFromParentAccount.ashx?" + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)")!)
+        request.httpMethod = "GET"
+        print(request)
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            
+            let responseString = String(data: data!, encoding: .utf8) ?? ""
+            #if DEBUG
+                print("responseString = \(responseString)")
+            #endif
+            }.resume()
+    }
+    
     func enter(login: String? = nil, pass: String? = nil) {
         
         // Авторизация пользователя
@@ -171,7 +191,7 @@ class CustomAlertViewController: UIViewController {
             let txtPass = pass == nil ? self.edPassText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
             var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + txtPass.stringByAddingPercentEncodingForRFC3986()! + "&addBcGuid=1")!)
             request.httpMethod = "GET"
-//            print(request)
+            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
@@ -189,10 +209,10 @@ class CustomAlertViewController: UIViewController {
                 self.responseString = String(data: data!, encoding: .utf8) ?? ""
                 
 //                #if DEBUG
-//                    print("responseString = \(self.responseString)")
+                    print("responseString = \(self.responseString)")
 //                #endif
                 if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                    self.responseString = self.responseString.replacingOccurrences(of: "error:  ", with: "")
+                    self.responseString = self.responseString.replacingOccurrences(of: "error: ", with: "")
                     let alert = UIAlertController(title: "Ошибка сервера", message: self.responseString, preferredStyle: .alert)
                     alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                     DispatchQueue.main.async {
@@ -566,6 +586,23 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
         tableView.deselectRow(at: indexPath, animated: true)
         index = indexPath.row
         self.tappedCell()
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        let item: AllLSJson = data[indexPath.row]
+        let ident: String = item.ident!
+        if editingStyle == .delete{
+            let alert = UIAlertController(title: "Удалить лицевой счёт «\(ident)»?", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) -> Void in }
+            let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { (_) -> Void in
+                self.deleteLS(code: ident)
+                self.data.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .bottom)
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(deleteAction)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
 }

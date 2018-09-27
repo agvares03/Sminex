@@ -150,7 +150,7 @@ class FirstController: UIViewController {
         let pass        = defaults.string(forKey: "pass")
         
         if login != nil && login != "" {
-            if pass != nil && login != "" {
+            if (UserDefaults.standard.string(forKey: "pwd") != "") && login != "" {
                 enter(login: login!, pass: pass!)
                 
             } else {
@@ -192,7 +192,7 @@ class FirstController: UIViewController {
         // Авторизация пользователя
         let txtLogin = login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
-        let pwd = getHash(pass: txtPass, salt: getSalt(login: txtLogin))
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         UserDefaults.standard.setValue(pwd, forKey: "pwd")
         UserDefaults.standard.synchronize()
@@ -330,6 +330,7 @@ class FirstController: UIViewController {
                 TemporaryHolder.instance.getFinance()
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken
+                print(token)
                 if token != nil {
                     self.send_id_app(id_account: answer[4], token: token!)
                 }
@@ -391,7 +392,7 @@ class FirstController: UIViewController {
         
         var request = URLRequest(url: URL(string: urlPath)!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
@@ -402,7 +403,7 @@ class FirstController: UIViewController {
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//                print("token (add) = \(String(describing: self.responseString))")
+                print("token (add) = \(String(describing: self.responseString))")
             #endif
             UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
             UserDefaults.standard.synchronize()
