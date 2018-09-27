@@ -957,7 +957,6 @@
 				4171BE591ECB369A00B9CDD7 /* Resources */,
 				8157CDB438B62F3F0A57F740 /* [CP] Embed Pods Frameworks */,
 				1C5AEB9D2126B26B00D9FF49 /* Embed App Extensions */,
-				8C07874541804303FFE620CC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1093,7 +1092,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFDateHelper/AFDateHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Arcane/Arcane.framework",
@@ -1128,22 +1127,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8C07874541804303FFE620CC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
