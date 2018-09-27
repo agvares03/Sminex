@@ -84,7 +84,7 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let code = edLS.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.CHECK_ACCOUNT + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)")!)
-//        print(request)
+        print(request)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {

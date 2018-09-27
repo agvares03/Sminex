@@ -217,8 +217,6 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 self.descTxt.textColor  = .red
                 
             } else {
-                self.descTxt.text       = self.responseString
-                self.descTxt.textColor  = .gray
                 let alert = UIAlertController(title: "Ваш личный счёт успешно добавлен", message: "", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                     self.performSegue(withIdentifier: "completeAdd", sender: self) }

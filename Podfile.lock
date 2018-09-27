@@ -2,58 +2,61 @@ PODS:
   - AFDateHelper (4.2.7)
   - Alamofire (4.7.3)
   - Arcane (1.2.1)
-  - DeviceKit (1.7.0)
+  - DeviceKit (1.8.1)
   - ExpyTableView (1.0)
-  - Firebase/Core (5.6.0):
+  - Firebase/Core (5.9.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (= 5.1.1)
-  - Firebase/CoreOnly (5.6.0):
-    - FirebaseCore (= 5.1.1)
-  - Firebase/Messaging (5.6.0):
+    - FirebaseAnalytics (= 5.2.0)
+  - Firebase/CoreOnly (5.9.0):
+    - FirebaseCore (= 5.1.4)
+  - Firebase/Messaging (5.9.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (= 3.1.0)
-  - FirebaseAnalytics (5.1.1):
+    - FirebaseMessaging (= 3.1.2)
+  - FirebaseAnalytics (5.2.0):
     - FirebaseCore (~> 5.1)
     - FirebaseInstanceID (~> 3.2)
-    - GoogleAppMeasurement (~> 5.1)
-    - GoogleUtilities/AppDelegateSwizzler (~> 5.2.0)
-    - GoogleUtilities/MethodSwizzler (~> 5.2.0)
+    - GoogleAppMeasurement (~> 5.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
     - GoogleUtilities/Network (~> 5.2)
-    - "GoogleUtilities/NSData+zlib (~> 5.2)"
+    - GoogleUtilities/NSData+zlib (~> 5.2)
     - nanopb (~> 0.3)
-  - FirebaseCore (5.1.1):
+  - FirebaseCore (5.1.4):
     - GoogleUtilities/Logger (~> 5.2)
-  - FirebaseInstanceID (3.2.1):
+  - FirebaseInstanceID (3.2.2):
     - FirebaseCore (~> 5.1)
-    - GoogleUtilities/Environment (~> 5.2)
-  - FirebaseMessaging (3.1.0):
+    - GoogleUtilities/Environment (~> 5.3)
+    - GoogleUtilities/UserDefaults (~> 5.3)
+  - FirebaseMessaging (3.1.2):
     - FirebaseCore (~> 5.0)
     - FirebaseInstanceID (~> 3.0)
     - GoogleUtilities/Reachability (~> 5.2)
     - Protobuf (~> 3.1)
-  - FSPagerView (0.7.2)
+  - FSPagerView (0.8.0)
   - Gloss (2.0.1)
-  - GoogleAppMeasurement (5.1.1):
-    - GoogleUtilities/AppDelegateSwizzler (~> 5.2.0)
-    - GoogleUtilities/MethodSwizzler (~> 5.2.0)
+  - GoogleAppMeasurement (5.2.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
     - GoogleUtilities/Network (~> 5.2)
-    - "GoogleUtilities/NSData+zlib (~> 5.2)"
+    - GoogleUtilities/NSData+zlib (~> 5.2)
     - nanopb (~> 0.3)
-  - GoogleUtilities/AppDelegateSwizzler (5.2.2):
+  - GoogleUtilities/AppDelegateSwizzler (5.3.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (5.2.2)
-  - GoogleUtilities/Logger (5.2.2):
+  - GoogleUtilities/Environment (5.3.0)
+  - GoogleUtilities/Logger (5.3.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (5.2.2):
+  - GoogleUtilities/MethodSwizzler (5.3.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (5.2.2):
+  - GoogleUtilities/Network (5.3.0):
     - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/NSData+zlib
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (5.2.2)"
-  - GoogleUtilities/Reachability (5.2.2):
+  - GoogleUtilities/NSData+zlib (5.3.0)
+  - GoogleUtilities/Reachability (5.3.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (5.3.0):
     - GoogleUtilities/Logger
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
@@ -62,12 +65,12 @@ PODS:
   - nanopb/encode (0.3.8)
   - Protobuf (3.6.1)
   - SimpleImageViewer (1.1.1)
-  - SwiftyXMLParser (4.1.0)
-  - UIScreenExtension (0.0.2)
-  - "UITextView+Placeholder (1.2.1)"
-  - YandexMobileMetrica (3.2.0):
-    - YandexMobileMetrica/Static (= 3.2.0)
-  - YandexMobileMetrica/Static (3.2.0)
+  - SwiftyXMLParser (4.2.0)
+  - UIScreenExtension (0.0.5)
+  - UITextView+Placeholder (1.2.1)
+  - YandexMobileMetrica (3.3.0):
+    - YandexMobileMetrica/Static (= 3.3.0)
+  - YandexMobileMetrica/Static (3.3.0)
 
 DEPENDENCIES:
   - AFDateHelper
@@ -82,30 +85,8 @@ DEPENDENCIES:
   - SimpleImageViewer
   - SwiftyXMLParser (from `https://github.com/yahoojapan/SwiftyXMLParser.git`)
   - UIScreenExtension (from `https://github.com/marchv/UIScreenExtension`)
-  - "UITextView+Placeholder"
+  - UITextView+Placeholder
   - YandexMobileMetrica
-
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - AFDateHelper
-    - Alamofire
-    - Arcane
-    - DeviceKit
-    - ExpyTableView
-    - Firebase
-    - FirebaseAnalytics
-    - FirebaseCore
-    - FirebaseInstanceID
-    - FirebaseMessaging
-    - FSPagerView
-    - Gloss
-    - GoogleAppMeasurement
-    - GoogleUtilities
-    - nanopb
-    - Protobuf
-    - SimpleImageViewer
-    - "UITextView+Placeholder"
-    - YandexMobileMetrica
 
 EXTERNAL SOURCES:
   SwiftyXMLParser:
@@ -115,35 +96,35 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SwiftyXMLParser:
-    :commit: 1ddcad0a09efb85f2325d994c2169cd9ba116ae3
+    :commit: 8d5c12d0f1109621b6a4a90a30e3ad635d7efc75
     :git: https://github.com/yahoojapan/SwiftyXMLParser.git
   UIScreenExtension:
-    :commit: 34c85c0196b2a85a97bbbcdf06b318e3178ad838
+    :commit: 605b17820bfa1ae5ff02633885d9371bfcc40030
     :git: https://github.com/marchv/UIScreenExtension
 
 SPEC CHECKSUMS:
   AFDateHelper: 4ad66fb19503041fbba8a3018cb7ef9c71b2ff88
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Arcane: 870689a8ba7145a7dec0c2d7d7836b50c9f12636
-  DeviceKit: 6a5bdeb103c03757bb94aef1ccb01e08bc8ef4ee
+  DeviceKit: eb29be542f5473b46b1c719011cf7de3ec5264ca
   ExpyTableView: 75fe6494d4613fd3dc4bd965cce6e14cec7e2223
-  Firebase: 75ea9e232eefa158c1049028030b8f661a2ccb62
-  FirebaseAnalytics: 993577e91157feb40945abedd6ab346d8a4b6ac8
-  FirebaseCore: cb9ee75e0894def766167c95a4d5a14b1c138269
-  FirebaseInstanceID: ea5af6920d0a4a29b40459d055bebe4a6c1333c4
-  FirebaseMessaging: f67b3719f520ee200da0e20ce577fe2bce0c01d0
-  FSPagerView: 7515f63c424da71623d299d4fbbfb3dd884642ff
+  Firebase: 383fa29aca93e371cab776b48a5c66544d3c2003
+  FirebaseAnalytics: 831f1f127f4a75698e9875a87bf7e2668730d953
+  FirebaseCore: 2a84b6b325792a4319ef71ee18819dcba08d2fd7
+  FirebaseInstanceID: 78ba376fcd5b94c001f9999b2cbd3d1f1e56e78d
+  FirebaseMessaging: d6feeb06218d2675b4149b0ada925a6b707a74cf
+  FSPagerView: 53d0cd11a233d662ff23e37ed8ee4ecea3cec693
   Gloss: 1e8743f8de1fbe14a97f220ff901cba91ae5f8f8
-  GoogleAppMeasurement: f7507b39b70ad0bd80b3d81518b2f43868974307
-  GoogleUtilities: 06b66f9567769a7958db20a92f0128b2843e49d5
+  GoogleAppMeasurement: 2b3a023a61239c8d002e6e4fcf4abce8eddce0e0
+  GoogleUtilities: 760ccb53b7c7f40f9c02d8c241f76f841a7a6162
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   SimpleImageViewer: 34c3a2cde2d9ac022146772cefc27fca14b0c8b1
-  SwiftyXMLParser: b5a79fb8a730903703d0a92d30752a0b05158967
-  UIScreenExtension: 01da75cfff48e87ff8c9b443c335019641b36eaa
-  "UITextView+Placeholder": 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
-  YandexMobileMetrica: f18374ee6977a4cd1d0a86298a0df4ad7baf4135
+  SwiftyXMLParser: 0942fd979ab5c54658e16628156e9d32e08924c5
+  UIScreenExtension: 0ee0b7498977aac86214265d66d1509c320d23e9
+  UITextView+Placeholder: 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
+  YandexMobileMetrica: 415e4e8a7a23121a3d086958a655f444dd340edb
 
 PODFILE CHECKSUM: 3e5960ee32a37322ee925d2ead77ac10f532b322
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.4.0
