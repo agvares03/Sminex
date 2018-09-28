@@ -213,7 +213,7 @@ class CustomAlertViewController: UIViewController {
 //                #endif
                 if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                     self.responseString = self.responseString.replacingOccurrences(of: "error: ", with: "")
-                    let alert = UIAlertController(title: "Ошибка сервера", message: self.responseString, preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Ошибка", message: self.responseString, preferredStyle: .alert)
                     alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                     DispatchQueue.main.async {
                         self.present(alert, animated: true, completion: nil)
@@ -300,7 +300,8 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "0")
                     
-                    self.tabBarController?.selectedIndex = 0
+                    self.tabBarController?.selectedIndex = 1
+                    self.tabBarController?.selectedIndex = 2
                     self.removeFromParentViewController()
                     self.view.removeFromSuperview()
                 }
