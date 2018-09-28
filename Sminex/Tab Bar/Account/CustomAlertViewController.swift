@@ -103,7 +103,7 @@ class CustomAlertViewController: UIViewController {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_ALL_ACCOUNTS + "login=" + txtLogin + "&pwd=" + pwd!)!)
         request.httpMethod = "GET"
-//        print(request)
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
