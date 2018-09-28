@@ -677,6 +677,7 @@
 		0D24EE30C876B6B1DBB8BFA3AB53282B /* FIRMessaging.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRMessaging.h; path = Firebase/Messaging/Public/FIRMessaging.h; sourceTree = "<group>"; };
 		0D5B218A0865C25CCBD9FE0A65F02F16 /* FirebaseAnalytics.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FirebaseAnalytics.xcconfig; sourceTree = "<group>"; };
 		0D80F6FAD6C6C78B6663FF64640588C9 /* ExpyTableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpyTableView.swift; path = ExpyTableView/Classes/ExpyTableView.swift; sourceTree = "<group>"; };
+		0D971B7CEE131BBFD688BFB3404402DF /* firebaseinstanceid.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = firebaseinstanceid.framework; path = frameworks/firebaseinstanceid.framework; sourceTree = "<group>"; };
 		0E0D946DF88A2300681AE25A4E0CDCCF /* FIRMessagingConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRMessagingConnection.h; path = Firebase/Messaging/FIRMessagingConnection.h; sourceTree = "<group>"; };
 		10305B357963F7B1550C942A3E2B7B73 /* SwiftyXMLParser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyXMLParser.framework; path = SwiftyXMLParser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1108C0F7A328A5571098A803E673BE5E /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
@@ -1022,7 +1023,6 @@
 		E77C62E4D56C3F1DEDDC3242F6A2DF39 /* GULNSData+zlib.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "GULNSData+zlib.h"; path = "GoogleUtilities/NSData+zlib/GULNSData+zlib.h"; sourceTree = "<group>"; };
 		E7B68A90EC3D05C21ACD24D2C703881B /* GPBUnknownFieldSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBUnknownFieldSet.h; path = objectivec/GPBUnknownFieldSet.h; sourceTree = "<group>"; };
 		E7DBBC0272AF6C74A55916DD6F4F8935 /* Pods-Sminex-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sminex-Info.plist"; sourceTree = "<group>"; };
-		E7DFDA4FFEDBC2B39B568D22C648AD8E /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Frameworks/FirebaseInstanceID.framework; sourceTree = "<group>"; };
 		E80D195659D86ABC4333A636698E06FA /* GPBProtocolBuffers_RuntimeSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBProtocolBuffers_RuntimeSupport.h; path = objectivec/GPBProtocolBuffers_RuntimeSupport.h; sourceTree = "<group>"; };
 		E8E6002CB9B0688C62B46AE66CF23173 /* GPBDictionary.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBDictionary.h; path = objectivec/GPBDictionary.h; sourceTree = "<group>"; };
 		E98DDD89AADD8DBBF1759CDE228018A1 /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Alamofire.modulemap; sourceTree = "<group>"; };
@@ -1483,7 +1483,7 @@
 		3700259B3C461E8E44855043E125B8C9 /* FirebaseInstanceID */ = {
 			isa = PBXGroup;
 			children = (
-				6D8C7ABB1E99661AAE4EEA2D594D521B /* Frameworks */,
+				7B8E11F4CAA0AA2895C78B5A2EE81C41 /* Frameworks */,
 				3FDC749ED45CD41EDB11F7626EC3CD18 /* Support Files */,
 			);
 			name = FirebaseInstanceID;
@@ -1665,14 +1665,6 @@
 			name = MethodSwizzler;
 			sourceTree = "<group>";
 		};
-		6D8C7ABB1E99661AAE4EEA2D594D521B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				E7DFDA4FFEDBC2B39B568D22C648AD8E /* FirebaseInstanceID.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		73C3E2B97B178D0F4689B20285EB9826 /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -1692,6 +1684,14 @@
 				33D8E86A9E48A6C7C8C38818F887A5D0 /* GULLoggerLevel.h */,
 			);
 			name = Logger;
+			sourceTree = "<group>";
+		};
+		7B8E11F4CAA0AA2895C78B5A2EE81C41 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0D971B7CEE131BBFD688BFB3404402DF /* firebaseinstanceid.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7C6635A687A56EF05F829E6F6BD3ADC6 /* Arcane */ = {
