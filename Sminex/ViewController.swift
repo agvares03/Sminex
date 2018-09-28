@@ -195,6 +195,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 10, *) {
+            // Disables the password autoFill accessory view.
+            edLogin.textContentType = UITextContentType("")
+            edPass.textContentType = UITextContentType("")
+        }
+        
         sprtTopConst = sprtLabel.frame.origin.y
         edLogin.delegate = self
         edPass.delegate  = self
