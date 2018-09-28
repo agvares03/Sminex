@@ -15,6 +15,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var res:         UILabel!
     @IBOutlet private weak var name:        UILabel!
     @IBOutlet private weak var date:        UILabel!
+    @IBOutlet private weak var dateBtn:     UIButton!
     @IBOutlet private weak var outcome:     UILabel!
     
     @IBOutlet private weak var picker:      UIPickerView!
@@ -23,8 +24,26 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         navigationController?.popViewController(animated: true)
     }
     
+    @IBAction func datePickerPresed(_ sender: UIButton) {
+        if picker.isHidden {
+            
+            //            if !imgScroll.isHidden {
+            //                //                sendBtnConst.constant   = 180
+            //                //
+            //                //            } else {
+            //                //                sendBtnConst.constant   = 340
+            //                imageConst.constant     = 180
+            //            }
+            picker.isHidden         = false
+        } else {
+            picker.isHidden         = true
+        }
+    }
+    
     open var data_:     MeterValue?
     open var period_:   [CounterPeriod]?
+    var selectedYear: String?
+    var years:[String] = []
     
     private var values: [CounterHistoryCellData] = []
     
@@ -35,19 +54,36 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         
         // Выбор года - уберем с экрана
         picker.isHidden = true
+        picker.delegate = self
         
         fraction = data_?.fractionalNumber
         
         res.text = data_?.resource
         name.text = "Счетчик " + (data_?.meterUniqueNum)!
-        date.text = period_![0].year
+        years.append(period_![0].year!)
+        var i = 0
+        period_?.forEach { period in
+            if period.year! != years[i]{
+                years.append(period.year!)
+                i += 1
+            }
+        }
+        dateBtn.setTitle(period_![0].year, for: .normal)
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"
         
-        var metValues: [MeterValue] = []
+        self.setData()
         
+        collection.delegate     = self
+        collection.dataSource   = self
+    }
+    
+    func setData(){
+        var metValues: [MeterValue] = []
+        values.removeAll()
         period_?.forEach { period in
             
-            guard period.year == period_?.first?.year else { return }
+            //            guard period.year == period_?.first?.year else { return }
+            guard period.year == dateBtn.titleLabel?.text else { return }
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
                 if val.meterUniqueNum == data_?.meterUniqueNum {
@@ -58,13 +94,11 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         }
         
         metValues.forEach {
-           values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: $0.valueInput ?? "", fraction: fraction!) )
+            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: $0.valueInput ?? "", fraction: fraction!) )
         }
         
         values.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }
-        
-        collection.delegate     = self
-        collection.dataSource   = self
+        collection.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -80,6 +114,51 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collection.frame.size.width, height: 30.0)
+    }
+}
+
+extension CounterHistoryVC: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return years.count
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return years[row]
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        selectedYear = years[row]
+        dateBtn.setTitle(selectedYear, for: .normal)
+        self.setData()
+        picker.isHidden = true
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        
+        var label: UILabel
+        
+        if let view = view as? UILabel {
+            label = view
+        } else {
+            label = UILabel()
+        }
+        
+        label.textColor = .black
+        label.textAlignment = .center
+        label.font = UIFont(name: "Menlo-Regular", size: 15)
+        
+        label.text = years[row]
+        
+        return label
     }
 }
 
