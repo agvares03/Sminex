@@ -44,7 +44,8 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
         }
         if didntAdd == true{
             self.txtDesc.textColor = .red
-            self.txtDesc.text = "Лицевой счёт уже добавлен"
+            let ident: String = edLS.text!
+            self.txtDesc.text = "Лицевой счёт \(ident) уже добавлен в приложение"
             self.changeGoButton(isEnabled: false)
         }else if edLS.text != "" {
             view.endEditing(true)
