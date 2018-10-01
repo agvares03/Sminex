@@ -55,6 +55,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 imagePicker.delegate = self
                 imagePicker.sourceType = .camera
                 imagePicker.allowsEditing = true
+                imagePicker.setEditing(true, animated: true)
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }))
