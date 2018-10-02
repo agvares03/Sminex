@@ -30,6 +30,7 @@ class CustomAlertViewController: UIViewController {
     @IBOutlet weak var viewConst: NSLayoutConstraint!
     @IBOutlet weak var tableConst: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     @IBAction func addLSBtnPressed(_ sender: UIButton) {
     }
@@ -42,9 +43,12 @@ class CustomAlertViewController: UIViewController {
 //        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped(tapGestureRecognizer:)))
 //        self.view.isUserInteractionEnabled = true
 //        self.view.addGestureRecognizer(tapGestureRecognizer)
-        if tapped != nil {
-            performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
-        }
+//        if tapped != nil {
+//            performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
+//        }
+        TemporaryHolder.instance.allLS.removeAll()
+        self.data.removeAll()
+        self.startAnimation()
         getAllLS()
     }
     
@@ -54,13 +58,6 @@ class CustomAlertViewController: UIViewController {
         self.removeFromParentViewController()
         self.view.removeFromSuperview()
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "newLS" {
-//            let regVC = segue.destination as! AddLS
-//            regVC.isNew = true
-//        }
-//    }
     
     func tappedCell() {
         let login1 = UserDefaults.standard.string(forKey: "login")
@@ -97,13 +94,14 @@ class CustomAlertViewController: UIViewController {
     
     private func getAllLS(login: String? = nil, pass: String? = nil){
         TemporaryHolder.instance.allLS.removeAll()
+        self.data.removeAll()
         let login1 = UserDefaults.standard.string(forKey: "login")
         let pwd = UserDefaults.standard.string(forKey: "pwd")
         let txtLogin = login == nil ? login1?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_ALL_ACCOUNTS + "login=" + txtLogin + "&pwd=" + pwd!)!)
         request.httpMethod = "GET"
-        print(request)
+//        print(request)
         URLSession.shared.dataTask(with: request) {
             data, response, error in
             
@@ -117,10 +115,10 @@ class CustomAlertViewController: UIViewController {
                 return
             }
             
-//            let responseString = String(data: data!, encoding: .utf8) ?? ""
+            let responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//            print("responseString = \(responseString)")
+            print("responseString = \(responseString)")
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 if let lsArr = AllLSJsonData(json: json!)?.data {
@@ -128,6 +126,7 @@ class CustomAlertViewController: UIViewController {
                         TemporaryHolder.instance.allLS.append(contentsOf: lsArr)
                         self.data = TemporaryHolder.instance.allLS
                         DispatchQueue.main.sync {
+                            self.stopAnimation()
                             self.tableView.reloadData()
                         }
                     }
@@ -470,6 +469,16 @@ class CustomAlertViewController: UIViewController {
             defaults.setValue(self.edPassText.stringByAddingPercentEncodingForRFC3986()!, forKey: "pwd")
             defaults.synchronize()
         }
+    }
+    
+    private func startAnimation() {
+        indicator.isHidden = false
+        indicator.startAnimating()
+    }
+    
+    private func stopAnimation() {
+        indicator.isHidden = true
+        indicator.stopAnimating()
     }
 }
 

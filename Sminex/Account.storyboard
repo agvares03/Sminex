@@ -1287,17 +1287,23 @@
                                     <constraint firstAttribute="trailing" secondItem="umW-Ia-NJk" secondAttribute="trailing" id="xv4-dC-gVE"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="853-uD-UER">
+                                <rect key="frame" x="197" y="530" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.023913388324873108" green="0.023913388324873108" blue="0.023913388324873108" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="KYR-OY-FZF" firstAttribute="top" secondItem="v72-th-7id" secondAttribute="bottom" constant="185" id="0dT-9y-V5w"/>
                             <constraint firstItem="Tkl-uW-zwR" firstAttribute="top" secondItem="KYR-OY-FZF" secondAttribute="bottom" constant="20" id="HVS-i5-F10"/>
+                            <constraint firstItem="Tkl-uW-zwR" firstAttribute="top" secondItem="853-uD-UER" secondAttribute="bottom" constant="186" id="O7L-F2-hHc"/>
                             <constraint firstItem="KYR-OY-FZF" firstAttribute="leading" secondItem="ilu-Hy-pPF" secondAttribute="leadingMargin" id="gOd-1h-FJN"/>
                             <constraint firstItem="KYR-OY-FZF" firstAttribute="trailing" secondItem="ilu-Hy-pPF" secondAttribute="trailingMargin" id="o7c-1D-Zhk"/>
+                            <constraint firstItem="853-uD-UER" firstAttribute="centerX" secondItem="KYR-OY-FZF" secondAttribute="centerX" id="qc8-QX-g6d"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="backView" destination="HbC-UA-Ppe" id="SVX-Xr-biP"/>
+                        <outlet property="indicator" destination="853-uD-UER" id="0b0-hF-ng7"/>
                         <outlet property="tableConst" destination="dBJ-F2-ezl" id="w7t-bd-uu5"/>
                         <outlet property="tableView" destination="Zc8-fJ-AAr" id="EKc-TL-RfK"/>
                         <outlet property="viewConst" destination="vkm-ZE-SzC" id="fih-nc-pFf"/>
@@ -1947,12 +1953,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="account" width="25" height="28"/>
-        <image name="add" width="25" height="25"/>
+        <image name="account" width="75" height="84"/>
+        <image name="add" width="18.75" height="18.75"/>
         <image name="add_photo_txt" width="330" height="165"/>
         <image name="arrow_right" width="40" height="65"/>
         <image name="check_label" width="14" height="11"/>
-        <image name="default_userpic" width="400" height="400"/>
+        <image name="default_userpic" width="80" height="80"/>
         <image name="icSettings" width="30" height="30"/>
         <image name="ic_mobile" width="12" height="12"/>
         <image name="ic_show_password" width="22" height="15"/>
