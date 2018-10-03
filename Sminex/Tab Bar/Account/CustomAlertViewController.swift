@@ -60,6 +60,7 @@ class CustomAlertViewController: UIViewController {
     }
     
     func tappedCell() {
+        self.startAnimation()
         let login1 = UserDefaults.standard.string(forKey: "login")
         tapped = data[index]
         let ident: String = (tapped?.ident)! as String
@@ -76,6 +77,7 @@ class CustomAlertViewController: UIViewController {
                         let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                         alert.addAction(cancelAction)
                         self.present(alert, animated: true, completion: nil)
+                        self.stopAnimation()
                     }
                     return
                 }
@@ -111,6 +113,7 @@ class CustomAlertViewController: UIViewController {
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
+                    self.stopAnimation()
                 }
                 return
             }
@@ -201,6 +204,7 @@ class CustomAlertViewController: UIViewController {
                         let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                         alert.addAction(cancelAction)
                         self.present(alert, animated: true, completion: nil)
+                        self.stopAnimation()
                     }
                     return
                 }
@@ -215,6 +219,7 @@ class CustomAlertViewController: UIViewController {
                     let alert = UIAlertController(title: "Ошибка", message: self.responseString, preferredStyle: .alert)
                     alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                     DispatchQueue.main.async {
+                        self.stopAnimation()
                         self.present(alert, animated: true, completion: nil)
                     }
                 }else{
@@ -278,7 +283,7 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Flats")
                     db.del_db(table_name: "Ls")
                     db.parse_Houses()
-                    
+                    self.stopAnimation()
                     self.performSegue(withIdentifier: Segues.fromViewController.toAppsCons, sender: self)
                     
                 } else {                         // пользователь
@@ -298,7 +303,7 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Applications")
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "0")
-                    
+                    self.stopAnimation()
                     self.tabBarController?.selectedIndex = 1
                     self.tabBarController?.selectedIndex = 2
                     self.removeFromParentViewController()
@@ -309,6 +314,7 @@ class CustomAlertViewController: UIViewController {
                 let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
+                self.stopAnimation()
                 self.present(alert, animated: true, completion: nil)
 
             }
