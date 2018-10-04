@@ -46,7 +46,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
                 imagePicker.sourceType = .photoLibrary
-//                imagePicker.allowsEditing = true
+                imagePicker.allowsEditing = true
                 self.cameraOn = false
                 self.present(imagePicker, animated: true, completion: nil)
             }
@@ -226,13 +226,13 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         }
         
         dismiss(animated: true, completion: nil)
-//        if cameraOn == true{
+        if cameraOn == true{
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomCrop") as! CustomCropController
             vc.imageCrop = image
             cameraOn = false
             self.addChildViewController(vc)
             self.view.addSubview(vc.view)
-//        }
+        }
         
     }
     
