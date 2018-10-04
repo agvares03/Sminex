@@ -341,7 +341,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             startIndicator()
         }
         // Авторизация пользователя
-        if !itsPhone{
+        if !itsPhone && !isFromSettings_{
             self.LoginText = self.edLogin.text!
         }
         DispatchQueue.main.async {
