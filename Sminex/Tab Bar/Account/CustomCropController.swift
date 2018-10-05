@@ -56,7 +56,6 @@ class CustomCropController: UIViewController, UIScrollViewDelegate, UIImagePicke
         imageViewHeight.constant = image.size.height
         let scaleHeight = scrollView.frame.size.width/image.size.width
         let scaleWidth = scrollView.frame.size.height/image.size.height
-//        let scaleWidth = 281.5/image.size.height
         scrollView.minimumZoomScale = max(scaleWidth, scaleHeight)
         scrollView.zoomScale = max(scaleWidth, scaleHeight)
         scle = max(281.5/image.size.height, scaleHeight)
@@ -69,10 +68,8 @@ class CustomCropController: UIViewController, UIScrollViewDelegate, UIImagePicke
         let x:CGFloat = scrollView.contentOffset.x * scale
         let y:CGFloat = scrollView.contentOffset.y + imgTop.constant * scale
         print(x, y, scale, scrollView.zoomScale)
-//        let width:CGFloat = 375.0 * scale
         let height:CGFloat = scrollView.frame.size.width * scale
         let width:CGFloat = scrollView.frame.size.width * scale
-//        let height:CGFloat = scrollView.frame.size.height * scale
         let croppedCGImage = imageView.image?.cgImage?.cropping(to: CGRect(x: x, y: y, width: width, height: height))
         print(x, y, width, height)
         let croppedImage = UIImage(cgImage: croppedCGImage!)

@@ -251,9 +251,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
             
             var strNumber = value_?.guid ?? ""
             
-            
-            print("###: ")
-            print(count.text.stringByAddingPercentEncodingForRFC3986()!)
+//            print("###: ",count.text.stringByAddingPercentEncodingForRFC3986()!)
             let newCount = count.text.replacingOccurrences(of: ",", with: ".")
             
             let urlPath = Server.SERVER + Server.ADD_METER
@@ -330,7 +328,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
             } else if self.responseString == "5" {
                 self.delegate?.update()
                 let newCount1 = self.count.text.replacingOccurrences(of: ",", with: ".")
-                print(self.count.text)
+//                print(self.count.text)
                 self.monthValLabel.text    = (self.self.value_?.fractionalNumber?.contains(find: "alse") ?? true)
                                                 ? String(describing: Int(newCount1)!)
                                                 : String(describing: Float(newCount1)!)

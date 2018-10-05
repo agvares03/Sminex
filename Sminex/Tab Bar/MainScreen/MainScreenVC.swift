@@ -245,7 +245,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.synchronize()
             }.resume()
         let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
-        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+        var dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+        dateTo = 6
         UserDefaults.standard.set(false, forKey: "didntSchet")
         UserDefaults.standard.synchronize()
         if (dateFrom == 0 && dateTo == 0) && !(UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")) {
