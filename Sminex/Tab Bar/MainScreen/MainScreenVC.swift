@@ -153,33 +153,36 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.global(qos: .userInitiated).async {
-            DispatchQueue.global(qos: .background).async {
-                let res = self.getRequests()
-                var count = 1
-                sleep(2)
-                DispatchQueue.main.sync {
-                    self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-                    res.forEach {
-                        self.data[3]![count] = $0
-                        count += 1
+        if UserDefaults.standard.bool(forKey: "backBtn"){
+            DispatchQueue.global(qos: .userInitiated).async {
+                DispatchQueue.global(qos: .background).async {
+                    let res = self.getRequests()
+                    var count = 1
+                    sleep(2)
+                    DispatchQueue.main.sync {
+                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                        res.forEach {
+                            self.data[3]![count] = $0
+                            count += 1
+                        }
+                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                        self.collection.reloadData()
                     }
-                    self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-                    self.collection.reloadData()
                 }
-            }
-            self.fetchQuestions()
-            self.fetchDeals()
-            self.fetchDebt()
-            self.fetchNews()
-            DispatchQueue.main.async {
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
+                self.fetchQuestions()
+                self.fetchDeals()
+                self.fetchDebt()
+                self.fetchNews()
+                DispatchQueue.main.async {
+                    if #available(iOS 10.0, *) {
+                        self.collection.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                 }
             }
         }
+        UserDefaults.standard.set(false, forKey: "backBtn")
         tabBarController?.tabBar.tintColor = .black
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
