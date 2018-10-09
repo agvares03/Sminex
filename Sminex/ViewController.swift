@@ -429,7 +429,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 TemporaryHolder.instance.getFinance()
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken
-                print(token)
                 if token != nil {
                     self.sendAppId(id_account: answer[4], token: token!)
                 }
@@ -557,8 +556,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             self.responseString = String(data: data!, encoding: .utf8)!
             
             #if DEBUG
-                print("token (add) = \(String(describing: self.responseString))")
+//                print("token (add) = \(String(describing: self.responseString))")
             #endif
+            let UUID = UIDevice.current.identifierForVendor?.uuidString
+            UserDefaults.standard.setValue(UUID, forKey: "uuId")
             UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
             UserDefaults.standard.synchronize()
             
