@@ -312,7 +312,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if Device() == .iPhoneX && Device() == .simulator(.iPhoneX) {
             sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 220
         } else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 140
+            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 135
         } else{
             sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 125
         }

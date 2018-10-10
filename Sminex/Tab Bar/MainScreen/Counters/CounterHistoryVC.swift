@@ -68,7 +68,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
                 i += 1
             }
         }
-        dateBtn.setTitle(period_![0].year, for: .normal)
+        dateBtn.setTitle("▼ " + period_![0].year!, for: .normal)
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"
         
         self.setData()
@@ -84,7 +84,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         var predInput = "0,00"
         values.removeAll()
         period_?.forEach { period in
-            guard period.year == dateBtn.titleLabel?.text else { return }
+            guard period.year == dateBtn.titleLabel?.text?.replacingOccurrences(of: "▼ ", with: "") else { return }
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
                 if val.meterUniqueNum == data_?.meterUniqueNum {
@@ -96,7 +96,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
             }
         }
         period_?.forEach { period in
-            let str: String = (dateBtn.titleLabel?.text)!
+            let str: String = (dateBtn.titleLabel?.text?.replacingOccurrences(of: "▼ ", with: ""))!
             guard period.year == String((Int(str)! - 1)) else { return }
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
@@ -177,7 +177,7 @@ extension CounterHistoryVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         selectedYear = years[row]
-        dateBtn.setTitle(selectedYear, for: .normal)
+        dateBtn.setTitle("▼ " + selectedYear!, for: .normal)
         self.setData()
         picker.isHidden = true
     }
