@@ -145,7 +145,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 }
             }
             cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
-                desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
+            desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
             cell.contentView.backgroundColor = backColor
             return cell
         
