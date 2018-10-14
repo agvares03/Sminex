@@ -61,7 +61,7 @@ final class TemporaryHolder {
         }
     }
     public var contactsList: [ContactsJson] = []
-    public var allLS: [AllLSJson] = []
+    public var allLS: [AllLsData] = []
     
     public var receipts:      [AccountBillsJson]        = []
     public var calcs:         [AccountCalculationsJson] = []
@@ -154,7 +154,6 @@ final class TemporaryHolder {
                 let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDate)
                 var k = 0
                 self.calcs.forEach{
-                    print($0.numMonthSet!, $0.numYearSet!)
                     if $0.numYearSet! > dateTimeComponents.year!{
                         self.calcs.remove(at: k)
                     }

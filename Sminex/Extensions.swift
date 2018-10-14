@@ -8,6 +8,7 @@
 
 import UIKit
 import DeviceKit
+import Gloss
 
 extension UIDevice {
     
@@ -197,7 +198,29 @@ func saveGlobalData(date1:              String,
                     lsNumber:           String,
                     desc:               String) {
     
+    var lsList      : [String] = []
+    var addressList : [String] = []
+    if UserDefaults.standard.stringArray(forKey: "allLS") != nil{
+        lsList = UserDefaults.standard.stringArray(forKey: "allLS")!
+        addressList = UserDefaults.standard.stringArray(forKey: "allAddress")!
+        var k = 0
+        lsList.forEach(){
+            if $0 == lsNumber{
+                k = 1
+            }
+        }
+        if k == 0{
+            lsList.append(lsNumber)
+            addressList.append(adress)
+        }
+    }else{
+        lsList.append(lsNumber)
+        addressList.append(adress)
+    }
+    
     let defaults = UserDefaults.standard
+    defaults.setValue(lsList, forKey: "allLS")
+    defaults.setValue(addressList, forKey: "allAddress")
     defaults.setValue(lsNumber, forKey: "login")
     defaults.setValue(date1, forKey: "date1")
     defaults.setValue(date2, forKey: "date2")
