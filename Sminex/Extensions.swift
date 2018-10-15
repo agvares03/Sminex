@@ -210,6 +210,8 @@ func saveGlobalData(date1:              String,
             }
         }
         if k == 0{
+            lsList.removeAll()
+            addressList.removeAll()
             lsList.append(lsNumber)
             addressList.append(adress)
         }
