@@ -217,6 +217,20 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 self.descTxt.textColor  = .red
                 
             } else {
+                var lsList      : [String] = []
+                var addressList : [String] = []
+
+                lsList = UserDefaults.standard.stringArray(forKey: "allLS")!
+                addressList = UserDefaults.standard.stringArray(forKey: "allAddress")!
+                
+                lsList.append(self.code)
+                addressList.append(UserDefaults.standard.string(forKey: "adress")!)
+                
+                let defaults = UserDefaults.standard
+                defaults.setValue(lsList, forKey: "allLS")
+                defaults.setValue(addressList, forKey: "allAddress")
+                defaults.synchronize()
+                
                 let alert = UIAlertController(title: "Ваш личный счёт успешно добавлен", message: "", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                     self.performSegue(withIdentifier: "completeAdd", sender: self) }

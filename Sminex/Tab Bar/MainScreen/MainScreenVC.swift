@@ -153,33 +153,36 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.global(qos: .userInitiated).async {
-            DispatchQueue.global(qos: .background).async {
-                let res = self.getRequests()
-                var count = 1
-                sleep(2)
-                DispatchQueue.main.sync {
-                    self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-                    res.forEach {
-                        self.data[3]![count] = $0
-                        count += 1
+        if UserDefaults.standard.bool(forKey: "backBtn"){
+            DispatchQueue.global(qos: .userInitiated).async {
+                DispatchQueue.global(qos: .background).async {
+                    let res = self.getRequests()
+                    var count = 1
+                    sleep(2)
+                    DispatchQueue.main.sync {
+                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                        res.forEach {
+                            self.data[3]![count] = $0
+                            count += 1
+                        }
+                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+                        self.collection.reloadData()
                     }
-                    self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-                    self.collection.reloadData()
                 }
-            }
-            self.fetchQuestions()
-            self.fetchDeals()
-            self.fetchDebt()
-            self.fetchNews()
-            DispatchQueue.main.async {
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
+                self.fetchQuestions()
+                self.fetchDeals()
+                self.fetchDebt()
+                self.fetchNews()
+                DispatchQueue.main.async {
+                    if #available(iOS 10.0, *) {
+                        self.collection.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                 }
             }
         }
+        UserDefaults.standard.set(false, forKey: "backBtn")
         tabBarController?.tabBar.tintColor = .black
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
@@ -245,7 +248,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.synchronize()
             }.resume()
         let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
-        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+        var dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+        dateTo = 6
         UserDefaults.standard.set(false, forKey: "didntSchet")
         UserDefaults.standard.synchronize()
         if (dateFrom == 0 && dateTo == 0) && !(UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")) {
@@ -276,7 +280,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if dateFrom > dateTo{
                 var dateComponents = DateComponents()
                 dateComponents.year = dateTimeComponents.year!
-                dateComponents.month = dateTimeComponents.month! + 1
+                if dateTimeComponents.day! > dateTo{
+                    dateComponents.month = dateTimeComponents.month! + 1
+                }else{
+                    dateComponents.month = dateTimeComponents.month!
+                    leftDays = dateTimeComponents.day! - dateTo
+                }
                 dateComponents.day = dateTo
                 let userCalendar = Calendar.current
                 endDate = userCalendar.date(from: dateComponents)
@@ -291,7 +300,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if dateFrom != 0{
                 var dateComponents = DateComponents()
                 dateComponents.year = dateTimeComponents.year!
-                dateComponents.month = dateTimeComponents.month!
+                if dateFrom > dateTo && dateTimeComponents.day! > dateTo{
+                    dateComponents.month = dateTimeComponents.month!
+                }else{
+                    dateComponents.month = dateTimeComponents.month! - 1
+                }
                 dateComponents.day = dateFrom
                 let userCalendar = Calendar.current
                 startDate = userCalendar.date(from: dateComponents)
@@ -301,16 +314,20 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if leftDays <= 0{
                 UserDefaults.standard.set(true, forKey: "didntSchet")
                 UserDefaults.standard.synchronize()
-                if dateTimeComponents.day! > dateTo{
-                    if dateTimeComponents.month! == 1 || dateTimeComponents.month! == 3 || dateTimeComponents.month! == 5 || dateTimeComponents.month! == 7 || dateTimeComponents.month! == 8 || dateTimeComponents.month! == 10 || dateTimeComponents.month! == 12{
-                        leftDays = (31 - (dateTimeComponents.day! - 1)) + dateTo
-                    }else if dateTimeComponents.month! == 2{
-                        leftDays = (28 - (dateTimeComponents.day! - 1)) + dateTo
-                    }else{
-                        leftDays = (30 - (dateTimeComponents.day! - 1)) + dateTo
+                if dateFrom > dateTo{
+                    if dateTimeComponents.day! > dateTo{
+                        if dateTimeComponents.month! == 1 || dateTimeComponents.month! == 3 || dateTimeComponents.month! == 5 || dateTimeComponents.month! == 7 || dateTimeComponents.month! == 8 || dateTimeComponents.month! == 10 || dateTimeComponents.month! == 12{
+                            leftDays = (31 - (dateTimeComponents.day! - 1)) + dateTo
+                        }else if dateTimeComponents.month! == 2{
+                            leftDays = (28 - (dateTimeComponents.day! - 1)) + dateTo
+                        }else{
+                            leftDays = (30 - (dateTimeComponents.day! - 1)) + dateTo
+                        }
+                    }else {
+                        leftDays = (dateTo - dateTimeComponents.day!) + 1
                     }
                     if leftDays == 1 {
-                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                        data[5]![1] = SchetCellData(title: "Остался \(leftDays) день для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                         
                     } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
                         data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
@@ -321,7 +338,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }else{
                     leftDays = dateTo - dateTimeComponents.day!
                     if leftDays == 1 {
-                        data[5]![1] = SchetCellData(title: "Осталось \(leftDays) день для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                        data[5]![1] = SchetCellData(title: "Остался \(leftDays) день для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                         
                     } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
                         data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
@@ -332,7 +349,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }else if leftDays == 1 {
                 if dateTimeComponents.day! > dateTo{
-                    data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) день", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                    data[5]![1] = SchetCellData(title: "До передачи показаний остался \(leftDays) день", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                 }else{
                     data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) день", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                 }

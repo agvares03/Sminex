@@ -20,6 +20,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var emptyLabel:  UILabel!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
+        UserDefaults.standard.set(true, forKey: "backBtn")
         navigationController?.popViewController(animated: true)
     }
     

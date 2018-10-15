@@ -68,7 +68,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
                 i += 1
             }
         }
-        dateBtn.setTitle(period_![0].year, for: .normal)
+        dateBtn.setTitle("▼ " + period_![0].year!, for: .normal)
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"
         
         self.setData()
@@ -79,22 +79,62 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func setData(){
         var metValues: [MeterValue] = []
+        var arrInput:[String] = []
+        var arrValue:[String] = []
+        var predInput = "0,00"
         values.removeAll()
         period_?.forEach { period in
-            
-            //            guard period.year == period_?.first?.year else { return }
-            guard period.year == dateBtn.titleLabel?.text else { return }
+            guard period.year == dateBtn.titleLabel?.text?.replacingOccurrences(of: "▼ ", with: "") else { return }
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
                 if val.meterUniqueNum == data_?.meterUniqueNum {
                     metValues.append(val)
-                    
+                    print(val)
+                    arrInput.append(val.valueInput!)
+                    arrValue.append(val.value!)
                 }
             }
         }
-        
+        period_?.forEach { period in
+            let str: String = (dateBtn.titleLabel?.text?.replacingOccurrences(of: "▼ ", with: ""))!
+            guard period.year == String((Int(str)! - 1)) else { return }
+            period.perXml["MeterValue"].forEach {
+                let val = MeterValue($0, period: period.numMonth ?? "1")
+                if val.meterUniqueNum == data_?.meterUniqueNum {
+                    if predInput == "0,00" && val.valueInput != "0,00"{
+                       predInput = val.valueInput!
+                    }
+                }
+            }
+        }
+        var i = 0
         metValues.forEach {
-            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: $0.valueInput ?? "", fraction: fraction!) )
+            var income = "0,00"
+            var k = 0
+            if income == "0,00"{
+                arrValue.forEach {
+                    if $0 != "0,00" && k > i && income == "0,00"{
+                        income = $0
+                        return
+                    }
+                    k += 1
+                }
+            }
+            var n = 0
+            if income == "0,00"{
+                arrInput.forEach {
+                    if $0 != "0,00" && n > i && income == "0,00"{
+                        income = $0
+                        return
+                    }
+                    n += 1
+                }
+            }
+            if income == "0,00"{
+                income = predInput
+            }
+            i += 1
+            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: income, fraction: fraction!) )
         }
         
         values.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }
@@ -137,7 +177,7 @@ extension CounterHistoryVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         selectedYear = years[row]
-        dateBtn.setTitle(selectedYear, for: .normal)
+        dateBtn.setTitle("▼ " + selectedYear!, for: .normal)
         self.setData()
         picker.isHidden = true
     }
@@ -170,8 +210,8 @@ final class CounterHistoryCell: UICollectionViewCell {
     @IBOutlet private weak var income:  UILabel!
     
     fileprivate func display(_ item: CounterHistoryCellData) {
+        self.month.text = item.month
         
-        self.month.text     = item.month
         if item.fractionNumber.contains(find: "alse") {
             self.send.text      = item.send.replacingOccurrences(of: ",00", with: "")
             self.outcome.text   = item.outcome.replacingOccurrences(of: ",00", with: "")

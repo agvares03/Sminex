@@ -36,8 +36,8 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
     @IBAction private func btn_go_action(_ sender: UIButton) {
         var didntAdd = false
         TemporaryHolder.instance.allLS.forEach {
-            let item: AllLSJson = $0
-            let ident = item.ident!
+            let item: AllLsData = $0
+            let ident = item.ident
             if ident == edLS.text{
                 didntAdd = true
             }

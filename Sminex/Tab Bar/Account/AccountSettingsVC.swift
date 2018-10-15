@@ -35,6 +35,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBOutlet private weak var contactLabel:        UILabel!
     @IBOutlet private weak var emailLabel:          UILabel!
     
+    var cameraOn = false
+    
     @IBAction private func imageViewPressed(_ sender: UIButton) {
         
         let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -45,6 +47,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 imagePicker.delegate = self
                 imagePicker.sourceType = .photoLibrary
                 imagePicker.allowsEditing = true
+                self.cameraOn = false
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }))
@@ -54,16 +57,12 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
                 imagePicker.sourceType = .camera
-                imagePicker.allowsEditing = true
+                self.cameraOn = true
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }))
         action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
         present(action, animated: true, completion: nil)
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
     }
     
     @IBAction private func exitButtonPressed(_ sender: UIButton) {
@@ -181,6 +180,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
+        navigationController?.isNavigationBarHidden = false
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
@@ -219,10 +219,21 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             image = img
         }
         accountImageView.image = image
-        DispatchQueue.global(qos: .background).async {
-            UserDefaults.standard.setValue(UIImagePNGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128))), forKey: "accountIcon")
+        if cameraOn == false{
+            DispatchQueue.global(qos: .background).async {
+                UserDefaults.standard.setValue(UIImagePNGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128))), forKey: "accountIcon")
+            }
         }
+        
         dismiss(animated: true, completion: nil)
+        if cameraOn == true{
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomCrop") as! CustomCropController
+            vc.imageCrop = image
+            cameraOn = false
+            self.addChildViewController(vc)
+            self.view.addSubview(vc.view)
+        }
+        
     }
     
     private func editAccountInfo() {

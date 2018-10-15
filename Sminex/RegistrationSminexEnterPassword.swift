@@ -115,8 +115,8 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     
     open var isReg_     = false
     open var isNew      = false
-    open var login_     = ""
-    open var phone_     = ""
+    open var login_     = "1234"
+    open var phone_     = "1234567890"
     
     private var responseString  = ""
     private var const: CGFloat = 0.0
@@ -516,9 +516,11 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             return (view.frame.size.height - const) - 200
             
         } else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            return (view.frame.size.height - const) - 115
+            return (view.frame.size.height - const) - 135
+        } else if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .iPhone5 || Device() == .simulator(.iPhone5){
+            return (view.frame.size.height - const) - 105
         } else {
-            return (view.frame.size.height - const) - 100
+            return (view.frame.size.height - const) - 105
         }
     }
 }

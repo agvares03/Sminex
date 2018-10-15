@@ -96,16 +96,12 @@ open class DigitInputView: UIView {
             
             guard let textField = textField else { return "" }
             var txt = textField.text!
-            
-            if acceptableCharacters!.contains(find: ".") {
+            if acceptableCharacters!.contains(find: ",") {
                 let string = labels.map { $0.text! }.joined()
                 return String(Float(string)!)
             }
-            
             return txt
-            
         }
-        
     }
     
     fileprivate var labels = [DigitLabel]()
@@ -317,7 +313,9 @@ open class DigitInputView: UIView {
             if txt.hasPrefix("00") {
                 textField.text!.remove(at: txt.startIndex)
             }
-            
+            if (txt.contains(find: "..")) && txt.length > 5 {
+                textField.text = textField.text!.replacingOccurrences(of: ",,", with: ",")
+            }
             if (txt.contains(find: ".")) && txt.length > 1 {
                 if let index = txt.index(of: ".") {
                     let substring = txt.substring(toIndex: index.encodedOffset)
@@ -332,7 +330,6 @@ open class DigitInputView: UIView {
 //            if !txt.contains(find: ",") {
 //
 //            }
-            
         }
         
         for (index, item) in txt.reversed().enumerated() {
@@ -393,6 +390,7 @@ extension DigitInputView: UITextFieldDelegate {
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 //        let string = string.replacingOccurrences(of: ",", with: ".")
+        print(string)
         let char = string.cString(using: .utf8)
         let isBackSpace = strcmp(char, "\\b")
         if isBackSpace == -92, let text = textField.text {
@@ -430,12 +428,10 @@ extension DigitInputView: UITextFieldDelegate {
         if !(acceptableCharacters?.contains(find: string) ?? true) {
             return false
         }
-        
-        if (string == "," && (textField.text ?? "").contains(find: ",")){
+        if (string == "," && (textField.text ?? "").contains(find: ",")) || (string == "," && !(textField.text ?? "").contains(find: ",") && (textField.text?.length)! > 4){
             return false
         
         } else if (string == "," && !(textField.text ?? "").contains(find: ",")){
-            
             textField.text = (textField.text ?? "") + string
             didChange()
             return false

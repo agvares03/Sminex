@@ -145,7 +145,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 }
             }
             cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
-                desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
+            desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
             cell.contentView.backgroundColor = backColor
             return cell
         
@@ -406,28 +406,24 @@ final class FinanceHeaderCell: UITableViewCell {
         self.date.text      = date
         
         let defaults = UserDefaults.standard
-        pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
-        pay_QR.isHidden       = defaults.bool(forKey: "denyOnlinePayments")
-        pay_QR_image.isHidden = defaults.bool(forKey: "denyOnlinePayments")
+        
         if (defaults.bool(forKey: "denyTotalOnlinePayments")) {
             pay_button.isHidden   = true
-            pay_QR.isHidden       = true
-            pay_QR_image.isHidden = true
             
-            isPayed.constant      = 35
+            isPayed.constant      = 15
             heigthPayed.constant  = 150
 
         } else if (defaults.bool(forKey: "denyOnlinePayments")) {
-            
-            isPayed.constant      = 35
+            pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
+            isPayed.constant      = 15
             heigthPayed.constant  = 150
-            
         }
-        print(defaults.bool(forKey: "denyQRCode"))
-        
+        print(isPayed.constant, heigthPayed.constant)
         // Выводить или нет кнопку QR-код
-        pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
-        pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
+        if defaults.bool(forKey: "denyQRCode"){
+            pay_QR.isHidden           = defaults.bool(forKey: "denyQRCode")
+            pay_QR_image.isHidden     = defaults.bool(forKey: "denyQRCode")
+        }
         
     }
 }

@@ -11,9 +11,11 @@ import Gloss
 import DeviceKit
 import FirebaseMessaging
 
+private protocol MainDataProtocol:  class {}
+
 class CustomAlertViewController: UIViewController {
-    private var data: [AllLSJson] = []
-    open var tapped: AllLSJson?
+    private var data: [AllLsData] = []
+    open var tapped: AllLsData?
     private var index = 0
     var edLoginText = String()
     var edPassText = String()
@@ -30,6 +32,7 @@ class CustomAlertViewController: UIViewController {
     @IBOutlet weak var viewConst: NSLayoutConstraint!
     @IBOutlet weak var tableConst: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     @IBAction func addLSBtnPressed(_ sender: UIButton) {
     }
@@ -42,9 +45,12 @@ class CustomAlertViewController: UIViewController {
 //        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped(tapGestureRecognizer:)))
 //        self.view.isUserInteractionEnabled = true
 //        self.view.addGestureRecognizer(tapGestureRecognizer)
-        if tapped != nil {
-            performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
-        }
+//        if tapped != nil {
+//            performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
+//        }
+        TemporaryHolder.instance.allLS.removeAll()
+        self.data.removeAll()
+        self.startAnimation()
         getAllLS()
     }
     
@@ -55,14 +61,8 @@ class CustomAlertViewController: UIViewController {
         self.view.removeFromSuperview()
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "newLS" {
-//            let regVC = segue.destination as! AddLS
-//            regVC.isNew = true
-//        }
-//    }
-    
     func tappedCell() {
+        self.startAnimation()
         let login1 = UserDefaults.standard.string(forKey: "login")
         tapped = data[index]
         let ident: String = (tapped?.ident)! as String
@@ -79,6 +79,7 @@ class CustomAlertViewController: UIViewController {
                         let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                         alert.addAction(cancelAction)
                         self.present(alert, animated: true, completion: nil)
+                        self.stopAnimation()
                     }
                     return
                 }
@@ -95,45 +96,21 @@ class CustomAlertViewController: UIViewController {
         }
     }
     
-    private func getAllLS(login: String? = nil, pass: String? = nil){
+    private func getAllLS(){
         TemporaryHolder.instance.allLS.removeAll()
-        let login1 = UserDefaults.standard.string(forKey: "login")
-        let pwd = UserDefaults.standard.string(forKey: "pwd")
-        let txtLogin = login == nil ? login1?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_ALL_ACCOUNTS + "login=" + txtLogin + "&pwd=" + pwd!)!)
-        request.httpMethod = "GET"
-        print(request)
-        URLSession.shared.dataTask(with: request) {
-            data, response, error in
-            
-            if error != nil {
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
+        self.data.removeAll()
+        let lsList      : [String] = UserDefaults.standard.stringArray(forKey: "allLS")!
+        let addressList : [String] = UserDefaults.standard.stringArray(forKey: "allAddress")!
+            if lsList.count != 0 {
+                var i = 0
+                lsList.forEach(){
+                    TemporaryHolder.instance.allLS.append(AllLsData(ident: $0, address: addressList[i]))
+                    i += 1
                 }
-                return
+                self.data = TemporaryHolder.instance.allLS
+                self.stopAnimation()
+                self.tableView.reloadData()
             }
-            
-//            let responseString = String(data: data!, encoding: .utf8) ?? ""
-            
-            #if DEBUG
-//            print("responseString = \(responseString)")
-            #endif
-            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                if let lsArr = AllLSJsonData(json: json!)?.data {
-                    if lsArr.count != 0 {
-                        TemporaryHolder.instance.allLS.append(contentsOf: lsArr)
-                        self.data = TemporaryHolder.instance.allLS
-                        DispatchQueue.main.sync {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
-            }
-            }.resume()
     }
     
     private func exit() {
@@ -164,23 +141,20 @@ class CustomAlertViewController: UIViewController {
     }
     
     private func deleteLS(code: String) {
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        let code = code.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var lsList      : [String] = []
+        var addressList : [String] = []
         
-        var request = URLRequest(url: URL(string: Server.SERVER + "DeleteAccountFromParentAccount.ashx?" + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)")!)
-        request.httpMethod = "GET"
-        print(request)
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            guard data != nil else { return }
-            
-            let responseString = String(data: data!, encoding: .utf8) ?? ""
-            #if DEBUG
-                print("responseString = \(responseString)")
-            #endif
-            }.resume()
+        lsList = UserDefaults.standard.stringArray(forKey: "allLS")!
+        addressList = UserDefaults.standard.stringArray(forKey: "allAddress")!
+        
+        let k = lsList.firstIndex(of: code)
+        
+        lsList.remove(at: k!)
+        addressList.remove(at: k!)
+        let defaults = UserDefaults.standard
+        defaults.setValue(lsList, forKey: "allLS")
+        defaults.setValue(addressList, forKey: "allAddress")
+        defaults.synchronize()
     }
     
     func enter(login: String? = nil, pass: String? = nil) {
@@ -202,6 +176,7 @@ class CustomAlertViewController: UIViewController {
                         let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                         alert.addAction(cancelAction)
                         self.present(alert, animated: true, completion: nil)
+                        self.stopAnimation()
                     }
                     return
                 }
@@ -216,6 +191,7 @@ class CustomAlertViewController: UIViewController {
                     let alert = UIAlertController(title: "Ошибка", message: self.responseString, preferredStyle: .alert)
                     alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                     DispatchQueue.main.async {
+                        self.stopAnimation()
                         self.present(alert, animated: true, completion: nil)
                     }
                 }else{
@@ -279,7 +255,7 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Flats")
                     db.del_db(table_name: "Ls")
                     db.parse_Houses()
-                    
+                    self.stopAnimation()
                     self.performSegue(withIdentifier: Segues.fromViewController.toAppsCons, sender: self)
                     
                 } else {                         // пользователь
@@ -299,7 +275,7 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Applications")
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "0")
-                    
+                    self.stopAnimation()
                     self.tabBarController?.selectedIndex = 1
                     self.tabBarController?.selectedIndex = 2
                     self.removeFromParentViewController()
@@ -310,6 +286,7 @@ class CustomAlertViewController: UIViewController {
                 let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
+                self.stopAnimation()
                 self.present(alert, animated: true, completion: nil)
 
             }
@@ -471,6 +448,16 @@ class CustomAlertViewController: UIViewController {
             defaults.synchronize()
         }
     }
+    
+    private func startAnimation() {
+        indicator.isHidden = false
+        indicator.startAnimating()
+    }
+    
+    private func stopAnimation() {
+        indicator.isHidden = true
+        indicator.stopAnimating()
+    }
 }
 
 extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate {
@@ -590,8 +577,8 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        let item: AllLSJson = data[indexPath.row]
-        let ident: String = item.ident!
+        let item: AllLsData = data[indexPath.row]
+        let ident: String = item.ident
         if editingStyle == .delete{
             let alert = UIAlertController(title: "Удалить лицевой счёт «\(ident)»?", message: "", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) -> Void in }
@@ -616,7 +603,7 @@ class AllLsTableCell: UITableViewCell {
     @IBOutlet private weak var desc: UILabel!
     @IBOutlet private var checkImg: UIImageView!
     
-    func configure(item: AllLSJson?) {
+    func configure(item: AllLsData?) {
         checkImg.isHidden = true
         let login = UserDefaults.standard.string(forKey: "login")
         guard let item = item else { return }
@@ -631,34 +618,13 @@ class AllLsTableCell: UITableViewCell {
     
 }
 
-struct AllLSJsonData: JSONDecodable {
+final class AllLsData: MainDataProtocol {
     
-    let data: [AllLSJson]?
+    let ident:  String
+    let address:   String
     
-    init?(json: JSON) {
-        data = "data" <~~ json
+    init(ident: String, address: String) {
+        self.ident   = ident
+        self.address = address
     }
 }
-
-final class AllLSJson: NSObject, JSONDecodable, NSCoding {
-    
-    let address:       String?
-    let ident:        String?
-    
-    init(json: JSON) {
-        address    = "Address"  <~~ json
-        ident        = "Ident"    <~~ json
-    }
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(address, forKey: "Address")
-        aCoder.encode(ident, forKey: "Ident")
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        address       = aDecoder.decodeObject(forKey: "address")      as? String
-        ident        = aDecoder.decodeObject(forKey: "ident")       as? String
-    }
-}
-//{"data":["1172","2688","2732","2745","2746"]}
-//{"data":[{"Ident":"1478","Address":"-"},{"Ident":"2740","Address":""},{"Ident":"2744","Address":""},{"Ident":"2742","Address":""}]}

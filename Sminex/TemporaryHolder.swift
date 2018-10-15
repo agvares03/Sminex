@@ -61,7 +61,7 @@ final class TemporaryHolder {
         }
     }
     public var contactsList: [ContactsJson] = []
-    public var allLS: [AllLSJson] = []
+    public var allLS: [AllLsData] = []
     
     public var receipts:      [AccountBillsJson]        = []
     public var calcs:         [AccountCalculationsJson] = []
@@ -141,6 +141,25 @@ final class TemporaryHolder {
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.calcs = AccountCalculationsData(json: json!)!.data?.reversed() ?? []
                 var currMonth = 0
+                let currentDate = Date()
+                let userCalendar = Calendar.current
+                let requestedComponents: Set<Calendar.Component> = [
+                    .year,
+                    .month,
+                    .day,
+                    .hour,
+                    .minute,
+                    .second
+                ]
+                let dateTimeComponents = userCalendar.dateComponents(requestedComponents, from: currentDate)
+                var k = 0
+                self.calcs.forEach{
+                    if $0.numYearSet! > dateTimeComponents.year!{
+                        self.calcs.remove(at: k)
+                    }
+                    k += 1
+                }
+                
                 self.filteredCalcs = self.calcs.filter {
                     if ($0.numMonthSet ?? 0) != currMonth {
                         currMonth = ($0.numMonthSet ?? 0)
