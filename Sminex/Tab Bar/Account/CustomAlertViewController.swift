@@ -62,11 +62,11 @@ class CustomAlertViewController: UIViewController {
     }
     
     func tappedCell() {
-        self.startAnimation()
         let login1 = UserDefaults.standard.string(forKey: "login")
         tapped = data[index]
         let ident: String = (tapped?.ident)! as String
         if login1 != ident{
+            self.startAnimation()
             var request = URLRequest(url: URL(string: Server.SERVER + "GetPwdHashByIdent.ashx?" + "ident=" + ident)!)
             request.httpMethod = "GET"
             print(request)
@@ -135,6 +135,7 @@ class CustomAlertViewController: UIViewController {
         UserDefaults.standard.removeObject(forKey: "DealsImg")
         UserDefaults.standard.removeObject(forKey: "newsList")
         UserDefaults.standard.removeObject(forKey: "newsLastId")
+        UserDefaults.standard.set(true, forKey: "backBtn")
         UserDefaults.standard.synchronize()
         self.choice()
         self.saveUsersDefaults()
