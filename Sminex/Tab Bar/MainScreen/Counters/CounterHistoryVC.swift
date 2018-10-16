@@ -64,6 +64,9 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         fraction = data_?.fractionalNumber
         
         res.text = data_?.resource
+        if res.text!.contains(find: "лектроэнергия"){
+            res.text = res.text! + "\n"
+        }
         name.text = "Счетчик " + (data_?.meterUniqueNum)!
         years.append(period_![0].year!)
         var i = 0
