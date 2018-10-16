@@ -535,7 +535,7 @@
                                 <rect key="frame" x="16" y="203" width="335" height="420"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="420" id="WmV-my-evl"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="420" id="WmV-my-evl"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="HdP-pj-755">
                                     <size key="itemSize" width="307.5" height="30"/>
@@ -616,7 +616,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="veY-sM-bde">
-                                <rect key="frame" x="16" y="150" width="56" height="32"/>
+                                <rect key="frame" x="16" y="144" width="56" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="vT7-MS-yaH"/>
                                 </constraints>
@@ -629,7 +629,7 @@
                                 </connections>
                             </button>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d04-ml-O4a">
-                                <rect key="frame" x="16" y="119" width="133" height="94"/>
+                                <rect key="frame" x="16" y="115" width="133" height="94"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </pickerView>
@@ -639,7 +639,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="mgo-G0-Mrw" secondAttribute="trailing" constant="8" id="3Dk-hd-GKP"/>
                             <constraint firstItem="lzU-Ba-95u" firstAttribute="top" secondItem="l3L-k6-FBR" secondAttribute="bottom" constant="26" id="3tY-9d-xDY"/>
                             <constraint firstItem="l3L-k6-FBR" firstAttribute="leading" relation="lessThanOrEqual" secondItem="veY-sM-bde" secondAttribute="trailing" constant="53" id="7PS-pc-thw"/>
-                            <constraint firstItem="l3L-k6-FBR" firstAttribute="top" secondItem="veY-sM-bde" secondAttribute="top" id="B66-Hz-stN"/>
+                            <constraint firstItem="l3L-k6-FBR" firstAttribute="top" secondItem="veY-sM-bde" secondAttribute="top" constant="6" id="B66-Hz-stN"/>
                             <constraint firstItem="BMT-rp-aCB" firstAttribute="trailing" secondItem="mgo-G0-Mrw" secondAttribute="trailing" id="Ddk-iy-cg8"/>
                             <constraint firstItem="Pas-4E-a8B" firstAttribute="top" secondItem="cEd-EZ-P0J" secondAttribute="bottom" constant="16" id="FND-Vt-37T"/>
                             <constraint firstItem="gM8-v9-hO8" firstAttribute="top" secondItem="BMT-rp-aCB" secondAttribute="top" id="Fm7-7B-AjX"/>
@@ -658,7 +658,7 @@
                             <constraint firstItem="l3L-k6-FBR" firstAttribute="top" secondItem="BMT-rp-aCB" secondAttribute="top" id="jXf-MW-YjZ"/>
                             <constraint firstItem="D45-3L-rlB" firstAttribute="top" secondItem="CDq-DL-0Cr" secondAttribute="bottom" id="pN6-tM-FXk"/>
                             <constraint firstItem="mgo-G0-Mrw" firstAttribute="top" secondItem="Pas-4E-a8B" secondAttribute="top" constant="4" id="uyJ-39-d2S"/>
-                            <constraint firstItem="veY-sM-bde" firstAttribute="top" secondItem="Pas-4E-a8B" secondAttribute="bottom" constant="16.5" id="vom-zd-AP6"/>
+                            <constraint firstItem="veY-sM-bde" firstAttribute="top" secondItem="Pas-4E-a8B" secondAttribute="bottom" constant="10.5" id="vom-zd-AP6"/>
                             <constraint firstItem="gM8-v9-hO8" firstAttribute="leading" secondItem="l3L-k6-FBR" secondAttribute="trailing" constant="8" id="yMt-bW-HF4"/>
                             <constraint firstItem="lzU-Ba-95u" firstAttribute="top" secondItem="BMT-rp-aCB" secondAttribute="bottom" constant="8" id="zr2-Xl-Sna"/>
                         </constraints>
