@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import DeviceKit
 
 final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate {
     
@@ -51,6 +52,10 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .iPhone5 || Device() == .simulator(.iPhone5){
+            res.font = res.font.withSize(16)
+            dateBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        }
         
         // Выбор года - уберем с экрана
         picker.isHidden = true
