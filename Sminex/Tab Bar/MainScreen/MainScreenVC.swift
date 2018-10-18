@@ -201,7 +201,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
         request.httpMethod = "GET"
-        print(request)
+//        print(request)
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             

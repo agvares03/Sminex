@@ -73,7 +73,6 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
 
             #if DEBUG
-                print("=====")
                 print("responseString = \(self.responseString)")
             #endif
 

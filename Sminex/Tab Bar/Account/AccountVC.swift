@@ -140,9 +140,8 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
             #endif
             
         }.resume()
-        
-        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "pass"), forKey: "exitPass")
-        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "login"), forKey: "exitLogin")
+        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "authPass"), forKey: "exitPass")
+        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "authLogin"), forKey: "exitLogin")
         UserDefaults.standard.setValue("", forKey: "pass")
         UserDefaults.standard.setValue("", forKey: "pwd")
         UserDefaults.standard.removeObject(forKey: "accountIcon")

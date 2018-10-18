@@ -100,6 +100,34 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         navigationController?.popViewController(animated: true)
     }
     
+    @IBAction private func retryLabelPressed(_ sender: UIButton) {
+                
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
+        let code = self.code.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.NEW_ACCOUNT_SMS + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)")!)
+        //        print(request)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.endLoading()
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            }.resume()
+        self.againLabel.isHidden    = true
+        self.againLine.isHidden     = true
+        self.startTimer()
+    }
+    
     @objc private func btn_cancel(_ sender: UITapGestureRecognizer?) {
         navigationController?.popViewController(animated: true)
     }
