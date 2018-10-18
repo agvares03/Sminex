@@ -688,11 +688,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         let defaults = UserDefaults.standard
 //        defaults.setValue(edLogin.text!, forKey: "login")
         DispatchQueue.main.async {
-            if self.edLogin.text! != UserDefaults.standard.string(forKey: "exitLogin")!{
-                let lsList      : [String] = []
-                let addressList : [String] = []
-                defaults.setValue(lsList, forKey: "allLS")
-                defaults.setValue(addressList, forKey: "allAddress")
+            if (UserDefaults.standard.string(forKey: "exitLogin") != nil){
+                if self.edLogin.text! != UserDefaults.standard.string(forKey: "exitLogin")!{
+                    let lsList      : [String] = []
+                    let addressList : [String] = []
+                    defaults.setValue(lsList, forKey: "allLS")
+                    defaults.setValue(addressList, forKey: "allAddress")
+                }
             }
             defaults.setValue(self.edLogin.text!, forKey: "authLogin")
             defaults.setValue(self.edPass.text!, forKey: "authPass")
