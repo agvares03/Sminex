@@ -126,6 +126,8 @@ class CustomAlertViewController: UIViewController {
             
             guard data != nil else { return }
             }.resume()
+        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "pass"), forKey: "exitPass")
+        UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "login"), forKey: "exitLogin")
         UserDefaults.standard.removeObject(forKey: "accountIcon")
         UserDefaults.standard.removeObject(forKey: "googleToken")
         UserDefaults.standard.removeObject(forKey: "newsList")
