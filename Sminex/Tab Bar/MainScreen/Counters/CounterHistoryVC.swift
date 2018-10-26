@@ -56,7 +56,11 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
             res.font = res.font.withSize(16)
             dateBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         }
-        
+        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+        if (250.0...280.0).contains(points) {
+            name.font = name.font.withSize(22)
+            name.minimumScaleFactor = 1
+        }
         // Выбор года - уберем с экрана
         picker.isHidden = true
         picker.delegate = self

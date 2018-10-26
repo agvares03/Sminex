@@ -84,6 +84,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }))
+        
+        if let popoverController = action.popoverPresentationController {
+            popoverController.sourceView = sender
+            popoverController.sourceRect = sender.bounds
+        }
         action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
         present(action, animated: true, completion: nil)
     }

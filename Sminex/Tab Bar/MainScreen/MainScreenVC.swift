@@ -10,6 +10,7 @@ import UIKit
 import Gloss
 import SwiftyXMLParser
 import FSPagerView
+import DeviceKit
 
 private protocol MainDataProtocol:  class {}
 private protocol CellsDelegate:     class {
@@ -461,6 +462,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //                self.dealsSize = CGSize(width: view.frame.size.width, height: 204.0)
                 return CGSize(width: view.frame.size.width, height: 0.0)
             } else {
+                let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+                if (250.0...280.0).contains(points) {
+                    return CGSize(width: view.frame.size.width, height: 600.0)
+                }
                 return CGSize(width: view.frame.size.width, height: 204.0)
             }
         } else if title == "Заявки" {
@@ -1519,7 +1524,12 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         pagerView.delegate   = self
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (300.0...320.0).contains(points) {
+        print(points)
+        
+        if (250.0...280.0).contains(points) {
+            pagerView.itemSize = CGSize(width: 820, height: 668)
+            pagerHeight.constant = 668
+        }else if (300.0...320.0).contains(points) {
             pagerView.itemSize = CGSize(width: 288, height: 144)
             pagerHeight.constant = 144
             

@@ -55,7 +55,7 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         let cell = DealsListCell.fromNib()
         cell?.display(data_[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width, height: size.height + 20)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -145,6 +145,13 @@ final class DealsListCell: UICollectionViewCell {
         image.image         = item.img
         title.text          = item.name
         desc.text           = item.desc
+        
+        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+        if (250.0...280.0).contains(points) {
+            title.font = title.font.withSize(30)
+            desc.font = desc.font.withSize(28)
+            imageHeight.constant = 200
+        }
     }
     
     class func fromNib() -> DealsListCell? {
@@ -159,7 +166,14 @@ final class DealsListCell: UICollectionViewCell {
         cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (300.0...320.0).contains(points) {
+        print(points)
+        
+        if (250.0...280.0).contains(points) {
+            cell?.title.font = cell?.title.font.withSize(30)
+            cell?.desc.font = cell?.desc.font.withSize(30)
+            cell?.imageWidth.constant  = 820
+            cell?.imageHeight.constant = 668
+        }else if (300.0...320.0).contains(points) {
             cell?.imageWidth.constant  = 288
             cell?.imageHeight.constant = 144
             

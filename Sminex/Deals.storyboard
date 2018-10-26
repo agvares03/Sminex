@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="m28-NV-Fnl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="m28-NV-Fnl">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -42,10 +41,11 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ad2-72-PnO">
                                                     <rect key="frame" x="24" y="12" width="327" height="146"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="width" constant="327" id="DaD-8N-2Hi"/>
                                                         <constraint firstAttribute="height" constant="146" id="vcE-ZA-CZo"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Барбершоп TopGun. Скидка 15% на первое посещение" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Xme-e3-8Hq">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Барбершоп TopGun. Скидка 15% на первое посещение" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xme-e3-8Hq">
                                                     <rect key="frame" x="24" y="172" width="327" height="40.666666666666657"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -61,8 +61,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Стрижка 1 500Р. Стрижка бороды 800Р. Детская стрижка 1 200Р" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="MmS-EO-e8y">
-                                                    <rect key="frame" x="24" y="218" width="327" height="38.333333333333314"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Стрижка 1 500Р. Стрижка бороды 800Р. Детская стрижка 1 200Р" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MmS-EO-e8y">
+                                                    <rect key="frame" x="24" y="217.66666666666666" width="327" height="38.333333333333343"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -88,6 +88,7 @@
                                             <outlet property="desc" destination="MmS-EO-e8y" id="RN2-ck-tb4"/>
                                             <outlet property="image" destination="ad2-72-PnO" id="ivQ-BW-Lnu"/>
                                             <outlet property="imageHeight" destination="vcE-ZA-CZo" id="FYd-h8-ps1"/>
+                                            <outlet property="imageWidth" destination="DaD-8N-2Hi" id="2yz-Cl-k52"/>
                                             <outlet property="title" destination="Xme-e3-8Hq" id="3fz-6V-2bg"/>
                                         </connections>
                                     </collectionViewCell>
@@ -163,7 +164,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b78-Fp-arA">
-                                                    <rect key="frame" x="256" y="4" width="111" height="54"/>
+                                                    <rect key="frame" x="256" y="3.3333333333333321" width="111" height="54"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="54" id="DSH-nF-SyG"/>
                                                         <constraint firstAttribute="width" constant="111" id="yuB-fd-9XR"/>
@@ -211,7 +212,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Перейти на сайт: " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gT5-zm-eit">
-                                            <rect key="frame" x="24" y="489" width="374" height="19.333333333333314"/>
+                                            <rect key="frame" x="24" y="489.66666666666669" width="374" height="19.333333333333314"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -223,7 +224,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Другие акции" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NEW-s2-YmT">
-                                            <rect key="frame" x="24" y="540" width="137" height="24"/>
+                                            <rect key="frame" x="24" y="540.66666666666663" width="137" height="24"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -235,17 +236,17 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f1X-yr-xhl">
-                                            <rect key="frame" x="24" y="311" width="374" height="173"/>
+                                            <rect key="frame" x="24" y="311.66666666666669" width="374" height="173"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="173" id="ued-eV-gF1"/>
                                             </constraints>
-                                            <mutableString key="text">Единственный по-настоящему европейский уютный бизнес-квартал. Красивая малоэтажная архитектура, собственная большая зеленая территория, насыщенная инфраструктура и клиентоориентированный сервис — все создает для покупателей, арендаторов, их клиентов и партнеров атмосферу уюта и комфорта западноевропейского города.</mutableString>
+                                            <string key="text">Единственный по-настоящему европейский уютный бизнес-квартал. Красивая малоэтажная архитектура, собственная большая зеленая территория, насыщенная инфраструктура и клиентоориентированный сервис — все создает для покупателей, арендаторов, их клиентов и партнеров атмосферу уюта и комфорта западноевропейского города.</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq9-Kk-VWV">
-                                            <rect key="frame" x="0.0" y="517" width="414" height="1"/>
+                                            <rect key="frame" x="0.0" y="517.66666666666663" width="414" height="1"/>
                                             <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="iQ7-P1-xwb"/>
