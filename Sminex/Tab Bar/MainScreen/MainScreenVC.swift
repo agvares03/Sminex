@@ -1347,7 +1347,7 @@ final class CellsHeader: UICollectionReusableView {
             self.detail.setTitle("Подробнее", for: .normal)
         } else if item.title == "Версия" {
             self.detail.setTitleColor(UIColor.black, for: .normal)
-            self.detail.setTitle("ver. 1.69", for: .normal)
+            self.detail.setTitle("ver. 1.72", for: .normal)
         } else {
             self.detail.setTitle("Все", for: .normal)
         }
