@@ -164,7 +164,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             } else if self.responseString == "xxx" {
                 self.changeDescTextTo(isError: true, text: "Ошибка сервера. Попробуйте позже")
             
-            } else if self.responseString == "error:  Найдено более одного лицевого счёта. Для уточнения введите номер лицевого счёта."{
+            } else if self.responseString == "error:  Найдено более одного лицевого счета. Для уточнения введите номер лицевого счета."{
                 self.getLSforNumber()
             } else if self.responseString.contains("error") {
                 self.changeDescTextTo(isError: true, text: self.responseString.replacingOccurrences(of: "error:", with: ""))
@@ -227,7 +227,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     }
     
     private func showLS(){
-        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счёт", preferredStyle: .actionSheet)
+        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счет", preferredStyle: .actionSheet)
         ls1.forEach {
             let text = $0
             action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
@@ -267,7 +267,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
         view.addGestureRecognizer(theTap)
         if isNew{
-            edLS.placeholder = "Лицевой счёт"
+            edLS.placeholder = "Лицевой счет"
             didntEnter.text = "Не можете добавить ЛС?"
         }
         edLS.text = ls
@@ -296,7 +296,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             navigationItem.title = "Восстановление пароля"
         }
         if isNew && isReg_{
-            navigationItem.title = "Новый лицевой счёт"
+            navigationItem.title = "Новый лицевой счет"
         }
         if self.isNew{
             self.txtDesc.textColor = .gray
@@ -389,7 +389,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         } else {
             if isNew{
                 self.txtDesc.textColor = .gray
-                self.txtDesc.text = text == nil ? "Укажите ваш лицевой счёт" : text
+                self.txtDesc.text = text == nil ? "Укажите ваш лицевой счет" : text
             }else{
                 self.txtDesc.textColor = .gray
                 self.txtDesc.text = text == nil ? "Укажите лицевой счет или телефон, привязанный к лицевому счету" : text

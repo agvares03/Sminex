@@ -260,7 +260,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 defaults.synchronize()
                 
                 let ident: String = self.code
-                let alert = UIAlertController(title: "Лицевой счёт \(ident) добавлен", message: "", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Лицевой счет \(ident) добавлен", message: "", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                     self.performSegue(withIdentifier: "completeAdd", sender: self) }
                 alert.addAction(cancelAction)

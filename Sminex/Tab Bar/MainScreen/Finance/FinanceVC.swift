@@ -42,7 +42,6 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         automaticallyAdjustsScrollViewInsets = false
         startAnimation()
         table.dataSource    = self
@@ -69,7 +68,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             cell.display("Квитанции")
         
         } else {
-            cell.display("Взаиморасчёты")
+            cell.display("Взаиморасчеты")
         }
         return cell
     }

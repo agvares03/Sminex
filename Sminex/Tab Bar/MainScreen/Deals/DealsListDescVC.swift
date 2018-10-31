@@ -10,6 +10,7 @@ import UIKit
 import Gloss
 import UIScreenExtension
 
+
 final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet private weak var collection: UICollectionView!
@@ -108,11 +109,15 @@ final class DealsListDescHeader: UICollectionReusableView {
         
         if data_?.img != nil {
             image.image = data_?.img
-        
         } else {
             image.frame.size.height = 0
         }
-        
+        let width: Int = Int((data_?.img?.size.width)!)
+        let height1: Int = Int((data_?.img?.size.height)!)
+        let r =  width / height1
+        if Double(r) < 1.5{
+            image.contentMode = .scaleToFill
+        }
         titleLabel.text = data_?.name
         bodyLabel.text = data_?.body
         
@@ -174,6 +179,7 @@ final class DealsListDescHeader: UICollectionReusableView {
                 imageHeight.constant = 144
                 
             } else if (320.0...350.0).contains(points) {
+                
                 imageWidth.constant  = 304
                 imageHeight.constant = 170
                 

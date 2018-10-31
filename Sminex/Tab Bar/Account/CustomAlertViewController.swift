@@ -581,7 +581,7 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
         let ident: String = item.ident
         if ident != UserDefaults.standard.string(forKey: "login"){
             if editingStyle == .delete{
-                let alert = UIAlertController(title: "Удалить лицевой счёт «\(ident)»?", message: "", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "Удалить лицевой счет «\(ident)»?", message: "", preferredStyle: UIAlertControllerStyle.alert)
                 let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) -> Void in }
                 let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { (_) -> Void in
                     self.deleteLS(code: ident)
@@ -593,7 +593,7 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
                 self.present(alert, animated: true, completion: nil)
             }
         }else{
-            let alert = UIAlertController(title: "Не возможно отвязать авторизованный лиц. счёт!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "Невозможно отвязать используемый лицевой счет!", message: "", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Ок", style: .cancel) { (_) -> Void in }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)

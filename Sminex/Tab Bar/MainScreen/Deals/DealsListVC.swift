@@ -143,6 +143,12 @@ final class DealsListCell: UICollectionViewCell {
     fileprivate func display(_ item: DealsJson) {
         
         image.image         = item.img
+        let width: Int = Int((item.img?.size.width)!)
+        let height: Int = Int((item.img?.size.height)!)
+        let r =  width / height
+        if Double(r) < 1.5{
+            image.contentMode = .scaleToFill
+        }
         title.text          = item.name
         desc.text           = item.desc
         

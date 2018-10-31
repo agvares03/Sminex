@@ -151,7 +151,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func showLS(){
-        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счёт", preferredStyle: .actionSheet)
+        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счет", preferredStyle: .actionSheet)
         self.ls2.forEach {
             let text = $0
             action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
@@ -755,7 +755,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             if (ls_12_end == "89") || (ls_12_end == "79") {
                 itsPhone = true
             }
-            if (ls_1_end == "9") && (LoginText.count == 10) {
+            if (ls_1_end == "9") && (LoginText.count == 10 || LoginText.count == 9) {
                 itsPhone = true
             }
         }else{
