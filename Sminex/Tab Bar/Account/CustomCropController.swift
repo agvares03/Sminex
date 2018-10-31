@@ -59,7 +59,7 @@ class CustomCropController: UIViewController, UIScrollViewDelegate, UIImagePicke
         scrollView.minimumZoomScale = max(scaleWidth, scaleHeight)
         scrollView.zoomScale = max(scaleWidth, scaleHeight)
         scle = max(281.5/image.size.height, scaleHeight)
-        print(scaleHeight, scaleWidth, scrollView.zoomScale)
+//        print(scaleHeight, scaleWidth, scrollView.zoomScale)
     }
     
     @IBAction func cropButtonPressed(_ sender: Any) {
@@ -67,11 +67,11 @@ class CustomCropController: UIViewController, UIScrollViewDelegate, UIImagePicke
         let scale:CGFloat = 1/scle
         let x:CGFloat = scrollView.contentOffset.x * scale
         let y:CGFloat = scrollView.contentOffset.y + imgTop.constant * scale
-        print(x, y, scale, scrollView.zoomScale)
+//        print(x, y, scale, scrollView.zoomScale)
         let height:CGFloat = scrollView.frame.size.width * scale
         let width:CGFloat = scrollView.frame.size.width * scale
         let croppedCGImage = imageView.image?.cgImage?.cropping(to: CGRect(x: x, y: y, width: width, height: height))
-        print(x, y, width, height)
+//        print(x, y, width, height)
         let croppedImage = UIImage(cgImage: croppedCGImage!)
         
         DispatchQueue.global(qos: .background).async {
