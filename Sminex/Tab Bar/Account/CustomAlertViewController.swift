@@ -586,6 +586,7 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
                 let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { (_) -> Void in
                     self.deleteLS(code: ident)
                     self.data.remove(at: indexPath.row)
+                    TemporaryHolder.instance.allLS.remove(at: indexPath.row)
                     tableView.deleteRows(at: [indexPath], with: .bottom)
                 }
                 alert.addAction(cancelAction)
