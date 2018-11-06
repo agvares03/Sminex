@@ -275,6 +275,17 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Applications")
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "0")
+                    
+                    var imageList   : [String:Data] = [:]
+                    
+                    let login = UserDefaults.standard.string(forKey: "login")!
+                    imageList = UserDefaults.standard.dictionary(forKey: "allIcon") as! [String : Data]
+                    
+                    if imageList.keys.firstIndex(of: login) != nil{
+                        let image = imageList[login]
+                        UserDefaults.standard.setValue(image, forKey: "accountIcon")
+                    }
+                    
                     self.stopAnimation()
                     self.tabBarController?.selectedIndex = 1
                     self.tabBarController?.selectedIndex = 2

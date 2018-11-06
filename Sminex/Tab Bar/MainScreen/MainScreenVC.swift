@@ -89,7 +89,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewDidLoad()
         // Получим данные по Бизнес-центру (выводить или нет Оплаты)
         get_info_business_center()
-        
+        getAccIcon()
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
         fetchNews()
@@ -119,6 +119,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.layer.shadowOpacity   = 0.5
         navigationController?.navigationBar.layer.shadowOffset    = CGSize(width: 0, height: 1.0)
         navigationController?.navigationBar.layer.shadowRadius    = 1
+    }
+    
+    func getAccIcon(){
+        var imageList   : [String:Data] = [:]
+        
+        let login = UserDefaults.standard.string(forKey: "login")!
+        imageList = UserDefaults.standard.dictionary(forKey: "allIcon") as! [String : Data]
+        
+        if imageList.keys.firstIndex(of: login) != nil{
+            let image = imageList[login]
+            UserDefaults.standard.setValue(image, forKey: "accountIcon")
+        }
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {

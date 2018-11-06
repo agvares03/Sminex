@@ -22,7 +22,7 @@ target 'Sminex' do
     pod 'UITextView+Placeholder'
     pod 'AFDateHelper'
     pod 'SimpleImageViewer'
-    
+    pod 'CropViewController'
 end
 
 # Workaround for Cocoapods issue #7606
