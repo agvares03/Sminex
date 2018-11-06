@@ -186,7 +186,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             }
             
             #if DEBUG
-//            print("Счётчики:", String(data: data!, encoding: .utf8)!)
+//            print("счетчики:", String(data: data!, encoding: .utf8)!)
             #endif
             
             let xml = XML.parse(data!)

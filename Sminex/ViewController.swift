@@ -77,8 +77,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             
         } else {
-            
-            if itsPhone{
+            if itsPhone && (edLogin.text?.count == 10 || edLogin.text?.count == 11 || edLogin.text?.count == 12){
                 self.getLSforNumber()
             }else{
                 // Сохраним значения
@@ -91,8 +90,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func getLSforNumber(){
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_PHONE + "phone=" + self.edLogin.text!)!)
+        var phone = self.edLogin.text!
+        let ls_1 = self.edLogin.text!.index(self.edLogin.text!.startIndex, offsetBy: 1)
+        let ls_1_end = self.edLogin.text!.substring(to: ls_1)
+        if ls_1_end == "9"{
+            phone = "+7" + self.edLogin.text!
+        }
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ACCOUNT_PHONE + "phone=" + phone)!)
         request.httpMethod = "GET"
         print(request)
         URLSession.shared.dataTask(with: request) {
@@ -147,7 +151,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func showLS(){
-        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счёт", preferredStyle: .actionSheet)
+        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счет", preferredStyle: .actionSheet)
         self.ls2.forEach {
             let text = $0
             action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
@@ -736,7 +740,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             let ls_1 = LoginText.index(LoginText.startIndex, offsetBy: 1)
             ls_1_end = LoginText.substring(to: ls_1)
         }
-
         var ls_12_end = ""
         if (LoginText.count < 2) {
             ls_12_end = ""
@@ -752,9 +755,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             if (ls_12_end == "89") || (ls_12_end == "79") {
                 itsPhone = true
             }
-            if (ls_1_end == "9") && (LoginText.count == 10) {
+            if (ls_1_end == "9") && (LoginText.count == 10 || LoginText.count == 9) {
                 itsPhone = true
             }
+        }else{
+            itsPhone = false
         }
 //
         return true

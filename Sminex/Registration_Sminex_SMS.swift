@@ -149,7 +149,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
             navigationItem.title = "Восстановление пароля"
         }
         if isNew && isReg_{
-            navigationItem.title = "Новый лицевой счёт"
+            navigationItem.title = "Новый лицевой счет"
             didntEnter.text = "Не можете добавить ЛС?"
         }
         

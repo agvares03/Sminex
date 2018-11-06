@@ -51,6 +51,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
         super.viewWillAppear(animated)
         
         collection.reloadData()
+        tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = true
     }
     

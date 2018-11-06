@@ -155,6 +155,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if UserDefaults.standard.bool(forKey: "backBtn"){
+            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
+            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
             DispatchQueue.global(qos: .userInitiated).async {
                 DispatchQueue.global(qos: .background).async {
                     let res = self.getRequests()
@@ -170,6 +172,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         self.collection.reloadData()
                     }
                 }
+                
                 self.get_info_business_center()
                 self.fetchQuestions()
                 self.fetchDeals()
@@ -1524,8 +1527,6 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         pagerView.delegate   = self
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        print(points)
-        
         if (250.0...280.0).contains(points) {
             pagerView.itemSize = CGSize(width: 820, height: 668)
             pagerHeight.constant = 668
