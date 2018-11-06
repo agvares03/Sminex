@@ -57,6 +57,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
                 imagePicker.sourceType = .camera
+                imagePicker.allowsEditing = true
+                imagePicker.setEditing(true, animated: true)
                 self.cameraOn = true
                 self.present(imagePicker, animated: true, completion: nil)
             }
@@ -219,21 +221,34 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             image = img
         }
         accountImageView.image = image
-        if cameraOn == false{
+//        if cameraOn == false{
             DispatchQueue.global(qos: .background).async {
-                UserDefaults.standard.setValue(UIImagePNGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128))), forKey: "accountIcon")
+                var imageList   : [String:Data] = [:]
+                
+                let login = UserDefaults.standard.string(forKey: "login")!
+                if UserDefaults.standard.dictionary(forKey: "allIcon") != nil{
+                    imageList = UserDefaults.standard.dictionary(forKey: "allIcon") as! [String : Data]
+                    
+                    if let k = imageList.keys.firstIndex(of: login){
+                        imageList.remove(at: k)
+                    }
+                }
+                
+                imageList[login] = UIImageJPEGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128)), 128)
+                UserDefaults.standard.setValue(imageList, forKey: "allIcon")
+                UserDefaults.standard.setValue(UIImageJPEGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128)), 128), forKey: "accountIcon")
             }
-        }
+//        }
         
         dismiss(animated: true, completion: nil)
-        if cameraOn == true{
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomCrop") as! CustomCropController
-            vc.imageCrop = image
-            cameraOn = false
-            self.addChildViewController(vc)
-            self.view.addSubview(vc.view)
-        }
-        
+//        if cameraOn == true{
+//            let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomCrop") as! CustomCropController
+//            vc.imageCrop = image
+//            cameraOn = false
+//            self.addChildViewController(vc)
+//            self.view.addSubview(vc.view)
+//        }
+    
     }
     
     private func editAccountInfo() {

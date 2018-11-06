@@ -59,23 +59,36 @@ class CustomCropController: UIViewController, UIScrollViewDelegate, UIImagePicke
         scrollView.minimumZoomScale = max(scaleWidth, scaleHeight)
         scrollView.zoomScale = max(scaleWidth, scaleHeight)
         scle = max(281.5/image.size.height, scaleHeight)
-//        print(scaleHeight, scaleWidth, scrollView.zoomScale)
+        print(scaleHeight, scaleWidth, scrollView.zoomScale)
     }
     
     @IBAction func cropButtonPressed(_ sender: Any) {
-//        let scale:CGFloat = 1/scrollView.zoomScale
-        let scale:CGFloat = 1/scle
+        let scale:CGFloat = 1/scrollView.zoomScale
+//        let scale:CGFloat = 1/scle
         let x:CGFloat = scrollView.contentOffset.x * scale
         let y:CGFloat = scrollView.contentOffset.y + imgTop.constant * scale
-//        print(x, y, scale, scrollView.zoomScale)
+        print(x, y, scale, scrollView.zoomScale)
         let height:CGFloat = scrollView.frame.size.width * scale
         let width:CGFloat = scrollView.frame.size.width * scale
         let croppedCGImage = imageView.image?.cgImage?.cropping(to: CGRect(x: x, y: y, width: width, height: height))
-//        print(x, y, width, height)
+        print(x, y, width, height)
         let croppedImage = UIImage(cgImage: croppedCGImage!)
         
         DispatchQueue.global(qos: .background).async {
-            UserDefaults.standard.setValue(UIImagePNGRepresentation(resizeImageWith(image: croppedImage, newSize: CGSize(width: 128, height: 128))), forKey: "accountIcon")
+            var imageList   : [String:Data] = [:]
+            
+            let login = UserDefaults.standard.string(forKey: "login")!
+            if UserDefaults.standard.dictionary(forKey: "allIcon") != nil{
+                imageList = UserDefaults.standard.dictionary(forKey: "allIcon") as! [String : Data]
+                
+                if let k = imageList.keys.firstIndex(of: login){
+                    imageList.remove(at: k)
+                }
+            }
+            
+            imageList[login] = UIImageJPEGRepresentation(resizeImageWith(image: croppedImage, newSize: CGSize(width: 128, height: 128)), 128)
+            UserDefaults.standard.setValue(imageList, forKey: "allIcon")
+            UserDefaults.standard.setValue(UIImageJPEGRepresentation(resizeImageWith(image: croppedImage, newSize: CGSize(width: 128, height: 128)), 128), forKey: "accountIcon")
         }
         self.removeFromParentViewController()
         self.view.removeFromSuperview()
