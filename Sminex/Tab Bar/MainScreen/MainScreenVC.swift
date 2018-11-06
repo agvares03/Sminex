@@ -125,12 +125,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         var imageList   : [String:Data] = [:]
         
         let login = UserDefaults.standard.string(forKey: "login")!
-        imageList = UserDefaults.standard.dictionary(forKey: "allIcon") as! [String : Data]
-        
-        if imageList.keys.firstIndex(of: login) != nil{
-            let image = imageList[login]
-            UserDefaults.standard.setValue(image, forKey: "accountIcon")
+        if UserDefaults.standard.dictionary(forKey: "allIcon") != nil{
+            imageList = UserDefaults.standard.dictionary(forKey: "allIcon") as! [String : Data]
+            if imageList.keys.firstIndex(of: login) != nil{
+                let image = imageList[login]
+                UserDefaults.standard.setValue(image, forKey: "accountIcon")
+            }
         }
+        
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
