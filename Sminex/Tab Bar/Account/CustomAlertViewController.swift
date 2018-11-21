@@ -143,17 +143,24 @@ class CustomAlertViewController: UIViewController {
     private func deleteLS(code: String) {
         var lsList      : [String] = []
         var addressList : [String] = []
+        var imageList   : [String:Data] = [:]
         
         lsList = UserDefaults.standard.stringArray(forKey: "allLS")!
         addressList = UserDefaults.standard.stringArray(forKey: "allAddress")!
-        
+        if UserDefaults.standard.dictionary(forKey: "allIcon") != nil{
+            imageList = UserDefaults.standard.dictionary(forKey: "allIcon") as! [String : Data]
+        }
         let k = lsList.firstIndex(of: code)
         
         lsList.remove(at: k!)
         addressList.remove(at: k!)
+        if let l = imageList.keys.firstIndex(of: code){
+            imageList.remove(at: l)
+        }
         let defaults = UserDefaults.standard
         defaults.setValue(lsList, forKey: "allLS")
         defaults.setValue(addressList, forKey: "allAddress")
+        defaults.setValue(imageList, forKey: "allIcon")
         defaults.synchronize()
     }
     
@@ -284,6 +291,10 @@ class CustomAlertViewController: UIViewController {
                     if imageList.keys.firstIndex(of: login) != nil{
                         let image = imageList[login]
                         UserDefaults.standard.setValue(image, forKey: "accountIcon")
+                        
+                    }else{
+                        UserDefaults.standard.removeObject(forKey: "accountIcon")
+                        
                     }
                     
                     self.stopAnimation()
