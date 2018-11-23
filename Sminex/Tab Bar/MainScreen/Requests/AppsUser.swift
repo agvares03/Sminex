@@ -574,7 +574,7 @@ final class AppsUserCell: UICollectionViewCell {
     
     fileprivate func display(_ item: AppsUserCellData) {
         
-        desc.text       = item.desc
+        desc.text       = item.desc.replacingOccurrences(of: "Отправлен новый файл", with: "Прикреплен файл")
         icon.image      = item.icon
         status.text     = item.status
         back.isHidden   = !item.isBack
