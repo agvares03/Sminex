@@ -268,7 +268,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.synchronize()
             let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
             let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
-            UserDefaults.standard.set(true, forKey: "didntSchet")
+            UserDefaults.standard.set(false, forKey: "didntSchet")
             UserDefaults.standard.synchronize()
             if (dateFrom == 0 && dateTo == 0) && !(UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")) {
                 let now = NSDate()

@@ -390,11 +390,20 @@ extension DigitInputView: UITextFieldDelegate {
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 //        let string = string.replacingOccurrences(of: ",", with: ".")
-        print(string)
         let char = string.cString(using: .utf8)
         let isBackSpace = strcmp(char, "\\b")
+        
         if isBackSpace == -92, let text = textField.text {
             
+            if text.count > 4 && text.contains(find: ",") {
+                var text1 = text
+                if let index = text1.index(text1.endIndex, offsetBy: -5, limitedBy: text1.startIndex) {
+                    text1.remove(at: index)
+                    textField.text = text1
+                }
+                didChange(true)
+                return false
+            }
             textField.text = text.substring(to: text.index(text.endIndex, offsetBy: -1))
             didChange(true)
             return false
