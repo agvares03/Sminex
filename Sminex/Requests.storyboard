@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H87-Hl-ytf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H87-Hl-ytf">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -132,7 +132,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p68-BP-3fq">
+                                                <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p68-BP-3fq">
                                                     <rect key="frame" x="16" y="280.5" width="288" height="150"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="150" id="VIR-fF-WRQ"/>
@@ -454,7 +454,7 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kzq-qG-m9R">
+                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kzq-qG-m9R">
                                                     <rect key="frame" x="16" y="170.5" width="280" height="150"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="150" id="lB4-K6-Ta9"/>
@@ -974,6 +974,7 @@
                         <outlet property="tableView" destination="QFg-lI-4iH" id="38S-Ix-3f8"/>
                         <segue destination="Xqq-8c-mks" kind="show" identifier="admission" id="3TF-ko-oRJ"/>
                         <segue destination="JfM-6B-Zfp" kind="show" identifier="service" id="JJn-7r-WTs"/>
+                        <segue destination="qJ0-j4-jy3" kind="show" identifier="serviceUK" id="GPM-QM-sbt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z3I-iq-P3u" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1237,6 +1238,14 @@
             </objects>
             <point key="canvasLocation" x="237.59999999999999" y="-2089.2053973013494"/>
         </scene>
+        <!--ServicesUK-->
+        <scene sceneID="6bn-dB-kQv">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ServicesUK" id="qJ0-j4-jy3" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wks-3F-YeH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-127" y="-1729"/>
+        </scene>
         <!--Гостевой пропуск-->
         <scene sceneID="fcx-OB-qyn">
             <objects>
@@ -1316,7 +1325,7 @@
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sub-QB-LKi">
                                         <rect key="frame" x="200" y="336.5" width="20" height="20"/>
                                     </activityIndicatorView>
-                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5qp-gU-XOg">
+                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5qp-gU-XOg">
                                         <rect key="frame" x="16" y="319" width="343" height="150"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="150" id="8TV-b1-Glh"/>
@@ -1807,7 +1816,7 @@
                                             <!--2018-03-24 06:13:10 +0000-->
                                         </date>
                                     </datePicker>
-                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xQo-Mg-fGh">
+                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xQo-Mg-fGh">
                                         <rect key="frame" x="8" y="138.5" width="359" height="150"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="150" id="pL0-gL-e8W"/>
@@ -1890,13 +1899,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="account" width="25" height="28"/>
+        <image name="account" width="50" height="56"/>
         <image name="arrow_right" width="40" height="65"/>
         <image name="cameraIcon" width="29" height="22"/>
-        <image name="camera_icon" width="48" height="36"/>
+        <image name="camera_icon" width="29" height="22"/>
         <image name="closeIcon" width="25" height="25"/>
         <image name="rossNavbar" width="20" height="20"/>
-        <image name="send_icon" width="115" height="115"/>
+        <image name="send_icon" width="23" height="23"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>

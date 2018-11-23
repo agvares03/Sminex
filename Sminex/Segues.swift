@@ -188,6 +188,7 @@ struct Segues {
         
         static let toCreateAdmission = "admission"
         static let toCreateServive   = "service"
+        static let toServiceUK   = "serviceUK"
     }
     
     struct fromCreateTechService {
