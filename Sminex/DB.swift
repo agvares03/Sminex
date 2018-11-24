@@ -357,7 +357,7 @@ final class DB: NSObject, XMLParserDelegate {
         
         parser = XMLParser(contentsOf: url as URL)!
         parser.delegate = self
-        let success     = parser.parse()
+//        let success     = parser.parse()
         
 //        #if DEBUG
 //            if success {

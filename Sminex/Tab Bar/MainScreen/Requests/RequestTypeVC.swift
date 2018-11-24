@@ -25,12 +25,15 @@ class RequestTypeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let type: RequestTypeStruct
+        type = .init(id: "bcgtab0b-891a-4af8-9953-1bf1ffd7fe29", name: "Услуги УК")
         
         tableView.tableFooterView = UIView()
         if let types = TemporaryHolder.instance.requestTypes?.types {
             data = types
             tableView.reloadData()
         }
+        data.append(type)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,6 +107,8 @@ extension RequestTypeVC: UITableViewDataSource, UITableViewDelegate {
             
         } else if name == "Техническое обслуживание" {
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateServive, sender: indexPath.row)
+        } else if name == "Услуги УК" {
+            performSegue(withIdentifier: Segues.fromRequestTypeVC.toServiceUK, sender: indexPath.row)
         }
     }
     

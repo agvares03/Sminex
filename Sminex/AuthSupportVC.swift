@@ -16,6 +16,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet private weak var sendButtonBottom:    NSLayoutConstraint!
     @IBOutlet private weak var sendButtonTop:       NSLayoutConstraint!
     @IBOutlet private weak var imgsHeight:          NSLayoutConstraint!
+    @IBOutlet private weak var sendView:            UIView!
     @IBOutlet private weak var scroll:              UIScrollView!
     @IBOutlet private weak var imgsScroll:          UIScrollView!
     @IBOutlet private weak var problemTextView:     UITextField!
@@ -101,7 +102,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         }
         
         loader.isHidden = true
-        currPoint = sendButton.frame.origin.y
+        currPoint = sendView.frame.origin.y
         sendButton.isEnabled = false
         sendButton.alpha     = 0.5
         imgsHeight.constant  = 1
@@ -141,8 +142,8 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         if !isNeedToScroll() {
             
             if Device().isOneOf([.iPhone6, .iPhone6s, .simulator(.iPhone6), .simulator(.iPhone6s)]) && imgs.count != 0 {
-                sendButtonTop.constant    = 8
-                sendButtonBottom.constant = 200
+                sendButtonTop.constant    = -30
+                sendButtonBottom.constant = 210
                 return
                 
             } else {
@@ -254,15 +255,16 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     private func getPoint() -> CGFloat {
         if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
             if tabBarController == nil {
-                return (view.frame.size.height - currPoint) + 50
+                return currPoint - 210 + 50
             } else {
-                return ((view.frame.size.height - currPoint) + 50) - 50
+                print(view.frame.size.height, currPoint, currPoint - 210)
+                return currPoint - 210
             }
         } else {
             if tabBarController == nil {
-                return (view.frame.size.height - currPoint) - 50
+                return currPoint - 210 - 50
             } else {
-                return ((view.frame.size.height - currPoint) - 50) - 50
+                return currPoint - 210 - 50 - 50
             }
         }
     }

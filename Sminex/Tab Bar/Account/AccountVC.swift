@@ -183,6 +183,10 @@ final class AccountHeader: UICollectionReusableView {
                 DispatchQueue.main.async {
                     self.accImageView.image = image
                 }
+            }else{
+                DispatchQueue.main.async {
+                    self.accImageView.image = UIImage(named: "default_userpic")
+                }
             }
         }
         let defaults = UserDefaults.standard

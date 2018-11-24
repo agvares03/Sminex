@@ -127,7 +127,7 @@ final class ServicesUKTableCell: UICollectionViewCell {
     func display(_ title: String, desc: String, amount: String) {
         self.title.text     = title
         self.desc.text      = desc
-        self.amount.text    = amount
+        self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
     }
     
     class func fromNib() -> ServicesUKTableCell? {
