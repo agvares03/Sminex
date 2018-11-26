@@ -255,9 +255,13 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             var newData: [AppsUserCellData] = []
             self.rows.forEach { _, curr in
                 
-                let isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
+                var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
-                let lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
+                var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
+                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (self.rowComms[curr.id!]?.count)! == 1{
+                    lastComm = nil
+                    isAnswered = false
+                }
                 let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                 let isPerson = curr.name?.contains(find: "ропуск") ?? false
                 
@@ -276,7 +280,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
                 newData.append( AppsUserCellData(title: curr.name ?? "",
-                                                 desc: self.rowComms[curr.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                                                 desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
                                                  icon: icon,
                                                  status: curr.status ?? "",
                                                  date: curr.updateDate ?? "",
@@ -574,7 +578,11 @@ final class AppsUserCell: UICollectionViewCell {
     
     fileprivate func display(_ item: AppsUserCellData) {
         
-        desc.text       = item.desc.replacingOccurrences(of: "Отправлен новый файл", with: "Прикреплен файл")
+        if item.desc.contains(find: "Отправлен новый файл:"){
+            desc.text = "Добавлен файл"
+        }else{
+            desc.text   = item.desc
+        }
         icon.image      = item.icon
         status.text     = item.status
         back.isHidden   = !item.isBack

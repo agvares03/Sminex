@@ -802,11 +802,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 var commentCount = 0
                 rows.forEach { row in
-                    let isAnswered = (rowComms[row.id!]?.count ?? 0) <= 0 ? false : true
+                    var isAnswered = (rowComms[row.id!]?.count ?? 0) <= 0 ? false : true
                     
-                    let lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
+                    var lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1
+                    }
+                    if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (rowComms[row.id!]?.count)! == 1{
+                        lastComm = nil
+                        isAnswered = false
                     }
                     let icon = !(row.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     let isPerson = row.name?.contains(find: "ропуск") ?? false
@@ -827,7 +831,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : row.text ?? ""
                     
                     returnArr.append( RequestCellData(title: row.name ?? "",
-                                                      desc: rowComms[row.id!]?.count == 0 ? descText : lastComm?.text ?? "",
+                                                      desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
                                                       icon: icon,
                                                       date: row.updateDate ?? "",
                                                       status: row.status ?? "",
@@ -1622,9 +1626,12 @@ final class RequestCell: UICollectionViewCell {
     @IBOutlet private weak var back:        UIView!
     
     fileprivate func display(_ item: RequestCellData) {
-
         title.text  = item.title
-        desc.text   = item.desc
+        if item.desc.contains(find: "Отправлен новый файл:"){
+            desc.text = "Добавлен файл"
+        }else{
+           desc.text   = item.desc
+        }
         icon.image  = item.icon
         status.text = item.status.uppercased()
         
