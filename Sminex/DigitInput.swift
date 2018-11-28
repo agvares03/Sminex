@@ -395,9 +395,9 @@ extension DigitInputView: UITextFieldDelegate {
         
         if isBackSpace == -92, let text = textField.text {
             
-            if text.count > 4 && text.contains(find: ",") {
+            if text.contains(find: ",") && text.index(of: ",") != text.startIndex {
                 var text1 = text
-                if let index = text1.index(text1.endIndex, offsetBy: -5, limitedBy: text1.startIndex) {
+                if let index = text1.index(text1.index(of: ",")!, offsetBy: -1, limitedBy: text1.startIndex) {
                     text1.remove(at: index)
                     textField.text = text1
                 }
@@ -410,11 +410,11 @@ extension DigitInputView: UITextFieldDelegate {
         }
         
         if !isEnergy {
-            if (string == ",") && (textField.text?.length ?? 0) > 5{
+            if (string != ",") && (!textField.text!.contains(find: ",")) && (textField.text?.length ?? 0) > 4{
                 return false
             }
             
-            if (acceptableCharacters?.contains(find: ",") ?? false) && (textField.text ?? "").length >= 8 {
+            if (acceptableCharacters?.contains(find: ",") ?? false) && (textField.text ?? "").length >= 9 {
                 
                 return false
                 
@@ -437,7 +437,9 @@ extension DigitInputView: UITextFieldDelegate {
         if !(acceptableCharacters?.contains(find: string) ?? true) {
             return false
         }
-        if (string == "," && (textField.text ?? "").contains(find: ",")) || (string == "," && !(textField.text ?? "").contains(find: ",") && (textField.text?.length)! > 4){
+        if (string == "," && (textField.text ?? "").contains(find: ","))
+//            || (string == "," && !(textField.text ?? "").contains(find: ",") && (textField.text?.length)! > 4)
+        {
             return false
         
         } else if (string == "," && !(textField.text ?? "").contains(find: ",")){

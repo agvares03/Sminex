@@ -249,6 +249,7 @@ final class MenuCell: UICollectionViewCell {
         } else {
             notificationView.isHidden = true
         }
+        notificationView.isHidden = true
     }
 }
 
