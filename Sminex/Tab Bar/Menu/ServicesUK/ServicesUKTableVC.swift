@@ -47,10 +47,6 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
         let data = self.data[safe: indexPath.row]
         cell?.display(data?.name ?? "", desc: data?.desc ?? "", amount: data?.cost ?? "")
         var size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (250.0...280.0).contains(points) {
-            return CGSize(width: view.frame.size.width, height: size.height - 120)
-        }
         if size.height > 290 {
             size.height = size.height - 50
             return CGSize(width: view.frame.size.width, height: size.height)

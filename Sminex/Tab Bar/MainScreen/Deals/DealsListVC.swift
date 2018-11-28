@@ -143,10 +143,10 @@ final class DealsListCell: UICollectionViewCell {
     fileprivate func display(_ item: DealsJson) {
         
         image.image         = item.img
-        let width: Int = Int((item.img?.size.width)!)
-        let height: Int = Int((item.img?.size.height)!)
-        let r =  width / height
-        if Double(r) < 1.5{
+        let width:Double = Double((item.img?.size.width)!)
+        let height1:Double = Double((item.img?.size.height)!)
+        let r: Double =  width / height1
+        if r < 1.5{
             image.contentMode = .scaleToFill
         }
         title.text          = item.name
@@ -156,7 +156,9 @@ final class DealsListCell: UICollectionViewCell {
         if (250.0...280.0).contains(points) {
             title.font = title.font.withSize(30)
             desc.font = desc.font.withSize(28)
-            imageHeight.constant = 200
+            imageHeight.constant = 455
+        }else{
+            image.contentMode = .scaleToFill
         }
     }
     
@@ -177,8 +179,8 @@ final class DealsListCell: UICollectionViewCell {
         if (250.0...280.0).contains(points) {
             cell?.title.font = cell?.title.font.withSize(30)
             cell?.desc.font = cell?.desc.font.withSize(30)
-            cell?.imageWidth.constant  = 820
-            cell?.imageHeight.constant = 668
+            cell?.imageWidth.constant  = 834
+            cell?.imageHeight.constant = 455
         }else if (300.0...320.0).contains(points) {
             cell?.imageWidth.constant  = 288
             cell?.imageHeight.constant = 144

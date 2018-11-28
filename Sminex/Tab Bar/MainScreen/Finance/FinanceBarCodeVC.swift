@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import DeviceKit
 
 final class FinanceBarCodeVC: UIViewController {
     
+    @IBOutlet weak var qrView: UIView!
     @IBOutlet private weak var topLayout:   NSLayoutConstraint!
     @IBOutlet private weak var barcode:     UIImageView!
     @IBOutlet private weak var amount:  	UILabel!
@@ -24,7 +26,6 @@ final class FinanceBarCodeVC: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap)
-
         if data_ != nil {
 
             amount.text = String(Double(data_?.sumPay ?? 0.0))
@@ -41,6 +42,13 @@ final class FinanceBarCodeVC: UIViewController {
         }
         if isNeedToScrollMore() {
             topLayout.constant = 50
+        }
+        DispatchQueue.main.async{
+            if Device().isOneOf([.iPhoneSE, .iPhone5s, .iPhone5, .iPhone5c, .simulator(.iPhoneSE), .simulator(.iPhone5s), .simulator(.iPhone5), .simulator(.iPhone5c)]){
+                self.qrView.frame.origin.y = 20
+            }else{
+                self.topLayout.constant = 80
+            }
         }
     }
     

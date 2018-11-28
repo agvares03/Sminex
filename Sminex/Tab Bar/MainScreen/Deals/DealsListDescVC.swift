@@ -112,10 +112,10 @@ final class DealsListDescHeader: UICollectionReusableView {
         } else {
             image.frame.size.height = 0
         }
-        let width: Int = Int((data_?.img?.size.width)!)
-        let height1: Int = Int((data_?.img?.size.height)!)
-        let r =  width / height1
-        if Double(r) < 1.5{
+        let width:Double = Double((data_?.img?.size.width)!)
+        let height1:Double = Double((data_?.img?.size.height)!)
+        let r: Double =  width / height1
+        if r < 1.5{
             image.contentMode = .scaleToFill
         }
         titleLabel.text = data_?.name
@@ -174,7 +174,10 @@ final class DealsListDescHeader: UICollectionReusableView {
         } else {
             
             let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-            if (300.0...320.0).contains(points) {
+            if (250.0...280.0).contains(points) {
+                imageWidth.constant  = 834
+                imageHeight.constant = 450
+            }else if (300.0...320.0).contains(points) {
                 imageWidth.constant  = 288
                 imageHeight.constant = 144
                 
@@ -241,6 +244,7 @@ final class DealsListDescCell: UICollectionViewCell {
         } else {
             image.frame.size.width = 0
         }
+        image.contentMode = .scaleToFill
         self.title.text = item.name
     }
     

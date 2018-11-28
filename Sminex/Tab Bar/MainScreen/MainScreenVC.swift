@@ -482,7 +482,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             } else {
                 let points = Double(UIScreen.pixelsPerInch ?? 0.0)
                 if (250.0...280.0).contains(points) {
-                    return CGSize(width: view.frame.size.width, height: 600.0)
+                    print("KEKA", view.frame.size.width)
+                    return CGSize(width: view.frame.size.width, height: 455.0)
                 }
                 return CGSize(width: view.frame.size.width, height: 204.0)
             }
@@ -1547,8 +1548,8 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
         if (250.0...280.0).contains(points) {
-            pagerView.itemSize = CGSize(width: 820, height: 668)
-            pagerHeight.constant = 668
+            pagerView.itemSize = CGSize(width: 820, height: 450)
+            pagerHeight.constant = 450
         }else if (300.0...320.0).contains(points) {
             pagerView.itemSize = CGSize(width: 288, height: 144)
             pagerHeight.constant = 144
