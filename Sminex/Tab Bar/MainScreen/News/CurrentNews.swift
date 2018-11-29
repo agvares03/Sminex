@@ -64,6 +64,8 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         }
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+        print(points)
+        
         if (300.0...320.0).contains(points) {
             imageWidth.constant  = 288
             imageHeight.constant = 144
