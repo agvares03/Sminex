@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C1B22B621AF98B60029148A /* DispTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B22B521AF98B60029148A /* DispTabView.swift */; };
+		1C1B22B821B02D490029148A /* TechServiceDispVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B22B721B02D490029148A /* TechServiceDispVC.swift */; };
+		1C1B22BA21B066650029148A /* TableWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B22B921B066650029148A /* TableWorker.swift */; };
 		1C479CE721427388004B9312 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C479CE621427387004B9312 /* CustomAlertViewController.swift */; };
+		1C54D61221AF8C1100A82C71 /* MainDisp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C54D61121AF8C1100A82C71 /* MainDisp.storyboard */; };
 		1C843EAC214BFAE50014C279 /* AddLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C843EAB214BFAE50014C279 /* AddLS.swift */; };
 		1CC573DF214F3D8B005E21B8 /* AddLS_SMS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC573DE214F3D8B005E21B8 /* AddLS_SMS.swift */; };
 		3A5ADBBB210C49950012F6DB /* HistoryCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5ADBBA210C49950012F6DB /* HistoryCounterCell.swift */; };
@@ -185,7 +189,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1C1B22B521AF98B60029148A /* DispTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispTabView.swift; sourceTree = "<group>"; };
+		1C1B22B721B02D490029148A /* TechServiceDispVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechServiceDispVC.swift; sourceTree = "<group>"; };
+		1C1B22B921B066650029148A /* TableWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableWorker.swift; sourceTree = "<group>"; };
 		1C479CE621427387004B9312 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
+		1C54D61121AF8C1100A82C71 /* MainDisp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainDisp.storyboard; sourceTree = "<group>"; };
 		1C843EAB214BFAE50014C279 /* AddLS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLS.swift; sourceTree = "<group>"; };
 		1CC573DE214F3D8B005E21B8 /* AddLS_SMS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLS_SMS.swift; sourceTree = "<group>"; };
 		3A5ADBBA210C49950012F6DB /* HistoryCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCounterCell.swift; sourceTree = "<group>"; };
@@ -398,6 +406,16 @@
 				FA6E6EBF662F32D68C69BE89 /* Pods_Sminex.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1C1B22B421AF989B0029148A /* Disp */ = {
+			isa = PBXGroup;
+			children = (
+				1C1B22B521AF98B60029148A /* DispTabView.swift */,
+				1C1B22B721B02D490029148A /* TechServiceDispVC.swift */,
+				1C1B22B921B066650029148A /* TableWorker.swift */,
+			);
+			path = Disp;
 			sourceTree = "<group>";
 		};
 		1C843EAD214BFB060014C279 /* AddLS */ = {
@@ -832,6 +850,7 @@
 				6C54077F206E7C600050A0D0 /* Questions.storyboard */,
 				6C42560F206B6EF0007E1BF6 /* Counter.storyboard */,
 				4171BE621ECB369A00B9CDD7 /* Main.storyboard */,
+				1C54D61121AF8C1100A82C71 /* MainDisp.storyboard */,
 				6C4C0A0C20675A83004EF2FF /* Requests.storyboard */,
 				6C4C0A0E20675B2B004EF2FF /* Auth.storyboard */,
 				4171BE6A1ECB369A00B9CDD7 /* LaunchScreen.storyboard */,
@@ -844,6 +863,7 @@
 		6C5E78E02065054B00805EF1 /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
+				1C1B22B421AF989B0029148A /* Disp */,
 				6CE2F4B4208769FA00709242 /* News */,
 				6C62C272207F32C600B5EA11 /* Finance */,
 				6C170AC9207CCFF300C84BE6 /* Deals */,
@@ -1025,6 +1045,7 @@
 				419CBB121EF03E1A00E07021 /* ic_menu_call.png in Resources */,
 				6C425610206B6EF0007E1BF6 /* Counter.storyboard in Resources */,
 				41D9FBE91EDA9C6C00925972 /* ic_action_rigth.png in Resources */,
+				1C54D61221AF8C1100A82C71 /* MainDisp.storyboard in Resources */,
 				419CBB081EEF65C700E07021 /* ic_get_app.png in Resources */,
 				6C170AC8207CCF0200C84BE6 /* Deals.storyboard in Resources */,
 				6C7F90E6207633EB00CFA721 /* Account.storyboard in Resources */,
@@ -1200,6 +1221,7 @@
 				6C1D5C16208DD2E300BEB826 /* ContactsVC.swift in Sources */,
 				6C170ACC207CD00E00C84BE6 /* DealsListVC.swift in Sources */,
 				6C938C75206F4B9B00E34EA1 /* QuestionsTableVC.swift in Sources */,
+				1C1B22B621AF98B60029148A /* DispTabView.swift in Sources */,
 				41DFA8241ED3475700F15109 /* SettingsCons.swift in Sources */,
 				6CFB5C6C2083ADC40028D331 /* FinanceCalcsArchiveVC.swift in Sources */,
 				411B6CDF1EE6FF22001DCBC7 /* Comments+CoreDataProperties.swift in Sources */,
@@ -1212,6 +1234,7 @@
 				4171BE751ECB392B00B9CDD7 /* CoreDataManager.swift in Sources */,
 				411B6CE11EE6FF22001DCBC7 /* Houses+CoreDataProperties.swift in Sources */,
 				6CD20DC3209B70C200E59BE1 /* ViewController_UK.swift in Sources */,
+				1C1B22B821B02D490029148A /* TechServiceDispVC.swift in Sources */,
 				41FBABC220E2667C0044970E /* QuestionCell.swift in Sources */,
 				41E2299B1EEE67A900306120 /* ChoiceLS.swift in Sources */,
 				41E229991EEE5EC000306120 /* AddAppCons.swift in Sources */,
@@ -1241,6 +1264,7 @@
 				6C43A54520A5A5EA008155F9 /* ServicesUKDescVC.swift in Sources */,
 				6C7B0B68206BCA0200E974AE /* DigitInput.swift in Sources */,
 				6C938C79206F56F300E34EA1 /* QuestionAnswerVC.swift in Sources */,
+				1C1B22BA21B066650029148A /* TableWorker.swift in Sources */,
 				411B6CCA1EE3A7EC001DCBC7 /* Saldo+CoreDataProperties.swift in Sources */,
 				411B6CE21EE6FF22001DCBC7 /* Ls+CoreDataClass.swift in Sources */,
 				41DFA8371ED3502400F15109 /* PayUser.swift in Sources */,

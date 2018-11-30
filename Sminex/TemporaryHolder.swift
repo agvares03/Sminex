@@ -27,6 +27,7 @@ final class TemporaryHolder {
     }
     public var newsLastId = UserDefaults.standard.string(forKey: "newsLastId") ?? ""
     public var requestTypes:            RequestType?
+    public var worker: ServiceWorkerCellData?
     public var contacts:                Contacts?
     public var menuQuesions = 0 {
         didSet {
