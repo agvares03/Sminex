@@ -29,6 +29,7 @@ struct Segues {
         static let toRegister       = "goRegister"
         static let toAppsUser       = "AppsUsers"
         static let toAppsCons       = "AppsCons"
+        static let toAppsDisp       = "AppsDisp"
     }
     
     struct fromRegistrationSminex {
@@ -120,6 +121,7 @@ struct Segues {
         static let toRequestType     = "requestType"
         static let toAdmission       = "admission"
         static let toService         = "service"
+        static let toServiceDisp     = "serviceDisp"
     }
     
     struct fromAppUser {

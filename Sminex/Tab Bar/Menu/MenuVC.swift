@@ -197,7 +197,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             present(alert, animated: true, completion: nil)
         
         } else if indexPath.section == 4 {
-            // TODO
+            let url: URL = URL(string:"https://itunes.apple.com/ru/app/sminex-comfort/id1350615149?mt=8")!
+            let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            self.present(activityViewController, animated: true, completion: nil)
         }
     }
     

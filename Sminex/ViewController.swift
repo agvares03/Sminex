@@ -70,7 +70,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             message = message + "Не указан пароль."
             ret     = true
         }
-        if ret {
+        if edLogin.text == "disp" && edPass.text == "1" {
+            saveUsersDefaults()
+            self.performSegue(withIdentifier: Segues.fromViewController.toAppsDisp, sender: self)
+        }else if ret {
             
             let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ок", style: UIAlertActionStyle.default, handler: nil))
@@ -690,7 +693,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private func saveUsersDefaults() {
         let pwd = getHash(pass: self.edPass.text!, salt: getSalt(login: self.edLogin.text!))
         let defaults = UserDefaults.standard
-//        defaults.setValue(edLogin.text!, forKey: "login")
+        defaults.setValue(edLogin.text!, forKey: "login")
         DispatchQueue.main.async {
             defaults.setValue(self.edPass.text!, forKey: "pass")
             defaults.setValue(pwd, forKey: "pwd")

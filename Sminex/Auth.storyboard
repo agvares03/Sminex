@@ -323,6 +323,7 @@
                         <outlet property="sprtLabel" destination="NeR-p2-8zi" id="T7r-kx-ydd"/>
                         <outlet property="sprtTop" destination="vC9-ff-hwQ" id="vzi-fK-nRN"/>
                         <segue destination="F4C-f3-aFe" kind="show" identifier="AppsUsers" id="sNG-0s-tau"/>
+                        <segue destination="EKS-e0-KM1" kind="show" identifier="AppsDisp" id="rt5-GH-5zU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -859,6 +860,7 @@
                                                 <rect key="frame" x="61" y="8" width="298" height="45"/>
                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="width" constant="298" id="35N-VD-dRF"/>
                                                     <constraint firstAttribute="height" constant="45" id="UKa-MP-CBR"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -892,7 +894,6 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="9e5-FK-M1P" secondAttribute="trailing" constant="16" id="35v-Rp-zEr"/>
                                             <constraint firstItem="IlE-S7-1zI" firstAttribute="leading" secondItem="MOm-t3-mnA" secondAttribute="trailing" constant="155" id="7BK-ml-0CO"/>
                                             <constraint firstItem="9e5-FK-M1P" firstAttribute="leading" secondItem="MOm-t3-mnA" secondAttribute="trailing" constant="16" id="Hji-zK-u0C"/>
                                             <constraint firstAttribute="height" constant="62" id="RVJ-a4-VMd"/>
@@ -965,6 +966,7 @@
                         <outlet property="sendButton" destination="9e5-FK-M1P" id="QT2-r3-gdN"/>
                         <outlet property="sendButtonBottom" destination="Beb-yU-laN" id="GMt-zP-wYk"/>
                         <outlet property="sendButtonTop" destination="pGV-J5-dIU" id="WZp-FE-5EP"/>
+                        <outlet property="sendButtonWidth" destination="35N-VD-dRF" id="q9U-tz-bsT"/>
                         <outlet property="sendView" destination="K7l-Lh-Jaz" id="hth-Zi-eJX"/>
                     </connections>
                 </viewController>
@@ -1225,6 +1227,14 @@
             </objects>
             <point key="canvasLocation" x="883" y="-169"/>
         </scene>
+        <!--MainDisp-->
+        <scene sceneID="45p-FP-vz1">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MainDisp" id="EKS-e0-KM1" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Kd-Rl-rbA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="903" y="-98"/>
+        </scene>
     </scenes>
     <resources>
         <image name="auth_logo" width="111" height="24"/>
@@ -1237,7 +1247,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sNG-0s-tau"/>
-        <segue reference="DEm-lU-60H"/>
+        <segue reference="Q5d-yE-aq6"/>
         <segue reference="74p-PR-qrV"/>
     </inferredMetricsTieBreakers>
 </document>

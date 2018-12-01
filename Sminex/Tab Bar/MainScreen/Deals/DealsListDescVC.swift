@@ -91,12 +91,12 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
 final class DealsListDescHeader: UICollectionReusableView {
     
     @IBOutlet         weak var imageHeight:    NSLayoutConstraint!
-    @IBOutlet weak var imageWidth: NSLayoutConstraint!
-    @IBOutlet private weak var image:          UIImageView!
-    @IBOutlet private weak var titleLabel:     UILabel!
-    @IBOutlet private weak var dateLabel:      UILabel!
-    @IBOutlet private weak var bodyLabel:      UILabel!
-    @IBOutlet private weak var linksLabel:     UILabel!
+    @IBOutlet         weak var imageWidth :    NSLayoutConstraint!
+    @IBOutlet private weak var image      :    UIImageView!
+    @IBOutlet private weak var titleLabel :    UILabel!
+    @IBOutlet private weak var dateLabel  :    UILabel!
+    @IBOutlet private weak var bodyLabel  :    UILabel!
+    @IBOutlet private weak var linksLabel :    UILabel!
     
     open var link_obj:String = "";
     
@@ -120,6 +120,15 @@ final class DealsListDescHeader: UICollectionReusableView {
         }
         titleLabel.text = data_?.name
         bodyLabel.text = data_?.body
+        
+        func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+            titleLabel.numberOfLines = 0
+            titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+            titleLabel.text = text
+            
+            titleLabel.sizeToFit()
+            return titleLabel.frame.height
+        }
         
         func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
             bodyLabel.numberOfLines = 0
@@ -158,7 +167,9 @@ final class DealsListDescHeader: UICollectionReusableView {
         titleLabel.preferredMaxLayoutWidth = titleLabel.bounds.size.width
         bodyLabel.preferredMaxLayoutWidth  = bodyLabel.bounds.size.width
         let height = heightForView(text: bodyLabel.text!, font: font!, width: bodyLabel.preferredMaxLayoutWidth)
-        bodyLabel.bounds.size.height = height
+        let height2 = heightForTitle(text: titleLabel.text!, width: titleLabel.preferredMaxLayoutWidth)
+        bodyLabel.bounds.size.height = height + 20
+        titleLabel.bounds.size.height = height2 + 50
         linksLabel.preferredMaxLayoutWidth = linksLabel.bounds.size.width
         
         if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
