@@ -102,6 +102,9 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         guard receipts != nil else {
             return 0
         }
+        receipts?.forEach{
+            print($0.usluga!)
+        }
         return receipts?.count != 0 ? (receipts?.count ?? 0) + 1 : 1
     }
     
@@ -211,7 +214,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
             
             #if DEBUG
-//                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
+                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
             #endif
         
         }.resume()
@@ -347,6 +350,8 @@ final class FinanceDebtCell: UICollectionViewCell {
     @IBOutlet private weak var desc:    UILabel!
     
     func display(title: String, desc: String, isBold: Bool) {
+        print(title)
+        
         self.title.text = title
         self.desc.text = desc
         

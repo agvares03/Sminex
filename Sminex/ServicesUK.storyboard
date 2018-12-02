@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bDn-jF-HOk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bDn-jF-HOk">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -218,12 +218,18 @@
                                     <action selector="sendButtonPressed:" destination="bW7-1B-TlC" eventType="touchUpInside" id="U8b-YO-pyP"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="A1X-eC-Zy1">
+                                <rect key="frame" x="177.5" y="617" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="fSu-Mf-Oac" secondAttribute="trailing" id="0WK-2U-SCD"/>
                             <constraint firstItem="Nkw-N1-wrs" firstAttribute="leading" secondItem="EPE-V5-WwL" secondAttribute="leading" constant="16" id="5JA-L5-CcN"/>
                             <constraint firstItem="fSu-Mf-Oac" firstAttribute="top" secondItem="Jn8-tJ-2St" secondAttribute="bottom" id="GBI-8w-K89"/>
+                            <constraint firstItem="A1X-eC-Zy1" firstAttribute="top" secondItem="fSu-Mf-Oac" secondAttribute="bottom" constant="15" id="Or7-FI-w2q"/>
+                            <constraint firstItem="ul1-Eq-pwn" firstAttribute="top" secondItem="A1X-eC-Zy1" secondAttribute="bottom" constant="30" id="TYK-wC-FqQ"/>
+                            <constraint firstItem="A1X-eC-Zy1" firstAttribute="centerX" secondItem="EPE-V5-WwL" secondAttribute="centerX" id="Xjj-vg-4zZ"/>
                             <constraint firstItem="fSu-Mf-Oac" firstAttribute="leading" secondItem="EPE-V5-WwL" secondAttribute="leading" id="afa-Yf-YZy"/>
                             <constraint firstAttribute="trailing" secondItem="Nkw-N1-wrs" secondAttribute="trailing" constant="16" id="bdJ-tn-3zZ"/>
                             <constraint firstItem="Nkw-N1-wrs" firstAttribute="top" secondItem="fSu-Mf-Oac" secondAttribute="bottom" constant="3" id="tlX-ba-RyY"/>
@@ -243,7 +249,9 @@
                         <outlet property="descLabel" destination="iYX-aP-tLg" id="Vwb-4w-rnj"/>
                         <outlet property="imgHeight" destination="xMy-do-mSG" id="1Im-E2-1TU"/>
                         <outlet property="imgView" destination="fhg-Mu-79H" id="gQW-KS-awx"/>
+                        <outlet property="loader" destination="A1X-eC-Zy1" id="0fv-Gb-eeG"/>
                         <outlet property="scroll" destination="fSu-Mf-Oac" id="mSn-Cr-voP"/>
+                        <outlet property="sendBtn" destination="Nkw-N1-wrs" id="l5d-hh-WL5"/>
                         <outlet property="titleLabel" destination="2ne-jW-ncj" id="BcR-vn-z8j"/>
                         <outlet property="titleTop" destination="af7-Hr-Epa" id="rnL-IE-iuh"/>
                     </connections>

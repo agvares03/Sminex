@@ -482,8 +482,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             } else {
                 let points = Double(UIScreen.pixelsPerInch ?? 0.0)
                 if (250.0...280.0).contains(points) {
-                    print("KEKA", view.frame.size.width)
                     return CGSize(width: view.frame.size.width, height: 455.0)
+                }
+                if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
+                    return CGSize(width: view.frame.size.width, height: 176.0)
                 }
                 return CGSize(width: view.frame.size.width, height: 204.0)
             }
@@ -1566,7 +1568,10 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
             pagerView.itemSize = CGSize(width: 382, height: 191)
             pagerHeight.constant = 191
         }
-
+        if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
+            pagerView.itemSize = CGSize(width: 288, height: 144)
+            pagerHeight.constant = 144
+        }
         
         if item.images.count == 0, let imgData = UserDefaults.standard.data(forKey: "DealsImg"), let img = UIImage(data: imgData)  {
             isLoading = true

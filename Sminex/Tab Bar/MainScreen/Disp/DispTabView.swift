@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import DeviceKit
 
 class DispTabView: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     
+    @IBOutlet weak var barItem: UIBarButtonItem!
     @IBOutlet private weak var tableView:       UITableView!
+    @IBOutlet private weak var heightTable:     NSLayoutConstraint!
+    @IBOutlet private weak var widthView:     NSLayoutConstraint!
     @IBOutlet private weak var activity:        UIActivityIndicatorView?
     
     @IBOutlet weak var appsTab: UIStackView!
@@ -64,6 +68,9 @@ class DispTabView: UIViewController, UITableViewDelegate, UITableViewDataSource{
         //        }
     }
     
+    @IBAction private func dispAccPressed(_ sender: UIButton?) {
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,6 +81,22 @@ class DispTabView: UIViewController, UITableViewDelegate, UITableViewDataSource{
         workLbl.isHidden = true
         workApps.titleLabel?.textColor = .lightGray
         newApps.titleLabel?.textColor = UIColor(red:0.00, green:0.57, blue:1.00, alpha:1.0)
+        widthView.constant = view.frame.width / 2
+        print(widthView.constant)
+        if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
+            heightTable.constant -= 100
+        }
+        
+        let button = UIButton()
+        button.setImage(UIImage(named: "dispIcon"), for: .normal)
+        button.addTarget(self, action: #selector(dispAccPressed), for: .touchUpInside)
+        button.cornerRadius = 15
+        barItem.customView = button
+        
+        let width = barItem.customView?.widthAnchor.constraint(equalToConstant: 32)
+        width!.isActive = true
+        let height = barItem.customView?.heightAnchor.constraint(equalToConstant: 32)
+        height!.isActive = true
         
         updateTable()
     }

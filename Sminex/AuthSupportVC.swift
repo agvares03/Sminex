@@ -26,6 +26,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet private weak var sendButton:          UIButton!
     
     private var reqId: String?
+    private var boundary: String?
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -340,34 +341,91 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         self.navigationController?.isNavigationBarHidden = false
         sender.view?.removeFromSuperview()
     }
-    
     private func sendMessage() {
         
         let login = lsTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let text  = problemTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        let email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        
+        var email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        email = email.replacingOccurrences(of: "%2B", with: "+")
+
         let url = "login=\(login)&text=\(text)&phone=\(email)"
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
+        
+        let encodedData = UIImageJPEGRepresentation(imgs[0], 0.5)
+        boundary = generateBoundaryString()
+        let contentType = "multipart/form-data; boundary=\(String(describing: boundary))"
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.httpBody = createRequestBody(photo: encodedData! as NSData) as Data
         request.httpMethod = "POST"
         
-//        print(request.url)
-        
-        let encodedData = NSKeyedArchiver.archivedData(withRootObject: imgs.map { UIImageJPEGRepresentation($0, 0.5) } )
-        
-        Alamofire.upload(encodedData, to: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!, method: .post, headers: nil).response { response in
+        let task = URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            let response = String(data: data!, encoding: .utf8) ?? ""
+            print(response)
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
             
-            if response.response?.statusCode == 200 {
+            
+            if response == "ok" {
                 let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
                 self.present(alert, animated: true, completion: nil)
+                
                 debugPrint(response)
             } else {
                 
-                self.showAlert(message: response.response?.description ?? "", title: "Ошибка сервера")
+                self.showAlert(message: response , title: "Ошибка сервера")
             }
+
         }
+        task.resume()
     }
+    
+    func generateBoundaryString() -> String {
+        return "Boundary-\(NSUUID().uuidString)"
+    }
+    
+    func createRequestBody(photo:NSData) -> NSData{
+        let body = NSMutableData()
+        body.append(NSString(format: "\r\n--%@\r\n", boundary!).data(using: String.Encoding.utf8.rawValue)!)
+        body.append(NSString(format: "Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpeg\"\r\n").data(using: String.Encoding.utf8.rawValue)!)
+        body.append(NSString(format:"Content-Type: image/jpeg\r\n\r\n").data(using: String.Encoding.utf8.rawValue)!)
+        body.append(photo as Data)
+        body.append(NSString(format: "\r\n--%@\r\n", boundary!).data(using: String.Encoding.utf8.rawValue)!)
+        return body
+    }
+    
+//    private func sendMessage() {
+//
+//        let login = lsTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+//        let text  = problemTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+//        var email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+//        email = email.replacingOccurrences(of: "%2B", with: "+")
+//
+//        let url = "login=\(login)&text=\(text)&phone=\(email)"
+//        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
+//        request.httpMethod = "POST"
+//        let encodedData = NSKeyedArchiver.archivedData(withRootObject: imgs.map { UIImageJPEGRepresentation($0, 0.5) } )
+//
+//        Alamofire.upload(encodedData, to: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!, method: .post, headers: nil).response { response in
+//            if response.response?.statusCode == 200 {
+//                let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
+//                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
+//                self.present(alert, animated: true, completion: nil)
+//
+//                debugPrint(response)
+//            } else {
+//
+//                self.showAlert(message: response.response?.description ?? "", title: "Ошибка сервера")
+//            }
+//        }
+//    }
     
     private func uploadPhoto(_ img: UIImage) {
         let group = DispatchGroup()
