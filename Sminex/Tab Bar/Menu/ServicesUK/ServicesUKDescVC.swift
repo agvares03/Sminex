@@ -60,13 +60,11 @@ final class ServicesUKDescVC: UIViewController {
         let login = UserDefaults.standard.string(forKey: "login")!
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm = titleLabel.text ?? ""
-        let currentDate = Date()
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=Техническое обслуживание&name=\("\(comm.stringByAddingPercentEncodingForRFC3986()!) \(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(currentDate, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(currentDate, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(formatDate(currentDate, format: "dd.MM.yyyy hh:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=1"
-        print(url)
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=bceeab0b-891a-4af8-9953-1bf1ffd7fe29&name=\("\(comm.stringByAddingPercentEncodingForRFC3986()!) \(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in
             
@@ -76,6 +74,10 @@ final class ServicesUKDescVC: UIViewController {
                 }
                 return
             }
+            #if DEBUG
+            print(String(data: responce!, encoding: .utf8)!)
+            #endif
+            
             if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
                 DispatchQueue.main.sync {
                     
@@ -83,13 +85,11 @@ final class ServicesUKDescVC: UIViewController {
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
-                    
+                    self.endAnimator()
                 }
                 return
             } else {
-                #if DEBUG
-                print(String(data: responce!, encoding: .utf8)!)
-                #endif
+                
                 
                     DispatchQueue.main.sync {
                         

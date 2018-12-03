@@ -684,9 +684,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
+            let isPaid = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.isPaid ?? ""
             appsUser = AppsUser()
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
+            appsUser?.isPaid = isPaid
             appsUser?.delegate = self
             appsUser?.prepareGroup = DispatchGroup()
             appsUser?.viewDidLoad()
@@ -779,7 +781,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     group.leave()
                 }
                 guard data != nil else { return }
-                
                 let xml = XML.parse(data!)
                 self.mainScreenXml = xml
                 let requests = xml["Requests"]
@@ -832,14 +833,23 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                     
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : row.text ?? ""
-                    
-                    returnArr.append( RequestCellData(title: row.name ?? "",
-                                                      desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
-                                                      icon: icon,
-                                                      date: row.updateDate ?? "",
-                                                      status: row.status ?? "",
-                                                      isBack: isAnswered,
-                                                      id: row.id ?? "") )
+                    if row.isPaid == "1"{
+                        returnArr.append( RequestCellData(title: "Заявка на услугу",
+                                                          desc: row.text ?? "",
+                                                          icon: icon,
+                                                          date: row.updateDate ?? "",
+                                                          status: row.status ?? "",
+                                                          isBack: isAnswered,
+                                                          id: row.id ?? "", isPaid: row.isPaid!) )
+                    }else{
+                        returnArr.append( RequestCellData(title: row.name ?? "",
+                                                          desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
+                                                          icon: icon,
+                                                          date: row.updateDate ?? "",
+                                                          status: row.status ?? "",
+                                                          isBack: isAnswered,
+                                                          id: row.id ?? "", isPaid: row.isPaid!) )
+                    }
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
             }.resume()
@@ -1295,6 +1305,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             
         } else if segue.identifier == Segues.fromMainScreenVC.toService {
+            
             let vc = segue.destination as! TechServiceVC
             vc.data_ = (appsUser?.techService!)!
             vc.comments_ = (appsUser?.techServiceComm)!
@@ -1633,6 +1644,7 @@ final class RequestCell: UICollectionViewCell {
     
     fileprivate func display(_ item: RequestCellData) {
         title.text  = item.title
+        
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
@@ -1704,8 +1716,9 @@ final class RequestCellData: MainDataProtocol {
     let status: String
     let isBack: Bool
     let id:     String
+    let isPaid: String
     
-    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String) {
+    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String, isPaid: String) {
         self.title  = title
         self.desc   = desc
         self.icon   = icon
@@ -1713,6 +1726,7 @@ final class RequestCellData: MainDataProtocol {
         self.status = status
         self.isBack = isBack
         self.id     = id
+        self.isPaid = isPaid
     }
 }
 

@@ -88,6 +88,8 @@ final class DB: NSObject, XMLParserDelegate {
         var id_app = ""
         if (elementName == "Row") {
             // Запишем заявку в БД
+            print(attributeDict)
+            
             let managedObject = Applications()
             managedObject.id              = 1
             managedObject.number          = attributeDict["ID"]
@@ -97,6 +99,7 @@ final class DB: NSObject, XMLParserDelegate {
             managedObject.adress          = attributeDict["HouseAddress"]
             managedObject.flat            = attributeDict["FlatNumber"]
             managedObject.phone           = attributeDict["PhoneNum"]
+            managedObject.is_paid         = attributeDict["IsPaidService"]
             managedObject.owner           = login
             if (attributeDict["isActive"] == "1") {
                 managedObject.is_close    = 1

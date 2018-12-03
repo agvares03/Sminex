@@ -29,5 +29,6 @@ extension Applications {
     @NSManaged public var phone:        String?
     @NSManaged public var tema:         String?
     @NSManaged public var text: 	    String?
+    @NSManaged public var is_paid:         String?
 
 }

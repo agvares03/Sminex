@@ -101,7 +101,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                                                           problem: "Нас топят соседи! Не можем с ними связаться. Срочно вызвайте сантехника",
                                                           date: "9 сентября 10:00",
                                                           status: "В ОБРАБОТКЕ",
-                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!])
+                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0")
     
     open var comments_: [ServiceCommentCellData] = []
     private var arr:    [TechServiceProtocol]    = []
@@ -114,7 +114,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if data_.isPaid == "1"{
+            self.navigationItem.title = "Заявка на услугу"
+        }
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         
@@ -613,10 +615,11 @@ final class ServiceHeaderData: TechServiceProtocol {
     let problem:    String
     let date:       String
     var status:     String
+    let isPaid:     String
     let images:     [UIImage]
     let imgsString: [String]
     
-    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = []) {
+    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String) {
         
         self.icon       = icon
         self.problem    = problem
@@ -624,6 +627,7 @@ final class ServiceHeaderData: TechServiceProtocol {
         self.status     = status
         self.images     = images
         self.imgsString = imagesUrl
+        self.isPaid     = isPaid
     }
 }
 

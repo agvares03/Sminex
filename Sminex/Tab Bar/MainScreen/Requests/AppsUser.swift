@@ -44,7 +44,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     public var isCreatingRequest_ = false
     public var delegate: MainScreenDelegate?
     public var xml_: XML.Accessor?
-    
+    public var isPaid: String?
     private var refreshControl: UIRefreshControl?
             var typeName = ""
             var reqId = ""
@@ -64,8 +64,8 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         prepareGroup?.enter()
+        
         collection?.delegate                     = self
         collection?.dataSource                   = self
         automaticallyAdjustsScrollViewInsets    = false
@@ -279,6 +279,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 
                 let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
+                
                 newData.append( AppsUserCellData(title: curr.name ?? "",
                                                  desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
                                                  icon: icon,
@@ -288,8 +289,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                  type: curr.idType ?? "",
                                                  id: curr.id ?? "",
                                                  updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                 stickTitle: isAnswered ? descText : ""))
+                                                 stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid!))
             }
+            
             var firstArr = newData.filter {
                 $0.status.contains(find: "обработке")
                     ||  $0.status.contains(find: "Отправлена")
@@ -358,7 +360,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.stopAnimatior()
                 
                 var type = self.data[indexPath.row].type
-                
                 // Это костыль - думать, как лучше сделать.
                 var itsNever: Bool = false
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
@@ -441,7 +442,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     
                 } else if type.contains(find: "Техническое обслуживание") {
                     let row = self.rows[self.data[indexPath.row].id]!
-                    
                     var images: [String] = []
                     
                     self.rowFiles.forEach {
@@ -456,7 +456,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images)
+                                                         imagesUrl: images, isPaid: row.isPaid ?? "")
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
@@ -478,13 +478,12 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                                             imageUrl: commImg,
                                                                             id: comm.id ?? ""))
                     }
-                    
                     self.reqId = row.id ?? ""
                     if self.collection != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toService, sender: self)
                     }
-                    
                     self.prepareGroup?.leave()
+                    
                 }
             }
         }
@@ -652,8 +651,9 @@ private final class AppsUserCellData {
     let id:         String
     let stickTitle: String
     let isBack:     Bool
+    let isPaid:     String
     
-    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String) {
+    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String) {
         
         self.updateDate = updateDate
         self.title      = title
@@ -665,6 +665,7 @@ private final class AppsUserCellData {
         self.type       = type
         self.id         = id
         self.stickTitle = stickTitle
+        self.isPaid     = isPaid
     }
 }
 
@@ -725,6 +726,7 @@ struct Request {
     let callUniqueID: 	        String?
     let flatNumber: 	        String?
     let updateDate:             String?
+    let isPaid:                 String?
     
     init(row: XML.Accessor) {
         isWait                  = row.attributes["isWait"]
@@ -787,6 +789,7 @@ struct Request {
         callUniqueID            = row.attributes["CallUniqueID"]
         flatNumber              = row.attributes["FlatNumber"]
         updateDate              = row.attributes["UpdatedDate"]
+        isPaid                  = row.attributes["IsPaidService"]
     }
 }
 

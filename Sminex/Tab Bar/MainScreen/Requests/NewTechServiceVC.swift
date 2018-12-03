@@ -122,6 +122,7 @@ class NewTechServiceVC: UIViewController {
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in
@@ -245,7 +246,7 @@ class NewTechServiceVC: UIViewController {
                                  problem: detailText,
                                  date: date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")),
                                  status: "В ОБРАБОТКЕ",
-                                 images: images)
+                                 images: images, isPaid: "0")
         uploadRequest()
     }
     
@@ -256,7 +257,7 @@ class NewTechServiceVC: UIViewController {
         if segue.identifier == Segues.fromCreateTechService.toService {
             let vc = segue.destination as! TechServiceVC
             vc.isCreate_ = true
-            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "")
+            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }

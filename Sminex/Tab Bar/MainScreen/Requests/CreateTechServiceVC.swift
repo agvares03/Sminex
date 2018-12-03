@@ -114,7 +114,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                                  problem: edProblem.text!,
                                  date: dateFormatter.string(from: picker.date),
                                  status: "В ОБРАБОТКЕ",
-                                 images: imagesArr)
+                                 images: imagesArr, isPaid: "0")
         uploadRequest()
     }
     
@@ -323,6 +323,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in
@@ -428,7 +429,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if segue.identifier == Segues.fromCreateTechService.toService {
             let vc = segue.destination as! TechServiceVC
             vc.isCreate_ = true
-            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "")
+            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }
