@@ -81,7 +81,7 @@ final class ServicesUKDescVC: UIViewController {
             if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
                 DispatchQueue.main.sync {
                     
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Услуга не заказана", message: "Попробуйте позже", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
@@ -92,9 +92,13 @@ final class ServicesUKDescVC: UIViewController {
                 
                 
                     DispatchQueue.main.sync {
-                        
-                        self.endAnimator()
-                        self.navigationController?.popViewController(animated: true)
+                        let alert = UIAlertController(title: "Услуга заказана", message: "", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
+                            self.endAnimator()
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
                     }
             }
             }

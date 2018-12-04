@@ -70,6 +70,9 @@ final class Server {
     static let DOWNLOAD_FILE       = "DownloadBillFile.ashx?"          // Скачать файл по квитанции
     static let GET_SERVICES        = "GetPaidServices.ashx?"           // Получение списка услуг
     static let DELETE_CLIENT       = "DeleteClientDevice.ashx?"        // Удаление девайса из списка
+    static let ADD_TECH_SUPPORT    = "AddTechSupportMail.ashx?"        // Добавление информации по письму
+    static let ADD_SUPPORT_FILE    = "AddTechSupportFile.ashx?"        // Добавление файлов к письму
+    
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

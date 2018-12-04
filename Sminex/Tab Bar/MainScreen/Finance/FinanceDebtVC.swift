@@ -102,9 +102,6 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         guard receipts != nil else {
             return 0
         }
-        receipts?.forEach{
-            print($0.usluga!)
-        }
         return receipts?.count != 0 ? (receipts?.count ?? 0) + 1 : 1
     }
     
@@ -126,22 +123,25 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
-        let isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
+        var isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
+        if receipts![indexPath.row].usluga == "" && receipts![indexPath.row].type != ""{
+            isBold = true
+        }
         if !isBold {
         cell.display(title: receipts![indexPath.row].usluga ?? "",
                      desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                      isBold: isBold)
         
         } else {
-            let currType = receipts?.filter {
-                return $0.type == receipts![indexPath.row].type
-            }
-            var sum = 0.0
-            currType?.forEach {
-                sum += ($0.sum ?? 0.0)
-            }
-            cell.display(title: receipts![indexPath.row].usluga ?? "",
-                         desc: (sum).formattedWithSeparator,
+//            let currType = receipts?.filter {
+//                return $0.type == receipts![indexPath.row].type
+//            }
+//            var sum = 0.0
+//            currType?.forEach {
+//                sum += ($0.sum ?? 0.0)
+//            }
+            cell.display(title: receipts![indexPath.row].type ?? "",
+                         desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                          isBold: isBold)
         }
         return cell
@@ -171,7 +171,10 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         
         } else {
             let cell = FinanceDebtCell.fromNib()
-            let isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
+            var isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
+            if receipts![indexPath.row].usluga == "" && receipts![indexPath.row].type != ""{
+                isBold = true
+            }
             cell?.display(title: receipts![indexPath.row].usluga ?? "",
                          desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                          isBold: false)
@@ -214,7 +217,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
             
             #if DEBUG
-                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
+//                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
             #endif
         
         }.resume()
@@ -228,7 +231,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
         request.httpMethod = "GET"
         
-        print(request.url)
+//        print(request.url)
         
         filesGroup.enter()
         URLSession.shared.dataTask(with: request) {
@@ -350,8 +353,6 @@ final class FinanceDebtCell: UICollectionViewCell {
     @IBOutlet private weak var desc:    UILabel!
     
     func display(title: String, desc: String, isBold: Bool) {
-        print(title)
-        
         self.title.text = title
         self.desc.text = desc
         

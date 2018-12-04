@@ -835,7 +835,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : row.text ?? ""
                     if row.isPaid == "1"{
                         returnArr.append( RequestCellData(title: "Заявка на услугу",
-                                                          desc: row.text ?? "",
+                                                          desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? row.text ?? "" : lastComm?.text ?? "",
                                                           icon: icon,
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",

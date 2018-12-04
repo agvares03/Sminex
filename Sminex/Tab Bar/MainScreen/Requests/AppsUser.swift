@@ -279,17 +279,30 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 
                 let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
+                if curr.isPaid == "1"{
+                    newData.append( AppsUserCellData(title: "Заявка на услугу",
+                                                     desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? curr.text! : lastComm?.text ?? "",
+                                                     icon: icon,
+                                                     status: curr.status ?? "",
+                                                     date: curr.updateDate ?? "",
+                                                     isBack: isAnswered,
+                                                     type: curr.idType ?? "",
+                                                     id: curr.id ?? "",
+                                                     updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
+                                                     stickTitle: isAnswered ? curr.text! : "", isPaid: curr.isPaid!))
+                }else{
+                    newData.append( AppsUserCellData(title: curr.name ?? "",
+                                                     desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
+                                                     icon: icon,
+                                                     status: curr.status ?? "",
+                                                     date: curr.updateDate ?? "",
+                                                     isBack: isAnswered,
+                                                     type: curr.idType ?? "",
+                                                     id: curr.id ?? "",
+                                                     updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
+                                                     stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid!))
+                }
                 
-                newData.append( AppsUserCellData(title: curr.name ?? "",
-                                                 desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
-                                                 icon: icon,
-                                                 status: curr.status ?? "",
-                                                 date: curr.updateDate ?? "",
-                                                 isBack: isAnswered,
-                                                 type: curr.idType ?? "",
-                                                 id: curr.id ?? "",
-                                                 updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                 stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid!))
             }
             
             var firstArr = newData.filter {

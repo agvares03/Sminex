@@ -857,10 +857,9 @@
                                         <rect key="frame" x="0.0" y="541" width="375" height="62"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9e5-FK-M1P">
-                                                <rect key="frame" x="61" y="8" width="298" height="45"/>
+                                                <rect key="frame" x="61" y="8" width="297.5" height="45"/>
                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="298" id="35N-VD-dRF"/>
                                                     <constraint firstAttribute="height" constant="45" id="UKa-MP-CBR"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -889,22 +888,21 @@
                                                 </connections>
                                             </button>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IlE-S7-1zI">
-                                                <rect key="frame" x="200" y="22" width="20" height="20"/>
+                                                <rect key="frame" x="177.5" y="22" width="20" height="20"/>
                                             </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="IlE-S7-1zI" firstAttribute="leading" secondItem="MOm-t3-mnA" secondAttribute="trailing" constant="155" id="7BK-ml-0CO"/>
-                                            <constraint firstItem="9e5-FK-M1P" firstAttribute="leading" secondItem="MOm-t3-mnA" secondAttribute="trailing" constant="16" id="Hji-zK-u0C"/>
+                                            <constraint firstItem="IlE-S7-1zI" firstAttribute="centerX" secondItem="K7l-Lh-Jaz" secondAttribute="centerX" id="1Mr-pR-TG4"/>
+                                            <constraint firstItem="9e5-FK-M1P" firstAttribute="leading" relation="lessThanOrEqual" secondItem="MOm-t3-mnA" secondAttribute="trailing" constant="16" id="Hji-zK-u0C"/>
                                             <constraint firstAttribute="height" constant="62" id="RVJ-a4-VMd"/>
-                                            <constraint firstItem="IlE-S7-1zI" firstAttribute="centerX" secondItem="9e5-FK-M1P" secondAttribute="centerX" id="SxY-5b-Tps"/>
                                             <constraint firstItem="9e5-FK-M1P" firstAttribute="top" secondItem="K7l-Lh-Jaz" secondAttribute="top" constant="8" id="Vvg-lc-zsM"/>
                                             <constraint firstItem="MOm-t3-mnA" firstAttribute="centerY" secondItem="9e5-FK-M1P" secondAttribute="centerY" constant="1.5" id="Z0w-tA-hYc"/>
-                                            <constraint firstAttribute="trailing" secondItem="IlE-S7-1zI" secondAttribute="trailing" constant="155" id="cmK-Vz-4QG"/>
                                             <constraint firstItem="MOm-t3-mnA" firstAttribute="top" secondItem="K7l-Lh-Jaz" secondAttribute="top" constant="21" id="dYu-eD-Bia"/>
                                             <constraint firstItem="IlE-S7-1zI" firstAttribute="top" secondItem="K7l-Lh-Jaz" secondAttribute="top" constant="22" id="fL5-yi-xZ4"/>
                                             <constraint firstItem="MOm-t3-mnA" firstAttribute="leading" secondItem="K7l-Lh-Jaz" secondAttribute="leading" constant="16" id="fPl-OU-izI"/>
                                             <constraint firstItem="IlE-S7-1zI" firstAttribute="centerY" secondItem="9e5-FK-M1P" secondAttribute="centerY" constant="1.5" id="jan-bO-eNy"/>
+                                            <constraint firstAttribute="trailing" secondItem="9e5-FK-M1P" secondAttribute="trailing" constant="16.5" id="oTa-qU-596"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -966,7 +964,6 @@
                         <outlet property="sendButton" destination="9e5-FK-M1P" id="QT2-r3-gdN"/>
                         <outlet property="sendButtonBottom" destination="Beb-yU-laN" id="GMt-zP-wYk"/>
                         <outlet property="sendButtonTop" destination="pGV-J5-dIU" id="WZp-FE-5EP"/>
-                        <outlet property="sendButtonWidth" destination="35N-VD-dRF" id="q9U-tz-bsT"/>
                         <outlet property="sendView" destination="K7l-Lh-Jaz" id="hth-Zi-eJX"/>
                     </connections>
                 </viewController>

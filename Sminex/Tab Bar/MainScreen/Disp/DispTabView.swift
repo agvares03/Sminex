@@ -69,6 +69,7 @@ class DispTabView: UIViewController, UITableViewDelegate, UITableViewDataSource{
     }
     
     @IBAction private func dispAccPressed(_ sender: UIButton?) {
+        self.performSegue(withIdentifier: "acc_Info", sender: self)
     }
     
     override func viewDidLoad() {

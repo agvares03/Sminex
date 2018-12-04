@@ -41,7 +41,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         view.endEditing(true)
         startAnimation()
-        sendMessage()
+        sendInfoMessage()
     }
     
     @IBAction private func imgsButtonPressed(_ sender: UIButton) {
@@ -108,7 +108,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         loader.isHidden = true
         if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
             currPoint = sendView.frame.origin.y - 200
-            sendButtonWidth.constant = sendButtonWidth.constant - 50
+//            sendButtonWidth.constant = sendButtonWidth.constant - 50
         }
         currPoint = sendView.frame.origin.y
         sendButton.isEnabled = false
@@ -341,64 +341,46 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         self.navigationController?.isNavigationBarHidden = false
         sender.view?.removeFromSuperview()
     }
-    private func sendMessage() {
+    
+    private func sendInfoMessage() {
         
         let login = lsTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let text  = problemTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        var email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        email = email.replacingOccurrences(of: "%2B", with: "+")
-
-        let url = "login=\(login)&text=\(text)&phone=\(email)"
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MESSAGE + url)!)
+        var email = ""
+        var phone = ""
+        if (emailTextView.text?.contains(find: "@"))!{
+            email = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        }else{
+            phone = emailTextView.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        }
+        phone = phone.replacingOccurrences(of: "%2B", with: "+")
         
-        let encodedData = UIImageJPEGRepresentation(imgs[0], 0.5)
-        boundary = generateBoundaryString()
-        let contentType = "multipart/form-data; boundary=\(String(describing: boundary))"
-        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.httpBody = createRequestBody(photo: encodedData! as NSData) as Data
+        let url = "login=\(login)&text=\(text)&phone=\(phone)&mail=\(email)"
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ADD_TECH_SUPPORT + url)!)
         request.httpMethod = "POST"
-        
+//        print(request)
+
         let task = URLSession.shared.dataTask(with: request) {
             data, error, responce in
             let response = String(data: data!, encoding: .utf8) ?? ""
-            print(response)
+//            print(response)
+            
             guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                 DispatchQueue.main.async {
                     self.present(alert, animated: true, completion: nil)
                 }
+                self.stopAnimation()
                 return
             }
-            
-            
-            if response == "ok" {
-                let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
-                self.present(alert, animated: true, completion: nil)
-                
-                debugPrint(response)
-            } else {
-                
-                self.showAlert(message: response , title: "Ошибка сервера")
+            self.reqId = response
+            self.imgs.forEach{
+                self.uploadPhoto($0)
             }
-
+            self.sendMessage()
         }
         task.resume()
-    }
-    
-    func generateBoundaryString() -> String {
-        return "Boundary-\(NSUUID().uuidString)"
-    }
-    
-    func createRequestBody(photo:NSData) -> NSData{
-        let body = NSMutableData()
-        body.append(NSString(format: "\r\n--%@\r\n", boundary!).data(using: String.Encoding.utf8.rawValue)!)
-        body.append(NSString(format: "Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpeg\"\r\n").data(using: String.Encoding.utf8.rawValue)!)
-        body.append(NSString(format:"Content-Type: image/jpeg\r\n\r\n").data(using: String.Encoding.utf8.rawValue)!)
-        body.append(photo as Data)
-        body.append(NSString(format: "\r\n--%@\r\n", boundary!).data(using: String.Encoding.utf8.rawValue)!)
-        return body
     }
     
 //    private func sendMessage() {
@@ -430,23 +412,23 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     private func uploadPhoto(_ img: UIImage) {
         let group = DispatchGroup()
         let reqID = reqId?.stringByAddingPercentEncodingForRFC3986()
-        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         
         group.enter()
         let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
             multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
-        }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
+        }, to: Server.SERVER + Server.ADD_SUPPORT_FILE + "mailId=" + reqID!) { (result) in
             
             switch result {
             case .success(let upload, _, _):
                 
                 upload.uploadProgress(closure: { (progress) in
-//                    print("Upload Progress: \(progress.fractionCompleted)")
+                    print("Upload Progress: \(progress.fractionCompleted)")
                 })
                 
                 upload.responseJSON { response in
 //                    print(response.result.value!)
+
                     group.leave()
                     
                 }
@@ -457,6 +439,35 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         }
         group.wait()
         return
+    }
+    
+    private func sendMessage() {
+        let reqID = reqId?.stringByAddingPercentEncodingForRFC3986()
+        
+        let url = "mailId=" + "\(reqID!)"
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MAIL + url)!)
+        request.httpMethod = "POST"
+//        print(request)
+        
+        let task = URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            let response = String(data: data!, encoding: .utf8) ?? ""
+//            print(response)
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                self.stopAnimation()
+                return
+            }
+            let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
+            alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
+            self.present(alert, animated: true, completion: nil)
+        }
+        task.resume()
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
