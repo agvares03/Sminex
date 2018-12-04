@@ -61,7 +61,7 @@ final class ServicesUKDescVC: UIViewController {
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm = titleLabel.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=bceeab0b-891a-4af8-9953-1bf1ffd7fe29&name=\("\(comm.stringByAddingPercentEncodingForRFC3986()!) \(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=bceeab0b-891a-4af8-9953-1bf1ffd7fe29&name=\(comm.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         print(request)
@@ -92,6 +92,7 @@ final class ServicesUKDescVC: UIViewController {
                 
                 
                     DispatchQueue.main.sync {
+                        UserDefaults.standard.set(true, forKey: "backBtn")
                         let alert = UIAlertController(title: "Услуга заказана", message: "", preferredStyle: .alert)
                         let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                             self.endAnimator()

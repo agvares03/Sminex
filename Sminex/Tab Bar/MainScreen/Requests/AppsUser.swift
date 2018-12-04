@@ -786,10 +786,10 @@ struct Request {
         isProcessing            = row.attributes["IsProcessing"]
         onlyForConsultant       = row.attributes["onlyForConsultant"]
         name                    = row.attributes["name"]
-        if (name?.contains("Техническ"))! {
-            name                = "Техническое обслуживание"
-        } else {
+        if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
+        } else {
+            name                = "Техническое обслуживание"
         }
         clearAfterWork          = row.attributes["ClearAfterWork"]
         idDepartment            = row.attributes["id_department"]

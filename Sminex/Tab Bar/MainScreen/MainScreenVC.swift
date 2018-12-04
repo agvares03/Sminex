@@ -773,6 +773,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
             request.httpMethod = "GET"
+            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -781,6 +782,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     group.leave()
                 }
                 guard data != nil else { return }
+                
+//                print(String(data: data!, encoding: .utf8) ?? "")
+                
                 let xml = XML.parse(data!)
                 self.mainScreenXml = xml
                 let requests = xml["Requests"]
@@ -817,7 +821,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         isAnswered = false
                     }
                     let icon = !(row.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
-                    let isPerson = row.name?.contains(find: "ропуск") ?? false
+                    var type = row.idType
+                    TemporaryHolder.instance.requestTypes?.types?.forEach {
+                        if $0.id == type {
+                            type = $0.name ?? ""
+                        }
+                    }
+//                    let isPerson = row.name?.contains(find: "ропуск") ?? false
+                    let isPerson = type!.contains(find: "ропуск") ?? false
                     
                     var persons = ""//row.responsiblePerson ?? ""
                     
