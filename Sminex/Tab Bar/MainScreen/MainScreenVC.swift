@@ -851,7 +851,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid!) )
+                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: row.text ?? "") )
                     }else{
                         returnArr.append( RequestCellData(title: row.name ?? "",
                                                           desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
@@ -859,7 +859,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid!) )
+                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: descText ) )
                     }
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
@@ -1646,6 +1646,7 @@ final class RequestCell: UICollectionViewCell {
     @IBOutlet private var descTop:     NSLayoutConstraint!
     @IBOutlet private var descBottom:  NSLayoutConstraint!
     
+    @IBOutlet private weak var stickTitle:  UILabel?
     @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var desc:        UILabel!
     @IBOutlet private weak var icon:    	UIImageView!
@@ -1655,7 +1656,7 @@ final class RequestCell: UICollectionViewCell {
     
     fileprivate func display(_ item: RequestCellData) {
         title.text  = item.title
-        
+        stickTitle?.text = item.stickTitle
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
@@ -1674,9 +1675,10 @@ final class RequestCell: UICollectionViewCell {
         if item.isBack {
             backTop.constant    = 6
             backBottom.constant = 6
-            descTop.constant    = 12
+            descTop.constant    = 28.5
             descBottom.constant = 17
             back.isHidden = false
+            stickTitle?.isHidden = false
 
         } else {
             backTop.constant    = 0
@@ -1684,6 +1686,8 @@ final class RequestCell: UICollectionViewCell {
             descTop.constant    = 2
             descBottom.constant = 12
             back.isHidden = true
+            stickTitle?.isHidden = true
+            stickTitle?.frame.size.height = 0
         }
 
         let currTitle = item.title
@@ -1711,6 +1715,7 @@ final class RequestCell: UICollectionViewCell {
         
         } else {
             cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+//            cell?.stickTitle.preferredMaxLayoutWidth = cell?.stickTitle.bounds.size.width ?? 0.0
             cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width  ?? 0.0
         }
 
@@ -1721,6 +1726,7 @@ final class RequestCell: UICollectionViewCell {
 final class RequestCellData: MainDataProtocol {
     
     let title:  String
+    let stickTitle: String
     let desc:   String
     let icon:   UIImage
     let date:   String
@@ -1729,7 +1735,7 @@ final class RequestCellData: MainDataProtocol {
     let id:     String
     let isPaid: String
     
-    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String, isPaid: String) {
+    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String, isPaid: String, stickTitle: String) {
         self.title  = title
         self.desc   = desc
         self.icon   = icon
@@ -1738,6 +1744,7 @@ final class RequestCellData: MainDataProtocol {
         self.isBack = isBack
         self.id     = id
         self.isPaid = isPaid
+        self.stickTitle = stickTitle
     }
 }
 
