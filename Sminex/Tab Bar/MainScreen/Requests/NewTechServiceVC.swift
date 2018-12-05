@@ -220,7 +220,7 @@ class NewTechServiceVC: UIViewController {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
                 imagePicker.sourceType = .photoLibrary;
-                imagePicker.allowsEditing = true
+                imagePicker.allowsEditing = false
                 self.present(imagePicker, animated: true, completion: nil)
             }
         }))
