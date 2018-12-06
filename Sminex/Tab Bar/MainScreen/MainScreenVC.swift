@@ -686,11 +686,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
-            let isPaid = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.isPaid ?? ""
             appsUser = AppsUser()
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
-            appsUser?.isPaid = isPaid
+            appsUser?.isFromMain = true
             appsUser?.delegate = self
             appsUser?.prepareGroup = DispatchGroup()
             appsUser?.viewDidLoad()

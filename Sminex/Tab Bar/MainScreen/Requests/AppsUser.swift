@@ -44,7 +44,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     public var isCreatingRequest_ = false
     public var delegate: MainScreenDelegate?
     public var xml_: XML.Accessor?
-    public var isPaid: String?
+    public var isFromMain: Bool = false
     private var refreshControl: UIRefreshControl?
             var typeName = ""
             var reqId = ""
@@ -395,9 +395,13 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.fullData = firstArr
                 self.fullCount = self.fullData.count
                 self.data.removeAll()
-                for _ in 0...19{
-                    self.data.append(firstArr.first!)
-                    firstArr.removeFirst()
+                if self.isFromMain{
+                    self.data = firstArr
+                }else{
+                    for _ in 0...19{
+                        self.data.append(firstArr.first!)
+                        firstArr.removeFirst()
+                    }
                 }
                 self.collection?.reloadData()
                 

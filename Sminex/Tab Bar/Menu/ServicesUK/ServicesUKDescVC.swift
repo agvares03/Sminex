@@ -84,8 +84,21 @@ final class ServicesUKDescVC: UIViewController {
             #if DEBUG
             print(String(data: responce!, encoding: .utf8)!)
             #endif
-            
-            if (String(data: responce!, encoding: .utf8)?.contains(find: "error"))! {
+            let responseString = String(data: responce!, encoding: .utf8) ?? ""
+            let checkInt = self.isStringAnInt(string: responseString)
+    
+            if checkInt{
+                DispatchQueue.main.sync {
+                    UserDefaults.standard.set(true, forKey: "backBtn")
+                    let alert = UIAlertController(title: "Услуга заказана", message: "", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
+                        self.endAnimator()
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }else{
                 DispatchQueue.main.sync {
                     
                     let alert = UIAlertController(title: "Услуга не заказана", message: "Попробуйте позже", preferredStyle: .alert)
@@ -95,22 +108,14 @@ final class ServicesUKDescVC: UIViewController {
                     self.endAnimator()
                 }
                 return
-            } else {
                 
-                
-                    DispatchQueue.main.sync {
-                        UserDefaults.standard.set(true, forKey: "backBtn")
-                        let alert = UIAlertController(title: "Услуга заказана", message: "", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
-                            self.endAnimator()
-                            self.navigationController?.popViewController(animated: true)
-                        }
-                        alert.addAction(cancelAction)
-                        self.present(alert, animated: true, completion: nil)
-                    }
             }
             }
     .resume()
+    }
+    
+    func isStringAnInt(string: String) -> Bool {
+        return Int(string) != nil
     }
     
     private func startAnimator() {
