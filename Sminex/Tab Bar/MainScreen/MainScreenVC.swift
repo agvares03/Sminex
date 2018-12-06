@@ -1662,7 +1662,8 @@ final class RequestCell: UICollectionViewCell {
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
-           desc.text   = item.desc
+            let mySubstring = item.desc.prefix(30)
+            desc.text   = String(mySubstring)
         }
         icon.image  = item.icon
         status.text = item.status.uppercased()

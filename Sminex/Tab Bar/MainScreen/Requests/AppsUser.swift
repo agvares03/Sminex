@@ -52,6 +52,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     private let typeGroup      = DispatchGroup()
             var prepareGroup: DispatchGroup? = nil
     private var data: [AppsUserCellData] = []
+    private var fullData: [AppsUserCellData] = []
     private var rowComms: [String : [RequestComment]]  = [:]
     private var rowPersons: [String : [RequestPerson]] = [:]
     private var rowAutos:   [String : [RequestAuto]]   = [:]
@@ -130,6 +131,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppsUserCell", for: indexPath) as! AppsUserCell
         cell.display(data[indexPath.row])
+        if indexPath.row == self.data.count - 1 {
+            self.loadMore()
+        }
         return cell
         
     }
@@ -138,6 +142,63 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         startAnimator()
         prepareTapped(indexPath)
+    }
+    // number of items to be fetched each time (i.e., database LIMIT)
+    let itemsPerBatch = 19
+    
+    // Where to start fetching items (database OFFSET)
+    var offset = 19
+    var fullCount = 0
+    // a flag for when all database items have already been loaded
+    var reachedEndOfItems = false
+    
+    func loadMore() {
+        
+        // don't bother doing another db query if already have everything
+        guard !self.reachedEndOfItems else {
+            return
+        }
+        self.startAnimator()
+        // query the db on a background thread
+        DispatchQueue.global(qos: .background).async {
+            
+            // determine the range of data items to fetch
+            var thisBatchOfItems: [AppsUserCellData] = []
+            let start = self.offset
+            var end = self.offset + self.itemsPerBatch
+            if end > self.fullCount{
+                end = self.fullCount - 1
+            }
+            for i in start...end{
+                thisBatchOfItems.append(self.fullData[i])
+            }
+            // update UITableView with new batch of items on main thread after query finishes
+            DispatchQueue.main.async {
+                
+                if thisBatchOfItems.count != 0 {
+                    
+                    // append the new items to the data source for the table view
+                    self.data += thisBatchOfItems
+                    // reload the table view
+                    self.collection?.reloadData()
+                    self.stopAnimatior()
+                    if #available(iOS 10.0, *) {
+                        self.collection?.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
+                    // check if this was the last of the data
+                    if thisBatchOfItems.count < self.itemsPerBatch {
+                        self.reachedEndOfItems = true
+                    }
+                    
+                    // reset the offset for the next data query
+                    self.offset += self.itemsPerBatch
+                }else{
+                    self.stopAnimatior()
+                }
+            }
+        }
     }
     
     func getRequestTypes() {
@@ -201,9 +262,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
-                defer {
-                    group.leave()
-                }
+//                defer {
+//                    group.leave()
+//                }
                 guard data != nil else { return }
                 
                 #if DEBUG
@@ -212,6 +273,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 let xml = XML.parse(data!)
                 self.parse(xml: xml)
+                group.leave()
                 }.resume()
         }
     }
@@ -328,10 +390,15 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             firstArr  = firstArr.sorted  { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
             secondArr = secondArr.sorted { (df.date(from: $0.updateDate) ?? Date()).compare((df.date(from: $1.updateDate)) ?? Date()) == .orderedDescending }
             firstArr.append(contentsOf: secondArr)
-            
             DispatchQueue.main.sync {
                 self.createButton?.isUserInteractionEnabled = false
-                self.data = firstArr
+                self.fullData = firstArr
+                self.fullCount = self.fullData.count
+                self.data.removeAll()
+                for _ in 0...19{
+                    self.data.append(firstArr.first!)
+                    firstArr.removeFirst()
+                }
                 self.collection?.reloadData()
                 
                 if self.requestId_ != "" {
@@ -589,11 +656,11 @@ final class AppsUserCell: UICollectionViewCell {
     private var type: String?
     
     fileprivate func display(_ item: AppsUserCellData) {
-        
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
-            desc.text   = item.desc
+            let mySubstring = item.desc.prefix(30)
+            desc.text   = String(mySubstring)
         }
         icon.image      = item.icon
         status.text     = item.status

@@ -342,7 +342,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func enter(login: String? = nil, pass: String? = nil) {
+    func enter(login: String? = nil, pass: String? = nil){
         
         if !isFromSettings_ {
             startIndicator()
@@ -380,9 +380,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             #if DEBUG
                 print("responseString = \(self.responseString)")
             #endif
-            
             self.choice()
-            
             }.resume()
         }
     }
@@ -401,8 +399,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 self.present(alert, animated: true, completion: nil)
                 
             } else if self.responseString == "2" || self.responseString.contains("error") {
-                self.errorLabel.isHidden = false
-                
+                if !self.isFromSettings_ {
+                    self.errorLabel.isHidden = true
+                }
             } else {
                 if !self.isFromSettings_ {
                     self.errorLabel.isHidden = true
