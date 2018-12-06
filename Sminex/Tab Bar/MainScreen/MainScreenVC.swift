@@ -38,6 +38,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     private var busines_center_dayFrom: Int?
     private var busines_center_dayTo: Int?
+    
+    private var busines_center_CompanyService: Bool? = false
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
@@ -234,7 +236,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 return
             }
-            
+            #if DEBUG
+//            print(String(data: data!, encoding: .utf8)!)
+            #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
                 self.busines_center_denyInvoiceFiles = Business_Center_Data(json: json!)?.DenyInvoiceFiles
@@ -249,11 +253,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 self.busines_center_dayFrom = Business_Center_Data(json: json!)?.DayFrom
                 self.busines_center_dayTo = Business_Center_Data(json: json!)?.DayTo
+                self.busines_center_CompanyService = Business_Center_Data(json: json!)?.DenyManagementCompanyServices
             }
-            
-            #if DEBUG
-//            print(String(data: data!, encoding: .utf8)!)
-            #endif
             
             let defaults = UserDefaults.standard
             defaults.set(self.business_center_info, forKey: "denyOnlinePayments")
@@ -265,6 +266,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.set(self.business_center_OnlyViewMeterReadings, forKey: "onlyViewMeterReadings")
             defaults.set(self.busines_center_dayFrom, forKey: "meterReadingsDayFrom")
             defaults.set(self.busines_center_dayTo, forKey: "meterReadingsDayTo")
+            defaults.set(self.busines_center_CompanyService, forKey: "denyCompanyService")
             defaults.synchronize()
             let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
             let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")

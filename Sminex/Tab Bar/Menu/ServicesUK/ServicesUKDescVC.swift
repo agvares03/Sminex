@@ -33,7 +33,7 @@ final class ServicesUKDescVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let denyCompanyService:Bool = (UserDefaults.standard.value(forKey: "denyCompanyService") as! Bool)
         if let image = UIImage(data: Data(base64Encoded: ((data_?.picture ?? "").replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             imgView.image = image
         
@@ -46,6 +46,13 @@ final class ServicesUKDescVC: UIViewController {
         titleLabel.text = data_?.name
         costLabel.text  = data_?.cost
         descLabel.text  = data_?.desc
+        if !denyCompanyService{
+            sendBtn.alpha     = 0.5
+            sendBtn.isEnabled = false
+        }else{
+            sendBtn.alpha     = 1
+            sendBtn.isEnabled = true
+        }
     }
     
     private func formatDate(_ date: Date, format: String) -> String {
