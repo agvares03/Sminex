@@ -312,7 +312,6 @@ class CustomAlertViewController: UIViewController {
                 alert.addAction(cancelAction)
                 self.stopAnimation()
                 self.present(alert, animated: true, completion: nil)
-
             }
         }
     }

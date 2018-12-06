@@ -38,6 +38,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     private var busines_center_dayFrom: Int?
     private var busines_center_dayTo: Int?
+    
+    private var busines_center_CompanyService: Bool? = false
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
@@ -234,7 +236,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 return
             }
-            
+            #if DEBUG
+//            print(String(data: data!, encoding: .utf8)!)
+            #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
                 self.busines_center_denyInvoiceFiles = Business_Center_Data(json: json!)?.DenyInvoiceFiles
@@ -249,11 +253,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 self.busines_center_dayFrom = Business_Center_Data(json: json!)?.DayFrom
                 self.busines_center_dayTo = Business_Center_Data(json: json!)?.DayTo
+                self.busines_center_CompanyService = Business_Center_Data(json: json!)?.DenyManagementCompanyServices
             }
-            
-            #if DEBUG
-//            print(String(data: data!, encoding: .utf8)!)
-            #endif
             
             let defaults = UserDefaults.standard
             defaults.set(self.business_center_info, forKey: "denyOnlinePayments")
@@ -265,6 +266,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.set(self.business_center_OnlyViewMeterReadings, forKey: "onlyViewMeterReadings")
             defaults.set(self.busines_center_dayFrom, forKey: "meterReadingsDayFrom")
             defaults.set(self.busines_center_dayTo, forKey: "meterReadingsDayTo")
+            defaults.set(self.busines_center_CompanyService, forKey: "denyCompanyService")
             defaults.synchronize()
             let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
             let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
@@ -684,11 +686,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
-            let isPaid = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.isPaid ?? ""
             appsUser = AppsUser()
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
-            appsUser?.isPaid = isPaid
+            appsUser?.isFromMain = true
             appsUser?.delegate = self
             appsUser?.prepareGroup = DispatchGroup()
             appsUser?.viewDidLoad()
@@ -851,7 +852,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid!) )
+                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: row.text ?? "") )
                     }else{
                         returnArr.append( RequestCellData(title: row.name ?? "",
                                                           desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
@@ -859,7 +860,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid!) )
+                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: descText ) )
                     }
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
@@ -1646,6 +1647,7 @@ final class RequestCell: UICollectionViewCell {
     @IBOutlet private var descTop:     NSLayoutConstraint!
     @IBOutlet private var descBottom:  NSLayoutConstraint!
     
+    @IBOutlet private weak var stickTitle:  UILabel?
     @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var desc:        UILabel!
     @IBOutlet private weak var icon:    	UIImageView!
@@ -1655,11 +1657,12 @@ final class RequestCell: UICollectionViewCell {
     
     fileprivate func display(_ item: RequestCellData) {
         title.text  = item.title
-        
+        stickTitle?.text = item.stickTitle
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
-           desc.text   = item.desc
+            let mySubstring = item.desc.prefix(30)
+            desc.text   = String(mySubstring)
         }
         icon.image  = item.icon
         status.text = item.status.uppercased()
@@ -1674,9 +1677,10 @@ final class RequestCell: UICollectionViewCell {
         if item.isBack {
             backTop.constant    = 6
             backBottom.constant = 6
-            descTop.constant    = 12
+            descTop.constant    = 28.5
             descBottom.constant = 17
             back.isHidden = false
+            stickTitle?.isHidden = false
 
         } else {
             backTop.constant    = 0
@@ -1684,6 +1688,8 @@ final class RequestCell: UICollectionViewCell {
             descTop.constant    = 2
             descBottom.constant = 12
             back.isHidden = true
+            stickTitle?.isHidden = true
+            stickTitle?.frame.size.height = 0
         }
 
         let currTitle = item.title
@@ -1711,6 +1717,7 @@ final class RequestCell: UICollectionViewCell {
         
         } else {
             cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+//            cell?.stickTitle.preferredMaxLayoutWidth = cell?.stickTitle.bounds.size.width ?? 0.0
             cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width  ?? 0.0
         }
 
@@ -1721,6 +1728,7 @@ final class RequestCell: UICollectionViewCell {
 final class RequestCellData: MainDataProtocol {
     
     let title:  String
+    let stickTitle: String
     let desc:   String
     let icon:   UIImage
     let date:   String
@@ -1729,7 +1737,7 @@ final class RequestCellData: MainDataProtocol {
     let id:     String
     let isPaid: String
     
-    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String, isPaid: String) {
+    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String, isPaid: String, stickTitle: String) {
         self.title  = title
         self.desc   = desc
         self.icon   = icon
@@ -1738,6 +1746,7 @@ final class RequestCellData: MainDataProtocol {
         self.isBack = isBack
         self.id     = id
         self.isPaid = isPaid
+        self.stickTitle = stickTitle
     }
 }
 

@@ -15,6 +15,7 @@ struct Business_Center_Data: JSONDecodable {
     let DenyOnlinePayments: Bool?
     let DenyInvoiceFiles: Bool?
     let DenyTotalOnlinePayments: Bool?
+    let DenyManagementCompanyServices: Bool?
     
     let DenyQRCode: Bool?
     
@@ -30,6 +31,7 @@ struct Business_Center_Data: JSONDecodable {
         DenyOnlinePayments                = "denyOnlinePayments"                  <~~ json
         DenyInvoiceFiles                  = "denyInvoiceFiles"                    <~~ json
         DenyTotalOnlinePayments           = "denyTotalOnlinePayments"             <~~ json
+        DenyManagementCompanyServices     = "denyManagementCompanyServices"       <~~ json
         
         DenyQRCode                        = "denyQRCode"                          <~~ json
         

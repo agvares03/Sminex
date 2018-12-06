@@ -20,10 +20,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var sendBtnConst:    NSLayoutConstraint!
     @IBOutlet weak var sendViewConst: NSLayoutConstraint!
     @IBOutlet weak var edConst: NSLayoutConstraint!
+    @IBOutlet weak var FioConst: NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
     @IBOutlet private weak var picker:          UIDatePicker!
-    @IBOutlet private weak var edFio:           UITextField!
+    @IBOutlet private weak var edFio:           UITextView!
     @IBOutlet private weak var edContact:       UITextField!
     @IBOutlet private weak var gosNumber:       UITextField!
     @IBOutlet private weak var edComment: UITextView!
@@ -83,8 +84,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         viewTapped(nil)
         if edFio.text == "" {
-            edFio.placeholder = "Введите текст!"
-        
+            edFio.text = "Введите текст!"
+            edFio.textColor = UIColor.lightGray
+            edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
         } else if edContact.text == "" {
             edContact.placeholder = "Введите текст!"
         
@@ -146,6 +148,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     private var data: AdmissionHeaderData?
     private var btnConstant: CGFloat = 0.0
     private var sprtTopConst: CGFloat = 0.0
+    private var show = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -212,8 +215,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
         
         edComment.text = "Примечания"
+        edFio.text = "ФИО гостей"
         edComment.textColor = UIColor.lightGray
         edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
+        edFio.textColor = UIColor.lightGray
+        edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -283,6 +289,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             }
             scroll.contentOffset = CGPoint(x: 0, y: 140)
         }
+        if FioConst.constant == 57{
+            sendViewConst.constant -= 20
+        }
     }
     
     // И вниз при исчезновении
@@ -307,6 +316,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 50)
             }
             scroll.contentOffset = CGPoint(x: 0, y: 0)
+        }
+        if FioConst.constant == 57{
+            sendViewConst.constant -= 20
         }
     }
     
@@ -612,17 +624,40 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         if updatedText.isEmpty {
             textView.text = "Примечания"
+            if textView.frame.origin.y < 100{
+                textView.text = "ФИО гостей"
+                sendButton.alpha     = 0.5
+                sendButton.isEnabled = false
+            }
             textView.textColor = UIColor.lightGray
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             
         } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
             textView.textColor = UIColor.black
             textView.text = text
+            if textView.frame.origin.y < 100{
+                sendButton.alpha     = 1
+                sendButton.isEnabled = true
+            }
             
         } else {
             return true
         }
         return false
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        
+        if (textView.text as NSString).components(separatedBy: .newlines).count < 3 && textView.frame.origin.y < 100 {
+            self.FioConst.constant = textView.contentSize.height
+            if self.FioConst.constant == 57 && self.show == false{
+                self.sendViewConst.constant -= 20
+                self.show = true
+            }
+            if self.FioConst.constant == 37{
+                self.show = false
+            }
+        }
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
