@@ -389,7 +389,7 @@ open class DigitInputView: UIView {
 extension DigitInputView: UITextFieldDelegate {
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        let string = string.replacingOccurrences(of: ",", with: ".")
+        let string = string.replacingOccurrences(of: ".", with: ",")
         let char = string.cString(using: .utf8)
         let isBackSpace = strcmp(char, "\\b")
         
