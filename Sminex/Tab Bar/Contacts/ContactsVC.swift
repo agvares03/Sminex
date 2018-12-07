@@ -22,6 +22,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
+        UserDefaults.standard.set(true, forKey: "fromMenu")
         performSegue(withIdentifier: Segues.fromContactsVc.toSupport, sender: self)
     }
     

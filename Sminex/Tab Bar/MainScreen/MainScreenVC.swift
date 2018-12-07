@@ -221,7 +221,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
         request.httpMethod = "GET"
-        print(request)
+//        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -774,7 +774,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
             request.httpMethod = "GET"
-            print(request)
+//            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -846,7 +846,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : row.text ?? ""
                     if row.isPaid == "1"{
-                        returnArr.append( RequestCellData(title: "Заявка на услугу",
+                        returnArr.append( RequestCellData(title: row.name ?? "",
                                                           desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? row.text ?? "" : lastComm?.text ?? "",
                                                           icon: icon,
                                                           date: row.updateDate ?? "",
@@ -1587,9 +1587,13 @@ final class StockCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerViewD
             pagerView.itemSize = CGSize(width: 343, height: 170)
             pagerHeight.constant = 170
             
+        } else if (400.0...450.0).contains(points) {
+            pagerView.itemSize = CGSize(width: 382, height: 180)
+            pagerHeight.constant = 180
+            
         } else {
-            pagerView.itemSize = CGSize(width: 382, height: 191)
-            pagerHeight.constant = 191
+            pagerView.itemSize = CGSize(width: 343, height: 170)
+            pagerHeight.constant = 170
         }
         if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
             pagerView.itemSize = CGSize(width: 288, height: 144)

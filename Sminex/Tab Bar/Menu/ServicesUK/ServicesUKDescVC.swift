@@ -44,7 +44,7 @@ final class ServicesUKDescVC: UIViewController {
         loader.isHidden = true
         navigationItem.title = data_?.name
         titleLabel.text = data_?.name
-        costLabel.text  = data_?.cost
+        costLabel.text  = data_?.cost!.replacingOccurrences(of: "руб.", with: "₽")
         descLabel.text  = data_?.desc
         if !denyCompanyService{
             sendBtn.alpha     = 0.5

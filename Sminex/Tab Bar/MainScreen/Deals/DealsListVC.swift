@@ -193,9 +193,13 @@ final class DealsListCell: UICollectionViewCell {
             cell?.imageWidth.constant  = 343
             cell?.imageHeight.constant = 170
             
-        } else {
+        } else if (400.0...450.0).contains(points) {
             cell?.imageWidth.constant  = 382
-            cell?.imageHeight.constant = 191
+            cell?.imageHeight.constant = 200
+            
+        } else {
+            cell?.imageWidth.constant  = 302
+            cell?.imageHeight.constant = 151
         }
 
         return cell

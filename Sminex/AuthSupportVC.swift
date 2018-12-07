@@ -15,7 +15,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet private weak var loader:              UIActivityIndicatorView!
     @IBOutlet private weak var sendButtonBottom:    NSLayoutConstraint!
     @IBOutlet private weak var sendButtonTop:       NSLayoutConstraint!
-    @IBOutlet private weak var sendButtonWidth:       NSLayoutConstraint!
+    @IBOutlet private weak var sendButtonWidth:     NSLayoutConstraint!
     @IBOutlet private weak var imgsHeight:          NSLayoutConstraint!
     @IBOutlet private weak var sendView:            UIView!
     @IBOutlet private weak var scroll:              UIScrollView!
@@ -31,6 +31,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
         view.endEditing(true)
+        UserDefaults.standard.set(false, forKey: "fromMenu")
         let alert = UIAlertController(title: "Удалить заявку?", message: "Изменения не сохранятся", preferredStyle: .alert)
         alert.addAction( UIAlertAction(title: "Отмена", style: .default, handler: { (_) in } ) )
         alert.addAction( UIAlertAction(title: "Удалить", style: .destructive, handler: { (_) in
@@ -73,23 +74,24 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     open var login_ = ""
+    open var fromMenu = false
     private var imgs: [UIImage] = [] {
         didSet {
             if imgs.count == 0 {
                 imgsHeight.constant = 1
-                sendButtonTop.constant = getPoint()
-                
-                if isNeedToScrollMore() && tabBarController != nil {
-                    sendButtonTop.constant = getPoint() + 99
-                }
+//                sendButtonTop.constant = getPoint()
+//
+//                if isNeedToScrollMore() && tabBarController != nil {
+//                    sendButtonTop.constant = getPoint() + 99
+//                }
                 
             } else {
                 imgsHeight.constant = 150
-                sendButtonTop.constant = getPoint() - 150
-                
-                if isNeedToScrollMore() && tabBarController != nil {
-                    sendButtonTop.constant = getPoint() - 100
-                }
+//                sendButtonTop.constant = getPoint() - 150
+//
+//                if isNeedToScrollMore() && tabBarController != nil {
+//                    sendButtonTop.constant = getPoint() - 100
+//                }
             }
             drawImages()
         }
@@ -98,7 +100,11 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if UserDefaults.standard.bool(forKey: "fromMenu"){
+            login_ = UserDefaults.standard.string(forKey: "login") ?? ""
+            lsTextView.isEnabled = false
+            lsTextView.textColor = .lightGray
+        }
         if login_ != "" {
             self.lsTextView.text = login_
         }
@@ -129,7 +135,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         
-        if problemTextView.text == "" || emailTextView.text == "" || lsTextView.text == "" {
+        if problemTextView.text == "" || emailTextView.text == "" {
             sendButton.isEnabled = false
             sendButton.alpha = 0.5
             
@@ -148,59 +154,63 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         scroll.contentSize.height += 200
         
         if !isNeedToScroll() {
-            if Device().isOneOf([.iPhone6, .iPhone6s, .iPhone7, .iPhone8, .simulator(.iPhone6), .simulator(.iPhone6s)]) && imgs.count != 0 {
-                sendButtonTop.constant    = -30
-                sendButtonBottom.constant = 210
+            if Device().isOneOf([.iPhone6, .iPhone6s, .iPhone7, .iPhone8, .simulator(.iPhone6), .simulator(.iPhone6s)]){
+                sendButtonTop.constant = getPoint() - 210
                 return
                 
-            } else {
+            }else if isPlusDevices(){
                 sendButtonTop.constant = getPoint() - 210
+                return
+            }else {
+                sendButtonTop.constant = getPoint() - 250
             }
             
         } else {
             
             if !isNeedToScrollMore() {
                 
-                if imgs.count == 0 {
+//                if imgs.count == 0 {
                     if tabBarController == nil {
-                        sendButtonTop.constant    = -30
-                        sendButtonBottom.constant = 210
-                        
+//                        sendButtonTop.constant    = -30
+//                        sendButtonBottom.constant = 210
+                        sendButtonTop.constant = getPoint() - 205
                     } else {
-                        sendButtonTop.constant = getPoint() - 210
+                        sendButtonTop.constant = getPoint() - 205
                     }
                     
-                } else {
-                    if tabBarController == nil {
-                        sendButtonBottom.constant += 80
-                        sendButtonTop.constant    -= 80
-                        
-                    } else {
-                        sendButtonBottom.constant = 300
-                        sendButtonTop.constant    -= 180
-                    }
-                }
+//                } else {
+//                    if tabBarController == nil {
+////                        sendButtonBottom.constant += 80
+////                        sendButtonTop.constant    -= 80
+//                        sendButtonTop.constant  = getPoint() - 210 - 150
+//
+//                    } else {
+////                        sendButtonBottom.constant = 300
+//                        sendButtonTop.constant  = getPoint() - 210 - 150
+//                    }
+//                }
                 
             } else {
                 
-                if imgs.count == 0 {
+//                if imgs.count == 0 {
                     if tabBarController == nil {
-                        sendButtonTop.constant    = getPoint() - 120
-                        sendButtonBottom.constant = getPoint() + 70
-                        
+//                        sendButtonTop.constant    = getPoint() - 120
+//                        sendButtonBottom.constant = getPoint() + 70
+                        sendButtonTop.constant    = getPoint() - 100
+                        sendButtonBottom.constant = getPoint() + 50
                     } else {
                         sendButtonTop.constant    = getPoint() - 100
                         sendButtonBottom.constant = getPoint() + 50
                     }
                     
-                } else {
-                    if tabBarController == nil {
-                        sendButtonBottom.constant = getPoint() + 120
-                        
-                    } else {
-                        sendButtonBottom.constant = getPoint() + 100
-                    }
-                }
+//                } else {
+//                    if tabBarController == nil {
+//                        sendButtonBottom.constant = getPoint() + 100
+//
+//                    } else {
+//                        sendButtonBottom.constant = getPoint() + 100
+//                    }
+//                }
             }
         }
     }
@@ -210,35 +220,40 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         
         scroll.contentSize.height -= 200
         
-        if Device().isOneOf([.iPhone6, .iPhone6s, .iPhone7, .iPhone8, .simulator(.iPhone6), .simulator(.iPhone6s)]) && imgs.count != 0 {
-            sendButtonBottom.constant = 16
-            sendButtonTop.constant    = getPoint() - 150
+        if Device().isOneOf([.iPhone6, .iPhone6s, .iPhone7, .iPhone8, .simulator(.iPhone6), .simulator(.iPhone6s)]){
+//            sendButtonBottom.constant = 16
+//            sendButtonTop.constant    = getPoint() - 150
+            sendButtonTop.constant = getPoint()
             return
         }
-        
+        if isPlusDevices(){
+            sendButtonTop.constant = getPoint()
+            return
+        }
         if !isNeedToScroll() {
             sendButtonTop.constant = getPoint()
             
         } else {
             if !isNeedToScrollMore() {
-                if imgs.count == 0 {
+//                if imgs.count == 0 {
                     sendButtonTop.constant = getPoint()
                     
-                } else {
-                    sendButtonBottom.constant = 16
-                    
-                    if tabBarController == nil {
-                        sendButtonTop.constant    = getPoint() - 210
-                        
-                    } else {
-                        sendButtonTop.constant    = getPoint() - 180
-                    }
-                }
+//                } else {
+//                    sendButtonBottom.constant = 16
+//
+//                    if tabBarController == nil {
+////                        sendButtonTop.constant    = getPoint() - 210
+//                        sendButtonTop.constant    = getPoint() - 150
+//
+//                    } else {
+//                        sendButtonTop.constant    = getPoint() - 150
+//                    }
+//                }
             } else {
                 sendButtonBottom.constant = 16
-                if imgs.count == 0 {
+//                if imgs.count == 0 {
                     sendButtonTop.constant = getPoint()
-                }
+//                }
             }
         }
     }
@@ -265,18 +280,20 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
     private func getPoint() -> CGFloat {
         if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
             return currPoint - 210 - 50 - 50
-        }else if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
+        }else if isPlusDevices(){
+            return currPoint - 210 + 70
+        } else if Device() != .iPhoneX && Device() != .simulator(.iPhoneX) {
             if tabBarController == nil {
-                return currPoint - 210 + 50
+                return currPoint - 210
             } else {
                 print(view.frame.size.height, currPoint, currPoint - 210)
                 return currPoint - 210
             }
-        } else {
+        }else {
             if tabBarController == nil {
-                return currPoint - 210 - 50
+                return currPoint - 210 + 85
             } else {
-                return currPoint - 210 - 50 - 50
+                return currPoint - 210 + 85
             }
         }
     }

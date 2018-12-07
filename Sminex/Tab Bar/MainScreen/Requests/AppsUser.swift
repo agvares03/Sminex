@@ -857,7 +857,10 @@ struct Request {
         isProcessing            = row.attributes["IsProcessing"]
         onlyForConsultant       = row.attributes["onlyForConsultant"]
         name                    = row.attributes["name"]
-        if (name?.contains("ропуск"))! {
+        
+        if (name?.contains("услуг"))! {
+            name                = "Заявка на услугу"
+        } else if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
         } else {
             name                = "Техническое обслуживание"

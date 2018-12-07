@@ -201,9 +201,15 @@ final class DealsListDescHeader: UICollectionReusableView {
                 imageWidth.constant  = 343
                 imageHeight.constant = 144
                 
-            } else {
+            } else if (400.0...450.0).contains(points) {
                 imageWidth.constant  = 382
                 imageHeight.constant = 175
+                
+            } else {
+//                imageWidth.constant  = 382
+//                imageHeight.constant = 175
+                imageWidth.constant  = 304
+                imageHeight.constant = 170
             }
         } 
         

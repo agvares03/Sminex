@@ -395,15 +395,15 @@ extension DigitInputView: UITextFieldDelegate {
         
         if isBackSpace == -92, let text = textField.text {
             
-            if text.contains(find: ",") && text.index(of: ",") != text.startIndex {
-                var text1 = text
-                if let index = text1.index(text1.index(of: ",")!, offsetBy: -1, limitedBy: text1.startIndex) {
-                    text1.remove(at: index)
-                    textField.text = text1
-                }
-                didChange(true)
-                return false
-            }
+//            if text.contains(find: ",") && text.index(of: ",") != text.startIndex {
+//                var text1 = text
+//                if let index = text1.index(text1.index(of: ",")!, offsetBy: -1, limitedBy: text1.startIndex) {
+//                    text1.remove(at: index)
+//                    textField.text = text1
+//                }
+//                didChange(true)
+//                return false
+//            }
             textField.text = text.substring(to: text.index(text.endIndex, offsetBy: -1))
             didChange(true)
             return false

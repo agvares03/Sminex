@@ -192,7 +192,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
                     UIApplication.shared.openURL(url)
                 }
                 } } ) )
-            alert.addAction( UIAlertAction(title: "Написать письмо", style: .default, handler: { (_) in self.performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self) } ) )
+            alert.addAction( UIAlertAction(title: "Написать письмо", style: .default, handler: { (_) in
+                self.performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self)
+                UserDefaults.standard.set(true, forKey: "fromMenu")
+            } ) )
             alert.addAction( UIAlertAction(title: "Отменить", style: .cancel, handler: { (_) in } ) )
             present(alert, animated: true, completion: nil)
         
@@ -209,6 +212,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         if segue.identifier == Segues.fromMenuVC.toSupport {
             let vc = segue.destination as! AuthSupportVC
             vc.login_ = UserDefaults.standard.string(forKey: "login") ?? ""
+            vc.fromMenu = true
         }
     }
 }
