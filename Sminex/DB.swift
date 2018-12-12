@@ -88,8 +88,7 @@ final class DB: NSObject, XMLParserDelegate {
         var id_app = ""
         if (elementName == "Row") {
             // Запишем заявку в БД
-            print(attributeDict)
-            
+//            print(attributeDict)
             let managedObject = Applications()
             managedObject.id              = 1
             managedObject.number          = attributeDict["ID"]
@@ -226,7 +225,8 @@ final class DB: NSObject, XMLParserDelegate {
                                                         var bill_pay      = ""
                                                         var bill_total    = ""
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-//                                                        print("JSON",json)
+                                                        print("JSON",json)
+                                                        
                                                         if let json_bills = json["data"] {
                                                             let int_end = (json_bills.count)!-1
                                                             if (int_end < 0) {

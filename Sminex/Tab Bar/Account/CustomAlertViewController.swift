@@ -136,8 +136,8 @@ class CustomAlertViewController: UIViewController {
         UserDefaults.standard.removeObject(forKey: "newsLastId")
         UserDefaults.standard.set(true, forKey: "backBtn")
         UserDefaults.standard.synchronize()
-        self.choice()
         self.saveUsersDefaults()
+        self.choice()
     }
     
     private func deleteLS(code: String) {
