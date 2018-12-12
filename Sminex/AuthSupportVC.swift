@@ -159,7 +159,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                 return
                 
             }else if isPlusDevices(){
-                sendButtonTop.constant = getPoint() - 210
+                sendButtonTop.constant = getPoint() - 220
                 return
             }else {
                 sendButtonTop.constant = getPoint() - 250

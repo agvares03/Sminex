@@ -228,7 +228,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//                print(self.responceString)
+                print(self.responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -342,8 +342,15 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
                 if curr.isPaid == "1"{
+                    var name = curr.name
+                    if (curr.name?.contains(find: "Заказ услуги: "))!{
+                        name = curr.name?.replacingOccurrences(of: "Заказ услуги: ", with: "")
+                    }
+                    if (curr.name?.contains(find: "Заказ услуги "))!{
+                        name = curr.name?.replacingOccurrences(of: "Заказ услуги ", with: "")
+                    }
                     newData.append( AppsUserCellData(title: "Заявка на услугу",
-                                                     desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? curr.text! : lastComm?.text ?? "",
+                                                     desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? name! : lastComm?.text ?? "",
                                                      icon: icon,
                                                      status: curr.status ?? "",
                                                      date: curr.updateDate ?? "",
@@ -351,7 +358,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                      type: curr.idType ?? "",
                                                      id: curr.id ?? "",
                                                      updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                     stickTitle: isAnswered ? curr.text! : "", isPaid: curr.isPaid!))
+                                                     stickTitle: isAnswered ? name! : "", isPaid: curr.isPaid!))
                 }else{
                     newData.append( AppsUserCellData(title: curr.name ?? "",
                                                      desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
@@ -859,7 +866,7 @@ struct Request {
         name                    = row.attributes["name"]
         
         if (name?.contains("услуг"))! {
-            name                = "Заявка на услугу"
+            
         } else if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
         } else {

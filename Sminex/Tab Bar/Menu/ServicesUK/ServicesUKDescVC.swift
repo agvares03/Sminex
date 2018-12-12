@@ -46,7 +46,7 @@ final class ServicesUKDescVC: UIViewController {
         titleLabel.text = data_?.name
         costLabel.text  = data_?.cost!.replacingOccurrences(of: "руб.", with: "₽")
         descLabel.text  = data_?.desc
-        if !denyCompanyService{
+        if denyCompanyService{
             sendBtn.alpha     = 0.5
             sendBtn.isEnabled = false
         }else{

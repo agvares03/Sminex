@@ -93,7 +93,7 @@ extension RequestTypeVC: UITableViewDataSource, UITableViewDelegate {
             self.tableView.reloadData()
         }
         let denyCompanyService:Bool = (UserDefaults.standard.value(forKey: "denyCompanyService") as! Bool)
-        if  (!denyCompanyService) && (cell.textLabel?.text == "Услуги службы комфорта") {
+        if  (denyCompanyService) && (cell.textLabel?.text == "Услуги службы комфорта") {
             print("Deleted")
             self.data.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
