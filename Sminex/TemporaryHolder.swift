@@ -80,7 +80,6 @@ final class TemporaryHolder {
     }
     
     private func getBills() {
-        
         let defaults = UserDefaults.standard
         if (defaults.bool(forKey: "denyInvoiceFiles")) {
             
@@ -106,7 +105,7 @@ final class TemporaryHolder {
                 #if DEBUG
 //                print(String(data: data!, encoding: .utf8) ?? "")
                 #endif
-                
+                self.receipts.removeAll()
                 if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                     self.receipts = AccountBillsData(json: json!)!.data ?? []
                 }
@@ -117,7 +116,8 @@ final class TemporaryHolder {
     }
     
     private func getCalculations() {
-        
+        self.calcs.removeAll()
+        self.filteredCalcs.removeAll()
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         

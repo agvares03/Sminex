@@ -238,6 +238,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             #if DEBUG
 //            print(String(data: data!, encoding: .utf8)!)
+            
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
@@ -846,13 +847,20 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : row.text ?? ""
                     if row.isPaid == "1"{
-                        returnArr.append( RequestCellData(title: row.name ?? "",
-                                                          desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? row.text ?? "" : lastComm?.text ?? "",
+                        var name = row.name
+                        if (row.name?.contains(find: "Заказ услуги: "))!{
+                            name = row.name?.replacingOccurrences(of: "Заказ услуги: ", with: "")
+                        }
+                        if (row.name?.contains(find: "Заказ услуги "))!{
+                            name = row.name?.replacingOccurrences(of: "Заказ услуги ", with: "")
+                        }
+                        returnArr.append( RequestCellData(title: "Заявка на услугу",
+                                                          desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? name ?? "" : lastComm?.text ?? "",
                                                           icon: icon,
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: row.text ?? "") )
+                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: name ?? "") )
                     }else{
                         returnArr.append( RequestCellData(title: row.name ?? "",
                                                           desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
