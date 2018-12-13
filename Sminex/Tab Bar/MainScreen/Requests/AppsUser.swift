@@ -158,6 +158,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         guard !self.reachedEndOfItems else {
             return
         }
+        if fullCount < 20{
+            return
+        }
         self.startAnimator()
         // query the db on a background thread
         DispatchQueue.global(qos: .background).async {
@@ -405,10 +408,18 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 if self.isFromMain{
                     self.data = firstArr
                 }else{
-                    for _ in 0...19{
-                        self.data.append(firstArr.first!)
-                        firstArr.removeFirst()
+                    if firstArr.count > 20{
+                        for i in 0...19{
+                            self.data.append(firstArr[i])
+                            //                        firstArr.removeFirst()
+                        }
+                    }else{
+                        for i in 0...firstArr.count - 1{
+                            self.data.append(firstArr[i])
+                            //                        firstArr.removeFirst()
+                        }
                     }
+                    
                 }
                 self.collection?.reloadData()
                 
