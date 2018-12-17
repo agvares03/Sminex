@@ -822,6 +822,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         lastComm = nil
                         isAnswered = false
                     }
+                    if lastComm != nil && row.isPaid == "1" && (rowComms[row.id!]?.count)! == 1{
+                        lastComm = nil
+                        isAnswered = false
+                    }
                     let icon = !(row.status?.contains(find: "Отправлена"))! ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                     var type = row.idType
                     TemporaryHolder.instance.requestTypes?.types?.forEach {

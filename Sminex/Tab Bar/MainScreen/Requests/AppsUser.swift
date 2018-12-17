@@ -327,6 +327,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     lastComm = nil
                     isAnswered = false
                 }
+                if lastComm != nil && curr.isPaid == "1" && (self.rowComms[curr.id!]?.count)! == 1{
+                    lastComm = nil
+                    isAnswered = false
+                }
                 let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
                 let isPerson = curr.name?.contains(find: "ропуск") ?? false
                 
