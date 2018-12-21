@@ -1662,6 +1662,7 @@ final class RequestCell: UICollectionViewCell {
     @IBOutlet private var backTop:     NSLayoutConstraint!
     @IBOutlet private var descTop:     NSLayoutConstraint!
     @IBOutlet private var descBottom:  NSLayoutConstraint!
+    @IBOutlet private var stickHeight:  NSLayoutConstraint?
     
     @IBOutlet private weak var stickTitle:  UILabel?
     @IBOutlet private weak var title:       UILabel!
@@ -1677,8 +1678,9 @@ final class RequestCell: UICollectionViewCell {
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
-            let mySubstring = item.desc.prefix(30)
-            desc.text   = String(mySubstring)
+//            let mySubstring = item.desc.prefix(30)
+//            desc.text   = String(mySubstring)
+            desc.text = item.desc
         }
         icon.image  = item.icon
         status.text = item.status.uppercased()
@@ -1693,15 +1695,14 @@ final class RequestCell: UICollectionViewCell {
         if item.isBack {
             backTop.constant    = 6
             backBottom.constant = 6
-            descTop.constant    = 28.5
+            descTop.constant    = 48
             descBottom.constant = 17
             back.isHidden = false
             stickTitle?.isHidden = false
-
         } else {
             backTop.constant    = 0
             backBottom.constant = 0
-            descTop.constant    = 2
+            descTop.constant    = 0
             descBottom.constant = 12
             back.isHidden = true
             stickTitle?.isHidden = true
@@ -1735,6 +1736,7 @@ final class RequestCell: UICollectionViewCell {
             cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
 //            cell?.stickTitle.preferredMaxLayoutWidth = cell?.stickTitle.bounds.size.width ?? 0.0
             cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width  ?? 0.0
+            cell?.stickTitle?.preferredMaxLayoutWidth  = cell?.stickTitle?.bounds.size.width  ?? 0.0
         }
 
         return cell
