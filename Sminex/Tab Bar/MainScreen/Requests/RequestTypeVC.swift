@@ -86,7 +86,8 @@ extension RequestTypeVC: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
         cell.textLabel?.text = data[indexPath.row].name
         let denyIssuanceOfPassSingle:Bool = (UserDefaults.standard.value(forKey: "denyIssuanceOfPassSingle") as! Bool)
-        if  (denyIssuanceOfPassSingle == true) && (cell.textLabel?.text == "Гостевой пропуск") {
+        let denyIssuanceOfPassSingleWithAuto:Bool = (UserDefaults.standard.value(forKey: "denyIssuanceOfPassSingleWithAuto") as! Bool)
+        if  (denyIssuanceOfPassSingle == true) && (denyIssuanceOfPassSingleWithAuto == true) && (cell.textLabel?.text == "Гостевой пропуск") {
             print("Deleted")
             self.data.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)

@@ -238,6 +238,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         var height_top:CGFloat = 370// высота верхних элементов
+        var k:CGFloat = 0
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")){
+            k = 51
+        }
         if Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
             Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
             Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
@@ -266,10 +270,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         //        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
         if !isNeedToScrollMore() {
 //            sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
-            sendViewConst.constant = view.frame.size.height - numb_to_move - height_top
+            sendViewConst.constant = view.frame.size.height - numb_to_move - height_top + k
         } else {
 //            sendBtnConst.constant = getPoint() - 150
-            sendViewConst.constant = getPoint() - 150
+            sendViewConst.constant = getPoint() - 150 + k
         }
         
         if !picker.isHidden {
@@ -278,7 +282,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         if gosNumber.isHidden == false{
 //            sendBtnConst.constant = sendBtnConst.constant - 55
-            sendViewConst.constant = sendBtnConst.constant - 57
+            sendViewConst.constant = sendBtnConst.constant - 57 + k
         }
         
         if isNeedToScroll() {
@@ -290,7 +294,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             scroll.contentOffset = CGPoint(x: 0, y: 140)
         }
         if FioConst.constant == 57{
-            sendViewConst.constant -= 20
+            sendViewConst.constant -= 20 + k
         }
     }
     
@@ -330,15 +334,19 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     private func getPoint() -> CGFloat {
+        var k:CGFloat = 0
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")){
+            k = 51
+        }
         if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
             Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
             Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
             Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            return (view.frame.size.height - sprtTopConst + 60) - 35
+            return (view.frame.size.height - sprtTopConst + 60) - 35 + k
         } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX){
-            return (view.frame.size.height - sprtTopConst + 45) - 70
+            return (view.frame.size.height - sprtTopConst + 45) - 70 + k
         } else {
-            return (view.frame.size.height - sprtTopConst + 60)
+            return (view.frame.size.height - sprtTopConst + 60) + k
         }
     }
     
@@ -604,11 +612,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if edFio.text == "" || edContact.text == "" {
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false) && (gosNumber.text == ""){
             sendButton.alpha     = 0.5
             sendButton.isEnabled = false
         
-        } else {
+        }else  if (edFio.text == "" || edContact.text == ""){
+            sendButton.alpha     = 0.5
+            sendButton.isEnabled = false
+            
+        }else {
             sendButton.alpha     = 1
             sendButton.isEnabled = true
         }
@@ -622,26 +634,50 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let currentText:String = textView.text
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         
-        if updatedText.isEmpty {
-            textView.text = "Примечания"
-            if textView.frame.origin.y < 100{
-                textView.text = "ФИО гостей"
-                sendButton.alpha     = 0.5
-                sendButton.isEnabled = false
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false){
+            if updatedText.isEmpty {
+                textView.text = "Примечания"
+                if textView.frame.origin.y < 100{
+                    textView.text = "ФИО гостей"
+                    sendButton.alpha     = 0.5
+                    sendButton.isEnabled = false
+                }
+                textView.textColor = UIColor.lightGray
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+                
+            } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+                textView.textColor = UIColor.black
+                textView.text = text
+                if textView.frame.origin.y < 100 && gosNumber.text != ""{
+                    sendButton.alpha     = 1
+                    sendButton.isEnabled = true
+                }
+                
+            } else {
+                return true
             }
-            textView.textColor = UIColor.lightGray
-            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            
-        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-            textView.textColor = UIColor.black
-            textView.text = text
-            if textView.frame.origin.y < 100{
-                sendButton.alpha     = 1
-                sendButton.isEnabled = true
+        }else {
+            if updatedText.isEmpty {
+                textView.text = "Примечания"
+                if textView.frame.origin.y < 100{
+                    textView.text = "ФИО гостей"
+                    sendButton.alpha     = 0.5
+                    sendButton.isEnabled = false
+                }
+                textView.textColor = UIColor.lightGray
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+                
+            } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+                textView.textColor = UIColor.black
+                textView.text = text
+                if textView.frame.origin.y < 100{
+                    sendButton.alpha     = 1
+                    sendButton.isEnabled = true
+                }
+                
+            } else {
+                return true
             }
-            
-        } else {
-            return true
         }
         return false
     }
