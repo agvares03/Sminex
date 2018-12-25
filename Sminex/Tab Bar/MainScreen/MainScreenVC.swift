@@ -1142,9 +1142,25 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             dateEnd = dateFormatter.date(from: item.dateEnd!)!
                         }
                         let currentDate = Date()
-                        if i < 3 && item.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
-//                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                            self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                        let calendar = Calendar.current
+                        let currHour = calendar.component(.hour, from: currentDate)
+                        let currMinutes = calendar.component(.minute, from: currentDate)
+                        let currDay = calendar.component(.day, from: currentDate)
+                        let currMonth = calendar.component(.month, from: currentDate)
+                        let currYear = calendar.component(.year, from: currentDate)
+                        
+                        let startHour = calendar.component(.hour, from: dateStart)
+                        let startMinutes = calendar.component(.minute, from: dateStart)
+                        let startDay = calendar.component(.day, from: currentDate)
+                        let startMonth = calendar.component(.month, from: currentDate)
+                        let startYear = calendar.component(.year, from: currentDate)
+                        if i < 3 && item.isDraft == false{
+                            //                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                            if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
+                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
+                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }
                             i += 1
                         }
                     }
@@ -1215,9 +1231,25 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             dateEnd = dateFormatter.date(from: item.dateEnd!)!
                         }
                         let currentDate = Date()
-                        if i < 3 && item.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
+                        let calendar = Calendar.current
+                        let currHour = calendar.component(.hour, from: currentDate)
+                        let currMinutes = calendar.component(.minute, from: currentDate)
+                        let currDay = calendar.component(.day, from: currentDate)
+                        let currMonth = calendar.component(.month, from: currentDate)
+                        let currYear = calendar.component(.year, from: currentDate)
+                        
+                        let startHour = calendar.component(.hour, from: dateStart)
+                        let startMinutes = calendar.component(.minute, from: dateStart)
+                        let startDay = calendar.component(.day, from: currentDate)
+                        let startMonth = calendar.component(.month, from: currentDate)
+                        let startYear = calendar.component(.year, from: currentDate)
+                        if i < 3 && item.isDraft == false{
                             //                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                            self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
+                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
+                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }
                             i += 1
                         }
                     }

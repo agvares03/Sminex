@@ -117,8 +117,25 @@ class NewsListTVC: UIViewController {
                                 dateEnd = dateFormatter.date(from: $0.dateEnd!)!
                             }
                             let currentDate = Date()
-                            if $0.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
-                                self.data.append($0)
+                            let calendar = Calendar.current
+                            let currHour = calendar.component(.hour, from: currentDate)
+                            let currMinutes = calendar.component(.minute, from: currentDate)
+                            let currDay = calendar.component(.day, from: currentDate)
+                            let currMonth = calendar.component(.month, from: currentDate)
+                            let currYear = calendar.component(.year, from: currentDate)
+                            
+                            let startHour = calendar.component(.hour, from: dateStart)
+                            let startMinutes = calendar.component(.minute, from: dateStart)
+                            let startDay = calendar.component(.day, from: currentDate)
+                            let startMonth = calendar.component(.month, from: currentDate)
+                            let startYear = calendar.component(.year, from: currentDate)
+                            if $0.isDraft == false{
+                                if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
+                                    self.data.append($0)
+                                }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
+                                    self.data.append($0)
+                                }
+                                
                             }
                         }
 //                        self.data = TemporaryHolder.instance.news!
@@ -209,8 +226,25 @@ class NewsListTVC: UIViewController {
                                 dateEnd = dateFormatter.date(from: $0.dateEnd!)!
                             }
                             let currentDate = Date()
-                            if $0.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
-                                self.data.append($0)
+                            let calendar = Calendar.current
+                            let currHour = calendar.component(.hour, from: currentDate)
+                            let currMinutes = calendar.component(.minute, from: currentDate)
+                            let currDay = calendar.component(.day, from: currentDate)
+                            let currMonth = calendar.component(.month, from: currentDate)
+                            let currYear = calendar.component(.year, from: currentDate)
+                            
+                            let startHour = calendar.component(.hour, from: dateStart)
+                            let startMinutes = calendar.component(.minute, from: dateStart)
+                            let startDay = calendar.component(.day, from: currentDate)
+                            let startMonth = calendar.component(.month, from: currentDate)
+                            let startYear = calendar.component(.year, from: currentDate)
+                            if $0.isDraft == false{
+                                if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
+                                    self.data.append($0)
+                                }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
+                                    self.data.append($0)
+                                }
+                                
                             }
                         }
 //                        self.data = TemporaryHolder.instance.news!
