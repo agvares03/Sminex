@@ -42,7 +42,10 @@ class NewsListTVC: UIViewController {
         }
         
         if TemporaryHolder.instance.news != nil {
-            data = TemporaryHolder.instance.news!
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            data = (TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending }))!
+//            data = TemporaryHolder.instance.news!
         }
         
         if tappedNews != nil {
@@ -54,7 +57,9 @@ class NewsListTVC: UIViewController {
     
     @objc private func refresh(_ sender: UIRefreshControl) {
         if TemporaryHolder.instance.news != nil {
-            self.data = TemporaryHolder.instance.news!
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            data = (TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending }))!
         }
         getAllNews()
     }
@@ -94,11 +99,29 @@ class NewsListTVC: UIViewController {
                 }
                 return
             }
+//            self.data.removeAll()
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)
-                        self.data = TemporaryHolder.instance.news!
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+                        TemporaryHolder.instance.news?.forEach{
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                            var dateStart = Date()
+                            var dateEnd = Date()
+                            if $0.dateStart != "" && $0.dateEnd != ""{
+                                dateStart = dateFormatter.date(from: $0.dateStart!)!
+                                dateEnd = dateFormatter.date(from: $0.dateEnd!)!
+                            }
+                            let currentDate = Date()
+                            if $0.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
+                                self.data.append($0)
+                            }
+                        }
+//                        self.data = TemporaryHolder.instance.news!
                         DispatchQueue.main.sync {
                             if #available(iOS 10.0, *) {
                                 self.tableView.refreshControl?.endRefreshing()
@@ -167,11 +190,30 @@ class NewsListTVC: UIViewController {
                 return
             }
             TemporaryHolder.instance.news?.removeAll()
+            self.data.removeAll()
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
+                        
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)
-                        self.data = TemporaryHolder.instance.news!
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+                        TemporaryHolder.instance.news?.forEach{
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                            var dateStart = Date()
+                            var dateEnd = Date()
+                            if $0.dateStart != "" && $0.dateEnd != ""{
+                                dateStart = dateFormatter.date(from: $0.dateStart!)!
+                                dateEnd = dateFormatter.date(from: $0.dateEnd!)!
+                            }
+                            let currentDate = Date()
+                            if $0.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
+                                self.data.append($0)
+                            }
+                        }
+//                        self.data = TemporaryHolder.instance.news!
                         DispatchQueue.main.sync {
                             if #available(iOS 10.0, *) {
                                 self.tableView.refreshControl?.endRefreshing()

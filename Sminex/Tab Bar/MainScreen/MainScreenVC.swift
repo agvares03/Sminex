@@ -1128,11 +1128,24 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                     self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
-                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+                    var i = 0
                     for (ind, item) in self.filteredNews.enumerated() {
-                        if ind < 3 {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                        var dateStart = Date()
+                        var dateEnd = Date()
+                        if item.dateStart != "" && item.dateEnd != ""{
+                            dateStart = dateFormatter.date(from: item.dateStart!)!
+                            dateEnd = dateFormatter.date(from: item.dateEnd!)!
+                        }
+                        let currentDate = Date()
+                        if i < 3 && item.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
 //                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            i += 1
                         }
                     }
                     
@@ -1188,11 +1201,24 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                     self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
-                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+                    var i = 0
                     for (ind, item) in self.filteredNews.enumerated() {
-                        if ind < 3 {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                        var dateStart = Date()
+                        var dateEnd = Date()
+                        if item.dateStart != "" && item.dateEnd != ""{
+                            dateStart = dateFormatter.date(from: item.dateStart!)!
+                            dateEnd = dateFormatter.date(from: item.dateEnd!)!
+                        }
+                        let currentDate = Date()
+                        if i < 3 && item.isDraft == false && ((currentDate <= dateEnd) && (currentDate >= dateStart)){
                             //                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            i += 1
                         }
                     }
                     
