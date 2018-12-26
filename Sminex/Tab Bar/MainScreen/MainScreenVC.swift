@@ -1460,7 +1460,7 @@ final class CellsHeader: UICollectionReusableView {
 //        }
         
         self.delegate = delegate
-        
+        // programm version 
         if item.title == "К оплате" || item.title ==  "Счетчики" {
             self.detail.setTitle("Подробнее", for: .normal)
         } else if item.title == "Версия" {
@@ -1469,7 +1469,6 @@ final class CellsHeader: UICollectionReusableView {
         } else {
             self.detail.setTitle("Все", for: .normal)
         }
-        
     }
     
 }
