@@ -231,7 +231,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print(self.responceString)
+//                print(self.responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -704,7 +704,6 @@ final class AppsUserCell: UICollectionViewCell {
             stickTitle.text = item.stickTitle
             let k = stickTitle.calculateMaxLines()
             if k == 1{
-                print(item.stickTitle, k)
                 skTitleBottm.constant = 8
                 skTitleHeight.constant = 15
             }
