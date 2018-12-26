@@ -182,6 +182,7 @@ final class DealsListCell: UICollectionViewCell {
         } else {
             imageWidth.constant  = 302
             imageHeight.constant = 151
+            image.contentMode = .scaleToFill
         }
     }
     
