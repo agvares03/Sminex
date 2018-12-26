@@ -692,7 +692,6 @@ final class AppsUserCell: UICollectionViewCell {
         status.text     = item.status
         back.isHidden   = !item.isBack
         type            = item.type
-        
         if item.stickTitle == "" {
             skTitleBottm.constant = 0
             skTitleHeight.constant = 0
@@ -700,17 +699,23 @@ final class AppsUserCell: UICollectionViewCell {
         
         } else {
             skTitleBottm.constant = 8
-            skTitleHeight.constant = 15
+            skTitleHeight.constant = 30
             stickTitle.text = item.stickTitle
+            let k = stickTitle.calculateMaxLines()
+            if k == 1{
+                print(item.stickTitle, k)
+                skTitleBottm.constant = 8
+                skTitleHeight.constant = 15
+            }
         }
         
         let df = DateFormatter()
         df.dateFormat = "dd.MM.yyyy hh:mm:ss"
         df.isLenient = true
+        
         date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
             ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "hh:mm")
             : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
-        
         if item.isBack {
             back.isHidden = false
             
@@ -982,6 +987,16 @@ struct RequestFile {
     }
 }
 
+extension UILabel {
+    func calculateMaxLines() -> Int {
+        let maxSize = CGSize(width: frame.size.width, height: CGFloat(Float.infinity))
+        let charSize = font.lineHeight
+        let text = (self.text ?? "") as NSString
+        let textSize = text.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        let linesRoundedUp = Int(ceil(textSize.height/charSize))
+        return linesRoundedUp
+    }
+}
 
 
 
