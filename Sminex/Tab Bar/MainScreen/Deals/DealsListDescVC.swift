@@ -9,6 +9,7 @@
 import UIKit
 import Gloss
 import UIScreenExtension
+import DeviceKit
 
 
 final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

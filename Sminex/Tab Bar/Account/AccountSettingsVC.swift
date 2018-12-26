@@ -161,9 +161,16 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         }
         
         let name                = defaults.string(forKey: "name")?.split(separator: " ")
-        familyNameField.text    = String(describing: name?[safe: 0] ?? "")
-        nameField.text          = String(describing: name?[safe: 1] ?? "")
-        otchestvoField.text     = String(describing: name?[safe: 2] ?? "")
+        if name?.count == 4{
+            familyNameField.text    = String(describing: name?[safe: 0] ?? "") + " " + String(describing: name?[safe: 1] ?? "")
+            nameField.text          = String(describing: name?[safe: 2] ?? "")
+            otchestvoField.text     = String(describing: name?[safe: 3] ?? "")
+        }else{
+            familyNameField.text    = String(describing: name?[safe: 0] ?? "")
+            nameField.text          = String(describing: name?[safe: 1] ?? "")
+            otchestvoField.text     = String(describing: name?[safe: 2] ?? "")
+        }
+        
         
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent   = true
