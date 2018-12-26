@@ -685,8 +685,8 @@ final class AppsUserCell: UICollectionViewCell {
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
-            let mySubstring = item.desc.prefix(30)
-            desc.text   = String(mySubstring)
+//            let mySubstring = item.desc.prefix(30)
+            desc.text   = item.desc
         }
         icon.image      = item.icon
         status.text     = item.status
