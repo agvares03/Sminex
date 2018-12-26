@@ -191,25 +191,30 @@ final class DealsListDescHeader: UICollectionReusableView {
             }else if (300.0...320.0).contains(points) {
                 imageWidth.constant  = 288
                 imageHeight.constant = 144
-                
+                image.contentMode = .scaleToFill
             } else if (320.0...350.0).contains(points) {
                 
                 imageWidth.constant  = 304
                 imageHeight.constant = 170
-                
+                image.contentMode = .scaleToFill
+                if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .iPhone5 || Device() == .simulator(.iPhone5){
+                    imageWidth.constant  = 288
+                    imageHeight.constant = 144
+                }
             } else if (350.0...400.0).contains(points) {
                 imageWidth.constant  = 343
                 imageHeight.constant = 144
-                
+                image.contentMode = .scaleToFill
             } else if (400.0...450.0).contains(points) {
                 imageWidth.constant  = 382
-                imageHeight.constant = 175
-                
+                imageHeight.constant = 180
+                image.contentMode = .scaleToFill
             } else {
 //                imageWidth.constant  = 382
 //                imageHeight.constant = 175
                 imageWidth.constant  = 304
                 imageHeight.constant = 170
+                image.contentMode = .scaleToFill
             }
         } 
         

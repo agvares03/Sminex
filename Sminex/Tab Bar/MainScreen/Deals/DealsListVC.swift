@@ -8,6 +8,7 @@
 
 import UIKit
 import Gloss
+import DeviceKit
 
 final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -55,7 +56,7 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         let cell = DealsListCell.fromNib()
         cell?.display(data_[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height + 20)
+        return CGSize(width: view.frame.size.width, height: size.height + 35)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -156,9 +157,31 @@ final class DealsListCell: UICollectionViewCell {
         if (250.0...280.0).contains(points) {
             title.font = title.font.withSize(30)
             desc.font = desc.font.withSize(28)
+            imageWidth.constant  = 834
             imageHeight.constant = 455
-        }else{
+        }else if (300.0...320.0).contains(points) {
+            imageWidth.constant  = 288
+            imageHeight.constant = 144
             image.contentMode = .scaleToFill
+        } else if (320.0...350.0).contains(points) {
+            imageWidth.constant  = 343
+            imageHeight.constant = 174
+            image.contentMode = .scaleToFill
+            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .iPhone5 || Device() == .simulator(.iPhone5){
+                imageWidth.constant  = 288
+                imageHeight.constant = 144
+            }
+        } else if (350.0...400.0).contains(points) {
+            imageWidth.constant  = 343
+            imageHeight.constant = 170
+            image.contentMode = .scaleToFill
+        } else if (400.0...450.0).contains(points) {
+            imageWidth.constant  = 382
+            imageHeight.constant = 180
+            image.contentMode = .scaleToFill
+        } else {
+            imageWidth.constant  = 302
+            imageHeight.constant = 151
         }
     }
     
@@ -194,9 +217,8 @@ final class DealsListCell: UICollectionViewCell {
             cell?.imageHeight.constant = 170
             
         } else if (400.0...450.0).contains(points) {
-            cell?.imageWidth.constant  = 382
-            cell?.imageHeight.constant = 200
-            
+            cell!.imageWidth.constant  = 382
+            cell!.imageHeight.constant = 180
         } else {
             cell?.imageWidth.constant  = 302
             cell?.imageHeight.constant = 151
