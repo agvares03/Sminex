@@ -202,7 +202,7 @@ final class NewsListCell: UICollectionViewCell {
             df.locale = Locale(identifier: "en_US_POSIX")
             df.dateFormat = "dd.MM.yyyy HH:mm:ss"
             if dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
-                date.text = dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "hh:mm")
+                date.text = dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "HH:mm")
 
             } else {
                 date.text = dayDifference(from: df.date(from: item?.created ?? "") ?? Date(), style: "dd MMMM")

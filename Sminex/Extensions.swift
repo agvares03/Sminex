@@ -308,10 +308,10 @@ func isXDevice() -> Bool {
 
 func dayDifference(from date: Date, style: String? = nil) -> String
 {
-    let calendar = NSCalendar.current
+    let calendar = Calendar.current
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale(identifier: "Ru-ru")
-    dateFormatter.dateFormat = style == nil ? "hh:mm:ss" : style
+    dateFormatter.dateFormat = style == nil ? "HH:mm:ss" : style
     if calendar.isDateInYesterday(date) { return "Вчера, \(dateFormatter.string(from: date))" }
     else if calendar.isDateInToday(date) { return "Сегодня, \(dateFormatter.string(from: date))" }
     else if calendar.isDateInTomorrow(date) { return "Завтра, \(dateFormatter.string(from: date))" }

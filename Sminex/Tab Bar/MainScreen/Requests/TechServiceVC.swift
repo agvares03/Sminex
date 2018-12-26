@@ -524,9 +524,9 @@ final class ServiceHeader: UICollectionViewCell {
         status.text = item.status
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         print(item.date)
-        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM hh:mm")
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
         
         if item.images.count == 0 {
             imageConst.constant = 0
@@ -689,8 +689,8 @@ final class ServiceCommentCell: UICollectionViewCell {
         desc.text   = item.desc
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "hh:mm") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "HH:mm") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
         image.isUserInteractionEnabled = true

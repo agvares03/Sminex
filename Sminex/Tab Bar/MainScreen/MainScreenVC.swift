@@ -1744,7 +1744,7 @@ final class RequestCell: UICollectionViewCell {
         status.text = item.status.uppercased()
         
         let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
         df.isLenient = true
         date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
             ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "")
@@ -1769,7 +1769,7 @@ final class RequestCell: UICollectionViewCell {
 
         let currTitle = item.title
         let titleDateString = currTitle.substring(fromIndex: currTitle.length - 19)
-        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
         if let titleDate = df.date(from: titleDateString) {
             df.dateFormat = "dd MMMM"
             df.locale = Locale(identifier: "Ru-ru")
