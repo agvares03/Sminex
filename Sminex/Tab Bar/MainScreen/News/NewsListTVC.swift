@@ -42,10 +42,7 @@ class NewsListTVC: UIViewController {
         }
         
         if TemporaryHolder.instance.news != nil {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-            data = (TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending }))!
-//            data = TemporaryHolder.instance.news!
+            data = TemporaryHolder.instance.news!
         }
         
         if tappedNews != nil {
@@ -57,9 +54,7 @@ class NewsListTVC: UIViewController {
     
     @objc private func refresh(_ sender: UIRefreshControl) {
         if TemporaryHolder.instance.news != nil {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-            data = (TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending }))!
+            self.data = TemporaryHolder.instance.news!
         }
         getAllNews()
     }
@@ -104,9 +99,9 @@ class NewsListTVC: UIViewController {
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+//                        let dateFormatter = DateFormatter()
+//                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+//                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
                         TemporaryHolder.instance.news?.forEach{
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
@@ -213,9 +208,9 @@ class NewsListTVC: UIViewController {
                     if newsArr.count != 0 {
                         
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+//                        let dateFormatter = DateFormatter()
+//                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+//                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
                         TemporaryHolder.instance.news?.forEach{
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"

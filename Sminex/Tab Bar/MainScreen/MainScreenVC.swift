@@ -872,7 +872,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: descText ) )
+                                                          id: row.id ?? "", isPaid: row.isPaid ?? "", stickTitle: descText ) )
                     }
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
@@ -1128,9 +1128,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                     self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+//                    let dateFormatter = DateFormatter()
+//                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+//                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
                     var i = 0
                     for (ind, item) in self.filteredNews.enumerated() {
                         let dateFormatter = DateFormatter()
@@ -1217,9 +1217,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                     self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+//                    let dateFormatter = DateFormatter()
+//                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+//                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
                     var i = 0
                     for (ind, item) in self.filteredNews.enumerated() {
                         let dateFormatter = DateFormatter()

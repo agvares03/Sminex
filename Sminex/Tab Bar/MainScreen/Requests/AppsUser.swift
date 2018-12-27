@@ -377,7 +377,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                      type: curr.idType ?? "",
                                                      id: curr.id ?? "",
                                                      updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                     stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid!))
+                                                     stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? ""))
                 }
                 
             }
