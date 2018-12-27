@@ -1460,16 +1460,15 @@ final class CellsHeader: UICollectionReusableView {
 //        }
         
         self.delegate = delegate
-        
+        // programm version 
         if item.title == "К оплате" || item.title ==  "Счетчики" {
             self.detail.setTitle("Подробнее", for: .normal)
         } else if item.title == "Версия" {
             self.detail.setTitleColor(UIColor.black, for: .normal)
-            self.detail.setTitle("ver. 1.82", for: .normal)
+            self.detail.setTitle("ver. 1.83", for: .normal)
         } else {
             self.detail.setTitle("Все", for: .normal)
         }
-        
     }
     
 }
