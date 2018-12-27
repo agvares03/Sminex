@@ -118,7 +118,7 @@ class NewTechServiceVC: UIViewController {
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm = detailText
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(Date().toString(format: .custom("dd.MM.yyyy hh:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         print(request)
@@ -243,7 +243,7 @@ class NewTechServiceVC: UIViewController {
         startAnimator()
         data = ServiceHeaderData(icon: UIImage(named: "account")!,
                                  problem: detailText,
-                                 date: date.toString(format: .custom("dd.MM.yyyy hh:mm:ss")),
+                                 date: date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")),
                                  status: "В ОБРАБОТКЕ",
                                  images: images, isPaid: "0")
         uploadRequest()

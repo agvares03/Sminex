@@ -325,7 +325,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             DispatchQueue.main.async {
                 let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
+                dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                 self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: self.img, id: UUID().uuidString)  )
                 self.collection.reloadData()
                 self.img = nil
@@ -382,7 +382,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                     let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                     self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: img, id: uid)  )
                     
                     if !isSplit {
