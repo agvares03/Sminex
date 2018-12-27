@@ -29,12 +29,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Создание объекта конфигурации
         let configuration = YMMYandexMetricaConfiguration.init(apiKey: "5e18cb69-5852-4a9e-9229-c2a2b7c1bf52")
         // Реализуйте логику определения того, является ли запуск приложения первым. В качестве критерия вы можете использовать проверку наличия каких-то файлов (настроек, баз данных и др.), которые приложение создает в свой первый запуск
-        let isFirstApplicationLaunch = false
         // Отслеживание новых пользователей
-        configuration?.handleFirstActivationAsUpdate = isFirstApplicationLaunch == false
+        configuration?.handleFirstActivationAsUpdate = true
         // Отслеживание аварийной остановки приложений
         configuration?.crashReporting = true
+        configuration?.statisticsSending = true
         
+        YMMYandexMetrica.activate(with: configuration!)
 
         return true
     }
