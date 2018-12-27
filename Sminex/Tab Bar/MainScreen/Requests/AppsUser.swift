@@ -231,7 +231,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-                print(self.responceString)
+//                print(self.responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -261,6 +261,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"
+//            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -692,7 +693,6 @@ final class AppsUserCell: UICollectionViewCell {
         status.text     = item.status
         back.isHidden   = !item.isBack
         type            = item.type
-        
         if item.stickTitle == "" {
             skTitleBottm.constant = 0
             skTitleHeight.constant = 0
@@ -700,17 +700,22 @@ final class AppsUserCell: UICollectionViewCell {
         
         } else {
             skTitleBottm.constant = 8
-            skTitleHeight.constant = 15
+            skTitleHeight.constant = 30
             stickTitle.text = item.stickTitle
+            let k = stickTitle.calculateMaxLines()
+            if k == 1{
+                skTitleBottm.constant = 8
+                skTitleHeight.constant = 15
+            }
         }
         
         let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
         df.isLenient = true
-        date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
-            ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "hh:mm")
-            : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
         
+        date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
+            ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "HH:mm")
+            : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
         if item.isBack {
             back.isHidden = false
             
@@ -720,7 +725,7 @@ final class AppsUserCell: UICollectionViewCell {
         
         let currTitle = item.title
         let titleDateString = currTitle.substring(fromIndex: currTitle.length - 19)
-        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
         if let titleDate = df.date(from: titleDateString) {
             df.dateFormat = "dd MMMM"
             df.locale = Locale(identifier: "Ru-ru")
@@ -982,6 +987,16 @@ struct RequestFile {
     }
 }
 
+extension UILabel {
+    func calculateMaxLines() -> Int {
+        let maxSize = CGSize(width: frame.size.width, height: CGFloat(Float.infinity))
+        let charSize = font.lineHeight
+        let text = (self.text ?? "") as NSString
+        let textSize = text.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        let linesRoundedUp = Int(ceil(textSize.height/charSize))
+        return linesRoundedUp
+    }
+}
 
 
 

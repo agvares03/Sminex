@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0Eh-C7-iPR">
-                                <rect key="frame" x="0.0" y="64" width="375" height="553"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="597"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wXS-u8-j4J">
                                     <size key="itemSize" width="320" height="275"/>
@@ -753,21 +753,21 @@
                                 <rect key="frame" x="0.0" y="23" width="375" height="549"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GBk-53-ksF">
-                                    <size key="itemSize" width="317" height="115"/>
+                                    <size key="itemSize" width="317" height="99"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AppsUserCell" id="tpU-of-SZG" customClass="AppsUserCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="29" y="0.0" width="317" height="90"/>
+                                        <rect key="frame" x="29" y="0.0" width="317" height="99"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="317" height="90"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="317" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vct-mt-8J6">
-                                                    <rect key="frame" x="11" y="47" width="293" height="19"/>
+                                                    <rect key="frame" x="11" y="55" width="293" height="19"/>
                                                     <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -785,7 +785,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста, другой номер. По указанному" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nd8-cq-Rz0">
-                                                    <rect key="frame" x="16" y="50" width="293" height="11"/>
+                                                    <rect key="frame" x="16" y="58" width="293" height="11"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="11" id="XPm-4Q-jDl"/>
                                                     </constraints>
@@ -794,26 +794,26 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-jJ-iNZ">
-                                                    <rect key="frame" x="8" y="72" width="10" height="10"/>
+                                                    <rect key="frame" x="8" y="81" width="10" height="10"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="10" id="TV3-S0-gn3"/>
                                                         <constraint firstAttribute="width" constant="10" id="ao4-El-2aN"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0iA-PT-qhI">
-                                                    <rect key="frame" x="26" y="72" width="59" height="10"/>
+                                                    <rect key="frame" x="26" y="79" width="59" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="8"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23:31" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yg0-4r-xRe">
-                                                    <rect key="frame" x="280.5" y="72" width="28.5" height="10"/>
+                                                    <rect key="frame" x="280.5" y="81" width="28.5" height="10"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="io9-0r-GFn">
-                                                    <rect key="frame" x="0.0" y="89" width="317" height="1"/>
+                                                    <rect key="frame" x="0.0" y="98" width="317" height="1"/>
                                                     <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="XzB-Cr-dF0"/>
@@ -822,10 +822,10 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста, другой номер. По указанному не берут трубку" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cce-4C-aBH">
-                                                    <rect key="frame" x="16" y="24" width="293" height="15"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста, другой номер. По указанному не берут трубку" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cce-4C-aBH">
+                                                    <rect key="frame" x="16" y="24" width="293" height="30"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="15" id="aPH-Dr-sEo"/>
+                                                        <constraint firstAttribute="height" constant="30" id="aPH-Dr-sEo"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -838,16 +838,15 @@
                                             <constraint firstItem="yg0-4r-xRe" firstAttribute="centerY" secondItem="0iA-PT-qhI" secondAttribute="centerY" id="6KA-8b-RcD"/>
                                             <constraint firstItem="yg0-4r-xRe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0iA-PT-qhI" secondAttribute="trailing" constant="50" id="7y3-Vw-9Hl"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="nd8-cq-Rz0" secondAttribute="trailing" id="BGf-VB-3aW"/>
-                                            <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="nd8-cq-Rz0" secondAttribute="bottom" constant="15" id="DsZ-8H-5sE"/>
                                             <constraint firstAttribute="bottom" secondItem="yg0-4r-xRe" secondAttribute="bottom" constant="8" id="F6Z-D9-ag1"/>
                                             <constraint firstItem="SMp-OZ-zCn" firstAttribute="top" secondItem="tpU-of-SZG" secondAttribute="top" id="FLK-o3-y1x"/>
                                             <constraint firstAttribute="bottom" secondItem="lGD-jJ-iNZ" secondAttribute="bottom" constant="8" id="FUC-7B-fU0"/>
-                                            <constraint firstItem="nd8-cq-Rz0" firstAttribute="top" secondItem="Cce-4C-aBH" secondAttribute="bottom" constant="11" id="JEj-sl-vCH"/>
+                                            <constraint firstItem="nd8-cq-Rz0" firstAttribute="top" secondItem="Cce-4C-aBH" secondAttribute="bottom" constant="4" id="JEj-sl-vCH"/>
                                             <constraint firstItem="Cce-4C-aBH" firstAttribute="top" secondItem="SMp-OZ-zCn" secondAttribute="bottom" constant="4" id="OYZ-47-9ly"/>
                                             <constraint firstAttribute="trailing" secondItem="yg0-4r-xRe" secondAttribute="trailing" constant="8" id="QaZ-Zb-6kI"/>
                                             <constraint firstItem="0iA-PT-qhI" firstAttribute="centerY" secondItem="lGD-jJ-iNZ" secondAttribute="centerY" id="QxS-oT-geK"/>
                                             <constraint firstAttribute="trailing" secondItem="io9-0r-GFn" secondAttribute="trailing" id="RWw-1r-o6I"/>
-                                            <constraint firstItem="0iA-PT-qhI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Vct-mt-8J6" secondAttribute="bottom" constant="5" id="Uzr-je-L8O"/>
+                                            <constraint firstItem="0iA-PT-qhI" firstAttribute="top" secondItem="Vct-mt-8J6" secondAttribute="bottom" constant="5" id="Uzr-je-L8O"/>
                                             <constraint firstAttribute="trailing" secondItem="SMp-OZ-zCn" secondAttribute="trailing" constant="25" id="XA1-he-Cyy"/>
                                             <constraint firstItem="nd8-cq-Rz0" firstAttribute="leading" secondItem="tpU-of-SZG" secondAttribute="leadingMargin" constant="8" id="ZvO-ah-46X"/>
                                             <constraint firstItem="Vct-mt-8J6" firstAttribute="trailing" secondItem="nd8-cq-Rz0" secondAttribute="trailing" constant="-5" id="buk-I9-H5D"/>
@@ -858,10 +857,11 @@
                                             <constraint firstItem="Vct-mt-8J6" firstAttribute="leading" secondItem="nd8-cq-Rz0" secondAttribute="leading" constant="-5" id="kqU-09-Sfp"/>
                                             <constraint firstItem="Cce-4C-aBH" firstAttribute="trailing" secondItem="nd8-cq-Rz0" secondAttribute="trailing" id="mGX-ow-kjU"/>
                                             <constraint firstItem="SMp-OZ-zCn" firstAttribute="leading" secondItem="tpU-of-SZG" secondAttribute="leading" constant="8" id="oWV-QU-z8r"/>
+                                            <constraint firstItem="io9-0r-GFn" firstAttribute="top" secondItem="0iA-PT-qhI" secondAttribute="bottom" constant="5" id="pDU-Yj-XUA"/>
                                             <constraint firstItem="Cce-4C-aBH" firstAttribute="leading" secondItem="nd8-cq-Rz0" secondAttribute="leading" id="rZ1-Lo-H8t"/>
                                             <constraint firstItem="Vct-mt-8J6" firstAttribute="bottom" secondItem="nd8-cq-Rz0" secondAttribute="bottom" constant="5" id="vdl-cY-seN"/>
                                         </constraints>
-                                        <size key="customSize" width="317" height="90"/>
+                                        <size key="customSize" width="317" height="99"/>
                                         <connections>
                                             <outlet property="back" destination="Vct-mt-8J6" id="T94-g9-cnz"/>
                                             <outlet property="date" destination="yg0-4r-xRe" id="tJ7-YY-B3E"/>
@@ -914,7 +914,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c3w-Ne-98Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1539.375" y="-2082.0422535211269"/>
+            <point key="canvasLocation" x="-1540" y="-2082.9085457271367"/>
         </scene>
         <!--Категории заявки-->
         <scene sceneID="ebf-jY-bBy">
@@ -1917,6 +1917,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="QHF-Wt-DHI"/>
-        <segue reference="qw4-Ju-feW"/>
+        <segue reference="xqa-2g-h5Q"/>
     </inferredMetricsTieBreakers>
 </document>

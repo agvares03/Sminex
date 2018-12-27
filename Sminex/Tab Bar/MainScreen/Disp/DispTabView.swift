@@ -214,10 +214,10 @@ final class AppsDispCell: UITableViewCell {
         adres.text     = item.adres
         
         let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy hh:mm:ss"
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
         df.isLenient = true
         date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
-            ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "hh:mm")
+            ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "HH:mm")
             : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
         
         title.text = item.title
