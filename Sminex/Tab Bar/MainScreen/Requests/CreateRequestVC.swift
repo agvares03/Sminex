@@ -90,7 +90,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         } else if edContact.text == "" {
             edContact.placeholder = "Введите текст!"
         
-        } else {
+        } else if !(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) && transportTitle.text == ""{
+            transportTitle.text = "Введите текст!"
+        }else{
             
             startAnimator()
             let dateFormatter = DateFormatter()
@@ -212,6 +214,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             isTransport.constant = 8
             transportSwitch.isHidden = true
             transportTitle.isHidden = true
+        }else if !(defaults.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (defaults.bool(forKey: "denyIssuanceOfPassSingle")){
+            transportSwitch.isOn = true
+            transportSwitch.isUserInteractionEnabled = false
+            commentConst.constant   = 65
+            gosNumber.isHidden      = false
+            gosLine.isHidden        = false
+            sendViewConst.constant = sendViewConst.constant - 57
         }
         
         edComment.text = "Примечания"
@@ -226,7 +235,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         super.viewWillAppear(animated)
         edFio.becomeFirstResponder()
 //        sendBtnConst.constant = getPoint()
-        sendViewConst.constant = getPoint()
+        sendViewConst.constant = getPoint() - 60
         tabBarController?.tabBar.isHidden = true
     }
     
@@ -282,7 +291,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         if gosNumber.isHidden == false{
 //            sendBtnConst.constant = sendBtnConst.constant - 55
-            sendViewConst.constant = sendBtnConst.constant - 57 + k
+            sendViewConst.constant = sendViewConst.constant - 57 + k
         }
         
         if isNeedToScroll() {
