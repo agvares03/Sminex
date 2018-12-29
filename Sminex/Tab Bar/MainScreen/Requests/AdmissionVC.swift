@@ -451,13 +451,13 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         let k = Double((imageView.image?.size.height)!) / Double((imageView.image?.size.width)!)
         let l = Double((imageView.image?.size.width)!) / Double((imageView.image?.size.height)!)
         if k > l{
-            newImageView.frame.size.height = UIScreen.main.bounds.size.width * CGFloat(k)
+            newImageView.frame.size.height = self.view.frame.size.width * CGFloat(k)
         }else{
-            newImageView.frame.size.height = UIScreen.main.bounds.size.width / CGFloat(l)
+            newImageView.frame.size.height = self.view.frame.size.width / CGFloat(l)
         }
-        newImageView.frame.size.width = UIScreen.main.bounds.size.width
+        newImageView.frame.size.width = self.view.frame.size.width
         let y = (UIScreen.main.bounds.size.height - newImageView.frame.size.height) / 2
-        newImageView.frame = CGRect(x: 0, y: y, width: newImageView.frame.size.height, height: newImageView.frame.size.height)
+        newImageView.frame = CGRect(x: 0, y: y, width: newImageView.frame.size.width, height: newImageView.frame.size.height)
         newImageView.backgroundColor = .black
         newImageView.contentMode = .scaleToFill
         newImageView.isUserInteractionEnabled = true
@@ -466,7 +466,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         view.addSubview(newImageView)
         self.view.addSubview(view)
         self.navigationController?.isNavigationBarHidden = true
-        self.tabBarController?.tabBar.isHidden = true    }
+        self.tabBarController?.tabBar.isHidden = true
+    }
     
     @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
         self.navigationController?.isNavigationBarHidden = false
