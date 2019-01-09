@@ -253,7 +253,7 @@ final class AccountHeader: UICollectionReusableView {
     }
     
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
-        let phone = "+74951911774"
+        let phone = "+74957266791"
         if let url = URL(string: "tel://" + phone) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
