@@ -1465,7 +1465,7 @@ final class CellsHeader: UICollectionReusableView {
             self.detail.setTitle("Подробнее", for: .normal)
         } else if item.title == "Версия" {
             self.detail.setTitleColor(UIColor.black, for: .normal)
-            self.detail.setTitle("ver. 1.83", for: .normal)
+            self.detail.setTitle("ver. 1.85", for: .normal)
         } else {
             self.detail.setTitle("Все", for: .normal)
         }
@@ -1724,7 +1724,7 @@ final class RequestCell: UICollectionViewCell {
     @IBOutlet private weak var stickTitle:  UILabel?
     @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var desc:        UILabel!
-    @IBOutlet private weak var icon:    	UIImageView!
+    @IBOutlet private weak var icon:        UIImageView!
     @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var status:      UILabel!
     @IBOutlet private weak var back:        UIView!
