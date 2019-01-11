@@ -217,7 +217,12 @@ final class AccountHeader: UICollectionReusableView {
         comfortPhoneLabel.isUserInteractionEnabled = true
         holderPhoneLabel.addGestureRecognizer(  UITapGestureRecognizer(target: self, action: #selector(holderPhonePressed(_:))) )
         comfortPhoneLabel.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))))
-        
+        let contacts:[ContactsJson] = TemporaryHolder.instance.contactsList
+        contacts.forEach{
+            if ($0.name?.contains(find: "сьерж"))!{
+                comfortPhoneLabel.text = $0.phone
+            }
+        }
         if TemporaryHolder.instance.bcImage != nil {
             bcImageView.image = TemporaryHolder.instance.bcImage
         
@@ -253,7 +258,7 @@ final class AccountHeader: UICollectionReusableView {
     }
     
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
-        let phone = "+74951911774"
+        let phone = comfortPhoneLabel.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "") ?? ""
         if let url = URL(string: "tel://" + phone) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)

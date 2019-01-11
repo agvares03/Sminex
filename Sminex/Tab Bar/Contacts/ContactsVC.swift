@@ -173,7 +173,6 @@ final class ContactsCell: UICollectionViewCell {
     
     fileprivate func display(_ item: ContactsJson, delegate: ContactsCellDelegate?) {
         self.delegate = delegate
-        
         title.text = item.name
         desc.text  = item.description
         
