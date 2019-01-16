@@ -31,7 +31,15 @@ class NewsTableCell: UITableViewCell {
                 date.text = dayDifference(from: df.date(from: item.created ?? "") ?? Date(), style: "HH:mm")
                 
             } else {
-                date.text = dayDifference(from: df.date(from: item.created ?? "") ?? Date(), style: "dd MMMM")
+                let dateI = df.date(from: item.created!)
+                let calendar = Calendar.current
+                let year = calendar.component(.year, from: dateI!)
+                let curYear = calendar.component(.year, from: Date())
+                if year < curYear{
+                    date.text = dayDifference(from: df.date(from: item.created!) ?? Date(), style: "dd MMMM YYYY")
+                }else{
+                    date.text = dayDifference(from: df.date(from: item.created!) ?? Date(), style: "dd MMMM")
+                }
             }
         }
     }

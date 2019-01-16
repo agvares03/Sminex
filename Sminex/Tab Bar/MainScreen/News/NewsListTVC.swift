@@ -40,7 +40,7 @@ class NewsListTVC: UIViewController {
         } else {
             tableView.addSubview(rControl!)
         }
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
         if TemporaryHolder.instance.news != nil {
             data = TemporaryHolder.instance.news!
         }
@@ -50,6 +50,13 @@ class NewsListTVC: UIViewController {
         }
         startAnimation()
         getNews()
+    }
+    
+    @objc private func appDidBecomeActive() {
+        if TemporaryHolder.instance.news != nil {
+            self.data = TemporaryHolder.instance.news!
+        }
+        getAllNews()
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
