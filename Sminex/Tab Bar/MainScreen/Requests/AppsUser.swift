@@ -407,25 +407,28 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             firstArr.append(contentsOf: secondArr)
             DispatchQueue.main.sync {
                 self.createButton?.isUserInteractionEnabled = false
-                self.fullData = firstArr
-                self.fullCount = self.fullData.count
-                self.data.removeAll()
-                if self.isFromMain{
-                    self.data = firstArr
-                }else{
-                    if firstArr.count > 20{
-                        for i in 0...19{
-                            self.data.append(firstArr[i])
-                            //                        firstArr.removeFirst()
-                        }
+                if firstArr.count != 0{
+                    self.fullData = firstArr
+                    self.fullCount = self.fullData.count
+                    self.data.removeAll()
+                    if self.isFromMain{
+                        self.data = firstArr
                     }else{
-                        for i in 0...firstArr.count - 1{
-                            self.data.append(firstArr[i])
-                            //                        firstArr.removeFirst()
+                        if firstArr.count > 20{
+                            for i in 0...19{
+                                self.data.append(firstArr[i])
+                                //                        firstArr.removeFirst()
+                            }
+                        }else{
+                            for i in 0...firstArr.count - 1{
+                                self.data.append(firstArr[i])
+                                //                        firstArr.removeFirst()
+                            }
                         }
+                        
                     }
-                    
                 }
+                
                 self.collection?.reloadData()
                 
                 if self.requestId_ != "" {

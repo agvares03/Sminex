@@ -400,7 +400,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 
             } else if self.responseString == "2" || self.responseString.contains("error") {
                 if !self.isFromSettings_ {
-                    self.errorLabel.isHidden = true
+                    self.errorLabel.isHidden = false
                 }
             } else {
                 if !self.isFromSettings_ {

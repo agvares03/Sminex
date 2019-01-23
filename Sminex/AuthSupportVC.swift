@@ -375,13 +375,12 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         let url = "login=\(login)&text=\(text)&phone=\(phone)&mail=\(email)"
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ADD_TECH_SUPPORT + url)!)
         request.httpMethod = "POST"
-//        print(request)
+        print(request)
 
         let task = URLSession.shared.dataTask(with: request) {
             data, error, responce in
             let response = String(data: data!, encoding: .utf8) ?? ""
-//            print(response)
-            
+            print(response)
             guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
@@ -432,17 +431,18 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         
         group.enter()
         let uid = UUID().uuidString
+        print(uid)
+        print(Server.SERVER + Server.ADD_SUPPORT_FILE + "mailId=" + reqID!)
         Alamofire.upload(multipartFormData: { multipartFromdata in
             multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
         }, to: Server.SERVER + Server.ADD_SUPPORT_FILE + "mailId=" + reqID!) { (result) in
-            
             switch result {
             case .success(let upload, _, _):
                 
                 upload.uploadProgress(closure: { (progress) in
                     print("Upload Progress: \(progress.fractionCompleted)")
                 })
-                
+                print("====")
                 upload.responseJSON { response in
 //                    print(response.result.value!)
 
@@ -451,7 +451,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
                 }
                 
             case .failure(let encodingError):
-                print(encodingError)
+                print("UPLOAD ERROR: ", encodingError)
             }
         }
         group.wait()
@@ -464,13 +464,12 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         let url = "mailId=" + "\(reqID!)"
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SEND_MAIL + url)!)
         request.httpMethod = "POST"
-//        print(request)
+        print(request)
         
         let task = URLSession.shared.dataTask(with: request) {
             data, error, responce in
             let response = String(data: data!, encoding: .utf8) ?? ""
-//            print(response)
-            
+            print(response)
             guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )

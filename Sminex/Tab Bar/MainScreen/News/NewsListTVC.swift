@@ -40,7 +40,7 @@ class NewsListTVC: UIViewController {
         } else {
             tableView.addSubview(rControl!)
         }
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
         if TemporaryHolder.instance.news != nil {
             data = TemporaryHolder.instance.news!
         }
@@ -50,6 +50,13 @@ class NewsListTVC: UIViewController {
         }
         startAnimation()
         getNews()
+    }
+    
+    @objc private func appDidBecomeActive() {
+        if TemporaryHolder.instance.news != nil {
+            self.data = TemporaryHolder.instance.news!
+        }
+        getAllNews()
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -211,6 +218,8 @@ class NewsListTVC: UIViewController {
 //                        let dateFormatter = DateFormatter()
 //                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+                        print(TemporaryHolder.instance.news?.count)
+                        
                         TemporaryHolder.instance.news?.forEach{
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
@@ -274,8 +283,9 @@ class NewsListTVC: UIViewController {
             }
             
             #if DEBUG
-            //print(String(data: data!, encoding: .utf8) ?? "")
+            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
+            
             }.resume()
     }
     

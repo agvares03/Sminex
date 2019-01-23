@@ -51,7 +51,15 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
                 date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "HH:mm")
                 
             } else {
-                date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "dd MMMM, HH:mm")
+                let dateI = df.date(from: data_?.created ?? "")
+                let calendar = Calendar.current
+                let year = calendar.component(.year, from: dateI!)
+                let curYear = calendar.component(.year, from: Date())
+                if year < curYear{
+                    date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "dd MMMM YYYY")
+                }else{
+                    date.text = dayDifference(from: df.date(from: data_?.created ?? "") ?? Date(), style: "dd MMMM")
+                }
             }
         }
         
