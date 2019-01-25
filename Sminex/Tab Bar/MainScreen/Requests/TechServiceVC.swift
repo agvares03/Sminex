@@ -93,17 +93,17 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         present(action, animated: true, completion: nil)
     }
     
-    open var delegate:   AppsUserDelegate?
-    open var reqId_      = ""
-    open var isCreate_   = false
-    open var isFromMain_ = false
-    open var data_: ServiceHeaderData = ServiceHeaderData(icon: UIImage(named: "account")!,
+    public var delegate:   AppsUserDelegate?
+    public var reqId_      = ""
+    public var isCreate_   = false
+    public var isFromMain_ = false
+    public var data_: ServiceHeaderData = ServiceHeaderData(icon: UIImage(named: "account")!,
                                                           problem: "Нас топят соседи! Не можем с ними связаться. Срочно вызвайте сантехника",
                                                           date: "9 сентября 10:00",
                                                           status: "В ОБРАБОТКЕ",
                                                           images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0")
     
-    open var comments_: [ServiceCommentCellData] = []
+    public var comments_: [ServiceCommentCellData] = []
     private var arr:    [TechServiceProtocol]    = []
     private var img:    UIImage?
     
@@ -157,7 +157,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 // Получим комментарии по одной заявке
                 let defaults = UserDefaults.standard
                 let login = defaults.string(forKey: "login")
-                let pass = defaults.string(forKey: "pass")
+//                let pass = defaults.string(forKey: "pass")
                 
                 var url_str = Server.SERVER
                 url_str = url_str + Server.GET_COMM_ID
@@ -228,7 +228,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         var rowComms: [String : [RequestComment]]  = [:]
         DispatchQueue.global(qos: .userInitiated).async {
             
-            let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
+//            let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             

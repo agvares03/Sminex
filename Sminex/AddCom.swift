@@ -114,10 +114,10 @@ final class AddCom: UIView, Modal {
             textComm = textEdit.text
             self.delegate?.addCommDone(addApp: self, addComm: textComm)
         }
-        if self.delegate_user != nil {
+//        if self.delegate_user != nil {
             textComm = textEdit.text
-            self.delegate_user?.addCommDone(addApp: self, addComm: textComm)
-        }
+//            self.delegate_user?.addCommDone(addApp: self, addComm: textComm)
+//        }
         dismiss(animated: true)
     }
     

@@ -47,7 +47,7 @@ final class DB: NSObject, XMLParserDelegate {
         let url: NSURL = NSURL(string: urlPath)!
         parser = XMLParser(contentsOf: url as URL)!
         parser.delegate = self
-        let success:Bool = parser.parse()
+//        let success:Bool = parser.parse()
         
 //        #if DEBUG
 //            if success {
@@ -85,7 +85,7 @@ final class DB: NSObject, XMLParserDelegate {
         }
         
         // Заявки с комментариями (xml)
-        var id_app = ""
+//        var id_app = ""
         if (elementName == "Row") {
             // Запишем заявку в БД
 //            print(attributeDict)
@@ -116,7 +116,7 @@ final class DB: NSObject, XMLParserDelegate {
                 managedObject.is_answered = 0
             }
             CoreDataManager.instance.saveContext()
-            id_app                        = attributeDict["ID"]!
+//            id_app                        = attributeDict["ID"]!
 //            #if DEBUG
 //                print(id_app)
 //            #endif
@@ -418,9 +418,9 @@ final class DB: NSObject, XMLParserDelegate {
 //                                                        }
                                                     } catch let error as NSError {
                                                         
-//                                                        #if DEBUG
-//                                                            print(error)
-//                                                        #endif
+                                                        #if DEBUG
+                                                            print(error)
+                                                        #endif
                                                     }
                                                 }
                                  
@@ -438,7 +438,7 @@ final class DB: NSObject, XMLParserDelegate {
         
         parser = XMLParser(contentsOf: url as URL)!
         parser.delegate = self
-        let success:Bool = parser.parse()
+//        let success:Bool = parser.parse()
         
 //        #if DEBUG
 //            if success {
@@ -545,9 +545,9 @@ final class DB: NSObject, XMLParserDelegate {
             
         } catch let error {
             
-//            #if DEBUG
-//                print(error)
-//            #endif
+            #if DEBUG
+                print(error)
+            #endif
         }
         
         return arr
@@ -577,9 +577,9 @@ final class DB: NSObject, XMLParserDelegate {
         
         } catch let error {
             
-//            #if DEBUG
-//                print(error)
-//            #endif
+            #if DEBUG
+                print(error)
+            #endif
         }
         CoreDataManager.instance.saveContext()
     }

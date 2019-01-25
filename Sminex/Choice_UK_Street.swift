@@ -15,7 +15,7 @@ final class Choice_UK_Street: UIViewController {
     @IBOutlet private weak var fon_top: UIImageView!
     
     // Какая регистрация будет
-    open var roleReg_ = ""
+    public var roleReg_ = ""
     
     private var opener: ViewController_UK!
     private var regionString = ""

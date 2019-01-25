@@ -112,10 +112,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         }
     }
     
-    open var isReg_     = false
-    open var isNew      = false
-    open var login_     = "1234"
-    open var phone_     = "1234567890"
+    public var isReg_     = false
+    public var isNew      = false
+    public var login_     = "1234public"
+    public var phone_     = "1234567890"
     
     private var responseString  = ""
     private var const: CGFloat = 0.0
@@ -284,7 +284,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
         
-        print(request.url)
+//        print(request.url)
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in

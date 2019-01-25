@@ -73,8 +73,8 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         present(action, animated: true, completion: nil)
     }
     
-    open var login_ = ""
-    open var fromMenu = false
+    public var login_ = ""
+    public var fromMenu = false
     private var imgs: [UIImage] = [] {
         didSet {
             if imgs.count == 0 {

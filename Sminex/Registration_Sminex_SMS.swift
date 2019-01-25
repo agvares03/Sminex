@@ -115,12 +115,12 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         }
     }
     
-    open var isPhone_     = false
-    open var isReg_       = false
-    open var isNew        = false
-    open var numberPhone_ = ""
-    open var numberLs_    = ""
-    open var phone_       = ""
+    public var isPhone_     = false
+    public var isReg_       = false
+    public var isNew        = false
+    public var numberPhone_ = ""
+    public var numberLs_    = ""
+    public var phone_       = ""
     
     private var responseString  = ""
     private var descText        = ""

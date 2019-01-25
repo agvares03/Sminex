@@ -14,9 +14,9 @@ final class SelectItemController: UITableViewController {
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    open var selectedIndex_   = -1
-    open var strings_         = [String]()
-    open var selectHandler_:    ((Int)->Void)?
+    public var selectedIndex_   = -1
+    public var strings_         = [String]()
+    public var selectHandler_:    ((Int)->Void)?
     
     override func viewDidLoad() {
         

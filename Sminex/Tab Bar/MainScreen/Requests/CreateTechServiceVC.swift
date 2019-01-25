@@ -118,8 +118,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         uploadRequest()
     }
     
-    open var delegate: AppsUserDelegate?
-    open var type_:     RequestTypeStruct?
+    public var delegate: AppsUserDelegate?
+    public var type_:     RequestTypeStruct?
     private var data:   ServiceHeaderData?
     private var reqId:  String?
     private var constant: CGFloat = 0.0

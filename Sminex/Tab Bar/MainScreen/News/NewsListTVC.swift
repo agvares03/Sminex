@@ -218,7 +218,7 @@ class NewsListTVC: UIViewController {
 //                        let dateFormatter = DateFormatter()
 //                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
-                        print(TemporaryHolder.instance.news?.count)
+//                        print(TemporaryHolder.instance.news?.count)
                         
                         TemporaryHolder.instance.news?.forEach{
                             let dateFormatter = DateFormatter()

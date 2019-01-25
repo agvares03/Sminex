@@ -12,21 +12,21 @@ import CoreData
 protocol CloseAppDelegate : class {
     func closeAppDone(closeApp: CloseAppAlert)
 }
-@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
+//@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class CloseAppAlert: UIViewController, FloatRatingViewDelegate {
     
-    open weak var delegate: CloseAppDelegate?
-    open var apps_:         Applications?
+    public weak var delegate: CloseAppDelegate?
+    public var apps_:         Applications?
     
     // Номер заявки
-    open var number_                 = ""
+    public var number_                 = ""
     private var responseString = ""
     
     // Данные для создания комментария
-    open var idAuthor_      = ""
-    open var nameAccount_   = ""
-    open var idAccount_     = ""
-    open var teckId_: Int64 = 1
+    public var idAuthor_      = ""
+    public var nameAccount_   = ""
+    public var idAccount_     = ""
+    public var teckId_: Int64 = 1
     
     @IBOutlet private weak var floatRatingView:   FloatRatingView!
     @IBOutlet private weak var closeComm:         UITextField!
@@ -117,9 +117,9 @@ final class CloseAppAlert: UIViewController, FloatRatingViewDelegate {
                 
                 let alert = UIAlertController(title: "Успешно", message: "Заявка закрыта с оценкой - " + self.mark, preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
-                    if self.delegate != nil {
-                        self.delegate?.closeAppDone(closeApp: self)
-                    }
+//                    if self.delegate != nil {
+//                        self.delegate?.closeAppDone(closeApp: self)
+//                    }
                     self.dismiss(animated: true, completion: nil)
                 }
                 alert.addAction(cancelAction)

@@ -148,8 +148,8 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     private var debtSumAll     = 0.0
     private var debtOverSum    = 0.0
     
-    open var phone_       = ""
-    open var code         = ""
+    public var phone_       = ""
+    public var code         = ""
     
     private var responseString  = ""
     private var descText        = ""

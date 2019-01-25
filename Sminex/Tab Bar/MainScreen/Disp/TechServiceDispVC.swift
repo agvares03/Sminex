@@ -71,7 +71,7 @@ final class TechServiceDispVC: UIViewController, UITextFieldDelegate, UIGestureR
         action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
         present(action, animated: true, completion: nil)
     }
-    open var data_: ServiceDispHeaderData = ServiceDispHeaderData(title: "Нс опять топят соседи", date: "9 сентября 10:00", person: "Иванов Иван Иванович", phone: "+79659139567", adres: "Проспект Мира 7")
+    public var data_: ServiceDispHeaderData = ServiceDispHeaderData(title: "Нс опять топят соседи", date: "9 сентября 10:00", person: "Иванов Иван Иванович", phone: "+79659139567", adres: "Проспект Мира 7")
     
     
     private var arr:    [TechServiceProtocol]    = []
@@ -79,7 +79,7 @@ final class TechServiceDispVC: UIViewController, UITextFieldDelegate, UIGestureR
     
     private var rowComms: [String : [RequestComment]]  = [:]
     private var rowFiles:   [RequestFile] = []
-    open var worker: [ServiceWorkerCellData] = []
+    public var worker: [ServiceWorkerCellData] = []
     
     private var refreshControl: UIRefreshControl?
     

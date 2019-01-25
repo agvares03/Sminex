@@ -143,9 +143,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
     }
     
-    open var name_ = ""
-    open var delegate: AppsUserDelegate?
-    open var type_: RequestTypeStruct?
+    public var name_ = ""
+    public var delegate: AppsUserDelegate?
+    public var type_: RequestTypeStruct?
     private var reqId: String?
     private var data: AdmissionHeaderData?
     private var btnConstant: CGFloat = 0.0

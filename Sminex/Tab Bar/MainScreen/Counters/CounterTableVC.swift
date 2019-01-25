@@ -26,7 +26,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         navigationController?.popViewController(animated: true)
     }
     
-    open var canCount = true
+    public var canCount = true
     
     private var refreshControl: UIRefreshControl?
     private var barTitle = ""

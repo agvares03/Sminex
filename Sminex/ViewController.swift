@@ -41,8 +41,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private var ls2:[String] = []
     
     // Какая регистрация будет
-    open var roleReg_ = ""
-    open var isFromSettings_ = false
+    public var roleReg_ = ""
+    public var isFromSettings_ = false
     
     private let textForgot      = ""
     private var responseString  = ""
@@ -95,7 +95,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private func getLSforNumber(){
         var phone = self.edLogin.text!
         let ls_1 = self.edLogin.text!.index(self.edLogin.text!.startIndex, offsetBy: 1)
-        let ls_1_end = self.edLogin.text!.substring(to: ls_1)
+        let ls_1_end = String(self.edLogin.text![..<ls_1])
         if ls_1_end == "9"{
             phone = "+7" + self.edLogin.text!
         }
@@ -740,18 +740,18 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             ls_1_end = ""
         } else {
             let ls_1 = LoginText.index(LoginText.startIndex, offsetBy: 1)
-            ls_1_end = LoginText.substring(to: ls_1)
+            ls_1_end = String(LoginText[..<ls_1])
         }
         var ls_12_end = ""
         if (LoginText.count < 2) {
             ls_12_end = ""
         } else {
             let ls_12 = LoginText.index(LoginText.startIndex, offsetBy: 2)
-            ls_12_end = LoginText.substring(to: ls_12)
+            ls_12_end = String(LoginText[..<ls_12])
         }
         if (ls_1_end == "+") {
             itsPhone = true
-        }else if (string.characters.count == 10 || string.characters.count == 11 || string.characters.count == 12){
+        }else if (string.count == 10 || string.count == 11 || string.count == 12){
             itsPhone = true
         }else if (!itsPhone) {
             if (ls_12_end == "89") || (ls_12_end == "79") {

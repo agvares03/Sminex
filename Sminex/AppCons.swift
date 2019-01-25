@@ -24,7 +24,7 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
     private var idsConsArray:   [String] = []
     private var teckCons = -1
     
-    open var delegate: ShowAppConsDelegate?
+    public var delegate: ShowAppConsDelegate?
     
     private var responseString: String = ""
     private var teckID:         Int64  = 0
@@ -52,19 +52,19 @@ final class AppCons: UIViewController, UITableViewDelegate, UITableViewDataSourc
     private var idAuthor    = ""
     private var nameAccount = ""
     private var idAccount   = ""
-    open var idApp_         = ""
+    public var idApp_         = ""
     
-    open var txtAdress_ = ""
-    open var txtPhone_  = ""
-    open var txtTema_   = ""
-    open var txtText_   = ""
-    open var txtDate_   = ""
+    public var txtAdress_ = ""
+    public var txtPhone_  = ""
+    public var txtTema_   = ""
+    public var txtText_   = ""
+    public var txtDate_   = ""
     
     @IBAction private func do_call(_ sender: UIButton) {
         if txtPhone_ != "" {
             let url = URL(string: "tel://\(txtPhone_)")!
             if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.openURL(url)
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         } else {
             let alert = UIAlertController(title: "Ошибка", message: "Не обнаружен номер телефона", preferredStyle: .alert)

@@ -24,8 +24,8 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         navigationController?.popViewController(animated: true)
     }
     
-    open var delegate: MainScreenDelegate?
-    open var performName_ = ""
+    public var delegate: MainScreenDelegate?
+    public var performName_ = ""
     
     private var refreshControl: UIRefreshControl?
     private var questions: [QuestionDataJson]? = []

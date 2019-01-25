@@ -38,13 +38,13 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         sendCount()
     }
     
-    open var period_: [CounterPeriod]?
+    public var period_: [CounterPeriod]?
     
-    open var month_:        String?
-    open var year_:         String?
-    open var date_:         String?
-    open var value_:        MeterValue?
-    open weak var delegate: CounterStatementDelegate?
+    public var month_:        String?
+    public var year_:         String?
+    public var date_:         String?
+    public var value_:        MeterValue?
+    public weak var delegate: CounterStatementDelegate?
     
     private var responseString = ""
     

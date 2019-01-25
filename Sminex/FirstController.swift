@@ -191,7 +191,7 @@ class FirstController: UIViewController {
         
         // Авторизация пользователя
         let txtLogin = login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
-        let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+//        let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         UserDefaults.standard.setValue(pwd, forKey: "pwd")
@@ -330,7 +330,7 @@ class FirstController: UIViewController {
                 TemporaryHolder.instance.getFinance()
                 // отправим на сервер данные об ид. устройства для отправки уведомлений
                 let token = Messaging.messaging().fcmToken
-                print(token)
+//                print(token)
                 if token != nil {
                     self.send_id_app(id_account: answer[4], token: token!)
                 }

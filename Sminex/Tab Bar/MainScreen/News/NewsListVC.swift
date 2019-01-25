@@ -19,8 +19,8 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         navigationController?.popViewController(animated: true)
     }
     
-    open var tappedNews: NewsJson?
-    open var data_: [NewsJson] = []
+    public var tappedNews: NewsJson?
+    public var data_: [NewsJson] = []
     private var index = 0
     private var refreshControl: UIRefreshControl?
     
@@ -37,11 +37,11 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        if #available(iOS 10.0, *) {
+//        if #available(iOS 10.0, *) {
             collection.refreshControl = refreshControl
-        } else {
-            collection.addSubview(refreshControl!)
-        }
+//        } else {
+//            collection.addSubview(refreshControl!)
+//        }
         
         if tappedNews != nil {
             performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
@@ -75,7 +75,7 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
         return CGSize(width: view.frame.size.width, height: !isNeedToScroll() ? size.height : size.height + 16)
     }
     
-    func collectionView(_ collectionView: UITableView, didSelectItemAt indexPath: IndexPath) {
+    private func collectionView(_ collectionView: UITableView, didSelectItemAt indexPath: IndexPath) {
         index = indexPath.row
         performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
     }
@@ -97,11 +97,11 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
             
             defer {
                 DispatchQueue.main.sync {
-                    if #available(iOS 10.0, *) {
+//                    if #available(iOS 10.0, *) {
                         self.collection.refreshControl?.endRefreshing()
-                    } else {
-                        self.refreshControl?.endRefreshing()
-                    }
+//                    } else {
+//                        self.refreshControl?.endRefreshing()
+//                    }
                     self.collection.reloadData()
                     self.stopAnimation()
                 }
@@ -120,18 +120,18 @@ final class NewsListVC: UIViewController, UICollectionViewDelegate, UICollection
                 return
             }
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                print("JSON: ", json)
+//                print("JSON: ", json)
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
                         TemporaryHolder.instance.news?.append(contentsOf: newsArr)
                         self.data_ = TemporaryHolder.instance.news!
                         
                         DispatchQueue.main.sync {
-                            if #available(iOS 10.0, *) {
+//                            if #available(iOS 10.0, *) {
                                 self.collection.refreshControl?.endRefreshing()
-                            } else {
-                                self.refreshControl?.endRefreshing()
-                            }
+//                            } else {
+//                                self.refreshControl?.endRefreshing()
+//                            }
                             self.collection.reloadData()
                             self.stopAnimation()
                         }

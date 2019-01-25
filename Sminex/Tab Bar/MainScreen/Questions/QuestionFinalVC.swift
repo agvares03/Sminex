@@ -30,7 +30,7 @@ final class QuestionFinalVC: UIViewController {
         }
     }
     
-    open var isFromMain_ = false
+    public var isFromMain_ = false
     
     override func viewDidLoad() {
         super.viewDidLoad()

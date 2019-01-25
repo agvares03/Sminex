@@ -95,7 +95,7 @@ open class DigitInputView: UIView {
         get {
             
             guard let textField = textField else { return "" }
-            var txt = textField.text!
+            let txt = textField.text!
             if acceptableCharacters!.contains(find: ",") {
                 let string = labels.map { $0.text! }.joined()
                 return String(Float(string)!)
@@ -404,7 +404,7 @@ extension DigitInputView: UITextFieldDelegate {
 //                didChange(true)
 //                return false
 //            }
-            textField.text = text.substring(to: text.index(text.endIndex, offsetBy: -1))
+            textField.text = String(text[text.index(text.endIndex, offsetBy: -1)])
             didChange(true)
             return false
         }

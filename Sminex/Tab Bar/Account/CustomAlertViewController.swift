@@ -56,7 +56,7 @@ class CustomAlertViewController: UIViewController {
     
     @objc func viewTapped(tapGestureRecognizer: UITapGestureRecognizer)
     {
-        let tappedView = tapGestureRecognizer.view as! UIView
+//        let tappedView = tapGestureRecognizer.view as! UIView
         self.removeFromParentViewController()
         self.view.removeFromSuperview()
     }

@@ -834,7 +834,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         }
                     }
 //                    let isPerson = row.name?.contains(find: "ропуск") ?? false
-                    let isPerson = type!.contains(find: "ропуск") ?? false
+                    let isPerson = type!.contains(find: "ропуск")
                     
                     var persons = ""//row.responsiblePerson ?? ""
                     
@@ -1132,7 +1132,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
                     var i = 0
-                    for (ind, item) in self.filteredNews.enumerated() {
+                    for (_, item) in self.filteredNews.enumerated() {
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                         var dateStart = Date()
@@ -1221,7 +1221,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
                     var i = 0
-                    for (ind, item) in self.filteredNews.enumerated() {
+                    for (_, item) in self.filteredNews.enumerated() {
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                         var dateStart = Date()

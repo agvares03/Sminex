@@ -41,8 +41,8 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
-    open var data_:     MeterValue?
-    open var period_:   [CounterPeriod]?
+    public var data_:     MeterValue?
+    public var period_:   [CounterPeriod]?
     var selectedYear: String?
     var years:[String] = []
     

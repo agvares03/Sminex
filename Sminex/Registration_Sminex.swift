@@ -481,7 +481,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
-        if ls.count >= 2 || (string.characters.count == 10 || string.characters.count == 11 || string.characters.count == 12) {
+        if ls.count >= 2 || (string.count == 10 || string.count == 11 || string.count == 12) {
             changeGoButton(isEnabled: true)
         } else {
             changeGoButton(isEnabled: false)
@@ -490,7 +490,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
         if string == "" {
 
             let ls_ind = ls.index(ls.endIndex, offsetBy: -1)
-            let ls_end = ls.substring(to: ls_ind)
+            let ls_end = String(ls[..<ls_ind])
             ls = ls_end
             if (ls_end == "") {
                 itsPhone = false
@@ -506,7 +506,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             ls_1_end = ""
         } else {
             let ls_1 = ls.index(ls.startIndex, offsetBy: 1)
-            ls_1_end = ls.substring(to: ls_1)
+            ls_1_end = String(ls[..<ls_1])
         }
 
         var ls_12_end = ""
@@ -514,7 +514,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
             ls_12_end = ""
         } else {
             let ls_12 = ls.index(ls.startIndex, offsetBy: 2)
-            ls_12_end = ls.substring(to: ls_12)
+            ls_12_end = String(ls[..<ls_12])
         }
         if (ls_1_end == "+") {
             itsPhone = true

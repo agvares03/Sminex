@@ -70,10 +70,10 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
-    open var isFromMain_ = false
-    open var delegate: MainScreenDelegate?
-    open var question_: QuestionDataJson?
-    open var questionDelegate: QuestionTableDelegate?
+    public var isFromMain_ = false
+    public var delegate: MainScreenDelegate?
+    public var question_: QuestionDataJson?
+    public var questionDelegate: QuestionTableDelegate?
     
     private var answers: [Int:[Int]] = [:]
     private var tap: UITapGestureRecognizer?
@@ -280,8 +280,8 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
         request.httpBody = jsonData
         
-        print(request.url)
-        print(String(data: request.httpBody!, encoding: .utf8))
+//        print(request.url)
+//        print(String(data: request.httpBody!, encoding: .utf8))
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -376,7 +376,7 @@ final class QuestionAnswerCell: UICollectionViewCell {
     @IBOutlet private weak var field:       UITextField!
     @IBOutlet private weak var question:    UILabel!
     @IBOutlet private weak var toggleView:  UIView!
-    open var question_: QuestionDataJson?
+    public var question_: QuestionDataJson?
     
     
     

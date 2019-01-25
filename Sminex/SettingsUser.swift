@@ -7,7 +7,7 @@
 //
 
 import UIKit
-@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
+//@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class SettingsUser: UIViewController {
 
     @IBOutlet private weak var menuButton: UIBarButtonItem!

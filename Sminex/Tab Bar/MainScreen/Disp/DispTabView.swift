@@ -150,7 +150,7 @@ class DispTabView: UIViewController, UITableViewDelegate, UITableViewDataSource{
     }
     
     func tappedCell() {
-        let login1 = UserDefaults.standard.string(forKey: "login")
+//        let login1 = UserDefaults.standard.string(forKey: "login")
         let tapped = data[index]
         let ident: String = (tapped.title) as String
         if ident == "Техническое обслуживание"{

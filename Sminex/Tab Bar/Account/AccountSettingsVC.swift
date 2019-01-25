@@ -88,11 +88,11 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         navigationController?.popViewController(animated: true)
     }
     
-    open var isReg_ = false
-    open var isNew  = false
-    open var responceString_ = ""
-    open var login_ = ""
-    open var pass_  = ""
+    public var isReg_ = false
+    public var isNew  = false
+    public var responceString_ = ""
+    public var login_ = ""
+    public var pass_  = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()

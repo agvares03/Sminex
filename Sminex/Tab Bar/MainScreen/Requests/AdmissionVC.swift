@@ -86,12 +86,12 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    open var name_: String?
-    open var delegate:   AppsUserDelegate?
-    open var reqId_      = ""
-    open var isCreated_  = false
-    open var isFromMain_ = false
-    open var data_: AdmissionHeaderData = AdmissionHeaderData(icon: UIImage(named: "account")!,
+    public var name_: String?
+    public var delegate:   AppsUserDelegate?
+    public var reqId_      = ""
+    public var isCreated_  = false
+    public var isFromMain_ = false
+    public var data_: AdmissionHeaderData = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                                                 gosti: "А. Е. Филимонов, В. В. Иванова",
                                                                 mobileNumber: "+7 965 913 95 67",
                                                                 gosNumber: "А 033 ЕО 777",
@@ -99,7 +99,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                                                                 status: "В ОБРАБОТКЕ",
                                                                 images: [],
                                                                 imagesUrl: [])
-    open var comments_: [AdmissionCommentCellData] = []
+    public var comments_: [AdmissionCommentCellData] = []
     
     private var arr: [AdmissionProtocol] = []
     private var img: UIImage?

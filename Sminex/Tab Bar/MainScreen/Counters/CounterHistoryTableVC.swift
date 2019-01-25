@@ -15,8 +15,8 @@ final class CounterHistoryTableVC: UIViewController {
     
     // MARK: Properties
     
-    open var data_: [MeterValue] = []
-    open var period_: [CounterPeriod]?
+    public var data_: [MeterValue] = []
+    public var period_: [CounterPeriod]?
     
     // MARK: View lifecycle
     

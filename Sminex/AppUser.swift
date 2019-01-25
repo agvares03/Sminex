@@ -12,20 +12,20 @@ import CoreData
 protocol ShowAppDelegate : class {
     func showAppDone(showApp: AppUser)
 }
-@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
+//@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class AppUser: UIViewController, UITableViewDelegate, UITableViewDataSource, CloseAppDelegate {
     // Картинки на подмену
     @IBOutlet private weak var view_btn:  UIView!
     @IBOutlet private weak var fon_app:   UIImageView!
     
     var delegate:   ShowAppDelegate?
-    open var apps_: Applications?
+    public var apps_: Applications?
     
-    open var txtTema_  = ""
-    open var txtText_  = ""
-    open var txtDate_  = ""
+    public var txtTema_  = ""
+    public var txtText_  = ""
+    public var txtDate_  = ""
     
-    open var idApp_    = ""
+    public var idApp_    = ""
     
     private var responseString = ""
     

@@ -19,7 +19,7 @@ final class RegistrationAdress: UIViewController {
     @IBOutlet private weak var new_mail:  UIImageView!
     
     private var responseString = ""
-    open var letter_           = ""
+    public var letter_           = ""
     
     // Массивы для хранения данных
     private var adressNames: [String] = []

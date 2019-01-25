@@ -9,10 +9,10 @@
 import UIKit
 import CoreData
 
-protocol AddAppDelegate : class {
-    func addAppDone(addApp: AddAppUser)
-}
-@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
+//protocol AddAppDelegate : class {
+//    func addAppDone(addApp: AddAppUser)
+//}
+//@available(*, deprecated, message: "Класс нигде не используется. Будет удалён в будущих сборках")
 final class AddAppUser: UITableViewController {
     
     // id аккаунта текущего
@@ -28,7 +28,7 @@ final class AddAppUser: UITableViewController {
     @IBOutlet private weak var tema:          UITextField!
     @IBOutlet private weak var textApp:       UITextField!
     
-    weak var delegate: AddAppDelegate?
+//    weak var delegate: AddAppDelegate?
     
     @IBOutlet private weak var btnAdd:    UIButton!
     @IBOutlet private weak var indicator: UIActivityIndicatorView!
@@ -184,9 +184,9 @@ final class AddAppUser: UITableViewController {
                 
                 let alert = UIAlertController(title: "Успешно", message: "Создана заявка №" + self.responseString, preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
-                    if self.delegate != nil {
-                        self.delegate?.addAppDone(addApp: self)
-                    }
+//                    if self.delegate != nil {
+//                        self.delegate?.addAppDone(addApp: self)
+//                    }
                     self.navigationController?.dismiss(animated: true, completion: nil)
                 }
                 alert.addAction(cancelAction)
