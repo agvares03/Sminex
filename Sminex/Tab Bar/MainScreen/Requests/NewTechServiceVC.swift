@@ -359,6 +359,7 @@ extension NewTechServiceVC: DatePickerCellDelegate {
     
     func dateDidChange(date: Date) {
         self.date = date
+        self.tableView.reloadData()
     }
     
 }

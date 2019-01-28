@@ -80,6 +80,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
     }
     
+    @objc func datePickerValueChanged(sender:UIDatePicker) {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM HH:mm"
+        dateField.setTitle(dateFormatter.string(from: sender.date), for: .normal)
+    }
+    
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         
         viewTapped(nil)
@@ -237,6 +244,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //        sendBtnConst.constant = getPoint()
         sendViewConst.constant = getPoint() - 60
         tabBarController?.tabBar.isHidden = true
+        picker.addTarget(self, action: #selector(
+            datePickerValueChanged), for: UIControlEvents.valueChanged)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
