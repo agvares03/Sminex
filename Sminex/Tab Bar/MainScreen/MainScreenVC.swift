@@ -481,7 +481,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if title == "Акции и предложения" {
             if (self.dealsSize == nil) {
 //                self.dealsSize = CGSize(width: view.frame.size.width, height: 204.0)
-                return CGSize(width: view.frame.size.width, height: 0.0)
+                return CGSize(width: view.frame.size.width, height: 1.0)
             } else {
                 let points = Double(UIScreen.pixelsPerInch ?? 0.0)
                 if (250.0...280.0).contains(points) {
@@ -1009,7 +1009,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             if (self.deals.count == 0) {
                 self.dealsSize = nil
-                
+                self.data[2]![1] = StockCellData(images: [])
             } else {
                 self.dealsSize = CGSize(width: 0, height: 0)
                 self.deals.forEach {
