@@ -630,7 +630,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false) && (gosNumber.text == ""){
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true) && (gosNumber.text == ""){
             sendButton.alpha     = 0.5
             sendButton.isEnabled = false
         
@@ -652,7 +652,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let currentText:String = textView.text
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         
-        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false){
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
             if updatedText.isEmpty {
                 textView.text = "Примечания"
                 if textView.frame.origin.y < 100{
