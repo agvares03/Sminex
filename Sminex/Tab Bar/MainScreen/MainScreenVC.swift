@@ -818,10 +818,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1
                     }
-                    if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (rowComms[row.id!]?.count)! == 1{
-                        lastComm = nil
-                        isAnswered = false
-                    }
+//                    if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (rowComms[row.id!]?.count)! == 1{
+//                        lastComm = nil
+//                        isAnswered = false
+//                    }
                     if lastComm != nil && row.isPaid == "1" && (rowComms[row.id!]?.count)! == 1{
                         lastComm = nil
                         isAnswered = false
@@ -1740,6 +1740,7 @@ final class RequestCell: UICollectionViewCell {
     fileprivate func display(_ item: RequestCellData) {
         title.text  = item.title
         stickTitle?.text = item.stickTitle
+        print(item.stickTitle, item.desc)
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{

@@ -324,10 +324,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
                 var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
-                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (self.rowComms[curr.id!]?.count)! == 1{
-                    lastComm = nil
-                    isAnswered = false
-                }
+//                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (self.rowComms[curr.id!]?.count)! == 1{
+//                    lastComm = nil
+//                    isAnswered = false
+//                }
                 if lastComm != nil && curr.isPaid == "1" && (self.rowComms[curr.id!]?.count)! == 1{
                     lastComm = nil
                     isAnswered = false
