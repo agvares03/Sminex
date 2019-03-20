@@ -818,10 +818,21 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
                         commentCount += 1
                     }
-//                    if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (rowComms[row.id!]?.count)! == 1{
-//                        lastComm = nil
-//                        isAnswered = false
-//                    }
+                    let df = DateFormatter()
+                    df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    let addReq = df.date(from: row.added!)
+                    let updateDate = df.date(from: row.updateDate!)
+                    let calendar = Calendar.current
+                    let componentsAdd = calendar.dateComponents([.day, .month, .year, .hour, .minute, .second], from: addReq!)
+                    let componentsUpd = calendar.dateComponents([.day, .month, .year, .hour, .minute, .second], from: updateDate!)
+                    var v = 0
+                    if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
+                        v = componentsUpd.second! - componentsAdd.second!
+                    }
+                    if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                        lastComm = nil
+                        isAnswered = false
+                    }
                     if lastComm != nil && row.isPaid == "1" && (rowComms[row.id!]?.count)! == 1{
                         lastComm = nil
                         isAnswered = false
@@ -1740,7 +1751,6 @@ final class RequestCell: UICollectionViewCell {
     fileprivate func display(_ item: RequestCellData) {
         title.text  = item.title
         stickTitle?.text = item.stickTitle
-        print(item.stickTitle, item.desc)
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{

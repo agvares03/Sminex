@@ -324,10 +324,21 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
                 var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
-//                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && (self.rowComms[curr.id!]?.count)! == 1{
-//                    lastComm = nil
-//                    isAnswered = false
-//                }
+                let df = DateFormatter()
+                df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                let addReq = df.date(from: curr.added!)
+                let updateDate = df.date(from: curr.updateDate!)
+                let calendar = Calendar.current
+                let componentsAdd = calendar.dateComponents([.day, .month, .year, .hour, .minute, .second], from: addReq!)
+                let componentsUpd = calendar.dateComponents([.day, .month, .year, .hour, .minute, .second], from: updateDate!)
+                var v = 0
+                if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
+                    v = componentsUpd.second! - componentsAdd.second!
+                }
+                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                    lastComm = nil
+                    isAnswered = false
+                }
                 if lastComm != nil && curr.isPaid == "1" && (self.rowComms[curr.id!]?.count)! == 1{
                     lastComm = nil
                     isAnswered = false
