@@ -139,6 +139,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         } else {
             collection.addSubview(refreshControl!)
         }
+        commentField.inputAccessoryView = nil
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -168,14 +169,11 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification?) {
-        if !isPlusDevices() {
-            view.frame.origin.y = -250
-            collection.contentInset.top = 250
-            
-        } else {
-            view.frame.origin.y = -265
-            collection.contentInset.top = 265
+    @objc func keyboardWillShow(sender: NSNotification) {
+        if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            view.frame.origin.y = 0 - keyboardHeight
+            collection.contentInset.top = keyboardHeight
         }
     }
     

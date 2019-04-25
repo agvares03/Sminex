@@ -125,7 +125,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         
         commentField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: commentField.frame.height))
         commentField.rightViewMode = .always
-        
+        commentField.autocorrectionType = .no
         collection.delegate     = self
         collection.dataSource   = self
         
@@ -135,8 +135,8 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         view.addGestureRecognizer(tap)
         
         // Подхватываем показ клавиатуры
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
@@ -145,7 +145,6 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         } else {
             collection.addSubview(refreshControl!)
         }
-        
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -276,19 +275,16 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     }
     
     // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification?) {
-        if !isPlusDevices() {
-            view.frame.origin.y = -250
-            collection.contentInset.top = 250
-        
-        } else {
-            view.frame.origin.y = -265
-            collection.contentInset.top = 265
+    @objc func keyboardWillShow(notification:NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            view.frame.origin.y = 0 - keyboardHeight
+            collection.contentInset.top = keyboardHeight
         }
     }
     
     // И вниз при исчезновении
-    @objc func keyboardWillHide(sender: NSNotification?) {
+    @objc func keyboardWillHide(notification:NSNotification) {
         view.frame.origin.y = 0
         collection.contentInset.top = 0
     }

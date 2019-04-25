@@ -273,7 +273,8 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
 //            vc.month_   = getNameAndMonth(periods.last?.numMonth ?? "1")
             vc.month_   = getNameAndMonth(periods[0].numMonth ?? "1")
             vc.year_    = periods[0].year ?? ""
-            vc.date_    = date[0] + " " + getNameAndMonth(periods[0].numMonth ?? "1") + " " + (periods[0].year ?? "")
+            vc.date_    = date[0] + " "
+            vc.date_ = vc.date_! + getNameAndMonth(periods[0].numMonth ?? "1") + " " + (periods[0].year ?? "")
             vc.delegate = self
             
         

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H87-Hl-ytf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H87-Hl-ytf">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0Eh-C7-iPR">
-                                <rect key="frame" x="0.0" y="20" width="375" height="597"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="553"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wXS-u8-j4J">
                                     <size key="itemSize" width="320" height="275"/>
@@ -331,7 +331,7 @@
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uPP-F1-ePF">
                                         <rect key="frame" x="342" y="15" width="20" height="20"/>
@@ -632,6 +632,15 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hob-uV-sSb">
                                 <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                                 <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Сообщение" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HPL-jD-7qO">
+                                        <rect key="frame" x="50" y="10" width="315" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="Qwc-Mm-UaP"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54P-ic-Jlj">
                                         <rect key="frame" x="10" y="15" width="25" height="20"/>
                                         <constraints>
@@ -644,15 +653,6 @@
                                             <action selector="cameraPressed:" destination="nGr-Se-ITa" eventType="touchUpInside" id="EiW-iq-eOn"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Сообщение" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Ob-Y9-Sfl">
-                                        <rect key="frame" x="50" y="10" width="315" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="q8R-ed-ZB4"/>
-                                        </constraints>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bEL-Ou-uXu">
                                         <rect key="frame" x="342" y="15" width="20" height="20"/>
                                         <constraints>
@@ -672,15 +672,15 @@
                                 <color key="backgroundColor" white="0.97999999999999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="8QP-Be-X2U" firstAttribute="height" secondItem="bEL-Ou-uXu" secondAttribute="height" id="ArX-Q9-iJo"/>
-                                    <constraint firstAttribute="trailing" secondItem="2Ob-Y9-Sfl" secondAttribute="trailing" constant="10" id="BeH-pe-0hP"/>
                                     <constraint firstItem="8QP-Be-X2U" firstAttribute="width" secondItem="bEL-Ou-uXu" secondAttribute="width" id="FIa-MN-OW3"/>
                                     <constraint firstItem="54P-ic-Jlj" firstAttribute="leading" secondItem="hob-uV-sSb" secondAttribute="leading" constant="10" id="IfS-3w-ykg"/>
-                                    <constraint firstItem="2Ob-Y9-Sfl" firstAttribute="centerY" secondItem="hob-uV-sSb" secondAttribute="centerY" id="Jxy-CL-B9M"/>
                                     <constraint firstItem="8QP-Be-X2U" firstAttribute="centerY" secondItem="bEL-Ou-uXu" secondAttribute="centerY" id="KF9-FE-yYg"/>
                                     <constraint firstAttribute="trailing" secondItem="bEL-Ou-uXu" secondAttribute="trailing" constant="13" id="LKG-o1-ssx"/>
-                                    <constraint firstItem="2Ob-Y9-Sfl" firstAttribute="leading" secondItem="54P-ic-Jlj" secondAttribute="trailing" constant="15" id="XIy-CF-NDT"/>
-                                    <constraint firstItem="bEL-Ou-uXu" firstAttribute="centerY" secondItem="2Ob-Y9-Sfl" secondAttribute="centerY" id="h4Z-sa-JMa"/>
+                                    <constraint firstItem="HPL-jD-7qO" firstAttribute="leading" secondItem="54P-ic-Jlj" secondAttribute="trailing" constant="15" id="Lqk-pS-rFY"/>
+                                    <constraint firstAttribute="trailing" secondItem="HPL-jD-7qO" secondAttribute="trailing" constant="10" id="ZBT-pl-8Bm"/>
                                     <constraint firstAttribute="height" constant="50" id="lmY-Se-JMS"/>
+                                    <constraint firstItem="8QP-Be-X2U" firstAttribute="centerY" secondItem="hob-uV-sSb" secondAttribute="centerY" id="mRR-Ic-hPm"/>
+                                    <constraint firstItem="HPL-jD-7qO" firstAttribute="centerY" secondItem="hob-uV-sSb" secondAttribute="centerY" id="mgO-E5-9t6"/>
                                     <constraint firstItem="8QP-Be-X2U" firstAttribute="centerX" secondItem="bEL-Ou-uXu" secondAttribute="centerX" id="rrh-ck-JX8"/>
                                     <constraint firstItem="54P-ic-Jlj" firstAttribute="centerY" secondItem="hob-uV-sSb" secondAttribute="centerY" id="sEx-E4-dii"/>
                                 </constraints>
@@ -710,14 +710,14 @@
                     <connections>
                         <outlet property="cameraButton" destination="54P-ic-Jlj" id="Epv-MG-R6Z"/>
                         <outlet property="collection" destination="cLU-39-NnP" id="ecD-Yc-bsN"/>
-                        <outlet property="commentField" destination="2Ob-Y9-Sfl" id="gEa-ni-UCH"/>
+                        <outlet property="commentField" destination="HPL-jD-7qO" id="cQR-rA-Klm"/>
                         <outlet property="loader" destination="8QP-Be-X2U" id="wHt-Cz-CKI"/>
                         <outlet property="sendBtn" destination="bEL-Ou-uXu" id="Ek9-Ec-xch"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zpw-xr-bMH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="238.125" y="-2851.0563380281692"/>
+            <point key="canvasLocation" x="237.59999999999999" y="-2851.1244377811095"/>
         </scene>
         <!--Заявки-->
         <scene sceneID="iFZ-fL-tFf">
@@ -1906,17 +1906,17 @@
         </scene>
     </scenes>
     <resources>
-        <image name="account" width="50" height="56"/>
+        <image name="account" width="25" height="28"/>
         <image name="arrow_right" width="40" height="65"/>
         <image name="cameraIcon" width="29" height="22"/>
-        <image name="camera_icon" width="29" height="22"/>
+        <image name="camera_icon" width="48.333332061767578" height="36.666667938232422"/>
         <image name="closeIcon" width="25" height="25"/>
         <image name="rossNavbar" width="20" height="20"/>
-        <image name="send_icon" width="23" height="23"/>
+        <image name="send_icon" width="115" height="115"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="QHF-Wt-DHI"/>
-        <segue reference="xqa-2g-h5Q"/>
+        <segue reference="qw4-Ju-feW"/>
     </inferredMetricsTieBreakers>
 </document>

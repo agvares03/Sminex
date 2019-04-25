@@ -129,8 +129,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                     self.showLS()
                 }else if self.ls2.count == 0{
                     // Сохраним значения
-                    self.LoginText = self.edLogin.text!
-                    self.saveUsersDefaults()
+                    DispatchQueue.main.async {
+                        self.LoginText = self.edLogin.text!
+                        self.saveUsersDefaults()
+                    }
                     // Запрос - получение данных !!!
                     self.enter()
                 }else{

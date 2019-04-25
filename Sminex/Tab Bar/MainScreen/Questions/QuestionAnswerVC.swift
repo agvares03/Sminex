@@ -16,6 +16,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
     @IBOutlet private weak var goButton:    UIButton!
+    @IBOutlet private weak var comment:    UITextView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -48,7 +49,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         selectedAnswers.forEach {
             answerArr.append((question_?.questions![currQuestion].answers![$0].id)!)
         }
-        guard answerArr.count != 0 else { return }
+//        guard answerArr.count != 0 else { return }
         answers[(question_?.questions![currQuestion].id!)!] = answerArr
         print(answers)
         isAccepted = false
@@ -255,15 +256,14 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         
         var json: [[String:Any]] = []
         print("=====")
-        print(answers)
+        
         
         var isManyValue = false
         var index = 0
-        
+        print(recomendationArray[index])
         answers.forEach { (arg) in
             let (key, value) = arg
             isManyValue = false
-            
             value.forEach {
                 if isManyValue {
                     json.append( ["QuestionID":key, "AnswerID":$0, "Comment": ""] )
@@ -273,20 +273,19 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
                 
                 isManyValue = true
             }
-            
             index += 1
         }
         
         let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
         request.httpBody = jsonData
         
-//        print(request.url)
+//        print(request)
 //        print(String(data: request.httpBody!, encoding: .utf8))
-        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
             guard data != nil else { return }
+            print(String(data: data!, encoding: .utf8))
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "ОК", style: .default, handler: { (_) in } ) )

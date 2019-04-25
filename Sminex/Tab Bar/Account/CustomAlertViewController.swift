@@ -298,7 +298,7 @@ class CustomAlertViewController: UIViewController {
                         UserDefaults.standard.removeObject(forKey: "accountIcon")
                         
                     }
-                    
+                    self.getContacts(login: self.edLoginText, pwd: self.edPassText)
                     self.stopAnimation()
                     self.tabBarController?.selectedIndex = 1
                     self.tabBarController?.selectedIndex = 2
