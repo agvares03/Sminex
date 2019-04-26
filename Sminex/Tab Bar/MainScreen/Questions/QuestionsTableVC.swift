@@ -122,6 +122,8 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
             guard data != nil else { return }
+//            print(String(data: data!, encoding: .utf8) ?? "")
+            
             let json = try? JSONSerialization.jsonObject(with: data!,
                                                          options: .allowFragments)
             let unfilteredData = QuestionsJson(json: json! as! JSON)?.data

@@ -91,9 +91,12 @@ final class FinanceCalcCell: UICollectionViewCell {
     
     fileprivate func display(_ item: AccountCalculationsJson) {
         
-        sumAccured.text = Int(item.sumAccrued ?? 0.0).formattedWithSeparator
-        sumDebt.text = Int(item.sumDebt ?? 0.0).formattedWithSeparator
-        sumPay.text = Int(item.sumPay ?? 0.0).formattedWithSeparator
+//        sumAccured.text = Int(item.sumAccrued ?? 0.0).formattedWithSeparator
+//        sumDebt.text = Int(item.sumDebt ?? 0.0).formattedWithSeparator
+//        sumPay.text = Int(item.sumPay ?? 0.0).formattedWithSeparator
+        sumAccured.text = String(format:"%.2f", item.sumAccrued!)
+        sumDebt.text = String(format:"%.2f", item.sumDebt!)
+        sumPay.text = String(format:"%.2f", item.sumPay!)
         title.text = item.type
         
         if item.type == "Итого" {
