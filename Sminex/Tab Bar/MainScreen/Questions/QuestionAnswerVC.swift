@@ -287,6 +287,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             guard data != nil else { return }
             print(String(data: data!, encoding: .utf8))
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                DispatchQueue.main.async{
+                    self.stopAnimation()
+                }
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "ОК", style: .default, handler: { (_) in } ) )
                 DispatchQueue.main.sync {

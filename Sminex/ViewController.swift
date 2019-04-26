@@ -138,10 +138,12 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 }else{
                     self.ls2.forEach {
                         let text = $0
-                        self.LoginText = text
-                        self.edLogin.text = text
+                        DispatchQueue.main.async {
+                            self.LoginText = text
+                            self.edLogin.text = text
                         // Сохраним значения
-                        self.saveUsersDefaults()
+                            self.saveUsersDefaults()
+                        }
                         // Запрос - получение данных !!!
                         self.enter()
                     }
