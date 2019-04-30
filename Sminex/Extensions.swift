@@ -244,7 +244,7 @@ func saveGlobalData(date1:              String,
 
 // Вычисляем соленый хэш пароля
 func getHash(pass: String, salt: Data) -> String {
-    
+    print(pass, salt)
     if (String(data: salt, encoding: .utf8) ?? "Unauthorized").contains(find: "Unauthorized") {
         return ""
     }
@@ -422,10 +422,11 @@ func getSalt() -> Data {
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + (UserDefaults.standard.string(forKey: "login") ?? ""))!)
             request.httpMethod = "GET"
-            
+            print(request)
             TemporaryHolder.instance.SaltQueue.enter()
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
+                print(String(data: data!, encoding: .utf8))
                 
                 defer {
                     TemporaryHolder.instance.SaltQueue.leave()

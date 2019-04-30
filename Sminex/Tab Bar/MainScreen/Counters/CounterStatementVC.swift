@@ -69,7 +69,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 count.isEnergy = true
                 count.numberOfDigits = 6
                 count.acceptableCharacters = "1234567890"
-                
+
             } else {
                 count.acceptableCharacters = "1234567890,"
                 count.numberOfDigits = 9

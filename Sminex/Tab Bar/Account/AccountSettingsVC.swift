@@ -226,6 +226,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         else if let img = info[UIImagePickerControllerOriginalImage] as? UIImage{
             image = img
         }
+//        if picker.cameraDevice == .front{
+//            image = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .leftMirrored)
+//        }
 //        accountImageView.image = image
         dismiss(animated: true, completion: nil)
         

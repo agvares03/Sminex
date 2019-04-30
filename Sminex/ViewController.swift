@@ -621,10 +621,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
         request.httpMethod = "GET"
-        
+        print(request)
         TemporaryHolder.instance.SaltQueue.enter()
         URLSession.shared.dataTask(with: request) {
             data, response, error in
+//            print(String(data: data!, encoding: .utf8))
             
             defer {
                 TemporaryHolder.instance.SaltQueue.leave()

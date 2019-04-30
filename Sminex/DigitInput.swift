@@ -405,7 +405,9 @@ extension DigitInputView: UITextFieldDelegate {
 //                return false
 //            }
 //            textField.text = String(text[text.index(text.endIndex, offsetBy: -1)])
-            textField.text = ""
+            var s = text
+            s.removeLast()
+            textField.text = s
             didChange(true)
             return false
         }

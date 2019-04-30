@@ -213,7 +213,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         transportSwitch.addTarget(self, action: #selector(stateChanged(_:)), for: .valueChanged)
-        edContact.text = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+        if UserDefaults.standard.string(forKey: "contactNumber") == "-" || UserDefaults.standard.string(forKey: "contactNumber") == "" || UserDefaults.standard.string(forKey: "contactNumber") == " "{
+            edContact.text = ""
+        }else{
+            edContact.text = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+        }
         
         let defaults = UserDefaults.standard
         if (defaults.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) {
