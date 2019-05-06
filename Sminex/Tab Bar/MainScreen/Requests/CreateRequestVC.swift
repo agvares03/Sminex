@@ -88,7 +88,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
-        
         viewTapped(nil)
         if edFio.text == "" {
             edFio.text = "Введите текст!"
@@ -99,6 +98,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         } else if !(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) && transportTitle.text == ""{
             transportTitle.text = "Введите текст!"
+        }else if picker.date < Date(){
+            let alert = UIAlertController(title: "Ошибка!", message: "Выберите другую дату", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
         }else{
             
             startAnimator()
@@ -240,6 +244,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
         edFio.textColor = UIColor.lightGray
         edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
+        picker.minimumDate = Date()
     }
     
     override func viewWillAppear(_ animated: Bool) {
