@@ -56,7 +56,26 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         DispatchQueue.global(qos: .userInitiated).async {
             self.getCounters()
         }
-        
+        updateUserInterface()
+    }
+    
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -67,7 +86,18 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
         tabBarController?.tabBar.selectedItem?.title = barTitle
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
     }
  
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -176,7 +206,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
-            
+            guard data != nil else { return }
             if (String(data: data!, encoding: .utf8)?.contains(find: "error"))! {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }

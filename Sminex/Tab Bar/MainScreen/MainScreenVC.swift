@@ -121,6 +121,30 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.layer.shadowOpacity   = 0.5
         navigationController?.navigationBar.layer.shadowOffset    = CGSize(width: 0, height: 1.0)
         navigationController?.navigationBar.layer.shadowRadius    = 1
+        tabBarController?.tabBar.tintColor = .black
+        tabBarController?.tabBar.selectedItem?.title = "Главная"
+        tabBarController?.tabBar.isHidden = false
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
+        updateUserInterface()
+    }
+    
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
     }
     
     func getAccIcon(){
@@ -170,6 +194,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
         if UserDefaults.standard.bool(forKey: "backBtn"){
             title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
             canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
@@ -212,7 +242,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
     }
     

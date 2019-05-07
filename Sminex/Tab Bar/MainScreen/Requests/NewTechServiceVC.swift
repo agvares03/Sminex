@@ -66,6 +66,7 @@ class NewTechServiceVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateUserInterface()
         tableView.tableFooterView = UIView()
         endAnimator()
         
@@ -76,9 +77,39 @@ class NewTechServiceVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.updateUserInterface()
+//                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        edFio.becomeFirstResponder()
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
     }
     // MARK: Functions
     

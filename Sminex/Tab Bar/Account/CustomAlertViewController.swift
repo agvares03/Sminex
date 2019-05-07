@@ -42,6 +42,7 @@ class CustomAlertViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateUserInterface()
 //        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped(tapGestureRecognizer:)))
 //        self.view.isUserInteractionEnabled = true
 //        self.view.addGestureRecognizer(tapGestureRecognizer)
@@ -52,6 +53,40 @@ class CustomAlertViewController: UIViewController {
         self.data.removeAll()
         self.startAnimation()
         getAllLS()
+    }
+    
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
     }
     
     @objc func viewTapped(tapGestureRecognizer: UITapGestureRecognizer)

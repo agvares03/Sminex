@@ -128,7 +128,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-     
+        updateUserInterface()
         endLoading()
         
         let theTap = UITapGestureRecognizer(target: self, action: #selector(self.ViewTapped(recognizer:)))
@@ -177,8 +177,33 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
         view.endEditing(true)
     }
     
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
         tabBarController?.tabBar.isHidden = true
         navigationController?.isNavigationBarHidden = false
         
@@ -188,6 +213,7 @@ final class Registration_Sminex_SMS: UIViewController, UIGestureRecognizerDelega
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = true
         

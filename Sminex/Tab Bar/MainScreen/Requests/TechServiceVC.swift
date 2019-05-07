@@ -114,6 +114,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateUserInterface()
         if data_.isPaid == "1"{
             self.navigationItem.title = "Заявка на услугу"
         }
@@ -145,6 +146,42 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         } else {
             collection.addSubview(refreshControl!)
         }
+    }
+    
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
+        tabBarController?.tabBar.isHidden = false
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -260,18 +297,6 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             }
             
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        tabBarController?.tabBar.isHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        tabBarController?.tabBar.isHidden = false
     }
     
     // Двигаем view вверх при показе клавиатуры

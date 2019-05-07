@@ -89,17 +89,40 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         viewTapped(nil)
-        if edFio.text == "" {
-            edFio.text = "Введите текст!"
-            edFio.textColor = UIColor.lightGray
-            edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
+        if (edFio.text == "" || edFio.text == "ФИО гостей") && edContact.text == ""{
+            if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.text == ""{
+                let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО, Контактный номер и Госномер", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.text != ""{
+                let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО и Контактный номер", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО и Контактный номер", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }else if (edFio.text == "" || edFio.text == "ФИО гостей") {
+            let alert = UIAlertController(title: "Ошибка!", message: "Заполните поле: ФИО", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
         } else if edContact.text == "" {
-            edContact.placeholder = "Введите текст!"
-        
-        } else if !(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) && transportTitle.text == ""{
-            transportTitle.text = "Введите текст!"
+            let alert = UIAlertController(title: "Ошибка!", message: "Заполните поле: Контактный номер", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        } else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.text == ""{
+            let alert = UIAlertController(title: "Ошибка!", message: "Заполните поле: Госномер", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
         }else if picker.date < Date(){
-            let alert = UIAlertController(title: "Ошибка!", message: "Выберите другую дату", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Ошибка!", message: "Дата пропуска должна быть не меньше текущей", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
@@ -165,7 +188,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        updateUserInterface()
         if  Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
             Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
             Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
@@ -247,8 +270,34 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         picker.minimumDate = Date()
     }
     
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.updateUserInterface()
+//                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
         edFio.becomeFirstResponder()
 //        sendBtnConst.constant = getPoint()
         sendViewConst.constant = getPoint() - 60
@@ -259,6 +308,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         tabBarController?.tabBar.isHidden = false
     }
     

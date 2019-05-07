@@ -51,11 +51,11 @@ class FirstController: UIViewController {
             
             if error != nil {
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключение к интеренету", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
-                        
+
                         exit(0)
-                        
+
                     }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
