@@ -983,7 +983,6 @@
 				4171BE591ECB369A00B9CDD7 /* Resources */,
 				8157CDB438B62F3F0A57F740 /* [CP] Embed Pods Frameworks */,
 				1C5AEB9D2126B26B00D9FF49 /* Embed App Extensions */,
-				5E890407F58146F58C6E28E3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1115,28 +1114,13 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5E890407F58146F58C6E28E3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8157CDB438B62F3F0A57F740 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFDateHelper/AFDateHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Arcane/Arcane.framework",
@@ -1173,7 +1157,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

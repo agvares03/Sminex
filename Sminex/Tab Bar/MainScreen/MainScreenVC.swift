@@ -201,37 +201,38 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                          object: Network.reachability)
         updateUserInterface()
         if UserDefaults.standard.bool(forKey: "backBtn"){
-            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
-            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
-            DispatchQueue.global(qos: .userInitiated).async {
-                DispatchQueue.global(qos: .background).async {
-                    let res = self.getRequests()
-                    var count = 1
-                    sleep(2)
-                    DispatchQueue.main.sync {
-                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-                        res.forEach {
-                            self.data[3]![count] = $0
-                            count += 1
-                        }
-                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-                        self.collection.reloadData()
-                    }
-                }
-                
-                self.get_info_business_center()
-                self.fetchQuestions()
-                self.fetchDeals()
-                self.fetchDebt()
-                self.fetchNews()
-                DispatchQueue.main.async {
-                    if #available(iOS 10.0, *) {
-                        self.collection.refreshControl?.endRefreshing()
-                    } else {
-                        self.refreshControl?.endRefreshing()
-                    }
-                }
-            }
+            self.viewDidLoad()
+//            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
+//            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
+//            DispatchQueue.global(qos: .userInitiated).async {
+//                DispatchQueue.global(qos: .background).async {
+//                    let res = self.getRequests()
+//                    var count = 1
+//                    sleep(2)
+//                    DispatchQueue.main.sync {
+//                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+//                        res.forEach {
+//                            self.data[3]![count] = $0
+//                            count += 1
+//                        }
+//                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
+//                        self.collection.reloadData()
+//                    }
+//                }
+//
+//                self.get_info_business_center()
+//                self.fetchQuestions()
+//                self.fetchDeals()
+//                self.fetchDebt()
+//                self.fetchNews()
+//                DispatchQueue.main.async {
+//                    if #available(iOS 10.0, *) {
+//                        self.collection.refreshControl?.endRefreshing()
+//                    } else {
+//                        self.refreshControl?.endRefreshing()
+//                    }
+//                }
+//            }
         }
         UserDefaults.standard.set(false, forKey: "backBtn")
         tabBarController?.tabBar.tintColor = .black
