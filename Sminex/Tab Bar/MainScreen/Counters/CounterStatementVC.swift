@@ -50,7 +50,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        updateUserInterface()
         automaticallyAdjustsScrollViewInsets = false
         
         count.bottomBorderColor = .clear
@@ -69,7 +69,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                 count.isEnergy = true
                 count.numberOfDigits = 6
                 count.acceptableCharacters = "1234567890"
-                
+
             } else {
                 count.acceptableCharacters = "1234567890,"
                 count.numberOfDigits = 9
@@ -195,16 +195,40 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         }
     }
     
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.updateUserInterface()
+//                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-//        tabBarController?.tabBar.selectedItem?.title = "Главная"
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
         tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         tabBarController?.tabBar.isHidden = false
     }
     

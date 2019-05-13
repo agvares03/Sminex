@@ -10,6 +10,7 @@
 		1C1B22B621AF98B60029148A /* DispTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B22B521AF98B60029148A /* DispTabView.swift */; };
 		1C1B22B821B02D490029148A /* TechServiceDispVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B22B721B02D490029148A /* TechServiceDispVC.swift */; };
 		1C1B22BA21B066650029148A /* TableWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1B22B921B066650029148A /* TableWorker.swift */; };
+		1C38229222808D0300B7F66C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C38229122808D0300B7F66C /* Reachability.swift */; };
 		1C479CE721427388004B9312 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C479CE621427387004B9312 /* CustomAlertViewController.swift */; };
 		1C4F97B621B61D7600A0DB12 /* AccountDisp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4F97B521B61D7600A0DB12 /* AccountDisp.swift */; };
 		1C54D61221AF8C1100A82C71 /* MainDisp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C54D61121AF8C1100A82C71 /* MainDisp.storyboard */; };
@@ -193,6 +194,7 @@
 		1C1B22B521AF98B60029148A /* DispTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispTabView.swift; sourceTree = "<group>"; };
 		1C1B22B721B02D490029148A /* TechServiceDispVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechServiceDispVC.swift; sourceTree = "<group>"; };
 		1C1B22B921B066650029148A /* TableWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableWorker.swift; sourceTree = "<group>"; };
+		1C38229122808D0300B7F66C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		1C479CE621427387004B9312 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
 		1C4F97B521B61D7600A0DB12 /* AccountDisp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDisp.swift; sourceTree = "<group>"; };
 		1C54D61121AF8C1100A82C71 /* MainDisp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainDisp.storyboard; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 				41D3E62E1F188E150084BB92 /* FirstController.swift */,
 				41DBC59B1ECC72FC004BDB9B /* Server.swift */,
 				4153B9BF1F5A284A00C56045 /* Choice_UK_Street.swift */,
+				1C38229122808D0300B7F66C /* Reachability.swift */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -980,7 +983,6 @@
 				4171BE591ECB369A00B9CDD7 /* Resources */,
 				8157CDB438B62F3F0A57F740 /* [CP] Embed Pods Frameworks */,
 				1C5AEB9D2126B26B00D9FF49 /* Embed App Extensions */,
-				5E890407F58146F58C6E28E3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1112,28 +1114,13 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5E890407F58146F58C6E28E3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8157CDB438B62F3F0A57F740 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFDateHelper/AFDateHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Arcane/Arcane.framework",
@@ -1170,7 +1157,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sminex/Pods-Sminex-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1257,6 +1244,7 @@
 				41D9FBA61ED92E7600925972 /* DB.swift in Sources */,
 				3ADF3C53210AF0DD008C956C /* BusinessCenterData.swift in Sources */,
 				41D9FBD81ED9563A00925972 /* Counters+CoreDataProperties.swift in Sources */,
+				1C38229222808D0300B7F66C /* Reachability.swift in Sources */,
 				6C7AA9692072120900D27FE2 /* QuestionEntity+CoreDataProperties.swift in Sources */,
 				41D3E6331F19AA130084BB92 /* RegistrationAdress.swift in Sources */,
 				411B6CE31EE6FF22001DCBC7 /* Ls+CoreDataProperties.swift in Sources */,

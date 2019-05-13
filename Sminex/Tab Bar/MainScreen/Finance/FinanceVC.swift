@@ -42,6 +42,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateUserInterface()
         automaticallyAdjustsScrollViewInsets = false
         startAnimation()
         table.dataSource    = self
@@ -59,6 +60,40 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
 //                self.stopAnimation()
             }
         }
+    }
+    
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
     }
     
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
@@ -124,30 +159,38 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             }
             return cell
         
-        } else if indexPath.section == 3 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            if (self.calcs.count == 0) {
-                cell.display(title: "", desc: "")
-            } else {
-                cell.display(title: "История взаиморасчетов", desc: "")
-                cell.contentView.backgroundColor = .white
-            }
-            return cell
+//        }else if indexPath.section == 3 {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
+//            if (self.calcs.count == 0) {
+//                cell.display(title: "", desc: "")
+//            } else {
+//                cell.display(title: "История взаиморасчетов", desc: "")
+//                cell.contentView.backgroundColor = .white
+//            }
+//            return cell
         
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            var debt = 0.0
-            let currDate = (filteredCalcs[indexPath.row - 1].numMonthSet, filteredCalcs[indexPath.row - 1].numYearSet)
-            calcs.forEach {
-                if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
-                    debt += ($0.sumDebt ?? 0.0)
+            if indexPath.row == filteredCalcs.count + 1 || indexPath.row == 4 {
+                if (self.calcs.count == 0) {
+                    cell.display(title: "", desc: "")
+                } else {
+                    cell.display(title: "История взаиморасчетов", desc: "")
+                    cell.contentView.backgroundColor = .white
                 }
+            } else {
+                var debt = 0.0
+                let currDate = (filteredCalcs[indexPath.row - 1].numMonthSet, filteredCalcs[indexPath.row - 1].numYearSet)
+                calcs.forEach {
+                    if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
+                        debt += ($0.sumDebt ?? 0.0)
+                    }
+                }
+                cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
+                desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
+                cell.contentView.backgroundColor = backColor
             }
-            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
-            desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
-            cell.contentView.backgroundColor = backColor
             return cell
-        
         }
     }
     
@@ -168,10 +211,10 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 return 0
             
             } else if filteredCalcs.count < 3 {
-                return filteredCalcs.count + 1
+                return filteredCalcs.count + 2
             
             } else {
-                return 4
+                return 5
             }
         
         } else {
@@ -217,7 +260,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 3
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -282,7 +325,6 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.debt = AccountDebtData(json: json!)?.data
             }
-            
             #if DEBUG
 //                print(String(data: data!, encoding: .utf8)!)
             #endif

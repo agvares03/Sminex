@@ -96,7 +96,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        updateUserInterface()
         if isReg_ {
             title                            = "Регистрация"
             navigationItem.leftBarButtonItem = nil
@@ -185,8 +185,33 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         lsLabel.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
+    func updateUserInterface() {
+        switch Network.reachability.status {
+        case .unreachable:
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
+                self.viewDidLoad()
+            }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        case .wifi: break
+            
+        case .wwan: break
+            
+        }
+    }
+    @objc func statusManager(_ notification: Notification) {
+        updateUserInterface()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
         tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = false
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -195,6 +220,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
@@ -226,6 +252,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         else if let img = info[UIImagePickerControllerOriginalImage] as? UIImage{
             image = img
         }
+//        if picker.cameraDevice == .front{
+//            image = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .leftMirrored)
+//        }
 //        accountImageView.image = image
         dismiss(animated: true, completion: nil)
         
