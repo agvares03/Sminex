@@ -140,6 +140,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             collection.addSubview(refreshControl!)
         }
         commentField.inputAccessoryView = nil
+        collection.reloadData()
     }
     
     func updateUserInterface() {
@@ -236,6 +237,10 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let cell = AdmissionCommentCell.fromNib()
             cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            let ar = arr[indexPath.row] as! AdmissionCommentCellData
+            if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
+                return CGSize(width: view.frame.size.width, height: 0)
+            }
             return CGSize(width: view.frame.size.width, height: size.height)
         }
     }

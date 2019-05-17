@@ -758,12 +758,24 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
         return false
     }
-    
+    var previousValue = CGRect.zero
+    var lines = 1
     func textViewDidChange(_ textView: UITextView) {
+        let pos = textView.endOfDocument
+        let currentRect = textView.caretRect(for: pos)
+        if (currentRect.origin.y > previousValue.origin.y){
+            lines += 1
+        }else if (currentRect.origin.y < previousValue.origin.y){
+            lines -= 1
+        }
         
-        if (textView.text as NSString).components(separatedBy: .newlines).count < 3 && textView.frame.origin.y < 100 {
+        if (textView.text as NSString).components(separatedBy: .newlines).count < 3 && lines < 3 && textView.frame.origin.y < 100 {
             self.FioConst.constant = textView.contentSize.height
             if self.FioConst.constant == 57 && self.show == false{
+                self.sendViewConst.constant -= 20
+                self.show = true
+            }else if (currentRect.origin.y > previousValue.origin.y) && self.show == true{
+                self.FioConst.constant -= 20
                 self.sendViewConst.constant -= 20
                 self.show = true
             }
@@ -771,6 +783,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 self.show = false
             }
         }
+        previousValue = currentRect
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {

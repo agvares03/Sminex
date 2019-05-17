@@ -87,11 +87,11 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         oldPasswordField.delegate = self
         newPasswordField.delegate = self
         
-        if #available(iOS 10, *) {
-            // Disables the password autoFill accessory view.
-            oldPasswordField.textContentType = UITextContentType("")
-            newPasswordField.textContentType = UITextContentType("")
-        }
+//        if #available(iOS 10, *) {
+//            // Disables the password autoFill accessory view.
+//            oldPasswordField.textContentType = UITextContentType("")
+//            newPasswordField.textContentType = UITextContentType("")
+//        }
         
         oldPasswordField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         newPasswordField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -184,26 +184,34 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
-            defer {
-                DispatchQueue.main.sync {
-                    UserDefaults.standard.setValue(self.newPasswordField.text ?? "", forKey: "pass")
-                    self.stopAnimator()
-                }
-            }
+//            defer {
+//                DispatchQueue.main.sync {
+//                    UserDefaults.standard.setValue(self.newPasswordField.text ?? "", forKey: "pass")
+//                    self.stopAnimator()
+//                }
+//            }
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                 
                 DispatchQueue.main.sync {
+                    self.stopAnimator()
                     self.present(alert, animated: true, completion: nil)
                 }
             
             } else {
                 let alert = UIAlertController(title: nil, message: "Ваш пароль был успешно изменён!", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) }) )
+                DispatchQueue.main.async {
+                    self.getSalt(login: login)
+                    UserDefaults.standard.setValue(self.newPasswordField.text ?? "", forKey: "pass")
+                    UserDefaults.standard.synchronize()
+                }
                 
                 DispatchQueue.main.sync {
+                    
+                    self.stopAnimator()
                     self.present(alert, animated: true, completion: nil)
                 }
             }
@@ -212,6 +220,39 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
 //                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
         }.resume()
+    }
+    
+    private func getSalt(login: String) -> Data {
+        
+        var salt: Data?
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        request.httpMethod = "GET"
+        print(request)
+        URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    
+                    //                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    //                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    //                    alert.addAction(cancelAction)
+                    //                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            salt = data
+            TemporaryHolder.instance.salt = data
+            DispatchQueue.main.async {
+                let pwd = getHash(pass: self.newPasswordField.text!, salt: salt!)
+                UserDefaults.standard.setValue(pwd, forKey: "pwd")
+                UserDefaults.standard.synchronize()
+            }
+            
+            }.resume()
+        return salt ?? Data()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -146,6 +146,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         } else {
             collection.addSubview(refreshControl!)
         }
+        collection.reloadData()
     }
     
     func updateUserInterface() {
@@ -348,6 +349,10 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             let cell = ServiceCommentCell.fromNib()
             cell?.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            let ar = arr[indexPath.row] as! ServiceCommentCellData
+            if ar.desc == "Прикреплено фото" || ar.desc == "Добавлен файл"{
+                return CGSize(width: view.frame.size.width, height: 0)
+            }
             return CGSize(width: view.frame.size.width, height: size.height)
         }
     }

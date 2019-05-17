@@ -163,8 +163,7 @@ final class Registration_Sminex: UIViewController, UITextFieldDelegate, UIGestur
                 
             } else if self.responseString == "xxx" {
                 self.changeDescTextTo(isError: true, text: "Ошибка сервера. Попробуйте позже")
-            
-            } else if self.responseString == "error:  Найдено более одного лицевого счета. Для уточнения введите номер лицевого счета."{
+            } else if self.responseString.contains("йдено более одного лицевого счёта"){
                 self.getLSforNumber()
             } else if self.responseString.contains("error") {
                 self.changeDescTextTo(isError: true, text: self.responseString.replacingOccurrences(of: "error:", with: ""))
