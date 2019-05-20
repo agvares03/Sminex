@@ -272,6 +272,9 @@ class NewTechServiceVC: UIViewController {
         
         view.endEditing(true)
         startAnimator()
+        if date < Date(){
+            date = Date()
+        }
         data = ServiceHeaderData(icon: UIImage(named: "account")!,
                                  problem: detailText,
                                  date: date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")),

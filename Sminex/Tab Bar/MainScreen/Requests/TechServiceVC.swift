@@ -657,6 +657,7 @@ final class ServiceHeaderData: TechServiceProtocol {
     let isPaid:     String
     let images:     [UIImage]
     let imgsString: [String]
+//    let desc:       String
     
     init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String) {
         
@@ -667,6 +668,7 @@ final class ServiceHeaderData: TechServiceProtocol {
         self.images     = images
         self.imgsString = imagesUrl
         self.isPaid     = isPaid
+//        self.desc       = desc
     }
 }
 

@@ -121,13 +121,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
-        }else if picker.date < Date(){
-            let alert = UIAlertController(title: "Ошибка!", message: "Дата пропуска должна быть не меньше текущей", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true, completion: nil)
+//        }else if picker.date < Date(){
+//            let alert = UIAlertController(title: "Ошибка!", message: "Дата пропуска должна быть не меньше текущей", preferredStyle: .alert)
+//            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//            alert.addAction(cancelAction)
+//            self.present(alert, animated: true, completion: nil)
         }else{
-            
+            if picker.date < Date(){
+                picker.date = Date()
+            }
             startAnimator()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
@@ -138,7 +140,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                        date: dateFormatter.string(from: picker.date),
                                        status: "В ОБРАБОТКЕ",
                                        images: images,
-                                       imagesUrl: [])
+                                       imagesUrl: [], desc: edComment.text!)
             uploadRequest()
         }
     }
@@ -311,96 +313,99 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         tabBarController?.tabBar.isHidden = false
     }
-    
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
-        var height_top:CGFloat = 370// высота верхних элементов
-        var k:CGFloat = 0
-        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")){
-            k = 51
-        }
-        if Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
-            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
-            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
-            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
-            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
-            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-            height_top = 267
-        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
-            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
-            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
-            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
-            height_top = 405
-        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
-            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
-            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
-            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            height_top = 445
-        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX)  {
-            height_top = 470
-        }
-        
-        
-        let userInfo = sender?.userInfo
-        let kbFrameSize = (userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let numb_to_move:CGFloat = kbFrameSize.height
-        //        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
-        if !isNeedToScrollMore() {
-//            sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
-            sendViewConst.constant = view.frame.size.height - numb_to_move - height_top + k
-        } else {
-//            sendBtnConst.constant = getPoint() - 150
-            sendViewConst.constant = getPoint() - 150 + k
-        }
-        
-        if !picker.isHidden {
-            datePickerPressed(nil)
-        }
-        
-        if gosNumber.isHidden == false{
-//            sendBtnConst.constant = sendBtnConst.constant - 55
-            sendViewConst.constant = sendViewConst.constant - 57 + k
-        }
-        
-        if isNeedToScroll() {
-            if images.count != 0 {
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 200)
-            } else {
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 50)
-            }
-            scroll.contentOffset = CGPoint(x: 0, y: 140)
-        }
-        if FioConst.constant == 57{
-            sendViewConst.constant -= 20 + k
-        }
+        let info = sender?.userInfo!
+        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+        self.sendViewConst.constant = (keyboardSize?.height)!
+//        var height_top:CGFloat = 370// высота верхних элементов
+//        var k:CGFloat = 0
+//        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")){
+//            k = 51
+//        }
+//        if Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
+//            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
+//            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
+//            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
+//            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
+//            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+//            height_top = 267
+//        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
+//            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
+//            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
+//            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
+//            height_top = 405
+//        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
+//            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
+//            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
+//            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+//            height_top = 445
+//        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX)  {
+//            height_top = 470
+//        }
+//
+//
+//        let userInfo = sender?.userInfo
+//        let kbFrameSize = (userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+//        let numb_to_move:CGFloat = kbFrameSize.height
+//        //        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
+//        if !isNeedToScrollMore() {
+////            sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
+//            sendViewConst.constant = view.frame.size.height - numb_to_move - height_top + k
+//        } else {
+////            sendBtnConst.constant = getPoint() - 150
+//            sendViewConst.constant = getPoint() - 150 + k
+//        }
+//
+//        if !picker.isHidden {
+//            datePickerPressed(nil)
+//        }
+//
+//        if gosNumber.isHidden == false{
+////            sendBtnConst.constant = sendBtnConst.constant - 55
+//            sendViewConst.constant = sendViewConst.constant - 57 + k
+//        }
+//
+//        if isNeedToScroll() {
+//            if images.count != 0 {
+//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 200)
+//            } else {
+//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 50)
+//            }
+//            scroll.contentOffset = CGPoint(x: 0, y: 140)
+//        }
+//        if FioConst.constant == 57{
+//            sendViewConst.constant -= 20 + k
+//        }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
-        if !isNeedToScrollMore() {
-//            sendBtnConst.constant = getPoint()
-            sendViewConst.constant = getPoint()
-        } else {
-//            sendBtnConst.constant = getPoint()
-            sendViewConst.constant = getPoint()
-        }
-        
-        if gosNumber.isHidden == false{
-//            sendBtnConst.constant = sendBtnConst.constant - 55
-            sendViewConst.constant = sendViewConst.constant - 55
-        }
-        
-        if isNeedToScroll() {
-            if images.count != 0 {
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 200)
-            } else {
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 50)
-            }
-            scroll.contentOffset = CGPoint(x: 0, y: 0)
-        }
-        if FioConst.constant == 57{
-            sendViewConst.constant -= 20
-        }
+        self.sendViewConst.constant = 0
+//        if !isNeedToScrollMore() {
+////            sendBtnConst.constant = getPoint()
+//            sendViewConst.constant = getPoint()
+//        } else {
+////            sendBtnConst.constant = getPoint()
+//            sendViewConst.constant = getPoint()
+//        }
+//
+//        if gosNumber.isHidden == false{
+////            sendBtnConst.constant = sendBtnConst.constant - 55
+//            sendViewConst.constant = sendViewConst.constant - 55
+//        }
+//
+//        if isNeedToScroll() {
+//            if images.count != 0 {
+//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 200)
+//            } else {
+//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 50)
+//            }
+//            scroll.contentOffset = CGPoint(x: 0, y: 0)
+//        }
+//        if FioConst.constant == 57{
+//            sendViewConst.constant -= 20
+//        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
@@ -647,7 +652,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if segue.identifier == Segues.fromCreateRequest.toAdmission {
             let vc = segue.destination as! AdmissionVC
             vc.isCreated_ = true
-            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", date: "", status: "", images: [], imagesUrl: [])
+            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", date: "", status: "", images: [], imagesUrl: [], desc: "")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
             vc.name_ = name_
@@ -769,7 +774,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             lines -= 1
         }
         
-        if (textView.text as NSString).components(separatedBy: .newlines).count < 3 && lines < 3 && textView.frame.origin.y < 100 {
+        if (textView.text as NSString).components(separatedBy: .newlines).count < 4 && lines < 4 && textView.frame.origin.y < 100 {
             self.FioConst.constant = textView.contentSize.height
             if self.FioConst.constant == 57 && self.show == false{
                 self.sendViewConst.constant -= 20

@@ -563,8 +563,17 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images)
+                                                         imagesUrl: images, desc: row.text ?? "")
                     self.admissionComm = []
+                    if row.text != ""{
+                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
+                                                                             title: "Примечание",
+                                                                             comment: row.text ?? "",
+                                                                             date: row.added ?? "",
+                                                                             commImg: nil,
+                                                                             commImgUrl: nil,
+                                                                             id: "-1") )
+                    }
                     self.rowComms[row.id!]!.forEach { comm in
                         
                         var commImg: String?
