@@ -107,12 +107,15 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         
         viewTapped(nil)
-        if picker.date < Date(){
-            let alert = UIAlertController(title: "Ошибка!", message: "Выберите другую дату", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true, completion: nil)
-        }else{
+//        if picker.date < Date(){
+//            let alert = UIAlertController(title: "Ошибка!", message: "Выберите другую дату", preferredStyle: .alert)
+//            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//            alert.addAction(cancelAction)
+//            self.present(alert, animated: true, completion: nil)
+//        }else{
+            if picker.date < Date(){
+                picker.date = Date()
+            }
             startAnimator()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
@@ -122,7 +125,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                                      status: "В ОБРАБОТКЕ",
                                      images: imagesArr, isPaid: "0")
             uploadRequest()
-        }
+//        }
     }
     
     public var delegate: AppsUserDelegate?

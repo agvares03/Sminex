@@ -98,7 +98,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                                                                 date: "9 Сентября 10:00",
                                                                 status: "В ОБРАБОТКЕ",
                                                                 images: [],
-                                                                imagesUrl: [])
+                                                                imagesUrl: [], desc: "")
     public var comments_: [AdmissionCommentCellData] = []
     
     private var arr: [AdmissionProtocol] = []
@@ -140,6 +140,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             collection.addSubview(refreshControl!)
         }
         commentField.inputAccessoryView = nil
+        collection.reloadData()
     }
     
     func updateUserInterface() {
@@ -236,6 +237,10 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let cell = AdmissionCommentCell.fromNib()
             cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+            let ar = arr[indexPath.row] as! AdmissionCommentCellData
+            if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
+                return CGSize(width: view.frame.size.width, height: 0)
+            }
             return CGSize(width: view.frame.size.width, height: size.height)
         }
     }
@@ -632,8 +637,9 @@ final class AdmissionHeaderData: AdmissionProtocol {
     let gosNumber:      String
     let date:           String
     var status:         String
+    var desc:           String
     
-    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, date: String, status: String, images: [UIImage], imagesUrl: [String]) {
+    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String) {
         
         self.icons          = icon
         self.gosti          = gosti
@@ -643,6 +649,7 @@ final class AdmissionHeaderData: AdmissionProtocol {
         self.status         = status
         self.images         = images
         self.imgsUrl        = imagesUrl
+        self.desc           = desc
     }
 }
 
@@ -736,6 +743,13 @@ final class AdmissionCommentCell: UICollectionViewCell {
                         self.imgsLoader.stopAnimating()
                     }
                 }
+            }
+        }
+        DispatchQueue.main.async {
+            if item.title == "Примечание"{
+                self.image.isHidden = true
+            }else{
+                self.image.isHidden = false
             }
         }
     }

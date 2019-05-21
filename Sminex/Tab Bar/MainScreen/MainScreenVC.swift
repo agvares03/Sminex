@@ -535,7 +535,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: size.height + 3)
         
         } else if title == "К оплате" {
-            if busines_center_denyTotalOnlinePayments == true || business_center_info == true {
+            if busines_center_denyTotalOnlinePayments == true || business_center_info == true || self.payNil {
                 return CGSize(width: view.frame.size.width - 32, height: 67.0)
             } else {
                 return CGSize(width: view.frame.size.width - 32, height: 110.0)
@@ -1067,7 +1067,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             }.resume()
     }
-    
+    var payNil = false
     private func fetchDebt() {
         
         let defaults = UserDefaults.standard
@@ -1117,15 +1117,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 if (datePay.count) > 9 {
                     datePay.removeLast(8)
                 }
-                self.data[4]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay)
-                
-                defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
+                self.payNil = true
+                self.data[4]![1] = ForPayCellData(title: (0).formattedWithSeparator + " ₽", date: datePay)
+                defaults.setValue(String(0) + " ₽", forKey: "ForPayTitle")
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()
-                
+                DispatchQueue.main.sync {
+                    self.collection.reloadData()
+                }
                 return
             }
-            
+            self.payNil = false
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.debt = AccountDebtData(json: json!)?.data!
             }
@@ -1133,11 +1135,21 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if (datePay?.count ?? 0) > 9 {
                 datePay?.removeLast(9)
             }
-            self.data[4]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay ?? "")
-            
-            defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
-            defaults.setValue(datePay, forKey: "ForPayDate")
-            defaults.synchronize()
+            print(self.debt?.sumPay)
+            if self.debt?.sumPay == nil{
+                self.data[4]![1] = ForPayCellData(title: (0).formattedWithSeparator + " ₽", date: datePay ?? "")
+                defaults.setValue(String(0) + " ₽", forKey: "ForPayTitle")
+                defaults.setValue(datePay, forKey: "ForPayDate")
+                defaults.synchronize()
+            }else{
+                self.data[4]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay ?? "")
+                defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
+                defaults.setValue(datePay, forKey: "ForPayDate")
+                defaults.synchronize()
+            }
+            DispatchQueue.main.sync {
+                self.collection.reloadData()
+            }
             
             #if DEBUG
 //            print(String(data: data!, encoding: .utf8)!)
@@ -1941,10 +1953,10 @@ final class ForPayCell: UICollectionViewCell {
     @IBOutlet private weak var pay:     UIButton!
     
     fileprivate func display(_ item: ForPayCellData) {
-        
+        pay.isHidden = true
         let defaults = UserDefaults.standard
         pay.isHidden = defaults.bool(forKey: "denyOnlinePayments")
-        if (defaults.bool(forKey: "denyTotalOnlinePayments")) {
+        if (defaults.bool(forKey: "denyTotalOnlinePayments")) || item.title == "0 ₽"{
             pay.isHidden = true
         }
         
