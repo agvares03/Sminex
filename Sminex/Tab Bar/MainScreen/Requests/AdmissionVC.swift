@@ -111,7 +111,15 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         updateUserInterface()
         endAnimating()
         automaticallyAdjustsScrollViewInsets = false
-        
+        if data_.desc != ""{
+            comments_.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
+                                                                 title: "Примечание",
+                                                                 comment: data_.desc ?? "",
+                                                                 date: data_.date ?? "",
+                                                                 commImg: nil,
+                                                                 commImgUrl: nil,
+                                                                 id: "-1") )
+        }
         arr = comments_
         arr.insert(data_, at: 0)
         

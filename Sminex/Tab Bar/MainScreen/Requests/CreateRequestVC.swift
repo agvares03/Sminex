@@ -541,8 +541,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         let login = UserDefaults.standard.string(forKey: "login")!
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        let comm = edComment.text ?? ""
-        
+        var comm = edComment.text ?? ""
+        if edComment.textColor == UIColor.lightGray{
+            comm = ""
+        }
         let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))".stringByAddingPercentEncodingForRFC3986() ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986() ?? "")&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=0&isNotify=1&dateFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PhoneForFeedBack=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
