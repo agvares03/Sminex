@@ -16,7 +16,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
         navigationController?.popViewController(animated: true)
     }
     
-    open var data_: [AccountCalculationsJson] = []
+    public var data_: [AccountCalculationsJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -29,7 +29,7 @@ final class ServicesUKDescVC: UIViewController {
         uploadRequest()
     }
     
-    open var data_: ServicesUKJson?
+    public var data_: ServicesUKJson?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1135,7 +1135,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if (datePay?.count ?? 0) > 9 {
                 datePay?.removeLast(9)
             }
-            print(self.debt?.sumPay)
             if self.debt?.sumPay == nil{
                 self.data[4]![1] = ForPayCellData(title: (0).formattedWithSeparator + " ₽", date: datePay ?? "")
                 defaults.setValue(String(0) + " ₽", forKey: "ForPayTitle")

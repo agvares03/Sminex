@@ -16,9 +16,9 @@ final class FinanceBarCodeVC: UIViewController {
     @IBOutlet private weak var barcode:     UIImageView!
     @IBOutlet private weak var amount:  	UILabel!
     
-    open var data_:     AccountDebtJson?
-    open var amount_:   Double?
-    open var codePay_:  String?
+    public var data_:     AccountDebtJson?
+    public var amount_:   Double?
+    public var codePay_:  String?
     
     override func viewDidLoad() {
         super.viewDidLoad()

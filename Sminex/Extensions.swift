@@ -426,7 +426,7 @@ func getSalt() -> Data {
             TemporaryHolder.instance.SaltQueue.enter()
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
-                print(String(data: data!, encoding: .utf8))
+//                print(String(data: data!, encoding: .utf8))
                 
                 defer {
                     TemporaryHolder.instance.SaltQueue.leave()

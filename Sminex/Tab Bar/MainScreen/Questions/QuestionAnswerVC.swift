@@ -312,7 +312,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             data, error, responce in
             
             guard data != nil else { return }
-            print(String(data: data!, encoding: .utf8))
+//            print(String(data: data!, encoding: .utf8))
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 DispatchQueue.main.async{
                     self.stopAnimation()

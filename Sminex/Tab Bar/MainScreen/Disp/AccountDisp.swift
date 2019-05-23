@@ -178,7 +178,7 @@ final class AccountDispHeader: UICollectionReusableView {
                 }
             }
         }
-        let defaults = UserDefaults.standard
+        _ = UserDefaults.standard
         accName.text = "Жанна Николаевна"
         bcName.text = "Диспетчер"
         jkLabel.text = "Премиум квартал РЕНОМЭ"

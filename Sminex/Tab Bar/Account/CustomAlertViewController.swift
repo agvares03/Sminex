@@ -124,6 +124,7 @@ class CustomAlertViewController: UIViewController {
                 #if DEBUG
                 print("responseString = \(responseString)")
                 #endif
+                UserDefaults.standard.setValue(responseString, forKey: "pwd")
                 self.edLoginText = ident
                 self.edPassText = responseString
                 self.enter()
@@ -333,7 +334,7 @@ class CustomAlertViewController: UIViewController {
                         UserDefaults.standard.removeObject(forKey: "accountIcon")
                         
                     }
-                    self.getContacts(login: self.edLoginText, pwd: self.edPassText)
+                    self.getContacts(login: self.edLoginText, pwd: self.edPassText.stringByAddingPercentEncodingForRFC3986()!)
                     self.stopAnimation()
                     self.tabBarController?.selectedIndex = 1
                     self.tabBarController?.selectedIndex = 2

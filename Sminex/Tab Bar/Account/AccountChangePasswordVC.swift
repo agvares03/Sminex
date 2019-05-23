@@ -204,7 +204,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
                 let alert = UIAlertController(title: nil, message: "Ваш пароль был успешно изменён!", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) }) )
                 DispatchQueue.main.async {
-                    self.getSalt(login: login)
+                    let _ = self.getSalt(login: login)
                     UserDefaults.standard.setValue(self.newPasswordField.text ?? "", forKey: "pass")
                     UserDefaults.standard.synchronize()
                 }

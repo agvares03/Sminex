@@ -18,7 +18,7 @@ final class Registration: UIViewController {
     @IBOutlet private weak var new_mail:  UIImageView!
     
     private var responseString  = ""
-    open var letter_            = ""
+    public var letter_            = ""
     
     @IBOutlet private weak var edFIO:     UITextField!
     @IBOutlet private weak var edLogin:   UITextField!

@@ -19,8 +19,8 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         navigationController?.popViewController(animated: true)
     }
     
-    open var pressedData_: DealsJson?
-    open var data_: [DealsJson] = []
+    public var pressedData_: DealsJson?
+    public var data_: [DealsJson] = []
     private var index = 0
     
     override func viewDidLoad() {

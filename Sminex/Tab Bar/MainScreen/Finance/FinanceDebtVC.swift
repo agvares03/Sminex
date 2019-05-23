@@ -71,7 +71,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    open var data_: AccountBillsJson?
+    public var data_: AccountBillsJson?
     private var receipts: [ReceiptsJson]?
     private var files: [RecieptFilesJson]?
     private var filesGroup = DispatchGroup()

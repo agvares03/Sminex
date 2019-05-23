@@ -20,8 +20,8 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
         navigationController?.popViewController(animated: true)
     }
     
-    open var data_: DealsJson?
-    open var anotherDeals_: [DealsJson] = []
+    public var data_: DealsJson?
+    public var anotherDeals_: [DealsJson] = []
     private var displayDeals: [DealsJson] = []
     
     override func viewDidLoad() {
@@ -99,11 +99,15 @@ final class DealsListDescHeader: UICollectionReusableView {
     @IBOutlet private weak var bodyLabel  :    UILabel!
     @IBOutlet private weak var linksLabel :    UILabel!
     
-    open var link_obj:String = "";
+    public var link_obj:String = "";
     
     @objc func tapFunction(sender:UITapGestureRecognizer) {
-        let url = NSURL(string: link_obj)!
-        UIApplication.shared.openURL(url as URL)
+        let url: URL = NSURL(string: link_obj)! as URL
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
     }
     
     func display(_ data_: DealsJson?) {

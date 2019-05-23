@@ -16,7 +16,7 @@ final class FinanceDebtArchiveVC: UIViewController, UICollectionViewDelegate, UI
         navigationController?.popViewController(animated: true)
     }
     
-    open var data_: [AccountBillsJson] = []
+    public var data_: [AccountBillsJson] = []
     private var index = 0
     
     override func viewDidLoad() {

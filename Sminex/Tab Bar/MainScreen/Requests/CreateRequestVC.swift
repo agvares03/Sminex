@@ -777,11 +777,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if (textView.text as NSString).components(separatedBy: .newlines).count < 4 && lines < 4 && textView.frame.origin.y < 100 {
             self.FioConst.constant = textView.contentSize.height
             if self.FioConst.constant == 57 && self.show == false{
-                self.sendViewConst.constant -= 20
                 self.show = true
             }else if (currentRect.origin.y > previousValue.origin.y) && self.show == true{
                 self.FioConst.constant -= 20
-                self.sendViewConst.constant -= 20
                 self.show = true
             }
             if self.FioConst.constant == 37{

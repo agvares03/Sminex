@@ -132,10 +132,22 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p68-BP-3fq">
+                                                <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p68-BP-3fq">
                                                     <rect key="frame" x="16" y="280.5" width="288" height="150"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mj0-Qa-sMf">
+                                                            <rect key="frame" x="0.0" y="0.0" width="288" height="150"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </view>
+                                                    </subviews>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="mj0-Qa-sMf" secondAttribute="trailing" id="Qxp-pH-fFW"/>
+                                                        <constraint firstItem="mj0-Qa-sMf" firstAttribute="centerX" secondItem="p68-BP-3fq" secondAttribute="centerX" id="Sz5-Hh-hlO"/>
                                                         <constraint firstAttribute="height" constant="150" id="VIR-fF-WRQ"/>
+                                                        <constraint firstItem="mj0-Qa-sMf" firstAttribute="leading" secondItem="p68-BP-3fq" secondAttribute="leading" id="Z8K-Ex-ky1"/>
+                                                        <constraint firstItem="mj0-Qa-sMf" firstAttribute="top" secondItem="p68-BP-3fq" secondAttribute="top" id="oea-1q-yZB"/>
+                                                        <constraint firstAttribute="bottom" secondItem="mj0-Qa-sMf" secondAttribute="bottom" id="q5Y-yD-vaw"/>
+                                                        <constraint firstItem="mj0-Qa-sMf" firstAttribute="centerY" secondItem="p68-BP-3fq" secondAttribute="centerY" id="z7u-br-CL4"/>
                                                     </constraints>
                                                 </scrollView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="L0T-Rr-j3U">
@@ -377,7 +389,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Гостевой пропуск" id="F1B-Pv-Q34">
-                        <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" style="plain" id="qXx-EF-z7f">
+                        <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="qXx-EF-z7f">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="backButtonPressed:" destination="nGr-Se-ITa" id="hzg-oM-G1r"/>
@@ -454,9 +466,21 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kzq-qG-m9R">
+                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kzq-qG-m9R">
                                                     <rect key="frame" x="16" y="170.5" width="280" height="150"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iRs-vI-2hN">
+                                                            <rect key="frame" x="0.0" y="0.0" width="280" height="150"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </view>
+                                                    </subviews>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="iRs-vI-2hN" secondAttribute="trailing" id="0jY-40-srd"/>
+                                                        <constraint firstItem="iRs-vI-2hN" firstAttribute="centerX" secondItem="kzq-qG-m9R" secondAttribute="centerX" id="H1X-yl-Pry"/>
+                                                        <constraint firstItem="iRs-vI-2hN" firstAttribute="centerY" secondItem="kzq-qG-m9R" secondAttribute="centerY" id="YCb-UB-ani"/>
+                                                        <constraint firstItem="iRs-vI-2hN" firstAttribute="leading" secondItem="kzq-qG-m9R" secondAttribute="leading" id="Zu7-rq-zfy"/>
+                                                        <constraint firstItem="iRs-vI-2hN" firstAttribute="top" secondItem="kzq-qG-m9R" secondAttribute="top" id="b0e-Kb-uoV"/>
+                                                        <constraint firstAttribute="bottom" secondItem="iRs-vI-2hN" secondAttribute="bottom" id="hId-Cc-SHD"/>
                                                         <constraint firstAttribute="height" constant="150" id="lB4-K6-Ta9"/>
                                                     </constraints>
                                                 </scrollView>
@@ -775,7 +799,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пропуск транспорта на 9.09" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SMp-OZ-zCn">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пропуск транспорта на 9.09" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="SMp-OZ-zCn">
                                                     <rect key="frame" x="8" y="0.0" width="284" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="RDF-Yu-Sbf"/>
@@ -806,7 +830,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23:31" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yg0-4r-xRe">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23:31" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="yg0-4r-xRe">
                                                     <rect key="frame" x="280.5" y="81" width="28.5" height="10"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1374,10 +1398,22 @@
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sub-QB-LKi">
                                         <rect key="frame" x="200" y="336.5" width="20" height="20"/>
                                     </activityIndicatorView>
-                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5qp-gU-XOg">
+                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5qp-gU-XOg">
                                         <rect key="frame" x="16" y="319" width="343" height="150"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kDX-Br-dfE">
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="150"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                        </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="150" id="8TV-b1-Glh"/>
+                                            <constraint firstItem="kDX-Br-dfE" firstAttribute="centerY" secondItem="5qp-gU-XOg" secondAttribute="centerY" id="AjK-Bd-4md"/>
+                                            <constraint firstItem="kDX-Br-dfE" firstAttribute="leading" secondItem="5qp-gU-XOg" secondAttribute="leading" id="CJc-iT-ZAB"/>
+                                            <constraint firstAttribute="trailing" secondItem="kDX-Br-dfE" secondAttribute="trailing" id="LGf-JN-VBb"/>
+                                            <constraint firstItem="kDX-Br-dfE" firstAttribute="centerX" secondItem="5qp-gU-XOg" secondAttribute="centerX" id="ZQO-vx-f8D"/>
+                                            <constraint firstAttribute="bottom" secondItem="kDX-Br-dfE" secondAttribute="bottom" id="o0k-Hj-22O"/>
+                                            <constraint firstItem="kDX-Br-dfE" firstAttribute="top" secondItem="5qp-gU-XOg" secondAttribute="top" id="xyQ-DA-wIy"/>
                                         </constraints>
                                     </scrollView>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MtI-IA-nXZ">
@@ -1620,7 +1656,7 @@
         <!--Категории заявки-->
         <scene sceneID="di7-md-QTK">
             <objects>
-                <viewController id="XXp-eL-9Wz" customClass="RequestTypeVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="req2" id="XXp-eL-9Wz" customClass="RequestTypeVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="w4G-9w-UNv"/>
                         <viewControllerLayoutGuide type="bottom" id="K7N-hm-igD"/>
@@ -1718,7 +1754,7 @@
         <!--Техническое обслуживание-->
         <scene sceneID="35I-H7-fm1">
             <objects>
-                <viewController id="S4H-xZ-gJL" customClass="CreateTechServiceVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="req1" id="S4H-xZ-gJL" customClass="CreateTechServiceVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4x9-Qu-jyk"/>
                         <viewControllerLayoutGuide type="bottom" id="40s-ef-0AT"/>
@@ -1823,10 +1859,22 @@
                                             <!--2018-03-24 06:13:10 +0000-->
                                         </date>
                                     </datePicker>
-                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xQo-Mg-fGh">
+                                    <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xQo-Mg-fGh">
                                         <rect key="frame" x="8" y="138.5" width="359" height="150"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NqG-lD-Tx4">
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="150"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                        </subviews>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="NqG-lD-Tx4" secondAttribute="bottom" id="7vJ-IY-zd7"/>
+                                            <constraint firstItem="NqG-lD-Tx4" firstAttribute="centerX" secondItem="xQo-Mg-fGh" secondAttribute="centerX" id="JG8-wB-O0B"/>
+                                            <constraint firstAttribute="trailing" secondItem="NqG-lD-Tx4" secondAttribute="trailing" id="csK-Jc-QJD"/>
+                                            <constraint firstItem="NqG-lD-Tx4" firstAttribute="centerY" secondItem="xQo-Mg-fGh" secondAttribute="centerY" id="gIp-6o-ggA"/>
                                             <constraint firstAttribute="height" constant="150" id="pL0-gL-e8W"/>
+                                            <constraint firstItem="NqG-lD-Tx4" firstAttribute="top" secondItem="xQo-Mg-fGh" secondAttribute="top" id="vnW-aD-Q59"/>
+                                            <constraint firstItem="NqG-lD-Tx4" firstAttribute="leading" secondItem="xQo-Mg-fGh" secondAttribute="leading" id="zvj-r9-itP"/>
                                         </constraints>
                                     </scrollView>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ZqF-mu-ord">
@@ -1916,7 +1964,7 @@
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QHF-Wt-DHI"/>
+        <segue reference="6le-cp-Wze"/>
         <segue reference="qw4-Ju-feW"/>
     </inferredMetricsTieBreakers>
 </document>

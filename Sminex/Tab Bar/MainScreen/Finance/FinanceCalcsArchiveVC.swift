@@ -17,7 +17,7 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
         navigationController?.popViewController(animated: true)
     }
     
-    open var data_:           [AccountCalculationsJson] = []
+    public var data_:           [AccountCalculationsJson] = []
     private var filteredData: [AccountCalculationsJson] = []
     private var index = 0
     

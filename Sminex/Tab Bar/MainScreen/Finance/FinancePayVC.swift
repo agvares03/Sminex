@@ -16,7 +16,7 @@ final class FinancePayVC: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    open var url_: URLRequest?
+    public var url_: URLRequest?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -125,7 +125,7 @@ class NewsListTVC: UIViewController {
             }
             
             guard data != nil else { return }
-//            print(String(data: data!, encoding: .utf8) ?? "")
+            print(String(data: data!, encoding: .utf8) ?? "")
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)

@@ -36,8 +36,8 @@ final class FinancePayAcceptVC: UIViewController {
         }
     }
     
-    open var accountData_: AccountDebtJson?
-    open var billsData_: AccountBillsJson?
+    public var accountData_: AccountDebtJson?
+    public var billsData_: AccountBillsJson?
     private var url: URLRequest!
     private var str_url: String!
     private var sumText = ""
