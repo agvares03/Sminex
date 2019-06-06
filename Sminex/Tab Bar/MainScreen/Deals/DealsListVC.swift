@@ -103,7 +103,7 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     private final func getDeals() {
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")")!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {

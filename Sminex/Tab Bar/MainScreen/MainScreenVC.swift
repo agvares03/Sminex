@@ -1021,7 +1021,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     private final func fetchDeals() {
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")")!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -1061,8 +1061,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 TemporaryHolder.instance.menuDeals = imgs.count
                 
                 #if DEBUG
-                //                print(String(data: data!, encoding: .utf8) ?? "")
+                print(String(data: data!, encoding: .utf8) ?? "")
                 #endif
+                
             }
             
             }.resume()
