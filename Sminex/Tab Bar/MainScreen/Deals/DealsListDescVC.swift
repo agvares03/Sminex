@@ -45,7 +45,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return displayDeals.count <= 3 ? displayDeals.count : 3
+        return displayDeals.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -74,7 +74,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let cell = DealsListDescCell.fromNib()
-        cell?.display(anotherDeals_[indexPath.row])
+        cell?.display(displayDeals[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
         return CGSize(width: view.frame.size.width, height: size.height)
     }

@@ -111,15 +111,21 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         updateUserInterface()
         endAnimating()
         automaticallyAdjustsScrollViewInsets = false
-        if data_.desc != ""{
-            comments_.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
-                                                                 title: "Примечание",
-                                                                 comment: data_.desc ?? "",
-                                                                 date: data_.date ?? "",
-                                                                 commImg: nil,
-                                                                 commImgUrl: nil,
-                                                                 id: "-1") )
+        print(data_.images)
+        if data_.images.count > 0{
+            data_.images.forEach{
+                comments_.append(AdmissionCommentCellData(image: UIImage(named: "account")!, title: "", comment: "", date: data_.date, commImg: $0, commImgUrl: nil, id: "-1"))
+            }
         }
+//        if data_.desc != ""{
+//            comments_.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
+//                                                                 title: "Примечание",
+//                                                                 comment: data_.desc ?? "",
+//                                                                 date: data_.date ?? "",
+//                                                                 commImg: nil,
+//                                                                 commImgUrl: nil,
+//                                                                 id: "-1") )
+//        }
         arr = comments_
         arr.insert(data_, at: 0)
         
@@ -260,7 +266,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.row == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionHeader", for: indexPath) as! AdmissionHeader
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionHeader1", for: indexPath) as! AdmissionHeader
             cell.display((arr[0] as! AdmissionHeaderData), delegate: self)
             return cell
         
@@ -526,6 +532,10 @@ final class AdmissionHeader: UICollectionViewCell {
     @IBOutlet private weak var gosLine:         UILabel!
     @IBOutlet private weak var date:            UILabel!
     @IBOutlet private weak var status:          UILabel!
+    @IBOutlet private weak var descText:        UILabel?
+    @IBOutlet private weak var descTitle:       UILabel?
+    @IBOutlet private weak var descLine:        UILabel?
+    @IBOutlet private weak var descConstant:    NSLayoutConstraint?
     
     private var delegate: AdmissionCellsProtocol?
     
@@ -536,16 +546,30 @@ final class AdmissionHeader: UICollectionViewCell {
         imgsLoader.stopAnimating()
         
         if item.gosNumber == "" {
-            gosConstant.constant   = -35
-            gosNumbers.isHidden = true
-            gosLine.isHidden    = true
-            gosTitle.isHidden   = true
+            gosConstant.constant = -35
+            gosNumbers.isHidden  = true
+            gosLine.isHidden     = true
+            gosTitle.isHidden    = true
         
         } else {
-            gosConstant.constant   = 14
-            gosNumbers.isHidden = false
-            gosLine.isHidden    = false
-            gosTitle.isHidden   = false
+            gosConstant.constant = 14
+            gosNumbers.isHidden  = false
+            gosLine.isHidden     = false
+            gosTitle.isHidden    = false
+        }
+        
+        if item.desc == "" {
+            descConstant?.constant = -35
+            descText?.isHidden  = true
+            descTitle?.isHidden = true
+            descLine?.isHidden  = true
+            
+        } else {
+            descConstant?.constant = 10
+            descText?.isHidden  = false
+            descTitle?.isHidden = false
+            descLine?.isHidden  = false
+            descText?.text = item.desc
         }
         
         image.image         = item.icons
@@ -559,64 +583,71 @@ final class AdmissionHeader: UICollectionViewCell {
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
         
-        if item.images.count == 0 && item.imgsUrl.count == 0 {
+//        if item.images.count == 0 && item.imgsUrl.count == 0 {
 //            imgs.isHidden       = true
-            imgsTop.constant = 0
+            if item.desc == "" {
+                imgsTop.constant = 0
+                
+            } else {
+                imgsTop.constant = 55
+            }
             imgsHeight.constant = 0
         
-        } else if item.images.count != 0 {
-//            imgs.isHidden       = false
-            imgsHeight.constant = 150
-            imgsTop.constant    = 16
-            
-            var x = 0.0
-            item.images.forEach {
-                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: imgs.frame.size.height))
-                image.image = $0
-                x += 165.0
-                let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
-                image.isUserInteractionEnabled = true
-                image.addGestureRecognizer(tap)
-                imgs.addSubview(image)
-            }
-            imgs.contentSize = CGSize(width: CGFloat(x), height: imgs.frame.size.height)
-        
-        } else if item.imgsUrl.count != 0 {
-            
-            imgsLoader.isHidden = false
-            imgsLoader.startAnimating()
-            
-            var rowImgs: [UIImage] = []
-            
-            DispatchQueue.global(qos: .userInitiated).async {
-                
-                item.imgsUrl.forEach { img in
-                    
-                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
-                    request.httpMethod = "GET"
-                    
-                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
-                    
-                    rowImgs.append(UIImage(data: data!)!)
-                }
-                
-                DispatchQueue.main.async {
-                    var x = 0.0
-                    rowImgs.forEach {
-                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.imgs.frame.size.height))
-                        image.image = $0
-                        x += 165.0
-                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(_:)))
-                        image.isUserInteractionEnabled = true
-                        image.addGestureRecognizer(tap)
-                        self.imgs.addSubview(image)
-                    }
-                    self.imgs.contentSize = CGSize(width: CGFloat(x), height: self.imgs.frame.size.height)
-                    self.imgsLoader.stopAnimating()
-                    self.imgsLoader.isHidden = true
-                }
-            }
-        }
+//        }
+//        else if item.images.count != 0 {
+////            imgs.isHidden       = false
+////            imgsHeight.constant = 150
+////            imgsTop.constant    = 16
+//
+//            var x = 0.0
+//            item.images.forEach {
+//                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: imgs.frame.size.height))
+//                image.image = $0
+//                x += 165.0
+//                let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+//                image.isUserInteractionEnabled = true
+//                image.addGestureRecognizer(tap)
+//                imgs.addSubview(image)
+//            }
+//            imgs.contentSize = CGSize(width: CGFloat(x), height: imgs.frame.size.height)
+//
+//        }
+//        else if item.imgsUrl.count != 0 {
+//
+//            imgsLoader.isHidden = false
+//            imgsLoader.startAnimating()
+//
+//            var rowImgs: [UIImage] = []
+//
+//            DispatchQueue.global(qos: .userInitiated).async {
+//
+//                item.imgsUrl.forEach { img in
+//
+//                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
+//                    request.httpMethod = "GET"
+//
+//                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+//
+//                    rowImgs.append(UIImage(data: data!)!)
+//                }
+//
+//                DispatchQueue.main.async {
+//                    var x = 0.0
+//                    rowImgs.forEach {
+//                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.imgs.frame.size.height))
+//                        image.image = $0
+//                        x += 165.0
+//                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(_:)))
+//                        image.isUserInteractionEnabled = true
+//                        image.addGestureRecognizer(tap)
+//                        self.imgs.addSubview(image)
+//                    }
+//                    self.imgs.contentSize = CGSize(width: CGFloat(x), height: self.imgs.frame.size.height)
+//                    self.imgsLoader.stopAnimating()
+//                    self.imgsLoader.isHidden = true
+//                }
+//            }
+//        }
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {

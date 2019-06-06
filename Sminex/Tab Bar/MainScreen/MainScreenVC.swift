@@ -1410,7 +1410,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = deals[safe: dealsIndex]
-            vc.anotherDeals_ = Array(deals.prefix(3))
+            vc.anotherDeals_ = deals
         
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
             let vc = segue.destination as! FinancePayAcceptVC
