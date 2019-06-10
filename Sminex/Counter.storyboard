@@ -38,7 +38,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="368" height="101"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Отпуск воды, Приём сточных вод" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" adjustsFontForContentSizeCategory="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Dy-xV-0Gs">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Отпуск воды, Приём сточных вод" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="2Dy-xV-0Gs">
                                                     <rect key="frame" x="16" y="12" width="268" height="49"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <nil key="textColor"/>
@@ -184,6 +184,7 @@
                         <outlet property="collection" destination="3CC-1K-SgW" id="pO9-kl-SVq"/>
                         <segue destination="DMi-Ag-0DU" kind="show" identifier="statement" id="XXA-SU-k4v"/>
                         <segue destination="LGT-Qc-NMF" kind="show" identifier="CounterHistory" id="reB-wO-3MQ"/>
+                        <segue destination="YlN-av-POH" kind="show" identifier="login_activity" id="XIo-7F-E6R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bN3-XH-e5a" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -393,6 +394,7 @@
                         <outlet property="outcomeLabel" destination="dAe-ie-Aeq" id="KMI-pU-Mu4"/>
                         <outlet property="scroll" destination="iVP-Nc-3DL" id="1Mc-dp-svs"/>
                         <outlet property="typeLabel" destination="EgH-84-RW7" id="6IC-lA-Axc"/>
+                        <segue destination="YlN-av-POH" kind="show" identifier="login_activity" id="uia-be-jYW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qrj-3N-G62" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -479,6 +481,7 @@
                     <connections>
                         <outlet property="tableView" destination="pG4-h6-gcV" id="fDs-ZD-ZFd"/>
                         <segue destination="Mau-s6-XFu" kind="show" identifier="history" id="ETc-hc-kwO"/>
+                        <segue destination="YlN-av-POH" kind="show" identifier="login_activity" id="AM3-CF-XdQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="03E-2g-Vxe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -801,9 +804,20 @@
             </objects>
             <point key="canvasLocation" x="-1106" y="-2698"/>
         </scene>
+        <!--UINavigationController-yke-5M-97h-->
+        <scene sceneID="Np7-Vc-ZLR">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Auth" referencedIdentifier="UINavigationController-yke-5M-97h" id="YlN-av-POH" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rER-a4-4qR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-210" y="-1526"/>
+        </scene>
     </scenes>
     <resources>
         <image name="arrow_right" width="40" height="65"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="AM3-CF-XdQ"/>
+    </inferredMetricsTieBreakers>
 </document>

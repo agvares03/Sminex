@@ -287,7 +287,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         
         var isManyValue = false
         var index = 0
-        print(recomendationArray[index])
+        print(recomendationArray)
         answers.forEach { (arg) in
             let (key, value) = arg
             isManyValue = false
@@ -300,19 +300,23 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
                 
                 isManyValue = true
             }
+            if value.count == 0{
+                json.append( ["QuestionID":key, "AnswerID":0, "Comment": recomendationArray[index] ] )
+            }
             index += 1
         }
-        
         let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
         request.httpBody = jsonData
         
-//        print(request)
-//        print(String(data: request.httpBody!, encoding: .utf8))
+        print(request)
+        print(String(data: request.httpBody!, encoding: .utf8))
+        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
             guard data != nil else { return }
-//            print(String(data: data!, encoding: .utf8))
+            print(String(data: data!, encoding: .utf8))
+            
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 DispatchQueue.main.async{
                     self.stopAnimation()
@@ -564,10 +568,21 @@ extension QuestionAnswerVC : UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
             recomendationArray.removeLast()
+            print(textView.text)
             recomendationArray.append(textView.text)
             textView.resignFirstResponder()
             return false
         }
         return true
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+//        if(textView == "\n") {
+            recomendationArray.removeLast()
+            print(textView.text)
+            recomendationArray.append(textView.text)
+            textView.resignFirstResponder()
+//            return false
+//        }
+//        return true
     }
 }

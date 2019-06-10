@@ -829,6 +829,7 @@
                         <segue destination="NQO-Y0-Fbv" kind="show" identifier="calcsArchive" id="DIU-KK-E9T"/>
                         <segue destination="T8C-5x-IHP" kind="show" identifier="calcs" id="UqP-vz-sNh"/>
                         <segue destination="5Q2-2i-2er" kind="show" identifier="financePay" id="pwy-L0-UOd"/>
+                        <segue destination="gvc-LV-gxV" kind="show" identifier="login_activity" id="1Br-lY-lXV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z91-TA-OR6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -936,6 +937,7 @@
                     <connections>
                         <outlet property="collection" destination="S4W-dK-7hO" id="Nil-gm-AaY"/>
                         <segue destination="T8C-5x-IHP" kind="show" identifier="calc" id="ePG-cd-LPa"/>
+                        <segue destination="gvc-LV-gxV" kind="show" identifier="login_activity" id="rfk-7s-WDa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XnG-H2-22b" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1207,6 +1209,14 @@
             </objects>
             <point key="canvasLocation" x="358.125" y="-1858.0985915492959"/>
         </scene>
+        <!--UINavigationController-yke-5M-97h-->
+        <scene sceneID="nXO-yx-dGE">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Auth" referencedIdentifier="UINavigationController-yke-5M-97h" id="gvc-LV-gxV" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K2H-Vo-7nh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="457" y="-1455"/>
+        </scene>
     </scenes>
     <resources>
         <image name="arrow_right" width="40" height="65"/>
@@ -1215,8 +1225,9 @@
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="rfk-7s-WDa"/>
         <segue reference="Uw4-h9-Yot"/>
-        <segue reference="UqP-vz-sNh"/>
+        <segue reference="ePG-cd-LPa"/>
         <segue reference="M1z-fP-A6K"/>
         <segue reference="pwy-L0-UOd"/>
     </inferredMetricsTieBreakers>

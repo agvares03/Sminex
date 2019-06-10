@@ -817,7 +817,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 guard data != nil else { return }
                 
 //                print(String(data: data!, encoding: .utf8) ?? "")
-                
+                if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+                    self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
+                    return
+                }
                 let xml = XML.parse(data!)
                 self.mainScreenXml = xml
                 let requests = xml["Requests"]
@@ -1061,7 +1064,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 TemporaryHolder.instance.menuDeals = imgs.count
                 
                 #if DEBUG
-                print(String(data: data!, encoding: .utf8) ?? "")
+//                print(String(data: data!, encoding: .utf8) ?? "")
                 #endif
                 
             }
@@ -1090,7 +1093,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
             guard data != nil else { return }
-            
+            if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
+                return
+            }
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
@@ -1391,6 +1397,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.isCreatingRequest_ = true
             vc.delegate = self
         
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = "1"
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
             let vc = segue.destination as! AppsUser
             vc.delegate = self

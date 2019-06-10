@@ -180,6 +180,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.CHANGE_PASSWRD + "isChg=1&login=\(login)&pwd=\(newPasswordField.text ?? "")&oldPwd=\(oldPass)")!)
         request.httpMethod = "GET"
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in

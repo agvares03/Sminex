@@ -88,7 +88,44 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
             imageWidth.constant  = 382
             imageHeight.constant = 191
         }
-
+        getImage()
+    }
+    
+    private func getImage() {
+        let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
+        let newsId:Int = (data_?.newsId!)!
+        var request = URLRequest(url: URL(string: Server.SERVER + "GetNewsByID.ashx?" + "id=" + String(newsId))!)
+        print("REQUEST = \(request)")
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil else { return }
+            //            print(String(data: data!, encoding: .utf8) ?? "")
+            
+            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.sync {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+//            DispatchQueue.main.async {
+//                if String(data: data!, encoding: .utf8) == nil || String(data: data!, encoding: .utf8) == "" {
+//                    self.titleTop.constant = 16
+//                    self.image.isHidden = true
+//
+//                } else {
+//                    self.image.image = UIImage(data: Data(base64Encoded: (String(data: data!, encoding: .utf8)!.replacingOccurrences(of: "data:image/png;base64,", with: "")))!)
+//                }
+//            }
+            }.resume()
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {

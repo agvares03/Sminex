@@ -187,6 +187,11 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
             vc.isFromMain_ = performName_ != ""
             vc.questionDelegate = self
             performName_ = ""
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = "1"
+            
         }
     }
 }

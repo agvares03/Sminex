@@ -53,7 +53,7 @@ extension CounterHistoryTableVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCounterCell", for: indexPath) as! HistoryCounterCell
-        cell.configure(title: data_[indexPath.row].resource ?? "", counterName: data_[indexPath.row].meterUniqueNum ?? "")
+        cell.configure(title: data_[indexPath.row].resource ?? "", counterName: data_[indexPath.row].meterType! + ", " + data_[indexPath.row].meterUniqueNum! )
         return cell
     }
     

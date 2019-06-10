@@ -22,6 +22,7 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     public var pressedData_: DealsJson?
     public var data_: [DealsJson] = []
     private var index = 0
+    public var kol = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +65,7 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        kol = 0
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),
@@ -143,6 +145,11 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
             vc.data_ = data_[index]
             vc.anotherDeals_ = data_
         
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = "1"
+            
         } else if segue.identifier == Segues.fromDealsListVC.toDealsAnim {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = pressedData_!

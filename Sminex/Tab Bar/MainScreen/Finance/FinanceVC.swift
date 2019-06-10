@@ -309,8 +309,13 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                     self.stopAnimation()
                 }
             }
-            
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            #endif
             guard data != nil else { return }
+            if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
+            }
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
@@ -325,9 +330,6 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.debt = AccountDebtData(json: json!)?.data
             }
-            #if DEBUG
-//                print(String(data: data!, encoding: .utf8)!)
-            #endif
         
         }.resume()
     }
@@ -378,6 +380,11 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             let vc = segue.destination as! FinanceBarCodeVC
             vc.data_ = debt
         
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = "1"
+            
         } else if segue.identifier == Segues.fromFinanceVC.toReceipts {
             let vc = segue.destination as! FinanceDebtVC
             vc.data_ = receipts[safe: index]

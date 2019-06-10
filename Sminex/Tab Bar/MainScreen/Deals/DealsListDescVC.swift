@@ -17,16 +17,17 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func backButtonTapped(_ sender: UIBarButtonItem) {
-        navigationController?.popViewController(animated: true)
+//        navigationController?.popViewController(animated: true)
+        navigationController?.popToRootViewController(animated: true)
     }
-    
+    public var kolDeals = 1
     public var data_: DealsJson?
     public var anotherDeals_: [DealsJson] = []
     private var displayDeals: [DealsJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(kolDeals)
         displayDeals = anotherDeals_.filter { return $0.id != data_?.id }
         automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
@@ -37,6 +38,10 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden           = true
+//        let k = kolDeals
+//        if k > 1{
+//            navigationController?.popViewController(animated: true)
+//        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,6 +73,8 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
         let vc = storyboard.instantiateViewController(withIdentifier: "dealDetails") as! DealsListDescVC
         vc.data_ = displayDeals[indexPath.row]
         vc.anotherDeals_ = anotherDeals_
+//        vc.kolDeals = self.kolDeals + 1
+        self.kolDeals += 1
         navigationController?.pushViewController(vc, animated: true)
     }
     

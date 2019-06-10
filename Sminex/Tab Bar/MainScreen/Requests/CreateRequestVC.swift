@@ -133,14 +133,26 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             startAnimator()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-            data = AdmissionHeaderData(icon: UIImage(named: "account")!,
-                                       gosti: edFio.text!,
-                                       mobileNumber: edContact.text!,
-                                       gosNumber: gosNumber.text ?? "",
-                                       date: dateFormatter.string(from: picker.date),
-                                       status: "В ОБРАБОТКЕ",
-                                       images: images,
-                                       imagesUrl: [], desc: edComment.text!)
+            if edComment.text == "Примечания" && edComment.textColor == UIColor.lightGray{
+                data = AdmissionHeaderData(icon: UIImage(named: "account")!,
+                                           gosti: edFio.text!,
+                                           mobileNumber: edContact.text!,
+                                           gosNumber: gosNumber.text ?? "",
+                                           date: dateFormatter.string(from: picker.date),
+                                           status: "В ОБРАБОТКЕ",
+                                           images: images,
+                                           imagesUrl: [], desc: "")
+            }else{
+                data = AdmissionHeaderData(icon: UIImage(named: "account")!,
+                                           gosti: edFio.text!,
+                                           mobileNumber: edContact.text!,
+                                           gosNumber: gosNumber.text ?? "",
+                                           date: dateFormatter.string(from: picker.date),
+                                           status: "В ОБРАБОТКЕ",
+                                           images: images,
+                                           imagesUrl: [], desc: edComment.text!)
+            }
+            
             uploadRequest()
         }
     }

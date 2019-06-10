@@ -285,19 +285,17 @@ class NewsListTVC: UIViewController {
                                 
                             }
                         }
-//                        self.data = TemporaryHolder.instance.news!
-                        DispatchQueue.main.sync {
-                            if #available(iOS 10.0, *) {
-                                self.tableView.refreshControl?.endRefreshing()
-                            } else {
-                                self.rControl?.endRefreshing()
-                            }
-                            self.tableView.reloadData()
-                            self.stopAnimation()
-                        }
-                        
                     }
                 }
+            }
+            DispatchQueue.main.sync {
+                if #available(iOS 10.0, *) {
+                    self.tableView.refreshControl?.endRefreshing()
+                } else {
+                    self.rControl?.endRefreshing()
+                }
+                self.tableView.reloadData()
+                self.stopAnimation()
             }
             
             if self.data.count != 0 {
@@ -349,6 +347,11 @@ class NewsListTVC: UIViewController {
             vc.data_ = tappedNews == nil ? data[index] : tappedNews
             vc.isFromMain_ = tappedNews != nil
             tappedNews = nil
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = "1"
+            
         }
     }
 

@@ -207,6 +207,9 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             guard data != nil else { return }
+            if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
+            }
             if (String(data: data!, encoding: .utf8)?.contains(find: "error"))! {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
@@ -216,7 +219,7 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             }
             
             #if DEBUG
-//            print("счетчики:", String(data: data!, encoding: .utf8)!)
+            print("счетчики:", String(data: data!, encoding: .utf8)!)
             #endif
             
             let xml = XML.parse(data!)
@@ -308,6 +311,11 @@ final class CounterTableVC: UIViewController, UICollectionViewDelegate, UICollec
             vc.delegate = self
             
         
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = "1"
+            
         } else if segue.identifier == Segues.fromCounterTableVC.toHistory {
             let vc     = segue.destination as! CounterHistoryTableVC
             vc.data_   = meterArr
@@ -396,7 +404,7 @@ final class CounterTableCell: UICollectionViewCell {
     fileprivate func display(_ item: MeterValue) {
         
         title.text = item.resource
-        desc.text  = item.meterUniqueNum
+        desc.text  = item.meterType! + ", " + item.meterUniqueNum!
         
         let value = String((item.value?.split(separator: ",")[0])!)
         count.text = value != "0" ? value : ""
@@ -432,6 +440,7 @@ struct MeterValue {
     let previousPeriod:     String?
     let period:             String?
     let guid:               String?
+    let meterType:          String?
     
     init(_ row: XML.Accessor, period: String) {
         
@@ -449,6 +458,7 @@ struct MeterValue {
         valueInput          = row.attributes["ValueInput"]
         previousPeriod      = row.attributes["PreviousPeriod"]
         guid                = row.attributes["GUID"]
+        meterType           = row.attributes["MeterType"]
     }
 }
 

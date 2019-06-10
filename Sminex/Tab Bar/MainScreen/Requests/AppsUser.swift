@@ -300,7 +300,10 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
 //                    group.leave()
 //                }
                 guard data != nil else { return }
-                
+                if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+                    self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
+                    return
+                }
                 #if DEBUG
 //                    print(String(data: data!, encoding: .utf8)!)
                 #endif
@@ -680,6 +683,11 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 vc.isFromMain_ = true
             }
         
+        } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
+            
+            let vc = segue.destination as! UINavigationController
+            (vc.viewControllers.first as! ViewController).roleReg_ = "1"
+            
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC
             vc.data_ = techService!

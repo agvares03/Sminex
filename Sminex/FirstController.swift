@@ -85,10 +85,10 @@ class FirstController: UIViewController {
                 if getUK == "1" {
                     
                     if self.nameUK == "" {
-                        self.performSegue(withIdentifier: Segues.fromFirstController.toChooiseUk, sender: self)
+//                        self.performSegue(withIdentifier: Segues.fromFirstController.toChooiseUk, sender: self)
                         
                     } else {
-                        self.performSegue(withIdentifier: Segues.fromFirstController.toLoginUK, sender: self)
+//                        self.performSegue(withIdentifier: Segues.fromFirstController.toLoginUK, sender: self)
                     }
                     
                 } else {
