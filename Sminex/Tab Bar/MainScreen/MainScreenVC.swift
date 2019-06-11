@@ -1093,10 +1093,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
             guard data != nil else { return }
-            if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
-                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
-                return
-            }
+//            if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+//                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
+//                return
+//            }
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )

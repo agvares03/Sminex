@@ -240,10 +240,15 @@
                                     <constraint firstItem="Waa-tF-U6a" firstAttribute="leading" secondItem="b2e-Jp-W4K" secondAttribute="leading" id="lHb-eq-x0r"/>
                                 </constraints>
                             </scrollView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="JcR-8O-Nos">
+                                <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="JcR-8O-Nos" firstAttribute="centerY" secondItem="Evi-vA-Rsb" secondAttribute="centerY" id="4Ez-5w-kaz"/>
                             <constraint firstItem="pi6-I5-0U0" firstAttribute="top" secondItem="38v-ma-Dz1" secondAttribute="bottom" id="OPP-RV-NAa"/>
+                            <constraint firstItem="JcR-8O-Nos" firstAttribute="centerX" secondItem="Evi-vA-Rsb" secondAttribute="centerX" id="lod-jx-Csr"/>
                             <constraint firstAttribute="trailing" secondItem="pi6-I5-0U0" secondAttribute="trailing" id="muI-Ld-MEd"/>
                             <constraint firstItem="pi6-I5-0U0" firstAttribute="leading" secondItem="Evi-vA-Rsb" secondAttribute="leading" id="w9T-fh-s9E"/>
                             <constraint firstItem="dIJ-6F-89I" firstAttribute="top" secondItem="pi6-I5-0U0" secondAttribute="bottom" id="xJZ-XI-8et"/>
@@ -262,6 +267,7 @@
                         <outlet property="image" destination="KMo-xe-wk7" id="csk-kO-Kmc"/>
                         <outlet property="imageHeight" destination="CIK-j7-BnN" id="z6w-M5-QlD"/>
                         <outlet property="imageWidth" destination="Wcl-x3-7yD" id="F8e-et-0vw"/>
+                        <outlet property="indicator" destination="JcR-8O-Nos" id="4Dg-rB-oo1"/>
                         <outlet property="scroll" destination="pi6-I5-0U0" id="43d-Z3-uJP"/>
                         <outlet property="titleLabel" destination="b2e-Jp-W4K" id="ZTH-t5-0Oj"/>
                         <outlet property="titleTop" destination="hRj-DQ-ek9" id="vDd-oz-1f6"/>

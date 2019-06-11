@@ -19,6 +19,7 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
     @IBOutlet private weak var webView:         UIWebView!
     @IBOutlet private weak var titleLabel:  	UILabel!
     @IBOutlet private weak var date:        	UILabel!
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         if !isFromMain_ {
@@ -34,7 +35,8 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        StartIndicator()
+        getImage()
         automaticallyAdjustsScrollViewInsets = false
         webView.delegate = self
         webView.scrollView.isScrollEnabled = false
@@ -63,13 +65,13 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
             }
         }
         
-        if data_?.headerImage == nil || data_?.headerImage == "" {
-            titleTop.constant = 16
-            image.isHidden = true
-        
-        } else {
-            image.image = UIImage(data: Data(base64Encoded: (data_?.headerImage?.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)!)
-        }
+//        if data_?.headerImage == nil || data_?.headerImage == "" {
+//            titleTop.constant = 16
+//            image.isHidden = true
+//
+//        } else {
+//            image.image = UIImage(data: Data(base64Encoded: (data_?.headerImage?.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)!)
+//        }
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
         print(points)
@@ -88,44 +90,38 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
             imageWidth.constant  = 382
             imageHeight.constant = 191
         }
-        getImage()
     }
     
     private func getImage() {
-        let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
         let newsId:Int = (data_?.newsId!)!
-        var request = URLRequest(url: URL(string: Server.SERVER + "GetNewsByID.ashx?" + "id=" + String(newsId))!)
-        print("REQUEST = \(request)")
+        var request = URLRequest(url: URL(string: Server.SERVER + "GetNewsHeaderImageByID.ashx?" + "id=" + String(newsId))!)
+//        print("REQUEST = \(request)")
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
             guard data != nil else { return }
-            //            print(String(data: data!, encoding: .utf8) ?? "")
             
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
+//            #if DEBUG
+//            print(String(data: data!, encoding: .utf8) ?? "")
+//            #endif
+            if String(data: data!, encoding: .utf8) != nil && (String(data: data!, encoding: .utf8)?.contains(find: "картинка для новости"))!{
+                DispatchQueue.main.async {
+                    self.titleTop.constant = 16
+                    self.image.isHidden = true
+                    self.StopIndicator()
                 }
-                return
+            }else{
+                if let image = UIImage(data: data!) {
+                    DispatchQueue.main.async {
+                        self.image.image = image
+                        self.image.isHidden = false
+                        self.StopIndicator()
+                    }
+                }
             }
-            
-            #if DEBUG
-            print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-//            DispatchQueue.main.async {
-//                if String(data: data!, encoding: .utf8) == nil || String(data: data!, encoding: .utf8) == "" {
-//                    self.titleTop.constant = 16
-//                    self.image.isHidden = true
-//
-//                } else {
-//                    self.image.image = UIImage(data: Data(base64Encoded: (String(data: data!, encoding: .utf8)!.replacingOccurrences(of: "data:image/png;base64,", with: "")))!)
-//                }
-//            }
-            }.resume()
+        }.resume()
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {
@@ -139,5 +135,19 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
             return false
         }
         return true
+    }
+    
+    private func StartIndicator() {
+        self.scroll.isHidden    = true
+        
+        self.indicator.startAnimating()
+        self.indicator.isHidden = false
+    }
+    
+    private func StopIndicator() {
+        self.scroll.isHidden    = false
+        
+        self.indicator.stopAnimating()
+        self.indicator.isHidden = true
     }
 }
