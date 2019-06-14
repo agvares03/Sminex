@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Gloss
 
 class RequestTypeVC: UIViewController {
     
@@ -26,15 +27,9 @@ class RequestTypeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
-        let type: RequestTypeStruct
-        type = .init(id: "3", name: "Услуги службы комфорта")
         
         tableView.tableFooterView = UIView()
-        if let types = TemporaryHolder.instance.requestTypes?.types {
-            data = types
-            tableView.reloadData()
-        }
-        data.append(type)
+        getRequestTypes()
     }
     
     func updateUserInterface() {
@@ -54,6 +49,55 @@ class RequestTypeVC: UIViewController {
     }
     @objc func statusManager(_ notification: Notification) {
         updateUserInterface()
+    }
+    
+    func getRequestTypes() {
+        
+        let id = UserDefaults.standard.string(forKey: "id_account") ?? ""
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.REQUEST_TYPE + "accountid=" + id)!)
+        request.httpMethod = "GET"
+        URLSession.shared.dataTask(with: request) {
+            data, responce, error in
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            let responceString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+            //                print(self.responceString)
+            #endif
+            
+            DispatchQueue.main.sync {
+                
+                if responceString.contains(find: "error") {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: responceString.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                } else {
+                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                        TemporaryHolder.instance.choise(json!)
+                    }
+                }
+                let type: RequestTypeStruct
+                type = .init(id: "3", name: "Услуги службы комфорта")
+                if let types = TemporaryHolder.instance.requestTypes?.types {
+                    self.data = types
+                }
+                self.data.append(type)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            }.resume()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

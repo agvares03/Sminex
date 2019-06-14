@@ -563,7 +563,7 @@ final class AdmissionHeader: UICollectionViewCell {
             descText?.isHidden  = true
             descTitle?.isHidden = true
             descLine?.isHidden  = true
-            
+            descText?.text = ""
         } else {
             descConstant?.constant = 10
             descText?.isHidden  = false
@@ -578,7 +578,7 @@ final class AdmissionHeader: UICollectionViewCell {
         gosNumbers.text     = item.gosNumber
         status.text         = item.status
         
-        print(item.date)
+//        print(item.date)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
@@ -587,9 +587,14 @@ final class AdmissionHeader: UICollectionViewCell {
 //            imgs.isHidden       = true
             if item.desc == "" {
                 imgsTop.constant = 0
-                
             } else {
-                imgsTop.constant = 55
+                let k = heightForTitle(text: item.desc, width: gosti.frame.size.width)
+                print(k)
+                if k == 20.5{
+                    imgsTop.constant = 35 + k
+                }else{
+                    imgsTop.constant = 25 + k
+                }
             }
             imgsHeight.constant = 0
         
@@ -648,6 +653,16 @@ final class AdmissionHeader: UICollectionViewCell {
 //                }
 //            }
 //        }
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {

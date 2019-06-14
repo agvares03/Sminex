@@ -46,7 +46,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         let code = self.code.stringByAddingPercentEncodingForRFC3986() ?? ""
         let address = UserDefaults.standard.string(forKey: "adress") ?? ""
         let smsCode = smsField.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ADD_NEW_LS + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code)&address=\(address)&smsCode=\(smsCode)")!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ADD_NEW_LS + "login=\(login.stringByAddingPercentEncodingForRFC3986() ?? "")&pwd=\(pwd)&code=\(code.stringByAddingPercentEncodingForRFC3986() ?? "")&address=\(address.stringByAddingPercentEncodingForRFC3986() ?? "")&smsCode=\(smsCode.stringByAddingPercentEncodingForRFC3986() ?? "")")!)
         print(request)
         
         request.httpMethod = "GET"        

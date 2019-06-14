@@ -118,7 +118,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//                        print("ArrLS = \(self.responseString)")
+                        print("ArrLS = \(self.responseString)")
             #endif
             
             do {
