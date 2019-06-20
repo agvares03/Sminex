@@ -56,7 +56,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
 //    private vals = ""
     
     @IBAction private func enter(_ sender: UIButton) {
-        
+        errorLabel.isHidden = true
         view.endEditing(true)
         // Проверка на заполнение
         var ret     = false;
@@ -80,7 +80,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             
         } else {
-            if itsPhone && (edLogin.text?.count == 10 || edLogin.text?.count == 11 || edLogin.text?.count == 12){
+            print("PHONE = ", edLogin.text?.count)
+            if (itsPhone && (edLogin.text?.count == 10 || edLogin.text?.count == 11 || edLogin.text?.count == 12)) || (edLogin.text?.first == "9" && edLogin.text?.count == 10){
                 self.getLSforNumber()
             }else{
                 // Сохраним значения
@@ -377,7 +378,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
         // Авторизация пользователя
         if !itsPhone && !isFromSettings_{
-            self.LoginText = self.edLogin.text!
+            DispatchQueue.main.async {
+                self.LoginText = self.edLogin.text!
+            }
         }
         DispatchQueue.main.async {
         let txtLogin = login == nil ? self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
