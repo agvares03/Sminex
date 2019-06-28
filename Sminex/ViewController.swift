@@ -61,7 +61,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         // Проверка на заполнение
         var ret     = false;
         var message = ""
-        
+        self.errorLabel.text = "Не правильный логин или пароль"
         if edLogin.text == "" {
             message = "Не указан логин. "
             ret     = true
@@ -80,7 +80,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             
         } else {
-            print("PHONE = ", edLogin.text?.count)
+            print("PHONE = ", edLogin.text?.count, itsPhone)
             if (itsPhone && (edLogin.text?.count == 10 || edLogin.text?.count == 11 || edLogin.text?.count == 12)) || (edLogin.text?.first == "9" && edLogin.text?.count == 10){
                 self.getLSforNumber()
             }else{
@@ -131,11 +131,13 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 }else if self.ls2.count == 0{
                     // Сохраним значения
                     DispatchQueue.main.async {
-                        self.LoginText = self.edLogin.text!
-                        self.saveUsersDefaults()
+//                        self.LoginText = self.edLogin.text!
+//                        self.saveUsersDefaults()
+                        self.errorLabel.text = "Л/сч не найден"
+                        self.errorLabel.isHidden = false
                     }
-                    // Запрос - получение данных !!!
-                    self.enter()
+//                    // Запрос - получение данных !!!
+//                    self.enter()
                 }else{
                     self.ls2.forEach {
                         let text = $0
@@ -752,50 +754,48 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
-        LoginText = edLogin.text!
-//        if string == "" {
-//
-//            let ls_ind = LoginText.index(LoginText.endIndex, offsetBy: -1)
-//            let ls_end = LoginText.substring(to: ls_ind)
-//            LoginText = ls_end
-//            if (ls_end == "") {
-//                itsPhone = false
-//            }
-//        } else {
-//
-//            LoginText = LoginText + string
-//        }
-        // определим телефон это или нет
-        var ls_1_end = ""
-        
-        if (LoginText.count < 1) {
-            ls_1_end = ""
-        } else {
-            let ls_1 = LoginText.index(LoginText.startIndex, offsetBy: 1)
-            ls_1_end = String(LoginText[..<ls_1])
-        }
-        var ls_12_end = ""
-        if (LoginText.count < 2) {
-            ls_12_end = ""
-        } else {
-            let ls_12 = LoginText.index(LoginText.startIndex, offsetBy: 2)
-            ls_12_end = String(LoginText[..<ls_12])
-        }
-        if (ls_1_end == "+") {
-            itsPhone = true
-        }else if (string.count == 10 || string.count == 11 || string.count == 12){
-            itsPhone = true
-        }else if (!itsPhone) {
-            if (ls_12_end == "89") || (ls_12_end == "79") {
-                itsPhone = true
+        if textField == edLogin{
+            LoginText = edLogin.text!
+            //        if string == "" {
+            //
+            //            let ls_ind = LoginText.index(LoginText.endIndex, offsetBy: -1)
+            //            let ls_end = LoginText.substring(to: ls_ind)
+            //            LoginText = ls_end
+            //            if (ls_end == "") {
+            //                itsPhone = false
+            //            }
+            //        } else {
+            //
+            //            LoginText = LoginText + string
+            //        }
+            // определим телефон это или нет
+            var ls_1_end = ""
+            
+            if (LoginText.count < 1) {
+                ls_1_end = ""
+            } else {
+                let ls_1 = LoginText.index(LoginText.startIndex, offsetBy: 1)
+                ls_1_end = String(LoginText[..<ls_1])
             }
-            if (ls_1_end == "9") && (LoginText.count == 10 || LoginText.count == 9) {
-                itsPhone = true
+            var ls_12_end = ""
+            if (LoginText.count < 2) {
+                ls_12_end = ""
+            } else {
+                let ls_12 = LoginText.index(LoginText.startIndex, offsetBy: 2)
+                ls_12_end = String(LoginText[..<ls_12])
             }
-        }else{
-            itsPhone = false
+            if (ls_1_end == "+") {
+                itsPhone = true
+            }else if (string.count == 10 || string.count == 11 || string.count == 12){
+                itsPhone = true
+            }else if (ls_12_end == "89") || (ls_12_end == "79") {
+                itsPhone = true
+            }else if (ls_1_end == "9") && (LoginText.count == 10 || LoginText.count == 9) {
+                itsPhone = true
+            }else{
+                itsPhone = false
+            }
         }
-//
         return true
         
     }

@@ -190,7 +190,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.global(qos: .background).async {
                 sleep(2)
-                
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
+                }
                 // Получим комментарии по одной заявке
                 let defaults = UserDefaults.standard
                 let login = defaults.string(forKey: "login")
@@ -208,11 +210,12 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     data, error, responce in
                     
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
-                        let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                         alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                         DispatchQueue.main.async {
                             self.present(alert, animated: true, completion: nil)
                             self.endAnimator()
+                            self.view.isUserInteractionEnabled = true
                         }
                         return
                     }
@@ -225,7 +228,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                         self.parse(xml: xml)
                         
                         self.img = nil
-                        self.collection.reloadData()
+//                        self.collection.reloadData()
                         self.commentField.text = ""
                         self.commentField.placeholder = "Сообщение"
                         self.view.endEditing(true)
@@ -246,13 +249,13 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 
             }
             
-            DispatchQueue.main.async {
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
-                }
-            }
+//            DispatchQueue.main.async {
+//                if #available(iOS 10.0, *) {
+//                    self.collection.refreshControl?.endRefreshing()
+//                } else {
+//                    self.refreshControl?.endRefreshing()
+//                }
+//            }
         }
     }
     
@@ -270,12 +273,13 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             
             let uid = UUID().uuidString
-            print(uid)
+//            print(uid)
             row1.forEach { row1 in
                 rows[row1.attributes["Status"]!]?.append(Request(row: row1))
                 rowComms[row1.attributes["ID"]!] = []
                 let status = row1.attributes["Status"]!
                 self.data_.status = status
+                print("PrComm: ", row2)
                 row2.forEach { row in
                     rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )
@@ -287,16 +291,26 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     rowComms[row.attributes["Name"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["PhoneNum"]!]?.append( RequestComment(row: row) )
                     index += 1
-                    self.arr = self.comments_
-                    self.arr.insert(self.data_, at: 0)
-                    self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: row.attributes["Name"]!, desc: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
-//                    self.arr.append( ServiceCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
-                    if index < self.arr.count{
-                        self.arr.removeLast()
+//                    self.arr = self.comments_
+                    if index > self.arr.count{
+                        self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: row.attributes["Name"]!, desc: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
                     }
+//                    self.arr.append( ServiceCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+//                    if index < self.arr.count{
+//                        print("--REMOVE--")
+//                        self.arr.removeLast()
+//                    }
                 }
             }
-            
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+                self.view.isUserInteractionEnabled = true
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
         }
     }
     
@@ -384,6 +398,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                 self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: self.img, id: UUID().uuidString)  )
+//                self.comments_.append(ServiceCommentCellData(icon: UIImage(named: "account")!, title: accountName, desc: self.commentField.text!, date: dateFormatter.string(from: Date()), image: self.img, id: UUID().uuidString))
                 self.img = nil
                 self.collection.reloadData()
                 self.commentField.text = ""

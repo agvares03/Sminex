@@ -317,12 +317,14 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     rowComms[row.attributes["Name"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["PhoneNum"]!]?.append( RequestComment(row: row) )
                     index += 1
-                    self.arr = self.comments_
-                    self.arr.insert(self.data_, at: 0)
-                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
-                    if index < self.arr.count{
-                        self.arr.removeLast()
+//                    self.arr = self.comments_
+//                    self.arr.insert(self.data_, at: 0)
+                    if index > self.arr.count{
+                        self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
                     }
+//                    if index < self.arr.count{
+//                        self.arr.removeLast()
+//                    }
                 }
             }
             
