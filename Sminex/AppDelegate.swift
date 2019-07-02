@@ -13,6 +13,8 @@ import Firebase
 import FirebaseInstanceID
 import FirebaseMessaging
 import YandexMobileMetrica
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -40,7 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         application.registerForRemoteNotifications()
         requestNotificationAuthorization(application: application)
-        
+        Fabric.with([Crashlytics.self])
+
         // Инициализация AppMetrica SDK
         // Создание объекта конфигурации
         let configuration = YMMYandexMetricaConfiguration.init(apiKey: "5e18cb69-5852-4a9e-9229-c2a2b7c1bf52")
