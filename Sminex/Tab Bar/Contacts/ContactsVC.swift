@@ -228,6 +228,7 @@ final class ContactsCell: UICollectionViewCell {
             phoneView.isHidden   = true
             phoneHeight.constant = 0
             email.text           = item.email
+            emailHeight.constant = 75
         }
         
         messageImage.isUserInteractionEnabled = true

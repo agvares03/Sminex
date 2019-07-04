@@ -63,10 +63,16 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
         
         } else {
-            
-            startAnimation()
-            DispatchQueue.global(qos: .userInteractive).async {
-                self.sendAnswer()
+            if question_?.questions![currQuestion].answers?.count == 0 && (recomendationArray.count == 0 || recomendationArray[0] == ""){
+                let alert = UIAlertController(title: "Ошибка", message: "Введите комментарий", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                startAnimation()
+                DispatchQueue.global(qos: .userInteractive).async {
+                    self.sendAnswer()
+                }
             }
         }
     }

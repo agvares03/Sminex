@@ -256,19 +256,6 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 self.descTxt.textColor  = .red
                 
             } else {
-                var lsList      : [String] = []
-                var addressList : [String] = []
-
-                lsList = UserDefaults.standard.stringArray(forKey: "allLS")!
-                addressList = UserDefaults.standard.stringArray(forKey: "allAddress")!
-                
-                lsList.append(self.code)
-                addressList.append(UserDefaults.standard.string(forKey: "adress")!)
-                
-                let defaults = UserDefaults.standard
-                defaults.setValue(lsList, forKey: "allLS")
-                defaults.setValue(addressList, forKey: "allAddress")
-                defaults.synchronize()
                 
                 let ident: String = self.code
                 let alert = UIAlertController(title: "Лицевой счет \(ident) добавлен", message: "", preferredStyle: .alert)
@@ -429,7 +416,19 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 
                 // Экземпляр класса DB
                 let db = DB()
+                var lsList      : [String] = []
+                var addressList : [String] = []
                 
+                lsList = UserDefaults.standard.stringArray(forKey: "allLS")!
+                addressList = UserDefaults.standard.stringArray(forKey: "allAddress")!
+                
+                lsList.append(self.code)
+                addressList.append(UserDefaults.standard.string(forKey: "adress")!)
+                
+                let defaults = UserDefaults.standard
+                defaults.setValue(lsList, forKey: "allLS")
+                defaults.setValue(addressList, forKey: "allAddress")
+                defaults.synchronize()
                 // Если пользователь - окно пользователя, если консультант - другое окно
                 if answer[5] == "1" {          // консультант
                     

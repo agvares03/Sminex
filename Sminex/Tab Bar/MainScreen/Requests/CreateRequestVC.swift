@@ -133,6 +133,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             startAnimator()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            if transportSwitch.isOn == false{
+                gosNumber.text = ""
+            }
             if edComment.text == "Примечания" && edComment.textColor == UIColor.lightGray{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
@@ -568,8 +571,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         personsArr?.forEach {
             requestBody["persons"]?.append(["FIO":$0, "PassportData":""])
         }
-        autosArr?.forEach {
-            requestBody["autos"]?.append(["Mark":"", "Color":"", "Number":$0, "Parking":""])
+        if transportSwitch.isOn == true{
+            autosArr?.forEach {
+                requestBody["autos"]?.append(["Mark":"", "Color":"", "Number":$0, "Parking":""])
+            }
         }
         
         if let json = try? JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted) {
