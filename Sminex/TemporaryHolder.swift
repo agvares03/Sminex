@@ -50,6 +50,7 @@ final class TemporaryHolder {
                 let df = DateFormatter()
                 df.dateFormat = "dd.MM.yyyy hh:mm:ss"
                 let date = df.date(from: $0.dateEnd ?? "") ?? Date()
+                print(date)
                 if date < Date() {
                     return false
                 }
@@ -61,6 +62,7 @@ final class TemporaryHolder {
             }
         }
     }
+    public var newsNew: [NewsJson]? = []
     public var contactsList: [ContactsJson] = []
     public var allLS: [AllLsData] = []
     

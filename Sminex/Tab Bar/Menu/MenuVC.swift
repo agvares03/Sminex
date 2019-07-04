@@ -195,7 +195,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
-                if TemporaryHolder.instance.news != nil {
+                if TemporaryHolder.instance.newsNew != nil {
                     performSegue(withIdentifier: Segues.fromMenuVC.toNews, sender: self)
                 }
             

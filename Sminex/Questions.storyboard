@@ -38,8 +38,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="371" height="95"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Bdo-dr-P5R">
-                                                    <rect key="frame" x="16" y="15" width="225" height="20.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bdo-dr-P5R">
+                                                    <rect key="frame" x="16" y="15" width="225" height="36"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -62,9 +62,9 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 вопросов" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QJI-Ir-sas">
-                                                    <rect key="frame" x="20" y="57.5" width="225" height="15"/>
+                                                    <rect key="frame" x="20" y="64" width="225" height="22"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="15" id="ukK-Ue-jzg"/>
+                                                        <constraint firstAttribute="height" constant="22" id="ukK-Ue-jzg"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -80,12 +80,12 @@
                                             <constraint firstAttribute="trailing" secondItem="EbK-2z-SAi" secondAttribute="trailing" id="Pht-gn-feH"/>
                                             <constraint firstItem="QJI-Ir-sas" firstAttribute="trailing" secondItem="Bdo-dr-P5R" secondAttribute="trailing" constant="4" id="QD3-JT-qEs"/>
                                             <constraint firstItem="Bdo-dr-P5R" firstAttribute="top" secondItem="y7D-3o-bkx" secondAttribute="top" constant="15" id="g8g-jJ-ACV"/>
-                                            <constraint firstItem="QJI-Ir-sas" firstAttribute="top" secondItem="Bdo-dr-P5R" secondAttribute="bottom" constant="22" id="hYt-v7-8ka"/>
+                                            <constraint firstItem="QJI-Ir-sas" firstAttribute="top" secondItem="Bdo-dr-P5R" secondAttribute="bottom" constant="13" id="hYt-v7-8ka"/>
                                             <constraint firstItem="QJI-Ir-sas" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leadingMargin" constant="12" id="mSX-fC-G6a"/>
+                                            <constraint firstItem="EbK-2z-SAi" firstAttribute="top" secondItem="QJI-Ir-sas" secondAttribute="bottom" constant="8" id="mYj-RA-v2w"/>
                                             <constraint firstAttribute="bottom" secondItem="EbK-2z-SAi" secondAttribute="bottom" id="o7i-d3-LUU"/>
                                             <constraint firstItem="Bdo-dr-P5R" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leadingMargin" constant="8" id="wmf-wL-99T"/>
                                         </constraints>
-                                        <size key="customSize" width="371" height="95"/>
                                         <connections>
                                             <outlet property="desc" destination="QJI-Ir-sas" id="pYl-B4-ji2"/>
                                             <outlet property="title" destination="Bdo-dr-P5R" id="he7-qM-G0L"/>

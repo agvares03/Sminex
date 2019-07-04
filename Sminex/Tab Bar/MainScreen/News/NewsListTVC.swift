@@ -41,8 +41,8 @@ class NewsListTVC: UIViewController {
             tableView.addSubview(rControl!)
         }
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
-        if TemporaryHolder.instance.news != nil {
-            data = TemporaryHolder.instance.news!
+        if TemporaryHolder.instance.newsNew != nil {
+            data = TemporaryHolder.instance.newsNew!
         }
         
         if tappedNews != nil {
@@ -87,16 +87,16 @@ class NewsListTVC: UIViewController {
     }
     
     @objc private func appDidBecomeActive() {
-        if TemporaryHolder.instance.news != nil {
-            self.data = TemporaryHolder.instance.news!
-        }
+//        if TemporaryHolder.instance.news != nil {
+//            self.data = TemporaryHolder.instance.news!
+//        }
         getAllNews()
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
-        if TemporaryHolder.instance.news != nil {
-            self.data = TemporaryHolder.instance.news!
-        }
+//        if TemporaryHolder.instance.news != nil {
+//            self.data = TemporaryHolder.instance.news!
+//        }
         getAllNews()
     }
     
@@ -113,7 +113,7 @@ class NewsListTVC: UIViewController {
             data, error, responce in
             
             defer {
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     if #available(iOS 10.0, *) {
                         self.tableView.refreshControl?.endRefreshing()
                     } else {
@@ -139,11 +139,11 @@ class NewsListTVC: UIViewController {
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
-                        TemporaryHolder.instance.news?.append(contentsOf: newsArr)
+                        TemporaryHolder.instance.newsNew?.append(contentsOf: newsArr)
 //                        let dateFormatter = DateFormatter()
 //                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
-                        TemporaryHolder.instance.news?.forEach{
+                        TemporaryHolder.instance.newsNew?.forEach{
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                             var dateStart = Date()
@@ -175,18 +175,18 @@ class NewsListTVC: UIViewController {
                             }
                         }
 //                        self.data = TemporaryHolder.instance.news!
-                        DispatchQueue.main.sync {
-                            if #available(iOS 10.0, *) {
-                                self.tableView.refreshControl?.endRefreshing()
-                            } else {
-                                self.rControl?.endRefreshing()
-                            }
-                            self.tableView.reloadData()
-                            self.stopAnimation()
-                        }
                         
                     }
                 }
+            }
+            DispatchQueue.main.async {
+                if #available(iOS 10.0, *) {
+                    self.tableView.refreshControl?.endRefreshing()
+                } else {
+                    self.rControl?.endRefreshing()
+                }
+                self.tableView.reloadData()
+                self.stopAnimation()
             }
             
             if self.data.count != 0 {
@@ -219,17 +219,17 @@ class NewsListTVC: UIViewController {
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
-            defer {
-                DispatchQueue.main.sync {
-                    if #available(iOS 10.0, *) {
-                        self.tableView.refreshControl?.endRefreshing()
-                    } else {
-                        self.rControl?.endRefreshing()
-                    }
-                    self.tableView.reloadData()
-                    self.stopAnimation()
-                }
-            }
+//            defer {
+//                DispatchQueue.main.sync {
+//                    if #available(iOS 10.0, *) {
+//                        self.tableView.refreshControl?.endRefreshing()
+//                    } else {
+//                        self.rControl?.endRefreshing()
+//                    }
+//                    self.tableView.reloadData()
+//                    self.stopAnimation()
+//                }
+//            }
             
             guard data != nil else { return }
             //            print(String(data: data!, encoding: .utf8) ?? "")
@@ -242,19 +242,19 @@ class NewsListTVC: UIViewController {
                 }
                 return
             }
-            TemporaryHolder.instance.news?.removeAll()
+            TemporaryHolder.instance.newsNew?.removeAll()
             self.data.removeAll()
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 if let newsArr = NewsJsonData(json: json!)?.data {
                     if newsArr.count != 0 {
                         
-                        TemporaryHolder.instance.news?.append(contentsOf: newsArr)
+                        TemporaryHolder.instance.newsNew = newsArr
 //                        let dateFormatter = DateFormatter()
 //                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                        TemporaryHolder.instance.news = TemporaryHolder.instance.news?.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
 //                        print(TemporaryHolder.instance.news?.count)
                         
-                        TemporaryHolder.instance.news?.forEach{
+                        TemporaryHolder.instance.newsNew?.forEach{
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
                             var dateStart = Date()
@@ -285,10 +285,11 @@ class NewsListTVC: UIViewController {
                                 
                             }
                         }
+                        print(self.data.count)
                     }
                 }
             }
-            DispatchQueue.main.sync {
+            DispatchQueue.main.async {
                 if #available(iOS 10.0, *) {
                     self.tableView.refreshControl?.endRefreshing()
                 } else {
@@ -315,7 +316,7 @@ class NewsListTVC: UIViewController {
             }
             
             #if DEBUG
-            print(String(data: data!, encoding: .utf8) ?? "")
+//            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             }.resume()
@@ -362,6 +363,7 @@ extension NewsListTVC: UITableViewDataSource, UITableViewDelegate {
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("COUNT: ", data.count)
         return data.count
     }
     

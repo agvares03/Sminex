@@ -1181,13 +1181,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                        TemporaryHolder.instance.news = NewsJsonData(json: json!)!.data!
+                        TemporaryHolder.instance.newsNew = NewsJsonData(json: json!)!.data!
                     }
-                    UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
+                    UserDefaults.standard.set(String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0), forKey: "newsLastId")
                     
-                    TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
+                    TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
-                    self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
+                    self.filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
 //                    let dateFormatter = DateFormatter()
 //                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
@@ -1240,7 +1240,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             var decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
-            TemporaryHolder.instance.news = decodedNewsDict[0]!
+            TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
 //                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
@@ -1260,7 +1260,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
 //            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
                 let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
-                
+            
                 var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
                 request.httpMethod = "GET"
 //                print("REQUEST = \(request)")
@@ -1270,13 +1270,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     
                     guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                        TemporaryHolder.instance.news = NewsJsonData(json: json!)!.data!
+                        TemporaryHolder.instance.newsNew = NewsJsonData(json: json!)!.data!
                     }
-                    UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
+                    UserDefaults.standard.set(String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0), forKey: "newsLastId")
                     
-                    TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
+                    TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
-                    self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
+                    self.filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
 //                    let dateFormatter = DateFormatter()
 //                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 //                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
@@ -1329,7 +1329,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //                return
 //            }
             decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
-            TemporaryHolder.instance.news = decodedNewsDict[0]!
+            TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
                     //                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
