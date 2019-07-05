@@ -103,7 +103,17 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 85.0)
+        return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 55)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -200,6 +210,7 @@ final class QuestionsTableCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet weak var titleHeight: NSLayoutConstraint!
     
     fileprivate func display(_ item: QuestionDataJson) {
         
@@ -236,13 +247,24 @@ final class QuestionsTableCell: UICollectionViewCell {
         if array.contains(item.id!) {
             isAnswered = true
         }
-        
+        titleHeight.constant = heightForTitle(text: item.name!, width: title.frame.size.width) + 10
+        print("titleHeight: ", titleHeight.constant)
         desc.text = (isAnswered)
             ? "Вы начали опрос"
             : String(item.questions?.count ?? 0) + txt
         desc.textColor = (isAnswered)
             ? .gray
             : UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
 }

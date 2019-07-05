@@ -219,7 +219,20 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "QuestionAnswerCell", for: indexPath) as! QuestionAnswerCell
         cell.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
+//        if view.frame.size.width == 320{
+            cell.frame = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y, width: cell.frame.size.width, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell.frame.size.width - 60) + 30)
+//        }
         return cell
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -250,6 +263,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         let cell = QuestionAnswerCell.fromNib()
         cell?.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
         let size  = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+        if view.frame.size.width == 320{
+            return CGSize(width: view.frame.size.width, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell!.frame.size.width - 60) + 30)
+        }
         return CGSize(width: view.frame.size.width, height: size.height)
     }
     
@@ -257,6 +273,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         let cell = QuestionAnswerHeader.fromNib()
         cell?.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
         let size  = cell?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+        if view.frame.size.width == 320{
+            return CGSize(width: view.frame.size.width, height: size.height + 30)
+        }
         return CGSize(width: view.frame.size.width, height: size.height)
     }
     
