@@ -67,6 +67,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     @IBAction private func exitButtonPressed(_ sender: UIButton) {
+        self.exit()
+    }
+    
+    func exit(){
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "pass"), forKey: "exitPass")
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "login"), forKey: "exitLogin")
         UserDefaults.standard.setValue("", forKey: "pass")
@@ -310,7 +314,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&businessPhone=\(phone_contact)&email=\(email)&additionalInfo=\(comment_txt ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -322,7 +326,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             guard data != nil else { return }
             
             #if DEBUG
-//                print(String(data: data!, encoding: .utf8)!)
+                print(String(data: data!, encoding: .utf8)!)
             #endif
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
@@ -378,7 +382,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 DispatchQueue.main.sync {
                     
                     let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
+                        self.exit()
+                    }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
                 }

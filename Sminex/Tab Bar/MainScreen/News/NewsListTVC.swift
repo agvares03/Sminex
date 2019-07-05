@@ -9,7 +9,7 @@
 import UIKit
 import Gloss
 
-class NewsListTVC: UIViewController {
+class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: Outlets
     
@@ -28,6 +28,8 @@ class NewsListTVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.tableFooterView = UIView()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
@@ -219,17 +221,17 @@ class NewsListTVC: UIViewController {
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
-//            defer {
-//                DispatchQueue.main.sync {
-//                    if #available(iOS 10.0, *) {
-//                        self.tableView.refreshControl?.endRefreshing()
-//                    } else {
-//                        self.rControl?.endRefreshing()
-//                    }
-//                    self.tableView.reloadData()
-//                    self.stopAnimation()
-//                }
-//            }
+            defer {
+                DispatchQueue.main.sync {
+                    if #available(iOS 10.0, *) {
+                        self.tableView.refreshControl?.endRefreshing()
+                    } else {
+                        self.rControl?.endRefreshing()
+                    }
+                    self.tableView.reloadData()
+                    self.stopAnimation()
+                }
+            }
             
             guard data != nil else { return }
             //            print(String(data: data!, encoding: .utf8) ?? "")
@@ -277,11 +279,13 @@ class NewsListTVC: UIViewController {
                             let startMonth = calendar.component(.month, from: currentDate)
                             let startYear = calendar.component(.year, from: currentDate)
                             if $0.isDraft == false{
-                                if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                                    self.data.append($0)
-                                }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
+//                                if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
+                                if (Date() < dateEnd) && (Date() >= dateStart){
                                     self.data.append($0)
                                 }
+//                                else if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
+//                                    self.data.append($0)
+//                                }
                                 
                             }
                         }
@@ -322,6 +326,31 @@ class NewsListTVC: UIViewController {
             }.resume()
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if data.count > 0{
+            return data.count
+        }else{
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "NewsTableCell", for: indexPath) as! NewsTableCell
+        if data.count > indexPath.row{
+            let news: NewsJson? = data[indexPath.row]
+            cell.configure(item: news)
+        }
+        return cell
+    }
+    
+    // MARK: UITableViewDelegate
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        index = indexPath.row
+        performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
+    }
+    
     private func startAnimation() {
         loader.isHidden     = false
         tableView.isHidden = true
@@ -356,30 +385,4 @@ class NewsListTVC: UIViewController {
         }
     }
 
-}
-
-extension NewsListTVC: UITableViewDataSource, UITableViewDelegate {
-    
-    // MARK: UITableViewDataSource
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("COUNT: ", data.count)
-        return data.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTableCell", for: indexPath) as! NewsTableCell  
-        let news = data[indexPath.row]
-        cell.configure(item: news)
-        return cell
-    }
-    
-    // MARK: UITableViewDelegate
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        index = indexPath.row
-        performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
-    }
-    
 }
