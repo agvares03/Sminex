@@ -49,7 +49,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         selectedAnswers.forEach {
             answerArr.append((question_?.questions![currQuestion].answers![$0].id)!)
         }
-//        guard answerArr.count != 0 else { return }
+        if question_?.questions![currQuestion].answers?.count != 0{
+            guard answerArr.count != 0 else { return }
+        }
         answers[(question_?.questions![currQuestion].id!)!] = answerArr
         print(answers)
         isAccepted = false
