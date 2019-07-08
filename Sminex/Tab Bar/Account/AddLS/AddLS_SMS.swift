@@ -423,7 +423,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 addressList = UserDefaults.standard.stringArray(forKey: "allAddress")!
                 
                 lsList.append(self.code)
-                addressList.append(UserDefaults.standard.string(forKey: "adress")!)
+                addressList.append(answer[safe: 10] ?? "")
                 
                 let defaults = UserDefaults.standard
                 defaults.setValue(lsList, forKey: "allLS")
