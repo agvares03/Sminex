@@ -45,11 +45,11 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         }
         
         var answerArr: [Int] = []
-        
-        selectedAnswers.forEach {
-            answerArr.append((question_?.questions![currQuestion].answers![$0].id)!)
-        }
+
         if question_?.questions![currQuestion].answers?.count != 0{
+            selectedAnswers.forEach {
+                answerArr.append((question_?.questions![currQuestion].answers![$0].id)!)
+            }
             guard answerArr.count != 0 else { return }
         }
         answers[(question_?.questions![currQuestion].id!)!] = answerArr
