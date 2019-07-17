@@ -125,7 +125,11 @@ final class ServicesUKDescVC: UIViewController {
             if checkInt{
                 DispatchQueue.main.sync {
                     UserDefaults.standard.set(true, forKey: "backBtn")
-                    let alert = UIAlertController(title: "Услуга заказана", message: "", preferredStyle: .alert)
+                    var title = "Услуга заказана"
+                    if (self.data_?.name?.contains(find: "Уборка помещений"))!{
+                        title = "Заявка на услугу принята. В ближайшее время сотрудник Службы Комфорта свяжется с Вами для уточнения дополнительных деталей. Спасибо"
+                    }
+                    let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                         self.endAnimator()
                         self.navigationController?.popViewController(animated: true)

@@ -459,6 +459,7 @@ final class AuthSupportVC: UIViewController, UIImagePickerControllerDelegate, UI
         let uid = UUID().uuidString
         print(uid)
         print(Server.SERVER + Server.ADD_SUPPORT_FILE + "mailId=" + reqID!)
+        
         Alamofire.upload(multipartFormData: { multipartFromdata in
             multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
         }, to: Server.SERVER + Server.ADD_SUPPORT_FILE + "mailId=" + reqID!) { (result) in

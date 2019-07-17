@@ -7,20 +7,28 @@
 //
 
 import UIKit
+import ExpyTableView
 
-
-final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
-    @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var table:   ExpyTableView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
     
+    struct Objects {
+        var sectionName : String!
+        var filteredData : [AccountCalculationsJson]!
+    }
+    
     public var data_:           [AccountCalculationsJson] = []
     private var filteredData: [AccountCalculationsJson] = []
     private var index = 0
-    
+    private var section = 0
+    public var debt:          AccountDebtJson?
+    var kolYear: [String] = []
+    var dataFilt = [Objects]()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,58 +40,249 @@ final class FinanceCalcsArchiveVC: UIViewController, UICollectionViewDelegate, U
             }
             return false
         }
-        
-        automaticallyAdjustsScrollViewInsets = false
-        collection.delegate     = self
-        collection.dataSource   = self
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return filteredData.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 50.0)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        index = indexPath.row
-        performSegue(withIdentifier: Segues.fromFinanceCalcsArchive.toCalc, sender: self)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcsArchiveCell", for: indexPath) as! FinanceCalcsArchiveCell
-        var debt = 0.0
-        let currDate = (filteredData[indexPath.row].numMonthSet, filteredData[indexPath.row].numYearSet)
-        data_.forEach {
-            if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
-                debt += ($0.sumDebt ?? 0.0)
+        var year = 0
+        filteredData.forEach{
+            if $0.numYearSet != year{
+                year = $0.numYearSet!
+                kolYear.append(String($0.numYearSet!))
             }
         }
-        cell.display(title: getNameAndMonth(filteredData[indexPath.row].numMonthSet ?? 0) + " \(filteredData[indexPath.row].numYearSet ?? 0)",
-            desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
+        for i in 0...kolYear.count - 1{
+            var s = filteredData
+            s.removeAll()
+            filteredData.forEach{
+                if String($0.numYearSet!) == kolYear[i]{
+                    s.append($0)
+                }
+            }
+            dataFilt.append(Objects(sectionName: kolYear[i], filteredData: s))
+        }
+        print(dataFilt.count)
+        automaticallyAdjustsScrollViewInsets = false
+        table.dataSource    = self
+        table.delegate      = self
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return dataFilt.count
+    }
+    
+    func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveYearCell") as! FinanceCalcsArchiveYearCell
+        cell.display(dataFilt[section].sectionName)
+        
+        //do other header related calls or settups
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+            return dataFilt[section].filteredData.count + 2
+        }else{
+            return dataFilt[section].filteredData.count + 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+            if indexPath.row > 0{
+                index = indexPath.row - 2
+                section = indexPath.section
+                performSegue(withIdentifier: Segues.fromFinanceCalcsArchive.toCalc, sender: self)
+            }
+        }else{
+            if indexPath.row > 0{
+                index = indexPath.row - 1
+                section = indexPath.section
+                performSegue(withIdentifier: Segues.fromFinanceCalcsArchive.toCalc, sender: self)
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveCell") as! FinanceCalcsArchiveCell
+        if indexPath.section == 0 && indexPath.row == 1 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+            var sum = String(format:"%.2f", debt!.sumPay!)
+            if Double(debt!.sumPay!) > 999.00 || Double(debt!.sumPay!) < -999.00{
+                let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+                sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+            }
+            cell.display(title: "Аванс", desc: sum.replacingOccurrences(of: "-", with: ""))
+        } else {
+            var debt = 0.0
+            var currDate = (0, 0)
+            if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+                currDate = (dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet, dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet) as! (Int, Int)
+            }else{
+                currDate = (dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet, dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet) as! (Int, Int)
+            }
+            data_.forEach {
+                if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
+                    debt += ($0.sumDebt ?? 0.0)
+                }
+            }
+            if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+                var year = ""
+                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+                    year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet ?? 0)"
+                }else{
+                    year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet ?? 0)"
+                }
+                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+                    if dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet! > 2000{
+                        year.removeFirst()
+                        year.removeFirst()
+                    }
+                }else{
+                    if dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet! > 2000{
+                        year.removeFirst()
+                        year.removeFirst()
+                    }
+                }
+                var sum = String(format:"%.2f", debt)
+                if Double(debt) > 999.00 || Double(debt) < -999.00{
+                    let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+                }
+                if sum.first == "-" {
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+                }
+                if debt == 0.00{
+                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+                                     desc: "Оплачено")
+                    }else{
+                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
+                                     desc: "Оплачено")
+                    }
+                }else if debt > 0.00{
+                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+                                     desc: "Задолженность " + sum)
+                    }else{
+                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
+                                     desc: "Задолженность " + sum)
+                    }
+                }else{
+                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
+                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+                                     desc: sum)
+                    }else{
+                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
+                                     desc: sum)
+                    }
+                }
+            }else{
+                cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " \(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet ?? 0)",
+                desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
+            }
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: ExpyTableView, expyState state: ExpyState, changeForSection section: Int) {
+        
+        if state == .willExpand {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCell
+            cell.expand(true)
+            
+        } else if state == .willCollapse {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCell
+            cell.expand(false)
+        }
+    }
+    
+    func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
+        return true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceCalcsArchive.toCalc {
             let vc = segue.destination as! FinanceCalcVC
-            let date = (filteredData[index].numMonthSet, filteredData[index].numYearSet)
+            let date = (dataFilt[section].filteredData[index].numMonthSet, dataFilt[section].filteredData[index].numYearSet)
             vc.data_ = data_.filter {
                 return (date.0 == $0.numMonthSet && date.1 == $0.numYearSet)
             }
         }
     }
+    
+    private func getNameAndMonth(_ number_month: Int) -> String {
+        print(number_month)
+        if number_month == 1 {
+            return "Янв"
+        } else if number_month == 2 {
+            return "Фев"
+        } else if number_month == 3 {
+            return "Март"
+        } else if number_month == 4 {
+            return "Апр"
+        } else if number_month == 5 {
+            return "Май"
+        } else if number_month == 6 {
+            return "Июнь"
+        } else if number_month == 7 {
+            return "Июль"
+        } else if number_month == 8 {
+            return "Авг"
+        } else if number_month == 9 {
+            return "Сен"
+        } else if number_month == 10 {
+            return "Окт"
+        } else if number_month == 11 {
+            return "Ноя"
+        } else {
+            return "Дек"
+        }
+    }
 }
 
-final class FinanceCalcsArchiveCell: UICollectionViewCell {
+final class FinanceCalcsArchiveCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet weak var img: UIImageView!
     
     fileprivate func display(title: String, desc: String) {
         self.title.text = title
         self.desc.text  = desc
+        if title == "Аванс" || desc.contains(find: "-"){
+            self.desc.textColor = .green
+            self.desc.alpha = 1
+        }else{
+            self.desc.textColor = .darkText
+            self.desc.alpha = 0.5
+        }
+        if (title == "Аванс") {
+            img.image = nil
+        }else{
+            img.image = UIImage(named: "arrow_right")
+        }
+    }
+}
+final class FinanceCalcsArchiveYearCell: UITableViewCell {
+    
+    @IBOutlet private weak var title:   UILabel!
+    @IBOutlet weak var img: UIImageView!
+    
+    func display(_ title: String) {
+        self.title.text     = title
+        self.img.image = UIImage(named: "expand")
+    }
+    
+    func expand(_ isExpanded: Bool) {
+        if !isExpanded {
+            self.img.image = UIImage(named: "expand")
+            
+        } else {
+            self.img.image = UIImage(named: "expanded")
+        }
     }
 }

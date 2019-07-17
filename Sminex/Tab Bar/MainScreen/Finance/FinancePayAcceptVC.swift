@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class FinancePayAcceptVC: UIViewController {
+final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var offerLabel:  UILabel!
     @IBOutlet private weak var fieldTop:    NSLayoutConstraint!
@@ -46,7 +46,7 @@ final class FinancePayAcceptVC: UIViewController {
         super.viewDidLoad()
         updateUserInterface()
         stopAnimation()
-        
+        sumTextField.delegate = self
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         
         if accountData_ == nil {
@@ -80,6 +80,12 @@ final class FinancePayAcceptVC: UIViewController {
         let offerTap = UITapGestureRecognizer(target: self, action: #selector(offerTapped(_:)))
         offerLabel.isUserInteractionEnabled = true
         offerLabel.addGestureRecognizer(offerTap)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        sumTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
+    }
+    
+    @objc func keyboardWillShow(sender: NSNotification?) {
+        self.sumTextField.text = ""
     }
     
     func updateUserInterface() {
@@ -119,6 +125,41 @@ final class FinancePayAcceptVC: UIViewController {
     @objc private func viewTapped(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
+    
+    @objc func textFieldDidChange(_ textField: UITextField){
+        var str: String = textField.text!
+        str = str.replacingOccurrences(of: ",", with: ".")
+        self.sumTextField.text = str
+        if str.contains(find: "."){
+            var i = 0
+            str.forEach{
+                if $0 == "."{
+                    i += 1
+                }
+            }
+            if i > 1 && str.last == "."{
+                str.removeLast()
+                self.sumTextField.text = str
+            }
+            let index = (str.index(of: "."))!
+            let s = str.distance(from: index, to: str.endIndex)
+            if s > 3{
+                str.removeLast()
+                self.sumTextField.text = str
+            }
+        }
+    }
+    
+//    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        var str: String = textField.text!
+//        str = str.replacingOccurrences(of: ",", with: ".")
+//        self.sumTextField.text = str
+//        if str.contains(find: ".") && (string == "." || string == ","){
+//            str.removeLast()
+//            self.sumTextField.text = str
+//        }
+//        return true
+//    }
     
     @objc private func offerTapped(_ sender: UITapGestureRecognizer) {
         url = URLRequest(url: URL(string: "http://client.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentOffer.aspx")!)

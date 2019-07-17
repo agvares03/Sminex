@@ -402,7 +402,8 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                            strah:               "0",
                            buisness:            answer[safe: 9]  ?? "",
                            lsNumber:            answer[safe: 16] ?? "",
-                           desc:                answer[safe: 15] ?? "")
+                           desc:                answer[safe: 15] ?? "",
+                           typeОfBuildings:     answer[safe: 19] ?? "")
             
             TemporaryHolder.instance.getFinance()
             // отправим на сервер данные об ид. устройства для отправки уведомлений

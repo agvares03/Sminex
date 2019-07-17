@@ -65,7 +65,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
         
         } else {
-            if question_?.questions![currQuestion].answers?.count == 0 && (recomendationArray.count == 0 || recomendationArray[0] == ""){
+            if question_?.questions![currQuestion].answers?.count == 0 && (recomendationArray.count == 0 || recomendationArray[currQuestion] == ""){
                 let alert = UIAlertController(title: "Ошибка", message: "Введите комментарий", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
@@ -594,9 +594,9 @@ var recomendationArray: [String] = []
 extension QuestionAnswerVC : UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
-            recomendationArray.removeLast()
+//            recomendationArray.removeLast()
             print(textView.text)
-            recomendationArray.append(textView.text)
+            recomendationArray[currQuestion] = textView.text
             textView.resignFirstResponder()
             return false
         }
@@ -604,9 +604,9 @@ extension QuestionAnswerVC : UITextViewDelegate {
     }
     func textViewDidEndEditing(_ textView: UITextView) {
 //        if(textView == "\n") {
-            recomendationArray.removeLast()
+//            recomendationArray.removeLast()
             print(textView.text)
-            recomendationArray.append(textView.text)
+            recomendationArray[currQuestion] = textView.text
             textView.resignFirstResponder()
 //            return false
 //        }

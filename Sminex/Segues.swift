@@ -250,6 +250,7 @@ struct Segues {
         static let toReceiptArchive   = "receiptArchive"
         static let toCalcsArchive     = "calcsArchive"
         static let toPay              = "financePay"
+        static let toHistory          = "payHistory"
     }
     
     struct fromFinanceDebtArchiveVC {

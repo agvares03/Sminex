@@ -1960,6 +1960,7 @@ private final class RequestAddCellData: MainDataProtocol {
 final class ForPayCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UILabel!
+    @IBOutlet private weak var titleDrob:   UILabel!
     @IBOutlet private weak var date:    UILabel!
     @IBOutlet private weak var pay:     UIButton!
     
@@ -1970,12 +1971,33 @@ final class ForPayCell: UICollectionViewCell {
         if (defaults.bool(forKey: "denyTotalOnlinePayments")) || item.title == "0 ₽"{
             pay.isHidden = true
         }
-        
-        title.text  = item.title
+        let d: Double = Double(item.title.replacingOccurrences(of: " ₽", with: ""))!
+        var sum = String(format:"%.2f", d)
+        if d > 999.00 || d < -999.00{
+            let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+        }
+        if sum.first == "-" {
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+        }
+        var am = sum
+        var am2 = sum
+        item.title.forEach{_ in
+            if am.contains(find: "."){
+                am.removeLast()
+            }
+        }
+        item.title.forEach{_ in
+            if am2.contains(find: "."){
+                am2.removeFirst()
+            }
+        }
+        title.text    = am
+        titleDrob.text = "," + am2 + " ₽"
         
         if item.title.contains(find: "-") {
             title.textColor = .green
-        
+            
         } else {
             title.textColor = .black
         }
@@ -1997,7 +2019,7 @@ final class ForPayCell: UICollectionViewCell {
                     cell = cellView
                 }
             }
-
+            
             return cell
         }
     }
