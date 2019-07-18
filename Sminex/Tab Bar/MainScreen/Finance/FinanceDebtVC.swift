@@ -212,9 +212,27 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             cell?.display(title: receipts![indexPath.row].usluga ?? "",
                          desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                          isBold: false)
-            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: isBold ? size.height + 15 : size.height)
+            var lblH: CGFloat = 0
+            if !isBold {
+                let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
+                lblH = heightForView(text: receipts![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
+            } else {
+                let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
+                lblH = heightForView(text: receipts![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
+            }
+            return CGSize(width: view.frame.size.width, height: lblH)
         }
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        print(label.frame.height, width)
+        return label.frame.height
     }
     
     private func getDebt() {
@@ -369,26 +387,44 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
 }
-
+//" ₽"
 final class FinanceDebtHeader: UICollectionReusableView {
     
     @IBOutlet private weak var title: UILabel!
     @IBOutlet private weak var obj_sum: UILabel!
     
     func dispay(_ title: String, _ obj_sum: String) {
+        let d: Double = Double(obj_sum.replacingOccurrences(of: ",", with: "."))!
+        var sum = String(format:"%.2f", d)
+        if d > 999.00 || d < -999.00{
+            let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+        }
+        if sum.first == "-" {
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+        }
         self.title.text = title
-        self.obj_sum.text = obj_sum
+        self.obj_sum.text = sum + " ₽"
     }
 }
 
 final class FinanceDebtCell: UICollectionViewCell {
     
-    @IBOutlet private weak var title:   UILabel!
-    @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet weak var title:   UILabel!
+    @IBOutlet weak var desc:    UILabel!
     
     func display(title: String, desc: String, isBold: Bool) {
+        let d: Double = Double(desc.replacingOccurrences(of: ",", with: "."))!
+        var sum = String(format:"%.2f", d)
+        if d > 999.00 || d < -999.00{
+            let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+        }
+        if sum.first == "-" {
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+        }
         self.title.text = title
-        self.desc.text = desc
+        self.desc.text = sum
         
         if isBold {
             self.title.font = UIFont.boldSystemFont(ofSize: self.title.font.pointSize)
@@ -420,7 +456,7 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
     @IBOutlet private weak var shareLoader: UIActivityIndicatorView!
     @IBOutlet private weak var shareButton: UIButton!
     @IBOutlet private weak var dateLabel:   UILabel!
-    @IBOutlet private weak var btnConst:   NSLayoutConstraint!
+//    @IBOutlet private weak var btnConst:   NSLayoutConstraint!
     @IBOutlet private weak var btnConst1:   NSLayoutConstraint!
     @IBOutlet weak var pay_button: UIButton!
     @IBOutlet weak var pay_QR: UIButton!

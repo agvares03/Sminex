@@ -64,7 +64,16 @@ final class FinanceDebtArchiveCell: UICollectionViewCell {
     @IBOutlet private weak var desc:    UILabel!
     
     fileprivate func display(title: String, desc: String) {
+        let d: Double = Double(desc.replacingOccurrences(of: ",", with: "."))!
+        var sum = String(format:"%.2f", d)
+        if d > 999.00 || d < -999.00{
+            let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+        }
+        if sum.first == "-" {
+            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+        }
         self.title.text = title
-        self.desc.text  = desc
+        self.desc.text  = sum
     }
 }

@@ -90,13 +90,35 @@ final class FinanceCalcCell: UICollectionViewCell {
     @IBOutlet private weak var title:       UILabel!
     
     fileprivate func display(_ item: AccountCalculationsJson) {
+        var sumA = String(format:"%.2f", item.sumAccrued!)
+        if item.sumAccrued! > 999.00 || item.sumAccrued! < -999.00{
+            let i = Int(sumA.distance(from: sumA.startIndex, to: sumA.index(of: ".")!)) - 3
+            sumA.insert(" ", at: sumA.index(sumA.startIndex, offsetBy: i))
+        }
+        if sumA.first == "-" {
+            sumA.insert(" ", at: sumA.index(sumA.startIndex, offsetBy: 1))
+        }
+        sumAccured.text = sumA
         
-//        sumAccured.text = Int(item.sumAccrued ?? 0.0).formattedWithSeparator
-//        sumDebt.text = Int(item.sumDebt ?? 0.0).formattedWithSeparator
-//        sumPay.text = Int(item.sumPay ?? 0.0).formattedWithSeparator
-        sumAccured.text = String(format:"%.2f", item.sumAccrued!)
-        sumDebt.text = String(format:"%.2f", item.sumDebt!)
-        sumPay.text = String(format:"%.2f", item.sumPay!)
+        var sumD = String(format:"%.2f", item.sumDebt!)
+        if item.sumDebt! > 999.00 || item.sumDebt! < -999.00{
+            let i = Int(sumD.distance(from: sumD.startIndex, to: sumD.index(of: ".")!)) - 3
+            sumD.insert(" ", at: sumD.index(sumD.startIndex, offsetBy: i))
+        }
+        if sumD.first == "-" {
+            sumD.insert(" ", at: sumD.index(sumD.startIndex, offsetBy: 1))
+        }
+        sumDebt.text = sumD
+        
+        var sumP = String(format:"%.2f", item.sumPay!)
+        if item.sumPay! > 999.00 || item.sumPay! < -999.00{
+            let i = Int(sumP.distance(from: sumP.startIndex, to: sumP.index(of: ".")!)) - 3
+            sumP.insert(" ", at: sumP.index(sumP.startIndex, offsetBy: i))
+        }
+        if sumP.first == "-" {
+            sumP.insert(" ", at: sumP.index(sumP.startIndex, offsetBy: 1))
+        }
+        sumPay.text = sumP
         title.text = item.type
         
         if item.type == "Итого" {
