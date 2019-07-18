@@ -1,15 +1,14 @@
 //
-//  FinanceCalcsArchiveVC.swift
+//  FinanceCalcsArchiveVCComm.swift
 //  Sminex
 //
-//  Created by IH0kN3m on 4/15/18.
-//  Copyright © 2018 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 18/07/2019.
 //
 
 import UIKit
 import ExpyTableView
 
-final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
+class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
     @IBOutlet private weak var table:   ExpyTableView!
     
@@ -69,7 +68,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
     
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveYearCell") as! FinanceCalcsArchiveYearCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveYearCommCell") as! FinanceCalcsArchiveYearCommCell
         cell.display(dataFilt[section].sectionName)
         
         //do other header related calls or settups
@@ -77,7 +76,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 && (Double((debt?.sumPay)!) < 0.00){
+        if section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
             return dataFilt[section].filteredData.count + 2
         }else{
             return dataFilt[section].filteredData.count + 1
@@ -89,7 +88,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 && (Double((debt?.sumPay)!) < 0.00){
+        if indexPath.section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
             if indexPath.row > 0{
                 index = indexPath.row - 2
                 section = indexPath.section
@@ -106,8 +105,8 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveCell") as! FinanceCalcsArchiveCell
-        if indexPath.section == 0 && indexPath.row == 1 && (Double((debt?.sumPay)!) < 0.00){
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveCommCell") as! FinanceCalcsArchiveCommCell
+        if indexPath.section == 0 && indexPath.row == 1 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
             var sum = String(format:"%.2f", debt!.sumPay!)
             if Double(debt!.sumPay!) > 999.00 || Double(debt!.sumPay!) < -999.00{
                 let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
@@ -117,7 +116,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
         } else {
             var debt = 0.0
             var currDate = (0, 0)
-            if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00){
+            if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
                 currDate = (dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet, dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet) as! (Int, Int)
             }else{
                 currDate = (dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet, dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet) as! (Int, Int)
@@ -129,12 +128,12 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
             }
 //            if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
                 var year = ""
-                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00){
+                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
                     year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet ?? 0)"
                 }else{
                     year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet ?? 0)"
                 }
-                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00){
+                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
                     if dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet! > 2000{
                         year.removeFirst()
                         year.removeFirst()
@@ -154,7 +153,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
                     sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
                 }
                 if debt == 0.00{
-                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00){
+                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
                                      desc: "Оплачено")
                     }else{
@@ -162,7 +161,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
                                      desc: "Оплачено")
                     }
                 }else if debt > 0.00{
-                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00){
+                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
                                      desc: "Задолженность " + sum)
                     }else{
@@ -170,7 +169,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
                                      desc: "Задолженность " + sum)
                     }
                 }else{
-                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00){
+                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"){
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
                                      desc: sum)
                     }else{
@@ -180,7 +179,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
                 }
 //            }else{
 //                cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " \(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet ?? 0)",
-//                desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
+//                    desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
 //            }
         }
         return cell
@@ -190,12 +189,12 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
         
         if state == .willExpand {
             let index = IndexPath(row: 0, section: section)
-            let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCell
+            let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCommCell
             cell.expand(true)
             
         } else if state == .willCollapse {
             let index = IndexPath(row: 0, section: section)
-            let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCell
+            let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCommCell
             cell.expand(false)
         }
     }
@@ -244,7 +243,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
     }
 }
 
-final class FinanceCalcsArchiveCell: UITableViewCell {
+final class FinanceCalcsArchiveCommCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
@@ -267,7 +266,7 @@ final class FinanceCalcsArchiveCell: UITableViewCell {
         }
     }
 }
-final class FinanceCalcsArchiveYearCell: UITableViewCell {
+final class FinanceCalcsArchiveYearCommCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet weak var img: UIImageView!

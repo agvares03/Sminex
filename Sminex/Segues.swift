@@ -178,6 +178,8 @@ struct Segues {
         static let toDeals           = "deals"
         static let toFinance         = "finance"
         static let toFinancePay      = "pay"
+        static let toFinanceComm     = "financeComm"
+        static let toFinancePayComm  = "payComm"
         static let toNews            = "news"
         static let toNewsWAnim       = "newsWAnim"
         static let toRequestAnim     = "requestAnim"

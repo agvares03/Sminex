@@ -525,6 +525,7 @@
                         <segue destination="LnE-VV-eWZ" kind="show" identifier="news" id="8he-B8-Gnd"/>
                         <segue destination="AM0-AH-4YQ" kind="show" identifier="ukServices" id="LcX-Ak-6db"/>
                         <segue destination="IEv-8l-sOU" kind="show" identifier="support" id="Yz8-9Z-vaj"/>
+                        <segue destination="Ges-82-KDd" kind="show" identifier="financeComm" id="N5g-VE-Zg6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xr4-pA-C4F" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1293,6 +1294,8 @@
                         <segue destination="eYO-6E-I6z" kind="show" identifier="admission" id="3MS-X7-XIv"/>
                         <segue destination="W5r-NX-ZHd" kind="show" identifier="dealsList" id="ezo-dP-VPL"/>
                         <segue destination="rgD-LZ-Fl0" kind="show" identifier="login_activity" id="6VF-iA-wXk"/>
+                        <segue destination="0wj-KN-t0z" kind="show" identifier="payComm" id="v3e-6m-Ep5"/>
+                        <segue destination="Ges-82-KDd" kind="show" identifier="financeComm" id="cut-Ue-rY9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iaa-22-iNE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1357,7 +1360,7 @@
                 <viewControllerPlaceholder storyboardName="Finance" referencedIdentifier="FinancePay" id="F1c-aq-S8Y" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rDa-8g-6AJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2742" y="-687"/>
+            <point key="canvasLocation" x="3122" y="-911"/>
         </scene>
         <!--UINavigationController-yke-5M-97h-->
         <scene sceneID="rNH-ea-17N">
@@ -1423,7 +1426,7 @@
                 <viewControllerPlaceholder storyboardName="Finance" id="WAZ-2P-F0t" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="93D-iD-1Ry" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2741" y="-561"/>
+            <point key="canvasLocation" x="3104" y="-807"/>
         </scene>
         <!--News-->
         <scene sceneID="mbE-pK-eJg">
@@ -1545,6 +1548,22 @@
             </objects>
             <point key="canvasLocation" x="-639.375" y="-1733.4507042253522"/>
         </scene>
+        <!--FinancePay-->
+        <scene sceneID="ueI-Sx-C61">
+            <objects>
+                <viewControllerPlaceholder storyboardName="FinanceComm" referencedIdentifier="FinancePay" id="0wj-KN-t0z" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FHI-xx-EgT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3210" y="-858"/>
+        </scene>
+        <!--FinanceComm-->
+        <scene sceneID="3Oa-LG-FfY">
+            <objects>
+                <viewControllerPlaceholder storyboardName="FinanceComm" id="Ges-82-KDd" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Osk-ul-F1o" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3194" y="-755"/>
+        </scene>
     </scenes>
     <resources>
         <image name="arrow_right" width="40" height="65"/>
@@ -1558,11 +1577,12 @@
         <image name="sminex_logo.png" width="582" height="126"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ggi-Bk-Rzm"/>
+        <segue reference="N5g-VE-Zg6"/>
+        <segue reference="8he-B8-Gnd"/>
         <segue reference="efl-bX-pxf"/>
-        <segue reference="E5J-g1-PDx"/>
-        <segue reference="JHZ-fd-xvP"/>
+        <segue reference="AB9-zB-ayT"/>
+        <segue reference="t3B-Fb-YCZ"/>
         <segue reference="6VF-iA-wXk"/>
-        <segue reference="FAf-8f-1ee"/>
+        <segue reference="5gl-5c-IU0"/>
     </inferredMetricsTieBreakers>
 </document>
