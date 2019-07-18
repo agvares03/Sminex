@@ -59,14 +59,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             0 : CellsHeaderData(title: "Счетчики"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")],
         3 : [
-            0 : CellsHeaderData(title: "Новости")
-        ],
-        4 : [
-            0 : CellsHeaderData(title: "Опросы")
-        ],
-        5 : [
             0 : CellsHeaderData(title: "Акции и предложения"),
             1 : StockCellData(images: [])
+        ],
+        4 : [
+            0 : CellsHeaderData(title: "Новости")
+        ],
+        5 : [
+            0 : CellsHeaderData(title: "Опросы")
         ],
         6 : [
             0 : CellsHeaderData(title: "Версия"),
@@ -423,10 +423,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 4 && questionSize != nil {
+        if section == 5 && questionSize != nil {
             return 0
             
-        } else if section == 3 && newsSize != nil {
+        } else if section == 4 && newsSize != nil {
             return 0
         } else if section == 0 {
             return (data[section]?.count ?? 2) - 1
@@ -692,14 +692,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if section == 4 && questionSize != nil {
+        if section == 5 && questionSize != nil {
             return CGSize(width: 0.0, height: 0.0)
             
-        } else if section == 3 && newsSize != nil {
+        } else if section == 4 && newsSize != nil {
             return CGSize(width: 0.0, height: 0.0)
-        } else if section == 5 && dealsSize == nil {
+        } else if section == 3 && dealsSize == nil {
             return CGSize(width: 0.0, height: 0.0)
-        } else if section == 5 {
+        } else if section == 3 {
             return CGSize(width: view.frame.size.width, height: 35.0)
         } else {
             return CGSize(width: view.frame.size.width, height: 50.0)
@@ -964,8 +964,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     } else {
                         self.questionSize = nil
                         DispatchQueue.main.sync {
-                            self.data.removeValue(forKey: 4)
-                            self.data[4] = [0:CellsHeaderData(title: "Опросы")]
+                            self.data.removeValue(forKey: 5)
+                            self.data[5] = [0:CellsHeaderData(title: "Опросы")]
                             var count = 1
                             filtered.forEach {
                                 
@@ -997,9 +997,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                 }
                                 
                                 if isAnsvered {
-                                    self.data[4]![count] = SurveyCellData(title: $0.name ?? "", question: "Вы начали опрос")
+                                    self.data[5]![count] = SurveyCellData(title: $0.name ?? "", question: "Вы начали опрос")
                                 } else {
-                                    self.data[4]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
+                                    self.data[5]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
                                 }
                                 
                                 count += 1
@@ -1056,13 +1056,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             if (self.deals.count == 0) {
                 self.dealsSize = nil
-                self.data[5]![1] = StockCellData(images: [])
+                self.data[3]![1] = StockCellData(images: [])
             } else {
                 self.dealsSize = CGSize(width: 0, height: 0)
                 self.deals.forEach {
                     imgs.append( $0.img ?? UIImage() )
                 }
-                self.data[5]![1] = StockCellData(images: imgs)
+                self.data[3]![1] = StockCellData(images: imgs)
                 TemporaryHolder.instance.menuDeals = imgs.count
                 
                 #if DEBUG
@@ -1217,17 +1217,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         let startMonth = calendar.component(.month, from: currentDate)
                         let startYear = calendar.component(.year, from: currentDate)
                         if i < 3 && item.isDraft == false{
-                            //                            self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                            //                            self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                             if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                                self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                             }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                                self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                             }
                             i += 1
                         }
                     }
                     
-                    if (self.data[3]?.count ?? 0) < 2 {
+                    if (self.data[4]?.count ?? 0) < 2 {
                         self.newsSize = CGSize(width: 0, height: 0)
                         
                     } else {
@@ -1245,12 +1245,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
-                    //                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                    //                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                 }
             }
             
-            if (self.data[3]?.count ?? 0) < 2 {
+            if (self.data[4]?.count ?? 0) < 2 {
                 self.newsSize = CGSize(width: 0, height: 0)
                 
             } else {
@@ -1306,17 +1306,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     let startMonth = calendar.component(.month, from: currentDate)
                     let startYear = calendar.component(.year, from: currentDate)
                     if i < 3 && item.isDraft == false{
-                        //                            self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                        //                            self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                         if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                            self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                         }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                            self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                         }
                         i += 1
                     }
                 }
                 
-                if (self.data[3]?.count ?? 0) < 2 {
+                if (self.data[4]?.count ?? 0) < 2 {
                     self.newsSize = CGSize(width: 0, height: 0)
                     
                 } else {
@@ -1334,12 +1334,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
-                    //                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                    //                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                 }
             }
             
-            if (self.data[3]?.count ?? 0) < 2 {
+            if (self.data[4]?.count ?? 0) < 2 {
                 self.newsSize = CGSize(width: 0, height: 0)
                 
             } else {
@@ -1372,12 +1372,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             //
             //                for (ind, item) in self.filteredNews.enumerated() {
             //                    if ind < 3 {
-            ////                        self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-            //                        self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+            ////                        self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+            //                        self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
             //                    }
             //                }
             //
-            //                if (self.data[3]?.count ?? 0) < 2 {
+            //                if (self.data[4]?.count ?? 0) < 2 {
             //                    self.newsSize = CGSize(width: 0, height: 0)
             //
             //                } else {
@@ -1487,7 +1487,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if method == "Questions" {
             DispatchQueue.main.async {
-                self.data[4] = [0 : CellsHeaderData(title: "Опросы")]
+                self.data[5] = [0 : CellsHeaderData(title: "Опросы")]
                 self.collection.reloadData()
             }
             fetchQuestions()
