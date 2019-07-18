@@ -220,15 +220,15 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
         } else if number_month == 2 {
             return "Фев"
         } else if number_month == 3 {
-            return "Март"
+            return "Мар"
         } else if number_month == 4 {
             return "Апр"
         } else if number_month == 5 {
             return "Май"
         } else if number_month == 6 {
-            return "Июнь"
+            return "Июн"
         } else if number_month == 7 {
-            return "Июль"
+            return "Июл"
         } else if number_month == 8 {
             return "Авг"
         } else if number_month == 9 {
