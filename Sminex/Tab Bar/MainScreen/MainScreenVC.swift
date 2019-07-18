@@ -51,27 +51,27 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var canCount = true
     private var data: [Int:[Int:MainDataProtocol]] = [
         0 : [
-            0 : CellsHeaderData(title: "Опросы")
-            ],
-        1 : [
-            0 : CellsHeaderData(title: "Новости")
-            ],
-        2 : [
-            0 : CellsHeaderData(title: "Акции и предложения"),
-            1 : StockCellData(images: [])
-            ],
-        3 : [
             0 : CellsHeaderData(title: "Заявки")],
-        4 : [
+        1 : [
             0 : CellsHeaderData(title: "К оплате")
-            ],
-        5 : [
+        ],
+        2 : [
             0 : CellsHeaderData(title: "Счетчики"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")],
+        3 : [
+            0 : CellsHeaderData(title: "Новости")
+        ],
+        4 : [
+            0 : CellsHeaderData(title: "Опросы")
+        ],
+        5 : [
+            0 : CellsHeaderData(title: "Акции и предложения"),
+            1 : StockCellData(images: [])
+        ],
         6 : [
             0 : CellsHeaderData(title: "Версия"),
             1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
-//            1 : VersionCellData()]]
+    //            1 : VersionCellData()]]
     private var questionSize:   CGSize?
     private var newsSize:       CGSize?
     private var dealsSize:      CGSize?
@@ -166,15 +166,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.global(qos: .background).async {
                 let res = self.getRequests()
-                var count = 1
+                var count = 2
                 sleep(2)
                 DispatchQueue.main.sync {
-                    self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                    self.data[0] = [0 : CellsHeaderData(title: "Заявки")]
+                    self.data[0]![1] = RequestAddCellData(title: "Оставить заявку")
                     res.forEach {
-                        self.data[3]![count] = $0
+                        self.data[0]![count] = $0
                         count += 1
                     }
-                    self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
                     self.collection.reloadData()
                 }
             }
@@ -202,37 +202,37 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         updateUserInterface()
         if UserDefaults.standard.bool(forKey: "backBtn"){
             self.viewDidLoad()
-//            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
-//            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                DispatchQueue.global(qos: .background).async {
-//                    let res = self.getRequests()
-//                    var count = 1
-//                    sleep(2)
-//                    DispatchQueue.main.sync {
-//                        self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
-//                        res.forEach {
-//                            self.data[3]![count] = $0
-//                            count += 1
-//                        }
-//                        self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
-//                        self.collection.reloadData()
-//                    }
-//                }
-//
-//                self.get_info_business_center()
-//                self.fetchQuestions()
-//                self.fetchDeals()
-//                self.fetchDebt()
-//                self.fetchNews()
-//                DispatchQueue.main.async {
-//                    if #available(iOS 10.0, *) {
-//                        self.collection.refreshControl?.endRefreshing()
-//                    } else {
-//                        self.refreshControl?.endRefreshing()
-//                    }
-//                }
-//            }
+            //            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
+            //            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
+            //            DispatchQueue.global(qos: .userInitiated).async {
+            //                DispatchQueue.global(qos: .background).async {
+            //                    let res = self.getRequests()
+            //                    var count = 1
+            //                    sleep(2)
+            //                    DispatchQueue.main.sync {
+            //                        self.data[0] = [0 : CellsHeaderData(title: "Заявки")]
+            //                        res.forEach {
+            //                            self.data[0]![count] = $0
+            //                            count += 1
+            //                        }
+            //                        self.data[0]![count] = RequestAddCellData(title: "Оставить заявку")
+            //                        self.collection.reloadData()
+            //                    }
+            //                }
+            //
+            //                self.get_info_business_center()
+            //                self.fetchQuestions()
+            //                self.fetchDeals()
+            //                self.fetchDebt()
+            //                self.fetchNews()
+            //                DispatchQueue.main.async {
+            //                    if #available(iOS 10.0, *) {
+            //                        self.collection.refreshControl?.endRefreshing()
+            //                    } else {
+            //                        self.refreshControl?.endRefreshing()
+            //                    }
+            //                }
+            //            }
         }
         UserDefaults.standard.set(false, forKey: "backBtn")
         tabBarController?.tabBar.tintColor = .black
@@ -252,7 +252,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
         request.httpMethod = "GET"
-//        print(request)
+        //        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -263,12 +263,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
                 
                 DispatchQueue.main.sync {
-//                    self.present(alert, animated: true, completion: nil)
+                    //                    self.present(alert, animated: true, completion: nil)
                 }
                 return
             }
             #if DEBUG
-//            print(String(data: data!, encoding: .utf8)!)
+            //            print(String(data: data!, encoding: .utf8)!)
             
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
@@ -310,7 +310,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 dateFormatter.dateFormat = "LLLL yyyy"
                 //            dateFormatter.setLocalizedDateFormatFromTemplate("ru-Ru")
                 let nameOfMonth = dateFormatter.string(from: now as Date)
-                self.data[5]![1] = SchetCellData(title: "", date: "Передача показаний за \(nameOfMonth)")
+                self.data[2]![1] = SchetCellData(title: "", date: "Передача показаний за \(nameOfMonth)")
                 
             } else {
                 let dateFormatter = DateFormatter()
@@ -379,43 +379,43 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             leftDays = (dateTo - dateTimeComponents.day!) + 1
                         }
                         if leftDays == 1 {
-                            self.data[5]![1] = SchetCellData(title: "Остался \(leftDays) день для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                            self.data[2]![1] = SchetCellData(title: "Остался \(leftDays) день для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                             
                         } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
-                            self.data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                            self.data[2]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                             
                         } else {
-                            self.data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                            self.data[2]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                         }
                     }else{
                         leftDays = dateTo - dateTimeComponents.day!
                         if leftDays == 1 {
-                            self.data[5]![1] = SchetCellData(title: "Остался \(leftDays) день для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                            self.data[2]![1] = SchetCellData(title: "Остался \(leftDays) день для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                             
                         } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
-                            self.data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                            self.data[2]![1] = SchetCellData(title: "Осталось \(leftDays) дня для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                             
                         } else {
-                            self.data[5]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                            self.data[2]![1] = SchetCellData(title: "Осталось \(leftDays) дней для передачи показаний", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                         }
                     }
                 }else if leftDays == 1 {
                     if dateTimeComponents.day! > dateTo{
-                        self.data[5]![1] = SchetCellData(title: "До передачи показаний остался \(leftDays) день", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                        self.data[2]![1] = SchetCellData(title: "До передачи показаний остался \(leftDays) день", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                     }else{
-                        self.data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) день", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                        self.data[2]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) день", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                     }
                 } else if leftDays == 2 || leftDays == 3 || leftDays == 4 {
                     if dateTimeComponents.day! > dateTo{
-                        self.data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дня", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                        self.data[2]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дня", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                     }else{
-                        self.data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дня", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                        self.data[2]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дня", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                     }
                 } else {
                     if dateTimeComponents.day! > dateTo{
-                        self.data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дней", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
+                        self.data[2]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дней", date: "Передача с \(dateFormatter.string(from: startDate!)) по \(dateFormatter.string(from: endDate!))")
                     }else{
-                        self.data[5]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дней", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
+                        self.data[2]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дней", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                     }
                 }
             }
@@ -423,14 +423,16 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 && questionSize != nil {
+        if section == 4 && questionSize != nil {
             return 0
             
-        } else if section == 1 && newsSize != nil {
+        } else if section == 3 && newsSize != nil {
             return 0
+        } else if section == 0 {
+            return (data[section]?.count ?? 2) - 1
         } else if data.keys.contains(section) {
             return (data[section]?.count ?? 2) - 1
-        
+            
         } else {
             return 0
         }
@@ -450,46 +452,46 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-//        if kind == UICollectionElementKindSectionHeader {
+        //        if kind == UICollectionElementKindSectionHeader {
         
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CellsHeader", for: indexPath) as! CellsHeader
-//        if  indexPath.section != 4 && self.debtSize == nil{
-            header.display(data[indexPath.section]![0] as! CellsHeaderData, delegate: self)
-//        } else {
-//            header.frame.size.height = 0
-//        }
-            header.frame.size.width = view.frame.size.width - 32
-            header.frame.origin.x = 16
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CellsHeader", for: indexPath) as! CellsHeader
+        //        if  indexPath.section != 4 && self.debtSize == nil{
+        header.display(data[indexPath.section]![0] as! CellsHeaderData, delegate: self)
+        //        } else {
+        //            header.frame.size.height = 0
+        //        }
+        header.frame.size.width = view.frame.size.width - 32
+        header.frame.origin.x = 16
         
-            if header.title.text == "Акции и предложения" {
-                header.backgroundColor = .clear
-            } else if header.title.text == "Версия" {
-                header.backgroundColor = .clear
-                header.title.text = ""
-            }  else {
-                header.backgroundColor = .white
-            }
-            
-            if #available(iOS 11.0, *) {
-                header.clipsToBounds = false
-                header.layer.cornerRadius = 4
-                header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            } else {
-                let rectShape = CAShapeLayer()
-                rectShape.bounds = header.frame
-                rectShape.position = header.center
-                rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
-                header.layer.mask = rectShape
-            }
+        if header.title.text == "Акции и предложения" {
+            header.backgroundColor = .clear
+        } else if header.title.text == "Версия" {
+            header.backgroundColor = .clear
+            header.title.text = ""
+        }  else {
+            header.backgroundColor = .white
+        }
+        
+        if #available(iOS 11.0, *) {
+            header.clipsToBounds = false
+            header.layer.cornerRadius = 4
+            header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        } else {
+            let rectShape = CAShapeLayer()
+            rectShape.bounds = header.frame
+            rectShape.position = header.center
+            rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+            header.layer.mask = rectShape
+        }
         return header
-
-//        } else {
-            
-//            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "EnableCell", for: indexPath) as! EnableCell
-//            footer.display("")
-//            return footer
-            
-//        }
+        
+        //        } else {
+        
+        //            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "EnableCell", for: indexPath) as! EnableCell
+        //            footer.display("")
+        //            return footer
+        
+        //        }
         
     }
     
@@ -502,16 +504,16 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! SurveyCellData, indexPath: indexPath, delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
             return CGSize(width: view.frame.size.width - 32, height: size.height)
-        
+            
         } else if title == "Новости" {
             let cell = NewsCell.fromNib(viewWidth: view.frame.size.width)
             cell?.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
             return CGSize(width: view.frame.size.width - 32, height: size.height)
-        
+            
         } else if title == "Акции и предложения" {
             if (self.dealsSize == nil) {
-//                self.dealsSize = CGSize(width: view.frame.size.width, height: 204.0)
+                //                self.dealsSize = CGSize(width: view.frame.size.width, height: 204.0)
                 return CGSize(width: view.frame.size.width, height: 1.0)
             } else {
                 let points = Double(UIScreen.pixelsPerInch ?? 0.0)
@@ -524,8 +526,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return CGSize(width: view.frame.size.width, height: 204.0)
             }
         } else if title == "Заявки" {
-            if indexPath.row == data[indexPath.section]!.count - 2 {
-                return CGSize(width: view.frame.size.width - 32, height: 70.0)
+            if indexPath.row == 0 {
+                return CGSize(width: view.frame.size.width - 32, height: 50.0)
             }
             let cell = RequestCell.fromNib(viewSize: collection.frame.size.width)
             if let requestData = data[indexPath.section]![indexPath.row + 1] as? RequestCellData {
@@ -533,7 +535,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
             return CGSize(width: view.frame.size.width - 32, height: size.height + 3)
-        
+            
         } else if title == "К оплате" {
             if busines_center_denyTotalOnlinePayments == true || business_center_info == true || self.payNil {
                 return CGSize(width: view.frame.size.width - 32, height: 67.0)
@@ -549,7 +551,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             return CGSize(width: view.frame.size.width - 32, height: size.height)
         } else if title == "Версия" {
-
+            
             return CGSize(width: view.frame.size.width - 32, height: 0.0)
             
         } else {
@@ -578,7 +580,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
             return cell
-        
+            
         } else if title == "Новости" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCell", for: indexPath) as! NewsCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! NewsCellData, isLast: data[indexPath.section]!.count == indexPath.row + 2)
@@ -597,23 +599,23 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             
             return cell
-        
+            
         } else if title == "Акции и предложения" {
             
-//            if (self.dealsSize == nil) {
-//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EnableCell", for: indexPath) as! EnableCell
-//                return cell
-//            } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StockCell", for: indexPath) as! StockCell
-                cell.display(data[indexPath.section]![indexPath.row + 1] as! StockCellData, delegate: self, indexPath: indexPath)
+            //            if (self.dealsSize == nil) {
+            //                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EnableCell", for: indexPath) as! EnableCell
+            //                return cell
+            //            } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StockCell", for: indexPath) as! StockCell
+            cell.display(data[indexPath.section]![indexPath.row + 1] as! StockCellData, delegate: self, indexPath: indexPath)
             return cell
-//            }
-        
+            //            }
+            
         } else if title == "Заявки" {
             
-            if indexPath.row == data[indexPath.section]!.count - 2 {
+            if indexPath.row == 0 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestAddCell", for: indexPath) as! RequestAddCell
-                cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestAddCellData, delegate: self)
+                cell.display(data[indexPath.section]![1] as! RequestAddCellData, delegate: self)
                 if #available(iOS 11.0, *) {
                     cell.clipsToBounds = false
                     cell.layer.cornerRadius = 4
@@ -634,7 +636,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 return cell
             }
-        
+            
         } else if title == "К оплате" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ForPayCell", for: indexPath) as! ForPayCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! ForPayCellData)
@@ -652,7 +654,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
             return cell
-        
+            
         } else if title == "Счетчики" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SchetCell", for: indexPath) as! SchetCell
             cell.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData, delegate: self)
@@ -672,10 +674,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return cell
             
         } else if title == "Версия" {
-
+            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VersionCell", for: indexPath) as! VersionCell
             return cell
-        
+            
         } else {
             return SurveyCell()
         }
@@ -690,14 +692,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if section == 0 && questionSize != nil {
+        if section == 4 && questionSize != nil {
             return CGSize(width: 0.0, height: 0.0)
-        
-        } else if section == 1 && newsSize != nil {
+            
+        } else if section == 3 && newsSize != nil {
             return CGSize(width: 0.0, height: 0.0)
-        } else if section == 2 && dealsSize == nil {
+        } else if section == 5 && dealsSize == nil {
             return CGSize(width: 0.0, height: 0.0)
-        } else if section == 2 {
+        } else if section == 5 {
             return CGSize(width: view.frame.size.width, height: 35.0)
         } else {
             return CGSize(width: view.frame.size.width, height: 50.0)
@@ -708,16 +710,16 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if let cell = collection.cellForItem(at: indexPath) as? SurveyCell {
             surveyName = cell.title.text ?? ""
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestionAnim, sender: self)
-        
+            
         } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
-        
+            
         } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
             tappedNews = self.filteredNews[safe: indexPath.row]
             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
-        
+            
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
-            self.requestId = (self.data[3]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
+            self.requestId = (self.data[0]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
             appsUser = AppsUser()
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
@@ -738,7 +740,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
             }
-//
+            //
         }
     }
     
@@ -746,7 +748,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         if name == "Заявки" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toRequest, sender: self)
-        
+            
         } else if name == "Передать показания" {
             if canCount {
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
@@ -755,18 +757,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if name == "Счетчики" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
             
-        } else if name == "Добавить заявку" {
+        } else if name == "Оставить заявку" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toCreateRequest, sender: self)
-        
+            
         } else if name == "Опросы" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestions, sender: self)
-        
+            
         } else if name == "Акции и предложения" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toDealsList, sender: self)
-        
+            
         } else if name == "К оплате" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
-        
+            
         } else if name == "Новости" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toNews, sender: self)
         }
@@ -781,14 +783,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         DispatchQueue.global(qos: .background).async {
             let res = self.getRequests()
-            var count = 1
+            var count = 2
             DispatchQueue.main.sync {
-                self.data[3] = [0 : CellsHeaderData(title: "Заявки")]
+                self.data[0] = [0 : CellsHeaderData(title: "Заявки")]
+                self.data[0]![1] = RequestAddCellData(title: "Оставить заявку")
                 res.forEach {
-                    self.data[3]![count] = $0
+                    self.data[0]![count] = $0
                     count += 1
                 }
-                self.data[3]![count] = RequestAddCellData(title: "Добавить заявку")
                 self.collection.reloadData()
             }
         }
@@ -806,7 +808,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
             request.httpMethod = "GET"
-//            print(request)
+            //            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -816,7 +818,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 guard data != nil else { return }
                 
-//                print(String(data: data!, encoding: .utf8) ?? "")
+                //                print(String(data: data!, encoding: .utf8) ?? "")
                 if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
                     self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
                     return
@@ -878,7 +880,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             type = $0.name ?? ""
                         }
                     }
-//                    let isPerson = row.name?.contains(find: "ропуск") ?? false
+                    //                    let isPerson = row.name?.contains(find: "ропуск") ?? false
                     let isPerson = type!.contains(find: "ропуск")
                     
                     var persons = ""//row.responsiblePerson ?? ""
@@ -921,7 +923,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
-            }.resume()
+                }.resume()
         }
         
         group.wait()
@@ -962,8 +964,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     } else {
                         self.questionSize = nil
                         DispatchQueue.main.sync {
-                            self.data.removeValue(forKey: 0)
-                            self.data[0] = [0:CellsHeaderData(title: "Опросы")]
+                            self.data.removeValue(forKey: 4)
+                            self.data[4] = [0:CellsHeaderData(title: "Опросы")]
                             var count = 1
                             filtered.forEach {
                                 
@@ -995,9 +997,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                 }
                                 
                                 if isAnsvered {
-                                    self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "Вы начали опрос")
+                                    self.data[4]![count] = SurveyCellData(title: $0.name ?? "", question: "Вы начали опрос")
                                 } else {
-                                    self.data[0]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
+                                    self.data[4]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
                                 }
                                 
                                 count += 1
@@ -1018,7 +1020,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
                 
-            }.resume()
+                }.resume()
         }
     }
     
@@ -1042,7 +1044,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
                 
                 DispatchQueue.main.sync {
-//                    self.present(alert, animated: true, completion: nil)
+                    //                    self.present(alert, animated: true, completion: nil)
                 }
                 return
             }
@@ -1054,17 +1056,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             if (self.deals.count == 0) {
                 self.dealsSize = nil
-                self.data[2]![1] = StockCellData(images: [])
+                self.data[5]![1] = StockCellData(images: [])
             } else {
                 self.dealsSize = CGSize(width: 0, height: 0)
                 self.deals.forEach {
                     imgs.append( $0.img ?? UIImage() )
                 }
-                self.data[2]![1] = StockCellData(images: imgs)
+                self.data[5]![1] = StockCellData(images: imgs)
                 TemporaryHolder.instance.menuDeals = imgs.count
                 
                 #if DEBUG
-//                print(String(data: data!, encoding: .utf8) ?? "")
+                //                print(String(data: data!, encoding: .utf8) ?? "")
                 #endif
                 
             }
@@ -1076,7 +1078,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         let defaults = UserDefaults.standard
         
-        self.data[4]![1] = ForPayCellData(title: defaults.string(forKey: "ForPayTitle") ?? "", date: defaults.string(forKey: "ForPayDate") ?? "")
+        self.data[1]![1] = ForPayCellData(title: defaults.string(forKey: "ForPayTitle") ?? "", date: defaults.string(forKey: "ForPayDate") ?? "")
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
@@ -1093,19 +1095,19 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
             guard data != nil else { return }
-//            if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
-//                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
-//                return
-//            }
+            //            if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+            //                self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
+            //                return
+            //            }
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
                 
                 DispatchQueue.main.sync {
-//                    self.present(alert, animated: true, completion: nil)
+                    //                    self.present(alert, animated: true, completion: nil)
                 }
                 
-//                self.data.removeValue(forKey: 4)
+                //                self.data.removeValue(forKey: 4)
                 
                 let dateFormatter = DateFormatter()
                 let date = Date()
@@ -1125,7 +1127,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     datePay.removeLast(8)
                 }
                 self.payNil = true
-                self.data[4]![1] = ForPayCellData(title: (0).formattedWithSeparator + " ₽", date: datePay)
+                self.data[1]![1] = ForPayCellData(title: (0).formattedWithSeparator + " ₽", date: datePay)
                 defaults.setValue(String(0) + " ₽", forKey: "ForPayTitle")
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()
@@ -1143,12 +1145,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 datePay?.removeLast(9)
             }
             if self.debt?.sumPay == nil{
-                self.data[4]![1] = ForPayCellData(title: (0).formattedWithSeparator + " ₽", date: datePay ?? "")
+                self.data[1]![1] = ForPayCellData(title: (0).formattedWithSeparator + " ₽", date: datePay ?? "")
                 defaults.setValue(String(0) + " ₽", forKey: "ForPayTitle")
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()
             }else{
-                self.data[4]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay ?? "")
+                self.data[1]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay ?? "")
                 defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()
@@ -1158,7 +1160,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
             
             #if DEBUG
-//            print(String(data: data!, encoding: .utf8)!)
+            //            print(String(data: data!, encoding: .utf8)!)
             #endif
             
             }.resume()
@@ -1173,7 +1175,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
                 request.httpMethod = "GET"
-//                print("REQUEST = \(request)")
+                //                print("REQUEST = \(request)")
                 
                 URLSession.shared.dataTask(with: request) {
                     data, error, responce in
@@ -1188,9 +1190,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0)
                     UserDefaults.standard.synchronize()
                     self.filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
-//                    let dateFormatter = DateFormatter()
-//                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-//                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+                    //                    let dateFormatter = DateFormatter()
+                    //                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    //                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
                     var i = 0
                     for (_, item) in self.filteredNews.enumerated() {
                         let dateFormatter = DateFormatter()
@@ -1215,106 +1217,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         let startMonth = calendar.component(.month, from: currentDate)
                         let startYear = calendar.component(.year, from: currentDate)
                         if i < 3 && item.isDraft == false{
-                            //                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                            //                            self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                             if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                             }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                             }
                             i += 1
                         }
                     }
                     
-                    if (self.data[1]?.count ?? 0) < 2 {
-                        self.newsSize = CGSize(width: 0, height: 0)
-                    
-                    } else {
-                        self.newsSize = nil
-                    }
-                    
-                    DispatchQueue.main.sync {
-                        self.collection.reloadData()
-                    }
-                    return
-                }.resume()
-                return
-            }
-            var decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
-            TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
-            for (ind, item) in decodedNewsDict[1]!.enumerated() {
-                if ind < 3 {
-//                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                }
-            }
-
-            if (self.data[1]?.count ?? 0) < 2 {
-                self.newsSize = CGSize(width: 0, height: 0)
-
-            } else {
-                self.newsSize = nil
-            }
-            DispatchQueue.main.sync {
-                self.collection.reloadData()
-            }
-            
-//            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
-                let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
-            
-                var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
-                request.httpMethod = "GET"
-//                print("REQUEST = \(request)")
-            
-                URLSession.shared.dataTask(with: request) {
-                    data, error, responce in
-                    
-                    guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
-                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                        TemporaryHolder.instance.newsNew = NewsJsonData(json: json!)!.data!
-                    }
-                    UserDefaults.standard.set(String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0), forKey: "newsLastId")
-                    
-                    TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0)
-                    UserDefaults.standard.synchronize()
-                    self.filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
-//                    let dateFormatter = DateFormatter()
-//                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-//                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
-                    var i = 0
-                    for (_, item) in self.filteredNews.enumerated() {
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                        var dateStart = Date()
-                        var dateEnd = Date()
-                        if item.dateStart != "" && item.dateEnd != ""{
-                            dateStart = dateFormatter.date(from: item.dateStart!)!
-                            dateEnd = dateFormatter.date(from: item.dateEnd!)!
-                        }
-                        let currentDate = Date()
-                        let calendar = Calendar.current
-                        let currHour = calendar.component(.hour, from: currentDate)
-                        let currMinutes = calendar.component(.minute, from: currentDate)
-                        let currDay = calendar.component(.day, from: currentDate)
-                        let currMonth = calendar.component(.month, from: currentDate)
-                        let currYear = calendar.component(.year, from: currentDate)
-                        
-                        let startHour = calendar.component(.hour, from: dateStart)
-                        let startMinutes = calendar.component(.minute, from: dateStart)
-                        let startDay = calendar.component(.day, from: currentDate)
-                        let startMonth = calendar.component(.month, from: currentDate)
-                        let startYear = calendar.component(.year, from: currentDate)
-                        if i < 3 && item.isDraft == false{
-                            //                            self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                            if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                            }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                                self.data[1]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                            }
-                            i += 1
-                        }
-                    }
-                    
-                    if (self.data[1]?.count ?? 0) < 2 {
+                    if (self.data[3]?.count ?? 0) < 2 {
                         self.newsSize = CGSize(width: 0, height: 0)
                         
                     } else {
@@ -1326,18 +1239,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                     return
                     }.resume()
-//                return
-//            }
-            decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
+                return
+            }
+            var decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
             TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
-                    //                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                    self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                    //                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
                 }
             }
             
-            if (self.data[1]?.count ?? 0) < 2 {
+            if (self.data[3]?.count ?? 0) < 2 {
                 self.newsSize = CGSize(width: 0, height: 0)
                 
             } else {
@@ -1346,49 +1259,138 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             DispatchQueue.main.sync {
                 self.collection.reloadData()
             }
-
-//            let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
-//            let lastId = TemporaryHolder.instance.newsLastId
-//
-////            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
-//            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
-//            request.httpMethod = "GET"
-//            print("REQUEST = \(request)")
-//
-//            URLSession.shared.dataTask(with: request) {
-//                data, error, responce in
-//
-//                guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
-//
-//                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-//                    TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
-//                }
-//                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
-//                TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
-//                UserDefaults.standard.synchronize()
-//                self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
-//
-//                for (ind, item) in self.filteredNews.enumerated() {
-//                    if ind < 3 {
-////                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-//                        self.data[1]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-//                    }
-//                }
-//
-//                if (self.data[1]?.count ?? 0) < 2 {
-//                    self.newsSize = CGSize(width: 0, height: 0)
-//
-//                } else {
-//                    self.newsSize = nil
-//                }
-//
-//                DispatchQueue.main.sync {
-//                    self.collection.reloadData()
-//                }
-//                }.resume()
+            
+            //            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
+            let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
+            
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
+            request.httpMethod = "GET"
+            //                print("REQUEST = \(request)")
+            
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
+                
+                guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    TemporaryHolder.instance.newsNew = NewsJsonData(json: json!)!.data!
+                }
+                UserDefaults.standard.set(String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0), forKey: "newsLastId")
+                
+                TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0)
+                UserDefaults.standard.synchronize()
+                self.filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
+                //                    let dateFormatter = DateFormatter()
+                //                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                //                    self.filteredNews = self.filteredNews.sorted(by: { dateFormatter.date(from: $0.dateStart!)!.compare(dateFormatter.date(from: $1.dateStart!)!) == .orderedAscending })
+                var i = 0
+                for (_, item) in self.filteredNews.enumerated() {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    var dateStart = Date()
+                    var dateEnd = Date()
+                    if item.dateStart != "" && item.dateEnd != ""{
+                        dateStart = dateFormatter.date(from: item.dateStart!)!
+                        dateEnd = dateFormatter.date(from: item.dateEnd!)!
+                    }
+                    let currentDate = Date()
+                    let calendar = Calendar.current
+                    let currHour = calendar.component(.hour, from: currentDate)
+                    let currMinutes = calendar.component(.minute, from: currentDate)
+                    let currDay = calendar.component(.day, from: currentDate)
+                    let currMonth = calendar.component(.month, from: currentDate)
+                    let currYear = calendar.component(.year, from: currentDate)
+                    
+                    let startHour = calendar.component(.hour, from: dateStart)
+                    let startMinutes = calendar.component(.minute, from: dateStart)
+                    let startDay = calendar.component(.day, from: currentDate)
+                    let startMonth = calendar.component(.month, from: currentDate)
+                    let startYear = calendar.component(.year, from: currentDate)
+                    if i < 3 && item.isDraft == false{
+                        //                            self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                        if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
+                            self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                        }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
+                            self.data[3]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                        }
+                        i += 1
+                    }
+                }
+                
+                if (self.data[3]?.count ?? 0) < 2 {
+                    self.newsSize = CGSize(width: 0, height: 0)
+                    
+                } else {
+                    self.newsSize = nil
+                }
+                
+                DispatchQueue.main.sync {
+                    self.collection.reloadData()
+                }
+                return
+                }.resume()
+            //                return
+            //            }
+            decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
+            TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
+            for (ind, item) in decodedNewsDict[1]!.enumerated() {
+                if ind < 3 {
+                    //                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+                    self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                }
+            }
+            
+            if (self.data[3]?.count ?? 0) < 2 {
+                self.newsSize = CGSize(width: 0, height: 0)
+                
+            } else {
+                self.newsSize = nil
+            }
+            DispatchQueue.main.sync {
+                self.collection.reloadData()
+            }
+            
+            //            let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
+            //            let lastId = TemporaryHolder.instance.newsLastId
+            //
+            ////            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login + ((lastId != "" && lastId != "0") ? "&lastId=" + lastId : ""))!)
+            //            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
+            //            request.httpMethod = "GET"
+            //            print("REQUEST = \(request)")
+            //
+            //            URLSession.shared.dataTask(with: request) {
+            //                data, error, responce in
+            //
+            //                guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
+            //
+            //                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+            //                    TemporaryHolder.instance.news?.append(contentsOf: NewsJsonData(json: json!)!.data!)
+            //                }
+            //                UserDefaults.standard.set(String(TemporaryHolder.instance.news?.first?.newsId ?? 0), forKey: "newsLastId")
+            //                TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.news?.first?.newsId ?? 0)
+            //                UserDefaults.standard.synchronize()
+            //                self.filteredNews = TemporaryHolder.instance.news?.filter { $0.isShowOnMainPage ?? false } ?? []
+            //
+            //                for (ind, item) in self.filteredNews.enumerated() {
+            //                    if ind < 3 {
+            ////                        self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
+            //                        self.data[3]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+            //                    }
+            //                }
+            //
+            //                if (self.data[3]?.count ?? 0) < 2 {
+            //                    self.newsSize = CGSize(width: 0, height: 0)
+            //
+            //                } else {
+            //                    self.newsSize = nil
+            //                }
+            //
+            //                DispatchQueue.main.sync {
+            //                    self.collection.reloadData()
+            //                }
+            //                }.resume()
         }
     }
-
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -1396,7 +1398,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let vc = segue.destination as! AppsUser
             vc.isCreatingRequest_ = true
             vc.delegate = self
-        
+            
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
             
             let vc = segue.destination as! UINavigationController
@@ -1405,39 +1407,39 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
             let vc = segue.destination as! AppsUser
             vc.delegate = self
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toSchet {
             let vc = segue.destination as! CounterTableVC
             vc.canCount = canCount
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toQuestionAnim {
             let vc = segue.destination as! QuestionsTableVC
             vc.performName_ = surveyName
             vc.delegate = self
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toQuestions {
             let vc = segue.destination as! QuestionsTableVC
             vc.delegate = self
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toDeals {
             let vc = segue.destination as! DealsListDescVC
             vc.data_ = deals[safe: dealsIndex]
             vc.anotherDeals_ = deals
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
             let vc = segue.destination as! FinancePayAcceptVC
             vc.accountData_ = debt
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toNewsWAnim {
             let vc = segue.destination as! NewsListTVC
             vc.tappedNews = tappedNews
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
             let vc = segue.destination as! AppsUser
             vc.requestId_ = requestId
             vc.xml_ = mainScreenXml
             vc.delegate = self
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toAdmission {
             let vc = segue.destination as! AdmissionVC
             vc.data_ = (appsUser?.admission!)!
@@ -1463,7 +1465,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 appsUser?.xml_ = nil
                 vc.isFromMain_ = true
             }
-        
+            
         } else if segue.identifier == Segues.fromMainScreenVC.toDealsList {
             let vc = segue.destination as! DealsListVC
             vc.data_ = deals
@@ -1482,10 +1484,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if method == "Request" {
             fetchRequests()
-        
+            
         } else if method == "Questions" {
             DispatchQueue.main.async {
-                self.data[0] = [0 : CellsHeaderData(title: "Опросы")]
+                self.data[4] = [0 : CellsHeaderData(title: "Опросы")]
                 self.collection.reloadData()
             }
             fetchQuestions()
@@ -1516,16 +1518,16 @@ final class CellsHeader: UICollectionReusableView {
             (UIDevice.current.modelName.contains(find: "Simulator iPhone SE")) {
             title.font = title.font.withSize(20)
         }
-//
-//        if !item.isNeedDetail {
-//            detail.isHidden = true
-//
-//        } else {
-//            detail.isHidden = false
-//        }
+        //
+        //        if !item.isNeedDetail {
+        //            detail.isHidden = true
+        //
+        //        } else {
+        //            detail.isHidden = false
+        //        }
         
         self.delegate = delegate
-        // programm version 
+        // programm version
         if item.title == "К оплате" || item.title ==  "Счетчики" {
             self.detail.setTitle("Подробнее", for: .normal)
             self.detail.setTitleColor(self.tintColor, for: .normal)
@@ -1611,7 +1613,7 @@ final class NewsCell: UICollectionViewCell {
         
         if isLast {
             divider.isHidden = true
-        
+            
         } else {
             divider.isHidden = false
         }
@@ -1624,9 +1626,9 @@ final class NewsCell: UICollectionViewCell {
             df.locale = Locale(identifier: "en_US_POSIX")
             df.dateFormat = "dd.MM.yyyy HH:mm:ss"
             if dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") {
-//            if dayDifference(from: df.date(from: item.date)!, style: "dd MMMM").contains(find: "Сегодня") {
+                //            if dayDifference(from: df.date(from: item.date)!, style: "dd MMMM").contains(find: "Сегодня") {
                 date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "HH:mm")
-            
+                
             } else {
                 let dateI = df.date(from: item.date)
                 let calendar = Calendar.current
@@ -1810,8 +1812,8 @@ final class RequestCell: UICollectionViewCell {
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
-//            let mySubstring = item.desc.prefix(30)
-//            desc.text   = String(mySubstring)
+            //            let mySubstring = item.desc.prefix(30)
+            //            desc.text   = String(mySubstring)
             desc.text = item.desc
         }
         icon.image  = item.icon
@@ -1823,7 +1825,7 @@ final class RequestCell: UICollectionViewCell {
         date.text = dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
             ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "")
             : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
-
+        
         if item.isBack {
             backTop.constant    = 6
             backBottom.constant = 6
@@ -1840,7 +1842,7 @@ final class RequestCell: UICollectionViewCell {
             stickTitle?.isHidden = true
             stickTitle?.frame.size.height = 0
         }
-
+        
         let currTitle = item.title
         let titleDateString = currTitle.substring(fromIndex: currTitle.length - 19)
         df.dateFormat = "dd.MM.yyyy HH:mm:ss"
@@ -1863,14 +1865,14 @@ final class RequestCell: UICollectionViewCell {
         if isPlusDevices() {
             cell?.title.preferredMaxLayoutWidth = viewSize - 32//cell?.title.bounds.size.width ?? 0.0 + 20
             cell?.desc.preferredMaxLayoutWidth  = viewSize - 48//cell?.desc.bounds.size.width ?? 0.0 + 20
-        
+            
         } else {
             cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-//            cell?.stickTitle.preferredMaxLayoutWidth = cell?.stickTitle.bounds.size.width ?? 0.0
+            //            cell?.stickTitle.preferredMaxLayoutWidth = cell?.stickTitle.bounds.size.width ?? 0.0
             cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width  ?? 0.0
             cell?.stickTitle?.preferredMaxLayoutWidth  = cell?.stickTitle?.bounds.size.width  ?? 0.0
         }
-
+        
         return cell
     }
 }
@@ -1919,15 +1921,10 @@ final class VersionCell: UICollectionViewCell {
 final class RequestAddCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UIButton!
-    @IBOutlet private weak var button:  UIButton!
-    
-    @IBAction private func pressed(_ sender: UIButton!) {
-        delegate?.tapped(name: "Добавить заявку")
-    }
     
     
     @IBAction func addRequestByTitle(_ sender: Any) {
-        delegate?.tapped(name: "Добавить заявку")
+        delegate?.tapped(name: "Оставить заявку")
     }
     
     private var delegate: CellsDelegate?
@@ -1940,11 +1937,6 @@ final class RequestAddCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        button.layer.masksToBounds = false
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        button.layer.shadowOpacity = 0.2
     }
 }
 

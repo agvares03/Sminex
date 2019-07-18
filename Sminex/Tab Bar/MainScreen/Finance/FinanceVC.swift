@@ -377,6 +377,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             return 220.0
         
         } else {
+            if view.frame.size.width == 320 && indexPath.section == 2 && indexPath.row != 0{
+                return 60.0
+            }
             return 50.0
         }
         

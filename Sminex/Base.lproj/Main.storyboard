@@ -1164,52 +1164,24 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gf-kX-y7V">
-                                                    <rect key="frame" x="24" y="4" width="134" height="33"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <state key="normal" title="Добавить заявку"/>
+                                                    <rect key="frame" x="16" y="4" width="285" height="33"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                    <state key="normal" title="Оставить заявку">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
                                                     <connections>
                                                         <action selector="addRequestByTitle:" destination="kG0-BY-9uh" eventType="touchUpInside" id="S5l-ZZ-6o5"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QNM-TV-VOc">
-                                                    <rect key="frame" x="206" y="0.5" width="103" height="40"/>
-                                                    <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="40" id="oha-EB-ssQ"/>
-                                                        <constraint firstAttribute="width" constant="103" id="y37-Ye-a9Y"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                    <state key="normal">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </state>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="20"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                    <connections>
-                                                        <action selector="pressed:" destination="kG0-BY-9uh" eventType="touchUpInside" id="ehE-Z4-a0j"/>
-                                                    </connections>
-                                                </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plusIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Fl1-DD-wac">
-                                                    <rect key="frame" x="250.5" y="13.5" width="14" height="14"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="14" id="Tbe-lk-YL6"/>
-                                                        <constraint firstAttribute="height" constant="14" id="xvS-E1-92n"/>
-                                                    </constraints>
-                                                </imageView>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="leading" secondItem="kG0-BY-9uh" secondAttribute="leadingMargin" constant="8" id="5Su-cQ-TcW"/>
-                                            <constraint firstAttribute="trailing" secondItem="QNM-TV-VOc" secondAttribute="trailing" constant="8" id="Ed2-fb-Otq"/>
-                                            <constraint firstItem="QNM-TV-VOc" firstAttribute="centerY" secondItem="kG0-BY-9uh" secondAttribute="centerY" id="Iie-xI-McX"/>
-                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="centerY" secondItem="QNM-TV-VOc" secondAttribute="centerY" id="PMK-9Y-S4f"/>
-                                            <constraint firstItem="Fl1-DD-wac" firstAttribute="centerY" secondItem="QNM-TV-VOc" secondAttribute="centerY" id="eqv-XW-tHG"/>
-                                            <constraint firstItem="QNM-TV-VOc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8gf-kX-y7V" secondAttribute="trailing" constant="15" id="qBT-d9-IOq"/>
-                                            <constraint firstItem="Fl1-DD-wac" firstAttribute="centerX" secondItem="QNM-TV-VOc" secondAttribute="centerX" id="uDj-1r-Ohd"/>
+                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="leading" secondItem="kG0-BY-9uh" secondAttribute="leading" constant="16" id="5Su-cQ-TcW"/>
+                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="top" secondItem="kG0-BY-9uh" secondAttribute="top" constant="4" id="EsV-NT-p2S"/>
+                                            <constraint firstAttribute="bottom" secondItem="8gf-kX-y7V" secondAttribute="bottom" constant="4" id="VCl-HV-k97"/>
+                                            <constraint firstAttribute="trailing" secondItem="8gf-kX-y7V" secondAttribute="trailing" constant="16" id="l0h-m7-IaV"/>
                                         </constraints>
                                         <size key="customSize" width="317" height="41"/>
                                         <userDefinedRuntimeAttributes>
@@ -1218,7 +1190,6 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <outlet property="button" destination="QNM-TV-VOc" id="mMO-l9-Hrt"/>
                                             <outlet property="title" destination="8gf-kX-y7V" id="M0C-HC-HI0"/>
                                         </connections>
                                     </collectionViewCell>
@@ -1584,7 +1555,6 @@
         <image name="main" width="25" height="22.5"/>
         <image name="menu" width="25" height="19.5"/>
         <image name="messageIcon" width="36" height="36"/>
-        <image name="plusIcon" width="14" height="14"/>
         <image name="sminex_logo.png" width="582" height="126"/>
     </resources>
     <inferredMetricsTieBreakers>

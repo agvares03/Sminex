@@ -22,12 +22,10 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var dateConst2: NSLayoutConstraint!
     @IBOutlet weak var dateConst: NSLayoutConstraint!
     @IBOutlet weak var sumConst2: NSLayoutConstraint!
-    @IBOutlet weak var sumConst: NSLayoutConstraint!
     @IBOutlet weak var back: UIBarButtonItem!
     @IBOutlet private weak var tableView:       UITableView!
     @IBOutlet private weak var headerView:      UIView!
     @IBOutlet private weak var dateLabel:       UILabel!
-    @IBOutlet private weak var periodLabel:     UILabel!
     @IBOutlet private weak var sumLabel:        UILabel!
     
     private var values: [HistoryPayCellData] = []
@@ -35,7 +33,6 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
     var paysType = 0
     @IBAction func allPaysAction(_ sender: UIButton) {
         paysType = 0
-        periodLabel.text = "ПЕРИОД"
         parse_all(login: login, pass: pass)
         allPaysBtn.tintColor = .black
         selectAllPay.backgroundColor = .black
@@ -45,7 +42,6 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
     
     @IBAction func mobilePaysAction(_ sender: UIButton) {
         paysType = 1
-        periodLabel.text = "СТАТУС"
         parse_Mobile(login: login, pass: pass)
         allPaysBtn.tintColor = .lightGray
         selectAllPay.backgroundColor = .lightGray
@@ -80,12 +76,11 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
         selectAllPay.backgroundColor = .black
         mobilePaysBtn.tintColor = .lightGray
         selectMobilePay.backgroundColor = .lightGray
-        if self.view.frame.size.width < 375{
-            dateConst.constant = dateConst.constant - 6
-            sumConst.constant = sumConst.constant - 6
-            dateConst2.constant = dateConst2.constant - 6
-            sumConst2.constant = sumConst2.constant - 6
-        }
+//        if self.view.frame.size.width < 375{
+//            dateConst.constant = dateConst.constant - 6
+//            dateConst2.constant = dateConst2.constant - 6
+//            sumConst2.constant = sumConst2.constant - 6
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -282,7 +277,6 @@ class HistoryPayCell: UITableViewCell {
     var delegate: UIViewController?
     
     @IBOutlet weak var datePay: UILabel!
-    @IBOutlet weak var period: UILabel!
     @IBOutlet weak var summ: UILabel!
     
     fileprivate func display(_ item: HistoryPayCellData) {
@@ -294,8 +288,6 @@ class HistoryPayCell: UITableViewCell {
                 let sum: Double = Double(item.sum)!
                 self.summ.text = String(format:"%.2f", sum)
             }
-            self.period.textAlignment = .right
-            self.period.text = item.period
             self.datePay.text = date1
         }else{
             //            let date1: String = item.date.substring(to: item.date.index(item.date.endIndex, offsetBy: -9))
@@ -305,14 +297,6 @@ class HistoryPayCell: UITableViewCell {
                 let sum: Double = Double(item.sum)!
                 self.summ.text = String(format:"%.2f", sum)
             }
-            if item.period == "Обработан"{
-                self.period.text = "Оплачен"
-            }else if item.period == "Оплачен"{
-                self.period.text = item.period
-            }else if item.period != "Обработан" || item.period != "Оплачен"{
-                self.period.text = "Не обработан"
-            }
-            self.period.textAlignment = .center
             self.datePay.text = item.date
         }
         
