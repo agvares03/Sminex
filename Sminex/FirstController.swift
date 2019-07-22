@@ -17,6 +17,9 @@ class FirstController: UIViewController {
     private var busines_center_denyInvoiceFiles: Bool?
     private var busines_center_denyTotalOnlinePayments: Bool?
     
+    // Можно или нет ввозить/вывозить имущество
+    private var denyImportExportPropertyRequest: Bool?
+    
     @IBOutlet private weak var indicator: UIActivityIndicatorView!
     
     private var window: UIWindow?
@@ -128,6 +131,9 @@ class FirstController: UIViewController {
                 self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
                 self.busines_center_denyInvoiceFiles = Business_Center_Data(json: json!)?.DenyInvoiceFiles
                 self.busines_center_denyTotalOnlinePayments = Business_Center_Data(json: json!)?.DenyTotalOnlinePayments
+                
+                // Можно или нет ввозить/вывозить имущество
+                self.denyImportExportPropertyRequest = Business_Center_Data(json: json!)?.DenyImportExportProperty
             }
             
             #if DEBUG
@@ -138,6 +144,7 @@ class FirstController: UIViewController {
             defaults.set(self.business_center_info, forKey: "denyOnlinePayments")
             defaults.set(self.busines_center_denyInvoiceFiles, forKey: "denyInvoiceFiles")
             defaults.set(self.busines_center_denyTotalOnlinePayments, forKey: "denyTotalOnlinePayments")
+            defaults.set(self.denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
             defaults.synchronize()
             
         }.resume()
@@ -421,10 +428,14 @@ class FirstController: UIViewController {
         let DenyInvoiceFiles: Bool?
         let DenyTotalOnlinePayments: Bool?
         
+        // Можно или нет ввозить/вывозить имущество
+        let DenyImportExportProperty: Bool?
+        
         init?(json: JSON) {
-            DenyOnlinePayments = "denyOnlinePayments"    <~~ json
-            DenyInvoiceFiles   = "denyInvoiceFiles"    <~~ json
-            DenyTotalOnlinePayments = "denyTotalOnlinePayments"    <~~ json
+            DenyOnlinePayments = "denyOnlinePayments"                      <~~ json
+            DenyInvoiceFiles   = "denyInvoiceFiles"                        <~~ json
+            DenyTotalOnlinePayments = "denyTotalOnlinePayments"            <~~ json
+            DenyImportExportProperty = "denyImportExportPropertyRequest"   <~~ json
         }
     }
     

@@ -33,6 +33,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var transportSwitch: UISwitch!
     @IBOutlet private weak var gosLine:         UILabel!
     @IBOutlet private weak var pickerLine:      UILabel!
+    @IBOutlet weak var heigthFooter: NSLayoutConstraint!
+    @IBOutlet weak var phone_service: UILabel!
+    @IBOutlet weak var img_phone_service: UIImageView!
+    @IBOutlet weak var heigth_phone_service: NSLayoutConstraint!
     
     @IBAction private func closeButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -285,6 +289,22 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         edFio.textColor = UIColor.lightGray
         edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
         picker.minimumDate = Date()
+        
+        let tap_phone = UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:)))
+        img_phone_service.isUserInteractionEnabled   = true
+        img_phone_service.addGestureRecognizer(tap_phone)
+        
+    }
+    
+    @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
+        let newPhone = phone_service.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+        if let url = URL(string: "tel://" + newPhone!) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
     }
     
     func updateUserInterface() {
@@ -333,6 +353,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let info = sender?.userInfo!
         let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
         self.sendViewConst.constant = (keyboardSize?.height)!
+        
+        // При показе клавиатуры оставим только кнопку
+        heigthFooter.constant = 59
+        
 //        var height_top:CGFloat = 370// высота верхних элементов
 //        var k:CGFloat = 0
 //        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")){
@@ -397,6 +421,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         self.sendViewConst.constant = 0
+        
+        // Покажем или нет информацию в подвале
+        changeFooter()
 //        if !isNeedToScrollMore() {
 ////            sendBtnConst.constant = getPoint()
 //            sendViewConst.constant = getPoint()
@@ -455,6 +482,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             gosLine.isHidden        = false
 //            sendBtnConst.constant = sendBtnConst.constant - 55
 //            sendViewConst.constant = sendViewConst.constant - 57
+            
+            // Увеличим подвал для показа информации (Если это необходимо)
+            changeFooter()
         
         } else {
             commentConst.constant   = 8
@@ -462,6 +492,40 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             gosLine.isHidden        = true
 //            sendBtnConst.constant = sendBtnConst.constant + 55
 //            sendViewConst.constant = sendViewConst.constant + 57
+            
+            // Уменьшим подвал для показа информации
+            heigthFooter.constant = 59
+        }
+    }
+    
+    private func changeFooter() {
+        if (transportSwitch.isOn) {
+            if (UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
+                heigthFooter.constant = 160
+                let data_: [ContactsJson] = TemporaryHolder.instance.contactsList
+                var phone: String = ""
+                for data in data_ {
+                    if (data.name?.contains(find: "Консьерж"))! {
+                        phone = data.phone ?? "";
+                    }
+                }
+                if (phone != "") {
+                    
+                    heigthFooter.constant = 270
+                    heigth_phone_service.constant = 110
+                    phone_service.text = phone
+                    
+                } else {
+                    
+                    heigthFooter.constant = 160
+                    heigth_phone_service.constant = 0
+                    
+                }
+            } else {
+                heigthFooter.constant = 59
+            }
+        } else {
+            heigthFooter.constant = 59
         }
     }
     
