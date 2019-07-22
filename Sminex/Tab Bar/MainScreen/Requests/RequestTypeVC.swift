@@ -57,6 +57,8 @@ class RequestTypeVC: UIViewController {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REQUEST_TYPE + "accountid=" + id)!)
         request.httpMethod = "GET"
+        print(request)
+        
         URLSession.shared.dataTask(with: request) {
             data, responce, error in
             
@@ -72,7 +74,7 @@ class RequestTypeVC: UIViewController {
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            //                print(self.responceString)
+            print(responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -89,7 +91,12 @@ class RequestTypeVC: UIViewController {
                 }
                 let type: RequestTypeStruct
                 type = .init(id: "3", name: "Услуги службы комфорта")
-                if let types = TemporaryHolder.instance.requestTypes?.types {
+                if var types = TemporaryHolder.instance.requestTypes?.types {
+                    for i in 0...types.count - 1{
+                        if types[i].name == "Обращение"{
+                            types.remove(at: i)
+                        }
+                    }
                     self.data = types
                 }
                 self.data.append(type)

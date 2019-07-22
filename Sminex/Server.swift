@@ -12,8 +12,8 @@ final class Server {
     
     private var responseString: String?
     
-//    static let SERVER              = "http://tst.sminex.com:1580/"
-    static let SERVER              = "http://client.sminex.com:1580/"
+    static let SERVER              = "http://tst.sminex.com:1580/"
+//    static let SERVER              = "http://client.sminex.com:1580/"
     
     static let REGISTRATION        = "RegisterSimple.ashx?"            // Регистрация
     static let FORGOT              = "remember.ashx?"                  // Забыли пароль
@@ -94,6 +94,13 @@ final class Server {
             blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
             alpha: CGFloat(1.0)
         )
+    }
+    
+    func isValidEmail(testStr: String) -> Bool{
+        let emailRegEx = "(?:[a-zA-Z0-9!#$%\\&‘*+/=?\\^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%\\&'*+/=?\\^_`{|}" + "~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\" + "x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-" + "z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5" + "]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-" + "9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21" + "-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
+        
+        let emailTest = NSPredicate(format:"SELF MATCHES[c] %@", emailRegEx)
+        return emailTest.evaluate(with: testStr)
     }
     
 }

@@ -24,6 +24,12 @@
 		1CCD60E622E07A9B009C4B5C /* FinanceDebtVCComm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCD60E522E07A9B009C4B5C /* FinanceDebtVCComm.swift */; };
 		1CCD60E822E07B92009C4B5C /* FinanceCalcsArchiveVCComm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCD60E722E07B92009C4B5C /* FinanceCalcsArchiveVCComm.swift */; };
 		1CCD60EA22E07BEC009C4B5C /* FinanceCalcVCComm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCD60E922E07BEC009C4B5C /* FinanceCalcVCComm.swift */; };
+		1CF71AB622E59303008405F0 /* Appeal.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CF71AB522E59303008405F0 /* Appeal.storyboard */; };
+		1CF71AB922E59813008405F0 /* CreateAppeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF71AB822E59813008405F0 /* CreateAppeal.swift */; };
+		1CF71ABB22E5C6C2008405F0 /* AppealUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF71ABA22E5C6C2008405F0 /* AppealUser.swift */; };
+		1CF71ABD22E5C6CF008405F0 /* AppealVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF71ABC22E5C6CF008405F0 /* AppealVC.swift */; };
+		1CF71AC422E5CB11008405F0 /* Appeals+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF71AC322E5CB11008405F0 /* Appeals+CoreDataProperties.swift */; };
+		1CF71AC522E5CB11008405F0 /* Appeals+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF71AC222E5CB11008405F0 /* Appeals+CoreDataClass.swift */; };
 		3A5ADBBB210C49950012F6DB /* HistoryCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5ADBBA210C49950012F6DB /* HistoryCounterCell.swift */; };
 		3AB975EC2101933C009DEBC5 /* NewsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */; };
 		3AB975F02101968E009DEBC5 /* NewsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB975EF2101968E009DEBC5 /* NewsTableCell.swift */; };
@@ -216,6 +222,12 @@
 		1CCD60E522E07A9B009C4B5C /* FinanceDebtVCComm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceDebtVCComm.swift; sourceTree = "<group>"; };
 		1CCD60E722E07B92009C4B5C /* FinanceCalcsArchiveVCComm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceCalcsArchiveVCComm.swift; sourceTree = "<group>"; };
 		1CCD60E922E07BEC009C4B5C /* FinanceCalcVCComm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceCalcVCComm.swift; sourceTree = "<group>"; };
+		1CF71AB522E59303008405F0 /* Appeal.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Appeal.storyboard; sourceTree = "<group>"; };
+		1CF71AB822E59813008405F0 /* CreateAppeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAppeal.swift; sourceTree = "<group>"; };
+		1CF71ABA22E5C6C2008405F0 /* AppealUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppealUser.swift; sourceTree = "<group>"; };
+		1CF71ABC22E5C6CF008405F0 /* AppealVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppealVC.swift; sourceTree = "<group>"; };
+		1CF71AC222E5CB11008405F0 /* Appeals+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Appeals+CoreDataClass.swift"; path = "/Users/sergeyivanov/Desktop/Работа НИЦ/sminex/Sminex/Appeals+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		1CF71AC322E5CB11008405F0 /* Appeals+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Appeals+CoreDataProperties.swift"; path = "/Users/sergeyivanov/Desktop/Работа НИЦ/sminex/Sminex/Appeals+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		3A5ADBBA210C49950012F6DB /* HistoryCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCounterCell.swift; sourceTree = "<group>"; };
 		3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableCell.xib; sourceTree = "<group>"; };
 		3AB975EF2101968E009DEBC5 /* NewsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableCell.swift; sourceTree = "<group>"; };
@@ -461,6 +473,16 @@
 			path = FinanceComm;
 			sourceTree = "<group>";
 		};
+		1CF71AB722E597EA008405F0 /* Appeal */ = {
+			isa = PBXGroup;
+			children = (
+				1CF71AB822E59813008405F0 /* CreateAppeal.swift */,
+				1CF71ABA22E5C6C2008405F0 /* AppealUser.swift */,
+				1CF71ABC22E5C6CF008405F0 /* AppealVC.swift */,
+			);
+			path = Appeal;
+			sourceTree = "<group>";
+		};
 		3AB975EA2101931C009DEBC5 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
@@ -619,6 +641,8 @@
 		4171BE771ECB3E1000B9CDD7 /* DB */ = {
 			isa = PBXGroup;
 			children = (
+				1CF71AC222E5CB11008405F0 /* Appeals+CoreDataClass.swift */,
+				1CF71AC322E5CB11008405F0 /* Appeals+CoreDataProperties.swift */,
 				411B6CD21EE6FF22001DCBC7 /* Comments+CoreDataClass.swift */,
 				411B6CD31EE6FF22001DCBC7 /* Comments+CoreDataProperties.swift */,
 				411B6CD41EE6FF22001DCBC7 /* Houses+CoreDataClass.swift */,
@@ -884,6 +908,7 @@
 				6C7F90E5207633EB00CFA721 /* Account.storyboard */,
 				6C54077F206E7C600050A0D0 /* Questions.storyboard */,
 				6C42560F206B6EF0007E1BF6 /* Counter.storyboard */,
+				1CF71AB522E59303008405F0 /* Appeal.storyboard */,
 				4171BE621ECB369A00B9CDD7 /* Main.storyboard */,
 				1C54D61121AF8C1100A82C71 /* MainDisp.storyboard */,
 				6C4C0A0C20675A83004EF2FF /* Requests.storyboard */,
@@ -899,6 +924,7 @@
 		6C5E78E02065054B00805EF1 /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
+				1CF71AB722E597EA008405F0 /* Appeal */,
 				1C1B22B421AF989B0029148A /* Disp */,
 				6CE2F4B4208769FA00709242 /* News */,
 				1CCD60DE22E078BC009C4B5C /* FinanceComm */,
@@ -1076,6 +1102,7 @@
 				4136BD791EED06B1000EAE37 /* logo_SM.png in Resources */,
 				4136BD141EEBAC7B000EAE37 /* ic_comm_action.png in Resources */,
 				41D3E6351F19AA620084BB92 /* home.png in Resources */,
+				1CF71AB622E59303008405F0 /* Appeal.storyboard in Resources */,
 				419CBB0A1EEF661B00E07021 /* ic_send_app.png in Resources */,
 				41979406203185460034298D /* start_img.png in Resources */,
 				411B6CF61EE7268F001DCBC7 /* fon_app.png in Resources */,
@@ -1219,6 +1246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C7F90EB2077365000CFA721 /* AccountChangePasswordVC.swift in Sources */,
+				1CF71ABB22E5C6C2008405F0 /* AppealUser.swift in Sources */,
 				41DFA8311ED34FBA00F15109 /* AppsUser.swift in Sources */,
 				3AB975F02101968E009DEBC5 /* NewsTableCell.swift in Sources */,
 				4124DE8D20FF128A00C41290 /* NewsListTVC.swift in Sources */,
@@ -1273,6 +1301,7 @@
 				6CD3AD97206622AE001589B7 /* TechServiceVC.swift in Sources */,
 				1CCD60E022E078E3009C4B5C /* FinanceVCComm.swift in Sources */,
 				6CD3AD9520661413001589B7 /* CreateRequestVC.swift in Sources */,
+				1CF71AC422E5CB11008405F0 /* Appeals+CoreDataProperties.swift in Sources */,
 				3A5ADBBB210C49950012F6DB /* HistoryCounterCell.swift in Sources */,
 				41EBEC881ED17BDF009F6A9D /* SWRevealViewController.m in Sources */,
 				41DFA8351ED3500400F15109 /* OSV_User.swift in Sources */,
@@ -1311,9 +1340,12 @@
 				6C8C69C9206CA03C0090A49D /* CounterHistoryVC.swift in Sources */,
 				6CFB5C6E2083AFF40028D331 /* FinanceCalcVC.swift in Sources */,
 				6C43A54520A5A5EA008155F9 /* ServicesUKDescVC.swift in Sources */,
+				1CF71AB922E59813008405F0 /* CreateAppeal.swift in Sources */,
 				6C7B0B68206BCA0200E974AE /* DigitInput.swift in Sources */,
+				1CF71AC522E5CB11008405F0 /* Appeals+CoreDataClass.swift in Sources */,
 				6C938C79206F56F300E34EA1 /* QuestionAnswerVC.swift in Sources */,
 				1C1B22BA21B066650029148A /* TableWorker.swift in Sources */,
+				1CF71ABD22E5C6CF008405F0 /* AppealVC.swift in Sources */,
 				411B6CCA1EE3A7EC001DCBC7 /* Saldo+CoreDataProperties.swift in Sources */,
 				411B6CE21EE6FF22001DCBC7 /* Ls+CoreDataClass.swift in Sources */,
 				41DFA8371ED3502400F15109 /* PayUser.swift in Sources */,

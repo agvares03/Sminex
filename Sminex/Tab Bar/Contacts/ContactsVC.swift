@@ -15,16 +15,12 @@ private protocol ContactsCellDelegate: class {
     func phonePressed(_ phone: String)
     func messagePressed(_ phone: String)
     func emailPressed(_ mail: String)
+    func btnPressed(_ type: Int)
 }
 
 final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ContactsCellDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate{
     
     @IBOutlet private weak var collection: UICollectionView!
-    
-    @IBAction private func sendButtonPressed(_ sender: UIButton) {
-        UserDefaults.standard.set(true, forKey: "fromMenu")
-        performSegue(withIdentifier: Segues.fromContactsVc.toSupport, sender: self)
-    }
     
     private var data_: [ContactsJson] = []
     
@@ -68,6 +64,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
         data_ = TemporaryHolder.instance.contactsList
         collection.reloadData()
         navigationController?.isNavigationBarHidden = true
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -100,7 +97,12 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
         let isSupport = data_[indexPath.row].name?.contains(find: "оддержка") ?? false
 //        return CGSize(width: view.frame.size.width, height: isSupport ? size.height + 5 : size.height - 18)
-        
+        if data_[indexPath.row].phone != nil && data_[indexPath.row].phone != ""{
+        } else {
+            if data_[indexPath.row].isVisibleEmail! == false{
+                return CGSize(width: view.frame.size.width, height: 0)
+            }
+        }
         if (data_[indexPath.row].name?.contains(find: "Предложения"))! {
             if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone4s || Device() == .simulator(.iPhone4s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c){
                 return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 30)
@@ -110,7 +112,8 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
                 return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
             }
         }
-        return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
+//        return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
+        return CGSize(width: view.frame.size.width, height: isSupport ? size.height : size.height - 20)
     }
     
     func phonePressed(_ phone: String) {
@@ -161,6 +164,25 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
             present(alert, animated: true, completion: nil)
         }
     }
+    var typeRequest = 0
+    func btnPressed(_ type: Int) {
+        typeRequest = type
+        performSegue(withIdentifier: "addAppeal", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addAppeal" {
+            let vc = segue.destination as! AppealUser
+            vc.isCreatingRequest_ = true
+            if typeRequest == 0{
+                vc.typeReq = "Консьержу/ в службу комфорта"
+            }else if typeRequest == 1{
+                vc.typeReq = "Директору службы комфорта"
+            }else if typeRequest == 2{
+                vc.typeReq = "в Техподдержку приложения"
+            }
+        }
+    }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
@@ -182,6 +204,7 @@ final class ContactsCell: UICollectionViewCell {
     @IBOutlet private weak var sendBtnHeight:   NSLayoutConstraint!
     @IBOutlet private weak var phoneHeight:     NSLayoutConstraint!
     @IBOutlet private weak var emailHeight:     NSLayoutConstraint!
+    @IBOutlet private weak var btnTopHeight:    NSLayoutConstraint!
     @IBOutlet private weak var messageImage:    UIImageView!
     @IBOutlet private weak var phoneImage:      UIImageView!
     @IBOutlet private weak var emailImage:      UIImageView!
@@ -199,29 +222,30 @@ final class ContactsCell: UICollectionViewCell {
         self.delegate = delegate
         title.text = item.name
         desc.text  = item.description
-        
+        sendBtnHeight.constant = 45
         if item.name?.contains(find: "оддержка") ?? false {
-            sendBtnHeight.constant = 45
             item.email = ""
-        
-        } else {
-            sendBtnHeight.constant = 0
         }
-        
-        if item.phone != nil && item.phone != "" {
+        if item.isVisibleCreate! == false{
+            sendBtnHeight.constant = 0
+        }else{
+            sendBtnHeight.constant = 45
+        }
+        if item.phone != nil && item.phone != ""{
             phoneHeight.constant = 70.5
             phoneView.isHidden   = false
             
-            if item.email != nil && item.email != "" {
+            if item.email != nil && item.email != "" && item.isVisibleEmail!{
                 emailView.isHidden   = false
                 emailHeight.constant = 50 //75
                 phone.text           = item.phone
                 email.text           = item.email
-            
+                btnTopHeight?.constant = 20
             } else {
                 phone.text           = item.phone
                 emailHeight.constant = 0
                 emailView.isHidden   = true
+                btnTopHeight?.constant = 5
             }
         
         } else {
@@ -229,6 +253,11 @@ final class ContactsCell: UICollectionViewCell {
             phoneHeight.constant = 0
             email.text           = item.email
             emailHeight.constant = 75
+            btnTopHeight?.constant = 5
+            if item.isVisibleEmail! == false{
+                emailHeight.constant = 0
+                emailView.isHidden   = true
+            }
         }
         
         messageImage.isUserInteractionEnabled = true
@@ -270,6 +299,17 @@ final class ContactsCell: UICollectionViewCell {
     @objc private func emailPressed(_ sender: UITapGestureRecognizer) {
         delegate?.emailPressed(email.text ?? "")
     }
+    @IBAction private func sendButtonPressed(_ sender: UIButton) {
+        var type = 0
+        if (title.text?.contains(find: "консьерж"))!{
+            type = 0
+        }else if (title.text?.contains(find: "предложения"))!{
+            type = 1
+        }else if (title.text?.contains(find: "поддержка"))!{
+            type = 2
+        }
+        delegate?.btnPressed(type)
+    }
 }
 
 
@@ -288,12 +328,16 @@ final class ContactsJson: JSONDecodable {
     let description: String?
     let phone: String?
     var email: String?
+    let isVisibleCreate: Bool?
+    let isVisibleEmail: Bool?
     
     init?(json: JSON) {
-        description = "Description" <~~ json
-        phone       = "Phone"       <~~ json
-        email       = "Email"       <~~ json
-        name        = "Name"        <~~ json
+        description     = "Description"             <~~ json
+        phone           = "Phone"                   <~~ json
+        email           = "Email"                   <~~ json
+        name            = "Name"                    <~~ json
+        isVisibleCreate = "IsVisibleCreateReguest"  <~~ json
+        isVisibleEmail  = "IsVisibleEmail"          <~~ json
     }
 }
 

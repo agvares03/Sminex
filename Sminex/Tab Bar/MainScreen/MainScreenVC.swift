@@ -256,7 +256,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
         request.httpMethod = "GET"
-        //        print(request)
+                print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -272,7 +272,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             #if DEBUG
-            //            print(String(data: data!, encoding: .utf8)!)
+//                        print(String(data: data!, encoding: .utf8)!)
             
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {

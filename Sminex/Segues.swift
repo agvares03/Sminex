@@ -290,6 +290,7 @@ struct Segues {
         static let toFinance         = "finance"
         static let toNews            = "news"
         static let toServicesUK      = "ukServices"
+        static let toAppeal          = "appeal"
         static let toSupport         = "support"
     }
     

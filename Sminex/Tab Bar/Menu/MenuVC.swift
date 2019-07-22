@@ -17,6 +17,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             MenuCellData(icon: UIImage(named: "menu_finance")!, title: "Финансы", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_meters")!, title: "Показания счетчиков", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: TemporaryHolder.instance.menuRequests == 0 ? "" : "\(TemporaryHolder.instance.menuRequests)"),
+            MenuCellData(icon: UIImage(named: "menu_appeal")!, title: "Обращения", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_services")!, title: "Услуги Службы комфорта", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_news")!, title: "Новости", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: TemporaryHolder.instance.menuQuesions == 0 ? "" : "\(TemporaryHolder.instance.menuQuesions)"),
@@ -114,10 +115,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 || section == 1 {
+        if section == 0 {
             return 2
         
-        } else if section == 2 {
+        } else if section == 2 || section == 1{
             return 3
         
         } else {
@@ -151,13 +152,13 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             cell.display(data[indexPath.row + 2])
         
         } else if section == 2 {
-            cell.display(data[indexPath.row + 4])
+            cell.display(data[indexPath.row + 5])
         
         } else if section == 3 {
-            cell.display(data[indexPath.row + 7])
+            cell.display(data[indexPath.row + 8])
         
         } else {
-            cell.display(data[indexPath.row + 8])
+            cell.display(data[indexPath.row + 9])
         }
         return cell
     }
@@ -191,8 +192,9 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         } else if indexPath.section == 1 {
             if indexPath.row == 0 {
                 performSegue(withIdentifier: Segues.fromMenuVC.toRequest, sender: self)
-            
             } else if indexPath.row == 1 {
+                performSegue(withIdentifier: Segues.fromMenuVC.toAppeal, sender: self)
+            } else if indexPath.row == 2 {
                 performSegue(withIdentifier: Segues.fromMenuVC.toServicesUK, sender: self)
             }
         

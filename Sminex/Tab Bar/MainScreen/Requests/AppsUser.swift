@@ -240,7 +240,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REQUEST_TYPE + "accountid=" + id)!)
         request.httpMethod = "GET"
-        
+        print(request)
         self.typeGroup.enter()
         URLSession.shared.dataTask(with: request) {
             data, responce, error in
@@ -353,7 +353,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             var newData: [AppsUserCellData] = []
             self.rows.forEach { _, curr in
-                
                 var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
                 var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
@@ -950,6 +949,14 @@ struct Request {
             
         } else if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
+        } else if (name?.contains("Обращение к консьержу"))! {
+            name                = "Обращение к консьержу"
+        } else if (name?.contains("Обращение в техподдержку"))! {
+            name                = "Обращение в техподдержку"
+        } else if (name?.contains("Обращение к директору"))! {
+            name                = "Обращение к директору"
+        } else if (name?.contains("Обращение"))! {
+            name                = "Обращение"
         } else {
             name                = "Техническое обслуживание"
         }
