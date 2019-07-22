@@ -1,17 +1,16 @@
 //
-//  FinanceVC.swift
+//  FinanceVCComm.swift
 //  Sminex
 //
-//  Created by IH0kN3m on 4/12/18.
-//  Copyright © 2018 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 18/07/2019.
 //
 
 import UIKit
 import Gloss
 import ExpyTableView
 
-final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
-
+class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
+    
     @IBOutlet private weak var loader:  UIActivityIndicatorView!
     @IBOutlet private weak var table:   ExpyTableView!
     
@@ -22,7 +21,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     @IBAction private func barcodePreesed(_ sender: UIButton) {
         if debt?.codPay != "" && debt?.codPay != nil {
             performSegue(withIdentifier: Segues.fromFinanceVC.toBarcode, sender: self)
-        
+            
         } else {
             showToast(message: "Нет данных по QR-коду")
         }
@@ -57,7 +56,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             self.getAccountDebt()
             DispatchQueue.main.async {
                 self.table.reloadData()
-//                self.stopAnimation()
+                //                self.stopAnimation()
             }
         }
     }
@@ -97,19 +96,19 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
-            return 4
-        }else{
+//        if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+//            return 4
+//        }else{
             return 3
-        }
+//        }
     }
     
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCell") as! FinanceSectionCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCommCell") as! FinanceSectionCommCell
         if section == 1 {
             cell.display("Квитанции")
-        
+            
         } else {
             cell.display("Взаиморасчеты")
         }
@@ -119,7 +118,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceHeaderCell") as! FinanceHeaderCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceHeaderCommCell") as! FinanceHeaderCommCell
             cell.selectionStyle = .none
             if debt != nil {
                 var datePay = self.debt?.datePay
@@ -151,59 +150,59 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 let dateText = dateFormatter.string(from: endOfMonth!)
                 
                 let datePay = dateText
-//                if (datePay.count) > 9 {
-//                    datePay.removeLast(8)
-//                }
+                //                if (datePay.count) > 9 {
+                //                    datePay.removeLast(8)
+                //                }
                 cell.display(amount: (debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: "До " + (datePay))
             }
             cell.contentView.backgroundColor = backColor
             return cell
             
         } else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
             if indexPath.row == receipts.count + 1 || indexPath.row == 4 {
                 cell.display(title: "Архив квитанции", desc: "")
                 cell.contentView.backgroundColor = .white
-            
+                
             } else {
-//                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
-//                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
-//                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
-                    var year = "\(receipts[safe: indexPath.row - 1]?.numYear ?? 0)"
-                    if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
-                        year.removeFirst()
-                        year.removeFirst()
-                    }
-                    var sum = String(format:"%.2f", receipts[safe: indexPath.row - 1]!.sum!)
-                    if Double(receipts[safe: indexPath.row - 1]!.sum!) > 999.00 || Double(receipts[safe: indexPath.row - 1]!.sum!) < -999.00{
-                        let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
-                        sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
-                    }
-                    if sum.first == "-" {
-                        sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
-                    }
-                    cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " " + year,
-                                 desc: sum)
-//                }else{
-//                    cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
-//                        desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0)).formattedWithSeparator)
-//                }
+                //                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
+                //                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
+                //                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+                var year = "\(receipts[safe: indexPath.row - 1]?.numYear ?? 0)"
+                if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
+                    year.removeFirst()
+                    year.removeFirst()
+                }
+                var sum = String(format:"%.2f", receipts[safe: indexPath.row - 1]!.sum!)
+                if Double(receipts[safe: indexPath.row - 1]!.sum!) > 999.00 || Double(receipts[safe: indexPath.row - 1]!.sum!) < -999.00{
+                    let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+                }
+                if sum.first == "-" {
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+                }
+                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " " + year,
+                             desc: sum)
+                //                }else{
+                //                    cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
+                //                        desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0)).formattedWithSeparator)
+                //                }
                 cell.contentView.backgroundColor = backColor
             }
             return cell
-        
-//        }else if indexPath.section == 3 {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-//            if (self.calcs.count == 0) {
-//                cell.display(title: "", desc: "")
-//            } else {
-//                cell.display(title: "История взаиморасчетов", desc: "")
-//                cell.contentView.backgroundColor = .white
-//            }
-//            return cell
-        
+            
+            //        }else if indexPath.section == 3 {
+            //            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
+            //            if (self.calcs.count == 0) {
+            //                cell.display(title: "", desc: "")
+            //            } else {
+            //                cell.display(title: "История взаиморасчетов", desc: "")
+            //                cell.contentView.backgroundColor = .white
+            //            }
+            //            return cell
+            
         } else if indexPath.section == 2{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
             if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 4) && (Double((debt?.sumPay)!) >= 0.00){
                 if (self.calcs.count == 0) {
                     cell.display(title: "", desc: "")
@@ -239,67 +238,67 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                         debt += ($0.sumDebt ?? 0.00)
                     }
                 }
-//                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
-                    var year = ""
+                //                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+                var year = ""
+                if (Double((self.debt!.sumPay)!) < 0.00){
+                    year = "\(filteredCalcs[indexPath.row - 2].numYearSet ?? 0)"
+                }else{
+                    year = "\(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)"
+                }
+                if (Double((self.debt!.sumPay)!) < 0.00){
+                    if receipts[safe: indexPath.row - 2]!.numYear! > 2000{
+                        year.removeFirst()
+                        year.removeFirst()
+                    }
+                }else{
+                    if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
+                        year.removeFirst()
+                        year.removeFirst()
+                    }
+                }
+                var sum = String(format:"%.2f", debt)
+                if Double(debt) > 999.00 || Double(debt) < -999.00{
+                    let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+                }
+                if sum.first == "-" {
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+                }
+                if debt == 0.00{
                     if (Double((self.debt!.sumPay)!) < 0.00){
-                        year = "\(filteredCalcs[indexPath.row - 2].numYearSet ?? 0)"
+                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+                                     desc: "Оплачено")
                     }else{
-                        year = "\(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)"
+                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
+                                     desc: "Оплачено")
                     }
+                }else if debt > 0.00{
                     if (Double((self.debt!.sumPay)!) < 0.00){
-                        if receipts[safe: indexPath.row - 2]!.numYear! > 2000{
-                            year.removeFirst()
-                            year.removeFirst()
-                        }
+                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+                                     desc: "Задолженность " + sum)
                     }else{
-                        if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
-                            year.removeFirst()
-                            year.removeFirst()
-                        }
+                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
+                                     desc: "Задолженность " + sum)
                     }
-                    var sum = String(format:"%.2f", debt)
-                    if Double(debt) > 999.00 || Double(debt) < -999.00{
-                        let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
-                        sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
-                    }
-                    if sum.first == "-" {
-                        sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
-                    }
-                    if debt == 0.00{
-                        if (Double((self.debt!.sumPay)!) < 0.00){
-                            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                         desc: "Оплачено")
-                        }else{
-                            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
-                                         desc: "Оплачено")
-                        }
-                    }else if debt > 0.00{
-                        if (Double((self.debt!.sumPay)!) < 0.00){
-                            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                         desc: "Задолженность " + sum)
-                        }else{
-                            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
-                                         desc: "Задолженность " + sum)
-                        }
+                }else{
+                    if Double((self.debt!.sumPay)!) < 0.00{
+                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+                                     desc: sum)
                     }else{
-                        if Double((self.debt!.sumPay)!) < 0.00{
-                            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                         desc: sum)
-                        }else{
-                            cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
-                                         desc: debt != 0.0 ? "- \(debt.formattedWithSeparator)" : "")
-                        }
+                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
+                                     desc: debt != 0.0 ? "- \(debt.formattedWithSeparator)" : "")
                     }
-//                }else{
-//                    cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
-//                        desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
-//                }
+                }
+                //                }else{
+                //                    cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
+                //                        desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
+                //                }
                 
                 cell.contentView.backgroundColor = backColor
             }
             return cell
         }else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
             cell.display(title: "История оплат", desc: "")
             cell.contentView.backgroundColor = .white
             return cell
@@ -313,7 +312,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 
             } else if receipts.count < 3 {
                 return receipts.count + 2
-            
+                
             } else {
                 return 5
             }
@@ -331,7 +330,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 }else{
                     return filteredCalcs.count + 2
                 }
-            
+                
             } else {
                 if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
                     return 6
@@ -339,7 +338,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                     return 5
                 }
             }
-        
+            
         } else {
             return 1
         }
@@ -349,12 +348,12 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         
         if state == .willExpand {
             let index = IndexPath(row: 0, section: section)
-            let cell = tableView.cellForRow(at: index) as! FinanceSectionCell
+            let cell = tableView.cellForRow(at: index) as! FinanceSectionCommCell
             cell.expand(true)
-        
+            
         } else if state == .willCollapse {
             let index = IndexPath(row: 0, section: section)
-            let cell = tableView.cellForRow(at: index) as! FinanceSectionCell
+            let cell = tableView.cellForRow(at: index) as! FinanceSectionCommCell
             cell.expand(false)
         }
     }
@@ -375,7 +374,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 return 160
             }
             return 220.0
-        
+            
         } else {
             if view.frame.size.width == 320 && indexPath.section == 2 && indexPath.row != 0{
                 return 60.0
@@ -396,7 +395,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             }
             index = indexPath.row - 1
             performSegue(withIdentifier: Segues.fromFinanceVC.toReceipts, sender: self)
-        
+            
         } else if indexPath.section == 2 {
             guard indexPath.row != 0 else { return }
             if Double((self.debt!.sumPay)!) < 0.00{
@@ -416,7 +415,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 index = indexPath.row - 1
                 performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
             }
-        
+            
         } else if indexPath.section == 3 {
             performSegue(withIdentifier: Segues.fromFinanceVC.toHistory, sender: self)
         }
@@ -451,18 +450,18 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
                 
                 DispatchQueue.main.sync {
-//                    self.present(alert, animated: true, completion: nil)
+                    //                    self.present(alert, animated: true, completion: nil)
                 }
-
+                
                 return
             }
             
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.debt = AccountDebtData(json: json!)?.data
-//                self.debt?.sumPay = -12345.00
+                //                self.debt?.sumPay = -12345.00
             }
-        
-        }.resume()
+            
+            }.resume()
     }
     
     private func startAnimation() {
@@ -510,40 +509,40 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         if segue.identifier == Segues.fromFinanceVC.toBarcode {
             let vc = segue.destination as! FinanceBarCodeVC
             vc.data_ = debt
-        
+            
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
             
             let vc = segue.destination as! UINavigationController
             (vc.viewControllers.first as! ViewController).roleReg_ = "1"
             
         } else if segue.identifier == Segues.fromFinanceVC.toReceipts {
-            let vc = segue.destination as! FinanceDebtVC
+            let vc = segue.destination as! FinanceDebtVCComm
             vc.data_ = receipts[safe: index]
-        
+            
         } else if segue.identifier == Segues.fromFinanceVC.toReceiptArchive {
-            let vc = segue.destination as! FinanceDebtArchiveVC
+            let vc = segue.destination as! FinanceDebtArchiveVCComm
             vc.data_ = receipts
-        
+            
         } else if segue.identifier == Segues.fromFinanceVC.toCalcs {
-            let vc = segue.destination as! FinanceCalcVC
+            let vc = segue.destination as! FinanceCalcVCComm
             let date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
             vc.data_ = calcs.filter {
                 return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }
-        
+            
         } else if segue.identifier == Segues.fromFinanceVC.toCalcsArchive {
-            let vc = segue.destination as! FinanceCalcsArchiveVC
+            let vc = segue.destination as! FinanceCalcsArchiveVCComm
             vc.debt = debt
             vc.data_ = calcs
-        
+            
         } else if segue.identifier == Segues.fromFinanceVC.toPay {
-            let vc = segue.destination as! FinancePayAcceptVC
+            let vc = segue.destination as! FinancePayAcceptVCComm
             vc.accountData_ = debt
         }
     }
 }
 
-final class FinanceSectionCell: UITableViewCell {
+final class FinanceSectionCommCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var img:     UIImageView!
@@ -556,7 +555,7 @@ final class FinanceSectionCell: UITableViewCell {
     func expand(_ isExpanded: Bool) {
         if !isExpanded {
             self.img.image = UIImage(named: "expand")
-        
+            
         } else {
             self.img.image = UIImage(named: "expanded")
         }
@@ -564,7 +563,7 @@ final class FinanceSectionCell: UITableViewCell {
 }
 
 
-final class FinanceHeaderCell: UITableViewCell {
+final class FinanceHeaderCommCell: UITableViewCell {
     
     @IBOutlet weak var heigth_cell: NSLayoutConstraint!
     
@@ -572,7 +571,7 @@ final class FinanceHeaderCell: UITableViewCell {
     @IBOutlet private weak var amountDrob: UILabel!
     @IBOutlet private weak var date: UILabel!
     
-    @IBOutlet weak var pay_button: UIButton!    
+    @IBOutlet weak var pay_button: UIButton!
     @IBOutlet weak var pay_QR: UIButton!
     @IBOutlet weak var pay_QR_image: UIImageView!
     
@@ -611,13 +610,13 @@ final class FinanceHeaderCell: UITableViewCell {
             
             isPayed.constant      = 15
             heigthPayed.constant  = 150
-
+            
         } else if (defaults.bool(forKey: "denyOnlinePayments")) {
             pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
             isPayed.constant      = 15
             heigthPayed.constant  = 150
         }
-//        print(isPayed.constant, heigthPayed.constant)
+        //        print(isPayed.constant, heigthPayed.constant)
         // Выводить или нет кнопку QR-код
         if defaults.bool(forKey: "denyQRCode"){
             pay_QR.isHidden           = true
@@ -628,7 +627,7 @@ final class FinanceHeaderCell: UITableViewCell {
 }
 
 
-final class FinanceCell: UITableViewCell {
+final class FinanceCommCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
@@ -652,127 +651,3 @@ final class FinanceCell: UITableViewCell {
         
     }
 }
-
-struct AccountDebtData: JSONDecodable {
-    
-    let data: AccountDebtJson?
-    
-    init?(json: JSON) {
-        data = "data" <~~ json
-    }
-}
-
-struct AccountDebtJson: JSONDecodable {
-    
-    let datePay:    String?
-    let codPay:     String?
-    let descPay:    String?
-    var sumPay:     Double?
-    
-    init?(json: JSON) {
-        
-        datePay = "date_pay"    <~~ json
-        codPay  = "cod_pay"     <~~ json
-        descPay = "desc_pay"    <~~ json
-        sumPay  = "sum_pay"     <~~ json
-    }
-}
-
-struct AccountBillsData: JSONDecodable {
-    
-    let data: [AccountBillsJson]?
-    
-    init?(json: JSON) {
-        data = "data" <~~ json
-    }
-}
-
-struct AccountBillsJson: JSONDecodable {
-    
-    let idReceipts:            String?
-    let datePayed:             String?
-    let datePay:               String?
-    let codPay:                String?
-    let number:                String?
-    let desc:                  String?
-    let sum:                   Double?
-    let payment_sum:           Double?
-    let numMonth:              Int?
-    let numYear: 	           Int?
-    let permit_online_payment: Bool?
-    let number_eng:            String?
-    
-    init?(json: JSON) {
-        idReceipts            = "id_receipts" <~~ json
-        datePayed             = "date_payed"  <~~ json
-        datePay               = "date_pay"    <~~ json
-        codPay                = "cod_pay"     <~~ json
-        desc                  = "desc"        <~~ json
-        sum                   = "sum"         <~~ json
-        numMonth              = "num_month"   <~~ json
-        numYear               = "num_year"    <~~ json
-        number                = "number"      <~~ json
-        payment_sum           = "payment_sum" <~~ json
-        permit_online_payment = "permit_online_payment"  <~~ json
-        number_eng            = "number_eng"  <~~ json
-    }
-}
-
-struct AccountCalculationsData: JSONDecodable {
-    
-    let data: [AccountCalculationsJson]?
-    
-    init?(json: JSON) {
-        data = "data" <~~ json
-    }
-}
-
-struct AccountCalculationsJson: JSONDecodable {
-    
-    let descSet:        String?
-    let type:           String?
-    let sumAccrued:     Double?
-    let sumDebt:        Double?
-    let sumPay:         Double?
-    let numMonthSet:    Int?
-    let numYearSet:     Int?
-    
-    init?(json: JSON) {
-        
-        numMonthSet = "num_month_set"   <~~ json
-        numYearSet  = "num_year_set"    <~~ json
-        sumAccrued  = "sum_accrued"     <~~ json
-        sumDebt     = "sum_debt"        <~~ json
-        descSet     = "desc_set"        <~~ json
-        sumPay      = "sum_pay"         <~~ json
-        type        = "type"            <~~ json
-    }
-    
-    init(type: String,
-         sumAccrued: Double?,
-         sumDebt: Double?,
-         sumPay: Double?,
-         descSet: String? = nil,
-         numMonthSet: Int? = nil,
-         numYearSet: Int? = nil) {
-        
-        self.type           = type
-        self.sumAccrued     = sumAccrued
-        self.sumDebt        = sumDebt
-        self.sumPay         = sumPay
-        self.descSet        = descSet
-        self.numMonthSet    = numMonthSet
-        self.numYearSet     = numYearSet
-    }
-}
-
-
-
-
-
-
-
-
-
-
-

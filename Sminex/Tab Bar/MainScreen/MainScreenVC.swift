@@ -43,7 +43,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+        if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
+        }else{
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+        }
     }
     
     private var requestId  = ""
@@ -767,8 +771,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             performSegue(withIdentifier: Segues.fromMainScreenVC.toDealsList, sender: self)
             
         } else if name == "К оплате" {
-            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
-            
+            if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+                performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
+            }else{
+                performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
+            }
         } else if name == "Новости" {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toNews, sender: self)
         }
@@ -1427,6 +1434,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.anotherDeals_ = deals
             
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePay {
+            let vc = segue.destination as! FinancePayAcceptVC
+            vc.accountData_ = debt
+            
+        } else if segue.identifier == Segues.fromMainScreenVC.toFinancePayComm {
             let vc = segue.destination as! FinancePayAcceptVC
             vc.accountData_ = debt
             
