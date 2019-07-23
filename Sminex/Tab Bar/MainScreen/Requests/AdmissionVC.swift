@@ -94,7 +94,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     public var data_: AdmissionHeaderData = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                                                 gosti: "А. Е. Филимонов, В. В. Иванова",
                                                                 mobileNumber: "+7 965 913 95 67",
-                                                                gosNumber: "А 033 ЕО 777",
+                                                                gosNumber: "А 033 ЕО 777", mark: "Toyota",
                                                                 date: "9 Сентября 10:00",
                                                                 status: "В ОБРАБОТКЕ",
                                                                 images: [],
@@ -521,17 +521,22 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
 
 final class AdmissionHeader: UICollectionViewCell {
     
-    @IBOutlet private weak var imgsLoader:      UIActivityIndicatorView!
+//    @IBOutlet private weak var imgsLoader:      UIActivityIndicatorView!
     @IBOutlet private weak var gosConstant:     NSLayoutConstraint!
-    @IBOutlet private weak var imgsHeight:      NSLayoutConstraint!
-    @IBOutlet private weak var imgsTop:         NSLayoutConstraint!
-    @IBOutlet private weak var imgs:            UIScrollView!
+    @IBOutlet private weak var markConstant:     NSLayoutConstraint!
+    @IBOutlet private weak var gostiConstant:     NSLayoutConstraint!
+//    @IBOutlet private weak var imgsHeight:      NSLayoutConstraint!
+//    @IBOutlet private weak var imgsTop:         NSLayoutConstraint!
+//    @IBOutlet private weak var imgs:            UIScrollView!
     @IBOutlet private weak var image:           UIImageView!
     @IBOutlet private weak var gosti:           UILabel!
     @IBOutlet private weak var mobileNumber:    UILabel!
     @IBOutlet private weak var gosNumbers:      UILabel!
     @IBOutlet private weak var gosTitle:        UILabel!
     @IBOutlet private weak var gosLine:         UILabel!
+    @IBOutlet private weak var markAuto:        UILabel!
+    @IBOutlet private weak var markTitle:       UILabel!
+    @IBOutlet private weak var markLine:        UILabel!
     @IBOutlet private weak var date:            UILabel!
     @IBOutlet private weak var status:          UILabel!
     @IBOutlet private weak var descText:        UILabel?
@@ -549,11 +554,11 @@ final class AdmissionHeader: UICollectionViewCell {
     fileprivate func display(_ item: AdmissionHeaderData, delegate: AdmissionCellsProtocol) {
         
         self.delegate = delegate
-        imgsLoader.isHidden = true
-        imgsLoader.stopAnimating()
+//        imgsLoader.isHidden = true
+//        imgsLoader.stopAnimating()
         
         if item.gosNumber == "" {
-            gosConstant.constant = -35
+            gosConstant?.constant = 0
             gosNumbers.isHidden  = true
             gosLine.isHidden     = true
             gosTitle.isHidden    = true
@@ -585,20 +590,32 @@ final class AdmissionHeader: UICollectionViewCell {
                 heigthFooter?.constant = 0
                 heigth_phone_service?.constant = 0
             }
-            gosConstant.constant = 14
+            gosConstant?.constant = 58
             gosNumbers.isHidden  = false
             gosLine.isHidden     = false
             gosTitle.isHidden    = false
         }
         
+        if item.mark == "" {
+            markConstant?.constant = 0
+            markAuto.isHidden    = true
+            markLine.isHidden    = true
+            markTitle.isHidden   = true
+        } else {
+            markConstant?.constant = 58
+            markAuto.isHidden    = false
+            markLine.isHidden    = false
+            markTitle.isHidden   = false
+        }
+        
         if item.desc == "" {
-            descConstant?.constant = -35
+            descConstant?.constant = 0
             descText?.isHidden  = true
             descTitle?.isHidden = true
             descLine?.isHidden  = true
             descText?.text = ""
         } else {
-            descConstant?.constant = 10
+            descConstant?.constant = 47
             descText?.isHidden  = false
             descTitle?.isHidden = false
             descLine?.isHidden  = false
@@ -609,87 +626,32 @@ final class AdmissionHeader: UICollectionViewCell {
         gosti.text          = item.gosti
         mobileNumber.text   = item.mobileNumber
         gosNumbers.text     = item.gosNumber
+        markAuto.text       = item.mark
         status.text         = item.status
-        
-//        print(item.date)
+        let k = heightForTitle(text: item.gosti, width: gosti.frame.size.width)
+        gostiConstant?.constant = k
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
         
 //        if item.images.count == 0 && item.imgsUrl.count == 0 {
 //            imgs.isHidden       = true
-            if item.desc == "" {
-                imgsTop.constant = 0
-            } else {
-                let k = heightForTitle(text: item.desc, width: gosti.frame.size.width)
-                print(k)
-                if k == 20.5{
-                    imgsTop.constant = 35 + k
-                }else{
-                    imgsTop.constant = 25 + k
-                }
-            }
-            imgsHeight.constant = 0
+//            if item.desc == "" {
+//                imgsTop.constant = 0
+//            } else {
+//                let k = heightForTitle(text: item.desc, width: gosti.frame.size.width)
+//                print(k)
+//                if k == 20.5{
+//                    imgsTop.constant = 35 + k
+//                }else{
+//                    imgsTop.constant = 25 + k
+//                }
+//            }
+//            imgsHeight.constant = 0
         
         let tap_phone = UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:)))
         img_phone_service.isUserInteractionEnabled   = true
         img_phone_service.addGestureRecognizer(tap_phone)
-        
-//        }
-//        else if item.images.count != 0 {
-////            imgs.isHidden       = false
-////            imgsHeight.constant = 150
-////            imgsTop.constant    = 16
-//
-//            var x = 0.0
-//            item.images.forEach {
-//                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: imgs.frame.size.height))
-//                image.image = $0
-//                x += 165.0
-//                let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
-//                image.isUserInteractionEnabled = true
-//                image.addGestureRecognizer(tap)
-//                imgs.addSubview(image)
-//            }
-//            imgs.contentSize = CGSize(width: CGFloat(x), height: imgs.frame.size.height)
-//
-//        }
-//        else if item.imgsUrl.count != 0 {
-//
-//            imgsLoader.isHidden = false
-//            imgsLoader.startAnimating()
-//
-//            var rowImgs: [UIImage] = []
-//
-//            DispatchQueue.global(qos: .userInitiated).async {
-//
-//                item.imgsUrl.forEach { img in
-//
-//                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
-//                    request.httpMethod = "GET"
-//
-//                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
-//
-//                    rowImgs.append(UIImage(data: data!)!)
-//                }
-//
-//                DispatchQueue.main.async {
-//                    var x = 0.0
-//                    rowImgs.forEach {
-//                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.imgs.frame.size.height))
-//                        image.image = $0
-//                        x += 165.0
-//                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(_:)))
-//                        image.isUserInteractionEnabled = true
-//                        image.addGestureRecognizer(tap)
-//                        self.imgs.addSubview(image)
-//                    }
-//                    self.imgs.contentSize = CGSize(width: CGFloat(x), height: self.imgs.frame.size.height)
-//                    self.imgsLoader.stopAnimating()
-//                    self.imgsLoader.isHidden = true
-//                }
-//            }
-//        }
     }
     
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
@@ -740,8 +702,9 @@ final class AdmissionHeaderData: AdmissionProtocol {
     let date:           String
     var status:         String
     var desc:           String
+    var mark:           String
     
-    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String) {
+    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, mark: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String) {
         
         self.icons          = icon
         self.gosti          = gosti
@@ -752,6 +715,7 @@ final class AdmissionHeaderData: AdmissionProtocol {
         self.images         = images
         self.imgsUrl        = imagesUrl
         self.desc           = desc
+        self.mark           = mark
     }
 }
 

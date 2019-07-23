@@ -378,18 +378,6 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         loader.isHidden = true
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == Segues.fromCreateRequest.toAdmission {
-            let vc = segue.destination as! AdmissionVC
-            vc.isCreated_ = true
-            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", date: "", status: "", images: [], imagesUrl: [], desc: "")
-            vc.reqId_ = reqId ?? ""
-//            vc.delegate = delegate
-            vc.name_ = name_
-        }
-    }
-    
     private func formatDate(_ date: Date, format: String) -> String {
         
         let df = DateFormatter()

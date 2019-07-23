@@ -26,12 +26,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var picker:          UIDatePicker!
     @IBOutlet private weak var edFio:           UITextView!
     @IBOutlet private weak var edContact:       UITextField!
-    @IBOutlet private weak var gosNumber:       UITextField!
-    @IBOutlet private weak var edComment: UITextView!
+    @IBOutlet private weak var gosNumber:       UITextView!
+    @IBOutlet private weak var markAuto:        UITextView!
+    @IBOutlet private weak var edComment:       UITextView!
     @IBOutlet private weak var dateField:       UIButton!
     @IBOutlet private weak var sendButton:      UIButton!
     @IBOutlet private weak var transportSwitch: UISwitch!
     @IBOutlet private weak var gosLine:         UILabel!
+    @IBOutlet private weak var markLine:        UILabel!
     @IBOutlet private weak var pickerLine:      UILabel!
     @IBOutlet weak var heigthFooter: NSLayoutConstraint!
     @IBOutlet weak var phone_service: UILabel!
@@ -94,12 +96,12 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         viewTapped(nil)
         if (edFio.text == "" || edFio.text == "ФИО гостей") && edContact.text == ""{
-            if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.text == ""{
+            if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == UIColor.lightGray{
                 let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО, Контактный номер и Госномер", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            }else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.text != ""{
+            }else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor != UIColor.lightGray{
                 let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО и Контактный номер", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
@@ -120,7 +122,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
-        } else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.text == ""{
+        } else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == UIColor.lightGray{
             let alert = UIAlertController(title: "Ошибка!", message: "Заполните поле: Госномер", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
@@ -139,12 +141,21 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             if transportSwitch.isOn == false{
                 gosNumber.text = ""
+                markAuto.text = ""
+            }
+            var gos = ""
+            var mark = ""
+            if gosNumber.textColor != UIColor.lightGray{
+                gos = gosNumber.text
+            }
+            if markAuto.textColor != UIColor.lightGray{
+                mark = markAuto.text
             }
             if edComment.text == "Примечания" && edComment.textColor == UIColor.lightGray{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
                                            mobileNumber: edContact.text!,
-                                           gosNumber: gosNumber.text ?? "",
+                                           gosNumber: gos , mark: mark ,
                                            date: dateFormatter.string(from: picker.date),
                                            status: "В ОБРАБОТКЕ",
                                            images: images,
@@ -153,7 +164,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
                                            mobileNumber: edContact.text!,
-                                           gosNumber: gosNumber.text ?? "",
+                                           gosNumber: gos , mark: mark ,
                                            date: dateFormatter.string(from: picker.date),
                                            status: "В ОБРАБОТКЕ",
                                            images: images,
@@ -246,13 +257,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         sendButton.alpha     = 0.5
         sendButton.isEnabled = false
-        
+        gosNumber.isHidden      = true
+        gosLine.isHidden        = true
+        markAuto.isHidden       = true
+        markLine.isHidden       = true
         edContact.delegate  = self
         edFio.delegate      = self
         gosNumber.delegate  = self
+        markAuto.delegate  = self
         edComment.delegate  = self
-        
-        gosNumber.autocapitalizationType = .none
         
         title = "Пропуск"
         
@@ -276,14 +289,20 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }else if !(defaults.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (defaults.bool(forKey: "denyIssuanceOfPassSingle")){
             transportSwitch.isOn = true
             transportSwitch.isUserInteractionEnabled = false
-            commentConst.constant   = 65
+            commentConst.constant   = 120
             gosNumber.isHidden      = false
             gosLine.isHidden        = false
+            markAuto.isHidden       = false
+            markLine.isHidden       = false
             sendViewConst.constant = sendViewConst.constant - 57
         }
         
         edComment.text = "Примечания"
         edFio.text = "ФИО гостей"
+        gosNumber.textColor = UIColor.lightGray
+        gosNumber.selectedTextRange = gosNumber.textRange(from: gosNumber.beginningOfDocument, to: gosNumber.beginningOfDocument)
+        markAuto.textColor = UIColor.lightGray
+        markAuto.selectedTextRange = markAuto.textRange(from: markAuto.beginningOfDocument, to: markAuto.beginningOfDocument)
         edComment.textColor = UIColor.lightGray
         edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
         edFio.textColor = UIColor.lightGray
@@ -477,9 +496,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @objc private func stateChanged(_ sender: UISwitch) {
         
         if sender.isOn{
-            commentConst.constant   = 65
+            commentConst.constant   = 120
             gosNumber.isHidden      = false
             gosLine.isHidden        = false
+            markAuto.isHidden       = false
+            markLine.isHidden       = false
 //            sendBtnConst.constant = sendBtnConst.constant - 55
 //            sendViewConst.constant = sendViewConst.constant - 57
             
@@ -490,6 +511,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             commentConst.constant   = 8
             gosNumber.isHidden      = true
             gosLine.isHidden        = true
+            markAuto.isHidden       = true
+            markLine.isHidden       = true
 //            sendBtnConst.constant = sendBtnConst.constant + 55
 //            sendViewConst.constant = sendViewConst.constant + 57
             
@@ -632,12 +655,21 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         var requestBody: [String:[Any]] = ["persons":[], "autos":[]]
         let personsArr = edFio.text?.split(separator: ",")
         let autosArr = gosNumber.text?.split(separator: ",")
+        let mark = markAuto.text?.split(separator: ",")
         personsArr?.forEach {
             requestBody["persons"]?.append(["FIO":$0, "PassportData":""])
         }
-        if transportSwitch.isOn == true{
+        var i = 0
+        if transportSwitch.isOn == true && gosNumber.textColor != UIColor.lightGray && markAuto.textColor != UIColor.lightGray{
             autosArr?.forEach {
-                requestBody["autos"]?.append(["Mark":"", "Color":"", "Number":$0, "Parking":""])
+                if mark!.count == 0{
+                    requestBody["autos"]?.append(["Mark":"", "Color":"", "Number":$0, "Parking":""])
+                }else if i < mark!.count{
+                    requestBody["autos"]?.append(["Mark":mark?[i], "Color":"", "Number":$0, "Parking":""])
+                }else{
+                    requestBody["autos"]?.append(["Mark":mark?.last!, "Color":"", "Number":$0, "Parking":""])
+                }
+                i += 1
             }
         }
         
@@ -735,7 +767,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if segue.identifier == Segues.fromCreateRequest.toAdmission {
             let vc = segue.destination as! AdmissionVC
             vc.isCreated_ = true
-            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", date: "", status: "", images: [], imagesUrl: [], desc: "")
+            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", mark: "", date: "", status: "", images: [], imagesUrl: [], desc: "")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
             vc.name_ = name_
@@ -777,11 +809,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true) && (gosNumber.text == ""){
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
             sendButton.alpha     = 0.5
             sendButton.isEnabled = false
         
-        }else  if (edFio.text == "" || edContact.text == ""){
+        }else  if (edFio.textColor == UIColor.lightGray || edContact.textColor == UIColor.lightGray){
             sendButton.alpha     = 0.5
             sendButton.isEnabled = false
             
@@ -795,81 +827,119 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        
         let currentText:String = textView.text
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-        
-        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
+        if textView == gosNumber{
             if updatedText.isEmpty {
-                textView.text = "Примечания"
-                if textView.frame.origin.y < 100{
-                    textView.text = "ФИО гостей"
-                    sendButton.alpha     = 0.5
-                    sendButton.isEnabled = false
-                }
+                textView.text = "Госномер (или номера через запятую) например А 033 ЕО 77"
+                sendButton.alpha     = 0.5
+                sendButton.isEnabled = false
                 textView.textColor = UIColor.lightGray
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
                 
             } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
                 textView.textColor = UIColor.black
                 textView.text = text
-                if textView.frame.origin.y < 100 && gosNumber.text != ""{
-                    sendButton.alpha     = 1
-                    sendButton.isEnabled = true
-                }
+                sendButton.alpha     = 1
+                sendButton.isEnabled = true
                 
             } else {
                 return true
             }
-        }else {
+        }else if textView == markAuto{
             if updatedText.isEmpty {
-                textView.text = "Примечания"
-                if textView.frame.origin.y < 100{
-                    textView.text = "ФИО гостей"
-                    sendButton.alpha     = 0.5
-                    sendButton.isEnabled = false
-                }
+                textView.text = "Марка автомобиля (или марки через запятую)"
+                sendButton.alpha     = 0.5
+                sendButton.isEnabled = false
                 textView.textColor = UIColor.lightGray
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
                 
             } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
                 textView.textColor = UIColor.black
                 textView.text = text
-                if textView.frame.origin.y < 100{
-                    sendButton.alpha     = 1
-                    sendButton.isEnabled = true
-                }
+                sendButton.alpha     = 1
+                sendButton.isEnabled = true
                 
             } else {
                 return true
+            }
+        }else{
+            if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
+                if updatedText.isEmpty {
+                    textView.text = "Примечания"
+                    if textView.frame.origin.y < 100{
+                        textView.text = "ФИО гостей"
+                        sendButton.alpha     = 0.5
+                        sendButton.isEnabled = false
+                    }
+                    textView.textColor = UIColor.lightGray
+                    textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+                    
+                } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+                    textView.textColor = UIColor.black
+                    textView.text = text
+                    if textView.frame.origin.y < 100 && gosNumber.text != ""{
+                        sendButton.alpha     = 1
+                        sendButton.isEnabled = true
+                    }
+                    
+                } else {
+                    return true
+                }
+            }else {
+                if updatedText.isEmpty {
+                    textView.text = "Примечания"
+                    if textView.frame.origin.y < 100{
+                        textView.text = "ФИО гостей"
+                        sendButton.alpha     = 0.5
+                        sendButton.isEnabled = false
+                    }
+                    textView.textColor = UIColor.lightGray
+                    textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+                    
+                } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+                    textView.textColor = UIColor.black
+                    textView.text = text
+                    if textView.frame.origin.y < 100{
+                        sendButton.alpha     = 1
+                        sendButton.isEnabled = true
+                    }
+                    
+                } else {
+                    return true
+                }
             }
         }
+        
         return false
     }
     var previousValue = CGRect.zero
     var lines = 1
     func textViewDidChange(_ textView: UITextView) {
-        let pos = textView.endOfDocument
-        let currentRect = textView.caretRect(for: pos)
-        if (currentRect.origin.y > previousValue.origin.y){
-            lines += 1
-        }else if (currentRect.origin.y < previousValue.origin.y){
-            lines -= 1
+        if textView != gosNumber && textView != markAuto{
+            let pos = textView.endOfDocument
+            let currentRect = textView.caretRect(for: pos)
+            if (currentRect.origin.y > previousValue.origin.y){
+                lines += 1
+            }else if (currentRect.origin.y < previousValue.origin.y){
+                lines -= 1
+            }
+            
+            if (textView.text as NSString).components(separatedBy: .newlines).count < 4 && lines < 4 && textView.frame.origin.y < 100 {
+                self.FioConst.constant = textView.contentSize.height
+                if self.FioConst.constant == 57 && self.show == false{
+                    self.show = true
+                }else if (currentRect.origin.y > previousValue.origin.y) && self.show == true{
+                    self.FioConst.constant -= 20
+                    self.show = true
+                }
+                if self.FioConst.constant == 37{
+                    self.show = false
+                }
+            }
+            previousValue = currentRect
         }
         
-        if (textView.text as NSString).components(separatedBy: .newlines).count < 4 && lines < 4 && textView.frame.origin.y < 100 {
-            self.FioConst.constant = textView.contentSize.height
-            if self.FioConst.constant == 57 && self.show == false{
-                self.show = true
-            }else if (currentRect.origin.y > previousValue.origin.y) && self.show == true{
-                self.FioConst.constant -= 20
-                self.show = true
-            }
-            if self.FioConst.constant == 37{
-                self.show = false
-            }
-        }
-        previousValue = currentRect
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {

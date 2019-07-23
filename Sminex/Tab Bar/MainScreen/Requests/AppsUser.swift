@@ -542,12 +542,19 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     
                     var auto = ""
+                    var mark = ""
                     self.rowAutos[row.id!]?.forEach {
                         if $0.number != "" && $0.number != nil {
                             auto = auto + ($0.number ?? "")
                         }
                         if $0.number != self.rowAutos[row.id!]?.last?.number {
                             auto = auto + ", "
+                        }
+                        if $0.mark != "" && $0.mark != nil {
+                            mark = mark + ($0.mark ?? "")
+                        }
+                        if $0.mark != self.rowAutos[row.id!]?.last?.mark {
+                            mark = mark + ", "
                         }
                     }
                     
@@ -561,7 +568,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
-                                                         gosNumber: auto,
+                                                         gosNumber: auto, mark: mark,
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
