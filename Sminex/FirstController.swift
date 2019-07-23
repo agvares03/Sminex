@@ -133,7 +133,7 @@ class FirstController: UIViewController {
                 self.busines_center_denyTotalOnlinePayments = Business_Center_Data(json: json!)?.DenyTotalOnlinePayments
                 
                 // Можно или нет ввозить/вывозить имущество
-                self.denyImportExportPropertyRequest = Business_Center_Data(json: json!)?.DenyImportExportProperty
+//                self.denyImportExportPropertyRequest = Business_Center_Data(json: json!)?.DenyImportExportProperty
             }
             
             #if DEBUG
@@ -144,7 +144,7 @@ class FirstController: UIViewController {
             defaults.set(self.business_center_info, forKey: "denyOnlinePayments")
             defaults.set(self.busines_center_denyInvoiceFiles, forKey: "denyInvoiceFiles")
             defaults.set(self.busines_center_denyTotalOnlinePayments, forKey: "denyTotalOnlinePayments")
-            defaults.set(self.denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
+//            defaults.set(self.denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
             defaults.synchronize()
             
         }.resume()

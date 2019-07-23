@@ -101,6 +101,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchNews()
         fetchDebt()
         fetchDeals()
+        getRequestTypes()
         fetchRequests()
         fetchQuestions()
         collection.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 24, right: 0)
@@ -272,7 +273,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             #if DEBUG
-//                        print(String(data: data!, encoding: .utf8)!)
+//            print(String(data: data!, encoding: .utf8)!)
             
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
@@ -801,6 +802,49 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.collection.reloadData()
             }
         }
+    }
+    
+    func getRequestTypes() {
+        
+        let id = UserDefaults.standard.string(forKey: "id_account") ?? ""
+        
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.REQUEST_TYPE + "accountid=" + id)!)
+        request.httpMethod = "GET"
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) {
+            data, responce, error in
+            
+            if error != nil {
+                DispatchQueue.main.sync {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            let responceString = String(data: data!, encoding: .utf8) ?? ""
+            
+            #if DEBUG
+            print(responceString)
+            #endif
+            
+            DispatchQueue.main.sync {
+                var denyImportExportPropertyRequest = false
+                if responceString.contains(find: "error") {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: responceString.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                } else {
+                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                        denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
+                        UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
+                    }
+                }
+            }
+            }.resume()
     }
     
     func getRequests() -> [RequestCellData] {

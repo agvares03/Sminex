@@ -539,6 +539,11 @@ final class AdmissionHeader: UICollectionViewCell {
     @IBOutlet private weak var descLine:        UILabel?
     @IBOutlet private weak var descConstant:    NSLayoutConstraint?
     
+    @IBOutlet weak var heigthFooter: NSLayoutConstraint?
+    @IBOutlet weak var phone_service: UILabel!
+    @IBOutlet weak var img_phone_service: UIImageView!
+    @IBOutlet weak var heigth_phone_service: NSLayoutConstraint?
+    
     private var delegate: AdmissionCellsProtocol?
     
     fileprivate func display(_ item: AdmissionHeaderData, delegate: AdmissionCellsProtocol) {
@@ -552,8 +557,34 @@ final class AdmissionHeader: UICollectionViewCell {
             gosNumbers.isHidden  = true
             gosLine.isHidden     = true
             gosTitle.isHidden    = true
-        
+            heigthFooter?.constant = 0
+            heigth_phone_service?.constant = 0
         } else {
+            if (UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
+                heigthFooter?.constant = 100
+                let data_: [ContactsJson] = TemporaryHolder.instance.contactsList
+                var phone: String = ""
+                for data in data_ {
+                    if (data.name?.contains(find: "Консьерж"))! {
+                        phone = data.phone ?? "";
+                    }
+                }
+                if (phone != "") {
+                    
+                    heigthFooter?.constant = 100
+                    heigth_phone_service?.constant = 110
+                    phone_service.text = phone
+                    
+                } else {
+                    
+                    heigthFooter?.constant = 100
+                    heigth_phone_service?.constant = 0
+                    
+                }
+            } else {
+                heigthFooter?.constant = 0
+                heigth_phone_service?.constant = 0
+            }
             gosConstant.constant = 14
             gosNumbers.isHidden  = false
             gosLine.isHidden     = false
@@ -599,6 +630,10 @@ final class AdmissionHeader: UICollectionViewCell {
                 }
             }
             imgsHeight.constant = 0
+        
+        let tap_phone = UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:)))
+        img_phone_service.isUserInteractionEnabled   = true
+        img_phone_service.addGestureRecognizer(tap_phone)
         
 //        }
 //        else if item.images.count != 0 {
@@ -655,6 +690,17 @@ final class AdmissionHeader: UICollectionViewCell {
 //                }
 //            }
 //        }
+    }
+    
+    @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
+        let newPhone = phone_service.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+        if let url = URL(string: "tel://" + newPhone!) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{

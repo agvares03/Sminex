@@ -78,7 +78,7 @@ class RequestTypeVC: UIViewController {
             #endif
             
             DispatchQueue.main.sync {
-                
+                var denyImportExportPropertyRequest = false
                 if responceString.contains(find: "error") {
                     let alert = UIAlertController(title: "Ошибка сервера", message: responceString.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
@@ -87,6 +87,8 @@ class RequestTypeVC: UIViewController {
                 } else {
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                         TemporaryHolder.instance.choise(json!)
+                        denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
+                        UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
                     }
                 }
                 let type: RequestTypeStruct

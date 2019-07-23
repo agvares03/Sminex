@@ -39,8 +39,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="337"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Нас топят соседи! Не можем с ними связаться. Срочно вызывайте сантехника" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NIf-Di-wCR">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Нас топят соседи! Не можем с ними связаться. Срочно вызывайте сантехника" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NIf-Di-wCR">
                                                     <rect key="frame" x="16" y="78" width="280" height="60"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="60" id="OSL-AE-hQh"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -228,6 +231,7 @@
                                         </constraints>
                                         <size key="customSize" width="320" height="337"/>
                                         <connections>
+                                            <outlet property="descHeight" destination="OSL-AE-hQh" id="Tih-Y7-HWT"/>
                                             <outlet property="descText" destination="NIf-Di-wCR" id="974-GK-FXz"/>
                                             <outlet property="descTitle" destination="UBw-1k-uOx" id="53X-B4-qAc"/>
                                             <outlet property="email" destination="JvC-im-l24" id="waa-zl-FyQ"/>

@@ -491,7 +491,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
 
 final class AppealHeader: UICollectionViewCell {
     
-    //@IBOutlet private weak var descHeight:      NSLayoutConstraint!
+    @IBOutlet private weak var descHeight:      NSLayoutConstraint!
     @IBOutlet private weak var mobileNumber:    UILabel!
     @IBOutlet private weak var descText:        UILabel?
     @IBOutlet private weak var descTitle:       UILabel?
@@ -519,7 +519,7 @@ final class AppealHeader: UICollectionViewCell {
             mobileNumber?.text = "-"
         }
         ident?.text = item.ident
-        //descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width)
+        descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width - 95)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -528,8 +528,7 @@ final class AppealHeader: UICollectionViewCell {
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.text = text
         label.sizeToFit()
-        
-        return label.frame.height
+        return label.frame.size.height
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
