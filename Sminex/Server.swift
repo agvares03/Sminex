@@ -12,8 +12,8 @@ final class Server {
     
     private var responseString: String?
     
-    static let SERVER              = "http://tst.sminex.com:1580/"
-//    static let SERVER              = "http://client.sminex.com:1580/"
+   // static let SERVER              = "http://tst.sminex.com:1580/"
+    static let SERVER              = "http://client.sminex.com:1580/"
     
     static let REGISTRATION        = "RegisterSimple.ashx?"            // Регистрация
     static let FORGOT              = "remember.ashx?"                  // Забыли пароль
