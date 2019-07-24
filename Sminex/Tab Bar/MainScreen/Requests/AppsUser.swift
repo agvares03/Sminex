@@ -240,7 +240,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REQUEST_TYPE + "accountid=" + id)!)
         request.httpMethod = "GET"
-        
+        print(request)
         self.typeGroup.enter()
         URLSession.shared.dataTask(with: request) {
             data, responce, error in
@@ -353,7 +353,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             var newData: [AppsUserCellData] = []
             self.rows.forEach { _, curr in
-                
                 var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
                 var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
@@ -516,15 +515,19 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 var type = self.data[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
                 var itsNever: Bool = false
+                print(type)
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
                         itsNever = true
                     }
+                    
                 }
-                if (!itsNever) {
-                    type = "Гостевой пропуск"
-                }
+                print(TemporaryHolder.instance.requestTypes?.types)
+                print(type)
+//                if (!itsNever) {
+//                    type = "Гостевой пропуск"
+//                }
                 
                 if type.contains(find: "ропуск") {
                     self.typeName = type
@@ -543,12 +546,19 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     
                     var auto = ""
+                    var mark = ""
                     self.rowAutos[row.id!]?.forEach {
                         if $0.number != "" && $0.number != nil {
                             auto = auto + ($0.number ?? "")
                         }
                         if $0.number != self.rowAutos[row.id!]?.last?.number {
                             auto = auto + ", "
+                        }
+                        if $0.mark != "" && $0.mark != nil {
+                            mark = mark + ($0.mark ?? "")
+                        }
+                        if $0.mark != self.rowAutos[row.id!]?.last?.mark {
+                            mark = mark + ", "
                         }
                     }
                     
@@ -562,7 +572,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
-                                                         gosNumber: auto,
+                                                         gosNumber: auto, mark: mark,
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
@@ -603,7 +613,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     self.prepareGroup?.leave()
                     
-                } else if type.contains(find: "Техническое обслуживание") {
+                } else {
                     let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
                     
@@ -950,6 +960,14 @@ struct Request {
             
         } else if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
+        } else if (name?.contains("Обращение к консьержу"))! {
+            name                = "Обращение к консьержу"
+        } else if (name?.contains("Обращение в техподдержку"))! {
+            name                = "Обращение в техподдержку"
+        } else if (name?.contains("Обращение к директору"))! {
+            name                = "Обращение к директору"
+        } else if (name?.contains("Обращение"))! {
+            name                = "Обращение"
         } else {
             name                = "Техническое обслуживание"
         }

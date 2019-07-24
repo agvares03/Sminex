@@ -1,14 +1,13 @@
 //
-//  FinanceCalcVC.swift
+//  FinanceCalcVCComm.swift
 //  Sminex
 //
-//  Created by IH0kN3m on 4/15/18.
-//  Copyright © 2018 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 18/07/2019.
 //
 
 import UIKit
 
-final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet private weak var collection: UICollectionView!
     
@@ -32,7 +31,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let cell = FinanceCalcCell.fromNib()
+        let cell = FinanceCalcCommCell.fromNib()
         if indexPath.row != data_.count {
             cell?.display(data_[indexPath.row])
             
@@ -45,10 +44,10 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcCell", for: indexPath) as! FinanceCalcCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcCommCell", for: indexPath) as! FinanceCalcCommCell
         if indexPath.row != data_.count {
             cell.display(data_[indexPath.row])
-        
+            
         } else {
             var sumAccured  = 0.0
             var sumDebt     = 0.0
@@ -67,13 +66,13 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceCalcHeader", for: indexPath) as! FinanceCalcHeader
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceCalcCommHeader", for: indexPath) as! FinanceCalcCommHeader
         header.display(getNameAndMonth(data_.first?.numMonthSet ?? 0) + " \(data_.first?.numYearSet ?? 0)")
         return header
     }
 }
 
-final class FinanceCalcHeader: UICollectionReusableView {
+final class FinanceCalcCommHeader: UICollectionReusableView {
     
     @IBOutlet private weak var title: UILabel!
     
@@ -82,7 +81,7 @@ final class FinanceCalcHeader: UICollectionReusableView {
     }
 }
 
-final class FinanceCalcCell: UICollectionViewCell {
+final class FinanceCalcCommCell: UICollectionViewCell {
     
     @IBOutlet private weak var sumAccured:  UILabel!
     @IBOutlet private weak var sumDebt:     UILabel!
@@ -126,7 +125,7 @@ final class FinanceCalcCell: UICollectionViewCell {
             sumDebt.font    = UIFont.boldSystemFont(ofSize: sumDebt.font.pointSize)
             sumPay.font     = UIFont.boldSystemFont(ofSize: sumPay.font.pointSize)
             title.font      = UIFont.boldSystemFont(ofSize: title.font.pointSize)
-        
+            
         } else {
             sumAccured.font = UIFont.systemFont(ofSize: sumAccured.font.pointSize, weight: .light)
             sumDebt.font    = UIFont.systemFont(ofSize: sumDebt.font.pointSize, weight: .light)
@@ -135,11 +134,11 @@ final class FinanceCalcCell: UICollectionViewCell {
         }
     }
     
-    class func fromNib() -> FinanceCalcCell? {
-        var cell: FinanceCalcCell?
+    class func fromNib() -> FinanceCalcCommCell? {
+        var cell: FinanceCalcCommCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? FinanceCalcCell {
+            if let view = $0 as? FinanceCalcCommCell {
                 cell = view
             }
         }
@@ -147,16 +146,3 @@ final class FinanceCalcCell: UICollectionViewCell {
         return cell
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

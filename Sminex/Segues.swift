@@ -178,6 +178,8 @@ struct Segues {
         static let toDeals           = "deals"
         static let toFinance         = "finance"
         static let toFinancePay      = "pay"
+        static let toFinanceComm     = "financeComm"
+        static let toFinancePayComm  = "payComm"
         static let toNews            = "news"
         static let toNewsWAnim       = "newsWAnim"
         static let toRequestAnim     = "requestAnim"
@@ -250,6 +252,7 @@ struct Segues {
         static let toReceiptArchive   = "receiptArchive"
         static let toCalcsArchive     = "calcsArchive"
         static let toPay              = "financePay"
+        static let toHistory          = "payHistory"
     }
     
     struct fromFinanceDebtArchiveVC {
@@ -287,6 +290,7 @@ struct Segues {
         static let toFinance         = "finance"
         static let toNews            = "news"
         static let toServicesUK      = "ukServices"
+        static let toAppeal          = "appeal"
         static let toSupport         = "support"
     }
     

@@ -27,6 +27,8 @@ struct Business_Center_Data: JSONDecodable {
     let DayFrom: Int?
     let DayTo: Int?
     
+    let DenyImportExportProperty: Bool?
+    
     init?(json: JSON) {
         DenyOnlinePayments                = "denyOnlinePayments"                  <~~ json
         DenyInvoiceFiles                  = "denyInvoiceFiles"                    <~~ json
@@ -42,5 +44,6 @@ struct Business_Center_Data: JSONDecodable {
         
         DayFrom                           = "meterReadingsDayFrom"                <~~ json
         DayTo                             = "meterReadingsDayTo"                  <~~ json
+        DenyImportExportProperty          = "denyImportExportPropertyRequest"     <~~ json
     }
 }

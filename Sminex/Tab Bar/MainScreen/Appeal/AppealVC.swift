@@ -1,22 +1,21 @@
 //
-//  AdmissionVC.swift
+//  AppealVC.swift
 //  Sminex
 //
-//  Created by IH0kN3m on 3/23/18.
-//  Copyright © 2018 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 22/07/2019.
 //
 
 import UIKit
 import Alamofire
 import SwiftyXMLParser
 
-private protocol AdmissionProtocol: class {}
+private protocol AppealProtocol: class {}
 private var mainScreenXml:  XML.Accessor?
-private protocol AdmissionCellsProtocol: class {
+private protocol AppealCellsProtocol: class {
     func imageTapped(_ sender: UITapGestureRecognizer)
 }
 
-final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AdmissionCellsProtocol {
+class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AppealCellsProtocol {
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var collection:      UICollectionView!
@@ -26,13 +25,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         imgs = [:]
-        if isCreated_ {
-            let viewControllers = navigationController?.viewControllers
-            navigationController?.popToViewController(viewControllers![viewControllers!.count - 4], animated: true)
-        
-        } else if isFromMain_ {
+        if isFromMain_ {
             navigationController?.popToRootViewController(animated: true)
-        
+            
         } else {
             navigationController?.popViewController(animated: true)
         }
@@ -76,32 +71,24 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
         startAnimating()
         if img != nil && commentField.text != "" {
-            self.uploadPhoto(img!, isSplit: true)
+            uploadPhoto(img!, isSplit: true)
             return
             
         } else if img == nil && commentField.text != "" {
-            self.sendComment()
+            sendComment()
         } else if img != nil && commentField.text == "" {
-            self.uploadPhoto(img!)
+            uploadPhoto(img!)
         }
     }
     
     public var name_: String?
-    public var delegate:   AppsUserDelegate?
+    public var delegate:   AppealUserDelegate?
     public var reqId_      = ""
-    public var isCreated_  = false
     public var isFromMain_ = false
-    public var data_: AdmissionHeaderData = AdmissionHeaderData(icon: UIImage(named: "account")!,
-                                                                gosti: "А. Е. Филимонов, В. В. Иванова",
-                                                                mobileNumber: "+7 965 913 95 67",
-                                                                gosNumber: "А 033 ЕО 777", mark: "Toyota",
-                                                                date: "9 Сентября 10:00",
-                                                                status: "В ОБРАБОТКЕ",
-                                                                images: [],
-                                                                imagesUrl: [], desc: "")
-    public var comments_: [AdmissionCommentCellData] = []
+    public var data_: AppealHeaderData = AppealHeaderData(title: "Консьержу", mobileNumber: "89246785645", ident: "1478", email: "test@test.ru", desc: "Описание")
+    public var comments_: [AppealCommentCellData] = []
     
-    private var arr: [AdmissionProtocol] = []
+    private var arr: [AppealProtocol] = []
     private var img: UIImage?
     
     private var refreshControl: UIRefreshControl?
@@ -111,21 +98,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         updateUserInterface()
         endAnimating()
         automaticallyAdjustsScrollViewInsets = false
-        print(data_.images)
-        if data_.images.count > 0{
-            data_.images.forEach{
-                comments_.append(AdmissionCommentCellData(image: UIImage(named: "account")!, title: "", comment: "", date: data_.date, commImg: $0, commImgUrl: nil, id: "-1"))
-            }
-        }
-//        if data_.desc != ""{
-//            comments_.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
-//                                                                 title: "Примечание",
-//                                                                 comment: data_.desc ?? "",
-//                                                                 date: data_.date ?? "",
-//                                                                 commImg: nil,
-//                                                                 commImgUrl: nil,
-//                                                                 id: "-1") )
-//        }
         arr = comments_
         arr.insert(data_, at: 0)
         
@@ -200,12 +172,12 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                 self.getMessages()
                 sleep(2)
                 DispatchQueue.main.sync {
-//                    self.data[IndexPath] = [0 : CellsHeaderData(title: "Заявки")]
-//                    res.forEach {
-//                        self.data_[IndexPath]![count] = $0
-//                        count += 1
-//                    }
-//                    self.data[IndexPath]![count] = RequestAddCellData(title: "Добавить заявку")
+                    //                    self.data[IndexPath] = [0 : CellsHeaderData(title: "Заявки")]
+                    //                    res.forEach {
+                    //                        self.data_[IndexPath]![count] = $0
+                    //                        count += 1
+                    //                    }
+                    //                    self.data[IndexPath]![count] = RequestAddCellData(title: "Добавить заявку")
                     self.collection.reloadData()
                 }
             }
@@ -241,14 +213,14 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if indexPath.row == 0 {
-
-            let cell = AdmissionHeader.fromNib()
-            cell?.display((arr[0] as! AdmissionHeaderData), delegate: self)
+            
+            let cell = AppealHeader.fromNib()
+            cell?.display((arr[0] as! AppealHeaderData), delegate: self, delegate1: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
             return CGSize(width: view.frame.size.width, height: size.height)
             
         } else {
-            let arr1 = arr[indexPath.row] as! AdmissionCommentCellData
+            let arr1 = arr[indexPath.row] as! AppealCommentCellData
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             let calendar = Calendar.current
@@ -264,7 +236,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let date = day + "." + month + "." + year
             if arr1.title == UserDefaults.standard.string(forKey: "name") ?? "" || arr1.title == UserDefaults.standard.string(forKey: "login") ?? "" {
                 var showDate = true
-                let cell = AdmissionCommentUserCell.fromNib()
+                let cell = AppealCommentUserCell.fromNib()
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd.MM.yyyy"
                 if dateFormatter.date(from: date)! > commDate{
@@ -279,16 +251,16 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-                let ar = arr[indexPath.row] as! AdmissionCommentCellData
+                let ar = arr[indexPath.row] as! AppealCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
                     return CGSize(width: view.frame.size.width, height: 0)
                 }
                 return CGSize(width: view.frame.size.width, height: size.height)
             }else{
                 var showDate = true
-                let cell = AdmissionCommentConstCell.fromNib()
+                let cell = AppealCommentConstCell.fromNib()
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd.MM.yyyy"
                 if dateFormatter.date(from: date)! > commDate{
@@ -303,9 +275,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-                let ar = arr[indexPath.row] as! AdmissionCommentCellData
+                let ar = arr[indexPath.row] as! AppealCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
                     return CGSize(width: view.frame.size.width, height: 0)
                 }
@@ -321,12 +293,12 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.row == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionHeader1", for: indexPath) as! AdmissionHeader
-            cell.display((arr[0] as! AdmissionHeaderData), delegate: self)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppealHeader", for: indexPath) as! AppealHeader
+            cell.display((arr[0] as! AppealHeaderData), delegate: self, delegate1: self)
             return cell
-        
+            
         } else {
-            let arr1 = arr[indexPath.row] as! AdmissionCommentCellData
+            let arr1 = arr[indexPath.row] as! AppealCommentCellData
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             let calendar = Calendar.current
@@ -342,7 +314,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let date = day + "." + month + "." + year
             if arr1.title == UserDefaults.standard.string(forKey: "name") ?? "" || arr1.title == UserDefaults.standard.string(forKey: "login") ?? ""{
                 var showDate = true
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionCommentUserCell", for: indexPath) as! AdmissionCommentUserCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppealCommentUserCell", for: indexPath) as! AppealCommentUserCell
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd.MM.yyyy"
                 print(arr1.date)
@@ -358,11 +330,11 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
                 return cell
             }else{
                 var showDate = true
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionCommentConstCell", for: indexPath) as! AdmissionCommentConstCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppealCommentConstCell", for: indexPath) as! AppealCommentConstCell
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd.MM.yyyy"
                 if dateFormatter.date(from: date)! > commDate{
@@ -377,14 +349,14 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
                 return cell
             }
         }
     }
     
     func getMessages(){
-            
+        
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pass  = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
@@ -411,7 +383,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                 rows[row1.attributes["Status"]!]?.append(Request(row: row1))
                 rowComms[row1.attributes["ID"]!] = []
                 let status = row1.attributes["Status"]!
-                self.data_.status = status
                 row2.forEach { row in
                     rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )
@@ -423,14 +394,14 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     rowComms[row.attributes["Name"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["PhoneNum"]!]?.append( RequestComment(row: row) )
                     index += 1
-//                    self.arr = self.comments_
-//                    self.arr.insert(self.data_, at: 0)
+                    //                    self.arr = self.comments_
+                    //                    self.arr.insert(self.data_, at: 0)
                     if index > self.arr.count{
-                        self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        self.arr.append( AppealCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
                     }
-//                    if index < self.arr.count{
-//                        self.arr.removeLast()
-//                    }
+                    //                    if index < self.arr.count{
+                    //                        self.arr.removeLast()
+                    //                    }
                 }
             }
             
@@ -468,14 +439,14 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             }
             
             #if DEBUG
-                print(String(data: data!, encoding: .utf8)!)
+            print(String(data: data!, encoding: .utf8)!)
             #endif
             
             DispatchQueue.main.async {
                 let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: self.img, id: UUID().uuidString)  )
+                self.arr.append( AppealCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: self.img, id: UUID().uuidString)  )
                 self.collection.reloadData()
                 self.img = nil
                 self.commentField.text = ""
@@ -502,7 +473,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()
         let comm = commentField.text ?? ""
         if isSplit {
-//            commentField.text = ""
+            //            commentField.text = ""
         }
         
         let uid = UUID().uuidString
@@ -532,16 +503,16 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     let accountName = UserDefaults.standard.string(forKey: "name") ?? ""
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-                    self.arr.append( AdmissionCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: img, id: uid)  )
+                    self.arr.append( AppealCommentCellData(image: UIImage(named: "account")!, title: accountName, comment: self.commentField.text!, date: dateFormatter.string(from: Date()),commImg: img, id: uid)  )
                     
                     if !isSplit {
                         self.collection.reloadData()
                         self.img = nil
-//                        self.commentField.text = ""
+                        //                        self.commentField.text = ""
                         self.commentField.placeholder = "Сообщение"
                         self.view.endEditing(true)
                         self.delegate?.update()
-                    
+                        
                         // Подождем пока закроется клваиатура
                         DispatchQueue.global(qos: .userInteractive).async {
                             usleep(900000)
@@ -624,151 +595,37 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
 }
 
-
-final class AdmissionHeader: UICollectionViewCell {
+final class AppealHeader: UICollectionViewCell {
     
-//    @IBOutlet private weak var imgsLoader:      UIActivityIndicatorView!
-    @IBOutlet private weak var gosConstant:     NSLayoutConstraint!
-    @IBOutlet private weak var markConstant:     NSLayoutConstraint!
-    @IBOutlet private weak var gostiConstant:     NSLayoutConstraint!
-//    @IBOutlet private weak var imgsHeight:      NSLayoutConstraint!
-//    @IBOutlet private weak var imgsTop:         NSLayoutConstraint!
-//    @IBOutlet private weak var imgs:            UIScrollView!
-    @IBOutlet private weak var image:           UIImageView!
-    @IBOutlet private weak var gosti:           UILabel!
+    @IBOutlet private weak var descHeight:      NSLayoutConstraint!
     @IBOutlet private weak var mobileNumber:    UILabel!
-    @IBOutlet private weak var gosNumbers:      UILabel!
-    @IBOutlet private weak var gosTitle:        UILabel!
-    @IBOutlet private weak var gosLine:         UILabel!
-    @IBOutlet private weak var markAuto:        UILabel!
-    @IBOutlet private weak var markTitle:       UILabel!
-    @IBOutlet private weak var markLine:        UILabel!
-    @IBOutlet private weak var date:            UILabel!
-    @IBOutlet private weak var status:          UILabel!
     @IBOutlet private weak var descText:        UILabel?
     @IBOutlet private weak var descTitle:       UILabel?
-    @IBOutlet private weak var descLine:        UILabel?
-    @IBOutlet private weak var descConstant:    NSLayoutConstraint?
+    @IBOutlet private weak var email:           UILabel?
+    @IBOutlet private weak var ident:           UILabel?
     
-    @IBOutlet weak var heigthFooter: NSLayoutConstraint?
-    @IBOutlet weak var phone_service: UILabel!
-    @IBOutlet weak var img_phone_service: UIImageView!
-    @IBOutlet weak var heigth_phone_service: NSLayoutConstraint?
+    private var delegate: AppealCellsProtocol?
+    private var delegate1: AppealVC?
     
-    private var delegate: AdmissionCellsProtocol?
-    
-    fileprivate func display(_ item: AdmissionHeaderData, delegate: AdmissionCellsProtocol) {
+    fileprivate func display(_ item: AppealHeaderData, delegate: AppealCellsProtocol, delegate1: AppealVC) {
+        print(item)
         
         self.delegate = delegate
-//        imgsLoader.isHidden = true
-//        imgsLoader.stopAnimating()
-        
-        if item.gosNumber == "" {
-            gosConstant?.constant = 0
-            gosNumbers.isHidden  = true
-            gosLine.isHidden     = true
-            gosTitle.isHidden    = true
-            heigthFooter?.constant = 0
-            heigth_phone_service?.constant = 0
-        } else {
-            if (UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
-                heigthFooter?.constant = 100
-                let data_: [ContactsJson] = TemporaryHolder.instance.contactsList
-                var phone: String = ""
-                for data in data_ {
-                    if (data.name?.contains(find: "Консьерж"))! {
-                        phone = data.phone ?? "";
-                    }
-                }
-                if (phone != "") {
-                    
-                    heigthFooter?.constant = 100
-                    heigth_phone_service?.constant = 110
-                    phone_service.text = phone
-                    
-                } else {
-                    
-                    heigthFooter?.constant = 100
-                    heigth_phone_service?.constant = 0
-                    
-                }
-            } else {
-                heigthFooter?.constant = 0
-                heigth_phone_service?.constant = 0
-            }
-            gosConstant?.constant = 58
-            gosNumbers.isHidden  = false
-            gosLine.isHidden     = false
-            gosTitle.isHidden    = false
+        self.delegate1 = delegate1
+        descText?.text = item.desc
+        descTitle?.text = item.title
+        if item.email.contains(find: "@"){
+            email?.text = item.email
+        }else{
+            email?.text = "-"
         }
-        
-        if item.mark == "" {
-            markConstant?.constant = 0
-            markAuto.isHidden    = true
-            markLine.isHidden    = true
-            markTitle.isHidden   = true
-        } else {
-            markConstant?.constant = 58
-            markAuto.isHidden    = false
-            markLine.isHidden    = false
-            markTitle.isHidden   = false
+        if item.mobileNumber != "" || item.mobileNumber != "-" || item.mobileNumber != " "{
+            mobileNumber?.text = item.mobileNumber
+        }else{
+            mobileNumber?.text = "-"
         }
-        
-        if item.desc == "" {
-            descConstant?.constant = 0
-            descText?.isHidden  = true
-            descTitle?.isHidden = true
-            descLine?.isHidden  = true
-            descText?.text = ""
-        } else {
-            descConstant?.constant = 47
-            descText?.isHidden  = false
-            descTitle?.isHidden = false
-            descLine?.isHidden  = false
-            descText?.text = item.desc
-        }
-        
-        image.image         = item.icons
-        gosti.text          = item.gosti
-        mobileNumber.text   = item.mobileNumber
-        gosNumbers.text     = item.gosNumber
-        markAuto.text       = item.mark
-        status.text         = item.status
-        let k = heightForTitle(text: item.gosti, width: gosti.frame.size.width)
-        gostiConstant?.constant = k
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
-        
-//        if item.images.count == 0 && item.imgsUrl.count == 0 {
-//            imgs.isHidden       = true
-//            if item.desc == "" {
-//                imgsTop.constant = 0
-//            } else {
-//                let k = heightForTitle(text: item.desc, width: gosti.frame.size.width)
-//                print(k)
-//                if k == 20.5{
-//                    imgsTop.constant = 35 + k
-//                }else{
-//                    imgsTop.constant = 25 + k
-//                }
-//            }
-//            imgsHeight.constant = 0
-        
-        let tap_phone = UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:)))
-        img_phone_service.isUserInteractionEnabled   = true
-        img_phone_service.addGestureRecognizer(tap_phone)
-    }
-    
-    @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
-        let newPhone = phone_service.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
-        if let url = URL(string: "tel://" + newPhone!) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
-        }
+        ident?.text = item.ident
+        descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width - 95)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -777,19 +634,18 @@ final class AdmissionHeader: UICollectionViewCell {
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.text = text
         label.sizeToFit()
-        
-        return label.frame.height
+        return label.frame.size.height
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
         delegate?.imageTapped(sender)
     }
- 
-    class func fromNib() -> AdmissionHeader? {
-        var cell: AdmissionHeader?
+    
+    class func fromNib() -> AppealHeader? {
+        var cell: AppealHeader?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? AdmissionHeader {
+            if let view = $0 as? AppealHeader {
                 cell = view
             }
         }
@@ -797,36 +653,26 @@ final class AdmissionHeader: UICollectionViewCell {
     }
 }
 
-final class AdmissionHeaderData: AdmissionProtocol {
+final class AppealHeaderData: AppealProtocol {
     
-    let images:         [UIImage]
-    let imgsUrl:        [String]
-    let icons:          UIImage
-    let gosti:          String
+    let title:          String
     let mobileNumber:   String
-    let gosNumber:      String
-    let date:           String
-    var status:         String
-    var desc:           String
-    var mark:           String
+    let desc:           String
+    let email:          String
+    let ident:          String
     
-    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, mark: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String) {
+    init(title: String, mobileNumber: String, ident: String, email: String, desc: String) {
         
-        self.icons          = icon
-        self.gosti          = gosti
+        self.title          = title
         self.mobileNumber   = mobileNumber
-        self.gosNumber      = gosNumber
-        self.date           = date
-        self.status         = status
-        self.images         = images
-        self.imgsUrl        = imagesUrl
+        self.ident          = ident
+        self.email          = email
         self.desc           = desc
-        self.mark           = mark
     }
 }
 
 
-final class AdmissionCommentUserCell: UICollectionViewCell {
+final class AppealCommentUserCell: UICollectionViewCell {
     
     @IBOutlet private weak var imgsLoader:  UIActivityIndicatorView!
     @IBOutlet private      var imgsConst:   NSLayoutConstraint!
@@ -835,13 +681,13 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
-    @IBOutlet private weak var comment: 	UILabel!
+    @IBOutlet private weak var comment:     UILabel!
     @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var time:        UILabel!
     
-    private var delegate: AdmissionCellsProtocol?
+    private var delegate: AppealCellsProtocol?
     
-    fileprivate func display(_ item: AdmissionCommentCellData, delegate: AdmissionCellsProtocol, showDate: Bool) {
+    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -920,11 +766,11 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
         delegate?.imageTapped(sender)
     }
     
-    class func fromNib() -> AdmissionCommentUserCell? {
-        var cell: AdmissionCommentUserCell?
+    class func fromNib() -> AppealCommentUserCell? {
+        var cell: AppealCommentUserCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? AdmissionCommentUserCell {
+            if let view = $0 as? AppealCommentUserCell {
                 cell = view
             }
         }
@@ -933,7 +779,7 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
     }
 }
 
-final class AdmissionCommentConstCell: UICollectionViewCell{
+final class AppealCommentConstCell: UICollectionViewCell {
     
     @IBOutlet private weak var imgsLoader:  UIActivityIndicatorView!
     @IBOutlet private      var imgsConst:   NSLayoutConstraint!
@@ -947,9 +793,9 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
     @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var time:        UILabel!
     
-    private var delegate: AdmissionCellsProtocol?
+    private var delegate: AppealCellsProtocol?
     
-    fileprivate func display(_ item: AdmissionCommentCellData, delegate: AdmissionCellsProtocol, showDate: Bool) {
+    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -1032,11 +878,11 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
         delegate?.imageTapped(sender)
     }
     
-    class func fromNib() -> AdmissionCommentConstCell? {
-        var cell: AdmissionCommentConstCell?
+    class func fromNib() -> AppealCommentConstCell? {
+        var cell: AppealCommentConstCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? AdmissionCommentConstCell {
+            if let view = $0 as? AppealCommentConstCell {
                 cell = view
             }
         }
@@ -1046,7 +892,7 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
     }
 }
 
-final class AdmissionCommentCellData: AdmissionProtocol {
+final class AppealCommentCellData: AppealProtocol {
     
     let img:        UIImage?
     let image:      UIImage
@@ -1069,8 +915,3 @@ final class AdmissionCommentCellData: AdmissionProtocol {
 }
 
 private var imgs: [String:UIImage] = [:]
-
-
-
-
-

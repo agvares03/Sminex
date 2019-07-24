@@ -1,14 +1,13 @@
 //
-//  FinancePayAcceptVC.swift
+//  FinancePayAcceptVCComm.swift
 //  Sminex
 //
-//  Created by IH0kN3m on 4/22/18.
-//  Copyright © 2018 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 18/07/2019.
 //
 
 import UIKit
 
-final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
+class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var offerLabel:  UILabel!
     @IBOutlet private weak var fieldTop:    NSLayoutConstraint!
@@ -57,7 +56,7 @@ final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
                 date?.removeLast(9)
             }
             descLabel.text = "Оплата счета: \(billsData_?.number ?? "") от \(date ?? "")"
-        
+            
         } else {
             sumTextField.text = String(format: "%.2f", (accountData_?.sumPay ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета"
@@ -150,16 +149,16 @@ final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
         }
     }
     
-//    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        var str: String = textField.text!
-//        str = str.replacingOccurrences(of: ",", with: ".")
-//        self.sumTextField.text = str
-//        if str.contains(find: ".") && (string == "." || string == ","){
-//            str.removeLast()
-//            self.sumTextField.text = str
-//        }
-//        return true
-//    }
+    //    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    //        var str: String = textField.text!
+    //        str = str.replacingOccurrences(of: ",", with: ".")
+    //        self.sumTextField.text = str
+    //        if str.contains(find: ".") && (string == "." || string == ","){
+    //            str.removeLast()
+    //            self.sumTextField.text = str
+    //        }
+    //        return true
+    //    }
     
     @objc private func offerTapped(_ sender: UITapGestureRecognizer) {
         url = URLRequest(url: URL(string: "http://client.sminex.com/_layouts/BusinessCenters.Branding/Payments/PaymentOffer.aspx")!)
@@ -202,17 +201,17 @@ final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
                 return
             }
             
-//            self.str_url = String(data: data!, encoding: .utf8)!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
-//            self.str_url = self.str_url.replacingOccurrences(of: "https%3A", with: "https:")
+            //            self.str_url = String(data: data!, encoding: .utf8)!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
+            //            self.str_url = self.str_url.replacingOccurrences(of: "https%3A", with: "https:")
             
             // Костыль
             self.str_url = String(data: data!, encoding: .utf8)!//.replacingOccurrences(of: " ", with: "")
             
-//            let index = self.str_url.index(self.str_url.startIndex, offsetBy: 39)
-//            var str1 = self.str_url.substring(to: index)
-//            var str2 = self.str_url.suffix(self.str_url.length - 39)
-//
-//            self.str_url = str1 + str2.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
+            //            let index = self.str_url.index(self.str_url.startIndex, offsetBy: 39)
+            //            var str1 = self.str_url.substring(to: index)
+            //            var str2 = self.str_url.suffix(self.str_url.length - 39)
+            //
+            //            self.str_url = str1 + str2.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
             self.url = URLRequest(url: URL(string: self.str_url)!)
             
             DispatchQueue.main.sync {
@@ -220,7 +219,7 @@ final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
             }
             
             #if DEBUG
-//            print(String(data: data!, encoding: .utf8) ?? "")
+            //            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             }.resume()
@@ -246,21 +245,3 @@ final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

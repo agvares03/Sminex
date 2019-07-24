@@ -1,14 +1,13 @@
 //
-//  FinanceDebtArchiveVC.swift
+//  FinancePayVCComm.swift
 //  Sminex
 //
-//  Created by IH0kN3m on 4/15/18.
-//  Copyright © 2018 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 18/07/2019.
 //
 
 import UIKit
 
-final class FinanceDebtArchiveVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class FinanceDebtArchiveVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet private weak var collection: UICollectionView!
     
@@ -34,8 +33,8 @@ final class FinanceDebtArchiveVC: UIViewController, UICollectionViewDelegate, UI
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtArchiveCell", for: indexPath) as! FinanceDebtArchiveCell
-//        cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtArchiveCommCell", for: indexPath) as! FinanceDebtArchiveCommCell
+        //        cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
         cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0)).formattedWithSeparator))
         return cell
     }
@@ -87,7 +86,7 @@ final class FinanceDebtArchiveVC: UIViewController, UICollectionViewDelegate, UI
 }
 
 
-final class FinanceDebtArchiveCell: UICollectionViewCell {
+final class FinanceDebtArchiveCommCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!

@@ -1,21 +1,15 @@
 //
-//  FinanceDebtVC.swift
+//  FinanceDebtVCComm.swift
 //  Sminex
 //
-//  Created by IH0kN3m on 4/13/18.
-//  Copyright © 2018 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 18/07/2019.
 //
 
 import UIKit
 import Gloss
 import PDFKit
 
-protocol FinanceDebtPayCellDelegate {
-    func startShareAnimation()
-    func stopShareAnimation()
-}
-
-final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
@@ -65,7 +59,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                 alert.addAction( UIAlertAction(title: file.fileName, style: .default, handler: { (_) in self.getShareFile(file) } ) )
             }
             present(alert, animated: true, completion: nil)
-        
+            
         } else {
             self.getShareFile(files?.first)
         }
@@ -95,7 +89,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                     self.getShareElements()
                 }
             }
-        }        
+        }
     }
     
     func updateUserInterface() {
@@ -141,7 +135,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceDebtHeader", for: indexPath) as! FinanceDebtHeader
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceDebtCommHeader", for: indexPath) as! FinanceDebtCommHeader
         header.dispay(getNameAndMonth(data_?.numMonth ?? 0) + " \(data_?.numYear ?? 0)", (String(format:"%.2f", (data_?.sum)!) ))
         return header
         
@@ -150,30 +144,30 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.row == receipts?.count {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtPayCell", for: indexPath) as! FinanceDebtPayCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtPayCommCell", for: indexPath) as! FinanceDebtPayCommCell
             cell.display(data_!)
             delegate = cell
             return cell
         }
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
         var isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
         if receipts![indexPath.row].usluga == "" && receipts![indexPath.row].type != ""{
             isBold = true
         }
         if !isBold {
-        cell.display(title: receipts![indexPath.row].usluga ?? "",
-                     desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
-                     isBold: isBold)
-        
+            cell.display(title: receipts![indexPath.row].usluga ?? "",
+                         desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
+                         isBold: isBold)
+            
         } else {
-//            let currType = receipts?.filter {
-//                return $0.type == receipts![indexPath.row].type
-//            }
-//            var sum = 0.0
-//            currType?.forEach {
-//                sum += ($0.sum ?? 0.0)
-//            }
+            //            let currType = receipts?.filter {
+            //                return $0.type == receipts![indexPath.row].type
+            //            }
+            //            var sum = 0.0
+            //            currType?.forEach {
+            //                sum += ($0.sum ?? 0.0)
+            //            }
             cell.display(title: receipts![indexPath.row].type ?? "",
                          desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                          isBold: isBold)
@@ -202,22 +196,22 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                 return CGSize(width: view.frame.size.width, height: 80.0)
             }
             return CGSize(width: view.frame.size.width, height: 193.0)
-        
+            
         } else {
-            let cell = FinanceDebtCell.fromNib()
+            let cell = FinanceDebtCommCell.fromNib()
             var isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
             if receipts![indexPath.row].usluga == "" && receipts![indexPath.row].type != ""{
                 isBold = true
             }
             cell?.display(title: receipts![indexPath.row].usluga ?? "",
-                         desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
-                         isBold: false)
+                          desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
+                          isBold: false)
             var lblH: CGFloat = 0
             if !isBold {
-                let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
+                let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
                 lblH = heightForView(text: receipts![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
             } else {
-                let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
+                let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
                 lblH = heightForView(text: receipts![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
             }
             return CGSize(width: view.frame.size.width, height: lblH)
@@ -269,10 +263,10 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             }
             
             #if DEBUG
-//                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
+            //                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
             #endif
-        
-        }.resume()
+            
+            }.resume()
     }
     
     private func getShareElements() {
@@ -283,7 +277,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
         request.httpMethod = "GET"
         
-//        print(request.url)
+        //        print(request.url)
         
         filesGroup.enter()
         URLSession.shared.dataTask(with: request) {
@@ -296,13 +290,13 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             guard data != nil else { return }
             
             #if DEBUG
-//            print(String(data: data!, encoding: .utf8) ?? "")
+            //            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.files = RecieptFilesDataJson.init(json: json!)?.data
             }
-        
+            
             }.resume()
     }
     
@@ -344,7 +338,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                     activityViewController.popoverPresentationController?.sourceView = self.view
                     self.present(activityViewController, animated: true, completion: nil)
                 }
-            
+                
             } else if file?.type == "pdf" || file?.fileName?.contains(find: ".pdf") ?? false {
                 var docURL = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last! as NSURL
                 docURL = docURL.appendingPathComponent( "myDocument.pdf")! as NSURL
@@ -355,9 +349,9 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
                     self.present(activityViewController, animated: true, completion: nil)
                 }
             }
- 
+            
             #if DEBUG
-//                print(String(data: data!, encoding: .utf8) ?? "")
+            //                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             }.resume()
@@ -380,7 +374,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             let vc = segue.destination as! FinanceBarCodeVC
             vc.amount_ = (data_?.sum ?? 0.0) - (data_?.payment_sum ?? 0.0)
             vc.codePay_ = data_?.codPay
-        
+            
         } else if segue.identifier == Segues.fromFinanceDebtVC.toPay {
             let vc = segue.destination as! FinancePayAcceptVC
             vc.billsData_ = data_
@@ -388,7 +382,7 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
     }
 }
 //" ₽"
-final class FinanceDebtHeader: UICollectionReusableView {
+final class FinanceDebtCommHeader: UICollectionReusableView {
     
     @IBOutlet private weak var title: UILabel!
     @IBOutlet private weak var obj_sum: UILabel!
@@ -408,7 +402,7 @@ final class FinanceDebtHeader: UICollectionReusableView {
     }
 }
 
-final class FinanceDebtCell: UICollectionViewCell {
+final class FinanceDebtCommCell: UICollectionViewCell {
     
     @IBOutlet weak var title:   UILabel!
     @IBOutlet weak var desc:    UILabel!
@@ -430,7 +424,7 @@ final class FinanceDebtCell: UICollectionViewCell {
             self.title.font = UIFont.boldSystemFont(ofSize: self.title.font.pointSize)
             self.desc.font  = UIFont.boldSystemFont(ofSize: self.desc.font.pointSize)
             self.title.textColor = .black
-        
+            
         } else {
             self.title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .light)
             self.desc.font  = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .light)
@@ -438,11 +432,11 @@ final class FinanceDebtCell: UICollectionViewCell {
         }
     }
     
-    class func fromNib() -> FinanceDebtCell? {
-        var cell: FinanceDebtCell?
+    class func fromNib() -> FinanceDebtCommCell? {
+        var cell: FinanceDebtCommCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? FinanceDebtCell {
+            if let view = $0 as? FinanceDebtCommCell {
                 cell = view
             }
         }
@@ -451,12 +445,12 @@ final class FinanceDebtCell: UICollectionViewCell {
     }
 }
 
-final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate {
+final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDelegate {
     
     @IBOutlet private weak var shareLoader: UIActivityIndicatorView!
     @IBOutlet private weak var shareButton: UIButton!
     @IBOutlet private weak var dateLabel:   UILabel!
-//    @IBOutlet private weak var btnConst:   NSLayoutConstraint!
+    //    @IBOutlet private weak var btnConst:   NSLayoutConstraint!
     @IBOutlet private weak var btnConst1:   NSLayoutConstraint!
     @IBOutlet weak var pay_button: UIButton!
     @IBOutlet weak var pay_QR: UIButton!
@@ -499,59 +493,5 @@ final class FinanceDebtPayCell: UICollectionViewCell, FinanceDebtPayCellDelegate
         shareLoader.stopAnimating()
         shareLoader.isHidden = true
         shareButton.isHidden = false
-    }
-}
-
-struct ReceiptsDataJson: JSONDecodable {
-    
-    let data: [ReceiptsJson]?
-    
-    init?(json: JSON) {
-        data = "data" <~~ json
-    }
-}
-
-struct ReceiptsJson: JSONDecodable {
-    
-    let idReceipts:     String?
-    let usluga:         String?
-    let type:           String?
-    let sum:            Double?
-    
-    init?(json: JSON) {
-        idReceipts  = "id_receipts" <~~ json
-        usluga      = "usluga"      <~~ json
-        type        = "type"        <~~ json
-        sum         = "sum"         <~~ json
-    }
-    
-    init(idReceipts: String, usluga: String, type: String, sum: Double) {
-        self.idReceipts = idReceipts
-        self.usluga     = usluga
-        self.type       = type
-        self.sum        = sum
-    }
-}
-
-struct RecieptFilesDataJson: JSONDecodable {
-    
-    let data: [RecieptFilesJson]?
-    
-    init?(json: JSON) {
-        data = "data" <~~ json
-    }
-}
-
-struct RecieptFilesJson: JSONDecodable {
-    
-    let fileName:   String?
-    let type:       String?
-    let id:         String?
-    
-    init?(json: JSON) {
-        
-        fileName = "FileName"   <~~ json
-        type     = "Type"       <~~ json
-        id       = "ID"         <~~ json
     }
 }

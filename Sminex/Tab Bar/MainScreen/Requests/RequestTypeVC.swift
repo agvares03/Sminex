@@ -57,6 +57,8 @@ class RequestTypeVC: UIViewController {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.REQUEST_TYPE + "accountid=" + id)!)
         request.httpMethod = "GET"
+        print(request)
+        
         URLSession.shared.dataTask(with: request) {
             data, responce, error in
             
@@ -72,11 +74,11 @@ class RequestTypeVC: UIViewController {
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            //                print(self.responceString)
+            print(responceString)
             #endif
             
             DispatchQueue.main.sync {
-                
+                var denyImportExportPropertyRequest = false
                 if responceString.contains(find: "error") {
                     let alert = UIAlertController(title: "Ошибка сервера", message: responceString.replacingOccurrences(of: "error:", with: ""), preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
@@ -85,11 +87,18 @@ class RequestTypeVC: UIViewController {
                 } else {
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                         TemporaryHolder.instance.choise(json!)
+                        denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
+                        UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
                     }
                 }
                 let type: RequestTypeStruct
                 type = .init(id: "3", name: "Услуги службы комфорта")
-                if let types = TemporaryHolder.instance.requestTypes?.types {
+                if var types = TemporaryHolder.instance.requestTypes?.types {
+                    for i in 0...types.count - 1{
+                        if types[i].name == "Обращение"{
+                            types.remove(at: i)
+                        }
+                    }
                     self.data = types
                 }
                 self.data.append(type)
