@@ -839,6 +839,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     return
                 } else {
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                        if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                            TemporaryHolder.instance.choise(json!)
+                        }
                         denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
                         UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
                     }

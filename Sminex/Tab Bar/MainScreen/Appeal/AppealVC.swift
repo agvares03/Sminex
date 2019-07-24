@@ -220,21 +220,76 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
             return CGSize(width: view.frame.size.width, height: size.height)
             
         } else {
-            let cell = AppealCommentCell.fromNib()
-            cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self)
-            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            let ar = arr[indexPath.row] as! AppealCommentCellData
-            if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
-                return CGSize(width: view.frame.size.width, height: 0)
+            let arr1 = arr[indexPath.row] as! AppealCommentCellData
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            let calendar = Calendar.current
+            var day = String(calendar.component(.day, from: dateFormatter.date(from: arr1.date)!))
+            if day.count == 1{
+                day = "0" + day
             }
-            return CGSize(width: view.frame.size.width, height: size.height)
+            var month = String(calendar.component(.month, from: dateFormatter.date(from: arr1.date)!))
+            if month.count == 1{
+                month = "0" + month
+            }
+            let year = String(calendar.component(.year, from: dateFormatter.date(from: arr1.date)!))
+            let date = day + "." + month + "." + year
+            if arr1.title == UserDefaults.standard.string(forKey: "name") ?? "" || arr1.title == UserDefaults.standard.string(forKey: "login") ?? "" {
+                var showDate = true
+                let cell = AppealCommentUserCell.fromNib()
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd.MM.yyyy"
+                if dateFormatter.date(from: date)! > commDate{
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }else{
+                    showDate = false
+                }
+                if indexPath.row == 1{
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }
+                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+                let ar = arr[indexPath.row] as! AppealCommentCellData
+                if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
+                    return CGSize(width: view.frame.size.width, height: 0)
+                }
+                return CGSize(width: view.frame.size.width, height: size.height)
+            }else{
+                var showDate = true
+                let cell = AppealCommentConstCell.fromNib()
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd.MM.yyyy"
+                if dateFormatter.date(from: date)! > commDate{
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }else{
+                    showDate = false
+                }
+                if indexPath.row == 1{
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }
+                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+                let ar = arr[indexPath.row] as! AppealCommentCellData
+                if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
+                    return CGSize(width: view.frame.size.width, height: 0)
+                }
+                return CGSize(width: view.frame.size.width, height: size.height)
+            }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return arr.count
     }
-    
+    var commDate = Date()
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.row == 0 {
@@ -243,9 +298,60 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
             return cell
             
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppealCommentCell", for: indexPath) as! AppealCommentCell
-            cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self)
-            return cell
+            let arr1 = arr[indexPath.row] as! AppealCommentCellData
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            let calendar = Calendar.current
+            var day = String(calendar.component(.day, from: dateFormatter.date(from: arr1.date)!))
+            if day.count == 1{
+                day = "0" + day
+            }
+            var month = String(calendar.component(.month, from: dateFormatter.date(from: arr1.date)!))
+            if month.count == 1{
+                month = "0" + month
+            }
+            let year = String(calendar.component(.year, from: dateFormatter.date(from: arr1.date)!))
+            let date = day + "." + month + "." + year
+            if arr1.title == UserDefaults.standard.string(forKey: "name") ?? "" || arr1.title == UserDefaults.standard.string(forKey: "login") ?? ""{
+                var showDate = true
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppealCommentUserCell", for: indexPath) as! AppealCommentUserCell
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd.MM.yyyy"
+                print(arr1.date)
+                if dateFormatter.date(from: date)! > commDate{
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }else{
+                    showDate = false
+                }
+                if indexPath.row == 1{
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }
+                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                return cell
+            }else{
+                var showDate = true
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppealCommentConstCell", for: indexPath) as! AppealCommentConstCell
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd.MM.yyyy"
+                if dateFormatter.date(from: date)! > commDate{
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }else{
+                    showDate = false
+                }
+                if indexPath.row == 1{
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+                    commDate = dateFormatter.date(from: arr1.date) ?? Date()
+                    showDate = true
+                }
+                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                return cell
+            }
         }
     }
     
@@ -566,20 +672,22 @@ final class AppealHeaderData: AppealProtocol {
 }
 
 
-final class AppealCommentCell: UICollectionViewCell {
+final class AppealCommentUserCell: UICollectionViewCell {
     
     @IBOutlet private weak var imgsLoader:  UIActivityIndicatorView!
     @IBOutlet private      var imgsConst:   NSLayoutConstraint!
     @IBOutlet private      var commConst:   NSLayoutConstraint!
+    @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
+    @IBOutlet private      var comm2Const:   NSLayoutConstraint!
+    @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
-    @IBOutlet private weak var image:       UIImageView!
-    @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var comment:     UILabel!
     @IBOutlet private weak var date:        UILabel!
+    @IBOutlet private weak var time:        UILabel!
     
     private var delegate: AppealCellsProtocol?
     
-    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol) {
+    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -591,32 +699,124 @@ final class AppealCommentCell: UICollectionViewCell {
             comImg.image       = item.img
             imgsConst.isActive = false
             commConst.isActive = true
-            
+            imgs2Const?.isActive = false
+            comm2Const?.isActive = true
+            comment.text = ""
         } else {
             comment.isHidden = false
             comImg.isHidden  = true
             imgsConst.isActive = true
             commConst.isActive = false
+            imgs2Const?.isActive = true
+            comm2Const?.isActive = false
         }
+        comment.text    = item.comment
         
-        if item.title == UserDefaults.standard.string(forKey: "name") ?? "" {
-            DispatchQueue.global(qos: .background).async {
-                if let imageData = UserDefaults.standard.object(forKey: "accountIcon"),
-                    let image = UIImage.init(data: imageData as! Data) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        let dat = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
+        let tim = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "HH:mm")
+        if dat.contains(find: "Сегодня") || dat.contains(find: "Вчера"){
+            let dat1 = dat.components(separatedBy: ",")
+            let tim1 = tim.components(separatedBy: ",")
+            date.text = String(dat1[0])
+            time.text = String(tim1[1])
+        }else{
+            date.text = dat
+            time.text = tim
+        }
+        let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        comImg.isUserInteractionEnabled = true
+        comImg.addGestureRecognizer(tap)
+        if showDate{
+            heightDate.constant = 31
+        }else{
+            heightDate.constant = 0
+        }
+        if item.imgUrl != nil {
+            
+            if imgs.keys.contains(item.id) {
+                self.comImg.image = imgs[item.id]
+            }
+            
+            imgsLoader.isHidden = false
+            imgsLoader.startAnimating()
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                
+                var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + item.imgUrl!)!)
+                request.httpMethod = "GET"
+                
+                let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+                
+                if data != nil {
                     DispatchQueue.main.async {
-                        self.image.image = image
-                        self.image.cornerRadius = self.image.frame.height / 2
-                    }
-                    
-                } else {
-                    DispatchQueue.main.async {
-                        self.image.image = item.image
+                        let imgDt = UIImage(data: data!)
+                        imgs[item.id] = imgDt
+                        self.comImg.image = imgDt
+                        self.imgsLoader.isHidden = true
+                        self.imgsLoader.stopAnimating()
                     }
                 }
             }
-            
+        }
+    }
+    
+    @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
+        delegate?.imageTapped(sender)
+    }
+    
+    class func fromNib() -> AppealCommentUserCell? {
+        var cell: AppealCommentUserCell?
+        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+        views?.forEach {
+            if let view = $0 as? AppealCommentUserCell {
+                cell = view
+            }
+        }
+        cell?.comment.preferredMaxLayoutWidth = cell?.comment.bounds.size.width ?? 0.0
+        return cell
+    }
+}
+
+final class AppealCommentConstCell: UICollectionViewCell {
+    
+    @IBOutlet private weak var imgsLoader:  UIActivityIndicatorView!
+    @IBOutlet private      var imgsConst:   NSLayoutConstraint!
+    @IBOutlet private      var commConst:   NSLayoutConstraint!
+    @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
+    @IBOutlet private      var comm2Const:   NSLayoutConstraint!
+    @IBOutlet              var heightDate:  NSLayoutConstraint!
+    @IBOutlet private weak var comImg:      UIImageView!
+    @IBOutlet private weak var title:       UILabel!
+    @IBOutlet private weak var comment:     UILabel!
+    @IBOutlet private weak var date:        UILabel!
+    @IBOutlet private weak var time:        UILabel!
+    
+    private var delegate: AppealCellsProtocol?
+    
+    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool) {
+        
+        self.delegate = delegate
+        imgsLoader.isHidden = true
+        imgsLoader.stopAnimating()
+        
+        if item.img != nil || item.imgUrl != nil {
+            comment.isHidden   = true
+            comImg.isHidden    = false
+            comImg.image       = item.img
+            imgsConst.isActive = false
+            commConst.isActive = true
+            imgs2Const?.isActive = false
+            comm2Const?.isActive = true
+            comment.text = ""
         } else {
-            image.image = item.image
+            comment.isHidden = false
+            comImg.isHidden  = true
+            imgsConst.isActive = true
+            commConst.isActive = false
+            imgs2Const?.isActive = true
+            comm2Const?.isActive = false
         }
         
         title.text      = item.title
@@ -624,8 +824,23 @@ final class AppealCommentCell: UICollectionViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Сегодня") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "HH:mm"): dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
-        
+        let dat = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
+        let tim = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "HH:mm")
+        print(dat, tim)
+        if dat.contains(find: "Сегодня") || dat.contains(find: "Вчера"){
+            let dat1 = dat.components(separatedBy: ",")
+            let tim1 = tim.components(separatedBy: ",")
+            date.text = String(dat1[0])
+            time.text = String(tim1[1])
+        }else{
+            date.text = dat
+            time.text = tim
+        }
+        if showDate{
+            heightDate.constant = 31
+        }else{
+            heightDate.constant = 0
+        }
         let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
         comImg.isUserInteractionEnabled = true
         comImg.addGestureRecognizer(tap)
@@ -657,24 +872,17 @@ final class AppealCommentCell: UICollectionViewCell {
                 }
             }
         }
-        DispatchQueue.main.async {
-            if item.title == "Примечание"{
-                self.image.isHidden = true
-            }else{
-                self.image.isHidden = false
-            }
-        }
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
         delegate?.imageTapped(sender)
     }
     
-    class func fromNib() -> AppealCommentCell? {
-        var cell: AppealCommentCell?
+    class func fromNib() -> AppealCommentConstCell? {
+        var cell: AppealCommentConstCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? AppealCommentCell {
+            if let view = $0 as? AppealCommentConstCell {
                 cell = view
             }
         }

@@ -515,15 +515,19 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 var type = self.data[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
                 var itsNever: Bool = false
+                print(type)
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
                         itsNever = true
                     }
+                    
                 }
-                if (!itsNever) {
-                    type = "Гостевой пропуск"
-                }
+                print(TemporaryHolder.instance.requestTypes?.types)
+                print(type)
+//                if (!itsNever) {
+//                    type = "Гостевой пропуск"
+//                }
                 
                 if type.contains(find: "ропуск") {
                     self.typeName = type
@@ -609,7 +613,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     self.prepareGroup?.leave()
                     
-                } else if type.contains(find: "Техническое обслуживание") {
+                } else {
                     let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
                     
