@@ -49,6 +49,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     public var requestId_ = ""
     public var isCreatingRequest_ = false
     public var typeReq = ""
+    public var selEmail = ""
     public var delegate: MainScreenDelegate?
     public var xml_: XML.Accessor?
     public var isFromMain: Bool = false
@@ -608,6 +609,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             let vc = segue.destination as! CreateAppeal
             vc.delegate = self
             vc.typeReq = typeReq
+            vc.selEmail = selEmail
             vc.name_ = typeName
             for i in 0...dataType.count - 1{
                 if dataType[i].name == "Обращение"{
