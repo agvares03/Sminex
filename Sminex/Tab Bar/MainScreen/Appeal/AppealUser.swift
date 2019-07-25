@@ -408,7 +408,15 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 }
                 
                 let descText = isPerson ? (persons == "" ? "Не указано" : persons) : curr.text ?? ""
-                newData.append( AppealUserCellData(title: curr.name ?? "",
+                var name = "Обращение"
+                if (curr.responsiblePerson?.contains("онсьерж"))! || (curr.name?.contains("онсьерж"))!{
+                    name                = "Обращение к консьержу"
+                } else if (curr.responsiblePerson?.contains("поддержк"))! || (curr.name?.contains("поддержк"))!{
+                    name                = "Обращение в Техподдержку"
+                } else if (curr.responsiblePerson?.contains("иректор"))! || (curr.name?.contains("иректор"))!{
+                    name                = " Обращение к Директору службы комфорта"
+                }
+                newData.append( AppealUserCellData(title: name ?? "",
                                                  desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
                                                  icon: icon,
                                                  status: curr.status ?? "",
@@ -417,7 +425,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                                                  type: curr.idType ?? "",
                                                  id: curr.id ?? "",
                                                  updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                 stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? ""))
+                                                 stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? "", respPerson: curr.responsiblePerson ?? ""))
                 
             }
             print("NewDATA: ", newData.count)
@@ -532,11 +540,11 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     }
                 }
                 var name = ""
-                if (row.name?.contains("Обращение к консьержу"))! {
+                if (row.responsiblePerson?.contains("онсьерж"))! || (row.name?.contains("онсьерж"))!{
                     name                = "Консьержу"
-                } else if (row.name?.contains("Обращение в техподдержку"))! {
+                } else if (row.responsiblePerson?.contains("поддержк"))! || (row.name?.contains("поддержк"))!{
                     name                = "в Техподдержку"
-                } else if (row.name?.contains("Обращение к директору"))! {
+                } else if (row.responsiblePerson?.contains("иректор"))! || (row.name?.contains("иректор"))!{
                     name                = "Директору службы комфорта"
                 }
                 self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: "", desc: row.text!)
@@ -726,8 +734,9 @@ private final class AppealUserCellData {
     let stickTitle: String
     let isBack:     Bool
     let isPaid:     String
+    let respPerson: String
     
-    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String) {
+    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String, respPerson: String) {
         
         self.updateDate = updateDate
         self.title      = title
@@ -740,5 +749,6 @@ private final class AppealUserCellData {
         self.id         = id
         self.stickTitle = stickTitle
         self.isPaid     = isPaid
+        self.respPerson = respPerson
     }
 }
