@@ -15,7 +15,7 @@ private protocol ContactsCellDelegate: class {
     func phonePressed(_ phone: String)
     func messagePressed(_ phone: String)
     func emailPressed(_ mail: String)
-    func btnPressed(_ type: Int)
+    func btnPressed(_ type: Int, _ email: String)
 }
 
 final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ContactsCellDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate{
@@ -165,8 +165,10 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
         }
     }
     var typeRequest = 0
-    func btnPressed(_ type: Int) {
+    var selEmail = ""
+    func btnPressed(_ type: Int, _ email: String) {
         typeRequest = type
+        selEmail = email
         performSegue(withIdentifier: "addAppeal", sender: self)
     }
     
@@ -174,6 +176,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
         if segue.identifier == "addAppeal" {
             let vc = segue.destination as! AppealUser
             vc.isCreatingRequest_ = true
+            vc.selEmail = selEmail
             if typeRequest == 0{
                 vc.typeReq = "Консьержу/ в службу комфорта"
             }else if typeRequest == 1{
@@ -223,9 +226,9 @@ final class ContactsCell: UICollectionViewCell {
         title.text = item.name
         desc.text  = item.description
         sendBtnHeight.constant = 45
-        if item.name?.contains(find: "оддержка") ?? false {
-            item.email = ""
-        }
+//        if item.name?.contains(find: "оддержка") ?? false {
+//            item.email = ""
+//        }
         if item.isVisibleCreate! == false{
             sendBtnHeight.constant = 0
         }else{
@@ -245,6 +248,7 @@ final class ContactsCell: UICollectionViewCell {
                 phone.text           = item.phone
                 emailHeight.constant = 0
                 emailView.isHidden   = true
+                email.text = item.email
                 btnTopHeight?.constant = 5
             }
         
@@ -308,7 +312,7 @@ final class ContactsCell: UICollectionViewCell {
         }else if (title.text?.contains(find: "поддержка"))!{
             type = 2
         }
-        delegate?.btnPressed(type)
+        delegate?.btnPressed(type, email.text ?? "")
     }
 }
 
