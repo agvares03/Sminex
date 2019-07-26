@@ -30,7 +30,44 @@ final class ServicesUKDescVC: UIViewController {
     }
     
     public var data_: ServicesUKJson?
+    public var allData: [ServicesUKJson] = []
+    public var index: Int = 0
     
+    @IBAction func SwipeRight(_ sender: UISwipeGestureRecognizer) {
+        if index > 0{
+            index -= 1
+            if let image = UIImage(data: Data(base64Encoded: ((allData[index].picture ?? "").replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
+                imgView.image = image
+                
+            } else {
+                imgHeight.constant = 0
+                titleTop.constant  = -16
+            }
+            loader.isHidden = true
+            navigationItem.title = allData[index].name
+            titleLabel.text = allData[index].name
+            costLabel.text  = allData[index].cost!.replacingOccurrences(of: "руб.", with: "₽")
+            descLabel.text  = allData[index].desc
+        }
+    }
+    
+    @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
+        if index < allData.count - 1{
+            index += 1
+            if let image = UIImage(data: Data(base64Encoded: ((allData[index].picture ?? "").replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
+                imgView.image = image
+                
+            } else {
+                imgHeight.constant = 0
+                titleTop.constant  = -16
+            }
+            loader.isHidden = true
+            navigationItem.title = allData[index].name
+            titleLabel.text = allData[index].name
+            costLabel.text  = allData[index].cost!.replacingOccurrences(of: "руб.", with: "₽")
+            descLabel.text  = allData[index].desc
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
@@ -103,7 +140,7 @@ final class ServicesUKDescVC: UIViewController {
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm = titleLabel.text ?? ""
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=bceeab0b-891a-4af8-9953-1bf1ffd7fe29&name=\(comm.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=bceeab0b-891a-4af8-9953-1bf1ffd7fe29&name=\(comm.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(allData[index].id!.stringByAddingPercentEncodingForRFC3986() ?? "")"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         print(request)
@@ -126,7 +163,7 @@ final class ServicesUKDescVC: UIViewController {
                 DispatchQueue.main.sync {
                     UserDefaults.standard.set(true, forKey: "backBtn")
                     var title = "Услуга заказана"
-                    if (self.data_?.name?.contains(find: "Уборка помещений"))!{
+                    if (self.allData[self.index].name?.contains(find: "Уборка помещений"))!{
                         title = "Заявка на услугу принята. В ближайшее время сотрудник Службы Комфорта свяжется с Вами для уточнения дополнительных деталей. Спасибо"
                     }
                     let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)

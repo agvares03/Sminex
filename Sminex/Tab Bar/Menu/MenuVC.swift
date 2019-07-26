@@ -18,7 +18,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             MenuCellData(icon: UIImage(named: "menu_meters")!, title: "Показания счетчиков", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: TemporaryHolder.instance.menuRequests == 0 ? "" : "\(TemporaryHolder.instance.menuRequests)"),
             MenuCellData(icon: UIImage(named: "menu_appeal")!, title: "Обращения", notification: ""),
-            MenuCellData(icon: UIImage(named: "menu_services")!, title: "Услуги Службы комфорта", notification: ""),
+            MenuCellData(icon: UIImage(named: "menu_services")!, title: "Каталог услуг", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_news")!, title: "Новости", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: TemporaryHolder.instance.menuQuesions == 0 ? "" : "\(TemporaryHolder.instance.menuQuesions)"),
             MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuDeals)"),
@@ -179,7 +179,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+                if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                     performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
                 }else{
                     performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
@@ -268,7 +268,7 @@ final class MenuCell: UICollectionViewCell {
         icon.image = item.icon
         
         if item.title == "Показания счетчиков"
-            || item.title == "Услуги Службы комфорта"
+            || item.title == "Каталог услуг"
             || item.title == "Опросы"
             || item.title == "Акции и предложения" {
             

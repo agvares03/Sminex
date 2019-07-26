@@ -43,7 +43,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
         }else{
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
@@ -171,15 +171,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.global(qos: .background).async {
                 let res = self.getRequests()
-                var count = 2
+                var count = 1
                 sleep(2)
                 DispatchQueue.main.sync {
                     self.data[0] = [0 : CellsHeaderData(title: "Заявки")]
-                    self.data[0]![1] = RequestAddCellData(title: "Оставить заявку")
                     res.forEach {
                         self.data[0]![count] = $0
                         count += 1
                     }
+                    self.data[0]![count] = RequestAddCellData(title: "Оставить заявку")
                     self.collection.reloadData()
                 }
             }
@@ -433,8 +433,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if section == 4 && newsSize != nil {
             return 0
-        } else if section == 0 {
-            return (data[section]?.count ?? 2) - 1
         } else if data.keys.contains(section) {
             return (data[section]?.count ?? 2) - 1
             
@@ -531,7 +529,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return CGSize(width: view.frame.size.width, height: 204.0)
             }
         } else if title == "Заявки" {
-            if indexPath.row == 0 {
+            if indexPath.row == data[indexPath.section]!.count - 2 {
                 return CGSize(width: view.frame.size.width - 32, height: 50.0)
             }
             let cell = RequestCell.fromNib(viewSize: collection.frame.size.width)
@@ -618,9 +616,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if title == "Заявки" {
             
-            if indexPath.row == 0 {
+            if indexPath.row == data[indexPath.section]!.count - 2 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestAddCell", for: indexPath) as! RequestAddCell
-                cell.display(data[indexPath.section]![1] as! RequestAddCellData, delegate: self)
+                cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestAddCellData, delegate: self)
                 if #available(iOS 11.0, *) {
                     cell.clipsToBounds = false
                     cell.layer.cornerRadius = 4
@@ -772,7 +770,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             performSegue(withIdentifier: Segues.fromMainScreenVC.toDealsList, sender: self)
             
         } else if name == "К оплате" {
-            if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+            if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
             }else{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
@@ -791,14 +789,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         DispatchQueue.global(qos: .background).async {
             let res = self.getRequests()
-            var count = 2
+            var count = 1
             DispatchQueue.main.sync {
                 self.data[0] = [0 : CellsHeaderData(title: "Заявки")]
-                self.data[0]![1] = RequestAddCellData(title: "Оставить заявку")
                 res.forEach {
                     self.data[0]![count] = $0
                     count += 1
                 }
+                self.data[0]![count] = RequestAddCellData(title: "Оставить заявку")
                 self.collection.reloadData()
             }
         }

@@ -97,7 +97,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
             return 4
         }else{
             return 3
@@ -168,7 +168,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             } else {
 //                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
 //                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
-//                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+//                if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                     var year = "\(receipts[safe: indexPath.row - 1]?.numYear ?? 0)"
                     if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
                         year.removeFirst()
@@ -239,7 +239,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                         debt += ($0.sumDebt ?? 0.00)
                     }
                 }
-//                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+//                if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                     var year = ""
                     if (Double((self.debt!.sumPay)!) < 0.00){
                         year = "\(filteredCalcs[indexPath.row - 2].numYearSet ?? 0)"
