@@ -21,6 +21,7 @@ class RequestTypeVC: UIViewController {
     
     private var typeName = ""
     private var data = [RequestTypeStruct]()
+    private var parkingsPlace = [String]()
     
     // MARK: View lifecycle
     
@@ -74,7 +75,7 @@ class RequestTypeVC: UIViewController {
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            print(responceString)
+//            print(responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -89,6 +90,7 @@ class RequestTypeVC: UIViewController {
                         TemporaryHolder.instance.choise(json!)
                         denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
                         UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
+                        self.parkingsPlace = (Business_Center_Data(json: json!)?.ParkingPlace)!
                     }
                 }
                 let type: RequestTypeStruct
@@ -147,11 +149,13 @@ class RequestTypeVC: UIViewController {
                 vc.delegate = delegate
                 vc.name_ = typeName
                 vc.type_ = data[index]
+                vc.parkingsPlace = self.parkingsPlace
             }
         case Segues.fromRequestTypeVC.toCreateServive:
-            if let vc = segue.destination as? NewTechServiceVC, let index = sender as? Int {
+            if let vc = segue.destination as? CreateTechServiceVC, let index = sender as? Int {
                 vc.delegate = delegate
                 vc.type_ = data[index]
+                vc.parkingsPlace = self.parkingsPlace
             }
         default: break
         }

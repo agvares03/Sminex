@@ -40,6 +40,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var busines_center_dayTo: Int?
     
     private var busines_center_CompanyService: Bool? = false
+    private var busines_center_denyShowFine: Bool?
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
@@ -291,6 +292,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.busines_center_dayFrom = Business_Center_Data(json: json!)?.DayFrom
                 self.busines_center_dayTo = Business_Center_Data(json: json!)?.DayTo
                 self.busines_center_CompanyService = Business_Center_Data(json: json!)?.DenyManagementCompanyServices
+                self.busines_center_denyShowFine = Business_Center_Data(json: json!)?.DenyShowFine
             }
             
             let defaults = UserDefaults.standard
@@ -304,6 +306,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.set(self.busines_center_dayFrom, forKey: "meterReadingsDayFrom")
             defaults.set(self.busines_center_dayTo, forKey: "meterReadingsDayTo")
             defaults.set(self.busines_center_CompanyService, forKey: "denyCompanyService")
+            defaults.set(self.busines_center_denyShowFine, forKey: "denyShowFine")
             defaults.synchronize()
             let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
             let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")

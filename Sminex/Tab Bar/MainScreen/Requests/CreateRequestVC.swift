@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import DeviceKit
 
-final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, HomePlaceCellDelegate, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var isTransport: NSLayoutConstraint!
     @IBOutlet weak var transportTitle: UILabel!
@@ -40,6 +40,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet weak var img_phone_service: UIImageView!
     @IBOutlet weak var heigth_phone_service: NSLayoutConstraint!
     
+    @IBOutlet private weak var tableView:   UITableView!
+    @IBOutlet private weak var placeView:   UIView!
+    @IBOutlet private weak var placeLbl:    UILabel!
+    @IBOutlet private weak var plcLbl:      UILabel!
+    @IBOutlet private weak var expImg:      UIImageView!
+    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
+    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
+    
     @IBAction private func closeButtonPressed(_ sender: UIBarButtonItem) {
         
         let action = UIAlertController(title: "Удалить заявку?", message: "Изменения не сохранятся", preferredStyle: .alert)
@@ -57,15 +65,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if picker.isHidden {
             
             if !imgScroll.isHidden {
-//                sendBtnConst.constant   = 180
-//
-//            } else {
-//                sendBtnConst.constant   = 340
-                imageConst.constant     = 180
+                //imageConst.constant     = 180
             }
             picker.isHidden         = false
             pickerLine.isHidden     = false
-            
+            imageConst.constant = 150
         } else {
             
             let dateFormatter = DateFormatter()
@@ -80,8 +84,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //
 //            } else {
 //                sendBtnConst.constant   = 170
-                imageConst.constant     = 5
+                //imageConst.constant     = 5
             }
+            imageConst.constant = 0
             
         }
     }
@@ -151,6 +156,21 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             if markAuto.textColor != UIColor.lightGray{
                 mark = markAuto.text
             }
+            var place = placeLbl.text ?? ""
+            if place == "Выбрать помещение(я)"{
+                place = ""
+            }else{
+                if place.contains(find: ", "){
+                    let str = place.components(separatedBy: ", ")
+                    place = ""
+                    str.forEach{
+                        place = place + $0 + ";"
+                    }
+                    if place.last == ";"{
+                        place.removeLast()
+                    }
+                }
+            }
             if edComment.text == "Примечания" && edComment.textColor == UIColor.lightGray{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
@@ -159,7 +179,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                            date: dateFormatter.string(from: picker.date),
                                            status: "В ОБРАБОТКЕ",
                                            images: images,
-                                           imagesUrl: [], desc: "")
+                                           imagesUrl: [], desc: "", placeHome: place)
             }else{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
@@ -168,7 +188,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                            date: dateFormatter.string(from: picker.date),
                                            status: "В ОБРАБОТКЕ",
                                            images: images,
-                                           imagesUrl: [], desc: edComment.text!)
+                                           imagesUrl: [], desc: edComment.text!, placeHome: place)
             }
             
             uploadRequest()
@@ -217,10 +237,32 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     private var btnConstant: CGFloat = 0.0
     private var sprtTopConst: CGFloat = 0.0
     private var show = false
+    public var parkingsPlace: [String]?
+    var checkPlace: [Bool] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
+        
+        self.expImg.image = UIImage(named: "expand")
+        tableView.delegate = self
+        tableView.dataSource = self
+        placeHeight.constant = 0
+        tableHeight.constant = 0
+        plcLbl.isHidden = true
+        parkingsPlace?.forEach{_ in
+            checkPlace.append(false)
+        }
+        if parkingsPlace!.count == 1{
+            placeHeight.constant = 20
+            placeView.backgroundColor = .white
+            plcLbl.isHidden = false
+            placeLbl.text = parkingsPlace![0]
+            expImg.isHidden = true
+        }else{
+            let tap1 = UITapGestureRecognizer(target: self, action: #selector(expand))
+            placeView.addGestureRecognizer(tap1)
+        }
         if  Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
             Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
             Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
@@ -266,7 +308,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         gosNumber.delegate  = self
         markAuto.delegate  = self
         edComment.delegate  = self
-        
+        imageConst.constant = 0
         title = "Пропуск"
         
         // Подхватываем показ клавиатуры
@@ -313,6 +355,21 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         img_phone_service.isUserInteractionEnabled   = true
         img_phone_service.addGestureRecognizer(tap_phone)
         
+    }
+    
+    var isExpanded = true
+    @objc func expand() {
+        if !isExpanded {
+            self.expImg.image = UIImage(named: "expand")
+            isExpanded = true
+            showTable = false
+            tableView.reloadData()
+        } else {
+            self.expImg.image = UIImage(named: "expanded")
+            isExpanded = false
+            showTable = true
+            tableView.reloadData()
+        }
     }
     
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
@@ -647,7 +704,38 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if edComment.textColor == UIColor.lightGray{
             comm = ""
         }
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))".stringByAddingPercentEncodingForRFC3986() ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986() ?? "")&phonenum=\(edContact.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=0&isNotify=1&dateFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PhoneForFeedBack=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        var place = placeLbl.text ?? ""
+        if place == "Выбрать помещение(я)"{
+            place = ""
+            if checkPlace.count != 0{
+                var i = 0
+                checkPlace.forEach{
+                    if $0 == false{
+                        i += 1
+                    }
+                }
+                if i == checkPlace.count{
+                    parkingsPlace!.forEach{
+                        place = place + $0 + ";"
+                    }
+                }
+                if place.last == ";"{
+                    place.removeLast()
+                }
+            }
+        }else{
+            if place.contains(find: ", "){
+                let str = place.components(separatedBy: ", ")
+                place = ""
+                str.forEach{
+                    place = place + $0 + ";"
+                }
+                if place.last == ";"{
+                    place.removeLast()
+                }
+            }
+        }
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("\(name_) \(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))".stringByAddingPercentEncodingForRFC3986() ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986() ?? "")&phonenum=\(edContact.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=0&isNotify=1&dateFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PhoneForFeedBack=\(String(describing: data!.mobileNumber).stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -767,7 +855,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if segue.identifier == Segues.fromCreateRequest.toAdmission {
             let vc = segue.destination as! AdmissionVC
             vc.isCreated_ = true
-            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", mark: "", date: "", status: "", images: [], imagesUrl: [], desc: "")
+            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", mark: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
             vc.name_ = name_
@@ -946,6 +1034,70 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if self.view.window != nil {
             if textView.textColor == UIColor.lightGray {
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
+        }
+    }
+    
+    var showTable = false
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        DispatchQueue.main.async {
+            if self.showTable{
+                if self.parkingsPlace!.count <= 4{
+                    self.tableHeight.constant = CGFloat(44 * self.parkingsPlace!.count)
+                }else{
+                    self.tableHeight.constant = 44 * 4
+                }
+            }else{
+                self.tableHeight.constant = 0
+            }
+        }
+        return self.parkingsPlace!.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HomePlaceCell", for: indexPath) as! HomePlaceCell
+        print(checkPlace)
+        cell.display(item: parkingsPlace![indexPath.row], isChecked: checkPlace[indexPath.row], delegate: self)
+        return cell
+    }
+    
+    func placeCheck(text: String, del: Bool) {
+        var str = placeLbl.text
+        if del{
+            str = str?.replacingOccurrences(of: text, with: "")
+            placeLbl.text = str!
+            if str?.last == " "{
+                str?.removeLast()
+                str?.removeLast()
+                placeLbl.text = str!
+            }
+            if str?.first == ","{
+                str?.removeFirst()
+                str?.removeFirst()
+                placeLbl.text = str!
+            }
+            if placeLbl.text == "" || placeLbl.text == " "{
+                placeHeight.constant = 0
+                plcLbl.isHidden = true
+                placeLbl.text = "Выбрать помещение(я)"
+            }
+            for i in 0...parkingsPlace!.count - 1{
+                if parkingsPlace![i] == text{
+                    checkPlace[i] = false
+                }
+            }
+        }else{
+            placeHeight.constant = 20
+            plcLbl.isHidden = false
+            if str == "Выбрать помещение(я)"{
+                placeLbl.text = text
+            }else{
+                placeLbl.text = str! + ", " + text
+            }
+            for i in 0...parkingsPlace!.count - 1{
+                if parkingsPlace![i] == text{
+                    checkPlace[i] = true
+                }
             }
         }
     }

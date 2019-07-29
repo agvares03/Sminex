@@ -17,7 +17,7 @@
 //    func stockCellPressed(currImg: Int)
 //}
 //
-//class NewRequestTypeVC: UIViewController {
+//class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout, MainScreenDelegate {
 //    
 //    // MARK: Outlets
 //    
@@ -161,27 +161,6 @@
 //        }
 //    }
 //    
-//    // MARK: Navigation
-//    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        switch segue.identifier {
-//        case Segues.fromRequestTypeVC.toCreateAdmission:
-//            if let vc = segue.destination as? CreateRequestVC, let index = sender as? Int {
-//                vc.delegate = delegate
-//                vc.name_ = typeName
-//                vc.type_ = data[0].filteredData[index]
-//            }
-//        case Segues.fromRequestTypeVC.toCreateServive:
-//            if let vc = segue.destination as? NewTechServiceVC, let index = sender as? Int {
-//                vc.delegate = delegate
-//                vc.type_ = data[0].filteredData[index]
-//            }
-//        default: break
-//        }
-//    }
-//}
-//
-//extension NewRequestTypeVC: UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout, MainScreenDelegate {
 //    func tapped(name: String) {
 //        <#code#>
 //    }
@@ -237,15 +216,15 @@
 //    
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        let cell = NewRequestTypeCell.fromNib()
-//        cell?.display(data[indexPath.section]![indexPath.row + 1] as! NewRequestTypeCellData, indexPath: indexPath, delegate: self)
+//        cell?.display(data[indexPath.section].filteredData[indexPath.row + 1] as! NewRequestTypeCellData, delegate: self, indexPath: indexPath)
 //        let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
 //        return CGSize(width: view.frame.size.width - 32, height: size.height)
 //    }
 //    
 //    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewRequestTypeCell", for: indexPath) as! NewRequestTypeCell
-//        cell.display(data[indexPath.section]![indexPath.row + 1] as! NewRequestTypeCellData, indexPath: indexPath, delegate: self, isLast: data[indexPath.section]!.count == indexPath.row + 2)
-//        if indexPath.row + 2 == data[indexPath.section]?.filteredData.count {
+//        cell.display(data[indexPath.section].filteredData[indexPath.row + 1] as! NewRequestTypeCellData, delegate: self, indexPath: indexPath)
+//        if indexPath.row + 2 == data[indexPath.section].filteredData.count {
 //            if #available(iOS 11.0, *) {
 //                cell.clipsToBounds = false
 //                cell.layer.cornerRadius = 4
@@ -262,7 +241,7 @@
 //    }
 //    
 //    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-////        pressed(at: indexPath)
+//        //        pressed(at: indexPath)
 //    }
 //    
 //    func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -273,21 +252,39 @@
 //        return CGSize(width: view.frame.size.width, height: 50.0)
 //    }
 //    
-////    func pressed(at indexPath: IndexPath) {
-////        if let cell = collection.cellForItem(at: indexPath) as? NewRequestTypeCell {
-////            surveyName = cell.title.text ?? ""
-////            performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestionAnim, sender: self)
-////
-////        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
-////            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
-////
-////        } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
-////            tappedNews = self.filteredNews[safe: indexPath.row]
-////            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
-////
-////        }
-////    }
+//    //    func pressed(at indexPath: IndexPath) {
+//    //        if let cell = collection.cellForItem(at: indexPath) as? NewRequestTypeCell {
+//    //            surveyName = cell.title.text ?? ""
+//    //            performSegue(withIdentifier: Segues.fromMainScreenVC.toQuestionAnim, sender: self)
+//    //
+//    //        } else if let _ = collection.cellForItem(at: indexPath) as? StockCell {
+//    //            performSegue(withIdentifier: Segues.fromMainScreenVC.toDeals, sender: self)
+//    //
+//    //        } else if (collection.cellForItem(at: indexPath) as? NewsCell) != nil {
+//    //            tappedNews = self.filteredNews[safe: indexPath.row]
+//    //            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
+//    //
+//    //        }
+//    //    }
 //    
+//    // MARK: Navigation
+//    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        switch segue.identifier {
+//        case Segues.fromRequestTypeVC.toCreateAdmission:
+//            if let vc = segue.destination as? CreateRequestVC, let index = sender as? Int {
+//                vc.delegate = delegate
+//                vc.name_ = typeName
+//                vc.type_ = data[0].filteredData[index]
+//            }
+//        case Segues.fromRequestTypeVC.toCreateServive:
+//            if let vc = segue.destination as? NewTechServiceVC, let index = sender as? Int {
+//                vc.delegate = delegate
+//                vc.type_ = data[0].filteredData[index]
+//            }
+//        default: break
+//        }
+//    }
 //}
 //
 //final class RequestTypeHeader: UICollectionReusableView {
@@ -382,7 +379,7 @@
 //    
 //}
 //
-//private final class NewRequestTypeCell: MainDataProtocol {
+//private final class NewRequestTypeCellData: MainDataProtocol {
 //    
 //    let title:      String
 //    let question:   String

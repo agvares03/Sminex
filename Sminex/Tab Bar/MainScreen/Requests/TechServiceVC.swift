@@ -101,7 +101,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                                                           problem: "Нас топят соседи! Не можем с ними связаться. Срочно вызвайте сантехника",
                                                           date: "9 сентября 10:00",
                                                           status: "В ОБРАБОТКЕ",
-                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0")
+                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0", placeHome: "")
     
     public var comments_: [ServiceCommentCellData] = []
     private var arr:    [TechServiceProtocol]    = []
@@ -666,6 +666,10 @@ final class ServiceHeader: UICollectionViewCell {
     @IBOutlet private weak var scrollTop:   NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var problem:     UILabel!
+    @IBOutlet private weak var place:       UILabel!
+    @IBOutlet private weak var placeLbl:    UILabel!
+    @IBOutlet private weak var separator:   UILabel!
+    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
     @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var icon:        UIImageView!
@@ -674,7 +678,19 @@ final class ServiceHeader: UICollectionViewCell {
     private var delegate: TechServiceCellsProtocol?
     
     fileprivate func display(_ item: ServiceHeaderData, delegate: TechServiceCellsProtocol) {
-        
+        if item.placeHome == ""{
+            place.isHidden = true
+            placeLbl.isHidden = true
+            separator.isHidden = true
+            placeHeight.isActive = true
+            placeHeight.constant = 0
+        }else{
+            place.text = item.placeHome
+            place.isHidden = false
+            placeLbl.isHidden = false
+            separator.isHidden = false
+            placeHeight.isActive = false
+        }
         self.delegate = delegate
         imageLoader.isHidden = true
         imageLoader.stopAnimating()
@@ -778,9 +794,10 @@ final class ServiceHeaderData: TechServiceProtocol {
     let isPaid:     String
     let images:     [UIImage]
     let imgsString: [String]
+    let placeHome:  String
 //    let desc:       String
     
-    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String) {
+    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String, placeHome: String) {
         
         self.icon       = icon
         self.problem    = problem
@@ -789,6 +806,7 @@ final class ServiceHeaderData: TechServiceProtocol {
         self.images     = images
         self.imgsString = imagesUrl
         self.isPaid     = isPaid
+        self.placeHome  = placeHome
 //        self.desc       = desc
     }
 }

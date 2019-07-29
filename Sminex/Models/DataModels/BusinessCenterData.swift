@@ -28,6 +28,9 @@ struct Business_Center_Data: JSONDecodable {
     let DayTo: Int?
     
     let DenyImportExportProperty: Bool?
+    let DenyShowFine: Bool?
+    
+    let ParkingPlace: [String]?
     
     init?(json: JSON) {
         DenyOnlinePayments                = "denyOnlinePayments"                  <~~ json
@@ -45,5 +48,7 @@ struct Business_Center_Data: JSONDecodable {
         DayFrom                           = "meterReadingsDayFrom"                <~~ json
         DayTo                             = "meterReadingsDayTo"                  <~~ json
         DenyImportExportProperty          = "denyImportExportPropertyRequest"     <~~ json
+        DenyShowFine                      = "denyShowFine"                        <~~ json
+        ParkingPlace                      = "parkings"                            <~~ json
     }
 }

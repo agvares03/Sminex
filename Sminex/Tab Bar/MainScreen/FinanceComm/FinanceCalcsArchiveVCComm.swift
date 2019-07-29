@@ -205,7 +205,7 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceCalcsArchive.toCalc {
-            let vc = segue.destination as! FinanceCalcVC
+            let vc = segue.destination as! FinanceCalcVCComm
             let date = (dataFilt[section].filteredData[index].numMonthSet, dataFilt[section].filteredData[index].numYearSet)
             vc.data_ = data_.filter {
                 return (date.0 == $0.numMonthSet && date.1 == $0.numYearSet)

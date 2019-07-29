@@ -245,7 +245,6 @@ func saveGlobalData(date1:              String,
     }else{
         defaults.setValue("", forKey: "typeBuilding")
     }
-//    defaults.setValue("Comm", forKey: "typeBuilding")
     defaults.synchronize()
 }
 

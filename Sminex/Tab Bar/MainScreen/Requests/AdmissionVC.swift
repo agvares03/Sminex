@@ -98,7 +98,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                                                                 date: "9 Сентября 10:00",
                                                                 status: "В ОБРАБОТКЕ",
                                                                 images: [],
-                                                                imagesUrl: [], desc: "")
+                                                                imagesUrl: [], desc: "", placeHome: "")
     public var comments_: [AdmissionCommentCellData] = []
     
     private var arr: [AdmissionProtocol] = []
@@ -650,6 +650,11 @@ final class AdmissionHeader: UICollectionViewCell {
     @IBOutlet private weak var descLine:        UILabel?
     @IBOutlet private weak var descConstant:    NSLayoutConstraint?
     
+    @IBOutlet private weak var place:       UILabel!
+    @IBOutlet private weak var placeLbl:    UILabel!
+    @IBOutlet private weak var separator:   UILabel!
+    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
+    
     @IBOutlet weak var heigthFooter: NSLayoutConstraint?
     @IBOutlet weak var phone_service: UILabel!
     @IBOutlet weak var img_phone_service: UIImageView!
@@ -658,7 +663,19 @@ final class AdmissionHeader: UICollectionViewCell {
     private var delegate: AdmissionCellsProtocol?
     
     fileprivate func display(_ item: AdmissionHeaderData, delegate: AdmissionCellsProtocol) {
-        
+        if item.placeHome == ""{
+            place.isHidden = true
+            placeLbl.isHidden = true
+            separator.isHidden = true
+            placeHeight.isActive = true
+            placeHeight.constant = 0
+        }else{
+            place.text = item.placeHome
+            place.isHidden = false
+            placeLbl.isHidden = false
+            separator.isHidden = false
+            placeHeight.isActive = false
+        }
         self.delegate = delegate
 //        imgsLoader.isHidden = true
 //        imgsLoader.stopAnimating()
@@ -809,8 +826,9 @@ final class AdmissionHeaderData: AdmissionProtocol {
     var status:         String
     var desc:           String
     var mark:           String
+    let placeHome:      String
     
-    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, mark: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String) {
+    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, mark: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String, placeHome: String) {
         
         self.icons          = icon
         self.gosti          = gosti
@@ -822,6 +840,7 @@ final class AdmissionHeaderData: AdmissionProtocol {
         self.imgsUrl        = imagesUrl
         self.desc           = desc
         self.mark           = mark
+        self.placeHome      = placeHome
     }
 }
 

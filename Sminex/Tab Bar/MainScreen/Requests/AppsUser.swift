@@ -576,7 +576,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, desc: row.text!)
+                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     self.admissionComm = []
 //                    if row.text != ""{
 //                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
@@ -629,7 +629,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, isPaid: row.isPaid ?? "")
+                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "")
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
@@ -909,6 +909,7 @@ struct Request {
     let flatNumber: 	        String?
     let updateDate:             String?
     let isPaid:                 String?
+    let premises:               String?
     
     init(row: XML.Accessor) {
         isWait                  = row.attributes["isWait"]
@@ -983,6 +984,7 @@ struct Request {
         flatNumber              = row.attributes["FlatNumber"]
         updateDate              = row.attributes["UpdatedDate"]
         isPaid                  = row.attributes["IsPaidService"]
+        premises                = row.attributes["Premises"]
     }
 }
 

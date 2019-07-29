@@ -23,6 +23,13 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
+        for k in 0...data_.count - 1{
+            if data_[k].type == "Пени"{
+                if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                    data_.remove(at: k)
+                }
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
