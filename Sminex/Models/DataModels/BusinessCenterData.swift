@@ -49,6 +49,6 @@ struct Business_Center_Data: JSONDecodable {
         DayTo                             = "meterReadingsDayTo"                  <~~ json
         DenyImportExportProperty          = "denyImportExportPropertyRequest"     <~~ json
         DenyShowFine                      = "denyShowFine"                        <~~ json
-        ParkingPlace                      = "parkings"                            <~~ json
+        ParkingPlace                      = "premises"                            <~~ json
     }
 }

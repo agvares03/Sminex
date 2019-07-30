@@ -35,6 +35,11 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     @IBOutlet private weak var plcLbl:      UILabel!
     @IBOutlet private weak var expImg:      UIImageView!
     
+    @IBOutlet private weak var timeBtn1:    UIButton!
+    @IBOutlet private weak var timeBtn2:    UIButton!
+    @IBOutlet private weak var dateLbl:     UILabel!
+    @IBOutlet private weak var noDateLbl:   UILabel!
+    
     
     @IBAction private func cancelButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -43,6 +48,47 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         action.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (_) in }))
         action.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { (_) in self.navigationController?.popViewController(animated: true) }))
         present(action, animated: true, completion: nil)
+    }
+    
+    var choiceBtn = 1
+    var choiceColor = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1.0)
+    var unChoiceColor = UIColor(red: 246/255, green: 249/255, blue: 249/255, alpha: 1.0)
+    var extTime = false
+    @IBAction private func timeBtn1Action(_ sender: UIButton){
+        if choiceBtn == 1{
+            choiceBtn = 0
+            dateLbl.isHidden = true
+            noDateLbl.isHidden = false
+            dateBtn.isHidden = true
+            extTime = true
+            timeBtn2.setTitleColor(.darkGray, for: .normal)
+            timeBtn2.backgroundColor = choiceColor
+            timeBtn1.setTitleColor(.black, for: .normal)
+            timeBtn1.backgroundColor = unChoiceColor
+            if !picker.isHidden{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd MMMM HH:mm"
+                
+                dateBtn.setTitle(dateFormatter.string(from: picker.date), for: .normal)
+                picker.isHidden         = true
+                pickerLine.isHidden     = true
+                imageConst.constant = 0
+            }
+        }
+    }
+    
+    @IBAction private func timeBtn2Action(_ sender: UIButton){
+        if choiceBtn == 0{
+            choiceBtn = 1
+            dateLbl.isHidden = false
+            noDateLbl.isHidden = true
+            dateBtn.isHidden = false
+            extTime = false
+            timeBtn1.setTitleColor(.darkGray, for: .normal)
+            timeBtn1.backgroundColor = choiceColor
+            timeBtn2.setTitleColor(.black, for: .normal)
+            timeBtn2.backgroundColor = unChoiceColor
+        }
     }
     
     @IBAction private func dateButtonPressed(_ sender: UIButton?) {
@@ -170,7 +216,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                                      problem: edProblem.text!,
                                      date: dateFormatter.string(from: picker.date),
                                      status: "В ОБРАБОТКЕ",
-                                     images: imagesArr, isPaid: "0", placeHome: place)
+                                     images: imagesArr, isPaid: "0", placeHome: place, soonPossible: extTime)
             uploadRequest()
 //        }
     }
@@ -196,6 +242,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
 //        if isNeedToScrollMore() {
 //            btnConst.constant = 50
 //        }
+        
+        dateLbl.isHidden = false
+        noDateLbl.isHidden = true
+        dateBtn.isHidden = false
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
         tableView.dataSource = self
@@ -389,9 +439,15 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 }
             }
         }
-        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id ?? "")&name=\("Обслуживание \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))")&text=\(comm)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&premises=\(place)")
+        var soonPossible = ""
+        if extTime{
+            soonPossible = "1"
+        }else{
+            soonPossible = "0"
+        }
+        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id ?? "")&name=\("Обслуживание \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))")&text=\(comm)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&premises=\(place)&asSoonAsPossible=\(soonPossible)")
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Обслуживание \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Обслуживание \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -501,7 +557,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if segue.identifier == Segues.fromCreateTechService.toService {
             let vc = segue.destination as! TechServiceVC
             vc.isCreate_ = true
-            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0", placeHome: "")
+            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0", placeHome: "", soonPossible: false)
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }

@@ -24,7 +24,7 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         collection.delegate     = self
         collection.dataSource   = self
         for k in 0...data_.count - 1{
-            if data_[k].type == "Пени"{
+            if (data_[k].type?.containsIgnoringCase(find: "пени"))!{
                 if UserDefaults.standard.bool(forKey: "denyShowFine"){
                     data_.remove(at: k)
                 }

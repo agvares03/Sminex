@@ -75,7 +75,7 @@ class RequestTypeVC: UIViewController {
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//            print(responceString)
+            print(responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -90,7 +90,9 @@ class RequestTypeVC: UIViewController {
                         TemporaryHolder.instance.choise(json!)
                         denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
                         UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
-                        self.parkingsPlace = (Business_Center_Data(json: json!)?.ParkingPlace)!
+                        if responceString.contains(find: "premises"){
+                            self.parkingsPlace = (Business_Center_Data(json: json!)?.ParkingPlace)!
+                        }
                     }
                 }
                 let type: RequestTypeStruct
@@ -197,13 +199,14 @@ extension RequestTypeVC: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let name = data[indexPath.row].name
         
-        if  (name?.contains(find: "ропуск"))! {
+        if (name?.containsIgnoringCase(find: "пропуск"))! {
             typeName = name ?? ""
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateAdmission, sender: indexPath.row)
             
-        } else if name == "Техническое обслуживание" {
+        } else if (name?.containsIgnoringCase(find: "обслуживание"))! {
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateServive, sender: indexPath.row)
-        } else if name == "Услуги службы комфорта" {
+//        } else if name == "Услуги службы комфорта" {
+        }else{
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toServiceUK, sender: indexPath.row)
         }
     }

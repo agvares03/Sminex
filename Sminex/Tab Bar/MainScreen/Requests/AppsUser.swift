@@ -305,7 +305,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     return
                 }
                 #if DEBUG
-//                    print(String(data: data!, encoding: .utf8)!)
+                    print(String(data: data!, encoding: .utf8)!)
                 #endif
                 
                 let xml = XML.parse(data!)
@@ -629,7 +629,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "")
+                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible)
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
@@ -910,6 +910,7 @@ struct Request {
     let updateDate:             String?
     let isPaid:                 String?
     let premises:               String?
+    let soonPossible:           Bool
     
     init(row: XML.Accessor) {
         isWait                  = row.attributes["isWait"]
@@ -985,6 +986,11 @@ struct Request {
         updateDate              = row.attributes["UpdatedDate"]
         isPaid                  = row.attributes["IsPaidService"]
         premises                = row.attributes["Premises"]
+        if row.attributes["AsSoonAsPossible"] == "1"{
+            soonPossible = true
+        }else{
+            soonPossible = false
+        }
     }
 }
 
