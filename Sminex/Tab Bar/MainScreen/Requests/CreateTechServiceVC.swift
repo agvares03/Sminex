@@ -292,7 +292,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
 //        }
         picker.addTarget(self, action: #selector(
             datePickerValueChanged), for: UIControlEvents.valueChanged)
-        edProblem.text = "Описание"
+        edProblem.text = "Введите описание"
         edProblem.textColor = UIColor.lightGray
         edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
     }
@@ -582,7 +582,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         
         if updatedText.isEmpty {
-            textView.text = "Описание"
+            textView.text = "Введите описание"
             textView.textColor = UIColor.lightGray
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
         

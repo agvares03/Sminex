@@ -961,7 +961,7 @@ struct Request {
         if (name?.contains("услуг"))! {
             
         } else if (name?.contains("ропуск"))! {
-            name                = "Гостевой пропуск"
+            name                = "Пропуск"
         } else if (name?.contains("Обращение к консьержу"))! {
             name                = "Обращение к консьержу"
         } else if (name?.contains("Обращение в техподдержку"))! {
@@ -971,7 +971,7 @@ struct Request {
         } else if (name?.contains("Обращение"))! {
             name                = "Обращение"
         } else {
-            name                = "Техническое обслуживание"
+            name                = "Обслуживание"
         }
         clearAfterWork          = row.attributes["ClearAfterWork"]
         idDepartment            = row.attributes["id_department"]

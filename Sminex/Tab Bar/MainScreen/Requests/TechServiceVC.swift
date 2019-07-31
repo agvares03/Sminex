@@ -668,6 +668,7 @@ final class ServiceHeader: UICollectionViewCell {
     @IBOutlet private weak var problem:     UILabel!
     @IBOutlet private weak var place:       UILabel!
     @IBOutlet private weak var placeLbl:    UILabel!
+    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
     @IBOutlet private weak var separator:   UILabel!
     @IBOutlet private weak var noDateHeight: NSLayoutConstraint!
     @IBOutlet private weak var date:        UILabel!
@@ -677,6 +678,17 @@ final class ServiceHeader: UICollectionViewCell {
     @IBOutlet private weak var noDateLbl:   UILabel!
     
     private var delegate: TechServiceCellsProtocol?
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        print(label.frame.height, width)
+        return label.frame.height
+    }
     
     fileprivate func display(_ item: ServiceHeaderData, delegate: TechServiceCellsProtocol) {
         if item.placeHome == ""{
@@ -688,6 +700,7 @@ final class ServiceHeader: UICollectionViewCell {
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
+            placeHeight.constant = heightForView(text: item.placeHome, font: place.font, width: place.frame.size.width)
         }
         self.delegate = delegate
         imageLoader.isHidden = true
