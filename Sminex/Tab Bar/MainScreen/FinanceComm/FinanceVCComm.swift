@@ -210,11 +210,11 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                     cell.display(title: "История взаиморасчетов", desc: "")
                     cell.contentView.backgroundColor = .white
                 }
-            }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5) && (Double((debt?.sumPay)!) < 0.00){
+            }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5)) { //} && (Double((debt?.sumPay)!) >= 0.00){
                 if (self.calcs.count == 0) {
                     cell.display(title: "", desc: "")
                 } else {
-                    cell.display(title: "История взаиморасчетов", desc: "")
+                    cell.display(title: "История оплат", desc: "")
                     cell.contentView.backgroundColor = .white
                 }
             }else if indexPath.row == 1 && (Double((debt?.sumPay)!) < 0.00){
@@ -335,7 +335,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
                     return 6
                 }else{
-                    return 5
+                    return 6
                 }
             }
             
@@ -410,6 +410,9 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             }else{
                 if indexPath.row == 4 {
                     performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
+                    return
+                } else if (indexPath.row == 5) {
+                    performSegue(withIdentifier: Segues.fromFinanceVC.toHistory, sender: self)
                     return
                 }
                 index = indexPath.row - 1
@@ -529,6 +532,9 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             vc.data_ = calcs.filter {
                 return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }
+            
+        } else if segue.identifier == Segues.fromFinanceVC.toHistory {
+//            let vc = segue.destination as! FinanceHistoryPayController
             
         } else if segue.identifier == Segues.fromFinanceVC.toCalcsArchive {
             let vc = segue.destination as! FinanceCalcsArchiveVCComm
