@@ -47,7 +47,7 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     func updateUserInterface() {
         switch Network.reachability.status {
         case .unreachable:
-            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключенние к интернету", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Ошибка", message: "Отсутствует подключение к интернету", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Повторить", style: .default) { (_) -> Void in
                 self.viewDidLoad()
             }
