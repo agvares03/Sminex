@@ -210,7 +210,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                     cell.display(title: "История взаиморасчетов", desc: "")
                     cell.contentView.backgroundColor = .white
                 }
-            }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5)) { //} && (Double((debt?.sumPay)!) >= 0.00){
+            }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5) { //} && (Double((debt?.sumPay)!) >= 0.00){
                 if (self.calcs.count == 0) {
                     cell.display(title: "", desc: "")
                 } else {
