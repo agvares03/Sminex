@@ -22,6 +22,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             MenuCellData(icon: UIImage(named: "menu_news")!, title: "Новости", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: TemporaryHolder.instance.menuQuesions == 0 ? "" : "\(TemporaryHolder.instance.menuQuesions)"),
             MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuDeals)"),
+//            MenuCellData(icon: UIImage(named: "menu_finance")!, title: "Уведомления", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_support")!, title: "Техподдержка приложения", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_share")!, title: "Поделиться приложением", notification: "")
         ]
@@ -210,6 +211,9 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             } else if indexPath.row == 2 {
                 performSegue(withIdentifier: Segues.fromMenuVC.toDeals, sender: self)
             }
+//            else if indexPath.row == 3 {
+//                performSegue(withIdentifier: Segues.fromMenuVC.toNotification, sender: self)
+//            }
         
         } else if indexPath.section == 3 {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)

@@ -394,7 +394,7 @@ final class DB: NSObject, XMLParserDelegate {
                                                                         }
                                                                     }
                                                                     
-                                                                    self.add_data_notification(id: id, name: name, type: type, ident: ident, date: date, isReaded: isReaded)
+//                                                                    self.add_data_notification(id: id, name: name, type: type, ident: ident, date: date, isReaded: isReaded)
 
                                                                     
                                                                 }

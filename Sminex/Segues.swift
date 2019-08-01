@@ -287,6 +287,7 @@ struct Segues {
         static let toSchet           = "schet"
         static let toQuestions       = "questionTable"
         static let toDeals           = "deals"
+        static let toNotification    = "notifications"
         static let toFinance         = "finance"
         static let toNews            = "news"
         static let toServicesUK      = "ukServices"
