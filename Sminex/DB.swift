@@ -210,6 +210,7 @@ final class DB: NSObject, XMLParserDelegate {
         let task = URLSession.shared.dataTask(with: request as URLRequest,
                                               completionHandler: {
                                                 data, response, error in
+//                                                print(String(data: data!, encoding: .utf8)!)
                                                 
                                                 if error != nil {
                                                     return

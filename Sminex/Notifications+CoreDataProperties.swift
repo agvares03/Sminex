@@ -16,11 +16,11 @@ extension Notifications {
         return NSFetchRequest<Notifications>(entityName: "Notifications")
     }
 
-    @NSManaged public var id: Int64
-    @NSManaged public var name: String?
     @NSManaged public var type: String?
-    @NSManaged public var date: String?
+    @NSManaged public var name: String?
     @NSManaged public var isReaded: Bool
     @NSManaged public var ident: String?
+    @NSManaged public var id: Int64
+    @NSManaged public var date: String?
 
 }

@@ -159,6 +159,22 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             var place = placeLbl.text ?? ""
             if place == "Выбрать помещение(я)"{
                 place = ""
+                if checkPlace.count != 0{
+                    var i = 0
+                    checkPlace.forEach{
+                        if $0 == false{
+                            i += 1
+                        }
+                    }
+                    if i == checkPlace.count{
+                        parkingsPlace!.forEach{
+                            place = place + $0 + ";"
+                        }
+                    }
+                    if place.last == ";"{
+                        place.removeLast()
+                    }
+                }
             }else{
                 if place.contains(find: ", "){
                     let str = place.components(separatedBy: ", ")

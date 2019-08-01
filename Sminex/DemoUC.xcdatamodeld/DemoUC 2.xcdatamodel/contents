@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G84" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Appeals" representedClassName=".Appeals" syncable="YES">
         <attribute name="adress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="customer_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -77,6 +77,14 @@
         <attribute name="id_flat" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="Notifications" representedClassName=".Notifications" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ident" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isReaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="QuestionEntity" representedClassName=".Question" syncable="YES">
         <attribute name="answerId" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
@@ -103,5 +111,6 @@
         <element name="Ls" positionX="387" positionY="-162" width="128" height="105"/>
         <element name="QuestionEntity" positionX="414" positionY="-261" width="128" height="90"/>
         <element name="Saldo" positionX="405" positionY="-270" width="128" height="165"/>
+        <element name="Notifications" positionX="459" positionY="-216" width="128" height="135"/>
     </elements>
 </model>

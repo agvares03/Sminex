@@ -59,9 +59,12 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     private var rowFiles:   [RequestFile] = []
             var admission: AdmissionHeaderData?
             var techService: ServiceHeaderData?
+            var serviceUK: ServiceAppHeaderData?
             var admissionComm: [AdmissionCommentCellData] = []
             var techServiceComm: [ServiceCommentCellData] = []
+            var serviceUKComm: [ServiceAppCommentCellData] = []
     private var rows: [String:Request] = [:]
+    public var dataService: [ServicesUKJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +76,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         automaticallyAdjustsScrollViewInsets    = false
         
         startAnimator()
-        
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }
@@ -305,7 +307,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     return
                 }
                 #if DEBUG
-                    print(String(data: data!, encoding: .utf8)!)
+//                    print(String(data: data!, encoding: .utf8)!)
                 #endif
                 
                 let xml = XML.parse(data!)
@@ -613,6 +615,61 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     self.prepareGroup?.leave()
                     
+                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услуг"){
+                    let row = self.rows[self.data[indexPath.row].id]!
+                    var images: [String] = []
+                    
+                    self.rowFiles.forEach {
+                        
+                        if self.dateTeck($0.dateTime!) == self.dateTeck(row.dateFrom!) {
+                            images.append($0.fileId!)
+                        }
+                    }
+                    var dataServ: ServicesUKJson!
+                    self.dataService.forEach{
+                        if $0.name == self.data[indexPath.row].desc{
+                            dataServ = $0
+                        }
+                    }
+                    print(dataServ)
+                    var serviceDesc = ""
+                    if dataServ?.shortDesc == "" || dataServ?.shortDesc == " "{
+                        serviceDesc  = String((dataServ?.desc?.prefix(100))!) + "..."
+                    }else{
+                        serviceDesc  = dataServ?.shortDesc ?? ""
+                    }
+                    var imageIcon = UIImage()
+                    if let imageV = UIImage(data: Data(base64Encoded: ((dataServ?.picture!.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)) ?? Data()) {
+                        imageIcon = imageV
+                    }
+                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: row.emails ?? "", date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.comment ?? "", placeHome: row.premises!, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon)
+                    
+                    self.techServiceComm = []
+                    self.rowComms[row.id!]!.forEach { comm in
+                        
+                        var commImg: String?
+                        
+                        self.rowFiles.forEach {
+                            
+                            if $0.fileId == comm.idFile {
+                                commImg = $0.fileId!
+                            }
+                        }
+                        
+                        self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
+                                                                             title: comm.name ?? "",
+                                                                             comment: comm.text ?? "",
+                                                                             date: comm.createdDate ?? "",
+                                                                             commImg: nil,
+                                                                             commImgUrl: commImg,
+                                                                             id: comm.id ?? ""))
+                    }
+                    self.reqId = row.id ?? ""
+                    if self.collection != nil {
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                    }
+                    self.prepareGroup?.leave()
+                    
                 } else {
                     let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
@@ -698,6 +755,18 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             let vc = segue.destination as! UINavigationController
             (vc.viewControllers.first as! ViewController).roleReg_ = "1"
             
+        }else if segue.identifier == Segues.fromAppsUser.toServiceUK {
+            let vc = segue.destination as! ServiceAppVC
+            var data: ServicesUKJson!
+            dataService.forEach{
+                if $0.name == serviceUK?.title{
+                    data = $0
+                }
+            }
+            vc.serviceData = data
+            vc.data_ = serviceUK!
+            vc.reqId_ = reqId 
+            vc.delegate = self
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC
             vc.data_ = techService!
@@ -711,7 +780,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         
         } else if segue.identifier == Segues.fromAppsUser.toRequestType {
-            let vc = segue.destination as! RequestTypeVC
+            let vc = segue.destination as! NewRequestTypeVC
             vc.delegate = self
         }
     }
