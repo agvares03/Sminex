@@ -1,9 +1,8 @@
 //
-//  AppsUser.swift
-//  DemoUC
+//  NewAppsUser.swift
+//  Sminex
 //
-//  Created by Роман Тузин on 22.05.17.
-//  Copyright © 2017 The Best. All rights reserved.
+//  Created by Sergey Ivanov on 01/08/2019.
 //
 
 import UIKit
@@ -11,13 +10,10 @@ import CoreData
 import Gloss
 import SwiftyXMLParser
 
-protocol AppsUserDelegate: class {
-    func update()
-}
-
-final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppsUserDelegate {
+final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppsUserDelegate {
     
     @IBOutlet         weak var collection:      UICollectionView?
+    @IBOutlet         weak var collectionHeader:UICollectionView?
     @IBOutlet private weak var createButton:    UIButton?
     @IBOutlet private weak var activity:        UIActivityIndicatorView?
     
@@ -46,23 +42,23 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     public var xml_: XML.Accessor?
     public var isFromMain: Bool = false
     private var refreshControl: UIRefreshControl?
-            var typeName = ""
-            var reqId = ""
+    var typeName = ""
+    var reqId = ""
     private var responceString = ""
     private let typeGroup      = DispatchGroup()
-            var prepareGroup: DispatchGroup? = nil
+    var prepareGroup: DispatchGroup? = nil
     private var data: [AppsUserCellData] = []
     private var fullData: [AppsUserCellData] = []
     private var rowComms: [String : [RequestComment]]  = [:]
     private var rowPersons: [String : [RequestPerson]] = [:]
     private var rowAutos:   [String : [RequestAuto]]   = [:]
     private var rowFiles:   [RequestFile] = []
-            var admission: AdmissionHeaderData?
-            var techService: ServiceHeaderData?
-            var serviceUK: ServiceAppHeaderData?
-            var admissionComm: [AdmissionCommentCellData] = []
-            var techServiceComm: [ServiceCommentCellData] = []
-            var serviceUKComm: [ServiceAppCommentCellData] = []
+    var admission: AdmissionHeaderData?
+    var techService: ServiceHeaderData?
+    var serviceUK: ServiceAppHeaderData?
+    var admissionComm: [AdmissionCommentCellData] = []
+    var techServiceComm: [ServiceCommentCellData] = []
+    var serviceUKComm: [ServiceAppCommentCellData] = []
     private var rows: [String:Request] = [:]
     public var dataService: [ServicesUKJson] = []
     
@@ -73,7 +69,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         collection?.delegate                     = self
         collection?.dataSource                   = self
-        automaticallyAdjustsScrollViewInsets    = false
+        collectionHeader?.delegate               = self
+        collectionHeader?.dataSource             = self
+        automaticallyAdjustsScrollViewInsets     = false
         
         startAnimator()
         if TemporaryHolder.instance.requestTypes == nil {
@@ -85,9 +83,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             DispatchQueue.global(qos: .userInitiated).async {
                 self.parse(xml: self.xml_!)
             }
-        
+            
         } else {
-        
+            
             DispatchQueue.main.async {
                 self.getRequests()
             }
@@ -263,7 +261,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//                print(self.responceString)
+            //                print(self.responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -287,27 +285,27 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         let group = DispatchGroup()
         group.enter()
         DispatchQueue.global(qos: .userInteractive).async {
-        
+            
             let login = UserDefaults.standard.string(forKey: "login")!
             let pass  = UserDefaults.standard.string(forKey: "pwd") ?? ""
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"
-//            print(request)
+            //            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
-//                defer {
-//                    group.leave()
-//                }
+                //                defer {
+                //                    group.leave()
+                //                }
                 guard data != nil else { return }
                 if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
                     self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
                     return
                 }
                 #if DEBUG
-//                    print(String(data: data!, encoding: .utf8)!)
+                //                    print(String(data: data!, encoding: .utf8)!)
                 #endif
                 
                 let xml = XML.parse(data!)
@@ -527,9 +525,9 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 print(TemporaryHolder.instance.requestTypes?.types)
                 print(type)
-//                if (!itsNever) {
-//                    type = "Гостевой пропуск"
-//                }
+                //                if (!itsNever) {
+                //                    type = "Гостевой пропуск"
+                //                }
                 
                 if type.contains(find: "ропуск") {
                     self.typeName = type
@@ -540,7 +538,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                         self.rowPersons[row.id ?? ""]?.forEach {
                             if $0.id == self.rowPersons[row.id ?? ""]?.last?.id {
                                 persons += ($0.fio ?? "") + " "
-                            
+                                
                             } else {
                                 persons += ($0.fio ?? "") + ", "
                             }
@@ -580,15 +578,15 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          images: [],
                                                          imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     self.admissionComm = []
-//                    if row.text != ""{
-//                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
-//                                                                             title: "Примечание",
-//                                                                             comment: row.text ?? "",
-//                                                                             date: row.added ?? "",
-//                                                                             commImg: nil,
-//                                                                             commImgUrl: nil,
-//                                                                             id: "-1") )
-//                    }
+                    //                    if row.text != ""{
+                    //                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
+                    //                                                                             title: "Примечание",
+                    //                                                                             comment: row.text ?? "",
+                    //                                                                             date: row.added ?? "",
+                    //                                                                             commImg: nil,
+                    //                                                                             commImgUrl: nil,
+                    //                                                                             id: "-1") )
+                    //                    }
                     self.rowComms[row.id!]!.forEach { comm in
                         
                         var commImg: String?
@@ -749,7 +747,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.xml_ = nil
                 vc.isFromMain_ = true
             }
-        
+            
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
             
             let vc = segue.destination as! UINavigationController
@@ -765,7 +763,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
             vc.serviceData = data
             vc.data_ = serviceUK!
-            vc.reqId_ = reqId 
+            vc.reqId_ = reqId
             vc.delegate = self
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC
@@ -778,7 +776,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.xml_ = nil
                 vc.isFromMain_ = true
             }
-        
+            
         } else if segue.identifier == Segues.fromAppsUser.toRequestType {
             let vc = segue.destination as! NewRequestTypeVC
             vc.delegate = self
@@ -807,7 +805,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
 }
 
-
 private final class AppsUserCell: UICollectionViewCell {
     
     @IBOutlet private weak var skTitleHeight: NSLayoutConstraint!
@@ -818,7 +815,7 @@ private final class AppsUserCell: UICollectionViewCell {
     @IBOutlet private weak var desc:            UILabel!
     @IBOutlet private weak var status:          UILabel!
     @IBOutlet private weak var date:            UILabel!
-    @IBOutlet private weak var back:    	    UIView!
+    @IBOutlet private weak var back:            UIView!
     
     private var type: String?
     
@@ -826,7 +823,7 @@ private final class AppsUserCell: UICollectionViewCell {
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
-//            let mySubstring = item.desc.prefix(30)
+            //            let mySubstring = item.desc.prefix(30)
             desc.text   = item.desc
         }
         icon.image      = item.icon
@@ -837,7 +834,7 @@ private final class AppsUserCell: UICollectionViewCell {
             skTitleBottm.constant = 0
             skTitleHeight.constant = 0
             stickTitle.text = ""
-        
+            
         } else {
             skTitleBottm.constant = 8
             skTitleHeight.constant = 30
@@ -870,7 +867,7 @@ private final class AppsUserCell: UICollectionViewCell {
             df.dateFormat = "dd MMMM"
             df.locale = Locale(identifier: "Ru-ru")
             title.text = String(currTitle.dropLast(19)) + "на " + df.string(from: titleDate)
-        
+            
         } else {
             title.text = item.title
         }
@@ -919,243 +916,3 @@ private final class AppsUserCellData {
         self.isPaid     = isPaid
     }
 }
-
-struct Request {
-    
-    let isWait:                 String?
-    let isReadedByClient:   	String?
-    let cusName:            	String?
-    let idWorktype:         	String?
-    let siteUrl: 	        	String?
-    let isLauncher: 	        String?
-    let IsPotentialClient:      String?
-    let ident: 	                String?
-    let isPerformed:            String?
-    let responsiblePerson:      String?
-    let phoneNum:               String?
-    let id:                     String?
-    let status:                 String?
-    let text:                   String?
-    let dateServiceDesired:     String?
-    let isReaded:               String?
-    let addressStreet:          String?
-    let emergencyRequestType:   String?
-    let isCorrected:            String?
-    let isNeedNotify:           String?
-    let adressFlat:             String?
-    let isBlockPerform: 	    String?
-    let addressCorps:           String?
-    let dateTo: 	            String?
-    let added: 	                String?
-    let idConsultant: 	        String?
-    let dateFrom: 	            String?
-    let addressHome: 	        String?
-    let housesAddress: 	        String?
-    let isCons: 	            String?
-    let isAnswered: 	        String?
-    let idPriority: 	        String?
-    let idType: 	            String?
-    let isRegister: 	        String?
-    let isActive: 	            String?
-    let emails: 	            String?
-    let isCallCenter:           String?
-    let guid: 	                String?
-    let idAuthor:               String?
-    let isPay: 	                String?
-    let idHouseProfile: 	    String?
-    let isProcessing:           String?
-    let onlyForConsultant: 	    String?
-    var name:                   String?
-    let clearAfterWork: 	    String?
-    let idDepartment:           String?
-    let comment: 	            String?
-    let idStatus: 	            String?
-    let paymentAmount:          String?
-    let isLowMark:              String?
-    let planDate:               String?
-    let ipAddr: 	            String?
-    let callUniqueID: 	        String?
-    let flatNumber: 	        String?
-    let updateDate:             String?
-    let isPaid:                 String?
-    let premises:               String?
-    let soonPossible:           Bool
-    
-    init(row: XML.Accessor) {
-        isWait                  = row.attributes["isWait"]
-        isReadedByClient        = row.attributes["isReadedByClient"]
-        cusName                 = row.attributes["cusName"]
-        idWorktype              = row.attributes["id_worktype"]
-        siteUrl                 = row.attributes["SiteURL"]
-        isLauncher              = row.attributes["isLauncher"]
-        IsPotentialClient       = row.attributes["IsPotentialClient"]
-        ident                   = row.attributes["ident"]
-        isPerformed             = row.attributes["isPerformed"]
-        responsiblePerson       = row.attributes["ResponsiblePerson"]
-        phoneNum                = row.attributes["PhoneNum"]
-        id                      = row.attributes["ID"]
-        status                  = row.attributes["Status"]
-        text                    = row.attributes["text"]
-        dateServiceDesired      = row.attributes["DateServiceDesired"]
-        isReaded                = row.attributes["IsReaded"]
-        addressStreet           = row.attributes["AddressStreet"]
-        emergencyRequestType    = row.attributes["EmergencyRequestType"]
-        isCorrected             = row.attributes["IsCorrected"]
-        isNeedNotify            = row.attributes["IsNeedNotify"]
-        adressFlat              = row.attributes["AddressFlat"]
-        isBlockPerform          = row.attributes["IsBlockPerform"]
-        addressCorps            = row.attributes["AddressCorps"]
-        dateTo                  = row.attributes["DateTo"]
-        added                   = row.attributes["added"]
-        idConsultant            = row.attributes["id_Consultant"]
-        dateFrom                = row.attributes["DateFrom"]
-        addressHome             = row.attributes["AddressHome"]
-        housesAddress           = row.attributes["HouseAddress"]
-        isCons                  = row.attributes["isCons"]
-        isAnswered              = row.attributes["IsAnswered"]
-        idPriority              = row.attributes["id_priority"]
-        idType                  = row.attributes["id_type"]
-        isRegister              = row.attributes["IsRegister"]
-        isActive                = row.attributes["isActive"]
-        emails                  = row.attributes["Emails"]
-        isCallCenter            = row.attributes["IsCallCenter"]
-        guid                    = row.attributes["GUID"]
-        idAuthor                = row.attributes["id_Author"]
-        isPay                   = row.attributes["IsPay"]
-        idHouseProfile          = row.attributes["id_HouseProfile"]
-        isProcessing            = row.attributes["IsProcessing"]
-        onlyForConsultant       = row.attributes["onlyForConsultant"]
-        name                    = row.attributes["name"]
-        
-        if (name?.contains("услуг"))! {
-            
-        } else if (name?.contains("ропуск"))! {
-            name                = "Пропуск"
-        } else if (name?.contains("Обращение к консьержу"))! {
-            name                = "Обращение к консьержу"
-        } else if (name?.contains("Обращение в техподдержку"))! {
-            name                = "Обращение в техподдержку"
-        } else if (name?.contains("Обращение к директору"))! {
-            name                = "Обращение к директору"
-        } else if (name?.contains("Обращение"))! {
-            name                = "Обращение"
-        } else {
-            name                = "Обслуживание"
-        }
-        clearAfterWork          = row.attributes["ClearAfterWork"]
-        idDepartment            = row.attributes["id_department"]
-        comment                 = row.attributes["Comment"]
-        idStatus                = row.attributes["id_status"]
-        paymentAmount           = row.attributes["PaymentAmount"]
-        isLowMark               = row.attributes["IsLowMark"]
-        planDate                = row.attributes["PlanDate"]
-        ipAddr                  = row.attributes["ip_addr"]
-        callUniqueID            = row.attributes["CallUniqueID"]
-        flatNumber              = row.attributes["FlatNumber"]
-        updateDate              = row.attributes["UpdatedDate"]
-        isPaid                  = row.attributes["IsPaidService"]
-        premises                = row.attributes["Premises"]
-        if row.attributes["AsSoonAsPossible"] == "1"{
-            soonPossible = true
-        }else{
-            soonPossible = false
-        }
-    }
-}
-
-struct RequestPerson {
-    
-    let id:             String?
-    let fio:            String?
-    let passportData:   String?
-    
-    init(row: XML.Element) {
-        
-        id = row.attributes["ID"]
-        fio = row.attributes["FIO"]
-        passportData = row.attributes["PassportData"]
-    }
-}
-
-struct RequestAuto {
-    
-    let id:         String?
-    let mark:       String?
-    let color:      String?
-    let number:     String?
-    let parking:    String?
-    
-    init(row: XML.Element) {
-        
-        id      = row.attributes["ID"]
-        mark    = row.attributes["Mark"]
-        color   = row.attributes["Color"]
-        number  = row.attributes["Number"]
-        parking = row.attributes["Parking"]
-    }
-}
-
-struct RequestComment {
-    
-    let id:     		String?
-    let idFile:     	String?
-    let idAuthor:       String?
-    let text:       	String?
-    let name:   	    String?
-    let isHidden:       String?
-    let createdDate:    String?
-    let idRequest:      String?
-    let phoneNum:       String?
-    
-    init(row: XML.Accessor) {
-        
-        id          = row.attributes["ID"]
-        idFile      = row.attributes["id_file"]
-        idAuthor    = row.attributes["id_Author"]
-        text        = row.attributes["text"]
-        name        = row.attributes["Name"]
-        isHidden    = row.attributes["isHidden"]
-        createdDate = row.attributes["CreatedDate"]
-        idRequest   = row.attributes["id_request"]
-        phoneNum    = row.attributes["PhoneNum"]
-    }
-}
-
-struct RequestFile {
-    
-    let fileId:     String?
-    let fileName:   String?
-    let dateTime:   String?
-    let userName:   String?
-    let isCons:     String?
-    let isCurrUsr:  String?
-    let userId:     String?
-    
-    init(row: XML.Accessor) {
-        
-        fileId      = row.attributes["FileID"]
-        fileName    = row.attributes["FileName"]
-        dateTime    = row.attributes["DateTime"]
-        userName    = row.attributes["UserName"]
-        isCons      = row.attributes["IsConsultant"]
-        isCurrUsr   = row.attributes["IsCurrentUser"]
-        userId      = row.attributes["UserID"]
-    }
-}
-
-extension UILabel {
-    func calculateMaxLines() -> Int {
-        let maxSize = CGSize(width: frame.size.width, height: CGFloat(Float.infinity))
-        let charSize = font.lineHeight
-        let text = (self.text ?? "") as NSString
-        let textSize = text.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
-        let linesRoundedUp = Int(ceil(textSize.height/charSize))
-        return linesRoundedUp
-    }
-}
-
-
-
-
-
-
