@@ -682,6 +682,12 @@ final class ServiceAppHeader: UICollectionViewCell {
         servicePrice.text   = item.price.replacingOccurrences(of: "руб.", with: "₽")
         serviceDesc.text    = item.servDesc
         serviceIcon.image   = item.servIcon
+        serviceIcon.layer.borderColor = UIColor.black.cgColor
+        serviceIcon.layer.borderWidth = 2.0
+        // Углы
+        serviceIcon.layer.cornerRadius = serviceIcon.frame.width / 2
+        // Поправим отображения слоя за его границами
+        serviceIcon.layer.masksToBounds = true
         let k = heightForTitle(text: item.desc, width: desc.frame.size.width)
         descConstant?.constant = k
         priceHeight.constant = heightForTitle(text: item.price, width: servicePrice.frame.size.width)

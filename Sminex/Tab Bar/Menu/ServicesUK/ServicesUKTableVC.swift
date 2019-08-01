@@ -159,7 +159,7 @@ final class ServicesUKTableCell: UICollectionViewCell {
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var amount:  UILabel!
-    @IBOutlet private weak var image:   CircleView!
+    @IBOutlet private weak var image:   CircleView2!
     
     func display(_ title: String, desc: String, amount: String, picture: String) {
         self.title.text     = title
@@ -167,6 +167,12 @@ final class ServicesUKTableCell: UICollectionViewCell {
         self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
         if let imageV = UIImage(data: Data(base64Encoded: (picture.replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             image.image = imageV
+            image.layer.borderColor = UIColor.black.cgColor
+            image.layer.borderWidth = 2.0
+            // Углы
+            image.layer.cornerRadius = image.frame.width / 2
+            // Поправим отображения слоя за его границами
+            image.layer.masksToBounds = true
         }else{
             image.isHidden = true
         }

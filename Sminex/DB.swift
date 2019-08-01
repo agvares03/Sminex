@@ -81,23 +81,23 @@ final class DB: NSObject, XMLParserDelegate {
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
                                                         print("JSON",json)
                                                         
-                                                        if let json_notifications = json["data"] {
-                                                            let int_end = (json_notifications.count)!-1
-                                                            if (int_end < 0) {
-                                                            } else {
-                                                                
-                                                                for index in 0...int_end {
-                                                                    let json_not = json_notifications.object(at: index) as! [String:AnyObject]
-                                                                    for obj in json_not {
-                                                                        name = obj.value as! String
-                                                                    }
-                                                                    
-                                                                    var i = 85
-                                                                    
-                                                                    
-                                                                }
-                                                            }
-                                                        }
+//                                                        if let json_notifications = json["data"] {
+//                                                            let int_end = (json_notifications.count)!-1
+//                                                            if (int_end < 0) {
+//                                                            } else {
+//                                                                
+//                                                                for index in 0...int_end {
+//                                                                    let json_not = json_notifications.object(at: index) as! [String:AnyObject]
+//                                                                    for obj in json_not {
+//                                                                        name = obj.value as! String
+//                                                                    }
+//                                                                    
+//                                                                    var i = 85
+//                                                                    
+//                                                                    
+//                                                                }
+//                                                            }
+//                                                        }
                                                         
                                                     } catch let error as NSError {
                                                         print(error)

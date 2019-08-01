@@ -265,7 +265,12 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         //        }
         if let image = UIImage(data: Data(base64Encoded: ((data_?.picture ?? "").replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             serviceIcon.image = image
-            
+            serviceIcon.layer.borderColor = UIColor.black.cgColor
+            serviceIcon.layer.borderWidth = 2.0
+            // Углы
+            serviceIcon.layer.cornerRadius = serviceIcon.frame.width / 2
+            // Поправим отображения слоя за его границами
+            serviceIcon.layer.masksToBounds = true
         }
         let defaults            = UserDefaults.standard
         edEmail.text              = defaults.string(forKey: "mail")
@@ -509,12 +514,12 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         }else{
             soonPossible = "0"
         }
-        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(comm)&text=\(comm)&phonenum=\(edPhone.text!)&email=\(edEmail.text!)&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(String(describing: data_?.id!))&premises=\(place)&asSoonAsPossible=\(soonPossible)")
+        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(data_?.name! ?? "")&text=\(comm)&phonenum=\(edPhone.text!)&email=\(edEmail.text!)&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(String(describing: data_?.id!))&premises=\(place)&asSoonAsPossible=\(soonPossible)")
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(comm.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&email=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&emails=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")&emails=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=1&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "GET"
+        request.httpMethod = "POST"
         print(request)
         
         URLSession.shared.dataTask(with: request) {
