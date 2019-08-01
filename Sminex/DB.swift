@@ -74,9 +74,7 @@ final class DB: NSObject, XMLParserDelegate {
                                                     return
                                                 } else {
                                                     
-                                                    // Запишем в БД данные по уведомлениям
                                                     do {
-                                                        var name          = ""
 
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
                                                         print("JSON",json)
@@ -87,13 +85,9 @@ final class DB: NSObject, XMLParserDelegate {
                                                             } else {
                                                                 
                                                                 for index in 0...int_end {
-                                                                    let json_not = json_notifications.object(at: index) as! [String:AnyObject]
-                                                                    for obj in json_not {
-                                                                        name = obj.value as! String
-                                                                    }
-                                                                    
-                                                                    var i = 85
-                                                                    
+                                                                    let json_not = json_notifications.object(at: index) as! String
+
+                                                                    self.add_type_counter(type: json_not)
                                                                     
                                                                 }
                                                             }
@@ -383,6 +377,14 @@ final class DB: NSObject, XMLParserDelegate {
         managedObject.plus             = plus
         managedObject.minus            = minus
         managedObject.end              = end
+        
+        CoreDataManager.instance.saveContext()
+    }
+    
+    // Типы приборов
+    func add_type_counter(type: String) {
+        let managedObject = TypesCounters()
+        managedObject.name = type
         
         CoreDataManager.instance.saveContext()
     }

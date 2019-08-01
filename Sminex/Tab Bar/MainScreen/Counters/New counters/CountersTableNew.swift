@@ -1,5 +1,5 @@
 //
-//  CounterChoiceType.swift
+//  CountersTableNew.swift
 //  Sminex
 //
 //  Created by Роман Тузин on 01/08/2019.
@@ -8,27 +8,32 @@
 import UIKit
 import CoreData
 
-class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+class CountersTableNew: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    var title_name: String?
+    
+    @IBOutlet weak var tableView: UITableView!
+    var fetchedResultsController: NSFetchedResultsController<Counters>?
+    
     @IBAction func BackPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
-    @IBOutlet weak var tableView: UITableView!
-    
-    var fetchedResultsController: NSFetchedResultsController<TypesCounters>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.delegate = self
         tableView.dataSource = self
         
-        fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "TypesCounters", keysForSort: ["name"], predicateFormat: nil) as? NSFetchedResultsController<TypesCounters>
+        let predicate = NSPredicate(format: "owner == %@ AND num_month == %@ AND year == %@", title_name ?? "", UserDefaults.standard.string(forKey: "month") ?? "", UserDefaults.standard.string(forKey: "year") ?? "")
+        fetchedResultsController?.fetchRequest.predicate = predicate
+        fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Counters", keysForSort: ["owner"], predicateFormat: nil) as? NSFetchedResultsController<Counters>
         do {
             try fetchedResultsController?.performFetch()
         } catch {
             print(error)
         }
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,24 +45,13 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let counter = (fetchedResultsController?.object(at: indexPath))! as Counters
         
-        let counter = (fetchedResultsController?.object(at: indexPath))! as TypesCounters
+        let cell: CounterCellNew = self.tableView.dequeueReusableCell(withIdentifier: "CounterCellNew") as! CounterCellNew
         
-        let cell: CounterTypeCell = self.tableView.dequeueReusableCell(withIdentifier: "TypeCounterCell") as! CounterTypeCell
-        
-        cell.type_name.text = counter.name
+        cell.counter_name.text = "Счетчик №" + counter.uniq_num! ?? ""
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "CounterNew", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "CounterList") as! CountersTableNew
-        let counter = (fetchedResultsController?.object(at: indexPath))! as TypesCounters
-        vc.title = counter.name
-        vc.title_name = counter.name
-
-        navigationController?.pushViewController(vc, animated: true)
     }
 
     /*
