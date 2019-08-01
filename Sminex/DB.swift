@@ -341,11 +341,11 @@ final class DB: NSObject, XMLParserDelegate {
     
     // Уведомления
     func parse_Notifications(id_account: String) {
-        let urlPath = Server.SERVER + Server.GET_NOTIFICATIONS + "id=" + id_account.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        let urlPath = Server.SERVER + Server.GET_NOTIFICATIONS + "accID=" + id_account.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
         
         let url: NSURL = NSURL(string: urlPath)!
         let request = NSMutableURLRequest(url: url as URL)
-//        request.httpMethod = "GET"
+        request.httpMethod = "GET"
         
         let task = URLSession.shared.dataTask(with: request as URLRequest,
                                               completionHandler: {
