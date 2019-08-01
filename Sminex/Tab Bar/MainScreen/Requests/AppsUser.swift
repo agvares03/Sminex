@@ -807,8 +807,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
 }
 
-
-private final class AppsUserCell: UICollectionViewCell {
+final class AppsUserCell: UICollectionViewCell {
     
     @IBOutlet private weak var skTitleHeight: NSLayoutConstraint!
     @IBOutlet private weak var skTitleBottm: NSLayoutConstraint!

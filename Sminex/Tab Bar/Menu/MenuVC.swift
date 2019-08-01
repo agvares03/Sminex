@@ -22,6 +22,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             MenuCellData(icon: UIImage(named: "menu_news")!, title: "Новости", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: TemporaryHolder.instance.menuQuesions == 0 ? "" : "\(TemporaryHolder.instance.menuQuesions)"),
             MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuDeals)"),
+            MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Уведомления", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuNotifications)"),
 //            MenuCellData(icon: UIImage(named: "menu_finance")!, title: "Уведомления", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_support")!, title: "Техподдержка приложения", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_share")!, title: "Поделиться приложением", notification: "")
@@ -119,9 +120,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         if section == 0 {
             return 2
         
-        } else if section == 2 || section == 1{
+        } else if section == 1{
             return 3
-        
+        } else if section == 2{
+            return 4
         } else {
             return 1
         }
@@ -156,10 +158,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             cell.display(data[indexPath.row + 5])
         
         } else if section == 3 {
-            cell.display(data[indexPath.row + 8])
+            cell.display(data[indexPath.row + 9])
         
         } else {
-            cell.display(data[indexPath.row + 9])
+            cell.display(data[indexPath.row + 10])
         }
         return cell
     }
@@ -210,10 +212,9 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             
             } else if indexPath.row == 2 {
                 performSegue(withIdentifier: Segues.fromMenuVC.toDeals, sender: self)
+            } else if indexPath.row == 3 {
+                performSegue(withIdentifier: Segues.fromMenuVC.toNotification, sender: self)
             }
-//            else if indexPath.row == 3 {
-//                performSegue(withIdentifier: Segues.fromMenuVC.toNotification, sender: self)
-//            }
         
         } else if indexPath.section == 3 {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
