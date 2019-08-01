@@ -21,5 +21,6 @@ extension Notifications {
     @NSManaged public var type: String?
     @NSManaged public var date: String?
     @NSManaged public var isReaded: Bool
+    @NSManaged public var ident: String?
 
 }
