@@ -16,5 +16,4 @@ public class Notifications: NSManagedObject {
         self.init(entity: CoreDataManager.instance.entityForName(entityName: "Notifications"), insertInto: CoreDataManager.instance.managedObjectContext)
         
     }
-
 }
