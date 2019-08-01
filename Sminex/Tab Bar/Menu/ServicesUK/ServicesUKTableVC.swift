@@ -221,6 +221,10 @@ struct ServicesUKJson: JSONDecodable {
     let cost:       String?
     let id:         String?
     let shortDesc:  String?
+    let selectPlace:Bool?
+    let selectTime: Bool?
+    let selectCost: Bool?
+    let fullDesc:   String?
     
     init?(json: JSON) {
         howToOrder = "HowToOrder"       <~~ json
@@ -230,6 +234,10 @@ struct ServicesUKJson: JSONDecodable {
         cost       = "Cost"             <~~ json
         id         = "ID"               <~~ json
         shortDesc  = "ShortDescription" <~~ json
+        selectPlace = "IsSelectPlace"    <~~ json
+        selectTime = "IsSelectTime"     <~~ json
+        selectCost = "IsSelectCost"     <~~ json
+        fullDesc   = "FullDescription"  <~~ json
     }
 }
 

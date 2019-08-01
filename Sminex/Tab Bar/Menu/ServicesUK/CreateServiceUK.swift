@@ -24,7 +24,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var edPhone:     UITextField!
     @IBOutlet private weak var edEmail:     UITextField!
     @IBOutlet private weak var serviceDesc: UILabel!
-    @IBOutlet private weak var servicePrice:UITextField!
+    @IBOutlet private weak var servicePrice:UILabel!
+    @IBOutlet private weak var servPriceHeight: NSLayoutConstraint!
     @IBOutlet private weak var serviceTitle:UILabel!
     @IBOutlet private weak var serviceIcon: CircleView2!
     @IBOutlet private weak var dateBtn:     UIButton!
@@ -38,6 +39,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     
     @IBOutlet private weak var timeBtn1:    UIButton!
     @IBOutlet private weak var timeBtn2:    UIButton!
+    @IBOutlet private weak var timeBtn1Width: NSLayoutConstraint!
+    @IBOutlet private weak var timeBtn2Width: NSLayoutConstraint!
     @IBOutlet private weak var dateLbl:     UILabel!
     @IBOutlet private weak var noDateLbl:   UILabel!
     
@@ -236,7 +239,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 }
             }
         }
-        data = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: servicePrice.text ?? "", mobileNumber: edPhone.text ?? "", servDesc: serviceDesc.text ?? "", email: edEmail.text ?? "", date: dateFormatter.string(from: picker.date), status: "В ОБРАБОТКЕ", images: imagesArr, imagesUrl: [], desc: edProblem.text!, placeHome: place, soonPossible: extTime, title: data_?.name ?? "", servIcon: serviceIcon.image!)
+        data = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: servicePrice.text ?? "", mobileNumber: edPhone.text ?? "", servDesc: serviceDesc.text ?? "", email: edEmail.text ?? "", date: dateFormatter.string(from: picker.date), status: "В ОБРАБОТКЕ", images: imagesArr, imagesUrl: [], desc: edProblem.text!, placeHome: place, soonPossible: extTime, title: data_?.name ?? "", servIcon: serviceIcon.image!, selectPrice: (data_?.selectCost)!, selectPlace: (data_?.selectPlace)!)
         uploadRequest()
         //        }
     }
@@ -285,7 +288,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         loader.isHidden = true
 //        navigationItem.title = data_?.name
         serviceTitle.text = data_?.name
-        servicePrice.text  = data_?.cost!.replacingOccurrences(of: "руб.", with: "₽")
+        servicePrice.text  = "Цена услуги: " + (data_?.cost!.replacingOccurrences(of: "руб.", with: "₽"))!
         if data_?.shortDesc == "" || data_?.shortDesc == " "{
             serviceDesc.text  = String((data_?.desc?.prefix(100))!) + "..."
         }else{
@@ -308,15 +311,49 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         parkingsPlace?.forEach{_ in
             checkPlace.append(false)
         }
-        if parkingsPlace!.count == 1{
-            placeHeight.constant = 20
-            placeView.backgroundColor = .white
-            plcLbl.isHidden = false
-            placeLbl.text = parkingsPlace![0]
-            expImg.isHidden = true
+        if !(data_?.selectPlace)!{
+            placeView.isHidden = true
         }else{
-            let tap1 = UITapGestureRecognizer(target: self, action: #selector(expand))
-            placeView.addGestureRecognizer(tap1)
+            if parkingsPlace!.count == 1{
+                placeHeight.constant = 20
+                placeView.backgroundColor = .white
+                plcLbl.isHidden = false
+                placeLbl.text = parkingsPlace![0]
+                expImg.isHidden = true
+            }else{
+                let tap1 = UITapGestureRecognizer(target: self, action: #selector(expand))
+                placeView.addGestureRecognizer(tap1)
+            }
+        }
+        if !(data_?.selectTime)!{
+            choiceBtn = 0
+            dateLbl.isHidden = true
+            noDateLbl.isHidden = false
+            dateBtn.isHidden = true
+            extTime = true
+            timeBtn2.setTitleColor(.darkGray, for: .normal)
+            timeBtn2.backgroundColor = choiceColor
+            timeBtn1.setTitleColor(.black, for: .normal)
+            timeBtn1.backgroundColor = unChoiceColor
+            if !picker.isHidden{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd MMMM HH:mm"
+                
+                dateBtn.setTitle(dateFormatter.string(from: picker.date), for: .normal)
+                picker.isHidden         = true
+                pickerLine.isHidden     = true
+                imageConst.constant = 0
+            }
+            timeBtn2.isHidden = true
+            timeBtn2Width.constant = 0
+            timeBtn1Width.constant = self.view.frame.size.width - 50
+        }else{
+            timeBtn2Width.constant = (self.view.frame.size.width - 50) / 2
+            timeBtn1Width.constant = (self.view.frame.size.width - 50) / 2
+        }
+        if !(data_?.selectCost)!{
+            servicePrice.text = ""
+            servPriceHeight.constant = 0
         }
         imageConst.constant = 0
         endAnimator()
@@ -514,9 +551,13 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         }else{
             soonPossible = "0"
         }
-        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(data_?.name! ?? "")&text=\(comm)&phonenum=\(edPhone.text!)&email=\(edEmail.text!)&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(String(describing: data_?.id!))&premises=\(place)&asSoonAsPossible=\(soonPossible)")
+        var paidEmergency = "0"
+        if data_?.name == "Дополнительное обслуживание"{
+            paidEmergency = "1"
+        }
+        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(data_?.name! ?? "")&text=\(comm)&phonenum=\(edPhone.text! )&responsiblePerson=\(data_?.name! ?? "")&emails=\(edEmail.text!)&isPaidEmergencyRequest=\(paidEmergency)&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(data_?.id! ?? "")&premises=\(place)&asSoonAsPossible=\(soonPossible)")
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(UserDefaults.standard.string(forKey: "name")?.stringByAddingPercentEncodingForRFC3986() ?? "")&emails=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=1&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&responsiblePerson=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&emails=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=\(paidEmergency.stringByAddingPercentEncodingForRFC3986() ?? "")&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -632,7 +673,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             let vc = segue.destination as! ServiceAppVC
             vc.isCreated_ = true
             vc.serviceData = data_
-            vc.data_ = data ?? ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: serviceIcon.image!)
+            vc.data_ = data ?? ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: serviceIcon.image!, selectPrice: true, selectPlace: true)
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }

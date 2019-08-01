@@ -789,7 +789,22 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     if let imageV = UIImage(data: Data(base64Encoded: ((dataServ?.picture!.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)) ?? Data()) {
                         imageIcon = imageV
                     }
-                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: row.emails ?? "", date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.comment ?? "", placeHome: row.premises!, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon)
+                    var emails = ""
+                    if row.emails == ""{
+                        emails = UserDefaults.standard.string(forKey: "mail")!
+                    }else{
+                        emails = row.emails!
+                    }
+                    var place = ""
+                    let parkingsPlace = UserDefaults.standard.stringArray(forKey: "parkingsPlace")!
+                    if row.premises == ""{
+                        parkingsPlace.forEach{
+                            place = place + $0
+                        }
+                    }else{
+                        place = row.premises!
+                    }
+                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
