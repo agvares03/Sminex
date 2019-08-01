@@ -90,7 +90,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var filteredNews: [NewsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
-    private var appsUser: AppsUser?
+    private var appsUser: NewAppsUser?
     private var dataService: [ServicesUKJson] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -727,7 +727,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[0]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
-            appsUser = AppsUser()
+            appsUser = NewAppsUser()
             appsUser?.dataService = dataService
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
@@ -857,7 +857,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            print(responceString)
+//            print(responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -871,6 +871,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                         if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                             TemporaryHolder.instance.choise(json!)
+                        }
+                        let responseString = String(data: data!, encoding: .utf8) ?? ""
+                        if responseString.containsIgnoringCase(find: "premises"){
+                            let parkingsPlace = (Business_Center_Data(json: json!)?.ParkingPlace)!
+                            UserDefaults.standard.set(parkingsPlace, forKey: "parkingsPlace")
                         }
                         denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
                         UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
@@ -1479,7 +1484,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
-            let vc = segue.destination as! AppsUser
+            let vc = segue.destination as! NewAppsUser
             vc.dataService = dataService
             vc.isCreatingRequest_ = true
             vc.delegate = self
@@ -1490,7 +1495,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             (vc.viewControllers.first as! ViewController).roleReg_ = "1"
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
-            let vc = segue.destination as! AppsUser
+            let vc = segue.destination as! NewAppsUser
             vc.dataService = dataService
             vc.delegate = self
             
@@ -1525,7 +1530,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.tappedNews = tappedNews
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
-            let vc = segue.destination as! AppsUser
+            let vc = segue.destination as! NewAppsUser
             vc.dataService = dataService
             vc.requestId_ = requestId
             vc.xml_ = mainScreenXml

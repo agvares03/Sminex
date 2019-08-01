@@ -133,7 +133,7 @@ class RequestTypeVC: UIViewController {
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
-        let AppsUserDelegate = self.delegate as! AppsUser
+        let AppsUserDelegate = self.delegate as! NewAppsUser
         
         if (AppsUserDelegate.isCreatingRequest_) {
             navigationController?.popToRootViewController(animated: true)

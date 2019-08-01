@@ -117,7 +117,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
                     var b : [NewRequestTypeCellData]! = []
                     types.forEach{
                         if (($0.name?.contains(find: "ропуск"))!){
-                            b.append(NewRequestTypeCellData(id: $0.id!, title: "Пропуск", picture: UIImage(named: "admissionIcon")!))
+                            b.append(NewRequestTypeCellData(id: $0.id!, title: $0.name!, picture: UIImage(named: "admissionIcon")!))
                         }else if ($0.name?.contains(find: "бслуживан"))!{
                             b.append(NewRequestTypeCellData(id: $0.id!, title: $0.name!, picture: UIImage(named: "teshServIcon")!))
                         }else if ($0.name?.contains(find: "варийная"))!{
@@ -193,7 +193,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
-        let AppsUserDelegate = self.delegate as! AppsUser
+        let AppsUserDelegate = self.delegate as! NewAppsUser
         
         if (AppsUserDelegate.isCreatingRequest_) {
             navigationController?.popToRootViewController(animated: true)

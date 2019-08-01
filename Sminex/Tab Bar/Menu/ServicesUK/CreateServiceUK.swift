@@ -26,7 +26,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var serviceDesc: UILabel!
     @IBOutlet private weak var servicePrice:UITextField!
     @IBOutlet private weak var serviceTitle:UILabel!
-    @IBOutlet private weak var serviceIcon: UIImageView!
+    @IBOutlet private weak var serviceIcon: CircleView2!
     @IBOutlet private weak var dateBtn:     UIButton!
     @IBOutlet private weak var sendBtn:     UIButton!
     @IBOutlet private weak var pickerLine:  UILabel!
@@ -509,12 +509,12 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         }else{
             soonPossible = "0"
         }
-        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=bceeab0b-891a-4af8-9953-1bf1ffd7fe29&name=\(comm)&text=\(comm)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(String(describing: data_?.id!))&premises=\(place)&asSoonAsPossible=\(soonPossible)")
+        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(comm)&text=\(comm)&phonenum=\(edPhone.text!)&email=\(edEmail.text!)&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(String(describing: data_?.id!))&premises=\(place)&asSoonAsPossible=\(soonPossible)")
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=bceeab0b-891a-4af8-9953-1bf1ffd7fe29&name=\(comm.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(comm.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&email=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&emails=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "POST"
+        request.httpMethod = "GET"
         print(request)
         
         URLSession.shared.dataTask(with: request) {
@@ -551,7 +551,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                         
                         self.endAnimator()
                         self.delegate?.update()
-                        self.performSegue(withIdentifier: Segues.fromCreateTechService.toService, sender: self)
+                        let viewControllers = self.navigationController?.viewControllers
+                        self.navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
                     }
                 }
             }

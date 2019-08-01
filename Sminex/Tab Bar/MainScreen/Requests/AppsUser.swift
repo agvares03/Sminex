@@ -615,7 +615,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     self.prepareGroup?.leave()
                     
-                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услуг"){
+                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услугу"){
                     let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
                     
@@ -1029,7 +1029,7 @@ struct Request {
         if (name?.contains("услуг"))! {
             
         } else if (name?.contains("ропуск"))! {
-            name                = "Пропуск"
+            name                = "Гостевой пропуск"
         } else if (name?.contains("Обращение к консьержу"))! {
             name                = "Обращение к консьержу"
         } else if (name?.contains("Обращение в техподдержку"))! {

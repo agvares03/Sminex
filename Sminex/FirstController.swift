@@ -131,7 +131,6 @@ class FirstController: UIViewController {
                 self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
                 self.busines_center_denyInvoiceFiles = Business_Center_Data(json: json!)?.DenyInvoiceFiles
                 self.busines_center_denyTotalOnlinePayments = Business_Center_Data(json: json!)?.DenyTotalOnlinePayments
-                
                 // Можно или нет ввозить/вывозить имущество
 //                self.denyImportExportPropertyRequest = Business_Center_Data(json: json!)?.DenyImportExportProperty
             }
@@ -435,11 +434,14 @@ class FirstController: UIViewController {
         // Можно или нет ввозить/вывозить имущество
         let DenyImportExportProperty: Bool?
         
+        let ParkingPlace: [String]?
+        
         init?(json: JSON) {
             DenyOnlinePayments = "denyOnlinePayments"                      <~~ json
             DenyInvoiceFiles   = "denyInvoiceFiles"                        <~~ json
             DenyTotalOnlinePayments = "denyTotalOnlinePayments"            <~~ json
             DenyImportExportProperty = "denyImportExportPropertyRequest"   <~~ json
+            ParkingPlace           = "premises"                            <~~ json
         }
     }
     

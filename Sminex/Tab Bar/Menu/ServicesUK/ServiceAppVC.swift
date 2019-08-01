@@ -13,6 +13,7 @@ private protocol ServiceAppProtocol: class {}
 private var mainScreenXml:  XML.Accessor?
 private protocol ServiceAppCellsProtocol: class {
     func imageTapped(_ sender: UITapGestureRecognizer)
+    func goService(_ sender: UITapGestureRecognizer)
 }
 
 class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ServiceAppCellsProtocol{
@@ -583,6 +584,10 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
         return true
     }
     
+    @objc func goService(_ sender: UITapGestureRecognizer) {
+        self.performSegue(withIdentifier: "goService", sender: self)
+    }
+    
     @objc func imageTapped(_ sender: UITapGestureRecognizer) {
         let view = UIView()
         view.frame = UIScreen.main.bounds
@@ -614,6 +619,17 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
         self.navigationController?.isNavigationBarHidden = false
         sender.view?.removeFromSuperview()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goService"{
+            let vc = segue.destination as! ServicesUKDescVC
+            vc.data_ = serviceData
+            var data:[ServicesUKJson] = []
+            data.append(serviceData!)
+            vc.allData = data
+            vc.index = 0
+        }
+    }
 }
 
 final class ServiceAppHeader: UICollectionViewCell {
@@ -621,8 +637,9 @@ final class ServiceAppHeader: UICollectionViewCell {
     @IBOutlet private weak var descConstant:   NSLayoutConstraint!
     @IBOutlet private weak var serviceDesc:     UILabel!
     @IBOutlet private weak var servicePrice:    UILabel!
+    @IBOutlet private weak var priceHeight:     NSLayoutConstraint!
     @IBOutlet private weak var serviceTitle:    UILabel!
-    @IBOutlet private weak var serviceIcon:     UIImageView!
+    @IBOutlet private weak var serviceIcon:     CircleView2!
     @IBOutlet private weak var image:           UIImageView!
     @IBOutlet private weak var desc:            UILabel!
     @IBOutlet private weak var mobileNumber:    UILabel!
@@ -664,8 +681,10 @@ final class ServiceAppHeader: UICollectionViewCell {
         serviceTitle.text   = item.title
         servicePrice.text   = item.price.replacingOccurrences(of: "руб.", with: "₽")
         serviceDesc.text    = item.servDesc
+        serviceIcon.image   = item.servIcon
         let k = heightForTitle(text: item.desc, width: desc.frame.size.width)
         descConstant?.constant = k
+        priceHeight.constant = heightForTitle(text: item.price, width: servicePrice.frame.size.width)
         titleHeight.constant = heightForTitle(text: item.title, width: serviceTitle.frame.size.width)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
@@ -680,6 +699,10 @@ final class ServiceAppHeader: UICollectionViewCell {
                 noDateLbl.isHidden = true
             }
         }
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(goService(_:)))
+        serviceDesc.isUserInteractionEnabled = true
+        serviceDesc.addGestureRecognizer(tap)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -690,6 +713,10 @@ final class ServiceAppHeader: UICollectionViewCell {
         label.sizeToFit()
         
         return label.frame.height
+    }
+    
+    @objc private func goService(_ sender: UITapGestureRecognizer) {
+        delegate?.goService(sender)
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {

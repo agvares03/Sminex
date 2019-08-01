@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Gloss
 
 final class ServicesUKDescVC: UIViewController {
     
@@ -14,7 +15,7 @@ final class ServicesUKDescVC: UIViewController {
     @IBOutlet private weak var titleTop:    NSLayoutConstraint!
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var scroll:      UIScrollView!
-    @IBOutlet private weak var imgView:     UIImageView!
+    @IBOutlet private weak var imgView:     CircleView2!
     @IBOutlet private weak var sendBtn:  UIButton!
     @IBOutlet private weak var titleLabel:  UILabel!
     @IBOutlet private weak var costLabel:   UILabel!
@@ -25,8 +26,9 @@ final class ServicesUKDescVC: UIViewController {
     }
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
-        startAnimator()
-        uploadRequest()
+//        startAnimator()
+//        uploadRequest()
+        performSegue(withIdentifier: Segues.fromRequestTypeVC.toServiceUK, sender: self)
     }
     
     public var data_: ServicesUKJson?
@@ -79,6 +81,7 @@ final class ServicesUKDescVC: UIViewController {
             imgHeight.constant = 0
             titleTop.constant  = -16
         }
+        parkingsPlace = UserDefaults.standard.stringArray(forKey: "parkingsPlace")!
         loader.isHidden = true
         navigationItem.title = data_?.name
         titleLabel.text = data_?.name
@@ -190,6 +193,17 @@ final class ServicesUKDescVC: UIViewController {
     .resume()
     }
     
+    private var parkingsPlace = [String]()
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Segues.fromRequestTypeVC.toServiceUK {
+            let vc = segue.destination as! CreateServiceUK
+//                vc.delegate = delegate as? AppsUserDelegate
+            vc.type_ = RequestTypeStruct(id: (data_?.id)!, name: (data_?.name)!)
+            vc.parkingsPlace = self.parkingsPlace
+            vc.data_ = data_
+        }
+    }
+    
     func isStringAnInt(string: String) -> Bool {
         return Int(string) != nil
     }
@@ -204,5 +218,36 @@ final class ServicesUKDescVC: UIViewController {
         sendBtn.isHidden = false
         loader.stopAnimating()
         loader.isHidden = true
+    }
+}
+
+@IBDesignable class CircleView2: UIView {
+    
+    let imageView = UIImageView()
+    
+    @IBInspectable var image: UIImage? {
+        didSet {
+            addImage()
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setup()
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        setup()
+    }
+    
+    func setup () {
+        imageView.frame = CGRect(x: 5, y: 5, width: 30, height: 30)
+        imageView.contentMode = .scaleAspectFit
+        addSubview(imageView)
+    }
+    
+    func addImage() {
+        imageView.image = image
     }
 }

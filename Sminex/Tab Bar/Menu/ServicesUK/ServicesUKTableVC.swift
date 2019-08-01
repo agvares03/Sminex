@@ -159,7 +159,7 @@ final class ServicesUKTableCell: UICollectionViewCell {
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var amount:  UILabel!
-    @IBOutlet private weak var image:   UIImageView!
+    @IBOutlet private weak var image:   CircleView!
     
     func display(_ title: String, desc: String, amount: String, picture: String) {
         self.title.text     = title
