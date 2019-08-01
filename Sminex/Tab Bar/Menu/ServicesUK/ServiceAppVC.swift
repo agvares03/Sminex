@@ -90,7 +90,7 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
     public var reqId_      = ""
     public var isCreated_  = false
     public var isFromMain_ = false
-    public var data_: ServiceAppHeaderData = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: UIImage(named: "account")!)
+    public var data_: ServiceAppHeaderData = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: UIImage(named: "account")!, selectPrice: true, selectPlace: true)
     public var serviceData: ServicesUKJson?
     public var comments_: [ServiceAppCommentCellData] = []
     
@@ -637,6 +637,7 @@ final class ServiceAppHeader: UICollectionViewCell {
     @IBOutlet private weak var descConstant:   NSLayoutConstraint!
     @IBOutlet private weak var serviceDesc:     UILabel!
     @IBOutlet private weak var servicePrice:    UILabel!
+    @IBOutlet private weak var priceLbl:        UILabel!
     @IBOutlet private weak var priceHeight:     NSLayoutConstraint!
     @IBOutlet private weak var serviceTitle:    UILabel!
     @IBOutlet private weak var serviceIcon:     CircleView2!
@@ -658,7 +659,7 @@ final class ServiceAppHeader: UICollectionViewCell {
     private var delegate: ServiceAppCellsProtocol?
     
     fileprivate func display(_ item: ServiceAppHeaderData, delegate: ServiceAppCellsProtocol) {
-        if item.placeHome == ""{
+        if item.placeHome == "" || !item.selectPlace{
             place.isHidden = true
             placeLbl.isHidden = true
             separator.isHidden = true
@@ -682,10 +683,21 @@ final class ServiceAppHeader: UICollectionViewCell {
         servicePrice.text   = item.price.replacingOccurrences(of: "руб.", with: "₽")
         serviceDesc.text    = item.servDesc
         serviceIcon.image   = item.servIcon
+        serviceIcon.layer.borderColor = UIColor.black.cgColor
+        serviceIcon.layer.borderWidth = 2.0
+        // Углы
+        serviceIcon.layer.cornerRadius = serviceIcon.frame.width / 2
+        // Поправим отображения слоя за его границами
+        serviceIcon.layer.masksToBounds = true
         let k = heightForTitle(text: item.desc, width: desc.frame.size.width)
         descConstant?.constant = k
-        priceHeight.constant = heightForTitle(text: item.price, width: servicePrice.frame.size.width)
+        priceHeight.constant = heightForTitle(text: item.price, width: servicePrice.frame.size.width) + 35
         titleHeight.constant = heightForTitle(text: item.title, width: serviceTitle.frame.size.width)
+        if !item.selectPrice{
+            servicePrice.text = ""
+            priceHeight.constant = 0
+            priceLbl.isHidden = true
+        }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
@@ -751,8 +763,10 @@ final class ServiceAppHeaderData: ServiceAppProtocol {
     let placeHome:      String
     let title:          String
     let soonPossible:   Bool
+    let selectPrice:    Bool
+    let selectPlace:    Bool
     
-    init(icon: UIImage, price: String, mobileNumber: String, servDesc: String, email: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String, placeHome: String, soonPossible: Bool, title: String, servIcon: UIImage) {
+    init(icon: UIImage, price: String, mobileNumber: String, servDesc: String, email: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String, placeHome: String, soonPossible: Bool, title: String, servIcon: UIImage, selectPrice: Bool, selectPlace: Bool) {
         
         self.icons          = icon
         self.servDesc       = servDesc
@@ -768,6 +782,8 @@ final class ServiceAppHeaderData: ServiceAppProtocol {
         self.soonPossible   = soonPossible
         self.title          = title
         self.servIcon       = servIcon
+        self.selectPrice    = selectPrice
+        self.selectPlace    = selectPlace
     }
 }
 

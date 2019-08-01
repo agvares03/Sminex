@@ -504,7 +504,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
     }
-    
+    private var parkingsPlace = [String]()
     func prepareTapped(_ indexPath: IndexPath) {
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -642,7 +642,21 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     if let imageV = UIImage(data: Data(base64Encoded: ((dataServ?.picture!.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)) ?? Data()) {
                         imageIcon = imageV
                     }
-                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: row.emails ?? "", date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.comment ?? "", placeHome: row.premises!, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon)
+                    var emails = ""
+                    if row.emails == ""{
+                        emails = UserDefaults.standard.string(forKey: "mail")!
+                    }else{
+                        emails = row.emails!
+                    }
+                    var place = ""
+                    if row.premises == ""{
+                        self.parkingsPlace.forEach{
+                            place = place + $0
+                        }
+                    }else{
+                        place = row.premises!
+                    }
+                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.comment ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
