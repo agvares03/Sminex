@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G84" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Appeals" representedClassName=".Appeals" syncable="YES">
         <attribute name="adress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="customer_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -100,6 +100,9 @@
         <attribute name="usluga" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="TypesCounters" representedClassName="TypesCounters" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Appeals" positionX="423" positionY="-252" width="128" height="255"/>
         <element name="Applications" positionX="207" positionY="-414" width="128" height="255"/>
@@ -109,8 +112,9 @@
         <element name="Fotos" positionX="286" positionY="72" width="128" height="135"/>
         <element name="Houses" positionX="250" positionY="-54" width="128" height="90"/>
         <element name="Ls" positionX="387" positionY="-162" width="128" height="105"/>
+        <element name="Notifications" positionX="459" positionY="-216" width="128" height="135"/>
         <element name="QuestionEntity" positionX="414" positionY="-261" width="128" height="90"/>
         <element name="Saldo" positionX="405" positionY="-270" width="128" height="165"/>
-        <element name="Notifications" positionX="459" positionY="-216" width="128" height="135"/>
+        <element name="TypesCounters" positionX="414" positionY="-261" width="128" height="60"/>
     </elements>
 </model>

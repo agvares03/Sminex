@@ -482,7 +482,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                     // ЗАЯВКИ С КОММЕНТАРИЯМИ
                     db.del_db(table_name: "Comments")
                     db.del_db(table_name: "Applications")
-                    db.parse_Apps(login: self.LoginText, pass: self.edPass.text ?? "", isCons: "1")
+                    db.parse_Apps(login: self.LoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: self.LoginText)) , isCons: "1")
                     
                     // Дома, квартиры, лицевые счета
                     db.del_db(table_name: "Houses")
@@ -500,8 +500,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                         // ПОКАЗАНИЯ СЧЕТЧИКОВ
                         // Удалим данные из базы данных
                         db.del_db(table_name: "Counters")
+                        db.del_db(table_name: "TypesCounters")
                         // Получим данные в базу данных
-                        db.parse_Countrers(login: self.LoginText, pass: self.edPass.text ?? "", history: answer[7])
+                        db.parse_Countrers(login: self.LoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: self.LoginText)), history: answer[7])
                         
                         // ВЕДОМОСТЬ (Пока данные тестовые)
                         // Удалим данные из базы данных

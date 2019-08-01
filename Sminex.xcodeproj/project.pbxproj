@@ -38,6 +38,11 @@
 		1CF71AC522E5CB11008405F0 /* Appeals+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF71AC222E5CB11008405F0 /* Appeals+CoreDataClass.swift */; };
 		30CBDCFE22F29046000547FB /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30CBDCFD22F29046000547FB /* Notifications.storyboard */; };
 		30CBDD0122F2961F000547FB /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CBDD0022F2961F000547FB /* NotificationsVC.swift */; };
+		30CBDD0422F2C004000547FB /* CounterChoiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CBDD0322F2C004000547FB /* CounterChoiceType.swift */; };
+		30CBDD0622F2C14E000547FB /* CounterNew.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30CBDD0522F2C14E000547FB /* CounterNew.storyboard */; };
+		30CBDD0822F2CB2D000547FB /* CounterTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CBDD0722F2CB2D000547FB /* CounterTypeCell.swift */; };
+		30CBDD0F22F2EC6D000547FB /* TypesCounters+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CBDD0D22F2EC6D000547FB /* TypesCounters+CoreDataClass.swift */; };
+		30CBDD1022F2EC6D000547FB /* TypesCounters+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CBDD0E22F2EC6D000547FB /* TypesCounters+CoreDataProperties.swift */; };
 		3A5ADBBB210C49950012F6DB /* HistoryCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5ADBBA210C49950012F6DB /* HistoryCounterCell.swift */; };
 		3AB975EC2101933C009DEBC5 /* NewsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */; };
 		3AB975F02101968E009DEBC5 /* NewsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB975EF2101968E009DEBC5 /* NewsTableCell.swift */; };
@@ -245,6 +250,11 @@
 		1CF71AC322E5CB11008405F0 /* Appeals+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Appeals+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		30CBDCFD22F29046000547FB /* Notifications.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Notifications.storyboard; sourceTree = "<group>"; };
 		30CBDD0022F2961F000547FB /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
+		30CBDD0322F2C004000547FB /* CounterChoiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterChoiceType.swift; sourceTree = "<group>"; };
+		30CBDD0522F2C14E000547FB /* CounterNew.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CounterNew.storyboard; sourceTree = "<group>"; };
+		30CBDD0722F2CB2D000547FB /* CounterTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterTypeCell.swift; sourceTree = "<group>"; };
+		30CBDD0D22F2EC6D000547FB /* TypesCounters+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TypesCounters+CoreDataClass.swift"; sourceTree = "<group>"; };
+		30CBDD0E22F2EC6D000547FB /* TypesCounters+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TypesCounters+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3A5ADBBA210C49950012F6DB /* HistoryCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCounterCell.swift; sourceTree = "<group>"; };
 		3AB975EB2101933C009DEBC5 /* NewsTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableCell.xib; sourceTree = "<group>"; };
 		3AB975EF2101968E009DEBC5 /* NewsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableCell.swift; sourceTree = "<group>"; };
@@ -508,6 +518,15 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
+		30CBDD0222F2BFDE000547FB /* New counters */ = {
+			isa = PBXGroup;
+			children = (
+				30CBDD0322F2C004000547FB /* CounterChoiceType.swift */,
+				30CBDD0722F2CB2D000547FB /* CounterTypeCell.swift */,
+			);
+			path = "New counters";
+			sourceTree = "<group>";
+		};
 		3AB975EA2101931C009DEBC5 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
@@ -666,6 +685,8 @@
 		4171BE771ECB3E1000B9CDD7 /* DB */ = {
 			isa = PBXGroup;
 			children = (
+				30CBDD0D22F2EC6D000547FB /* TypesCounters+CoreDataClass.swift */,
+				30CBDD0E22F2EC6D000547FB /* TypesCounters+CoreDataProperties.swift */,
 				1C88E75C22F29E3B0073B0FB /* Notifications+CoreDataClass.swift */,
 				1C88E75B22F29E3B0073B0FB /* Notifications+CoreDataProperties.swift */,
 				1CF71AC222E5CB11008405F0 /* Appeals+CoreDataClass.swift */,
@@ -937,6 +958,7 @@
 				6C7F90E5207633EB00CFA721 /* Account.storyboard */,
 				6C54077F206E7C600050A0D0 /* Questions.storyboard */,
 				6C42560F206B6EF0007E1BF6 /* Counter.storyboard */,
+				30CBDD0522F2C14E000547FB /* CounterNew.storyboard */,
 				1CF71AB522E59303008405F0 /* Appeal.storyboard */,
 				4171BE621ECB369A00B9CDD7 /* Main.storyboard */,
 				1C54D61121AF8C1100A82C71 /* MainDisp.storyboard */,
@@ -1023,6 +1045,7 @@
 		6CA10FA1206B964A00612D03 /* Counters */ = {
 			isa = PBXGroup;
 			children = (
+				30CBDD0222F2BFDE000547FB /* New counters */,
 				6C425613206B71AF007E1BF6 /* CounterTableVC.swift */,
 				6CA10F9F206B964400612D03 /* CounterStatementVC.swift */,
 				6C8C69CA206CA0D00090A49D /* CounterHistoryTableVC.swift */,
@@ -1150,6 +1173,7 @@
 				6C7F90E6207633EB00CFA721 /* Account.storyboard in Resources */,
 				30CBDCFE22F29046000547FB /* Notifications.storyboard in Resources */,
 				41DBC59E1ECC8F7A004BDB9B /* new_number_ls.png in Resources */,
+				30CBDD0622F2C14E000547FB /* CounterNew.storyboard in Resources */,
 				4136BD7D1EED334B000EAE37 /* ic_comm_list_grey.png in Resources */,
 				6C4C0A0D20675A83004EF2FF /* Requests.storyboard in Resources */,
 				4171BE6C1ECB369A00B9CDD7 /* LaunchScreen.storyboard in Resources */,
@@ -1313,10 +1337,12 @@
 				4197940B2032C9520034298D /* Registration_Sminex.swift in Sources */,
 				4171BE611ECB369A00B9CDD7 /* ViewController.swift in Sources */,
 				6C55E4AE207497A0003E432A /* OnOffButton.swift in Sources */,
+				30CBDD0822F2CB2D000547FB /* CounterTypeCell.swift in Sources */,
 				41B267F8203311A0000AEEB1 /* Registration_Sminex_SMS.swift in Sources */,
 				4136BD7B1EED0F1F000EAE37 /* CloseAppAlert.swift in Sources */,
 				6C425614206B71AF007E1BF6 /* CounterTableVC.swift in Sources */,
 				41D3E62F1F188E150084BB92 /* FirstController.swift in Sources */,
+				30CBDD0422F2C004000547FB /* CounterChoiceType.swift in Sources */,
 				4171BE5F1ECB369A00B9CDD7 /* AppDelegate.swift in Sources */,
 				41CDF01520350BB300A680AF /* TransitionManager.swift in Sources */,
 				6CA908152063A7EB00CB78FE /* MainScreenVC.swift in Sources */,
@@ -1325,6 +1351,7 @@
 				6C2D3288207F42D000F5F4C8 /* BarcodeGenerator.swift in Sources */,
 				6C62C274207F32D800B5EA11 /* FinanceVC.swift in Sources */,
 				6CE2F4B620876A1100709242 /* NewsListVC.swift in Sources */,
+				30CBDD1022F2EC6D000547FB /* TypesCounters+CoreDataProperties.swift in Sources */,
 				6C356CE62089C0C1009BEE1F /* CurrentNews.swift in Sources */,
 				4111CA361EF4FBCB00BBEB7B /* Modal.swift in Sources */,
 				6C1D5C16208DD2E300BEB826 /* ContactsVC.swift in Sources */,
@@ -1371,6 +1398,7 @@
 				1C38229222808D0300B7F66C /* Reachability.swift in Sources */,
 				6C7AA9692072120900D27FE2 /* QuestionEntity+CoreDataProperties.swift in Sources */,
 				41D3E6331F19AA130084BB92 /* RegistrationAdress.swift in Sources */,
+				30CBDD0F22F2EC6D000547FB /* TypesCounters+CoreDataClass.swift in Sources */,
 				1CCD60E422E07A2F009C4B5C /* FinanceDebtArchiveVCComm.swift in Sources */,
 				411B6CE31EE6FF22001DCBC7 /* Ls+CoreDataProperties.swift in Sources */,
 				3AD36CFA2105E75E007087ED /* NewTechServiceVC.swift in Sources */,

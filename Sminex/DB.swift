@@ -39,26 +39,73 @@ final class DB: NSObject, XMLParserDelegate {
         // Получим данные из xml
         // Потом сделать отдельный класс !!!
         let login = login
-        let pass  = pass
-        var urlPath = Server.SERVER + Server.GET_METERS + "login=" + login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + "&pwd=" + pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!;
+        let pass =  pass
+        var urlPath = Server.SERVER + Server.GET_METERS + "login=" + login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + "&pwd=" + pass;
         if (history == "0") {
             urlPath = urlPath + "&onlyCurrent=1"
         }
-        let url: NSURL = NSURL(string: urlPath)!
+        var url: NSURL = NSURL(string: urlPath)!
         parser = XMLParser(contentsOf: url as URL)!
         parser.delegate = self
-//        let success:Bool = parser.parse()
+        let success:Bool = parser.parse()
         
-//        #if DEBUG
-//            if success {
-//                print("parse success!")
-//            } else {
-//                print("parse failure!")
-//            }
-//        #endif
+        #if DEBUG
+            if success {
+                print("parse success!")
+            } else {
+                print("parse failure!")
+            }
+        #endif
         
         // сохраним последние значения Месяц-Год в глобальных переменных
         save_month_year(month: self.currMonth, year: self.currYear)
+        
+        // Сохранить типы приборов
+        urlPath = Server.SERVER + Server.GET_METERS + "login=" + login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + "&pwd=" + pass + "&onlyMeterTypes=1";
+        url = NSURL(string: urlPath)!
+        let request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest,
+                                              completionHandler: {
+                                                data, response, error in
+                                                
+                                                if error != nil {
+                                                    return
+                                                } else {
+                                                    
+                                                    // Запишем в БД данные по уведомлениям
+                                                    do {
+                                                        var name          = ""
+
+                                                        var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                                                        print("JSON",json)
+                                                        
+                                                        if let json_notifications = json["data"] {
+                                                            let int_end = (json_notifications.count)!-1
+                                                            if (int_end < 0) {
+                                                            } else {
+                                                                
+                                                                for index in 0...int_end {
+                                                                    let json_not = json_notifications.object(at: index) as! [String:AnyObject]
+                                                                    for obj in json_not {
+                                                                        name = obj.value as! String
+                                                                    }
+                                                                    
+                                                                    var i = 85
+                                                                    
+                                                                    
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                    } catch let error as NSError {
+                                                        print(error)
+                                                    }
+                                                    
+                                                }
+        })
+        task.resume()
         
     }
     
@@ -73,7 +120,7 @@ final class DB: NSObject, XMLParserDelegate {
             let managedObject = Counters()
             managedObject.id            = 1
             managedObject.uniq_num      = attributeDict["MeterUniqueNum"]!
-            managedObject.owner         = "Иванов И.И."
+            managedObject.owner         = attributeDict["MeterType"]
             managedObject.num_month     = self.currMonth
             managedObject.year          = self.currYear
             managedObject.count_name    = attributeDict["Name"]

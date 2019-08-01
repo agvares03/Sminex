@@ -367,8 +367,9 @@ class FirstController: UIViewController {
                     // ПОКАЗАНИЯ СЧЕТЧИКОВ
                     // Удалим данные из базы данных
                     db.del_db(table_name: "Counters")
+                    db.del_db(table_name: "TypesCounters")
                     // Получим данные в базу данных
-                    db.parse_Countrers(login: login, pass: pass, history: answer[7])
+                    db.parse_Countrers(login: login, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: login)), history: answer[7])
                     
                     // ВЕДОМОСТЬ (Пока данные тестовые)
                     // Удалим данные из базы данных
