@@ -91,7 +91,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var dealsIndex = 0
     private var numSections = 0
     private var appsUser: AppsUser?
-    
+    private var dataService: [ServicesUKJson] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         // Получим данные по Бизнес-центру (выводить или нет Оплаты)
@@ -103,6 +103,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchDebt()
         fetchDeals()
         getRequestTypes()
+        getServices()
         fetchRequests()
         fetchQuestions()
         collection.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 24, right: 0)
@@ -727,6 +728,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[0]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
             appsUser = AppsUser()
+            appsUser?.dataService = dataService
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
             appsUser?.isFromMain = true
@@ -742,7 +744,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     } else if self.appsUser?.techService != nil {
                         self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
                     } else {
-                        
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
                     }
                 }
             }
@@ -803,6 +805,33 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.collection.reloadData()
             }
         }
+    }
+    
+    private func getServices() {
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else {
+                let alert = UIAlertController(title: "Ошибка серевера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.dataService = ServicesUKDataJson(json: json!)?.data ?? []
+            }
+            
+            #if DEBUG
+            //            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            }.resume()
     }
     
     func getRequestTypes() {
@@ -1451,6 +1480,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
             let vc = segue.destination as! AppsUser
+            vc.dataService = dataService
             vc.isCreatingRequest_ = true
             vc.delegate = self
             
@@ -1461,6 +1491,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
             let vc = segue.destination as! AppsUser
+            vc.dataService = dataService
             vc.delegate = self
             
         } else if segue.identifier == Segues.fromMainScreenVC.toSchet {
@@ -1495,6 +1526,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
             let vc = segue.destination as! AppsUser
+            vc.dataService = dataService
             vc.requestId_ = requestId
             vc.xml_ = mainScreenXml
             vc.delegate = self
@@ -1512,6 +1544,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 vc.isFromMain_ = true
             }
             
+        } else if segue.identifier == Segues.fromAppsUser.toServiceUK{
+            let vc = segue.destination as! ServiceAppVC
+            vc.data_ = (appsUser?.serviceUK!)!
+            vc.comments_ = (appsUser?.serviceUKComm)!
+            vc.reqId_ = appsUser?.reqId ?? ""
+            vc.delegate = self
+            if appsUser?.requestId_ != "" {
+                appsUser?.requestId_ = ""
+                appsUser?.xml_ = nil
+                vc.isFromMain_ = true
+            }
         } else if segue.identifier == Segues.fromMainScreenVC.toService {
             
             let vc = segue.destination as! TechServiceVC
