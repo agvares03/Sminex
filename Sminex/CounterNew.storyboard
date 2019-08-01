@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KkT-kq-IPd">
+    <device id="retina5_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Передача показаний счетчиков-->
+        <scene sceneID="AjE-n3-ap5">
+            <objects>
+                <viewController id="KkT-kq-IPd" customClass="CounterChoiceType" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ji0-YM-Mvf"/>
+                        <viewControllerLayoutGuide type="bottom" id="1Zn-ik-wq0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="szB-Sf-NGA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lsk-cG-OHD">
+                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TypeCounterCell" id="drh-bL-TGp" customClass="CounterTypeCell" customModule="Sminex" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="drh-bL-TGp" id="nPU-za-FKu">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F1g-OC-Hxr">
+                                                    <rect key="frame" x="20" y="12" width="374" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="F1g-OC-Hxr" firstAttribute="leading" secondItem="nPU-za-FKu" secondAttribute="leadingMargin" id="9ao-dL-n2s"/>
+                                                <constraint firstItem="F1g-OC-Hxr" firstAttribute="trailing" secondItem="nPU-za-FKu" secondAttribute="trailingMargin" id="Bfa-DE-EUx"/>
+                                                <constraint firstItem="F1g-OC-Hxr" firstAttribute="top" secondItem="nPU-za-FKu" secondAttribute="topMargin" constant="1" id="DsO-wq-5xz"/>
+                                                <constraint firstItem="F1g-OC-Hxr" firstAttribute="bottom" secondItem="nPU-za-FKu" secondAttribute="bottomMargin" id="xEb-bq-mHe"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="type_name" destination="F1g-OC-Hxr" id="nWc-Rr-JHK"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="KkT-kq-IPd" id="jMq-df-6JM"/>
+                                    <outlet property="delegate" destination="KkT-kq-IPd" id="PMn-ew-x6U"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="lsk-cG-OHD" firstAttribute="leading" secondItem="gIB-JI-PQE" secondAttribute="leading" id="kGZ-B6-34l"/>
+                            <constraint firstItem="lsk-cG-OHD" firstAttribute="trailing" secondItem="gIB-JI-PQE" secondAttribute="trailing" id="lkp-Lr-y6n"/>
+                            <constraint firstItem="lsk-cG-OHD" firstAttribute="top" secondItem="Ji0-YM-Mvf" secondAttribute="bottom" id="s9a-GX-iQ8"/>
+                            <constraint firstItem="1Zn-ik-wq0" firstAttribute="top" secondItem="lsk-cG-OHD" secondAttribute="bottom" id="tZX-Xn-WOq"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gIB-JI-PQE"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Передача показаний счетчиков" id="he7-1n-LHb">
+                        <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="8XQ-oH-90H">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="BackPressed:" destination="KkT-kq-IPd" id="KSr-2y-DaC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="tableView" destination="lsk-cG-OHD" id="QLO-ha-Yik"/>
+                        <segue destination="AP7-Y6-HRG" kind="show" identifier="login_activity" id="igM-Y9-xOV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kJf-5h-0ll" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="343.47826086956525" y="-1742.1195652173915"/>
+        </scene>
+        <!--UINavigationController-yke-5M-97h-->
+        <scene sceneID="32Y-3w-13g">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Auth" referencedIdentifier="UINavigationController-yke-5M-97h" id="AP7-Y6-HRG" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Hf-hH-aqY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="395" y="-1365"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="sminex_arrow_navbar" width="12" height="22"/>
+    </resources>
+</document>
