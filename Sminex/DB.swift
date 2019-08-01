@@ -339,6 +339,88 @@ final class DB: NSObject, XMLParserDelegate {
         CoreDataManager.instance.saveContext()
     }
     
+    // Уведомления
+    func parse_Notifications(id_account: String) {
+        let urlPath = Server.SERVER + Server.GET_NOTIFICATIONS + "id=" + id_account.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        
+        let url: NSURL = NSURL(string: urlPath)!
+        let request = NSMutableURLRequest(url: url as URL)
+//        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest,
+                                              completionHandler: {
+                                                data, response, error in
+                                                
+                                                if error != nil {
+                                                    return
+                                                } else {
+                                                    
+                                                    // Запишем в БД данные по уведомлениям
+                                                    do {
+                                                        var id            = 1
+                                                        var name          = ""
+                                                        var type          = ""
+                                                        var ident         = ""
+                                                        var date          = ""
+                                                        var isReaded      = false
+                                                        var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                                                        print("JSON",json)
+                                                        
+                                                        if let json_notifications = json["data"] {
+                                                            let int_end = (json_notifications.count)!-1
+                                                            if (int_end < 0) {
+                                                            } else {
+                                                                
+                                                                for index in 0...int_end {
+                                                                    let json_not = json_notifications.object(at: index) as! [String:AnyObject]
+                                                                    for obj in json_not {
+                                                                        if obj.key == "ID" {
+                                                                            id = obj.value as! Int
+                                                                        }
+                                                                        if obj.key == "Name" {
+                                                                            name = obj.value as! String
+                                                                        }
+                                                                        if obj.key == "Type" {
+                                                                            type = obj.value as! String
+                                                                        }
+                                                                        if obj.key == "Ident" {
+                                                                            ident = obj.value as! String
+                                                                        }
+                                                                        if obj.key == "Date" {
+                                                                            date = obj.value as! String
+                                                                        }
+                                                                        if obj.key == "IsReaded" {
+                                                                            isReaded = obj.value as! Bool
+                                                                        }
+                                                                    }
+                                                                    
+                                                                    self.add_data_notification(id: id, name: name, type: type, ident: ident, date: date, isReaded: isReaded)
+
+                                                                    
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                    } catch let error as NSError {
+                                                        print(error)
+                                                    }
+                                                    
+                                                }
+        })
+        task.resume()
+    }
+    func add_data_notification(id: Int, name: String, type: String, ident: String, date: String, isReaded: Bool) {
+        let managedObject = Notifications()
+        managedObject.id               = Int64(id)
+        managedObject.name             = name
+        managedObject.type             = type
+        managedObject.ident            = ident
+        managedObject.date             = date
+        managedObject.isReaded         = isReaded
+        
+        CoreDataManager.instance.saveContext()
+    }
+    
     // Заявки с комментариями
     func parse_Apps(login: String, pass: String, isCons: String) {
         

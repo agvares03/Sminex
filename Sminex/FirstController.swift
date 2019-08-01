@@ -381,6 +381,10 @@ class FirstController: UIViewController {
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: login, pass: pass, isCons: "0")
                     
+                    // УВЕДОМЛЕНИЯ
+                    db.del_app(number: "Notifications")
+                    db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
+                    
                     self.performSegue(withIdentifier: Segues.fromFirstController.toAppsUserNow, sender: self)
 //                    self.performSegue(withIdentifier: Segues.fromFirstController.toNewMain, sender: self)
                     
