@@ -44,10 +44,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
-            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
-        }else{
+        if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+        }else{
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
         }
     }
     

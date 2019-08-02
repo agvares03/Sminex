@@ -29,10 +29,13 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         } catch {
             print(error)
         }
+        print(fetchedResultsController?.sections?.count)
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController?.sections {
+            print(sections[section].numberOfObjects)
             return sections[section].numberOfObjects
         } else {
             return 0
