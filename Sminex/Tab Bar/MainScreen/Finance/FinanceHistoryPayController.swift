@@ -90,7 +90,7 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
     
     func parse_all(login: String, pass: String) {
         values.removeAll()
-        let urlPath = ""
+        let urlPath = Server.SERVER + Server.GET_PAYS + "accID=" + UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986()!
         
         let url: NSURL = NSURL(string: urlPath)!
         let request = NSMutableURLRequest(url: url as URL)
@@ -108,9 +108,9 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
                                                     do {
                                                         var bill_date    = ""
                                                         var bill_id      = ""
-                                                        var bill_ident     = ""
-                                                        var bill_period      = ""
-                                                        var bill_sum    = ""
+                                                        var bill_ident   = ""
+                                                        var bill_period  = ""
+                                                        var bill_sum     = ""
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
                                                         print(json)
                                                         if let json_bills = json["data"] {
