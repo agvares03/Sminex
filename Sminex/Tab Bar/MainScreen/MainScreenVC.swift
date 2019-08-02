@@ -1500,7 +1500,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.delegate = self
             
         } else if segue.identifier == Segues.fromMainScreenVC.toSchet {
-            let vc = segue.destination as! CounterTableVC
+            let vc = segue.destination as! CounterChoiceType
             vc.canCount = canCount
             
         } else if segue.identifier == Segues.fromMainScreenVC.toQuestionAnim {

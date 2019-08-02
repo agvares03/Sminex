@@ -406,7 +406,7 @@ final class CounterTableCell: UICollectionViewCell {
         title.text = item.resource
         desc.text  = item.meterType! + ", " + item.meterUniqueNum!
         
-        let value = String((item.value?.split(separator: ",")[0])!)
+        let value = String((item.value1?.split(separator: ",")[0])!)
         count.text = value != "0" ? value : ""
     }
     
@@ -428,37 +428,69 @@ struct MeterValue {
     
     let fractionalNumber:   String?
     let units:              String?
-    let previousValue:      String?
+    let previousValue1:     String?
+    let previousValue2:     String?
+    let previousValue3:     String?
     let name:               String?
     let resource:           String?
     let previousValueInput: String?
-    let difference: 	    String?
+    let difference1: 	    String?
+    let difference2:        String?
+    let difference3:        String?
     let differenceInput: 	String?
     let meterUniqueNum:     String?
-    let value:              String?
-    let valueInput: 	    String?
+    let value1:             String?
+    let value2:             String?
+    let value3:             String?
+    let valueInput1: 	    String?
+    let valueInput2:        String?
+    let valueInput3:        String?
     let previousPeriod:     String?
     let period:             String?
     let guid:               String?
     let meterType:          String?
+    let typeTarif:          String?
+    let tarifName1:         String?
+    let tarifName2:         String?
+    let tarifName3:         String?
+    let tarifPrice1:        String?
+    let tarifPrice2:        String?
+    let tarifPrice3:        String?
+    let checkDate:          String?
     
     init(_ row: XML.Accessor, period: String) {
         
         self.period         = period
-        fractionalNumber    = row.attributes["FractionalNumber"]
-        units               = row.attributes["Units"]
-        previousValue       = row.attributes["PreviousValue"]
-        name                = row.attributes["Name"]
-        resource            = row.attributes["Resource"]
-        previousValueInput  = row.attributes["PreviousValueInput"]
-        difference          = row.attributes["Difference"]
-        differenceInput     = row.attributes["DifferenceInput"]
-        meterUniqueNum      = row.attributes["MeterUniqueNum"]
-        value               = row.attributes["Value"]
-        valueInput          = row.attributes["ValueInput"]
-        previousPeriod      = row.attributes["PreviousPeriod"]
-        guid                = row.attributes["GUID"]
-        meterType           = row.attributes["MeterType"]
+        fractionalNumber    = row.attributes["FractionalNumber"] ?? ""
+        units               = row.attributes["Units"] ?? ""
+        previousValue1      = row.attributes["PreviousValue"] ?? ""
+        previousValue2      = row.attributes["PreviousValue2"] ?? ""
+        previousValue3      = row.attributes["PreviousValue3"] ?? ""
+        name                = row.attributes["Name"] ?? ""
+        resource            = row.attributes["Resource"] ?? ""
+        previousValueInput  = row.attributes["PreviousValueInput"] ?? ""
+        difference1         = row.attributes["Difference1"] ?? ""
+        difference2         = row.attributes["Difference2"] ?? ""
+        difference3         = row.attributes["Difference3"] ?? ""
+        differenceInput     = row.attributes["DifferenceInput"] ?? ""
+        meterUniqueNum      = row.attributes["MeterUniqueNum"] ?? ""
+        value1              = row.attributes["Value"] ?? ""
+        value2              = row.attributes["Value2"] ?? ""
+        value3              = row.attributes["Value3"] ?? ""
+        valueInput1         = row.attributes["ValueInput1"] ?? ""
+        valueInput2         = row.attributes["ValueInput2"] ?? ""
+        valueInput3         = row.attributes["ValueInput3"] ?? ""
+        tarifName1          = row.attributes["Tarif_name1"] ?? ""
+        tarifName2          = row.attributes["Tarif_name2"] ?? ""
+        tarifName3          = row.attributes["Tarif_name3"] ?? ""
+        tarifPrice1         = row.attributes["TarifPrice1"] ?? ""
+        tarifPrice2         = row.attributes["TarifPrice2"] ?? ""
+        tarifPrice3         = row.attributes["TarifPrice3"] ?? ""
+        typeTarif           = row.attributes["Type_of_tariff"] ?? ""
+        previousPeriod      = row.attributes["PreviousPeriod"] ?? ""
+        guid                = row.attributes["GUID"] ?? ""
+        meterType           = row.attributes["MeterType"] ?? ""
+        checkDate           = row.attributes["Check_date"] ?? ""
     }
 }
 

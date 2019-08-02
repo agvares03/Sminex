@@ -37,7 +37,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("DealsMenu"), object: nil, queue: nil) { (_) in
             if TemporaryHolder.instance.menuDeals != 0 {
-                self.data[6] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
+                self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
                 DispatchQueue.main.async {
                     self.collection.reloadData()
                 }
@@ -53,7 +53,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name("QuestionsMenu"), object: nil, queue: nil) { (_) in
             if TemporaryHolder.instance.menuQuesions != 0 {
-                self.data[5] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
+                self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
                 DispatchQueue.main.async {
                     self.collection.reloadData()
                 }
@@ -97,7 +97,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         updateUserInterface()
         self.navigationController?.isNavigationBarHidden = true
         if TemporaryHolder.instance.menuDeals != 0 {
-            self.data[6] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
+            self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
             self.collection.reloadData()
         }
         if TemporaryHolder.instance.menuRequests != 0 {
@@ -105,7 +105,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             self.collection.reloadData()
         }
         if TemporaryHolder.instance.menuQuesions != 0 {
-            self.data[5] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
+            self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
             self.collection.reloadData()
         }
     }
