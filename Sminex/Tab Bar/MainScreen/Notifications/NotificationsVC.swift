@@ -6,21 +6,13 @@
 //
 
 import UIKit
+import CoreData
 
-class NotificationsVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
-    }
+    @IBOutlet weak var tableView: UITableView!
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PushListCell", for: indexPath) as! DealsListCell
-        return cell
-    }
-    
-    
-    @IBOutlet weak var loader: UIActivityIndicatorView!
-    @IBOutlet weak var collection: UICollectionView!
+    var fetchedResultsController: NSFetchedResultsController<Notifications>?
     
     @IBAction func BackPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -31,12 +23,16 @@ class NotificationsVC: UIViewController, UICollectionViewDelegate, UICollectionV
 
         updateUserInterface()
         
-        automaticallyAdjustsScrollViewInsets = false
+        tableView.delegate = self
+        tableView.dataSource = self
         
-        collection.delegate     = self
-        collection.dataSource   = self
+        fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch {
+            print(error)
+        }
         
-        stopAnimator()
     }
     
     func updateUserInterface() {
@@ -54,27 +50,46 @@ class NotificationsVC: UIViewController, UICollectionViewDelegate, UICollectionV
             
         }
     }
-    
-    private func startAnimator() {
-        collection.alpha = 0
-        loader.isHidden = false
-        loader.startAnimating()
-    }
 
-    private func stopAnimator() {
-        collection.alpha = 1
-        loader.isHidden = true
-        loader.stopAnimating()
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let sections = fetchedResultsController?.sections {
+            return sections[section].numberOfObjects
+        } else {
+            return 0
+        }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
+        
+        let cell: NotificationTableCell = self.tableView.dequeueReusableCell(withIdentifier: "NotificationTableCell") as! NotificationTableCell
+        
+        cell.Name_push.text = getTitle(type: push.type!)
+        cell.Body_push.text = push.name!
+        cell.Date_push.text = push.date!
+        
+        return cell
     }
-    */
-
+    
+    func getTitle(type: String) -> String {
+        var rezult: String = "Новое уведомление"
+        if (type == "REQUEST_COMMENT") {
+            rezult = "Новый комментарий"
+        } else if (type == "REQUEST_STATUS") {
+            rezult = "Изменен статус"
+        } else if (type == "NEWS") {
+            rezult = "Новая новость"
+        } else if (type == "QUESTION") {
+            rezult = "Новый опрос"
+        } else if (type == "DEBT") {
+            rezult = "Информация"
+        } else if (type == "METER_VALUE") {
+            rezult = "Информация по приборам"
+        }
+        return rezult
+    }
+    
+    
+    
 }
