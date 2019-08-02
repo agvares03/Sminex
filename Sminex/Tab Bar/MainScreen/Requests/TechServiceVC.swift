@@ -101,7 +101,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                                                           problem: "Нас топят соседи! Не можем с ними связаться. Срочно вызвайте сантехника",
                                                           date: "9 сентября 10:00",
                                                           status: "В ОБРАБОТКЕ",
-                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0")
+                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0", placeHome: "", soonPossible: false)
     
     public var comments_: [ServiceCommentCellData] = []
     private var arr:    [TechServiceProtocol]    = []
@@ -666,19 +666,47 @@ final class ServiceHeader: UICollectionViewCell {
     @IBOutlet private weak var scrollTop:   NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var problem:     UILabel!
+    @IBOutlet private weak var place:       UILabel!
+    @IBOutlet private weak var placeLbl:    UILabel!
+    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
+    @IBOutlet private weak var separator:   UILabel!
+    @IBOutlet private weak var noDateHeight: NSLayoutConstraint!
     @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var icon:        UIImageView!
     @IBOutlet private weak var status:      UILabel!
+    @IBOutlet private weak var noDateLbl:   UILabel!
     
     private var delegate: TechServiceCellsProtocol?
     
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        print(label.frame.height, width)
+        return label.frame.height
+    }
+    
     fileprivate func display(_ item: ServiceHeaderData, delegate: TechServiceCellsProtocol) {
-        
+        if item.placeHome == ""{
+            place.isHidden = true
+            placeLbl.isHidden = true
+            separator.isHidden = true
+        }else{
+            place.text = item.placeHome
+            place.isHidden = false
+            placeLbl.isHidden = false
+            separator.isHidden = false
+            placeHeight.constant = heightForView(text: item.placeHome, font: place.font, width: place.frame.size.width)
+        }
         self.delegate = delegate
         imageLoader.isHidden = true
         imageLoader.stopAnimating()
-        
+        noDateHeight.constant = 0
+        noDateLbl.isHidden = true
         problem.text = item.problem
         icon.image = item.icon
         status.text = item.status
@@ -687,6 +715,16 @@ final class ServiceHeader: UICollectionViewCell {
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         print(item.date)
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
+        if item.soonPossible{
+            date.text = "Как можно скорее"
+            if item.status != "Принята к выполнению"{
+                noDateHeight.constant = 64
+                noDateLbl.isHidden = false
+            }else{
+                noDateHeight.constant = 0
+                noDateLbl.isHidden = true
+            }
+        }
         if item.images.count == 0 {
             imageConst.constant = 0
             scrollTop.constant  = 0
@@ -778,9 +816,11 @@ final class ServiceHeaderData: TechServiceProtocol {
     let isPaid:     String
     let images:     [UIImage]
     let imgsString: [String]
+    let placeHome:  String
+    let soonPossible: Bool
 //    let desc:       String
     
-    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String) {
+    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String, placeHome: String, soonPossible: Bool) {
         
         self.icon       = icon
         self.problem    = problem
@@ -789,6 +829,8 @@ final class ServiceHeaderData: TechServiceProtocol {
         self.images     = images
         self.imgsString = imagesUrl
         self.isPaid     = isPaid
+        self.placeHome  = placeHome
+        self.soonPossible = soonPossible
 //        self.desc       = desc
     }
 }

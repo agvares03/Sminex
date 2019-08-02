@@ -44,6 +44,11 @@ final class TemporaryHolder {
             NotificationCenter.default.post(name: NSNotification.Name("DealsMenu"), object: nil)
         }
     }
+    public var menuNotifications    = 0 {
+        didSet {
+            NotificationCenter.default.post(name: NSNotification.Name("NotificationsMenu"), object: nil)
+        }
+    }
     public var news: [NewsJson]? = [] {
         didSet {
             self.news = news?.filter {

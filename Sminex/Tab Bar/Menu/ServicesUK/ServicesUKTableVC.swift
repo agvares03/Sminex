@@ -71,7 +71,7 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ServicesUKTableCell", for: indexPath) as! ServicesUKTableCell
         let data = self.data[safe: indexPath.row]
-        cell.display(data?.name ?? "", desc: data?.desc ?? "", amount: data?.cost ?? "")
+        cell.display(data?.name ?? "", desc: data?.shortDesc ?? "", amount: data?.cost ?? "", picture: data?.picture ?? "")
         return cell
     }
     
@@ -79,7 +79,7 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
     
         let cell = ServicesUKTableCell.fromNib()
         let data = self.data[safe: indexPath.row]
-        cell?.display(data?.name ?? "", desc: data?.desc ?? "", amount: data?.cost ?? "")
+        cell?.display(data?.name ?? "", desc: data?.shortDesc ?? "", amount: data?.cost ?? "", picture: data?.picture ?? "")
         var size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
         if size.height > 290 {
             size.height = size.height - 50
@@ -124,7 +124,7 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
             }
             
             #if DEBUG
-//                print(String(data: data!, encoding: .utf8) ?? "")
+//            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
         }.resume()
@@ -135,6 +135,8 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
         if segue.identifier == Segues.fromServicesUKTableVC.toDesc {
             let vc = segue.destination as! ServicesUKDescVC
             vc.data_ = data[index]
+            vc.allData = data
+            vc.index = index
         }
     }
     
@@ -157,11 +159,23 @@ final class ServicesUKTableCell: UICollectionViewCell {
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var amount:  UILabel!
+    @IBOutlet private weak var image:   CircleView2!
     
-    func display(_ title: String, desc: String, amount: String) {
+    func display(_ title: String, desc: String, amount: String, picture: String) {
         self.title.text     = title
         self.desc.text      = desc
         self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
+        if let imageV = UIImage(data: Data(base64Encoded: (picture.replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
+            image.image = imageV
+            image.layer.borderColor = UIColor.black.cgColor
+            image.layer.borderWidth = 2.0
+            // Углы
+            image.layer.cornerRadius = image.frame.width / 2
+            // Поправим отображения слоя за его границами
+            image.layer.masksToBounds = true
+        }else{
+            image.isHidden = true
+        }
     }
     
     class func fromNib() -> ServicesUKTableCell? {
@@ -206,14 +220,24 @@ struct ServicesUKJson: JSONDecodable {
     let desc:       String?
     let cost:       String?
     let id:         String?
+    let shortDesc:  String?
+    let selectPlace:Bool?
+    let selectTime: Bool?
+    let selectCost: Bool?
+    let fullDesc:   String?
     
     init?(json: JSON) {
-        howToOrder = "HowToOrder"  <~~ json
-        picture    = "Picture"     <~~ json
-        name       = "Name"        <~~ json
-        desc       = "Description" <~~ json
-        cost       = "Cost"        <~~ json
-        id         = "ID"          <~~ json
+        howToOrder = "HowToOrder"       <~~ json
+        picture    = "Picture"          <~~ json
+        name       = "Name"             <~~ json
+        desc       = "Description"      <~~ json
+        cost       = "Cost"             <~~ json
+        id         = "ID"               <~~ json
+        shortDesc  = "ShortDescription" <~~ json
+        selectPlace = "IsSelectPlace"    <~~ json
+        selectTime = "IsSelectTime"     <~~ json
+        selectCost = "IsSelectCost"     <~~ json
+        fullDesc   = "FullDescription"  <~~ json
     }
 }
 

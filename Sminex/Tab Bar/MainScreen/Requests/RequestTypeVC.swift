@@ -21,6 +21,7 @@ class RequestTypeVC: UIViewController {
     
     private var typeName = ""
     private var data = [RequestTypeStruct]()
+    private var parkingsPlace = [String]()
     
     // MARK: View lifecycle
     
@@ -89,6 +90,9 @@ class RequestTypeVC: UIViewController {
                         TemporaryHolder.instance.choise(json!)
                         denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
                         UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
+                        if responceString.contains(find: "premises"){
+                            self.parkingsPlace = (Business_Center_Data(json: json!)?.ParkingPlace)!
+                        }
                     }
                 }
                 let type: RequestTypeStruct
@@ -129,7 +133,7 @@ class RequestTypeVC: UIViewController {
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
-        let AppsUserDelegate = self.delegate as! AppsUser
+        let AppsUserDelegate = self.delegate as! NewAppsUser
         
         if (AppsUserDelegate.isCreatingRequest_) {
             navigationController?.popToRootViewController(animated: true)
@@ -147,11 +151,13 @@ class RequestTypeVC: UIViewController {
                 vc.delegate = delegate
                 vc.name_ = typeName
                 vc.type_ = data[index]
+                vc.parkingsPlace = self.parkingsPlace
             }
         case Segues.fromRequestTypeVC.toCreateServive:
-            if let vc = segue.destination as? NewTechServiceVC, let index = sender as? Int {
+            if let vc = segue.destination as? CreateTechServiceVC, let index = sender as? Int {
                 vc.delegate = delegate
                 vc.type_ = data[index]
+                vc.parkingsPlace = self.parkingsPlace
             }
         default: break
         }
@@ -193,13 +199,14 @@ extension RequestTypeVC: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let name = data[indexPath.row].name
         
-        if  (name?.contains(find: "ропуск"))! {
+        if (name?.containsIgnoringCase(find: "пропуск"))! {
             typeName = name ?? ""
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateAdmission, sender: indexPath.row)
             
-        } else if name == "Техническое обслуживание" {
+        } else if (name?.containsIgnoringCase(find: "обслуживание"))! {
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toCreateServive, sender: indexPath.row)
-        } else if name == "Услуги службы комфорта" {
+//        } else if name == "Услуги службы комфорта" {
+        }else{
             performSegue(withIdentifier: Segues.fromRequestTypeVC.toServiceUK, sender: indexPath.row)
         }
     }

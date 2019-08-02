@@ -42,6 +42,11 @@ final class CounterHistoryTableVC: UIViewController {
             vc.data_ = data_[index]
             vc.period_ = period_
         }
+        if segue.identifier == "history2", let index = sender as? Int {
+            let vc = segue.destination as! CounterHistoryNewVC
+            vc.data_ = data_[index]
+            vc.period_ = period_
+        }
     }
 }
 
@@ -59,7 +64,11 @@ extension CounterHistoryTableVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: Segues.fromCounterHistoryTableVC.toHistory, sender: indexPath.row)
+//        if Int(data_[indexPath.row].typeTarif!)! > 1{
+            performSegue(withIdentifier: "history2", sender: indexPath.row)
+//        }else{
+//            performSegue(withIdentifier: Segues.fromCounterHistoryTableVC.toHistory, sender: indexPath.row)
+//        }
     }
     
 }

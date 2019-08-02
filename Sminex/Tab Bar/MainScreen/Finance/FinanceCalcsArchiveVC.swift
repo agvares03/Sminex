@@ -127,7 +127,7 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
                     debt += ($0.sumDebt ?? 0.0)
                 }
             }
-//            if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+//            if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                 var year = ""
                 if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00){
                     year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet ?? 0)"

@@ -59,9 +59,12 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     private var rowFiles:   [RequestFile] = []
             var admission: AdmissionHeaderData?
             var techService: ServiceHeaderData?
+            var serviceUK: ServiceAppHeaderData?
             var admissionComm: [AdmissionCommentCellData] = []
             var techServiceComm: [ServiceCommentCellData] = []
+            var serviceUKComm: [ServiceAppCommentCellData] = []
     private var rows: [String:Request] = [:]
+    public var dataService: [ServicesUKJson] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +76,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         automaticallyAdjustsScrollViewInsets    = false
         
         startAnimator()
-        
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }
@@ -502,7 +504,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
     }
-    
+    private var parkingsPlace = [String]()
     func prepareTapped(_ indexPath: IndexPath) {
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -576,7 +578,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, desc: row.text!)
+                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     self.admissionComm = []
 //                    if row.text != ""{
 //                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
@@ -613,6 +615,75 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }
                     self.prepareGroup?.leave()
                     
+                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услугу"){
+                    let row = self.rows[self.data[indexPath.row].id]!
+                    var images: [String] = []
+                    
+                    self.rowFiles.forEach {
+                        
+                        if self.dateTeck($0.dateTime!) == self.dateTeck(row.dateFrom!) {
+                            images.append($0.fileId!)
+                        }
+                    }
+                    var dataServ: ServicesUKJson!
+                    self.dataService.forEach{
+                        if $0.name == self.data[indexPath.row].desc{
+                            dataServ = $0
+                        }
+                    }
+                    print(dataServ)
+                    var serviceDesc = ""
+                    if dataServ?.shortDesc == "" || dataServ?.shortDesc == " "{
+                        serviceDesc  = String((dataServ?.desc?.prefix(100))!) + "..."
+                    }else{
+                        serviceDesc  = dataServ?.shortDesc ?? ""
+                    }
+                    var imageIcon = UIImage()
+                    if let imageV = UIImage(data: Data(base64Encoded: ((dataServ?.picture!.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)) ?? Data()) {
+                        imageIcon = imageV
+                    }
+                    var emails = ""
+                    if row.emails == ""{
+                        emails = UserDefaults.standard.string(forKey: "mail")!
+                    }else{
+                        emails = row.emails!
+                    }
+                    var place = ""
+                    if row.premises == ""{
+                        self.parkingsPlace.forEach{
+                            place = place + $0
+                        }
+                    }else{
+                        place = row.premises!
+                    }
+                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.comment ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
+                    
+                    self.techServiceComm = []
+                    self.rowComms[row.id!]!.forEach { comm in
+                        
+                        var commImg: String?
+                        
+                        self.rowFiles.forEach {
+                            
+                            if $0.fileId == comm.idFile {
+                                commImg = $0.fileId!
+                            }
+                        }
+                        
+                        self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
+                                                                             title: comm.name ?? "",
+                                                                             comment: comm.text ?? "",
+                                                                             date: comm.createdDate ?? "",
+                                                                             commImg: nil,
+                                                                             commImgUrl: commImg,
+                                                                             id: comm.id ?? ""))
+                    }
+                    self.reqId = row.id ?? ""
+                    if self.collection != nil {
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                    }
+                    self.prepareGroup?.leave()
+                    
                 } else {
                     let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
@@ -629,7 +700,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, isPaid: row.isPaid ?? "")
+                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible)
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
@@ -698,6 +769,18 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             let vc = segue.destination as! UINavigationController
             (vc.viewControllers.first as! ViewController).roleReg_ = "1"
             
+        }else if segue.identifier == Segues.fromAppsUser.toServiceUK {
+            let vc = segue.destination as! ServiceAppVC
+            var data: ServicesUKJson!
+            dataService.forEach{
+                if $0.name == serviceUK?.title{
+                    data = $0
+                }
+            }
+            vc.serviceData = data
+            vc.data_ = serviceUK!
+            vc.reqId_ = reqId 
+            vc.delegate = self
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC
             vc.data_ = techService!
@@ -711,7 +794,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         
         } else if segue.identifier == Segues.fromAppsUser.toRequestType {
-            let vc = segue.destination as! RequestTypeVC
+            let vc = segue.destination as! NewRequestTypeVC
             vc.delegate = self
         }
     }
@@ -737,7 +820,6 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
 }
-
 
 final class AppsUserCell: UICollectionViewCell {
     
@@ -909,6 +991,8 @@ struct Request {
     let flatNumber: 	        String?
     let updateDate:             String?
     let isPaid:                 String?
+    let premises:               String?
+    let soonPossible:           Bool
     
     init(row: XML.Accessor) {
         isWait                  = row.attributes["isWait"]
@@ -969,7 +1053,7 @@ struct Request {
         } else if (name?.contains("Обращение"))! {
             name                = "Обращение"
         } else {
-            name                = "Техническое обслуживание"
+            name                = "Обслуживание"
         }
         clearAfterWork          = row.attributes["ClearAfterWork"]
         idDepartment            = row.attributes["id_department"]
@@ -983,6 +1067,12 @@ struct Request {
         flatNumber              = row.attributes["FlatNumber"]
         updateDate              = row.attributes["UpdatedDate"]
         isPaid                  = row.attributes["IsPaidService"]
+        premises                = row.attributes["Premises"]
+        if row.attributes["AsSoonAsPossible"] == "1"{
+            soonPossible = true
+        }else{
+            soonPossible = false
+        }
     }
 }
 

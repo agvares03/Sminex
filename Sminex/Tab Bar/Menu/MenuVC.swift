@@ -18,10 +18,12 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             MenuCellData(icon: UIImage(named: "menu_meters")!, title: "Показания счетчиков", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: TemporaryHolder.instance.menuRequests == 0 ? "" : "\(TemporaryHolder.instance.menuRequests)"),
             MenuCellData(icon: UIImage(named: "menu_appeal")!, title: "Обращения", notification: ""),
-            MenuCellData(icon: UIImage(named: "menu_services")!, title: "Услуги Службы комфорта", notification: ""),
+            MenuCellData(icon: UIImage(named: "menu_services")!, title: "Каталог услуг", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_news")!, title: "Новости", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: TemporaryHolder.instance.menuQuesions == 0 ? "" : "\(TemporaryHolder.instance.menuQuesions)"),
             MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuDeals)"),
+            MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Уведомления", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuNotifications)"),
+//            MenuCellData(icon: UIImage(named: "menu_finance")!, title: "Уведомления", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_support")!, title: "Техподдержка приложения", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_share")!, title: "Поделиться приложением", notification: "")
         ]
@@ -35,7 +37,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("DealsMenu"), object: nil, queue: nil) { (_) in
             if TemporaryHolder.instance.menuDeals != 0 {
-                self.data[6] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
+                self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
                 DispatchQueue.main.async {
                     self.collection.reloadData()
                 }
@@ -51,7 +53,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name("QuestionsMenu"), object: nil, queue: nil) { (_) in
             if TemporaryHolder.instance.menuQuesions != 0 {
-                self.data[5] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
+                self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
                 DispatchQueue.main.async {
                     self.collection.reloadData()
                 }
@@ -95,7 +97,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         updateUserInterface()
         self.navigationController?.isNavigationBarHidden = true
         if TemporaryHolder.instance.menuDeals != 0 {
-            self.data[6] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
+            self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
             self.collection.reloadData()
         }
         if TemporaryHolder.instance.menuRequests != 0 {
@@ -103,7 +105,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             self.collection.reloadData()
         }
         if TemporaryHolder.instance.menuQuesions != 0 {
-            self.data[5] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
+            self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
             self.collection.reloadData()
         }
     }
@@ -118,9 +120,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         if section == 0 {
             return 2
         
-        } else if section == 2 || section == 1{
+        } else if section == 1{
             return 3
-        
+        } else if section == 2{
+            return 4
         } else {
             return 1
         }
@@ -155,10 +158,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             cell.display(data[indexPath.row + 5])
         
         } else if section == 3 {
-            cell.display(data[indexPath.row + 8])
+            cell.display(data[indexPath.row + 9])
         
         } else {
-            cell.display(data[indexPath.row + 9])
+            cell.display(data[indexPath.row + 10])
         }
         return cell
     }
@@ -179,11 +182,11 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
-                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
+                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
                 }else{
-                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
-                }            
+                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
+                }
             } else if indexPath.row == 1 {
                 performSegue(withIdentifier: Segues.fromMenuVC.toSchet, sender: self)
             
@@ -209,6 +212,8 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             
             } else if indexPath.row == 2 {
                 performSegue(withIdentifier: Segues.fromMenuVC.toDeals, sender: self)
+            } else if indexPath.row == 3 {
+                performSegue(withIdentifier: Segues.fromMenuVC.toNotification, sender: self)
             }
         
         } else if indexPath.section == 3 {
@@ -268,7 +273,7 @@ final class MenuCell: UICollectionViewCell {
         icon.image = item.icon
         
         if item.title == "Показания счетчиков"
-            || item.title == "Услуги Службы комфорта"
+            || item.title == "Каталог услуг"
             || item.title == "Опросы"
             || item.title == "Акции и предложения" {
             

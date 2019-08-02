@@ -97,14 +97,14 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         typeLabel.text = value_?.resource
         counterLabel.text = "Счетчик " + (value_?.meterUniqueNum)!
         // Округлим прошлое показание счетчика
-        let round_value = value_?.previousValue?.replacingOccurrences(of: ",00", with: "")
+        let round_value = value_?.previousValue1?.replacingOccurrences(of: ",00", with: "")
         monthValLabel.text = round_value
         let previousMonth = Calendar.current.date(byAdding: .month, value: -1, to: Date())
         monthLabel.text = getMonth(date: previousMonth!)   // month_
 //        navigationController?.title = "Показания за " + month_! + " " + year_!
         self.title = "Показания за " + month_! + " " + year_!
         
-        outcomeLabel.text = "\(value_?.difference?.replacingOccurrences(of: ",00", with: "") ?? "0") \(value_?.units ?? "")"
+        outcomeLabel.text = "\(value_?.difference1?.replacingOccurrences(of: ",00", with: "") ?? "0") \(value_?.units ?? "")"
         //outcomeLabel.text = "\(value_?.difference?.replacingOccurrences(of: ",00", with: "") ?? "0") \(value_?.units ?? "")/мес."
         
         stopAnimator()
@@ -136,8 +136,8 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
         print(metValues)
         var a = [String]()
         metValues.forEach {
-            if Float($0.value?.replacingOccurrences(of: ",", with: ".") ?? "0")! > Float(0) {
-                a.append($0.value!)
+            if Float($0.value1?.replacingOccurrences(of: ",", with: ".") ?? "0")! > Float(0) {
+                a.append($0.value1!)
                 return
             }
         }

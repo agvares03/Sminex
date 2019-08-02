@@ -131,7 +131,6 @@ class FirstController: UIViewController {
                 self.business_center_info = Business_Center_Data(json: json!)?.DenyOnlinePayments
                 self.busines_center_denyInvoiceFiles = Business_Center_Data(json: json!)?.DenyInvoiceFiles
                 self.busines_center_denyTotalOnlinePayments = Business_Center_Data(json: json!)?.DenyTotalOnlinePayments
-                
                 // Можно или нет ввозить/вывозить имущество
 //                self.denyImportExportPropertyRequest = Business_Center_Data(json: json!)?.DenyImportExportProperty
             }
@@ -367,8 +366,9 @@ class FirstController: UIViewController {
                     // ПОКАЗАНИЯ СЧЕТЧИКОВ
                     // Удалим данные из базы данных
                     db.del_db(table_name: "Counters")
+                    db.del_db(table_name: "TypesCounters")
                     // Получим данные в базу данных
-                    db.parse_Countrers(login: login, pass: pass, history: answer[7])
+                    db.parse_Countrers(login: login, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: login)), history: answer[7])
                     
                     // ВЕДОМОСТЬ (Пока данные тестовые)
                     // Удалим данные из базы данных
@@ -380,6 +380,10 @@ class FirstController: UIViewController {
                     db.del_db(table_name: "Applications")
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: login, pass: pass, isCons: "0")
+                    
+                    // УВЕДОМЛЕНИЯ
+//                    db.del_app(number: "Notifications")
+                    db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                     
                     self.performSegue(withIdentifier: Segues.fromFirstController.toAppsUserNow, sender: self)
 //                    self.performSegue(withIdentifier: Segues.fromFirstController.toNewMain, sender: self)
@@ -431,11 +435,14 @@ class FirstController: UIViewController {
         // Можно или нет ввозить/вывозить имущество
         let DenyImportExportProperty: Bool?
         
+        let ParkingPlace: [String]?
+        
         init?(json: JSON) {
             DenyOnlinePayments = "denyOnlinePayments"                      <~~ json
             DenyInvoiceFiles   = "denyInvoiceFiles"                        <~~ json
             DenyTotalOnlinePayments = "denyTotalOnlinePayments"            <~~ json
             DenyImportExportProperty = "denyImportExportPropertyRequest"   <~~ json
+            ParkingPlace           = "premises"                            <~~ json
         }
     }
     

@@ -102,8 +102,8 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
                 if val.meterUniqueNum == data_?.meterUniqueNum {
                     metValues.append(val)
                     print(val)
-                    arrInput.append(val.valueInput!)
-                    arrValue.append(val.value!)
+                    arrInput.append(val.valueInput1!)
+                    arrValue.append(val.value1!)
                 }
             }
         }
@@ -113,8 +113,8 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
                 if val.meterUniqueNum == data_?.meterUniqueNum {
-                    if predInput == "0,00" && val.valueInput != "0,00"{
-                       predInput = val.valueInput!
+                    if predInput == "0,00" && val.valueInput1 != "0,00"{
+                       predInput = val.valueInput1!
                     }
                 }
             }
@@ -146,7 +146,7 @@ final class CounterHistoryVC: UIViewController, UICollectionViewDelegate, UIColl
                 income = predInput
             }
             i += 1
-            values.append( CounterHistoryCellData(value: $0.value, previousValue: $0.difference, period: Int($0.period ?? "1") ?? 1, income: income, fraction: fraction!) )
+            values.append( CounterHistoryCellData(value: $0.value1, previousValue: $0.difference1, period: Int($0.period ?? "1") ?? 1, income: income, fraction: fraction!) )
         }
         
         values.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }

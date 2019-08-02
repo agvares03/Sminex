@@ -73,6 +73,9 @@ final class Server {
     static let ADD_TECH_SUPPORT    = "AddTechSupportMail.ashx?"        // Добавление информации по письму
     static let ADD_SUPPORT_FILE    = "AddTechSupportFile.ashx?"        // Добавление файлов к письму
     
+    static let GET_NOTIFICATIONS   = "GetNotifications.ashx?"          // Получить уведомления для пользователя
+    static let GET_PAYS            = "GetPayments.ashx?"               // Получить информацию об оплатах
+    
     
     func hexStringToUIColor(hex: String) -> UIColor {
         var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

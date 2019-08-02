@@ -40,13 +40,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var busines_center_dayTo: Int?
     
     private var busines_center_CompanyService: Bool? = false
+    private var busines_center_denyShowFine: Bool?
     @IBOutlet private weak var collection: UICollectionView!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
-            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
-        }else{
+        if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+        }else{
+            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
         }
     }
     
@@ -89,8 +90,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var filteredNews: [NewsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
-    private var appsUser: AppsUser?
-    
+    private var appsUser: NewAppsUser?
+    private var dataService: [ServicesUKJson] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         // Получим данные по Бизнес-центру (выводить или нет Оплаты)
@@ -102,6 +103,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         fetchDebt()
         fetchDeals()
         getRequestTypes()
+        getServices()
         fetchRequests()
         fetchQuestions()
         collection.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 24, right: 0)
@@ -171,15 +173,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.global(qos: .background).async {
                 let res = self.getRequests()
-                var count = 2
+                var count = 1
                 sleep(2)
                 DispatchQueue.main.sync {
                     self.data[0] = [0 : CellsHeaderData(title: "Заявки")]
-                    self.data[0]![1] = RequestAddCellData(title: "Оставить заявку")
                     res.forEach {
                         self.data[0]![count] = $0
                         count += 1
                     }
+                    self.data[0]![count] = RequestAddCellData(title: "Оставить заявку")
                     self.collection.reloadData()
                 }
             }
@@ -291,6 +293,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.busines_center_dayFrom = Business_Center_Data(json: json!)?.DayFrom
                 self.busines_center_dayTo = Business_Center_Data(json: json!)?.DayTo
                 self.busines_center_CompanyService = Business_Center_Data(json: json!)?.DenyManagementCompanyServices
+                self.busines_center_denyShowFine = Business_Center_Data(json: json!)?.DenyShowFine
             }
             
             let defaults = UserDefaults.standard
@@ -304,6 +307,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             defaults.set(self.busines_center_dayFrom, forKey: "meterReadingsDayFrom")
             defaults.set(self.busines_center_dayTo, forKey: "meterReadingsDayTo")
             defaults.set(self.busines_center_CompanyService, forKey: "denyCompanyService")
+            defaults.set(self.busines_center_denyShowFine, forKey: "denyShowFine")
             defaults.synchronize()
             let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
             let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
@@ -433,8 +437,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if section == 4 && newsSize != nil {
             return 0
-        } else if section == 0 {
-            return (data[section]?.count ?? 2) - 1
         } else if data.keys.contains(section) {
             return (data[section]?.count ?? 2) - 1
             
@@ -531,7 +533,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return CGSize(width: view.frame.size.width, height: 204.0)
             }
         } else if title == "Заявки" {
-            if indexPath.row == 0 {
+            if indexPath.row == data[indexPath.section]!.count - 2 {
                 return CGSize(width: view.frame.size.width - 32, height: 50.0)
             }
             let cell = RequestCell.fromNib(viewSize: collection.frame.size.width)
@@ -618,9 +620,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if title == "Заявки" {
             
-            if indexPath.row == 0 {
+            if indexPath.row == data[indexPath.section]!.count - 2 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RequestAddCell", for: indexPath) as! RequestAddCell
-                cell.display(data[indexPath.section]![1] as! RequestAddCellData, delegate: self)
+                cell.display(data[indexPath.section]![indexPath.row + 1] as! RequestAddCellData, delegate: self)
                 if #available(iOS 11.0, *) {
                     cell.clipsToBounds = false
                     cell.layer.cornerRadius = 4
@@ -725,7 +727,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[0]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
-            appsUser = AppsUser()
+            appsUser = NewAppsUser()
+            appsUser?.dataService = dataService
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
             appsUser?.isFromMain = true
@@ -741,7 +744,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     } else if self.appsUser?.techService != nil {
                         self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
                     } else {
-                        
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
                     }
                 }
             }
@@ -772,7 +775,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             performSegue(withIdentifier: Segues.fromMainScreenVC.toDealsList, sender: self)
             
         } else if name == "К оплате" {
-            if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+            if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
             }else{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
@@ -791,17 +794,44 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         DispatchQueue.global(qos: .background).async {
             let res = self.getRequests()
-            var count = 2
+            var count = 1
             DispatchQueue.main.sync {
                 self.data[0] = [0 : CellsHeaderData(title: "Заявки")]
-                self.data[0]![1] = RequestAddCellData(title: "Оставить заявку")
                 res.forEach {
                     self.data[0]![count] = $0
                     count += 1
                 }
+                self.data[0]![count] = RequestAddCellData(title: "Оставить заявку")
                 self.collection.reloadData()
             }
         }
+    }
+    
+    private func getServices() {
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else {
+                let alert = UIAlertController(title: "Ошибка серевера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.dataService = ServicesUKDataJson(json: json!)?.data ?? []
+            }
+            
+            #if DEBUG
+            //            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            }.resume()
     }
     
     func getRequestTypes() {
@@ -827,7 +857,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            print(responceString)
+//            print(responceString)
             #endif
             
             DispatchQueue.main.sync {
@@ -841,6 +871,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                         if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                             TemporaryHolder.instance.choise(json!)
+                        }
+                        let responseString = String(data: data!, encoding: .utf8) ?? ""
+                        if responseString.containsIgnoringCase(find: "premises"){
+                            let parkingsPlace = (Business_Center_Data(json: json!)?.ParkingPlace)!
+                            UserDefaults.standard.set(parkingsPlace, forKey: "parkingsPlace")
                         }
                         denyImportExportPropertyRequest = (Business_Center_Data(json: json!)?.DenyImportExportProperty)!
                         UserDefaults.standard.set(denyImportExportPropertyRequest, forKey: "denyImportExportPropertyRequest")
@@ -1449,7 +1484,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
-            let vc = segue.destination as! AppsUser
+            let vc = segue.destination as! NewAppsUser
+            vc.dataService = dataService
             vc.isCreatingRequest_ = true
             vc.delegate = self
             
@@ -1459,11 +1495,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             (vc.viewControllers.first as! ViewController).roleReg_ = "1"
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
-            let vc = segue.destination as! AppsUser
+            let vc = segue.destination as! NewAppsUser
+            vc.dataService = dataService
             vc.delegate = self
             
         } else if segue.identifier == Segues.fromMainScreenVC.toSchet {
-            let vc = segue.destination as! CounterTableVC
+            let vc = segue.destination as! CounterChoiceType
             vc.canCount = canCount
             
         } else if segue.identifier == Segues.fromMainScreenVC.toQuestionAnim {
@@ -1493,7 +1530,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.tappedNews = tappedNews
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
-            let vc = segue.destination as! AppsUser
+            let vc = segue.destination as! NewAppsUser
+            vc.dataService = dataService
             vc.requestId_ = requestId
             vc.xml_ = mainScreenXml
             vc.delegate = self
@@ -1511,6 +1549,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 vc.isFromMain_ = true
             }
             
+        } else if segue.identifier == Segues.fromAppsUser.toServiceUK{
+            let vc = segue.destination as! ServiceAppVC
+            vc.data_ = (appsUser?.serviceUK!)!
+            vc.comments_ = (appsUser?.serviceUKComm)!
+            vc.reqId_ = appsUser?.reqId ?? ""
+            vc.delegate = self
+            if appsUser?.requestId_ != "" {
+                appsUser?.requestId_ = ""
+                appsUser?.xml_ = nil
+                vc.isFromMain_ = true
+            }
         } else if segue.identifier == Segues.fromMainScreenVC.toService {
             
             let vc = segue.destination as! TechServiceVC
@@ -2021,29 +2070,32 @@ final class ForPayCell: UICollectionViewCell {
         if (defaults.bool(forKey: "denyTotalOnlinePayments")) || item.title == "0 ₽"{
             pay.isHidden = true
         }
-        let d: Double = Double(item.title.replacingOccurrences(of: " ₽", with: ""))!
-        var sum = String(format:"%.2f", d)
-        if d > 999.00 || d < -999.00{
-            let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
-            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
-        }
-        if sum.first == "-" {
-            sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
-        }
-        var am = sum
-        var am2 = sum
-        item.title.forEach{_ in
-            if am.contains(find: "."){
-                am.removeLast()
+        if item.title != ""{
+            let d: Double = Double(item.title.replacingOccurrences(of: " ₽", with: ""))!
+            var sum = String(format:"%.2f", d)
+            if d > 999.00 || d < -999.00{
+                let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+                sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
             }
-        }
-        item.title.forEach{_ in
-            if am2.contains(find: "."){
-                am2.removeFirst()
+            if sum.first == "-" {
+                sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
             }
+            var am = sum
+            var am2 = sum
+            item.title.forEach{_ in
+                if am.contains(find: "."){
+                    am.removeLast()
+                }
+            }
+            item.title.forEach{_ in
+                if am2.contains(find: "."){
+                    am2.removeFirst()
+                }
+            }
+            title.text    = am
+            titleDrob.text = "," + am2 + " ₽"
         }
-        title.text    = am
-        titleDrob.text = "," + am2 + " ₽"
+        
         
         if item.title.contains(find: "-") {
             title.textColor = .green

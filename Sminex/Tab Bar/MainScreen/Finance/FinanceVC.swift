@@ -97,7 +97,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
             return 4
         }else{
             return 3
@@ -168,7 +168,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             } else {
 //                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
 //                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
-//                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+//                if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                     var year = "\(receipts[safe: indexPath.row - 1]?.numYear ?? 0)"
                     if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
                         year.removeFirst()
@@ -211,11 +211,11 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                     cell.display(title: "История взаиморасчетов", desc: "")
                     cell.contentView.backgroundColor = .white
                 }
-            }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5) && (Double((debt?.sumPay)!) < 0.00){
+            }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5) { //} && (Double((debt?.sumPay)!) < 0.00){
                 if (self.calcs.count == 0) {
                     cell.display(title: "", desc: "")
                 } else {
-                    cell.display(title: "История взаиморасчетов", desc: "")
+                    cell.display(title: "История оплат", desc: "")
                     cell.contentView.backgroundColor = .white
                 }
             }else if indexPath.row == 1 && (Double((debt?.sumPay)!) < 0.00){
@@ -239,7 +239,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                         debt += ($0.sumDebt ?? 0.00)
                     }
                 }
-//                if UserDefaults.standard.string(forKey: "typeBuilding") == "Comm"{
+//                if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                     var year = ""
                     if (Double((self.debt!.sumPay)!) < 0.00){
                         year = "\(filteredCalcs[indexPath.row - 2].numYearSet ?? 0)"
@@ -336,7 +336,7 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
                     return 6
                 }else{
-                    return 5
+                    return 6
                 }
             }
         
@@ -411,6 +411,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             }else{
                 if indexPath.row == 4 {
                     performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
+                    return
+                } else if (indexPath.row == 5) {
+                    performSegue(withIdentifier: Segues.fromFinanceVC.toHistory, sender: self)
                     return
                 }
                 index = indexPath.row - 1
@@ -531,6 +534,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
                 return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }
         
+        } else if segue.identifier == Segues.fromFinanceVC.toHistory {
+            //            let vc = segue.destination as! FinanceHistoryPayController
+            
         } else if segue.identifier == Segues.fromFinanceVC.toCalcsArchive {
             let vc = segue.destination as! FinanceCalcsArchiveVC
             vc.debt = debt

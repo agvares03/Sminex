@@ -50,7 +50,7 @@ class FinanceDebtArchiveVCComm: UIViewController, UICollectionViewDelegate, UICo
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceDebtArchiveVC.toReceipt {
-            let vc = segue.destination as! FinanceDebtVC
+            let vc = segue.destination as! FinanceDebtVCComm
             vc.data_ = data_[index]
         }
     }

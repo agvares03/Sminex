@@ -9,13 +9,19 @@
 import UIKit
 import Alamofire
 
-final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+protocol HomePlaceCellDelegate: class {
+    func placeCheck(text: String, del: Bool)
+}
+
+final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, HomePlaceCellDelegate {
+    
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var edConst:     NSLayoutConstraint!
-    @IBOutlet private weak var btnBottom:   NSLayoutConstraint!
     @IBOutlet private weak var btnConst:    NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
+    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
+    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
     @IBOutlet private weak var picker:      UIDatePicker!
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var images:      UIScrollView!
@@ -23,6 +29,16 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     @IBOutlet private weak var dateBtn:     UIButton!
     @IBOutlet private weak var sendBtn:     UIButton!
     @IBOutlet private weak var pickerLine:  UILabel!
+    @IBOutlet private weak var tableView:   UITableView!
+    @IBOutlet private weak var placeView:   UIView!
+    @IBOutlet private weak var placeLbl:    UILabel!
+    @IBOutlet private weak var plcLbl:      UILabel!
+    @IBOutlet private weak var expImg:      UIImageView!
+    
+    @IBOutlet private weak var timeBtn1:    UIButton!
+    @IBOutlet private weak var timeBtn2:    UIButton!
+    @IBOutlet private weak var dateLbl:     UILabel!
+    @IBOutlet private weak var noDateLbl:   UILabel!
     
     
     @IBAction private func cancelButtonPressed(_ sender: UIBarButtonItem) {
@@ -32,6 +48,47 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         action.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (_) in }))
         action.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { (_) in self.navigationController?.popViewController(animated: true) }))
         present(action, animated: true, completion: nil)
+    }
+    
+    var choiceBtn = 1
+    var choiceColor = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1.0)
+    var unChoiceColor = UIColor(red: 246/255, green: 249/255, blue: 249/255, alpha: 1.0)
+    var extTime = false
+    @IBAction private func timeBtn1Action(_ sender: UIButton){
+        if choiceBtn == 1{
+            choiceBtn = 0
+            dateLbl.isHidden = true
+            noDateLbl.isHidden = false
+            dateBtn.isHidden = true
+            extTime = true
+            timeBtn2.setTitleColor(.darkGray, for: .normal)
+            timeBtn2.backgroundColor = choiceColor
+            timeBtn1.setTitleColor(.black, for: .normal)
+            timeBtn1.backgroundColor = unChoiceColor
+            if !picker.isHidden{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd MMMM HH:mm"
+                
+                dateBtn.setTitle(dateFormatter.string(from: picker.date), for: .normal)
+                picker.isHidden         = true
+                pickerLine.isHidden     = true
+                imageConst.constant = 0
+            }
+        }
+    }
+    
+    @IBAction private func timeBtn2Action(_ sender: UIButton){
+        if choiceBtn == 0{
+            choiceBtn = 1
+            dateLbl.isHidden = false
+            noDateLbl.isHidden = true
+            dateBtn.isHidden = false
+            extTime = false
+            timeBtn1.setTitleColor(.darkGray, for: .normal)
+            timeBtn1.backgroundColor = choiceColor
+            timeBtn2.setTitleColor(.black, for: .normal)
+            timeBtn2.backgroundColor = unChoiceColor
+        }
     }
     
     @IBAction private func dateButtonPressed(_ sender: UIButton?) {
@@ -45,10 +102,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             imageConst.constant = 170
             
             if !images.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 220
+//                btnConst.constant = 220
             
             } else if images.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 50
+//                btnConst.constant = 50
             }
         
         } else {
@@ -59,15 +116,36 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             dateBtn.setTitle(dateFormatter.string(from: picker.date), for: .normal)
             picker.isHidden     = true
             pickerLine.isHidden = true
-            imageConst.constant = 8
+            imageConst.constant = 0
             
             if !images.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 100
+//                btnConst.constant = 100
             
             } else if images.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 50
+//                btnConst.constant = 50
             }
         }
+    }
+    var isExpanded = true
+    @objc func expand() {
+        if !isExpanded {
+            self.expImg.image = UIImage(named: "expand")
+            isExpanded = true
+            showTable = false
+            tableView.reloadData()
+        } else {
+            self.expImg.image = UIImage(named: "expanded")
+            isExpanded = false
+            showTable = true
+            tableView.reloadData()
+        }
+    }
+    
+    @objc func datePickerValueChanged(sender:UIDatePicker) {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM HH:mm"
+        dateBtn.setTitle(dateFormatter.string(from: sender.date), for: .normal)
     }
     
     @IBAction private func cameraButtonPressed(_ sender: UIButton) {
@@ -119,17 +197,50 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             startAnimator()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
+            var place = placeLbl.text ?? ""
+            if place == "Выбрать помещение(я)"{
+                place = ""
+                if checkPlace.count != 0{
+                    var i = 0
+                    checkPlace.forEach{
+                        if $0 == false{
+                            i += 1
+                        }
+                    }
+                    if i == checkPlace.count{
+                        parkingsPlace!.forEach{
+                            place = place + $0 + ";"
+                        }
+                    }
+                    if place.last == ";"{
+                        place.removeLast()
+                    }
+                }
+            }else{
+                if place.contains(find: ", "){
+                    let str = place.components(separatedBy: ", ")
+                    place = ""
+                    str.forEach{
+                        place = place + $0 + ";"
+                    }
+                    if place.last == ";"{
+                        place.removeLast()
+                    }
+                }
+            }
             data = ServiceHeaderData(icon: UIImage(named: "account")!,
                                      problem: edProblem.text!,
                                      date: dateFormatter.string(from: picker.date),
                                      status: "В ОБРАБОТКЕ",
-                                     images: imagesArr, isPaid: "0")
+                                     images: imagesArr, isPaid: "0", placeHome: place, soonPossible: extTime)
             uploadRequest()
 //        }
     }
     
     public var delegate: AppsUserDelegate?
     public var type_:     RequestTypeStruct?
+    public var parkingsPlace: [String]?
+    var checkPlace: [Bool] = []
     private var data:   ServiceHeaderData?
     private var reqId:  String?
     private var constant: CGFloat = 0.0
@@ -142,11 +253,35 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        constant = btnConst.constant
+//        constant = btnConst.constant
         btnConstant = sendBtn.frame.origin.y
-        if isNeedToScrollMore() {
-            btnConst.constant = 50
+//        if isNeedToScrollMore() {
+//            btnConst.constant = 50
+//        }
+        
+        dateLbl.isHidden = false
+        noDateLbl.isHidden = true
+        dateBtn.isHidden = false
+        self.expImg.image = UIImage(named: "expand")
+        tableView.delegate = self
+        tableView.dataSource = self
+        placeHeight.constant = 0
+        tableHeight.constant = 0
+        plcLbl.isHidden = true
+        parkingsPlace?.forEach{_ in
+            checkPlace.append(false)
         }
+        if parkingsPlace!.count == 1{
+            placeHeight.constant = 20
+            placeView.backgroundColor = .white
+            plcLbl.isHidden = false
+            placeLbl.text = parkingsPlace![0]
+            expImg.isHidden = true
+        }else{
+            let tap1 = UITapGestureRecognizer(target: self, action: #selector(expand))
+            placeView.addGestureRecognizer(tap1)
+        }
+        imageConst.constant = 0
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         
@@ -168,11 +303,12 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        if !isNeedToScroll() {
-            btnConst.constant = getConstant()
-        }
-        
-        edProblem.text = "Описание"
+//        if !isNeedToScroll() {
+//            btnConst.constant = getConstant()
+//        }
+        picker.addTarget(self, action: #selector(
+            datePickerValueChanged), for: UIControlEvents.valueChanged)
+        edProblem.text = "Введите описание"
         edProblem.textColor = UIColor.lightGray
         edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
     }
@@ -192,41 +328,17 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if !picker.isHidden {
             dateButtonPressed(nil)
         }
-        
-        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 200.0)
-        if isNeedToScroll() {
-            if imagesArr.count != 0 {
-                btnConst.constant  = 25
-                btnBottom.constant = 215
-            
-            } else {
-                btnConst.constant  = -65
-                btnBottom.constant = 240
-            }
-        
-        } else {
-            if !isXDevice() {
-                btnConst.constant = getConstant() - 235
-            } else {
-                btnConst.constant = getConstant() - 280
-            }
-        }
+        let info = sender?.userInfo!
+        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+        self.btnConst.constant = (keyboardSize?.height)!
+        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + (keyboardSize?.height)!)
+        keyboardHeight = keyboardSize!.height
     }
-    
+    var keyboardHeight: CGFloat = 0.0
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
-        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - 200.0)
-        
-        if isNeedToScroll() {
-            btnBottom.constant = 8
-            if !isNeedToScrollMore() {
-                btnConst.constant = getConstant()//constant
-            } else {
-                btnConst.constant = 50
-            }
-        } else {
-            btnConst.constant = getConstant()
-        }
+        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
+        self.btnConst.constant = 0
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
@@ -239,21 +351,21 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             images.isHidden = true
             imageConst.constant = 8
             
-            if !picker.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 100
-                
-            } else if picker.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 50
-            }
+//            if !picker.isHidden && isNeedToScrollMore() {
+//                btnConst.constant = 100
+//
+//            } else if picker.isHidden && isNeedToScrollMore() {
+//                btnConst.constant = 50
+//            }
             
         } else {
             
-            if !picker.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 220
-                
-            } else if picker.isHidden && isNeedToScrollMore() {
-                btnConst.constant = 50
-            }
+//            if !picker.isHidden && isNeedToScrollMore() {
+//                btnConst.constant = 220
+//
+//            } else if picker.isHidden && isNeedToScrollMore() {
+//                btnConst.constant = 50
+//            }
             
             images.isHidden = false
             
@@ -328,8 +440,46 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let login = UserDefaults.standard.string(forKey: "login")!
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm = edProblem.text ?? ""
+        var place = placeLbl.text ?? ""
+        if place == "Выбрать помещение(я)"{
+            place = ""
+            if checkPlace.count != 0{
+                var i = 0
+                checkPlace.forEach{
+                    if $0 == false{
+                        i += 1
+                    }
+                }
+                if i == checkPlace.count{
+                    parkingsPlace!.forEach{
+                        place = place + $0 + ";"
+                    }
+                }
+                if place.last == ";"{
+                    place.removeLast()
+                }
+            }
+        }else{
+            if place.contains(find: ", "){
+                let str = place.components(separatedBy: ", ")
+                place = ""
+                str.forEach{
+                    place = place + $0 + ";"
+                }
+                if place.last == ";"{
+                    place.removeLast()
+                }
+            }
+        }
+        var soonPossible = ""
+        if extTime{
+            soonPossible = "1"
+        }else{
+            soonPossible = "0"
+        }
+        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id ?? "")&name=\("Обслуживание \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))")&text=\(comm)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&premises=\(place)&asSoonAsPossible=\(soonPossible)")
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Техническое обслуживание \(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\("Обслуживание \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))".stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(UserDefaults.standard.string(forKey: "contactNumber") ?? "")&email=\(UserDefaults.standard.string(forKey: "mail") ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986()!)&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -439,7 +589,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if segue.identifier == Segues.fromCreateTechService.toService {
             let vc = segue.destination as! TechServiceVC
             vc.isCreate_ = true
-            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0")
+            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0", placeHome: "", soonPossible: false)
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }
@@ -464,7 +614,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         
         if updatedText.isEmpty {
-            textView.text = "Описание"
+            textView.text = "Введите описание"
             textView.textColor = UIColor.lightGray
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
         
@@ -501,5 +651,153 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             }
         }
     }
+    var showTable = false
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        DispatchQueue.main.async {
+            if self.showTable{
+                if self.parkingsPlace!.count <= 4{
+                    self.tableHeight.constant = CGFloat(44 * self.parkingsPlace!.count)
+                }else{
+                    self.tableHeight.constant = 44 * 4
+                }
+            }else{
+                self.tableHeight.constant = 0
+            }
+        }
+        return self.parkingsPlace!.count
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HomePlaceCell", for: indexPath) as! HomePlaceCell
+        print(checkPlace)
+        cell.display(item: parkingsPlace![indexPath.row], isChecked: checkPlace[indexPath.row], delegate: self)
+        return cell
+    }
+    
+    func placeCheck(text: String, del: Bool) {
+        var str = placeLbl.text
+        if del{
+            str = str?.replacingOccurrences(of: text, with: "")
+            placeLbl.text = str!
+            if str?.last == " "{
+                str?.removeLast()
+                str?.removeLast()
+                placeLbl.text = str!
+            }
+            if str?.first == ","{
+                str?.removeFirst()
+                str?.removeFirst()
+                placeLbl.text = str!
+            }
+            if placeLbl.text == "" || placeLbl.text == " "{
+                placeHeight.constant = 0
+                plcLbl.isHidden = true
+                placeLbl.text = "Выбрать помещение(я)"
+            }
+            for i in 0...parkingsPlace!.count - 1{
+                if parkingsPlace![i] == text{
+                    checkPlace[i] = false
+                }
+            }
+        }else{
+            placeHeight.constant = 20
+            plcLbl.isHidden = false
+            if str == "Выбрать помещение(я)"{
+                placeLbl.text = text
+            }else{
+                placeLbl.text = str! + ", " + text
+            }
+            for i in 0...parkingsPlace!.count - 1{
+                if parkingsPlace![i] == text{
+                    checkPlace[i] = true
+                }
+            }
+        }
+    }
+    
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        tableView.deselectRow(at: indexPath, animated: true)
+//        
+//    }
+    
+}
+
+final class HomePlaceCell: UITableViewCell {
+    
+    @IBOutlet private weak var toggle:      OnOffButton!
+    @IBOutlet private weak var question:    UILabel!
+    @IBOutlet private weak var toggleView:  UIView!
+    
+    @objc fileprivate func didTapOnOffButton(_ sender: UITapGestureRecognizer? = nil) {
+        
+        if checked{
+            
+            toggle.checked = true
+            toggle.backgroundColor  = blueColor
+            toggle.strokeColor      = .white
+            toggle.lineWidth        = 2
+            toggle.setBackgroundImage(nil, for: .normal)
+            
+            checked                 = false
+            isAccepted              = true
+            delegate!.placeCheck(text: question.text!, del: false)
+        }else {
+            toggle.checked = false
+            toggle.strokeColor      = .darkGray
+            toggle.backgroundColor  = .white
+            toggle.lineWidth        = 1
+            toggle.setBackgroundImage(nil, for: .normal)
+                
+            isAccepted              = false
+            checked                 = true
+            delegate!.placeCheck(text: question.text!, del: true)
+        }
+    }
+    
+    private let blueColor = UIColor(red: 0/255, green: 100/255, blue: 255/255, alpha: 1)
+    fileprivate var checked  = false
+    private var index = 0
+    private var delegate: HomePlaceCellDelegate?
+    func display(item: String, isChecked: Bool, delegate: HomePlaceCellDelegate) {
+        question.text = item
+        toggle.checked = false
+        self.delegate = delegate
+//        if !isSomeAnswers {
+            toggle.strokeColor  = .lightGray
+            toggle.lineWidth    = 2
+            
+//        } else {
+//            toggle.strokeColor = .darkGray
+//        }
+        
+        checked = isChecked
+        if checked{
+            
+            toggle.checked = true
+            toggle.backgroundColor  = blueColor
+            toggle.strokeColor      = .white
+            toggle.lineWidth        = 2
+            toggle.setBackgroundImage(nil, for: .normal)
+            
+            checked                 = false
+            isAccepted              = true
+        }else {
+            toggle.checked = false
+            toggle.strokeColor      = .darkGray
+            toggle.backgroundColor  = .white
+            toggle.lineWidth        = 1
+            toggle.setBackgroundImage(nil, for: .normal)
+            
+            isAccepted              = false
+            checked                 = true
+        }
+//        didTapOnOffButton()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapOnOffButton(_:)))
+        toggle.addGestureRecognizer(tap)
+        
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name("Uncheck"), object: nil, queue: nil) { _ in
+//            self.checked = false
+//            self.didTapOnOffButton()
+//        }
+    }
 }
