@@ -70,9 +70,40 @@
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LlI-yI-VxT">
                                 <rect key="frame" x="0.0" y="64" width="414" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Декабрь 2017*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RFO-zh-iyP">
+                                        <rect key="frame" x="35" y="16" width="171" height="27"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6TQ-nc-MsN">
+                                        <rect key="frame" x="326" y="13" width="68" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="История"/>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flI-01-kqK">
+                                        <rect key="frame" x="0.0" y="59" width="414" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="EKj-Rv-tvY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="4fI-hE-MNd"/>
+                                    <constraint firstAttribute="bottom" secondItem="RFO-zh-iyP" secondAttribute="bottom" constant="17" id="EsK-03-QWK"/>
+                                    <constraint firstItem="RFO-zh-iyP" firstAttribute="top" secondItem="LlI-yI-VxT" secondAttribute="top" constant="16" id="F31-88-SQT"/>
+                                    <constraint firstAttribute="trailing" secondItem="6TQ-nc-MsN" secondAttribute="trailing" constant="20" id="Gy1-Hr-NLn"/>
+                                    <constraint firstItem="flI-01-kqK" firstAttribute="leading" secondItem="LlI-yI-VxT" secondAttribute="leading" id="H0U-lN-O6D"/>
+                                    <constraint firstAttribute="bottom" secondItem="flI-01-kqK" secondAttribute="bottom" id="Hjb-Ec-b1d"/>
+                                    <constraint firstItem="RFO-zh-iyP" firstAttribute="leading" secondItem="LlI-yI-VxT" secondAttribute="leading" constant="35" id="Ywg-xw-5Gz"/>
+                                    <constraint firstAttribute="trailing" secondItem="flI-01-kqK" secondAttribute="trailing" id="jgW-al-zp7"/>
+                                    <constraint firstItem="6TQ-nc-MsN" firstAttribute="centerY" secondItem="RFO-zh-iyP" secondAttribute="centerY" id="z1g-zn-bQU"/>
                                 </constraints>
                             </view>
                         </subviews>

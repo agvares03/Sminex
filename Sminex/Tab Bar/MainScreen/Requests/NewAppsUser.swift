@@ -91,9 +91,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
         }
-        self.dataService.forEach{
-            self.dataType.append(NewAppsUserHeaderData(title: $0.name!, id: $0.id!))
-        }
+        self.dataType.append(NewAppsUserHeaderData(title: "Дополнительные услуги", id: "0"))
         if xml_ != nil {
             collection?.alpha   = 0
             createButton?.alpha = 0
@@ -249,7 +247,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             }
             let dat = data
             data.removeAll()
-            data = dat.filter(){ $0.title == dataType[selType].title || $0.desc == dataType[selType].title }
+            data = dat.filter(){ $0.title == dataType[selType].title || ($0.title == "Заявка на услугу" && dataType[selType].title == "Дополнительные услуги") }
             stopAnimatior()
             collection?.reloadData()
         }else{
@@ -592,14 +590,14 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 self.dataType.removeAll()
                 self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
                 for k in 0...dataType1.count - 1{
-                    for i in 0...self.data.count - 1{
-                        if self.data[i].title.containsIgnoringCase(find: "услугу"){
-                            if self.data[i].desc == dataType1[k].title && !typeIn{
+                    for i in 0...self.fullData.count - 1{
+                        if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
+                            if dataType1[k].title == "Дополнительные услуги" && !typeIn{
                                 typeIn = true
                             }
                         }else{
                             
-                            if (self.data[i].title == dataType1[k].title) && !typeIn{
+                            if (self.fullData[i].title == dataType1[k].title) && !typeIn{
                                 typeIn = true
                             }
                         }
