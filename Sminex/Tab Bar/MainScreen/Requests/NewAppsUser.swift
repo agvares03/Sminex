@@ -419,7 +419,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     return
                 }
                 #if DEBUG
-//                print(String(data: data!, encoding: .utf8)!)
+                print(String(data: data!, encoding: .utf8)!)
                 #endif
                 
                 let xml = XML.parse(data!)

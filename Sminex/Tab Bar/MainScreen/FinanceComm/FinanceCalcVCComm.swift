@@ -16,6 +16,23 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     public var data_: [AccountCalculationsJson] = []
+    public var calcs: [AccountCalculationsJson] = []
+    public var index = Int()
+    public var date: (Int?, Int?)
+    
+    @IBAction func SwipeRight(_ sender: UISwipeGestureRecognizer) {
+        if index > 0{
+            index -= 1
+            
+        }
+    }
+    
+    @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
+        if index < calcs.count - 1{
+            index += 1
+            
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
