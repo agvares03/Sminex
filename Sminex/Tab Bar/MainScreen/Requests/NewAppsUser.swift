@@ -41,6 +41,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     public var delegate: MainScreenDelegate?
     public var xml_: XML.Accessor?
     public var isFromMain: Bool = false
+    public var isFromNotifi_: Bool = false
     private var refreshControl: UIRefreshControl?
     var typeName = ""
     var reqId = ""
@@ -66,6 +67,8 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(isFromMain, isFromNotifi_)
+        
         updateUserInterface()
         prepareGroup?.enter()
         
@@ -523,7 +526,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                                                      type: curr.idType ?? "",
                                                      id: curr.id ?? "",
                                                      updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                     stickTitle: isAnswered ? name! : "", isPaid: curr.isPaid!))
+                                                     stickTitle: isAnswered ? name! : "", isPaid: curr.isPaid!, webID: curr.webID ?? ""))
                 }else{
                     newData.append( AppsUserCellData(title: curr.name ?? "",
                                                      desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
@@ -534,7 +537,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                                                      type: curr.idType ?? "",
                                                      id: curr.id ?? "",
                                                      updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                     stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? ""))
+                                                     stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? "", webID: curr.webID ?? ""))
                 }
                 
             }
@@ -623,7 +626,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 self.collection?.reloadData()
                 if self.requestId_ != "" {
                     for (index, item) in self.data.enumerated() {
-                        if item.id == self.requestId_ {
+                        if item.id == self.requestId_ || item.webID == self.requestId_{
                             if self.collection != nil {
                                 self.collectionView(self.collection!, didSelectItemAt: IndexPath(row: index, section: 0))
                                 
@@ -678,6 +681,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 
                 if type.contains(find: "ропуск") {
                     self.typeName = type
+                    print(self.rows)
                     let row = self.rows[self.data[indexPath.row].id]!
                     var persons = row.responsiblePerson ?? ""
                     
@@ -907,7 +911,13 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             if self.requestId_ != "" {
                 self.requestId_ = ""
                 self.xml_ = nil
-                vc.isFromMain_ = true
+                if isFromMain{
+                    vc.isFromMain_ = true
+                }
+                if isFromNotifi_{
+                    vc.isFromMain_ = false
+                    vc.isFromNotifi_ = true
+                }
             }
             
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
@@ -927,6 +937,17 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             vc.data_ = serviceUK!
             vc.reqId_ = reqId
             vc.delegate = self
+            if self.requestId_ != "" {
+                self.requestId_ = ""
+                self.xml_ = nil
+                if isFromMain{
+                    vc.isFromMain_ = true
+                }
+                if isFromNotifi_{
+                    vc.isFromMain_ = false
+                    vc.isFromNotifi_ = true
+                }
+            }
         } else if segue.identifier == Segues.fromAppsUser.toService {
             let vc = segue.destination as! TechServiceVC
             vc.data_ = techService!
@@ -936,7 +957,13 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             if self.requestId_ != "" {
                 self.requestId_ = ""
                 self.xml_ = nil
-                vc.isFromMain_ = true
+                if isFromMain{
+                    vc.isFromMain_ = true
+                }
+                if isFromNotifi_{
+                    vc.isFromMain_ = false
+                    vc.isFromNotifi_ = true
+                }
             }
             
         } else if segue.identifier == Segues.fromAppsUser.toRequestType {
@@ -1101,8 +1128,9 @@ private final class AppsUserCellData {
     let stickTitle: String
     let isBack:     Bool
     let isPaid:     String
+    let webID:      String
     
-    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String) {
+    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String, webID: String) {
         
         self.updateDate = updateDate
         self.title      = title
@@ -1115,5 +1143,6 @@ private final class AppsUserCellData {
         self.id         = id
         self.stickTitle = stickTitle
         self.isPaid     = isPaid
+        self.webID      = webID
     }
 }

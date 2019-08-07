@@ -19,17 +19,18 @@ final class DB: NSObject, XMLParserDelegate {
     
     // Удалить записи из таблиц
     public func del_db(table_name: String) {
+        print(table_name)
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: table_name)
         do {
+            
             let results = try CoreDataManager.instance.managedObjectContext.fetch(fetchRequest)
             for result in results {
                 CoreDataManager.instance.managedObjectContext.delete(result as! NSManagedObject)
             }
         } catch {
-            
-//            #if DEBUG
-//                print(error)
-//            #endif
+            #if DEBUG
+                print(error)
+            #endif
         }
         CoreDataManager.instance.saveContext()
     }
@@ -391,6 +392,7 @@ final class DB: NSObject, XMLParserDelegate {
     
     // Уведомления
     func parse_Notifications(id_account: String) {
+        var readedKol = 0
         let urlPath = Server.SERVER + Server.GET_NOTIFICATIONS + "accID=" + id_account.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
         
         let url: NSURL = NSURL(string: urlPath)!
@@ -443,14 +445,16 @@ final class DB: NSObject, XMLParserDelegate {
                                                                             isReaded = obj.value as! Bool
                                                                         }
                                                                     }
-                                                                    
+                                                                    if !isReaded{
+                                                                        readedKol += 1
+                                                                    }
                                                                     self.add_data_notification(id: id, name: name, type: type, ident: ident, date: date, isReaded: isReaded)
 
                                                                     
                                                                 }
                                                             }
                                                         }
-                                                        
+                                                        TemporaryHolder.instance.menuNotifications = readedKol
                                                     } catch let error as NSError {
                                                         print(error)
                                                     }

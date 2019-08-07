@@ -21,6 +21,9 @@ class NewsTableCell: UITableViewCell {
         guard let item = item else { return }
         
         title.text = item.header
+        if item.isImportant!{
+            title.text = item.header! + " !"
+        }
         desc.text = item.shortContent
         
         if item.dateStart != "" {

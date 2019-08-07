@@ -30,6 +30,10 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let viewControllers = navigationController?.viewControllers
             navigationController?.popToViewController(viewControllers![viewControllers!.count - 4], animated: true)
         
+        } else if isFromNotifi_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 2], animated: true)
+            
         } else if isFromMain_ {
             navigationController?.popToRootViewController(animated: true)
         
@@ -91,6 +95,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     public var reqId_      = ""
     public var isCreated_  = false
     public var isFromMain_ = false
+    public var isFromNotifi_ = false
     public var data_: AdmissionHeaderData = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                                                 gosti: "А. Е. Филимонов, В. В. Иванова",
                                                                 mobileNumber: "+7 965 913 95 67",
@@ -653,7 +658,7 @@ final class AdmissionHeader: UICollectionViewCell {
     @IBOutlet private weak var place:       UILabel!
     @IBOutlet private weak var placeLbl:    UILabel!
     @IBOutlet private weak var separator:   UILabel!
-    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
+    @IBOutlet private weak var placeHeight: NSLayoutConstraint?
     
     @IBOutlet weak var heigthFooter: NSLayoutConstraint?
     @IBOutlet weak var phone_service: UILabel!
@@ -667,14 +672,14 @@ final class AdmissionHeader: UICollectionViewCell {
             place.isHidden = true
             placeLbl.isHidden = true
             separator.isHidden = true
-            placeHeight.isActive = true
-            placeHeight.constant = 0
+            placeHeight?.isActive = true
+            placeHeight?.constant = 0
         }else{
             place.text = item.placeHome
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
-            placeHeight.isActive = false
+            placeHeight?.isActive = false
         }
         self.delegate = delegate
 //        imgsLoader.isHidden = true

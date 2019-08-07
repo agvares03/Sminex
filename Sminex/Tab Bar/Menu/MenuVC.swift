@@ -22,7 +22,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             MenuCellData(icon: UIImage(named: "menu_news")!, title: "Новости", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: TemporaryHolder.instance.menuQuesions == 0 ? "" : "\(TemporaryHolder.instance.menuQuesions)"),
             MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuDeals)"),
-            MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Уведомления", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuNotifications)"),
+            MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: TemporaryHolder.instance.menuDeals == 0 ? "" : "\(TemporaryHolder.instance.menuNotifications)"),
 //            MenuCellData(icon: UIImage(named: "menu_finance")!, title: "Уведомления", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_support")!, title: "Техподдержка приложения", notification: ""),
             MenuCellData(icon: UIImage(named: "menu_share")!, title: "Поделиться приложением", notification: "")
@@ -98,6 +98,10 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         self.navigationController?.isNavigationBarHidden = true
         if TemporaryHolder.instance.menuDeals != 0 {
             self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
+            self.collection.reloadData()
+        }
+        if TemporaryHolder.instance.menuNotifications != 0 {
+            self.data[8] = MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: "\(TemporaryHolder.instance.menuNotifications)")
             self.collection.reloadData()
         }
         if TemporaryHolder.instance.menuRequests != 0 {
@@ -290,7 +294,7 @@ final class MenuCell: UICollectionViewCell {
         } else {
             notificationView.isHidden = true
         }
-        notificationView.isHidden = true
+//        notificationView.isHidden = true
     }
 }
 

@@ -32,6 +32,10 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
         } else if isFromMain_ {
             navigationController?.popToRootViewController(animated: true)
             
+        } else if isFromNotifi_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 2], animated: true)
+            
         } else {
             navigationController?.popViewController(animated: true)
         }
@@ -90,6 +94,7 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
     public var reqId_      = ""
     public var isCreated_  = false
     public var isFromMain_ = false
+    public var isFromNotifi_ = false
     public var data_: ServiceAppHeaderData = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: UIImage(named: "account")!, selectPrice: true, selectPlace: true)
     public var serviceData: ServicesUKJson?
     public var comments_: [ServiceAppCommentCellData] = []

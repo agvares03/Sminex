@@ -32,6 +32,10 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         } else if isFromMain_ {
             navigationController?.popToRootViewController(animated: true)
         
+        } else if isFromNotifi_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 2], animated: true)
+            
         } else {
             navigationController?.popViewController(animated: true)
         }
@@ -97,6 +101,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
     public var reqId_      = ""
     public var isCreate_   = false
     public var isFromMain_ = false
+    public var isFromNotifi_ = false
     public var data_: ServiceHeaderData = ServiceHeaderData(icon: UIImage(named: "account")!,
                                                           problem: "Нас топят соседи! Не можем с ними связаться. Срочно вызвайте сантехника",
                                                           date: "9 сентября 10:00",

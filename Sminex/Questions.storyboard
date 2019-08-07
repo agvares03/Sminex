@@ -65,12 +65,18 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4RV-PZ-yTC">
-                                                    <rect key="frame" x="20" y="10" width="309" height="97"/>
+                                                    <rect key="frame" x="20" y="10" width="309" height="80"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="97" id="uyz-ZM-10J"/>
+                                                        <constraint firstAttribute="height" constant="80" id="uyz-ZM-10J"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опрос проводится с " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ro3-16-97d">
+                                                    <rect key="frame" x="20" y="95" width="318" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -80,15 +86,19 @@
                                             <constraint firstItem="4RV-PZ-yTC" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leadingMargin" constant="12" id="DPM-3z-VMK"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="OUQ-7R-BUL" secondAttribute="trailing" constant="6" id="H1Y-rb-Lac"/>
                                             <constraint firstItem="OUQ-7R-BUL" firstAttribute="centerY" secondItem="y7D-3o-bkx" secondAttribute="centerY" id="JGY-Ph-3WE"/>
+                                            <constraint firstItem="Ro3-16-97d" firstAttribute="top" secondItem="4RV-PZ-yTC" secondAttribute="bottom" constant="5" id="NCo-mN-M2n"/>
                                             <constraint firstAttribute="trailing" secondItem="EbK-2z-SAi" secondAttribute="trailing" id="Pht-gn-feH"/>
+                                            <constraint firstItem="QJI-Ir-sas" firstAttribute="top" secondItem="Ro3-16-97d" secondAttribute="bottom" constant="5" id="Puk-yH-7jX"/>
                                             <constraint firstItem="OUQ-7R-BUL" firstAttribute="leading" secondItem="4RV-PZ-yTC" secondAttribute="trailing" constant="20" id="SUq-a2-SB2"/>
-                                            <constraint firstItem="QJI-Ir-sas" firstAttribute="top" secondItem="4RV-PZ-yTC" secondAttribute="bottom" constant="10" id="gbS-dr-cp6"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="Ro3-16-97d" secondAttribute="trailing" constant="25" id="XxY-ae-nQc"/>
+                                            <constraint firstItem="Ro3-16-97d" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leadingMargin" constant="12" id="bzm-D8-WlP"/>
                                             <constraint firstItem="4RV-PZ-yTC" firstAttribute="top" secondItem="y7D-3o-bkx" secondAttribute="top" constant="10" id="hAT-1W-HdG"/>
                                             <constraint firstItem="QJI-Ir-sas" firstAttribute="leading" secondItem="y7D-3o-bkx" secondAttribute="leadingMargin" constant="12" id="mSX-fC-G6a"/>
                                             <constraint firstItem="EbK-2z-SAi" firstAttribute="top" secondItem="QJI-Ir-sas" secondAttribute="bottom" constant="10" id="mYj-RA-v2w"/>
                                             <constraint firstAttribute="bottom" secondItem="EbK-2z-SAi" secondAttribute="bottom" id="o7i-d3-LUU"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="dateStart" destination="Ro3-16-97d" id="HuY-xD-uuG"/>
                                             <outlet property="desc" destination="QJI-Ir-sas" id="pYl-B4-ji2"/>
                                             <outlet property="title" destination="4RV-PZ-yTC" id="9di-sd-Ykz"/>
                                             <outlet property="titleHeight" destination="uyz-ZM-10J" id="yHa-iJ-OjE"/>
@@ -144,7 +154,7 @@
         <!--Имя опроса-->
         <scene sceneID="YT1-gs-tX4">
             <objects>
-                <viewController id="PVX-C6-6zy" customClass="QuestionAnswerVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="questionAnswer" id="PVX-C6-6zy" customClass="QuestionAnswerVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oHx-ak-zG5"/>
                         <viewControllerLayoutGuide type="bottom" id="ETO-mw-dcQ"/>
@@ -193,7 +203,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Проведение встречи (в том числе деловой) прямо в лобби дома, не выходя в кафе" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m17-5b-Kql">
-                                                    <rect key="frame" x="57" y="15" width="294" height="233"/>
+                                                    <rect key="frame" x="57" y="15" width="294" height="272"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

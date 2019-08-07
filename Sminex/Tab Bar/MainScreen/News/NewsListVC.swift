@@ -249,6 +249,7 @@ final class NewsJson: NSObject, JSONDecodable, NSCoding {
     let isReaded:           Bool?
     let isDraft: 	        Bool?
     let newsId:             Int?
+    let isImportant:        Bool?
     
     init(json: JSON) {
         isShowOnMainPage    = "ShowOnMainPage"  <~~ json
@@ -262,6 +263,7 @@ final class NewsJson: NSObject, JSONDecodable, NSCoding {
         header              = "Header"          <~~ json
         newsId              = "NewsID"          <~~ json
         text                = "Text"            <~~ json
+        isImportant         = "IsImportant"     <~~ json
     }
     
     func encode(with aCoder: NSCoder) {
@@ -276,6 +278,7 @@ final class NewsJson: NSObject, JSONDecodable, NSCoding {
         aCoder.encode(isReaded, forKey: "isReaded")
         aCoder.encode(isDraft, forKey: "isDraft")
         aCoder.encode(newsId, forKey: "newsId")
+        aCoder.encode(isImportant, forKey: "isImportant")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -289,6 +292,7 @@ final class NewsJson: NSObject, JSONDecodable, NSCoding {
         isShowOnMainPage   = aDecoder.decodeObject(forKey: "isShowOnMainPage")  as? Bool
         isReaded           = aDecoder.decodeObject(forKey: "isReaded")          as? Bool
         isDraft            = aDecoder.decodeObject(forKey: "isDraft")           as? Bool
+        isImportant        = aDecoder.decodeObject(forKey: "isImportant")       as? Bool
         newsId             = aDecoder.decodeObject(forKey: "newsId")            as? Int
     }
 }
