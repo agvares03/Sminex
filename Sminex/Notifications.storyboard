@@ -22,9 +22,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="u4l-Gc-1dV">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="u4l-Gc-1dV">
                                 <rect key="frame" x="0.0" y="64" width="414" height="672"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationTableCell" rowHeight="139" id="y1b-7d-ICF" customClass="NotificationTableCell" customModule="Sminex" customModuleProvider="target">
@@ -92,6 +91,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="rCw-kB-XP3" firstAttribute="trailing" secondItem="u4l-Gc-1dV" secondAttribute="trailing" id="Dp7-Bo-Olb"/>
+                            <constraint firstItem="u4l-Gc-1dV" firstAttribute="leading" secondItem="rCw-kB-XP3" secondAttribute="leading" id="IVD-oz-vEe"/>
+                            <constraint firstItem="qkY-kD-g05" firstAttribute="top" secondItem="u4l-Gc-1dV" secondAttribute="bottom" id="fHK-pv-Ye8"/>
+                            <constraint firstItem="u4l-Gc-1dV" firstAttribute="top" secondItem="M7v-UA-DG6" secondAttribute="bottom" id="yKj-py-Enf"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="rCw-kB-XP3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Уведомления" id="sEG-ZI-iMc">
@@ -106,11 +111,50 @@
                     <connections>
                         <outlet property="tableView" destination="u4l-Gc-1dV" id="Rag-d0-Nsv"/>
                         <segue destination="35s-r2-6Z0" kind="show" identifier="login_activity" id="MGK-uv-dJw"/>
+                        <segue destination="Ihi-1b-5co" kind="show" identifier="goQuestion" id="PsR-uF-eat"/>
+                        <segue destination="VIb-jx-XKO" kind="show" identifier="goFinance" id="lXa-ab-nlo"/>
+                        <segue destination="1B1-t7-TPT" kind="show" identifier="goFinanceComm" id="aYO-Wb-NjL"/>
+                        <segue destination="NrJ-Rq-0nu" kind="show" identifier="goCounter" id="XyA-nf-k5C"/>
+                        <segue destination="Kp2-A6-hAv" kind="show" identifier="goServiceUK" id="vcJ-3x-CUG"/>
+                        <segue destination="IBa-CM-q1Z" kind="show" identifier="goAdmission" id="8ln-Df-Lpg"/>
+                        <segue destination="pFx-7Y-dn5" kind="show" identifier="goTechService" id="Lq0-3E-waM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cGM-b3-kr3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="343.47826086956525" y="-1742.1195652173915"/>
+        </scene>
+        <!--Questions-->
+        <scene sceneID="RSs-Vt-HNM">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Questions" id="Ihi-1b-5co" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CzL-Zs-sg1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="965" y="-1883"/>
+        </scene>
+        <!--Finance-->
+        <scene sceneID="1Be-oD-bcg">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Finance" id="VIb-jx-XKO" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wAP-My-Mq4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="954" y="-1810"/>
+        </scene>
+        <!--FinanceComm-->
+        <scene sceneID="OE2-ts-o6o">
+            <objects>
+                <viewControllerPlaceholder storyboardName="FinanceComm" id="1B1-t7-TPT" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qf6-gX-fOU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="981" y="-1756"/>
+        </scene>
+        <!--CounterNew-->
+        <scene sceneID="gIN-BW-Ypj">
+            <objects>
+                <viewControllerPlaceholder storyboardName="CounterNew" id="NrJ-Rq-0nu" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Deh-KP-o5u" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="974" y="-1688"/>
         </scene>
         <!--UINavigationController-yke-5M-97h-->
         <scene sceneID="qha-tP-9V4">
@@ -119,6 +163,30 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dyo-y7-ITP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="395" y="-1365"/>
+        </scene>
+        <!--admission-->
+        <scene sceneID="uP9-jN-XYp">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Requests" referencedIdentifier="admission" id="IBa-CM-q1Z" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XWE-s3-91I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="962" y="-1554"/>
+        </scene>
+        <!--service-->
+        <scene sceneID="PGp-4q-IVb">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Requests" referencedIdentifier="service" id="pFx-7Y-dn5" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Noc-wg-SAj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="950" y="-1484"/>
+        </scene>
+        <!--serviceUK-->
+        <scene sceneID="7QL-a2-PLh">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Requests" referencedIdentifier="serviceUK" id="Kp2-A6-hAv" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4To-uZ-npi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="964" y="-1615"/>
         </scene>
     </scenes>
     <resources>

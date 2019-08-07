@@ -1150,12 +1150,17 @@
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="bpT-hz-gxg" firstAttribute="top" secondItem="XZo-lh-Uzu" secondAttribute="bottom" id="KL9-me-FpL"/>
                             <constraint firstItem="XZo-lh-Uzu" firstAttribute="leading" secondItem="gbY-PR-MY7" secondAttribute="leading" id="c8A-VH-qlI"/>
                             <constraint firstItem="XZo-lh-Uzu" firstAttribute="top" secondItem="cqp-wa-uI4" secondAttribute="bottom" id="hXF-K9-j4r"/>
                             <constraint firstAttribute="trailing" secondItem="XZo-lh-Uzu" secondAttribute="trailing" id="jOm-Z3-jwN"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Ai6-Sm-8r3" appends="YES" id="sgu-XQ-18o"/>
+                            <outletCollection property="gestureRecognizers" destination="6vt-ep-JAS" appends="YES" id="YRF-8A-FMO"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Взаиморасчет" id="lii-em-4IF">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="KEx-Op-Vk0">
@@ -1170,6 +1175,8 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPb-xP-8e1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="Ai6-Sm-8r3"/>
+                <swipeGestureRecognizer direction="right" id="6vt-ep-JAS"/>
             </objects>
             <point key="canvasLocation" x="2040.8" y="-1496.4017991004498"/>
         </scene>
@@ -1610,6 +1617,6 @@
         <segue reference="Uw4-h9-Yot"/>
         <segue reference="UqP-vz-sNh"/>
         <segue reference="M1z-fP-A6K"/>
-        <segue reference="pwy-L0-UOd"/>
+        <segue reference="m9y-y7-qtt"/>
     </inferredMetricsTieBreakers>
 </document>

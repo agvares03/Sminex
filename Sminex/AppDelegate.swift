@@ -56,6 +56,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         YMMYandexMetrica.activate(with: configuration!)
 
+        if let notification = launchOptions?[.remoteNotification] as? [String:AnyObject]{
+            let aps = notification["aps"] as! [String:AnyObject]
+            var body: String = ""
+            var title: String = ""
+            if let alert = aps["alert"] as? String {
+                body = alert
+            } else if let alert = aps["alert"] as? [String : String] {
+                body = alert["body"]!
+                title = alert["title"]!
+            }
+            print(body, title)
+            let notifi = notification["gcm.notification.type_push"] as? String
+            if (notifi?.containsIgnoringCase(find: "question"))!{
+                //                UserDefaults.standard.set(true, forKey: "newNotifi")
+                UserDefaults.standard.set(body, forKey: "bodyNotifi")
+                UserDefaults.standard.set(title, forKey: "titleNotifi")
+                UserDefaults.standard.set(true, forKey: "openNotification")
+                UserDefaults.standard.synchronize()
+            }
+        }
         return true
     }
     
@@ -88,6 +108,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+        NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
+        print("---УВЕДОМЛЕНИЕ---")
+        guard let notifi = userInfo["aps"] as? [String : AnyObject] else {
+            print("Error parsing")
+            return
+        }
+        var body = ""
+        var title = ""
+        //        var msgURL = ""
+        if let alert = notifi["alert"] as? String {
+            body = alert
+        } else if let alert = notifi["alert"] as? [String : String] {
+            body = alert["body"]!
+            title = alert["title"]!
+        }
+        if userInfo["gcm.notification.type_push"] as? String == "comment"{
+            print("---isCOMMENT---")
+        }
+        print("Body:", body, "Title:", title)
+        print(body, title)
+        
+        let notification = notifi["gcm.notification.type_push"] as? String
+        if (notification?.containsIgnoringCase(find: "question"))!{
+            //                UserDefaults.standard.set(true, forKey: "newNotifi")
+            UserDefaults.standard.set(body, forKey: "bodyNotifi")
+            UserDefaults.standard.set(title, forKey: "titleNotifi")
+            UserDefaults.standard.set(true, forKey: "openNotification")
+            UserDefaults.standard.synchronize()
+        }
+        //        if title.contains("поступил комментарий"){
+        //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTheTable"), object: nil)
+        //        }
+        if UIApplication.shared.applicationState == .active {
+            //TODO: Handle foreground notification
+        } else {
+            //TODO: Handle background notification
+        }
+    }
+    
     func applicationReceivedRemoteMessage(_ remoteMessage: MessagingRemoteMessage) {
         print(remoteMessage.appData)
     }
@@ -106,18 +166,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Messaging.messaging().delegate = self
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
-            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: {_, _ in })
+            //            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            //            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: {_, _ in })
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+                (granted, error) in
+                print("Permission granted: \(granted)")
+                guard granted else { return }
+                self.getNotificationSettings()
+            }
          } else {
             let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
     }
     
+    func getNotificationSettings() {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            print("Notification settings: \(settings)")
+            guard settings.authorizationStatus == .authorized else { return }
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
+    }
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-        print(token)
+        print("TOKEN: ", token)
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -141,6 +217,32 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = response.notification.request.content.userInfo
         NSLog("[UserNotificationCenter] applicationState: \(applicationStateString) didReceiveResponse: \(userInfo)")
         //TODO: Handle background notification
+        let aps = userInfo["aps"] as! [String:AnyObject]
+        var body: String = ""
+        var title: String = ""
+        if let alert = aps["alert"] as? String {
+            body = alert
+        } else if let alert = aps["alert"] as? [String : String] {
+            body = alert["body"]!
+            title = alert["title"]!
+        }
+        if userInfo["gcm.notification.type_push"] as? String == "announcement"{
+            if UIApplication.shared.applicationState == .active {
+                //TODO: Handle foreground notification
+                UserDefaults.standard.set(true, forKey: "newNotifi")
+                UserDefaults.standard.set(body, forKey: "bodyNotifi")
+                UserDefaults.standard.set(title, forKey: "titleNotifi")
+                UserDefaults.standard.synchronize()
+                let main: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let initialView: UIViewController = main.instantiateViewController(withIdentifier: "notifi") as UIViewController
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                self.window?.rootViewController = initialView
+                self.window?.makeKeyAndVisible()
+            } else {
+                //TODO: Handle background notification
+            }
+            print("---isNEWS---")
+        }
         completionHandler()
     }
 }
@@ -151,14 +253,44 @@ extension AppDelegate : MessagingDelegate {
     }
     
     // iOS9, called when presenting notification in foreground
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
-        print("---УВЕДОМЛЕНИЕ---")
-        if UIApplication.shared.applicationState == .active {
-            //TODO: Handle foreground notification
-        } else {
-            //TODO: Handle background notification
-        }
-    }
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+//        NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
+//        print("---УВЕДОМЛЕНИЕ---")
+//        guard let notifi = userInfo["aps"] as? [String : AnyObject] else {
+//            print("Error parsing")
+//            return
+//        }
+//        var body = ""
+//        var title = ""
+//        //        var msgURL = ""
+//        if let alert = notifi["alert"] as? String {
+//            body = alert
+//        } else if let alert = notifi["alert"] as? [String : String] {
+//            body = alert["body"]!
+//            title = alert["title"]!
+//        }
+//        if userInfo["gcm.notification.type_push"] as? String == "comment"{
+//            print("---isCOMMENT---")
+//        }
+//        print("Body:", body, "Title:", title)
+//        print(body, title)
+//
+//        let notification = notifi["gcm.notification.type_push"] as? String
+//        if (notification?.containsIgnoringCase(find: "question"))!{
+//            //                UserDefaults.standard.set(true, forKey: "newNotifi")
+//            UserDefaults.standard.set(body, forKey: "bodyNotifi")
+//            UserDefaults.standard.set(title, forKey: "titleNotifi")
+//            UserDefaults.standard.set(true, forKey: "openNotification")
+//            UserDefaults.standard.synchronize()
+//        }
+////        if title.contains("поступил комментарий"){
+////            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTheTable"), object: nil)
+////        }
+//        if UIApplication.shared.applicationState == .active {
+//            //TODO: Handle foreground notification
+//        } else {
+//            //TODO: Handle background notification
+//        }
+//    }
 }
 

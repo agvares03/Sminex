@@ -45,6 +45,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
     public var delegate: MainScreenDelegate?
     public var xml_: XML.Accessor?
     public var isFromMain: Bool = false
+    public var isFromNotifi_: Bool = false
     private var refreshControl: UIRefreshControl?
             var typeName = ""
             var reqId = ""
@@ -761,7 +762,13 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             if self.requestId_ != "" {
                 self.requestId_ = ""
                 self.xml_ = nil
-                vc.isFromMain_ = true
+                if isFromMain{
+                    vc.isFromMain_ = true
+                }
+                if isFromNotifi_{
+                    vc.isFromMain_ = false
+                    vc.isFromNotifi_ = true
+                }
             }
         
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
@@ -790,7 +797,13 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
             if self.requestId_ != "" {
                 self.requestId_ = ""
                 self.xml_ = nil
-                vc.isFromMain_ = true
+                if isFromMain{
+                    vc.isFromMain_ = true
+                }
+                if isFromNotifi_{
+                    vc.isFromMain_ = false
+                    vc.isFromNotifi_ = true
+                }
             }
         
         } else if segue.identifier == Segues.fromAppsUser.toRequestType {
@@ -993,6 +1006,7 @@ struct Request {
     let isPaid:                 String?
     let premises:               String?
     let soonPossible:           Bool
+    let webID:                  String?
     
     init(row: XML.Accessor) {
         isWait                  = row.attributes["isWait"]
@@ -1039,6 +1053,7 @@ struct Request {
         isProcessing            = row.attributes["IsProcessing"]
         onlyForConsultant       = row.attributes["onlyForConsultant"]
         name                    = row.attributes["name"]
+        webID                   = row.attributes["WEBID"]
         
         if (name?.contains("услуг"))! {
             

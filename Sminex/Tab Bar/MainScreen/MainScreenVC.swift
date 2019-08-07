@@ -42,6 +42,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var busines_center_CompanyService: Bool? = false
     private var busines_center_denyShowFine: Bool?
     @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
         if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
@@ -118,11 +119,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else {
             collection.addSubview(refreshControl!)
         }
-        
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent         = true
         navigationController?.navigationBar.backgroundColor       = .white
-        navigationController?.navigationBar.tintColor             = .white
+//        navigationController?.navigationBar.tintColor             = .white
         navigationController?.navigationBar.barTintColor          = .white
         navigationController?.navigationBar.layer.shadowColor     = UIColor.lightGray.cgColor
         navigationController?.navigationBar.layer.shadowOpacity   = 0.5
@@ -132,7 +132,26 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "notifi0")!
+        }
         updateUserInterface()
+        if UserDefaults.standard.bool(forKey: "openNotification"){
+            DispatchQueue.main.async {
+                UserDefaults.standard.set(false, forKey: "openNotification")
+                if self.activeQuestionCount == 1{
+                    UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
+                }else{
+                    UserDefaults.standard.set("У вас есть непройденные опросы", forKey: "titleNotifi")
+                }
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomNotifiAlertController") as! CustomNotifiAlert
+                vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+                self.addChildViewController(vc)
+                self.view.addSubview(vc.view)
+            }
+        }
     }
     
     func updateUserInterface() {
@@ -207,6 +226,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                          name: .flagsChanged,
                          object: Network.reachability)
         updateUserInterface()
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "notifi0")!
+        }
         if UserDefaults.standard.bool(forKey: "backBtn"){
             self.viewDidLoad()
             //            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
@@ -907,7 +931,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 guard data != nil else { return }
                 
-                //                print(String(data: data!, encoding: .utf8) ?? "")
+                print(String(data: data!, encoding: .utf8) ?? "")
+                
                 if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
                     self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
                     return
@@ -986,6 +1011,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                     
                     let descText = isPerson ? (persons == "" ? "Не указано" : persons) : row.text ?? ""
+                    var isRead = false
+                    if row.isReadedByClient == "0"{
+                        isRead = false
+                    }else{
+                        isRead = true
+                    }
                     if row.isPaid == "1"{
                         var name = row.name
                         if (row.name?.contains(find: "Заказ услуги: "))!{
@@ -1000,7 +1031,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: name ?? "") )
+                                                          id: row.id ?? "", isPaid: row.isPaid!, stickTitle: name ?? "", isReaded: isRead, webID: row.webID ?? "" ) )
                     }else{
                         returnArr.append( RequestCellData(title: row.name ?? "",
                                                           desc: (rowComms[row.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
@@ -1008,7 +1039,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                                           date: row.updateDate ?? "",
                                                           status: row.status ?? "",
                                                           isBack: isAnswered,
-                                                          id: row.id ?? "", isPaid: row.isPaid ?? "", stickTitle: descText ) )
+                                                          id: row.id ?? "", isPaid: row.isPaid ?? "", stickTitle: descText, isReaded: isRead, webID: row.webID ?? "" ) )
                     }
                 }
                 TemporaryHolder.instance.menuRequests = commentCount
@@ -1084,15 +1115,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                                 if array.contains($0.id!) {
                                     isAnsvered = true
                                 }
-                                
                                 if isAnsvered {
-                                    self.data[5]![count] = SurveyCellData(title: $0.name ?? "", question: "Вы начали опрос")
+                                    self.data[5]![count] = SurveyCellData(title: $0.name ?? "", question: "Вы начали опрос", dateStart: $0.dateStart ?? "", dateStop: $0.dateStop ?? "")
                                 } else {
-                                    self.data[5]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt)
+                                    self.data[5]![count] = SurveyCellData(title: $0.name ?? "", question: "\($0.questions?.count ?? 0)" + txt, dateStart: $0.dateStart ?? "", dateStop: $0.dateStop ?? "")
+                                    self.activeQuestionCount += 1
+                                    self.activeQuestion_ = $0
                                 }
                                 
                                 count += 1
                             }
+                            UserDefaults.standard.set(self.activeQuestionCount, forKey: "activeQuestion")
                         }
                     }
                     TemporaryHolder.instance.menuQuesions = filtered.count
@@ -1112,7 +1145,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }.resume()
         }
     }
-    
+    var activeQuestionCount = 0
+    var activeQuestion_: QuestionDataJson?
     private final func fetchDeals() {
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
@@ -1308,9 +1342,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         if i < 3 && item.isDraft == false{
                             //                            self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                             if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                if item.isImportant!{
+                                    self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
+                                }else{
+                                    self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                }
                             }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                if item.isImportant!{
+                                    self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
+                                }else{
+                                    self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                                }
                             }
                             i += 1
                         }
@@ -1397,9 +1439,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if i < 3 && item.isDraft == false{
                         //                            self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                         if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                            self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            if item.isImportant!{
+                                self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }else{
+                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }
                         }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                            self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            if item.isImportant!{
+                                self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }else{
+                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                            }
                         }
                         i += 1
                     }
@@ -1522,7 +1572,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.accountData_ = debt
             
         } else if segue.identifier == Segues.fromMainScreenVC.toFinancePayComm {
-            let vc = segue.destination as! FinancePayAcceptVC
+            let vc = segue.destination as! FinancePayAcceptVCComm
             vc.accountData_ = debt
             
         } else if segue.identifier == Segues.fromMainScreenVC.toNewsWAnim {
@@ -1665,6 +1715,7 @@ class SurveyCell: UICollectionViewCell {
     @IBOutlet weak var title:               UILabel!
     @IBOutlet private weak var questions:   UILabel!
     @IBOutlet private weak var divider:     UILabel!
+    @IBOutlet private weak var dateStart:   UILabel!
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
         delegate?.pressed(at: indexPath!)
@@ -1681,6 +1732,16 @@ class SurveyCell: UICollectionViewCell {
         title.text       = item.title
         questions.text   = item.question
         divider.isHidden = isLast
+        
+        if item.dateStart != ""{
+            dateStart.text = "Опрос проводится с \(item.dateStart)"
+            if item.dateStop != ""{
+                dateStart.text = "Опрос проводится с \(item.dateStart) по \(item.dateStop)"
+            }
+        }else{
+            dateStart.text = ""
+            dateStart.isHidden = true
+        }
     }
     
     class func fromNib() -> SurveyCell? {
@@ -1702,10 +1763,14 @@ private final class SurveyCellData: MainDataProtocol {
     
     let title:      String
     let question:   String
+    let dateStart:  String
+    let dateStop:   String
     
-    init(title: String, question: String) {
+    init(title: String, question: String, dateStart: String, dateStop: String) {
         self.title      = title
         self.question   = question
+        self.dateStart  = dateStart
+        self.dateStop   = dateStop
     }
 }
 
@@ -1915,6 +1980,11 @@ final class RequestCell: UICollectionViewCell {
     
     fileprivate func display(_ item: RequestCellData) {
         title.text  = item.title
+        if !item.isReaded{
+            title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .bold)
+        }else{
+            title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .regular)
+        }
         stickTitle?.text = item.stickTitle
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
@@ -1995,8 +2065,10 @@ final class RequestCellData: MainDataProtocol {
     let isBack: Bool
     let id:     String
     let isPaid: String
+    let isReaded: Bool
+    let webID:  String
     
-    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String, isPaid: String, stickTitle: String) {
+    init(title: String, desc: String, icon: UIImage, date: String, status: String, isBack: Bool, id: String, isPaid: String, stickTitle: String, isReaded: Bool, webID: String) {
         self.title  = title
         self.desc   = desc
         self.icon   = icon
@@ -2006,6 +2078,8 @@ final class RequestCellData: MainDataProtocol {
         self.id     = id
         self.isPaid = isPaid
         self.stickTitle = stickTitle
+        self.isReaded = isReaded
+        self.webID  =   webID
     }
 }
 

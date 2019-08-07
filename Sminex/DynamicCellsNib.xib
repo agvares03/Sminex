@@ -1479,87 +1479,6 @@
             </connections>
             <point key="canvasLocation" x="345" y="1735"/>
         </collectionViewCell>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SurveyCell" id="rZp-Qq-rgZ" customClass="SurveyCell" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="317" height="128"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="317" height="128"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pta-sK-xEB">
-                        <rect key="frame" x="24" y="8" width="277" height="20.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 вопросов" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="roI-zk-HQ0">
-                        <rect key="frame" x="24" y="33.5" width="252" height="20.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c1y-3H-TgP">
-                        <rect key="frame" x="24" y="80" width="277" height="43"/>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="43" id="N6U-iZ-bTQ"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                        <state key="normal" title="Пройти опрос">
-                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </state>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <real key="value" value="4"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="goButtonPressed:" destination="rZp-Qq-rgZ" eventType="touchUpInside" id="EIZ-Ys-BPh"/>
-                        </connections>
-                    </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d98-Mt-YGr">
-                        <rect key="frame" x="24" y="127" width="277" height="1"/>
-                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="9fC-rv-rcL"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </subviews>
-            </view>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-            <constraints>
-                <constraint firstAttribute="bottom" secondItem="d98-Mt-YGr" secondAttribute="bottom" id="1qu-16-J96"/>
-                <constraint firstAttribute="trailing" secondItem="pta-sK-xEB" secondAttribute="trailing" constant="16" id="4Rt-lP-KHx"/>
-                <constraint firstItem="roI-zk-HQ0" firstAttribute="top" secondItem="pta-sK-xEB" secondAttribute="bottom" constant="5" id="7YR-z8-Iq4"/>
-                <constraint firstItem="c1y-3H-TgP" firstAttribute="trailing" secondItem="pta-sK-xEB" secondAttribute="trailing" id="8CU-hS-AmY"/>
-                <constraint firstItem="c1y-3H-TgP" firstAttribute="top" relation="greaterThanOrEqual" secondItem="roI-zk-HQ0" secondAttribute="bottom" constant="10" id="BWU-R2-7C2"/>
-                <constraint firstItem="pta-sK-xEB" firstAttribute="top" secondItem="rZp-Qq-rgZ" secondAttribute="top" constant="8" id="EJm-hg-bAi"/>
-                <constraint firstItem="roI-zk-HQ0" firstAttribute="leading" secondItem="rZp-Qq-rgZ" secondAttribute="leadingMargin" constant="8" id="G0Y-av-plF"/>
-                <constraint firstItem="c1y-3H-TgP" firstAttribute="leading" secondItem="pta-sK-xEB" secondAttribute="leading" id="QPV-MZ-OJY"/>
-                <constraint firstAttribute="trailingMargin" secondItem="roI-zk-HQ0" secondAttribute="trailing" constant="25" id="bcj-pv-MY1"/>
-                <constraint firstItem="d98-Mt-YGr" firstAttribute="trailing" secondItem="c1y-3H-TgP" secondAttribute="trailing" id="dMt-14-BP2"/>
-                <constraint firstItem="pta-sK-xEB" firstAttribute="leading" secondItem="rZp-Qq-rgZ" secondAttribute="leadingMargin" constant="8" id="o0O-hH-Iud"/>
-                <constraint firstItem="c1y-3H-TgP" firstAttribute="bottom" secondItem="rZp-Qq-rgZ" secondAttribute="bottomMargin" constant="-5" id="poY-fE-YbA"/>
-                <constraint firstItem="d98-Mt-YGr" firstAttribute="leading" secondItem="c1y-3H-TgP" secondAttribute="leading" id="qXA-a4-XKv"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="KGr-zT-9Sd"/>
-            <size key="customSize" width="317" height="128"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
-                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                    <real key="value" value="0.0"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
-            <connections>
-                <outlet property="divider" destination="d98-Mt-YGr" id="I62-NX-Yv0"/>
-                <outlet property="questions" destination="roI-zk-HQ0" id="8v7-8n-kpR"/>
-                <outlet property="title" destination="pta-sK-xEB" id="uPe-0x-Kzp"/>
-            </connections>
-            <point key="canvasLocation" x="-85" y="-121"/>
-        </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ScetCell" id="OC8-KZ-3zV" customClass="SchetCell" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="317" height="144"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5081,6 +5000,95 @@
                 <outlet property="tarifWidth" destination="6ss-GV-pcw" id="bcv-Rl-Xll"/>
                 <outlet property="twoTarif" destination="nVk-bs-eFc" id="1RR-df-8dL"/>
                 <outlet property="twoTarifLbl" destination="l7n-bn-dTF" id="hKJ-jq-ShY"/>
+            </connections>
+        </collectionViewCell>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SurveyCell" id="pR7-zv-O34" customClass="SurveyCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="317" height="147"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="317" height="147"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9C1-vm-aUU">
+                        <rect key="frame" x="24" y="8" width="277" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 вопросов" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JNP-iz-sys">
+                        <rect key="frame" x="24" y="59" width="252" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dyM-6g-lqn">
+                        <rect key="frame" x="24" y="99" width="277" height="43"/>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="43" id="mva-1s-mjt"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <state key="normal" title="Перейти к опросу">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="4"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="goButtonPressed:" destination="pR7-zv-O34" eventType="touchUpInside" id="5Ui-TU-9xu"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cnV-XR-EzT">
+                        <rect key="frame" x="24" y="146" width="277" height="1"/>
+                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="PF0-be-2x6"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опрос проводится с" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPq-1j-0Rx">
+                        <rect key="frame" x="24" y="33.5" width="257" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="cnV-XR-EzT" secondAttribute="bottom" id="3CJ-wC-0vT"/>
+                <constraint firstItem="dyM-6g-lqn" firstAttribute="top" relation="greaterThanOrEqual" secondItem="JNP-iz-sys" secondAttribute="bottom" constant="10" id="3Zi-1p-43t"/>
+                <constraint firstItem="9C1-vm-aUU" firstAttribute="top" secondItem="pR7-zv-O34" secondAttribute="top" constant="8" id="9hN-fT-Gg0"/>
+                <constraint firstItem="dyM-6g-lqn" firstAttribute="trailing" secondItem="9C1-vm-aUU" secondAttribute="trailing" id="A6O-De-bEU"/>
+                <constraint firstItem="cnV-XR-EzT" firstAttribute="trailing" secondItem="dyM-6g-lqn" secondAttribute="trailing" id="Nyj-5t-bQR"/>
+                <constraint firstAttribute="trailingMargin" secondItem="rPq-1j-0Rx" secondAttribute="trailing" constant="20" id="Pzw-Vp-hfZ"/>
+                <constraint firstItem="9C1-vm-aUU" firstAttribute="leading" secondItem="pR7-zv-O34" secondAttribute="leadingMargin" constant="8" id="WJ2-g8-Ib3"/>
+                <constraint firstItem="dyM-6g-lqn" firstAttribute="leading" secondItem="9C1-vm-aUU" secondAttribute="leading" id="Z94-Kj-6nb"/>
+                <constraint firstItem="dyM-6g-lqn" firstAttribute="bottom" secondItem="pR7-zv-O34" secondAttribute="bottomMargin" constant="-5" id="gFR-AD-HPp"/>
+                <constraint firstItem="JNP-iz-sys" firstAttribute="leading" secondItem="pR7-zv-O34" secondAttribute="leadingMargin" constant="8" id="gKv-xX-H7f"/>
+                <constraint firstItem="rPq-1j-0Rx" firstAttribute="leading" secondItem="pR7-zv-O34" secondAttribute="leadingMargin" constant="8" id="hBP-ee-i99"/>
+                <constraint firstItem="rPq-1j-0Rx" firstAttribute="top" secondItem="9C1-vm-aUU" secondAttribute="bottom" constant="5" id="kpe-ai-jr0"/>
+                <constraint firstItem="cnV-XR-EzT" firstAttribute="leading" secondItem="dyM-6g-lqn" secondAttribute="leading" id="mgS-7G-J0r"/>
+                <constraint firstAttribute="trailingMargin" secondItem="JNP-iz-sys" secondAttribute="trailing" constant="25" id="q7X-QR-FAs"/>
+                <constraint firstAttribute="trailing" secondItem="9C1-vm-aUU" secondAttribute="trailing" constant="16" id="rJW-KT-3Md"/>
+                <constraint firstItem="JNP-iz-sys" firstAttribute="top" secondItem="rPq-1j-0Rx" secondAttribute="bottom" constant="5" id="ya9-vd-hfj"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="xjg-lM-fmy"/>
+            <size key="customSize" width="317" height="147"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="0.0"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="dateStart" destination="rPq-1j-0Rx" id="1rp-io-sas"/>
+                <outlet property="divider" destination="cnV-XR-EzT" id="pLa-hS-CY6"/>
+                <outlet property="questions" destination="JNP-iz-sys" id="joo-CA-jO9"/>
+                <outlet property="title" destination="9C1-vm-aUU" id="DOH-TP-zf0"/>
             </connections>
         </collectionViewCell>
     </objects>

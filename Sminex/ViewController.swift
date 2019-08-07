@@ -516,7 +516,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                         db.parse_Apps(login: self.LoginText, pass: self.edPass.text ?? "", isCons: "0")
                         
                         // УВЕДОМЛЕНИЯ
-//                        db.del_app(number: "Notifications")
+                        db.del_db(table_name: "Notifications")
                         db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                         self.performSegue(withIdentifier: Segues.fromViewController.toAppsUser, sender: self)
                     }
