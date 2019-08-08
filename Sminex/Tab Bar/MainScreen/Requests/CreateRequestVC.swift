@@ -17,7 +17,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var imageConst:      NSLayoutConstraint!
     @IBOutlet weak var commentConst: NSLayoutConstraint!
-    @IBOutlet private weak var sendBtnConst:    NSLayoutConstraint!
+    @IBOutlet private weak var transportConst:    NSLayoutConstraint!
     @IBOutlet weak var sendViewConst: NSLayoutConstraint!
     @IBOutlet weak var edConst: NSLayoutConstraint!
     @IBOutlet weak var FioConst: NSLayoutConstraint!
@@ -279,26 +279,27 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             let tap1 = UITapGestureRecognizer(target: self, action: #selector(expand))
             placeView.addGestureRecognizer(tap1)
         }
-        if  Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
-            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
-            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
-            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
-            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
-            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-            edConst.constant -= 22
-        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
-            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
-            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
-            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
-            edConst.constant -= 22
-        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
-            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
-            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
-            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            edConst.constant += 16
-        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
-            edConst.constant += 16
-        }
+//        if  Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
+//            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
+//            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
+//            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
+//            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
+//            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+//            edConst.constant -= 22
+//        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
+//            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
+//            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
+//            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
+//            edConst.constant -= 22
+//        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
+//            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
+//            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
+//            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
+//            edConst.constant += 16
+//        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
+//            edConst.constant += 16
+//        }
+        edConst.constant = 40
         sprtTopConst = pickerLine.frame.origin.y
         btnConstant = sendButton.frame.origin.y
         endAnimator()
@@ -344,7 +345,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             isTransport.constant = 8
             transportSwitch.isHidden = true
             transportTitle.isHidden = true
+            transportConst.constant = 0
         }else if !(defaults.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (defaults.bool(forKey: "denyIssuanceOfPassSingle")){
+            transportConst.constant = 51
             transportSwitch.isOn = true
             transportSwitch.isUserInteractionEnabled = false
             commentConst.constant   = 120
