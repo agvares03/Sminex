@@ -119,7 +119,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         print(data_.images)
         if data_.images.count > 0{
             data_.images.forEach{
-                comments_.append(AdmissionCommentCellData(image: UIImage(named: "account")!, title: "", comment: "", date: data_.date, commImg: $0, commImgUrl: nil, id: "-1"))
+                comments_.append(AdmissionCommentCellData(image: UIImage(named: "account")!, title: UserDefaults.standard.string(forKey: "name") ?? "", comment: "", date: data_.date, commImg: $0, commImgUrl: nil, id: "-1"))
             }
         }
 //        if data_.desc != ""{

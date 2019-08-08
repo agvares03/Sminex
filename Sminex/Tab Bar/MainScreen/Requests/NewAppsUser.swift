@@ -20,6 +20,28 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
+    var index = 0
+    @IBAction func SwipeRight(_ sender: UISwipeGestureRecognizer) {
+        if index > 0{
+            index -= 1
+            startAnimator()
+            collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
+            collectionHeader?.reloadData()
+            selType = index
+            dataWithType()
+        }
+    }
+    
+    @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
+        if index < dataType.count - 1{
+            index += 1
+            startAnimator()
+            collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
+            collectionHeader?.reloadData()
+            selType = index
+            dataWithType()
+        }
+    }
     
     @IBAction private func addRequestPressed(_ sender: UIButton?) {
         
@@ -251,8 +273,8 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             let dat = data
             data.removeAll()
             data = dat.filter(){ $0.title == dataType[selType].title || ($0.title == "Заявка на услугу" && dataType[selType].title == "Дополнительные услуги") }
-            stopAnimatior()
             collection?.reloadData()
+            stopAnimatior()
         }else{
             self.data.removeAll()
             if fullData.count > 20{
@@ -266,8 +288,8 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     //                        firstArr.removeFirst()
                 }
             }
-            stopAnimatior()
             collection?.reloadData()
+            stopAnimatior()
         }
         
     }
@@ -424,7 +446,6 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 #if DEBUG
                 print(String(data: data!, encoding: .utf8)!)
                 #endif
-                
                 let xml = XML.parse(data!)
                 self.parse(xml: xml)
                 group.leave()
@@ -884,19 +905,22 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     private func startAnimator() {
-        
-        activity?.isHidden       = false
-        createButton?.isHidden   = true
-        collectionHeader?.isHidden = true
-        activity?.startAnimating()
+        DispatchQueue.main.async{
+            self.activity?.isHidden       = false
+            self.createButton?.isHidden   = true
+            self.collectionHeader?.isHidden = true
+            self.activity?.startAnimating()
+        }
     }
     
     private func stopAnimatior() {
+        DispatchQueue.main.async{
+            self.activity?.stopAnimating()
+            self.collectionHeader?.isHidden = false
+            self.activity?.isHidden       = true
+            self.createButton?.isHidden   = false
+        }
         
-        activity?.stopAnimating()
-        collectionHeader?.isHidden = false
-        activity?.isHidden       = true
-        createButton?.isHidden   = false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -125,7 +125,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         }
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
-        
+        if data_.images.count > 0{
+            data_.images.forEach{
+                comments_.append(ServiceCommentCellData(icon: UIImage(named: "account")!, title: UserDefaults.standard.string(forKey: "name") ?? "", desc: "", date: data_.date, image: $0, imageUrl: nil, id: "-1"))
+            }
+        }
         arr = comments_
         arr.insert(data_, at: 0)
         
@@ -730,69 +734,69 @@ final class ServiceHeader: UICollectionViewCell {
                 noDateLbl.isHidden = true
             }
         }
-        if item.images.count == 0 {
+//        if item.images.count == 0 {
             imageConst.constant = 0
             scrollTop.constant  = 0
 //            scroll.isHidden = true
         
-        } else {
-            imageConst.constant = 150
-            scrollTop.constant  = 16
-//            scroll.isHidden = false
-        }
+//        } else {
+//            imageConst.constant = 150
+//            scrollTop.constant  = 16
+////            scroll.isHidden = false
+//        }
         
-        if item.imgsString.count == 0 {
-            
-            var x = 0.0
-            item.images.forEach {
-                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
-                image.image = $0
-                x += 165.0
-                let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
-                image.isUserInteractionEnabled = true
-                image.addGestureRecognizer(tap)
-                scroll.addSubview(image)
-            }
-            scroll.contentSize = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
-        
-        } else {
-            
-            imageLoader.isHidden = false
-            imageLoader.startAnimating()
-            
-            var rowImgs: [UIImage] = []
-            
-            DispatchQueue.global(qos: .userInitiated).async {
-                
-                item.imgsString.forEach { img in
-                    
-                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
-                    request.httpMethod = "GET"
-                    
-                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
-                    
-                    if data != nil {
-                        rowImgs.append(UIImage(data: data!)!)
-                    }
-                }
-                
-                DispatchQueue.main.async {
-                    var x = 0.0
-                    rowImgs.forEach {
-                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
-                        image.image = $0
-                        x += 165.0
-                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
-                        image.isUserInteractionEnabled = true
-                        image.addGestureRecognizer(tap)
-                        self.scroll.addSubview(image)
-                    }
-                    self.scroll.contentSize = CGSize(width: CGFloat(x), height: self.scroll.frame.size.height)
-                    self.imageLoader.isHidden = true
-                    self.imageLoader.stopAnimating()
-                }
-            }
-        }
+//        if item.imgsString.count == 0 {
+//
+//            var x = 0.0
+//            item.images.forEach {
+//                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
+//                image.image = $0
+//                x += 165.0
+//                let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
+//                image.isUserInteractionEnabled = true
+//                image.addGestureRecognizer(tap)
+//                scroll.addSubview(image)
+//            }
+//            scroll.contentSize = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
+//
+//        } else {
+//
+//            imageLoader.isHidden = false
+//            imageLoader.startAnimating()
+//
+//            var rowImgs: [UIImage] = []
+//
+//            DispatchQueue.global(qos: .userInitiated).async {
+//
+//                item.imgsString.forEach { img in
+//
+//                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
+//                    request.httpMethod = "GET"
+//
+//                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+//
+//                    if data != nil {
+//                        rowImgs.append(UIImage(data: data!)!)
+//                    }
+//                }
+//
+//                DispatchQueue.main.async {
+//                    var x = 0.0
+//                    rowImgs.forEach {
+//                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
+//                        image.image = $0
+//                        x += 165.0
+//                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
+//                        image.isUserInteractionEnabled = true
+//                        image.addGestureRecognizer(tap)
+//                        self.scroll.addSubview(image)
+//                    }
+//                    self.scroll.contentSize = CGSize(width: CGFloat(x), height: self.scroll.frame.size.height)
+//                    self.imageLoader.isHidden = true
+//                    self.imageLoader.stopAnimating()
+//                }
+//            }
+//        }
     }
     
     @objc func imagePressed(_ sender: UITapGestureRecognizer) {
