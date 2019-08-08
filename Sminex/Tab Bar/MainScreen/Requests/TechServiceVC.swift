@@ -382,7 +382,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 return cell
             }else{
                 var showDate = true
@@ -401,7 +401,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 return cell
             }
         }
@@ -447,7 +447,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! ServiceCommentCellData
                 if ar.desc == "Прикреплено фото" || ar.desc == "Добавлен файл"{
@@ -471,7 +471,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! ServiceCommentCellData
                 if ar.desc == "Прикреплено фото" || ar.desc == "Добавлен файл"{
@@ -848,6 +848,7 @@ final class ServiceCommentUserCell: UICollectionViewCell {
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
+    @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var desc:     UILabel!
     @IBOutlet private weak var date:        UILabel!
@@ -855,7 +856,7 @@ final class ServiceCommentUserCell: UICollectionViewCell {
     
     private var delegate: TechServiceCellsProtocol?
     
-    fileprivate func display(_ item: ServiceCommentCellData, delegate: TechServiceCellsProtocol, showDate: Bool) {
+    fileprivate func display(_ item: ServiceCommentCellData, delegate: TechServiceCellsProtocol, showDate: Bool, delegate2: UIViewController) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -931,6 +932,17 @@ final class ServiceCommentUserCell: UICollectionViewCell {
                 }
             }
         }
+        commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 140)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     @objc private func imagePressed(_ sender: UITapGestureRecognizer) {
@@ -958,6 +970,7 @@ final class ServiceCommentConstCell: UICollectionViewCell {
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
+    @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var desc:        UILabel!
@@ -966,7 +979,7 @@ final class ServiceCommentConstCell: UICollectionViewCell {
     
     private var delegate: TechServiceCellsProtocol?
     
-    fileprivate func display(_ item: ServiceCommentCellData, delegate: TechServiceCellsProtocol, showDate: Bool) {
+    fileprivate func display(_ item: ServiceCommentCellData, delegate: TechServiceCellsProtocol, showDate: Bool, delegate2: UIViewController) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -1043,6 +1056,17 @@ final class ServiceCommentConstCell: UICollectionViewCell {
                 }
             }
         }
+        commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 140)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     @objc private func imagePressed(_ sender: UITapGestureRecognizer) {

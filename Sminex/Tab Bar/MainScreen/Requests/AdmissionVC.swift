@@ -16,7 +16,7 @@ private protocol AdmissionCellsProtocol: class {
     func imageTapped(_ sender: UITapGestureRecognizer)
 }
 
-final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AdmissionCellsProtocol {
+final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AdmissionCellsProtocol{
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var collection:      UICollectionView!
@@ -284,7 +284,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AdmissionCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
@@ -308,7 +308,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AdmissionCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
@@ -363,7 +363,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 return cell
             }else{
                 var showDate = true
@@ -382,7 +382,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! AdmissionCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 return cell
             }
         }
@@ -855,8 +855,9 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
     @IBOutlet private weak var imgsLoader:  UIActivityIndicatorView!
     @IBOutlet private      var imgsConst:   NSLayoutConstraint!
     @IBOutlet private      var commConst:   NSLayoutConstraint!
-    @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
-    @IBOutlet private      var comm2Const:   NSLayoutConstraint!
+    @IBOutlet private      var imgs2Const:  NSLayoutConstraint!
+    @IBOutlet private      var comm2Const:  NSLayoutConstraint!
+    @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var comment: 	UILabel!
@@ -865,8 +866,7 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
     
     private var delegate: AdmissionCellsProtocol?
     
-    fileprivate func display(_ item: AdmissionCommentCellData, delegate: AdmissionCellsProtocol, showDate: Bool) {
-        
+    fileprivate func display(_ item: AdmissionCommentCellData, delegate: AdmissionCellsProtocol, showDate: Bool, delegate2: UIViewController) {
         self.delegate = delegate
         imgsLoader.isHidden = true
         imgsLoader.stopAnimating()
@@ -938,6 +938,17 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
                 }
             }
         }
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
@@ -964,6 +975,7 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
     @IBOutlet private      var commConst:   NSLayoutConstraint!
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
+    @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var title:       UILabel!
@@ -973,7 +985,7 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
     
     private var delegate: AdmissionCellsProtocol?
     
-    fileprivate func display(_ item: AdmissionCommentCellData, delegate: AdmissionCellsProtocol, showDate: Bool) {
+    fileprivate func display(_ item: AdmissionCommentCellData, delegate: AdmissionCellsProtocol, showDate: Bool, delegate2: UIViewController) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -999,7 +1011,7 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
         
         title.text      = item.title
         comment.text    = item.comment
-        
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         let dat = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")
@@ -1050,6 +1062,16 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
                 }
             }
         }
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {

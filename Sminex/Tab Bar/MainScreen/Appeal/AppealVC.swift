@@ -251,7 +251,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AppealCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
@@ -275,7 +275,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                cell?.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AppealCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
@@ -330,7 +330,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 return cell
             }else{
                 var showDate = true
@@ -349,7 +349,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
                     commDate = dateFormatter.date(from: arr1.date) ?? Date()
                     showDate = true
                 }
-                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate)
+                cell.display((arr[indexPath.row] as! AppealCommentCellData), delegate: self, showDate: showDate, delegate2: self)
                 return cell
             }
         }
@@ -679,6 +679,7 @@ final class AppealCommentUserCell: UICollectionViewCell {
     @IBOutlet private      var commConst:   NSLayoutConstraint!
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
+    @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var comment:     UILabel!
@@ -687,7 +688,7 @@ final class AppealCommentUserCell: UICollectionViewCell {
     
     private var delegate: AppealCellsProtocol?
     
-    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool) {
+    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool, delegate2: UIViewController) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -760,6 +761,17 @@ final class AppealCommentUserCell: UICollectionViewCell {
                 }
             }
         }
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
@@ -787,6 +799,7 @@ final class AppealCommentConstCell: UICollectionViewCell {
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
+    @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var comment:     UILabel!
@@ -795,7 +808,7 @@ final class AppealCommentConstCell: UICollectionViewCell {
     
     private var delegate: AppealCellsProtocol?
     
-    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool) {
+    fileprivate func display(_ item: AppealCommentCellData, delegate: AppealCellsProtocol, showDate: Bool, delegate2: UIViewController) {
         
         self.delegate = delegate
         imgsLoader.isHidden = true
@@ -872,6 +885,17 @@ final class AppealCommentConstCell: UICollectionViewCell {
                 }
             }
         }
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {

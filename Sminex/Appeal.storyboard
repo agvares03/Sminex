@@ -271,10 +271,13 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IPB-L3-PX7">
-                                                    <rect key="frame" x="127.5" y="40" width="187.5" height="137"/>
+                                                    <rect key="frame" x="117.5" y="40" width="197.5" height="137"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста другой номер. По указанному не берет трубку" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WYP-6d-sZ2">
-                                                            <rect key="frame" x="10" y="5" width="167.5" height="106"/>
+                                                            <rect key="frame" x="15" y="5" width="167.5" height="106"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="106" id="NQz-J9-qJy"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -287,7 +290,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="22:31" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YhK-7G-1F9">
-                                                            <rect key="frame" x="0.0" y="116" width="184" height="17"/>
+                                                            <rect key="frame" x="0.0" y="116" width="187.5" height="17"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="17" id="MYy-Au-50C"/>
                                                             </constraints>
@@ -306,18 +309,18 @@
                                                         <constraint firstItem="WYP-6d-sZ2" firstAttribute="top" secondItem="IPB-L3-PX7" secondAttribute="top" constant="5" id="G2v-k9-szG"/>
                                                         <constraint firstItem="YhK-7G-1F9" firstAttribute="top" secondItem="WYP-6d-sZ2" secondAttribute="bottom" constant="5" id="GZS-UB-a9H"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="i0o-7y-7Mn" secondAttribute="trailing" constant="10" id="JTY-Mh-RqD"/>
-                                                        <constraint firstItem="WYP-6d-sZ2" firstAttribute="leading" secondItem="IPB-L3-PX7" secondAttribute="leading" constant="10" id="KEc-G4-QYa"/>
+                                                        <constraint firstItem="WYP-6d-sZ2" firstAttribute="leading" secondItem="IPB-L3-PX7" secondAttribute="leading" constant="15" id="KEc-G4-QYa"/>
                                                         <constraint firstItem="i0o-7y-7Mn" firstAttribute="top" secondItem="IPB-L3-PX7" secondAttribute="top" constant="5" id="SOb-Ni-6zc"/>
                                                         <constraint firstAttribute="bottom" secondItem="YhK-7G-1F9" secondAttribute="bottom" constant="4" id="UI6-nY-su7"/>
-                                                        <constraint firstAttribute="trailing" secondItem="WYP-6d-sZ2" secondAttribute="trailing" constant="10" id="cmL-ok-81f"/>
+                                                        <constraint firstAttribute="trailing" secondItem="WYP-6d-sZ2" secondAttribute="trailing" constant="15" id="cmL-ok-81f"/>
                                                         <constraint firstItem="76V-PS-PyR" firstAttribute="centerX" secondItem="i0o-7y-7Mn" secondAttribute="centerX" id="jGF-gM-nAg"/>
-                                                        <constraint firstAttribute="trailing" secondItem="YhK-7G-1F9" secondAttribute="trailing" constant="3.5" id="vMg-pP-1uG"/>
+                                                        <constraint firstAttribute="trailing" secondItem="YhK-7G-1F9" secondAttribute="trailing" constant="10" id="vMg-pP-1uG"/>
                                                         <constraint firstItem="YhK-7G-1F9" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i0o-7y-7Mn" secondAttribute="bottom" constant="8" id="wFT-H0-lup"/>
                                                         <constraint firstItem="i0o-7y-7Mn" firstAttribute="leading" secondItem="IPB-L3-PX7" secondAttribute="leading" constant="10" id="zxT-vj-0ca"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="9"/>
+                                                            <real key="value" value="20"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
@@ -336,6 +339,7 @@
                                             <outlet property="comImg" destination="i0o-7y-7Mn" id="X8D-B9-aX2"/>
                                             <outlet property="comm2Const" destination="JTY-Mh-RqD" id="Gih-Da-Yef"/>
                                             <outlet property="commConst" destination="wFT-H0-lup" id="XPD-AR-ns4"/>
+                                            <outlet property="commHeight" destination="NQz-J9-qJy" id="LqV-24-boy"/>
                                             <outlet property="comment" destination="WYP-6d-sZ2" id="CZn-IU-Oyt"/>
                                             <outlet property="date" destination="va4-A0-heS" id="Ltk-wX-Swn"/>
                                             <outlet property="heightDate" destination="9gs-Cu-R4c" id="fH5-eX-2p9"/>
@@ -377,10 +381,13 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KdL-Gf-RVt">
-                                                    <rect key="frame" x="5" y="40" width="187.5" height="112"/>
+                                                    <rect key="frame" x="5" y="40" width="197.5" height="112"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста другой номер. По указанному не берет трубку" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YGl-Pi-nNx">
-                                                            <rect key="frame" x="10" y="26" width="167.5" height="60"/>
+                                                            <rect key="frame" x="15" y="26" width="167.5" height="60"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="60" id="te6-fw-3Io"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -393,7 +400,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="22:31" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l8Q-nT-AEh">
-                                                            <rect key="frame" x="0.0" y="91" width="184" height="17"/>
+                                                            <rect key="frame" x="0.0" y="91" width="187.5" height="17"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="17" id="LcE-Gn-OhU"/>
                                                             </constraints>
@@ -405,7 +412,7 @@
                                                             <rect key="frame" x="25" y="41" width="20" height="20"/>
                                                         </activityIndicatorView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Работник Sminex" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tUF-zJ-ho9">
-                                                            <rect key="frame" x="5" y="5" width="177.5" height="16"/>
+                                                            <rect key="frame" x="15" y="5" width="177.5" height="16"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="16" id="H3E-yc-RJn"/>
                                                             </constraints>
@@ -417,25 +424,25 @@
                                                     <color key="backgroundColor" red="0.88072480119999996" green="0.88700448870000004" blue="0.90584355090000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstItem="Sgm-Ze-c3j" firstAttribute="centerY" secondItem="Av9-fX-qpJ" secondAttribute="centerY" id="6QJ-oY-Hs2"/>
-                                                        <constraint firstAttribute="trailing" secondItem="l8Q-nT-AEh" secondAttribute="trailing" constant="3.5" id="Awt-Lg-yDM"/>
+                                                        <constraint firstAttribute="trailing" secondItem="l8Q-nT-AEh" secondAttribute="trailing" constant="10" id="Awt-Lg-yDM"/>
                                                         <constraint firstItem="YGl-Pi-nNx" firstAttribute="top" secondItem="tUF-zJ-ho9" secondAttribute="bottom" constant="5" id="Dy6-dl-Bdw"/>
-                                                        <constraint firstItem="YGl-Pi-nNx" firstAttribute="leading" secondItem="KdL-Gf-RVt" secondAttribute="leading" constant="10" id="MOx-eW-xz7"/>
+                                                        <constraint firstItem="YGl-Pi-nNx" firstAttribute="leading" secondItem="KdL-Gf-RVt" secondAttribute="leading" constant="15" id="MOx-eW-xz7"/>
                                                         <constraint firstItem="tUF-zJ-ho9" firstAttribute="top" secondItem="KdL-Gf-RVt" secondAttribute="top" constant="5" id="RJc-yr-FyC"/>
                                                         <constraint firstItem="l8Q-nT-AEh" firstAttribute="top" secondItem="YGl-Pi-nNx" secondAttribute="bottom" constant="5" id="RWw-CC-T8F"/>
                                                         <constraint firstItem="l8Q-nT-AEh" firstAttribute="leading" secondItem="KdL-Gf-RVt" secondAttribute="leading" id="Rp9-Rh-FF4"/>
                                                         <constraint firstAttribute="trailing" secondItem="tUF-zJ-ho9" secondAttribute="trailing" constant="5" id="TBI-cL-aWb"/>
-                                                        <constraint firstItem="tUF-zJ-ho9" firstAttribute="leading" secondItem="KdL-Gf-RVt" secondAttribute="leading" constant="5" id="TMc-7e-m4C"/>
+                                                        <constraint firstItem="tUF-zJ-ho9" firstAttribute="leading" secondItem="KdL-Gf-RVt" secondAttribute="leading" constant="15" id="TMc-7e-m4C"/>
                                                         <constraint firstAttribute="bottom" secondItem="l8Q-nT-AEh" secondAttribute="bottom" constant="4" id="ViJ-3D-LYh"/>
                                                         <constraint firstItem="Sgm-Ze-c3j" firstAttribute="centerX" secondItem="Av9-fX-qpJ" secondAttribute="centerX" id="ecp-Kd-VVA"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Av9-fX-qpJ" secondAttribute="trailing" constant="10" id="n1S-6p-okY"/>
                                                         <constraint firstItem="l8Q-nT-AEh" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Av9-fX-qpJ" secondAttribute="bottom" constant="8" id="nlf-oh-Ky6"/>
                                                         <constraint firstItem="Av9-fX-qpJ" firstAttribute="leading" secondItem="KdL-Gf-RVt" secondAttribute="leading" constant="10" id="tH1-Zz-3gA"/>
-                                                        <constraint firstAttribute="trailing" secondItem="YGl-Pi-nNx" secondAttribute="trailing" constant="10" id="vde-d7-2WI"/>
+                                                        <constraint firstAttribute="trailing" secondItem="YGl-Pi-nNx" secondAttribute="trailing" constant="15" id="vde-d7-2WI"/>
                                                         <constraint firstItem="Av9-fX-qpJ" firstAttribute="top" secondItem="tUF-zJ-ho9" secondAttribute="bottom" constant="5" id="vzQ-2k-hFA"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="9"/>
+                                                            <real key="value" value="20"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
@@ -454,6 +461,7 @@
                                             <outlet property="comImg" destination="Av9-fX-qpJ" id="qO3-l7-2FK"/>
                                             <outlet property="comm2Const" destination="n1S-6p-okY" id="iA1-sm-cmF"/>
                                             <outlet property="commConst" destination="nlf-oh-Ky6" id="stl-Xp-AtM"/>
+                                            <outlet property="commHeight" destination="te6-fw-3Io" id="2Ex-G3-lSO"/>
                                             <outlet property="comment" destination="YGl-Pi-nNx" id="5Dv-Lw-Ywh"/>
                                             <outlet property="date" destination="T4m-ax-tty" id="PVZ-CZ-dqK"/>
                                             <outlet property="heightDate" destination="fM2-A8-NtK" id="Pp8-Xq-KYz"/>
