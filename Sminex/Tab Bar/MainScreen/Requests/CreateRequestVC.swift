@@ -305,10 +305,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMMM HH:mm"
-        dateField.setTitle(dateFormatter.string(from: Date()), for: .normal)
-        
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
@@ -368,8 +364,20 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
         edFio.textColor = UIColor.lightGray
         edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
-        picker.minimumDate = Date()
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM HH:mm"
+        let calendar = Calendar.current
+        let day = calendar.component(.day, from: Date())
+        let month = calendar.component(.month, from: Date())
+        let year = calendar.component(.year, from: Date())
+        let hour = calendar.component(.hour, from: Date()) + 1
+        let minute = calendar.component(.minute, from: Date())
+        let second = calendar.component(.second, from: Date())
+        let components = DateComponents(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+        let date = calendar.date(from: components)
+        dateField.setTitle(dateFormatter.string(from: date!), for: .normal)
+        picker.minimumDate = date!
         let tap_phone = UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:)))
         img_phone_service.isUserInteractionEnabled   = true
         img_phone_service.addGestureRecognizer(tap_phone)
