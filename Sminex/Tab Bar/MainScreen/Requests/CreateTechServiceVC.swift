@@ -287,8 +287,17 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMMM HH:mm"
-        dateBtn.setTitle(dateFormatter.string(from: Date()), for: .normal)
-        
+        let calendar = Calendar.current
+        let day = calendar.component(.day, from: Date())
+        let month = calendar.component(.month, from: Date())
+        let year = calendar.component(.year, from: Date())
+        let hour = calendar.component(.hour, from: Date()) + 1
+        let minute = calendar.component(.minute, from: Date())
+        let second = calendar.component(.second, from: Date())
+        let components = DateComponents(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+        let date = calendar.date(from: components)
+        dateBtn.setTitle(dateFormatter.string(from: date!), for: .normal)
+        picker.minimumDate = date!
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
