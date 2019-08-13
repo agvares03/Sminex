@@ -101,12 +101,22 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         viewTapped(nil)
         if (edFio.text == "" || edFio.text == "ФИО гостей") && edContact.text == ""{
-            if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == UIColor.lightGray{
+            if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == UIColor.lightGray && markAuto.textColor == UIColor.lightGray{
+                let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО, Контактный номер, Марка автомобиля и Госномер", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == UIColor.lightGray{
                 let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО, Контактный номер и Госномер", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
-            }else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor != UIColor.lightGray{
+            }else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && markAuto.textColor == UIColor.lightGray{
+                let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО, Контактный номер и Госномер", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor != UIColor.lightGray && markAuto.textColor != UIColor.lightGray{
                 let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО и Контактный номер", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
                 alert.addAction(cancelAction)
@@ -127,6 +137,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
+        } else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == UIColor.lightGray && markAuto.textColor == UIColor.lightGray{
+            let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: Госномер и Марка автомобиля", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+            //        }else if picker.date < Date(){
+            //            let alert = UIAlertController(title: "Ошибка!", message: "Дата пропуска должна быть не меньше текущей", preferredStyle: .alert)
+            //            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            //            alert.addAction(cancelAction)
+            //            self.present(alert, animated: true, completion: nil)
         } else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == UIColor.lightGray{
             let alert = UIAlertController(title: "Ошибка!", message: "Заполните поле: Госномер", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
@@ -137,6 +157,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
 //            alert.addAction(cancelAction)
 //            self.present(alert, animated: true, completion: nil)
+        } else if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && markAuto.textColor == UIColor.lightGray{
+            let alert = UIAlertController(title: "Ошибка!", message: "Заполните поле: Марка автомобиля", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+            //        }else if picker.date < Date(){
+            //            let alert = UIAlertController(title: "Ошибка!", message: "Дата пропуска должна быть не меньше текущей", preferredStyle: .alert)
+            //            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+            //            alert.addAction(cancelAction)
+            //            self.present(alert, animated: true, completion: nil)
         }else{
             if picker.date < Date(){
                 picker.date = Date()

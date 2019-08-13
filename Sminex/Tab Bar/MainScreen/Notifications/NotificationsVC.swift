@@ -21,6 +21,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     private var appsUser: NewAppsUser?
     private var dataService: [ServicesUKJson] = []
     private var mainScreenXml:  XML.Accessor?
@@ -31,19 +32,36 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.stopAnimation()
         updateUserInterface()
         let _ = getRequests()
         tableView.delegate = self
         tableView.dataSource = self
-        
-        fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
+        fetchedResultsController = funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
         do {
             try fetchedResultsController?.performFetch()
         } catch {
             print(error)
         }
+        self.getServices()
+    }
+    
+    func funcFetchedResultsController(entityName: String, keysForSort: [String], predicateFormat: String? = nil) -> NSFetchedResultsController<Counters> {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         
+        var sortDescriptors = [NSSortDescriptor]()
+        for key in keysForSort {
+            let sortDescriptor = NSSortDescriptor(key: key, ascending: false)
+            sortDescriptors.append(sortDescriptor)
+        }
+        fetchRequest.sortDescriptors = sortDescriptors
+        
+        if predicateFormat != nil {
+            fetchRequest.predicate = NSPredicate(format: predicateFormat!)
+        }
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.instance.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        return fetchedResultsController as! NSFetchedResultsController<Counters>
     }
     
     func updateUserInterface() {
@@ -91,6 +109,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     var select = IndexPath()
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         select = indexPath
+        self.startAnimation()
         let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
         if !push.isReaded{
             readNotifi()
@@ -109,6 +128,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             DispatchQueue.global(qos: .userInitiated).async {
                 self.appsUser?.prepareGroup?.wait()
                 DispatchQueue.main.async {
+                    self.stopAnimation()
                     if self.appsUser?.admission != nil {
                         self.performSegue(withIdentifier: "goAdmission", sender: self)
                     } else if self.appsUser?.techService != nil {
@@ -132,6 +152,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             DispatchQueue.global(qos: .userInitiated).async {
                 self.appsUser?.prepareGroup?.wait()
                 DispatchQueue.main.async {
+                    self.stopAnimation()
                     if self.appsUser?.admission != nil {
                         self.performSegue(withIdentifier: "goAdmission", sender: self)
                         
@@ -145,11 +166,18 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         } else if (push.type! == "NEWS") {
             fetchNews()
         } else if (push.type! == "QUESTION") {
-            self.performSegue(withIdentifier: "goQuestion", sender: self)
+            DispatchQueue.main.async {
+                self.stopAnimation()
+                self.performSegue(withIdentifier: "goQuestion", sender: self)
+            }
+            
         } else if (push.type! == "DEBT") {
             fetchDebt()
         } else if (push.type! == "METER_VALUE") {
-            self.performSegue(withIdentifier: "goCounter", sender: self)
+            DispatchQueue.main.async {
+                self.stopAnimation()
+                self.performSegue(withIdentifier: "goCounter", sender: self)
+            }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -177,7 +205,8 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             if appsUser?.requestId_ != "" {
                 appsUser?.requestId_ = ""
                 appsUser?.xml_ = nil
-                vc.isFromMain_ = true
+                vc.isFromMain_ = false
+                vc.isFromNotifi_ = true
             }
             
         } else if segue.identifier == "goServiceUK"{
@@ -189,7 +218,8 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             if appsUser?.requestId_ != "" {
                 appsUser?.requestId_ = ""
                 appsUser?.xml_ = nil
-                vc.isFromMain_ = true
+                vc.isFromMain_ = false
+                vc.isFromNotifi_ = true
             }
         } else if segue.identifier == "goTechService" {
             
@@ -201,7 +231,8 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             if appsUser?.requestId_ != "" {
                 appsUser?.requestId_ = ""
                 appsUser?.xml_ = nil
-                vc.isFromMain_ = true
+                vc.isFromMain_ = false
+                vc.isFromNotifi_ = true
             }
             
         }
@@ -240,7 +271,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
+        fetchedResultsController = funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
         do {
             try fetchedResultsController?.performFetch()
         } catch {
@@ -294,6 +325,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 self.debt = AccountDebtData(json: json!)?.data!
             }
             DispatchQueue.main.async {
+                self.stopAnimation()
                 if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                     self.performSegue(withIdentifier: "goFinanceComm", sender: self)
                 }else{
@@ -338,6 +370,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     }
                 }
                 DispatchQueue.main.async {
+                    self.stopAnimation()
                     self.performSegue(withIdentifier: "goNews", sender: self)
                 }
                 return
@@ -370,6 +403,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 //                print(String(data: data!, encoding: .utf8) ?? "")
                 
                 if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
+                    self.stopAnimation()
                     self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
                     return
                 }
@@ -378,5 +412,42 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             }.resume()
         }
         return returnArr
+    }
+    
+    private func getServices() {
+        let login = UserDefaults.standard.string(forKey: "login") ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else {
+                let alert = UIAlertController(title: "Ошибка серевера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            
+            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                self.dataService = ServicesUKDataJson(json: json!)?.data ?? []
+            }
+            
+            #if DEBUG
+            //            print(String(data: data!, encoding: .utf8) ?? "")
+            #endif
+            }.resume()
+    }
+    
+    private func startAnimation() {
+        indicator.isHidden = false
+        indicator.startAnimating()
+    }
+    
+    private func stopAnimation() {
+        indicator.isHidden = true
+        indicator.stopAnimating()
     }
 }
