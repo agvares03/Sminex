@@ -529,12 +529,11 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
         } else if segue.identifier == Segues.fromFinanceVC.toCalcs {
             let vc = segue.destination as! FinanceCalcVCComm
             let date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
-            print(calcs.filter {
-                return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
-            })
+            vc.dataDebt = receipts
             vc.index = index
             vc.date = date
-            vc.calcs = filteredCalcs
+            vc.filteredCalcs = filteredCalcs
+            vc.calcs = calcs
             vc.data_ = calcs.filter {
                 return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }

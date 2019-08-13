@@ -84,6 +84,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                     self.descTxt.textColor = .red
 
                 } else {
+                    UserDefaults.standard.set(self.passTextField.text ?? "", forKey: "pwd")
                     self.makeAuth()
                 }
             }

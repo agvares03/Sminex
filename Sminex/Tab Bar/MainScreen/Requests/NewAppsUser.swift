@@ -259,23 +259,26 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     func dataWithType(){
         if selType != 0{
             self.data.removeAll()
-            if fullData.count > 40{
-                for i in 0...39{
-                    self.data.append(fullData[i])
-                    //                        firstArr.removeFirst()
-                }
-            }else{
-                for i in 0...fullData.count - 1{
-                    self.data.append(fullData[i])
-                    //                        firstArr.removeFirst()
-                }
-            }
-            let dat = data
+//            if fullData.count > 40{
+//                for i in 0...39{
+//                    self.data.append(fullData[i])
+//                    //                        firstArr.removeFirst()
+//                }
+//            }else{
+//                for i in 0...fullData.count - 1{
+//                    self.data.append(fullData[i])
+//                    //                        firstArr.removeFirst()
+//                }
+//            }
+            let dat = fullData
             data.removeAll()
             data = dat.filter(){ $0.title == dataType[selType].title || ($0.title == "Заявка на услугу" && dataType[selType].title == "Дополнительные услуги") }
             collection?.reloadData()
             stopAnimatior()
         }else{
+            offset = 19
+            fullCount = 0
+            reachedEndOfItems = false
             self.data.removeAll()
             if fullData.count > 20{
                 for i in 0...19{
@@ -303,7 +306,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     var reachedEndOfItems = false
 
     func loadMore() {
-        
+        print(fullCount)
         // don't bother doing another db query if already have everything
         guard !self.reachedEndOfItems else {
             return
@@ -908,7 +911,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
         DispatchQueue.main.async{
             self.activity?.isHidden       = false
             self.createButton?.isHidden   = true
-            self.collectionHeader?.isHidden = true
+//            self.collectionHeader?.isHidden = true
             self.activity?.startAnimating()
         }
     }
@@ -916,7 +919,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     private func stopAnimatior() {
         DispatchQueue.main.async{
             self.activity?.stopAnimating()
-            self.collectionHeader?.isHidden = false
+//            self.collectionHeader?.isHidden = false
             self.activity?.isHidden       = true
             self.createButton?.isHidden   = false
         }

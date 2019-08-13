@@ -97,11 +97,11 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
-            return 4
-        }else{
+//        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
+//            return 4
+//        }else{
             return 3
-        }
+//        }
     }
     
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
@@ -530,6 +530,11 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
         } else if segue.identifier == Segues.fromFinanceVC.toCalcs {
             let vc = segue.destination as! FinanceCalcVC
             let date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
+            vc.dataDebt = receipts
+            vc.index = index
+            vc.date = date
+            vc.filteredCalcs = filteredCalcs
+            vc.calcs = calcs
             vc.data_ = calcs.filter {
                 return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }

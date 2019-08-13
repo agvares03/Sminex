@@ -799,7 +799,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             performSegue(withIdentifier: Segues.fromMainScreenVC.toDealsList, sender: self)
             
         } else if name == "К оплате" {
-            if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
+            if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
             }else{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)

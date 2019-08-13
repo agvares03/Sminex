@@ -547,7 +547,6 @@
                         <segue destination="Ges-82-KDd" kind="show" identifier="financeComm" id="N5g-VE-Zg6"/>
                         <segue destination="GoI-I6-4qe" kind="show" identifier="appeal" id="BjC-Ae-fyV"/>
                         <segue destination="2uc-1H-2RF" kind="show" identifier="notifications" id="9hd-uD-Ovc"/>
-                        <segue destination="0wj-KN-t0z" kind="show" identifier="payComm" id="pGL-gQ-ocw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xr4-pA-C4F" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1197,12 +1196,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gf-kX-y7V">
-                                                    <rect key="frame" x="0.0" y="4" width="317" height="33"/>
+                                                    <rect key="frame" x="16" y="4" width="285" height="33"/>
                                                     <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <state key="normal" title="Оставить заявку">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <action selector="addRequestByTitle:" destination="kG0-BY-9uh" eventType="touchUpInside" id="S5l-ZZ-6o5"/>
                                                     </connections>
@@ -1211,10 +1215,10 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="leading" secondItem="kG0-BY-9uh" secondAttribute="leading" id="5Su-cQ-TcW"/>
+                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="leading" secondItem="kG0-BY-9uh" secondAttribute="leading" constant="16" id="5Su-cQ-TcW"/>
                                             <constraint firstItem="8gf-kX-y7V" firstAttribute="top" secondItem="kG0-BY-9uh" secondAttribute="top" constant="4" id="EsV-NT-p2S"/>
                                             <constraint firstAttribute="bottom" secondItem="8gf-kX-y7V" secondAttribute="bottom" constant="4" id="VCl-HV-k97"/>
-                                            <constraint firstAttribute="trailing" secondItem="8gf-kX-y7V" secondAttribute="trailing" id="l0h-m7-IaV"/>
+                                            <constraint firstAttribute="trailing" secondItem="8gf-kX-y7V" secondAttribute="trailing" constant="16" id="l0h-m7-IaV"/>
                                         </constraints>
                                         <size key="customSize" width="317" height="41"/>
                                         <userDefinedRuntimeAttributes>
@@ -1400,7 +1404,7 @@
                 <viewControllerPlaceholder storyboardName="Finance" referencedIdentifier="FinancePay" id="F1c-aq-S8Y" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rDa-8g-6AJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3122" y="-911"/>
+            <point key="canvasLocation" x="3561" y="-740"/>
         </scene>
         <!--UINavigationController-yke-5M-97h-->
         <scene sceneID="rNH-ea-17N">
@@ -1466,7 +1470,7 @@
                 <viewControllerPlaceholder storyboardName="Finance" id="WAZ-2P-F0t" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="93D-iD-1Ry" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3104" y="-807"/>
+            <point key="canvasLocation" x="3264" y="-418"/>
         </scene>
         <!--News-->
         <scene sceneID="mbE-pK-eJg">
@@ -1594,7 +1598,7 @@
                 <viewControllerPlaceholder storyboardName="FinanceComm" referencedIdentifier="FinancePay" id="0wj-KN-t0z" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FHI-xx-EgT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3210" y="-858"/>
+            <point key="canvasLocation" x="3561" y="-616"/>
         </scene>
         <!--FinanceComm-->
         <scene sceneID="3Oa-LG-FfY">
@@ -1602,7 +1606,7 @@
                 <viewControllerPlaceholder storyboardName="FinanceComm" id="Ges-82-KDd" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Osk-ul-F1o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3194" y="-755"/>
+            <point key="canvasLocation" x="3469" y="-522"/>
         </scene>
         <!--serviceUK-->
         <scene sceneID="EH9-43-kGf">
@@ -1806,10 +1810,9 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cut-Ue-rY9"/>
-        <segue reference="v3e-6m-Ep5"/>
         <segue reference="Ggi-Bk-Rzm"/>
         <segue reference="efl-bX-pxf"/>
-        <segue reference="dIU-3I-TmA"/>
+        <segue reference="QLh-38-2Hc"/>
         <segue reference="JHZ-fd-xvP"/>
         <segue reference="6VF-iA-wXk"/>
         <segue reference="OYu-Na-GU4"/>

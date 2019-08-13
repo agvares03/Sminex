@@ -2191,7 +2191,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hJn-yU-yA5">
-                                                            <rect key="frame" x="51" y="10" width="300" height="23.5"/>
+                                                            <rect key="frame" x="51" y="10" width="304" height="23.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -2459,13 +2459,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Услуги по проектированию для собственников" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGC-FN-Lnj">
-                                                    <rect key="frame" x="5" y="74" width="84" height="86"/>
+                                                    <rect key="frame" x="0.0" y="64" width="94" height="96"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qMF-ps-gXw" customClass="CircleView" customModule="Sminex" customModuleProvider="target">
-                                                    <rect key="frame" x="15" y="5" width="64" height="64"/>
+                                                    <rect key="frame" x="20" y="5" width="54" height="54"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="qMF-ps-gXw" secondAttribute="height" multiplier="1:1" id="s8T-Z3-gv1"/>
                                                     </constraints>
@@ -2473,13 +2473,13 @@
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="CGC-FN-Lnj" secondAttribute="trailing" constant="5" id="23Q-4B-ECe"/>
-                                            <constraint firstAttribute="trailing" secondItem="qMF-ps-gXw" secondAttribute="trailing" constant="15" id="ABH-Tj-5Ow"/>
+                                            <constraint firstAttribute="trailing" secondItem="CGC-FN-Lnj" secondAttribute="trailing" id="23Q-4B-ECe"/>
+                                            <constraint firstAttribute="trailing" secondItem="qMF-ps-gXw" secondAttribute="trailing" constant="20" id="ABH-Tj-5Ow"/>
                                             <constraint firstAttribute="bottom" secondItem="CGC-FN-Lnj" secondAttribute="bottom" id="Pg2-3o-1yO"/>
-                                            <constraint firstItem="CGC-FN-Lnj" firstAttribute="leading" secondItem="tyn-xn-Bqb" secondAttribute="leading" constant="5" id="p9H-ym-yqN"/>
+                                            <constraint firstItem="CGC-FN-Lnj" firstAttribute="leading" secondItem="tyn-xn-Bqb" secondAttribute="leading" id="p9H-ym-yqN"/>
                                             <constraint firstItem="CGC-FN-Lnj" firstAttribute="top" secondItem="qMF-ps-gXw" secondAttribute="bottom" constant="5" id="pfv-0L-gdq"/>
                                             <constraint firstItem="qMF-ps-gXw" firstAttribute="top" secondItem="tyn-xn-Bqb" secondAttribute="top" constant="5" id="wDW-sw-tj9"/>
-                                            <constraint firstItem="qMF-ps-gXw" firstAttribute="leading" secondItem="tyn-xn-Bqb" secondAttribute="leading" constant="15" id="ydB-Ca-yoT"/>
+                                            <constraint firstItem="qMF-ps-gXw" firstAttribute="leading" secondItem="tyn-xn-Bqb" secondAttribute="leading" constant="20" id="ydB-Ca-yoT"/>
                                         </constraints>
                                         <size key="customSize" width="93.75" height="160"/>
                                         <connections>
@@ -2521,7 +2521,17 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Базовые услуги" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bp2-Ja-exk">
-                                            <rect key="frame" x="16" y="5" width="335" height="40"/>
+                                            <rect key="frame" x="16" y="6" width="335" height="47"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6M6-Dh-mzm">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="1" id="2GO-Jn-wzD"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -2529,9 +2539,12 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailingMargin" secondItem="bp2-Ja-exk" secondAttribute="trailing" constant="16" id="0ci-l9-2cx"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="bp2-Ja-exk" secondAttribute="bottom" constant="5" id="BtW-SH-dg0"/>
+                                        <constraint firstItem="6M6-Dh-mzm" firstAttribute="top" secondItem="U4J-FQ-gEg" secondAttribute="top" id="8eC-Gt-gWb"/>
+                                        <constraint firstAttribute="bottom" secondItem="bp2-Ja-exk" secondAttribute="bottom" constant="5" id="BtW-SH-dg0"/>
                                         <constraint firstItem="bp2-Ja-exk" firstAttribute="leading" secondItem="U4J-FQ-gEg" secondAttribute="leading" constant="16" id="CR2-tU-dxb"/>
-                                        <constraint firstItem="bp2-Ja-exk" firstAttribute="top" secondItem="U4J-FQ-gEg" secondAttribute="top" constant="5" id="gMf-F5-dUi"/>
+                                        <constraint firstItem="bp2-Ja-exk" firstAttribute="top" secondItem="6M6-Dh-mzm" secondAttribute="bottom" constant="5" id="KEH-ns-e3I"/>
+                                        <constraint firstAttribute="trailing" secondItem="6M6-Dh-mzm" secondAttribute="trailing" id="L1L-0d-uci"/>
+                                        <constraint firstItem="6M6-Dh-mzm" firstAttribute="leading" secondItem="U4J-FQ-gEg" secondAttribute="leading" id="nLA-Tw-m7A"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="title" destination="bp2-Ja-exk" id="J2P-cQ-Vbk"/>
@@ -3042,7 +3055,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="6Tj-g2-8Jq"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                             </textView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xgK-uU-VXc">
@@ -3496,7 +3509,7 @@
                                             <constraint firstAttribute="height" constant="40" id="Xoq-NO-2jq"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Отправить заявку">
+                                        <state key="normal" title="Заказать">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
@@ -3623,7 +3636,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uU4-El-ppN">
-                                <rect key="frame" x="0.0" y="20" width="375" height="1130"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="1086"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="6gS-NM-zkt">
                                     <size key="itemSize" width="320" height="275"/>
@@ -4585,7 +4598,7 @@
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xaX-8G-h8Y"/>
+        <segue reference="Hf8-HX-Hmi"/>
         <segue reference="LXW-54-Zjm"/>
         <segue reference="ppL-9S-3Ab"/>
         <segue reference="ZBp-Yh-2M2"/>
