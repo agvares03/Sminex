@@ -163,7 +163,12 @@ final class ServicesUKTableCell: UICollectionViewCell {
     
     func display(_ title: String, desc: String, amount: String, picture: String) {
         self.title.text     = title
-        self.desc.text      = desc
+        print(desc)
+        if desc != "" && desc != " "{
+            self.desc.text = desc
+        }else{
+            self.desc.text = ""
+        }
         self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
         if let imageV = UIImage(data: Data(base64Encoded: (picture.replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             image.image = imageV

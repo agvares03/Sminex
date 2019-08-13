@@ -799,7 +799,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             performSegue(withIdentifier: Segues.fromMainScreenVC.toDealsList, sender: self)
             
         } else if name == "К оплате" {
-            if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
+            if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
             }else{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
@@ -1342,17 +1342,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         if i < 3 && item.isDraft == false{
                             //                            self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                             if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                                if item.isImportant!{
-                                    self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
-                                }else{
-                                    self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                                }
+                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
                             }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                                if item.isImportant!{
-                                    self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
-                                }else{
-                                    self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                                }
+                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
                             }
                             i += 1
                         }
@@ -1377,7 +1369,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
                     //                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
                 }
             }
             
@@ -1439,17 +1431,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if i < 3 && item.isDraft == false{
                         //                            self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
                         if (currYear == startYear && currMonth == startMonth && currDay == startDay) && (currHour >= startHour && currMinutes >= startMinutes){
-                            if item.isImportant!{
-                                self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
-                            }else{
-                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                            }
+                            self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
                         }else if (currentDate <= dateEnd) && (currYear >= startYear && currMonth >= startMonth && currDay >= startDay){
-                            if item.isImportant!{
-                                self.data[4]![i + 1] = NewsCellData(title: item.header! + " !", desc: item.shortContent ?? "", date: item.created ?? "")
-                            }else{
-                                self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
-                            }
+                            self.data[4]![i + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
                         }
                         i += 1
                     }
@@ -1474,7 +1458,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
                     //                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "")
+                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
                 }
             }
             
@@ -1780,6 +1764,7 @@ final class NewsCell: UICollectionViewCell {
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var date:    UILabel!
+    @IBOutlet private weak var alertNews: UILabel!
     
     fileprivate func display(_ item: NewsCellData, isLast: Bool = false) {
         
@@ -1789,7 +1774,11 @@ final class NewsCell: UICollectionViewCell {
         } else {
             divider.isHidden = false
         }
-        
+        if item.isImportant{
+            alertNews.isHidden = false
+        }else{
+            alertNews.isHidden = true
+        }
         title.text  = item.title
         desc.text   = item.desc
         
@@ -1843,11 +1832,13 @@ final class NewsCellData: MainDataProtocol {
     let title:  String
     let desc:   String
     let date:   String
+    let isImportant: Bool
     
-    init(title: String, desc: String, date: String) {
+    init(title: String, desc: String, date: String, isImportant: Bool) {
         self.title  = title
         self.desc   = desc
         self.date   = date
+        self.isImportant = isImportant
     }
 }
 

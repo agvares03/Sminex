@@ -22,7 +22,7 @@ class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     private var index = 0
     open var tappedNews: NewsJson?
     private var rControl: UIRefreshControl?
-    
+    public var isFromNotifi_ = false
     // MARK: View lifecycle
 
     override func viewDidLoad() {
@@ -375,7 +375,11 @@ class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         if segue.identifier == Segues.fromNewsList.toNews {
             let vc = segue.destination as! CurrentNews
             vc.data_ = tappedNews == nil ? data[index] : tappedNews
-            vc.isFromMain_ = tappedNews != nil
+            if isFromNotifi_{
+                vc.isFromNotifi_ = isFromNotifi_
+            }else{
+                vc.isFromMain_ = tappedNews != nil
+            }
             tappedNews = nil
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
             

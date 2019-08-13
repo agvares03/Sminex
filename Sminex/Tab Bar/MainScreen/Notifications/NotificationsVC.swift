@@ -158,12 +158,14 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         if segue.identifier == "goQuestion" {
             let vc = segue.destination as! QuestionsTableVC
             let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
+            print(push.name!)
             vc.performName_ = push.name!
             vc.delegate = self
         }
         if segue.identifier == "goNews"{
             let vc = segue.destination as! NewsListTVC
             vc.tappedNews = tappedNews
+            vc.isFromNotifi_ = true
         }
         if segue.identifier == "goAdmission" {
             let vc = segue.destination as! AdmissionVC
@@ -305,38 +307,6 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     private func fetchNews() {
         DispatchQueue.global(qos: .userInitiated).async {
             let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
-            
-            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
-                let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
-                
-                var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
-                request.httpMethod = "GET"
-                //                print("REQUEST = \(request)")
-                
-                URLSession.shared.dataTask(with: request) {
-                    data, error, responce in
-                    
-                    guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else { return }
-                    
-                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                        TemporaryHolder.instance.newsNew = NewsJsonData(json: json!)!.data!
-                    }
-                    UserDefaults.standard.set(String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0), forKey: "newsLastId")
-                    
-                    TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0)
-                    UserDefaults.standard.synchronize()
-                    let filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
-                    filteredNews.forEach{
-                        let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
-                        if $0.text == push.name{
-                            self.tappedNews = $0
-                        }
-                    }
-                    self.performSegue(withIdentifier: "goNews", sender: self)
-                    return
-                    }.resume()
-                return
-            }
             var decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
             TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
             
@@ -359,13 +329,17 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 TemporaryHolder.instance.newsLastId = String(TemporaryHolder.instance.newsNew?.first?.newsId ?? 0)
                 UserDefaults.standard.synchronize()
                 let filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
+                let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
                 filteredNews.forEach{
-                    let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
-                    if $0.text == push.name{
+                    let ident: Int = Int(push.ident ?? "")!
+                    if $0.newsId == ident{
+                        print("OK")
                         self.tappedNews = $0
                     }
                 }
-                self.performSegue(withIdentifier: "goNews", sender: self)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "goNews", sender: self)
+                }
                 return
                 }.resume()
         }

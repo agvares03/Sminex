@@ -22,6 +22,7 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
     }
     
     public var data_:           [AccountCalculationsJson] = []
+    public var dataDebt: [AccountBillsJson] = []
     private var filteredData: [AccountCalculationsJson] = []
     private var index = 0
     private var section = 0
@@ -207,6 +208,17 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
         if segue.identifier == Segues.fromFinanceCalcsArchive.toCalc {
             let vc = segue.destination as! FinanceCalcVCComm
             let date = (dataFilt[section].filteredData[index].numMonthSet, dataFilt[section].filteredData[index].numYearSet)
+            var ind = 0
+            for i in 0...filteredData.count - 1{
+                if filteredData[i].numMonthSet == dataFilt[section].filteredData[index].numMonthSet && filteredData[i].numYearSet == dataFilt[section].filteredData[index].numYearSet{
+                    ind = i
+                }
+            }
+            vc.dataDebt = dataDebt
+            vc.index = ind
+            vc.date = date
+            vc.filteredCalcs = filteredData
+            vc.calcs = data_
             vc.data_ = data_.filter {
                 return (date.0 == $0.numMonthSet && date.1 == $0.numYearSet)
             }

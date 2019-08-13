@@ -9,7 +9,7 @@
 import UIKit
 import CropViewController
 
-final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate {
+final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, UITextViewDelegate {
     
     @IBOutlet private weak var loader:              UIActivityIndicatorView!
     @IBOutlet private weak var saveButtonTop:       NSLayoutConstraint!
@@ -21,7 +21,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBOutlet private weak var familyNameField:     UITextField!
     @IBOutlet private weak var otchestvoField:  	UITextField!
     @IBOutlet private weak var contactNumber:       UITextField!
-    @IBOutlet private weak var commentField:        UITextField!
+    @IBOutlet private weak var commentField:        UITextView!
     @IBOutlet private weak var privNumber:          UITextField!
     @IBOutlet private weak var nameField:       	UITextField!
     @IBOutlet private weak var lsLabel:             UITextField!
@@ -123,6 +123,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 }
             }
         }
+        commentField.delegate = self
         accountImageView.cornerRadius = accountImageView.frame.height / 2
         self.stopAnimator()
         
@@ -161,7 +162,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         
         commentField.text       = defaults.string(forKey: "accDesc")
         if (defaults.string(forKey: "accDesc") == "-") {
-            commentField.text   = ""
+            commentField.text   = "Добавить комментарий (например, «не звонить с 10 до 12»)"
+            commentField.textColor = UIColor.lightGray
         }
         
         let name                = defaults.string(forKey: "name")?.split(separator: " ")
@@ -309,8 +311,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let defName = isReg_ ? String(answers[safe: 6] ?? "") : (UserDefaults.standard.string(forKey: "name") ?? "")
         let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (defName.stringByAddingPercentEncodingForRFC3986() ?? "")
         let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
-        let comment_txt = commentField.text?.stringByAddingPercentEncodingForRFC3986()
-        
+        var comment_txt = commentField.text?.stringByAddingPercentEncodingForRFC3986()
+        if comment_txt == "Добавить комментарий (например, «не звонить с 10 до 12»)"{
+            comment_txt = ""
+        }
         let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&businessPhone=\(phone_contact)&email=\(email)&additionalInfo=\(comment_txt ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
@@ -436,6 +440,34 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             
         } else {
             emailLabel.isHidden = false
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        let currentText:String = textView.text
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
+        
+        if updatedText.isEmpty {
+            textView.text = "Добавить комментарий (например, «не звонить с 10 до 12»)"
+            textView.textColor = UIColor.lightGray
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            
+        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+            textView.textColor = UIColor.black
+            textView.text = text
+            
+        } else {
+            return true
+        }
+        return false
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if self.view.window != nil {
+            if textView.textColor == UIColor.lightGray {
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
         }
     }
 }

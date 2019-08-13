@@ -22,14 +22,18 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
-        if !isFromMain_ {
+        if isFromNotifi_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
+            
+        } else if !isFromMain_ {
             navigationController?.popViewController(animated: true)
         
         } else {
             navigationController?.popToRootViewController(animated: true)
         }
     }
-    
+    public var isFromNotifi_ = false
     public var data_: NewsJson?
     public var isFromMain_ = false
     

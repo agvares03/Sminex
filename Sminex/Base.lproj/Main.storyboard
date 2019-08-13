@@ -547,7 +547,6 @@
                         <segue destination="Ges-82-KDd" kind="show" identifier="financeComm" id="N5g-VE-Zg6"/>
                         <segue destination="GoI-I6-4qe" kind="show" identifier="appeal" id="BjC-Ae-fyV"/>
                         <segue destination="2uc-1H-2RF" kind="show" identifier="notifications" id="9hd-uD-Ovc"/>
-                        <segue destination="0wj-KN-t0z" kind="show" identifier="payComm" id="pGL-gQ-ocw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xr4-pA-C4F" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -931,7 +930,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отключение горячей воды" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yet-qa-pNG">
-                                                    <rect key="frame" x="16" y="8" width="285" height="20.5"/>
+                                                    <rect key="frame" x="16" y="8" width="219" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -958,15 +957,26 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1dC-kf-37s">
+                                                    <rect key="frame" x="238" y="1.5" width="16" height="33.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="16" id="TYO-cl-kbp"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="Tgv-z0-wUp" secondAttribute="bottom" id="2EP-B5-ii8"/>
                                             <constraint firstItem="Bmk-EY-TnK" firstAttribute="leading" secondItem="MUO-S7-hXN" secondAttribute="trailing" constant="2" id="5pi-5c-VEC"/>
+                                            <constraint firstItem="1dC-kf-37s" firstAttribute="leading" secondItem="Yet-qa-pNG" secondAttribute="trailing" constant="3" id="C8s-1A-plG"/>
                                             <constraint firstItem="Bmk-EY-TnK" firstAttribute="bottom" secondItem="MUO-S7-hXN" secondAttribute="bottom" id="IQb-ca-HE4"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="Yet-qa-pNG" secondAttribute="trailing" constant="8" id="J5k-Ep-bCe"/>
+                                            <constraint firstItem="1dC-kf-37s" firstAttribute="centerY" secondItem="Yet-qa-pNG" secondAttribute="centerY" id="JK0-eA-OqI"/>
                                             <constraint firstItem="Tgv-z0-wUp" firstAttribute="bottom" secondItem="MUO-S7-hXN" secondAttribute="bottom" constant="10" id="OAb-Qx-nio"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Yet-qa-pNG" secondAttribute="trailing" constant="28" id="SYk-8v-Cde"/>
                                             <constraint firstAttribute="trailing" secondItem="Tgv-z0-wUp" secondAttribute="trailing" constant="16" id="Wgh-ON-Jl9"/>
                                             <constraint firstItem="Yet-qa-pNG" firstAttribute="top" secondItem="cc4-HP-IzJ" secondAttribute="top" constant="8" id="XRB-fo-QzH"/>
                                             <constraint firstItem="Tgv-z0-wUp" firstAttribute="leading" secondItem="Yet-qa-pNG" secondAttribute="leading" id="b4p-6j-K1V"/>
@@ -982,6 +992,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <outlet property="alertNews" destination="1dC-kf-37s" id="25M-kJ-Xmq"/>
                                             <outlet property="date" destination="Bmk-EY-TnK" id="uUc-It-huv"/>
                                             <outlet property="desc" destination="MUO-S7-hXN" id="m9E-Gs-jtS"/>
                                             <outlet property="divider" destination="Tgv-z0-wUp" id="htO-FU-MY8"/>
@@ -1197,12 +1208,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gf-kX-y7V">
-                                                    <rect key="frame" x="0.0" y="4" width="317" height="33"/>
+                                                    <rect key="frame" x="16" y="4" width="285" height="33"/>
                                                     <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <state key="normal" title="Оставить заявку">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <action selector="addRequestByTitle:" destination="kG0-BY-9uh" eventType="touchUpInside" id="S5l-ZZ-6o5"/>
                                                     </connections>
@@ -1211,10 +1227,10 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="leading" secondItem="kG0-BY-9uh" secondAttribute="leading" id="5Su-cQ-TcW"/>
+                                            <constraint firstItem="8gf-kX-y7V" firstAttribute="leading" secondItem="kG0-BY-9uh" secondAttribute="leading" constant="16" id="5Su-cQ-TcW"/>
                                             <constraint firstItem="8gf-kX-y7V" firstAttribute="top" secondItem="kG0-BY-9uh" secondAttribute="top" constant="4" id="EsV-NT-p2S"/>
                                             <constraint firstAttribute="bottom" secondItem="8gf-kX-y7V" secondAttribute="bottom" constant="4" id="VCl-HV-k97"/>
-                                            <constraint firstAttribute="trailing" secondItem="8gf-kX-y7V" secondAttribute="trailing" id="l0h-m7-IaV"/>
+                                            <constraint firstAttribute="trailing" secondItem="8gf-kX-y7V" secondAttribute="trailing" constant="16" id="l0h-m7-IaV"/>
                                         </constraints>
                                         <size key="customSize" width="317" height="41"/>
                                         <userDefinedRuntimeAttributes>
@@ -1400,7 +1416,7 @@
                 <viewControllerPlaceholder storyboardName="Finance" referencedIdentifier="FinancePay" id="F1c-aq-S8Y" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rDa-8g-6AJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3122" y="-911"/>
+            <point key="canvasLocation" x="3561" y="-740"/>
         </scene>
         <!--UINavigationController-yke-5M-97h-->
         <scene sceneID="rNH-ea-17N">
@@ -1466,7 +1482,7 @@
                 <viewControllerPlaceholder storyboardName="Finance" id="WAZ-2P-F0t" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="93D-iD-1Ry" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3104" y="-807"/>
+            <point key="canvasLocation" x="3264" y="-418"/>
         </scene>
         <!--News-->
         <scene sceneID="mbE-pK-eJg">
@@ -1594,7 +1610,7 @@
                 <viewControllerPlaceholder storyboardName="FinanceComm" referencedIdentifier="FinancePay" id="0wj-KN-t0z" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FHI-xx-EgT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3210" y="-858"/>
+            <point key="canvasLocation" x="3561" y="-616"/>
         </scene>
         <!--FinanceComm-->
         <scene sceneID="3Oa-LG-FfY">
@@ -1602,7 +1618,7 @@
                 <viewControllerPlaceholder storyboardName="FinanceComm" id="Ges-82-KDd" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Osk-ul-F1o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3194" y="-755"/>
+            <point key="canvasLocation" x="3469" y="-522"/>
         </scene>
         <!--serviceUK-->
         <scene sceneID="EH9-43-kGf">
@@ -1806,10 +1822,9 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cut-Ue-rY9"/>
-        <segue reference="v3e-6m-Ep5"/>
         <segue reference="Ggi-Bk-Rzm"/>
         <segue reference="efl-bX-pxf"/>
-        <segue reference="dIU-3I-TmA"/>
+        <segue reference="QLh-38-2Hc"/>
         <segue reference="JHZ-fd-xvP"/>
         <segue reference="6VF-iA-wXk"/>
         <segue reference="OYu-Na-GU4"/>

@@ -1008,30 +1008,30 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="POw-1N-G8P">
-                                    <size key="itemSize" width="375" height="100"/>
+                                    <size key="itemSize" width="375" height="219"/>
                                     <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FinanceCalcCommCell" id="tkL-Ia-v6R" customClass="FinanceCalcCommCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="375" height="100"/>
+                                        <rect key="frame" x="0.0" y="50" width="375" height="219"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="219"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DXg-AP-EB7">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="100"/>
+                                                    <rect key="frame" x="16" y="0.0" width="343" height="109"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Машиноместа по прайс листу" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UPZ-yY-Q15">
-                                                            <rect key="frame" x="16" y="5" width="327" height="27"/>
+                                                            <rect key="frame" x="16" y="5" width="327" height="36"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HaN-jc-sMv">
-                                                            <rect key="frame" x="32" y="40" width="295" height="50"/>
+                                                            <rect key="frame" x="32" y="49" width="295" height="50"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ywC-TP-bL6">
                                                                     <rect key="frame" x="0.0" y="0.0" width="295" height="25"/>
@@ -1085,7 +1085,7 @@
                                                             </constraints>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHp-km-ojn">
-                                                            <rect key="frame" x="0.0" y="99" width="343" height="1"/>
+                                                            <rect key="frame" x="0.0" y="108" width="343" height="1"/>
                                                             <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="1" id="kVU-P4-b1g"/>
@@ -1115,16 +1115,56 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7XO-zZ-LoJ">
+                                                    <rect key="frame" x="16" y="124" width="343" height="40"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="4nt-LC-Hy8"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="Перейти к квитанциям">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <segue destination="rXO-RA-66m" kind="show" identifier="receiptArchive" id="iNF-h2-GQy"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bL4-XD-kEl">
+                                                    <rect key="frame" x="16" y="179" width="343" height="40"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="aay-Ov-8u3"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="Оплатить">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="goPay:" destination="tkL-Ia-v6R" eventType="touchUpInside" id="gvg-yd-4Pn"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="bL4-XD-kEl" firstAttribute="top" secondItem="7XO-zZ-LoJ" secondAttribute="bottom" constant="15" id="3ms-NU-feO"/>
+                                            <constraint firstAttribute="trailing" secondItem="7XO-zZ-LoJ" secondAttribute="trailing" constant="16" id="5Pt-Ao-grQ"/>
+                                            <constraint firstAttribute="bottom" secondItem="bL4-XD-kEl" secondAttribute="bottom" id="5yI-dL-sux"/>
                                             <constraint firstItem="DXg-AP-EB7" firstAttribute="leading" secondItem="tkL-Ia-v6R" secondAttribute="leading" constant="16" id="7j7-xW-eML"/>
+                                            <constraint firstItem="bL4-XD-kEl" firstAttribute="leading" secondItem="tkL-Ia-v6R" secondAttribute="leading" constant="16" id="F8s-dp-mmY"/>
+                                            <constraint firstAttribute="trailing" secondItem="bL4-XD-kEl" secondAttribute="trailing" constant="16" id="HdP-s0-9JD"/>
                                             <constraint firstAttribute="trailing" secondItem="DXg-AP-EB7" secondAttribute="trailing" constant="16" id="IXZ-Pk-6rP"/>
-                                            <constraint firstAttribute="bottom" secondItem="DXg-AP-EB7" secondAttribute="bottom" id="JAe-Ce-nbG"/>
+                                            <constraint firstItem="7XO-zZ-LoJ" firstAttribute="leading" secondItem="tkL-Ia-v6R" secondAttribute="leading" constant="16" id="UYC-Ji-3Dz"/>
                                             <constraint firstItem="DXg-AP-EB7" firstAttribute="top" secondItem="tkL-Ia-v6R" secondAttribute="top" id="WBw-zb-E2h"/>
+                                            <constraint firstItem="7XO-zZ-LoJ" firstAttribute="top" secondItem="DXg-AP-EB7" secondAttribute="bottom" constant="15" id="nIN-3I-t83"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="debtHeight" destination="4nt-LC-Hy8" id="h7Q-gk-jkl"/>
+                                            <outlet property="debtTop" destination="nIN-3I-t83" id="glN-CZ-AE1"/>
+                                            <outlet property="goDebt" destination="7XO-zZ-LoJ" id="jhu-qX-fe1"/>
+                                            <outlet property="payBtn" destination="bL4-XD-kEl" id="Tiy-ug-Agi"/>
+                                            <outlet property="payHeight" destination="aay-Ov-8u3" id="VLS-wE-5Dl"/>
+                                            <outlet property="payTop" destination="3ms-NU-feO" id="T0h-ZR-zev"/>
                                             <outlet property="sumAccured" destination="3rq-3W-pfA" id="qzZ-VZ-N3V"/>
                                             <outlet property="sumDebt" destination="zul-TC-wDU" id="bBg-5B-rzq"/>
                                             <outlet property="sumPay" destination="GTP-14-Xyg" id="HGo-ef-gzQ"/>
@@ -1156,6 +1196,7 @@
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="2OL-t0-NyI" firstAttribute="top" secondItem="GhP-XX-42M" secondAttribute="bottom" id="GhZ-Km-W6y"/>
                             <constraint firstAttribute="trailing" secondItem="GhP-XX-42M" secondAttribute="trailing" id="Yyc-CF-rIL"/>
@@ -1163,6 +1204,10 @@
                             <constraint firstItem="GhP-XX-42M" firstAttribute="leading" secondItem="l0r-l6-fbU" secondAttribute="leading" id="rMo-q9-pc6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IiK-Nr-ww9"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="V1K-ex-a6v" appends="YES" id="ExZ-0c-QOY"/>
+                            <outletCollection property="gestureRecognizers" destination="lM7-ND-4bM" appends="YES" id="sSc-Lw-irh"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Взаиморасчет" id="9wz-kZ-ZeK">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="2cc-97-DaA">
@@ -1174,9 +1219,20 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collection" destination="GhP-XX-42M" id="v88-JF-7i2"/>
+                        <segue destination="IKy-B1-0S4" kind="show" identifier="goPay" id="WbD-0S-Hgc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0rr-9c-hzy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="V1K-ex-a6v">
+                    <connections>
+                        <action selector="SwipeRight:" destination="8T3-GY-rZK" id="hD0-jw-cH1"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="lM7-ND-4bM">
+                    <connections>
+                        <action selector="SwipeLeft:" destination="8T3-GY-rZK" id="tYg-Mx-FA5"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2040.8" y="-1496.4017991004498"/>
         </scene>
@@ -1618,7 +1674,9 @@
         <segue reference="kIt-Vc-ybU"/>
         <segue reference="NUx-9a-9M3"/>
         <segue reference="mxB-qk-i3A"/>
-        <segue reference="dmk-7H-ulN"/>
+        <segue reference="1zh-mT-3jK"/>
+        <segue reference="iNF-h2-GQy"/>
         <segue reference="EIU-tV-9kd"/>
+        <segue reference="WbD-0S-Hgc"/>
     </inferredMetricsTieBreakers>
 </document>

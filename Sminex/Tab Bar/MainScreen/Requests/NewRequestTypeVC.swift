@@ -216,7 +216,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewRequestTypeCell", for: indexPath) as! NewRequestTypeCell
-            cell.display(data[indexPath.section].filteredData![indexPath.row], delegate: self, indexPath: indexPath)
+            cell.display(data[indexPath.section].filteredData![indexPath.row], delegate: self, indexPath: indexPath, displayWidth: self.view.frame.size.width)
             return cell
         }
     }
@@ -234,7 +234,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
         }else if indexPath.row == data[1].filteredData.count - 1{
             return CGSize(width: view.frame.size.width, height: 50)
         }else{
-            return CGSize(width: view.frame.size.width / 4, height: 170)
+            return CGSize(width: view.frame.size.width / 4, height: 140)
         }
     }
     
@@ -319,10 +319,18 @@ class NewRequestTypeCell: UICollectionViewCell {
     private var delegate: CellsDelegate?
     private var indexPath: IndexPath?
     
-    fileprivate func display(_ item: NewRequestTypeCellData, delegate: CellsDelegate, indexPath: IndexPath) {
+    fileprivate func display(_ item: NewRequestTypeCellData, delegate: CellsDelegate, indexPath: IndexPath, displayWidth: CGFloat) {
         self.delegate    = delegate
         self.indexPath   = indexPath
         title.text       = item.title
+        if item.title == "Гостевой пропуск"{
+            title.text = "Пропуск"
+        }
+        if displayWidth < 375{
+            title.font = UIFont.systemFont(ofSize: 11, weight: .regular)
+        }else if displayWidth == 375{
+            title.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        }
         let image: UIImage? = item.picture
         if image != nil{
             circleView.image = item.picture
@@ -330,9 +338,10 @@ class NewRequestTypeCell: UICollectionViewCell {
             circleView.layer.borderColor = UIColor.black.cgColor
             circleView.layer.borderWidth = 2.0
             // Углы
-            circleView.layer.cornerRadius = circleView.frame.width / 2
+            circleView.layer.cornerRadius = ((displayWidth / 4) - 40) / 2
             // Поправим отображения слоя за его границами
             circleView.layer.masksToBounds = true
+            print(circleView.frame.size.width)
         }else{
             circleView.isHidden = true
         }
@@ -388,7 +397,7 @@ struct NewRequestTypeCellData {
         
         let screenSize: CGRect = UIScreen.main.bounds
         let size = screenSize.width / 4
-        imageView.frame = CGRect(x: 10, y: 10, width: size - 50, height: size - 50)
+        imageView.frame = CGRect(x: 10, y: 10, width: size - 60, height: size - 60)
         imageView.contentMode = .scaleAspectFit
         addSubview(imageView)
     }
