@@ -29,13 +29,13 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             let viewControllers = navigationController?.viewControllers
             navigationController?.popToViewController(viewControllers![viewControllers!.count - 4], animated: true)
         
-        } else if isFromMain_ {
-            navigationController?.popToRootViewController(animated: true)
-        
         } else if isFromNotifi_ {
             let viewControllers = navigationController?.viewControllers
             navigationController?.popToViewController(viewControllers![viewControllers!.count - 2], animated: true)
             
+        } else if isFromMain_ {
+            navigationController?.popToRootViewController(animated: true)
+        
         } else {
             navigationController?.popViewController(animated: true)
         }

@@ -649,13 +649,13 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 self.collectionHeader?.reloadData()
                 self.collection?.reloadData()
                 if self.requestId_ != "" {
-                    print(self.requestId_, self.fullCount)
                     for index in 0...self.fullCount - 1{
                         if self.fullData[index].id == self.requestId_ || self.fullData[index].webID == self.requestId_{
                             if self.collection != nil {
                                 self.collectionView(self.collection!, didSelectItemAt: IndexPath(row: index, section: 0))
                                 
                             } else {
+                                print(self.fullData[index].title, self.fullData[index].stickTitle, self.fullData[index].desc)
                                 self.prepareTapped(IndexPath(row: index, section: 0))
                             }
                         }
@@ -801,63 +801,64 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     }
                     var dataServ: ServicesUKJson!
                     self.dataService.forEach{
-                        if $0.name == self.fullData[indexPath.row].desc{
+                        if $0.name == self.fullData[indexPath.row].desc || $0.name == self.fullData[indexPath.row].stickTitle{
                             dataServ = $0
                         }
                     }
-                    print(dataServ)
-                    var serviceDesc = ""
-                    if dataServ?.shortDesc == "" || dataServ?.shortDesc == " "{
-                        serviceDesc  = String((dataServ?.desc?.prefix(100))!) + "..."
-                    }else{
-                        serviceDesc  = dataServ?.shortDesc ?? ""
-                    }
-                    var imageIcon = UIImage()
-                    if let imageV = UIImage(data: Data(base64Encoded: ((dataServ?.picture!.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)) ?? Data()) {
-                        imageIcon = imageV
-                    }
-                    var emails = ""
-                    if row.emails == ""{
-                        emails = UserDefaults.standard.string(forKey: "mail")!
-                    }else{
-                        emails = row.emails!
-                    }
-                    var place = ""
-                    let parkingsPlace = UserDefaults.standard.stringArray(forKey: "parkingsPlace")!
-                    if row.premises == ""{
-                        parkingsPlace.forEach{
-                            place = place + $0
+                    if dataServ != nil{
+                        var serviceDesc = ""
+                        if dataServ?.shortDesc == "" || dataServ?.shortDesc == " "{
+                            serviceDesc  = String((dataServ?.desc?.prefix(100))!) + "..."
+                        }else{
+                            serviceDesc  = dataServ?.shortDesc ?? ""
                         }
-                    }else{
-                        place = row.premises!
-                    }
-                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
-                    
-                    self.techServiceComm = []
-                    self.rowComms[row.id!]!.forEach { comm in
-                        
-                        var commImg: String?
-                        
-                        self.rowFiles.forEach {
-                            
-                            if $0.fileId == comm.idFile {
-                                commImg = $0.fileId!
+                        var imageIcon = UIImage()
+                        if let imageV = UIImage(data: Data(base64Encoded: ((dataServ?.picture!.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)) ?? Data()) {
+                            imageIcon = imageV
+                        }
+                        var emails = ""
+                        if row.emails == ""{
+                            emails = UserDefaults.standard.string(forKey: "mail")!
+                        }else{
+                            emails = row.emails!
+                        }
+                        var place = ""
+                        let parkingsPlace = UserDefaults.standard.stringArray(forKey: "parkingsPlace")!
+                        if row.premises == ""{
+                            parkingsPlace.forEach{
+                                place = place + $0
                             }
+                        }else{
+                            place = row.premises!
                         }
+                        self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
                         
-                        self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
-                                                                             title: comm.name ?? "",
-                                                                             comment: comm.text ?? "",
-                                                                             date: comm.createdDate ?? "",
-                                                                             commImg: nil,
-                                                                             commImgUrl: commImg,
-                                                                             id: comm.id ?? ""))
+                        self.techServiceComm = []
+                        self.rowComms[row.id!]!.forEach { comm in
+                            
+                            var commImg: String?
+                            
+                            self.rowFiles.forEach {
+                                
+                                if $0.fileId == comm.idFile {
+                                    commImg = $0.fileId!
+                                }
+                            }
+                            
+                            self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
+                                                                                 title: comm.name ?? "",
+                                                                                 comment: comm.text ?? "",
+                                                                                 date: comm.createdDate ?? "",
+                                                                                 commImg: nil,
+                                                                                 commImgUrl: commImg,
+                                                                                 id: comm.id ?? ""))
+                        }
+                        self.reqId = row.id ?? ""
+                        if self.collection != nil {
+                            self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                        }
+                        self.prepareGroup?.leave()
                     }
-                    self.reqId = row.id ?? ""
-                    if self.collection != nil {
-                        self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
-                    }
-                    self.prepareGroup?.leave()
                     
                 } else {
                     let row = self.rows[self.fullData[indexPath.row].id]!

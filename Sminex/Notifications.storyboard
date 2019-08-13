@@ -89,12 +89,18 @@
                                     <outlet property="delegate" destination="16J-7j-jkX" id="L0F-Gy-4xo"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="aQY-5x-Gnq">
+                                <rect key="frame" x="188.66666666666666" y="349.66666666666669" width="37" height="37"/>
+                                <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="aQY-5x-Gnq" firstAttribute="centerY" secondItem="4Ca-YP-x6J" secondAttribute="centerY" id="7RN-Tu-tfo"/>
                             <constraint firstItem="rCw-kB-XP3" firstAttribute="trailing" secondItem="u4l-Gc-1dV" secondAttribute="trailing" id="Dp7-Bo-Olb"/>
                             <constraint firstItem="u4l-Gc-1dV" firstAttribute="leading" secondItem="rCw-kB-XP3" secondAttribute="leading" id="IVD-oz-vEe"/>
                             <constraint firstItem="qkY-kD-g05" firstAttribute="top" secondItem="u4l-Gc-1dV" secondAttribute="bottom" id="fHK-pv-Ye8"/>
+                            <constraint firstItem="aQY-5x-Gnq" firstAttribute="centerX" secondItem="4Ca-YP-x6J" secondAttribute="centerX" id="hvm-oa-ngo"/>
                             <constraint firstItem="u4l-Gc-1dV" firstAttribute="top" secondItem="M7v-UA-DG6" secondAttribute="bottom" id="yKj-py-Enf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="rCw-kB-XP3"/>
@@ -109,6 +115,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="indicator" destination="aQY-5x-Gnq" id="ERV-hC-C4n"/>
                         <outlet property="tableView" destination="u4l-Gc-1dV" id="Rag-d0-Nsv"/>
                         <segue destination="35s-r2-6Z0" kind="show" identifier="login_activity" id="MGK-uv-dJw"/>
                         <segue destination="Ihi-1b-5co" kind="show" identifier="goQuestion" id="PsR-uF-eat"/>
