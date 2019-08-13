@@ -117,7 +117,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             }
         }
         self.dataType.append(NewAppsUserHeaderData(title: "Дополнительные услуги", id: "0"))
-        if xml_ != nil {
+        if xml_ != nil && !isFromNotifi_{
             collection?.alpha   = 0
             createButton?.alpha = 0
             DispatchQueue.global(qos: .userInitiated).async {
@@ -447,7 +447,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     return
                 }
                 #if DEBUG
-                print(String(data: data!, encoding: .utf8)!)
+//                print(String(data: data!, encoding: .utf8)!)
                 #endif
                 let xml = XML.parse(data!)
                 self.parse(xml: xml)
@@ -649,8 +649,9 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 self.collectionHeader?.reloadData()
                 self.collection?.reloadData()
                 if self.requestId_ != "" {
-                    for (index, item) in self.data.enumerated() {
-                        if item.id == self.requestId_ || item.webID == self.requestId_{
+                    print(self.requestId_, self.fullCount)
+                    for index in 0...self.fullCount - 1{
+                        if self.fullData[index].id == self.requestId_ || self.fullData[index].webID == self.requestId_{
                             if self.collection != nil {
                                 self.collectionView(self.collection!, didSelectItemAt: IndexPath(row: index, section: 0))
                                 
@@ -686,7 +687,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             DispatchQueue.main.async {
                 self.stopAnimatior()
                 
-                var type = self.data[indexPath.row].type
+                var type = self.fullData[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
                 var itsNever: Bool = false
                 print(type)
@@ -706,7 +707,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 if type.contains(find: "ропуск") {
                     self.typeName = type
                     print(self.rows)
-                    let row = self.rows[self.data[indexPath.row].id]!
+                    let row = self.rows[self.fullData[indexPath.row].id]!
                     var persons = row.responsiblePerson ?? ""
                     
                     if persons == "" {
@@ -744,7 +745,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                     }
                     
-                    self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
+                    self.admission = AdmissionHeaderData(icon: self.fullData[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
                                                          gosNumber: auto, mark: mark,
@@ -788,8 +789,8 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     }
                     self.prepareGroup?.leave()
                     
-                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услуг"){
-                    let row = self.rows[self.data[indexPath.row].id]!
+                } else if self.fullData[indexPath.row].title.containsIgnoringCase(find: "услуг"){
+                    let row = self.rows[self.fullData[indexPath.row].id]!
                     var images: [String] = []
                     
                     self.rowFiles.forEach {
@@ -800,7 +801,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     }
                     var dataServ: ServicesUKJson!
                     self.dataService.forEach{
-                        if $0.name == self.data[indexPath.row].desc{
+                        if $0.name == self.fullData[indexPath.row].desc{
                             dataServ = $0
                         }
                     }
@@ -859,7 +860,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     self.prepareGroup?.leave()
                     
                 } else {
-                    let row = self.rows[self.data[indexPath.row].id]!
+                    let row = self.rows[self.fullData[indexPath.row].id]!
                     var images: [String] = []
                     
                     self.rowFiles.forEach {
@@ -869,7 +870,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                     }
                     
-                    self.techService = ServiceHeaderData(icon: self.data[indexPath.row].icon,
+                    self.techService = ServiceHeaderData(icon: self.fullData[indexPath.row].icon,
                                                          problem: row.text ?? "",
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",

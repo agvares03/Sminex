@@ -15,14 +15,16 @@ class NewsTableCell: UITableViewCell {
     @IBOutlet private weak var title: UILabel!
     @IBOutlet private weak var desc: UILabel!
     @IBOutlet private weak var date: UILabel!
+    @IBOutlet private weak var alertNews: UILabel!
     
     func configure(item: NewsJson?) {
         
         guard let item = item else { return }
-        
         title.text = item.header
         if item.isImportant!{
-            title.text = item.header! + " !"
+            alertNews.isHidden = false
+        }else{
+            alertNews.isHidden = true
         }
         desc.text = item.shortContent
         

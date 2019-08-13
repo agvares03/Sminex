@@ -482,75 +482,6 @@
             </connections>
             <point key="canvasLocation" x="-84" y="614"/>
         </collectionViewCell>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NewsCell" id="Ypi-8v-rmC" customClass="NewsCell" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="317" height="120"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="317" height="120"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отключение горячей воды" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g65-6f-EuO">
-                        <rect key="frame" x="24" y="8" width="269" height="20.5"/>
-                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PRE-mN-Crs">
-                        <rect key="frame" x="24" y="119" width="269" height="1"/>
-                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="lAN-wk-wkZ"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="22 ноября с 12:00 до 13:00 будет отключениа горяча..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nFV-a9-ltF">
-                        <rect key="frame" x="24" y="31.5" width="269" height="41"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Сегодня, 15 октября" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OnA-HC-QJe">
-                        <rect key="frame" x="24" y="82.5" width="269" height="18"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </subviews>
-            </view>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-            <constraints>
-                <constraint firstItem="OnA-HC-QJe" firstAttribute="top" secondItem="nFV-a9-ltF" secondAttribute="bottom" constant="10" id="2J5-r8-iTb"/>
-                <constraint firstItem="PRE-mN-Crs" firstAttribute="leading" secondItem="g65-6f-EuO" secondAttribute="leading" id="2Qn-EI-6zz"/>
-                <constraint firstItem="PRE-mN-Crs" firstAttribute="top" relation="greaterThanOrEqual" secondItem="OnA-HC-QJe" secondAttribute="bottom" constant="16" id="2ZC-5f-YAn"/>
-                <constraint firstItem="nFV-a9-ltF" firstAttribute="leading" secondItem="g65-6f-EuO" secondAttribute="leading" id="5Ww-oQ-tkJ"/>
-                <constraint firstItem="OnA-HC-QJe" firstAttribute="leading" secondItem="g65-6f-EuO" secondAttribute="leading" id="Bxp-oA-LX9"/>
-                <constraint firstItem="nFV-a9-ltF" firstAttribute="top" secondItem="g65-6f-EuO" secondAttribute="bottom" constant="3" id="KXF-0b-iam"/>
-                <constraint firstItem="OnA-HC-QJe" firstAttribute="trailing" secondItem="nFV-a9-ltF" secondAttribute="trailing" id="QxL-eH-Dn4"/>
-                <constraint firstItem="PRE-mN-Crs" firstAttribute="trailing" secondItem="nFV-a9-ltF" secondAttribute="trailing" id="SuC-FI-MaO"/>
-                <constraint firstAttribute="trailingMargin" secondItem="g65-6f-EuO" secondAttribute="trailing" constant="8" id="ULn-qG-w67"/>
-                <constraint firstItem="g65-6f-EuO" firstAttribute="leading" secondItem="Ypi-8v-rmC" secondAttribute="leadingMargin" constant="8" id="bW1-g8-UOY"/>
-                <constraint firstItem="nFV-a9-ltF" firstAttribute="trailing" secondItem="g65-6f-EuO" secondAttribute="trailing" id="qub-WY-Vh7"/>
-                <constraint firstItem="g65-6f-EuO" firstAttribute="top" secondItem="Ypi-8v-rmC" secondAttribute="top" constant="8" id="uFa-2G-Xm8"/>
-                <constraint firstAttribute="bottom" secondItem="PRE-mN-Crs" secondAttribute="bottom" id="y37-a3-LjO"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="zWG-YV-nQA"/>
-            <size key="customSize" width="317" height="120"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="NO"/>
-                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                    <real key="value" value="0.0"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
-            <connections>
-                <outlet property="date" destination="OnA-HC-QJe" id="4TU-Oe-BvS"/>
-                <outlet property="desc" destination="nFV-a9-ltF" id="Tfd-3f-VPx"/>
-                <outlet property="divider" destination="PRE-mN-Crs" id="BDO-mI-T6M"/>
-                <outlet property="title" destination="g65-6f-EuO" id="FUq-hZ-KNb"/>
-            </connections>
-            <point key="canvasLocation" x="-110" y="124"/>
-        </collectionViewCell>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="AccountHeader" id="Jbj-gF-hhk" customClass="AccountHeader" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="414" height="851"/>
             <autoresizingMask key="autoresizingMask"/>
@@ -5229,6 +5160,84 @@
                 <outlet property="desc" destination="poK-XZ-HbY" id="rda-XW-w9j"/>
                 <outlet property="image" destination="gXo-vn-t2Q" id="Jcb-Gq-lXI"/>
                 <outlet property="title" destination="Dwr-QF-obQ" id="jrh-4C-HWe"/>
+            </connections>
+        </collectionViewCell>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NewsCell" id="Ld8-WR-JcM" customClass="NewsCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="317" height="120"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="317" height="120"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отключение горячей воды" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEw-JZ-1Df">
+                        <rect key="frame" x="24" y="8" width="219" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87N-Js-DU1">
+                        <rect key="frame" x="24" y="119" width="277" height="1"/>
+                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="GIn-sT-uh9"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="749" text="22 ноября с 12:00 до 13:00 будет отключениа горяча..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.85000002384185791" translatesAutoresizingMaskIntoConstraints="NO" id="Tkp-wn-aiG">
+                        <rect key="frame" x="16" y="31.5" width="183" height="78.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="Сегодня, 8:52" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFw-6a-AXe">
+                        <rect key="frame" x="201" y="92" width="100" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HTh-AN-9PU">
+                        <rect key="frame" x="246" y="1.5" width="16" height="33.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="16" id="5mT-52-6Pf"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="87N-Js-DU1" secondAttribute="trailing" constant="16" id="3PX-pe-IzM"/>
+                <constraint firstItem="HTh-AN-9PU" firstAttribute="leading" secondItem="DEw-JZ-1Df" secondAttribute="trailing" constant="3" id="4vp-ua-AAT"/>
+                <constraint firstItem="Tkp-wn-aiG" firstAttribute="top" secondItem="DEw-JZ-1Df" secondAttribute="bottom" constant="3" id="6u0-4F-TfT"/>
+                <constraint firstItem="87N-Js-DU1" firstAttribute="bottom" secondItem="Tkp-wn-aiG" secondAttribute="bottom" constant="10" id="7eY-eJ-sni"/>
+                <constraint firstItem="87N-Js-DU1" firstAttribute="leading" secondItem="DEw-JZ-1Df" secondAttribute="leading" id="Arc-jI-emm"/>
+                <constraint firstItem="JFw-6a-AXe" firstAttribute="leading" secondItem="Tkp-wn-aiG" secondAttribute="trailing" constant="2" id="CaC-7b-mfa"/>
+                <constraint firstAttribute="bottom" secondItem="87N-Js-DU1" secondAttribute="bottom" id="GCJ-hg-bgJ"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DEw-JZ-1Df" secondAttribute="trailing" constant="28" id="Pod-5w-gAq"/>
+                <constraint firstItem="Tkp-wn-aiG" firstAttribute="leading" secondItem="Ld8-WR-JcM" secondAttribute="leading" constant="16" id="Qv2-jw-Mk5"/>
+                <constraint firstItem="JFw-6a-AXe" firstAttribute="bottom" secondItem="Tkp-wn-aiG" secondAttribute="bottom" id="SNT-WZ-dq2"/>
+                <constraint firstItem="HTh-AN-9PU" firstAttribute="centerY" secondItem="DEw-JZ-1Df" secondAttribute="centerY" id="qcr-ci-G72"/>
+                <constraint firstItem="DEw-JZ-1Df" firstAttribute="leading" secondItem="Ld8-WR-JcM" secondAttribute="leadingMargin" constant="8" id="rnB-aQ-APF"/>
+                <constraint firstAttribute="trailing" secondItem="JFw-6a-AXe" secondAttribute="trailing" constant="16" id="sXd-HG-1gc"/>
+                <constraint firstItem="DEw-JZ-1Df" firstAttribute="top" secondItem="Ld8-WR-JcM" secondAttribute="top" constant="8" id="xnl-4L-If7"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="61s-eU-Xck"/>
+            <size key="customSize" width="317" height="120"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="0.0"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="alertNews" destination="HTh-AN-9PU" id="P2q-kX-LsF"/>
+                <outlet property="date" destination="JFw-6a-AXe" id="8Dy-7x-8G8"/>
+                <outlet property="desc" destination="Tkp-wn-aiG" id="nhF-9J-LXS"/>
+                <outlet property="divider" destination="87N-Js-DU1" id="JXO-cH-5o5"/>
+                <outlet property="title" destination="DEw-JZ-1Df" id="IIg-5l-pP9"/>
             </connections>
         </collectionViewCell>
     </objects>
