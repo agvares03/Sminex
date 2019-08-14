@@ -109,7 +109,6 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
         updateUserInterface()
         endAnimating()
         automaticallyAdjustsScrollViewInsets = false
-        print(data_.images)
         if data_.images.count > 0{
             data_.images.forEach{
                 comments_.append(ServiceAppCommentCellData(image: UIImage(named: "account")!, title: "", comment: "", date: data_.date, commImg: $0, commImgUrl: nil, id: "-1"))
