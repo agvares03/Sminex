@@ -329,7 +329,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
 //            edConst.constant += 16
 //        }
-        edConst.constant = 40
+        edConst.constant = 45
         sprtTopConst = pickerLine.frame.origin.y
         btnConstant = sendButton.frame.origin.y
         endAnimator()

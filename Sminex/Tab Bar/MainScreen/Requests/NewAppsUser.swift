@@ -24,7 +24,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction func SwipeRight(_ sender: UISwipeGestureRecognizer) {
         if index > 0{
             index -= 1
-            startAnimator()
+            self.startAnimator()
             collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
             collectionHeader?.reloadData()
             selType = index
@@ -35,7 +35,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
         if index < dataType.count - 1{
             index += 1
-            startAnimator()
+            self.startAnimator()
             collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
             collectionHeader?.reloadData()
             selType = index
@@ -45,7 +45,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBAction private func addRequestPressed(_ sender: UIButton?) {
         
-        startAnimator()
+        self.startAnimator()
         
         DispatchQueue.global(qos: .userInteractive).async {
             
@@ -100,7 +100,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
         collectionHeader?.dataSource             = self
         automaticallyAdjustsScrollViewInsets     = false
         
-        startAnimator()
+        self.startAnimator()
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }else{
@@ -225,6 +225,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewAppsUserCell", for: indexPath) as! NewAppsUserCell
             cell.display(data[indexPath.row])
             if indexPath.row == self.data.count - 1 {
+                self.startAnimator()
                 self.loadMore()
             }
             return cell
@@ -246,10 +247,10 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.collection{
-            startAnimator()
+            self.startAnimator()
             prepareTapped(indexPath)
         }else{
-            startAnimator()
+            self.startAnimator()
             collectionHeader?.reloadData()
             selType = indexPath.row
             dataWithType()
@@ -276,7 +277,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             offset = 19
             reachedEndOfItems = false
             collection?.reloadData()
-            stopAnimatior()
+            self.stopAnimatior()
         }else{
             offset = 19
             reachedEndOfItems = false
@@ -293,7 +294,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
             collection?.reloadData()
-            stopAnimatior()
+            self.stopAnimatior()
         }
         
     }
@@ -966,21 +967,21 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     private func startAnimator() {
-        DispatchQueue.main.async{
+//        DispatchQueue.main.sync{
             self.activity?.isHidden       = false
             self.createButton?.isHidden   = true
 //            self.collectionHeader?.isHidden = true
             self.activity?.startAnimating()
-        }
+//        }
     }
     
     private func stopAnimatior() {
-        DispatchQueue.main.async{
+//        DispatchQueue.main.sync{
             self.activity?.stopAnimating()
 //            self.collectionHeader?.isHidden = false
             self.activity?.isHidden       = true
             self.createButton?.isHidden   = false
-        }
+//        }
         
     }
     
