@@ -1120,7 +1120,7 @@
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="6z3-yt-nv7" kind="show" identifier="receiptArchive" id="7gy-d4-tgY"/>
+                                                        <action selector="goCalc:" destination="xiG-zJ-Pm4" eventType="touchUpInside" id="O6l-2p-Qjc"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tt5-cW-w1D">
@@ -1213,6 +1213,7 @@
                     <connections>
                         <outlet property="collection" destination="XZo-lh-Uzu" id="Dsi-Vf-45l"/>
                         <segue destination="ODM-Ev-8QC" kind="show" identifier="goPay" id="IJ7-Wm-IW6"/>
+                        <segue destination="jEN-tK-MhP" kind="show" identifier="receiptArchive" id="GQh-Da-ctM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPb-xP-8e1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1665,8 +1666,7 @@
         <segue reference="1Br-lY-lXV"/>
         <segue reference="Uw4-h9-Yot"/>
         <segue reference="UqP-vz-sNh"/>
-        <segue reference="M1z-fP-A6K"/>
-        <segue reference="7gy-d4-tgY"/>
+        <segue reference="GQh-Da-ctM"/>
         <segue reference="m9y-y7-qtt"/>
         <segue reference="IJ7-Wm-IW6"/>
     </inferredMetricsTieBreakers>

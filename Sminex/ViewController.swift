@@ -206,7 +206,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     // Анимация перехода
     private var transitionManager = TransitionManager()
     private var sprtTopConst: CGFloat = 0.0
-    
+    private var salt = Data()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -439,7 +439,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 if !self.isFromSettings_ {
                     self.errorLabel.isHidden = true
                 }
-                
+                self.saveUsersDefaults()
                 // авторизация на сервере - получение данных пользователя
                 var answer = self.responseString.components(separatedBy: ";")
 //                print(answer)
@@ -482,7 +482,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                     // ЗАЯВКИ С КОММЕНТАРИЯМИ
                     db.del_db(table_name: "Comments")
                     db.del_db(table_name: "Applications")
-                    db.parse_Apps(login: self.LoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: self.LoginText)) , isCons: "1")
+                    db.parse_Apps(login: self.LoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.salt) , isCons: "1")
                     
                     // Дома, квартиры, лицевые счета
                     db.del_db(table_name: "Houses")
@@ -502,7 +502,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                         db.del_db(table_name: "Counters")
                         db.del_db(table_name: "TypesCounters")
                         // Получим данные в базу данных
-                        db.parse_Countrers(login: self.LoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: self.LoginText)), history: answer[7])
+                        db.parse_Countrers(login: self.LoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.salt), history: answer[7])
                         
                         // ВЕДОМОСТЬ (Пока данные тестовые)
                         // Удалим данные из базы данных
@@ -652,16 +652,14 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private func getSalt(login: String) -> Data {
         
         var salt: Data?
+        
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
         request.httpMethod = "GET"
-        
         print(request)
         TemporaryHolder.instance.SaltQueue.enter()
-
         URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            guard data != nil else { return }
-            print("SALT: ", String(data: data!, encoding: .utf8)!)
+            data, response, error in
+            //            print(String(data: data!, encoding: .utf8))
             
             defer {
                 TemporaryHolder.instance.SaltQueue.leave()
@@ -669,14 +667,14 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             
             if error != nil {
                 DispatchQueue.main.sync {
-//                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-//                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-//                    alert.addAction(cancelAction)
-//                    self.present(alert, animated: true, completion: nil)
+                    //                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    //                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    //                    alert.addAction(cancelAction)
+                    //                    self.present(alert, animated: true, completion: nil)
                 }
                 return
             }
-            
+            self.salt = data!
             salt = data
             TemporaryHolder.instance.salt = data
             }.resume()
@@ -701,7 +699,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         
         } else if segue.identifier == Segues.fromViewController.toAppsUser {
             let login = UserDefaults.standard.string(forKey: "login") ?? ""
-            getContacts(login: login, pwd: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: login)))
+            getContacts(login: login, pwd: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.salt))
         }
         
     }
@@ -731,9 +729,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func saveUsersDefaults() {
-        let salt = getSalt(login: self.edLogin.text!)
-        
-        let pwd = getHash(pass: self.edPass.text!, salt: salt)
+        let txtLogin = self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtPass = self.edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let pwd = getHash(pass: txtPass, salt: self.salt)
         let defaults = UserDefaults.standard
         defaults.setValue(edLogin.text!, forKey: "login")
         DispatchQueue.main.async {

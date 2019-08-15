@@ -432,7 +432,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         
         if imagesArr.count == 0 {
             images.isHidden = true
-            imageConst.constant = 8
+            imageConst.constant = 0
             
             //            if !picker.isHidden && isNeedToScrollMore() {
             //                btnConst.constant = 100
@@ -453,7 +453,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             images.isHidden = false
             
             if picker.isHidden {
-                imageConst.constant = 8
+                imageConst.constant = 0
                 
             } else {
                 imageConst.constant = 170

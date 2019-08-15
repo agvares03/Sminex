@@ -743,7 +743,7 @@ final class AdmissionHeader: UICollectionViewCell {
             descLine?.isHidden  = true
             descText?.text = ""
         } else {
-            descConstant?.constant = 47
+            descConstant?.constant = 58
             descText?.isHidden  = false
             descTitle?.isHidden = false
             descLine?.isHidden  = false
