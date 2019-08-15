@@ -198,7 +198,10 @@ class FirstController: UIViewController {
         // Авторизация пользователя
         let txtLogin = login.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
 //        let txtPass = pass.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
-        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
+        let salt = getSalt(login: login)
+        
+        let pwd = getHash(pass: pass, salt: salt)
+//        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
         UserDefaults.standard.setValue(pwd, forKey: "pwd")
         UserDefaults.standard.synchronize()
@@ -274,7 +277,8 @@ class FirstController: UIViewController {
         TemporaryHolder.instance.SaltQueue.enter()
         URLSession.shared.dataTask(with: request) {
             data, response, error in
-            
+            print("SALT: ", String(data: data!, encoding: .utf8)!)
+
             defer {
                 TemporaryHolder.instance.SaltQueue.leave()
             }

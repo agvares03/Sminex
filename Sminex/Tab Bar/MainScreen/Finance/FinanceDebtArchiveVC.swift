@@ -103,6 +103,6 @@ final class FinanceDebtArchiveCell: UICollectionViewCell {
             sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
         }
         self.title.text = title
-        self.desc.text  = sum
+        self.desc.text  = sum.replacingOccurrences(of: ".", with: ",")
     }
 }

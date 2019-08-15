@@ -338,9 +338,9 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     private var tappedNews: NewsJson?
     private func fetchNews() {
         DispatchQueue.global(qos: .userInitiated).async {
-            let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
-            var decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
-            TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
+//            let decoded = UserDefaults.standard.object(forKey: "newsList") as? Data
+//            var decodedNewsDict = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]]
+//            TemporaryHolder.instance.newsNew = decodedNewsDict[0]!
             
             //            guard decoded != nil && ((NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Int:[NewsJson]])[0]?.count ?? 0) != 0 else {
             let login = UserDefaults.standard.string(forKey: "id_account") ?? ""
@@ -363,8 +363,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 let filteredNews = TemporaryHolder.instance.newsNew?.filter { $0.isShowOnMainPage ?? false } ?? []
                 let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
                 filteredNews.forEach{
-                    let ident: Int = Int(push.ident ?? "")!
-                    if $0.newsId == ident{
+                    if String($0.newsId!) == push.ident{
                         print("OK")
                         self.tappedNews = $0
                     }

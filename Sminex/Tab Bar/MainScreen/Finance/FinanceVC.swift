@@ -647,7 +647,7 @@ final class FinanceCell: UITableViewCell {
     
     func display(title: String, desc: String) {
         self.title.text = title
-        self.desc.text  = desc
+        self.desc.text  = desc.replacingOccurrences(of: ".", with: ",")
         if title == "Аванс" || desc.contains(find: "-"){
             self.desc.textColor = .green
             self.desc.alpha = 1

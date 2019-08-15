@@ -24,7 +24,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction func SwipeRight(_ sender: UISwipeGestureRecognizer) {
         if index > 0{
             index -= 1
-            startAnimator()
+            self.startAnimator()
             collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
             collectionHeader?.reloadData()
             selType = index
@@ -35,7 +35,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
         if index < dataType.count - 1{
             index += 1
-            startAnimator()
+            self.startAnimator()
             collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
             collectionHeader?.reloadData()
             selType = index
@@ -45,7 +45,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     
     @IBAction private func addRequestPressed(_ sender: UIButton?) {
         
-        startAnimator()
+        self.startAnimator()
         
         DispatchQueue.global(qos: .userInteractive).async {
             
@@ -100,7 +100,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
         collectionHeader?.dataSource             = self
         automaticallyAdjustsScrollViewInsets     = false
         
-        startAnimator()
+        self.startAnimator()
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }else{
@@ -225,6 +225,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewAppsUserCell", for: indexPath) as! NewAppsUserCell
             cell.display(data[indexPath.row])
             if indexPath.row == self.data.count - 1 {
+                self.startAnimator()
                 self.loadMore()
             }
             return cell
@@ -246,10 +247,10 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.collection{
-            startAnimator()
+            self.startAnimator()
             prepareTapped(indexPath)
         }else{
-            startAnimator()
+            self.startAnimator()
             collectionHeader?.reloadData()
             selType = indexPath.row
             dataWithType()
@@ -259,25 +260,26 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     func dataWithType(){
         if selType != 0{
             self.data.removeAll()
-//            if fullData.count > 40{
-//                for i in 0...39{
-//                    self.data.append(fullData[i])
-//                    //                        firstArr.removeFirst()
-//                }
-//            }else{
-//                for i in 0...fullData.count - 1{
-//                    self.data.append(fullData[i])
-//                    //                        firstArr.removeFirst()
-//                }
-//            }
             let dat = fullData
             data.removeAll()
-            data = dat.filter(){ $0.title == dataType[selType].title || ($0.title == "Заявка на услугу" && dataType[selType].title == "Дополнительные услуги") }
+            dataChoice = dat.filter(){ $0.title == dataType[selType].title || ($0.title == "Заявка на услугу" && dataType[selType].title == "Дополнительные услуги") }
+            self.choiceCount = self.dataChoice.count
+            self.data.removeAll()
+            if dataChoice.count > 20{
+                for i in 0...19{
+                    self.data.append(dataChoice[i])
+                }
+            }else{
+                for i in 0...dataChoice.count - 1{
+                    self.data.append(dataChoice[i])
+                }
+            }
+            offset = 19
+            reachedEndOfItems = false
             collection?.reloadData()
-            stopAnimatior()
+            self.stopAnimatior()
         }else{
             offset = 19
-            fullCount = 0
             reachedEndOfItems = false
             self.data.removeAll()
             if fullData.count > 20{
@@ -292,71 +294,126 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
             collection?.reloadData()
-            stopAnimatior()
+            self.stopAnimatior()
         }
         
     }
     // number of items to be fetched each time (i.e., database LIMIT)
     let itemsPerBatch = 19
-    
+    private var dataChoice: [AppsUserCellData] = []
     // Where to start fetching items (database OFFSET)
     var offset = 19
     var fullCount = 0
+    var choiceCount = 0
     // a flag for when all database items have already been loaded
     var reachedEndOfItems = false
 
     func loadMore() {
-        print(fullCount)
         // don't bother doing another db query if already have everything
-        guard !self.reachedEndOfItems else {
-            return
-        }
-        if fullCount < 20{
-            return
-        }
-        self.startAnimator()
-        // query the db on a background thread
-        DispatchQueue.global(qos: .background).async {
-            
-            // determine the range of data items to fetch
-            var thisBatchOfItems: [AppsUserCellData] = []
-            let start = self.offset
-            var end = self.offset + self.itemsPerBatch
-            if end > self.fullCount{
-                end = self.fullCount - 1
+        if selType != 0{
+            guard !self.reachedEndOfItems else {
+                return
             }
-            for i in start...end{
-                thisBatchOfItems.append(self.fullData[i])
+            if choiceCount < 20{
+                return
             }
-            // update UITableView with new batch of items on main thread after query finishes
-            DispatchQueue.main.async {
+            self.startAnimator()
+            // query the db on a background thread
+            DispatchQueue.global(qos: .background).async {
                 
-                if thisBatchOfItems.count != 0 {
-//                    if thisBatchOfItems.title
-                    // append the new items to the data source for the table view
-                    self.data += thisBatchOfItems
-                    // reload the table view
-                    if self.selType != 0{
-                        self.dataWithType()
+                // determine the range of data items to fetch
+                var thisBatchOfItems: [AppsUserCellData] = []
+                let start = self.offset
+                var end = self.offset + self.itemsPerBatch
+                if end > self.choiceCount{
+                    end = self.choiceCount - 1
+                }
+                for i in start...end{
+                    thisBatchOfItems.append(self.dataChoice[i])
+                }
+                // update UITableView with new batch of items on main thread after query finishes
+                DispatchQueue.main.async {
+                    
+                    if thisBatchOfItems.count != 0 {
+    //                    if thisBatchOfItems.title
+                        // append the new items to the data source for the table view
+                        self.data += thisBatchOfItems
+                        // reload the table view
+                        if self.selType != 0{
+                            self.dataWithType()
+                        }else{
+                            self.collection?.reloadData()
+                        }
+                        
+                        self.stopAnimatior()
+                        if #available(iOS 10.0, *) {
+                            self.collection?.refreshControl?.endRefreshing()
+                        } else {
+                            self.refreshControl?.endRefreshing()
+                        }
+                        // check if this was the last of the data
+                        if thisBatchOfItems.count < self.itemsPerBatch {
+                            self.reachedEndOfItems = true
+                        }
+                        
+                        // reset the offset for the next data query
+                        self.offset += self.itemsPerBatch
                     }else{
-                        self.collection?.reloadData()
+                        self.stopAnimatior()
                     }
+                }
+            }
+        }else{
+            guard !self.reachedEndOfItems else {
+                return
+            }
+            if fullCount < 20{
+                return
+            }
+            self.startAnimator()
+            // query the db on a background thread
+            DispatchQueue.global(qos: .background).async {
+                
+                // determine the range of data items to fetch
+                var thisBatchOfItems: [AppsUserCellData] = []
+                let start = self.offset
+                var end = self.offset + self.itemsPerBatch
+                if end > self.fullCount{
+                    end = self.fullCount - 1
+                }
+                for i in start...end{
+                    thisBatchOfItems.append(self.fullData[i])
+                }
+                // update UITableView with new batch of items on main thread after query finishes
+                DispatchQueue.main.async {
                     
-                    self.stopAnimatior()
-                    if #available(iOS 10.0, *) {
-                        self.collection?.refreshControl?.endRefreshing()
-                    } else {
-                        self.refreshControl?.endRefreshing()
+                    if thisBatchOfItems.count != 0 {
+                        //                    if thisBatchOfItems.title
+                        // append the new items to the data source for the table view
+                        self.data += thisBatchOfItems
+                        // reload the table view
+                        if self.selType != 0{
+                            self.dataWithType()
+                        }else{
+                            self.collection?.reloadData()
+                        }
+                        
+                        self.stopAnimatior()
+                        if #available(iOS 10.0, *) {
+                            self.collection?.refreshControl?.endRefreshing()
+                        } else {
+                            self.refreshControl?.endRefreshing()
+                        }
+                        // check if this was the last of the data
+                        if thisBatchOfItems.count < self.itemsPerBatch {
+                            self.reachedEndOfItems = true
+                        }
+                        
+                        // reset the offset for the next data query
+                        self.offset += self.itemsPerBatch
+                    }else{
+                        self.stopAnimatior()
                     }
-                    // check if this was the last of the data
-                    if thisBatchOfItems.count < self.itemsPerBatch {
-                        self.reachedEndOfItems = true
-                    }
-                    
-                    // reset the offset for the next data query
-                    self.offset += self.itemsPerBatch
-                }else{
-                    self.stopAnimatior()
                 }
             }
         }
@@ -687,7 +744,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             DispatchQueue.main.async {
                 self.stopAnimatior()
                 
-                var type = self.fullData[indexPath.row].type
+                var type = self.data[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
                 var itsNever: Bool = false
                 print(type)
@@ -704,10 +761,10 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 //                    type = "Гостевой пропуск"
                 //                }
                 
-                if type.contains(find: "ропуск") {
+                if self.data[indexPath.row].title.contains(find: "ропуск") {
                     self.typeName = type
                     print(self.rows)
-                    let row = self.rows[self.fullData[indexPath.row].id]!
+                    let row = self.rows[self.data[indexPath.row].id]!
                     var persons = row.responsiblePerson ?? ""
                     
                     if persons == "" {
@@ -745,7 +802,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                     }
                     
-                    self.admission = AdmissionHeaderData(icon: self.fullData[indexPath.row].icon,
+                    self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
                                                          gosNumber: auto, mark: mark,
@@ -789,8 +846,8 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     }
                     self.prepareGroup?.leave()
                     
-                } else if self.fullData[indexPath.row].title.containsIgnoringCase(find: "услуг"){
-                    let row = self.rows[self.fullData[indexPath.row].id]!
+                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услуг"){
+                    let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
                     
                     self.rowFiles.forEach {
@@ -801,7 +858,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     }
                     var dataServ: ServicesUKJson!
                     self.dataService.forEach{
-                        if $0.name == self.fullData[indexPath.row].desc || $0.name == self.fullData[indexPath.row].stickTitle{
+                        if $0.name == self.data[indexPath.row].desc || $0.name == self.data[indexPath.row].stickTitle{
                             dataServ = $0
                         }
                     }
@@ -910,21 +967,21 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     private func startAnimator() {
-        DispatchQueue.main.async{
+//        DispatchQueue.main.sync{
             self.activity?.isHidden       = false
             self.createButton?.isHidden   = true
 //            self.collectionHeader?.isHidden = true
             self.activity?.startAnimating()
-        }
+//        }
     }
     
     private func stopAnimatior() {
-        DispatchQueue.main.async{
+//        DispatchQueue.main.sync{
             self.activity?.stopAnimating()
 //            self.collectionHeader?.isHidden = false
             self.activity?.isHidden       = true
             self.createButton?.isHidden   = false
-        }
+//        }
         
     }
     

@@ -652,14 +652,16 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private func getSalt(login: String) -> Data {
         
         var salt: Data?
-        
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
         request.httpMethod = "GET"
+        
         print(request)
         TemporaryHolder.instance.SaltQueue.enter()
+
         URLSession.shared.dataTask(with: request) {
-            data, response, error in
-//            print(String(data: data!, encoding: .utf8))
+            data, error, responce in
+            guard data != nil else { return }
+            print("SALT: ", String(data: data!, encoding: .utf8)!)
             
             defer {
                 TemporaryHolder.instance.SaltQueue.leave()
@@ -729,7 +731,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func saveUsersDefaults() {
-        let pwd = getHash(pass: self.edPass.text!, salt: getSalt(login: self.edLogin.text!))
+        let salt = getSalt(login: self.edLogin.text!)
+        
+        let pwd = getHash(pass: self.edPass.text!, salt: salt)
         let defaults = UserDefaults.standard
         defaults.setValue(edLogin.text!, forKey: "login")
         DispatchQueue.main.async {

@@ -103,6 +103,11 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
             if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
                 self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
             }
+            
+            #if DEBUG
+            print("счетчики:", String(data: data!, encoding: .utf8)!)
+            #endif
+            
             if (String(data: data!, encoding: .utf8)?.contains(find: "error"))! {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
@@ -110,10 +115,6 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                 self.present(alert, animated: true, completion: nil)
                 return
             }
-            
-            #if DEBUG
-//            print("счетчики:", String(data: data!, encoding: .utf8)!)
-            #endif
             
             let xml = XML.parse(data!)
             let metersValues = xml["MetersValues"]
