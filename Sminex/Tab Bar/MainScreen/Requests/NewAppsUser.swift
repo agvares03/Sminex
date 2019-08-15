@@ -260,42 +260,60 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     
     func dataWithType(){
         if selType != 0{
-            self.data.removeAll()
-            let dat = fullData
-            data.removeAll()
-            dataChoice = dat.filter(){ $0.title == dataType[selType].title || ($0.title == "Заявка на услугу" && dataType[selType].title == "Дополнительные услуги") }
-            self.choiceCount = self.dataChoice.count
-            self.data.removeAll()
-            if dataChoice.count > 20{
-                for i in 0...19{
-                    self.data.append(dataChoice[i])
+            DispatchQueue.global(qos: .background).async {
+                self.data.removeAll()
+                let dat = self.fullData
+                self.data.removeAll()
+                self.dataChoice = dat.filter(){ $0.title == self.dataType[self.selType].title || ($0.title == "Заявка на услугу" && self.dataType[self.selType].title == "Дополнительные услуги") }
+                self.choiceCount = self.dataChoice.count
+                self.data.removeAll()
+                if self.dataChoice.count > 20{
+                    for i in 0...19{
+                        self.data.append(self.dataChoice[i])
+                    }
+                }else{
+                    for i in 0...self.dataChoice.count - 1{
+                        self.data.append(self.dataChoice[i])
+                    }
                 }
-            }else{
-                for i in 0...dataChoice.count - 1{
-                    self.data.append(dataChoice[i])
+                self.offset = 19
+                self.self.reachedEndOfItems = false
+                DispatchQueue.main.async {
+                    self.collection?.reloadData()
+                    self.stopAnimatior()
+                    if #available(iOS 10.0, *) {
+                        self.collection?.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                 }
             }
-            offset = 19
-            reachedEndOfItems = false
-            collection?.reloadData()
-            self.stopAnimatior()
         }else{
-            offset = 19
-            reachedEndOfItems = false
-            self.data.removeAll()
-            if fullData.count > 20{
-                for i in 0...19{
-                    self.data.append(fullData[i])
-                    //                        firstArr.removeFirst()
+            DispatchQueue.global(qos: .background).async {
+                self.offset = 19
+                self.reachedEndOfItems = false
+                self.data.removeAll()
+                if self.fullData.count > 20{
+                    for i in 0...19{
+                        self.data.append(self.fullData[i])
+                        //                        firstArr.removeFirst()
+                    }
+                }else{
+                    for i in 0...self.fullData.count - 1{
+                        self.data.append(self.fullData[i])
+                        //                        firstArr.removeFirst()
+                    }
                 }
-            }else{
-                for i in 0...fullData.count - 1{
-                    self.data.append(fullData[i])
-                    //                        firstArr.removeFirst()
+                DispatchQueue.main.async {
+                    self.collection?.reloadData()
+                    self.stopAnimatior()
+                    if #available(iOS 10.0, *) {
+                        self.collection?.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                 }
             }
-            collection?.reloadData()
-            self.stopAnimatior()
         }
         
     }
@@ -340,11 +358,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         // append the new items to the data source for the table view
                         self.data += thisBatchOfItems
                         // reload the table view
-                        if self.selType != 0{
-                            self.dataWithType()
-                        }else{
-                            self.collection?.reloadData()
-                        }
+                        self.collection?.reloadData()
                         
                         self.stopAnimatior()
                         if #available(iOS 10.0, *) {
@@ -393,11 +407,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         // append the new items to the data source for the table view
                         self.data += thisBatchOfItems
                         // reload the table view
-                        if self.selType != 0{
-                            self.dataWithType()
-                        }else{
-                            self.collection?.reloadData()
-                        }
+                        self.collection?.reloadData()
                         
                         self.stopAnimatior()
                         if #available(iOS 10.0, *) {
