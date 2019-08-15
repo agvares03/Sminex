@@ -414,7 +414,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     name                = "Обращение к консьержу"
                 } else if (curr.responsiblePerson?.contains("поддержк"))! || (curr.name?.contains("поддержк"))!{
                     name                = "Обращение в Техподдержку"
-                } else if (curr.responsiblePerson?.contains("иректор"))! || (curr.name?.contains("иректор"))!{
+                } else if (curr.responsiblePerson?.contains("иректор"))! || (curr.name?.contains("иректор"))! || (curr.responsiblePerson?.containsIgnoringCase(find: "предложения"))! || (curr.name?.containsIgnoringCase(find: "предложения"))!{
                     name                = " Обращение к Директору службы комфорта"
                 }
                 newData.append( AppealUserCellData(title: name ?? "",
