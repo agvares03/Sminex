@@ -97,9 +97,9 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     
     func numberOfSections(in tableView: UITableView) -> Int {
 //        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
-//            return 4
+            return 4
 //        }else{
-            return 3
+//            return 3
 //        }
     }
     
@@ -319,24 +319,24 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             
         } else if section == 2 {
             if filteredCalcs.count == 0 {
-                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-                    return 1
-                }else{
+//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
+//                    return 1
+//                }else{
                     return 0
-                }
+//                }
             } else if filteredCalcs.count < 3 {
-                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-                    return filteredCalcs.count + 3
-                }else{
+//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
+//                    return filteredCalcs.count + 3
+//                }else{
                     return filteredCalcs.count + 2
-                }
+//                }
                 
             } else {
-                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-                    return 6
-                }else{
-                    return 6
-                }
+//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
+//                    return 6
+//                }else{
+                    return 5
+//                }
             }
             
         } else {
@@ -544,6 +544,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
         } else if segue.identifier == Segues.fromFinanceVC.toCalcsArchive {
             let vc = segue.destination as! FinanceCalcsArchiveVCComm
             vc.debt = debt
+            vc.dataDebt = receipts
             vc.data_ = calcs
             
         } else if segue.identifier == Segues.fromFinanceVC.toPay {

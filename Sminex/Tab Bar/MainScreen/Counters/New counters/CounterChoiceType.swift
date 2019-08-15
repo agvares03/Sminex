@@ -115,31 +115,49 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                 self.present(alert, animated: true, completion: nil)
                 return
             }
+            if !(String(data: data!, encoding: .utf8)?.contains(find: "MetersValues"))! {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "", message: "Показания по приборам учёта отсутствуют", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                    let calendar = Calendar.current
+                    let year = calendar.component(.year, from: Date())
+                    let month = calendar.component(.month, from: Date())
+                    self.dateLbl.text = self.getNameAndMonth(String(month)) + " " + (String(year))
+//                    self.tableView.isHidden = false
+                    self.dateLbl.isHidden = false
+                    self.historyBtn.isHidden = true
+                    self.indicator.stopAnimating()
+                    self.indicator.isHidden = true
+                }
+            }else{
+                let xml = XML.parse(data!)
+                let metersValues = xml["MetersValues"]
+                let period = metersValues["Period"].reversed()
+                let meterValue = period.first!["MeterValue"]
             
-            let xml = XML.parse(data!)
-            let metersValues = xml["MetersValues"]
-            let period = metersValues["Period"].reversed()
-            let meterValue = period.first!["MeterValue"]
+                var newMeters: [MeterValue] = []
+                meterValue.forEach {
+                    newMeters.append( MeterValue($0, period: period.first?.attributes["NumMonth"] ?? "1") )
+                }
             
-            var newMeters: [MeterValue] = []
-            meterValue.forEach {
-                newMeters.append( MeterValue($0, period: period.first?.attributes["NumMonth"] ?? "1") )
+                var newPeriods: [CounterPeriod] = []
+                period.forEach {
+                    newPeriods.append( CounterPeriod($0) )
+                }
+                self.meterArr = newMeters
+                self.periods  = newPeriods
+                DispatchQueue.main.async {
+                    self.dateLbl.text = self.getNameAndMonth(self.periods.first?.numMonth ?? "1") + " " + (self.periods.first?.year ?? "")
+                    self.tableView.isHidden = false
+                    self.dateLbl.isHidden = false
+                    self.historyBtn.isHidden = false
+                    self.indicator.stopAnimating()
+                    self.indicator.isHidden = true
+                }
             }
             
-            var newPeriods: [CounterPeriod] = []
-            period.forEach {
-                newPeriods.append( CounterPeriod($0) )
-            }
-            self.meterArr = newMeters
-            self.periods  = newPeriods
-            DispatchQueue.main.async {
-                self.dateLbl.text = self.getNameAndMonth(self.periods.first?.numMonth ?? "1") + " " + (self.periods.first?.year ?? "")
-                self.tableView.isHidden = false
-                self.dateLbl.isHidden = false
-                self.historyBtn.isHidden = false
-                self.indicator.stopAnimating()
-                self.indicator.isHidden = true
-            }
             }.resume()
     }
     

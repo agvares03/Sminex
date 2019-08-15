@@ -47,14 +47,37 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "receiptArchive" {
-            let vc = segue.destination as! FinanceDebtArchiveVC
-            vc.data_ = dataDebt
+            let vc = segue.destination as! FinanceDebtVC
+            var dat: AccountBillsJson?
+            dataDebt.forEach{
+                if date.0 == $0.numMonth && date.1 == $0.numYear{
+                    dat = $0
+                }
+            }
+            vc.data_ = dat
         }
         if segue.identifier == "goPay" {
             let vc = segue.destination as! FinancePayVC
             vc.url_ = url
         }
     }
+    
+    func goCalc() {
+        var dat: AccountBillsJson?
+        dataDebt.forEach{
+            if date.0 == $0.numMonth && date.1 == $0.numYear{
+                dat = $0
+            }
+        }
+        if dat != nil{
+            self.performSegue(withIdentifier: "receiptArchive", sender: self)
+        }else{
+            let alert = UIAlertController(title: "", message: "Не найдена квитанция по выбранной дате!", preferredStyle: .alert)
+            alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -203,30 +226,33 @@ final class FinanceCalcCell: UICollectionViewCell {
     @IBAction private func goPay(_ sender: UIButton) {
         self.delegate?.requestPay(debt: sumDebt.text!)
     }
+    @IBAction private func goCalc(_ sender: UIButton) {
+        self.delegate?.goCalc()
+    }
     var delegate: PayDelegate?
     fileprivate func display(_ item: AccountCalculationsJson, pay: PayDelegate) {
         self.delegate = pay
-        if item.type != "Итого"{
+//        if item.type != "Итого"{
             payBtn.isHidden = true
             payHeight.constant = 0
             payTop.constant = 0
             goDebt.isHidden = true
             debtHeight.constant = 0
             debtTop.constant = 0
-        }else{
-            if item.sumDebt! > 0.00{
-                payBtn.isHidden = false
-                payHeight.constant = 40
-                payTop.constant = 15
-            }else{
-                payBtn.isHidden = true
-                payHeight.constant = 0
-                payTop.constant = 0
-            }
-            goDebt.isHidden = false
-            debtHeight.constant = 40
-            debtTop.constant = 15
-        }
+//        }else{
+//            if item.sumDebt! > 0.00{
+//                payBtn.isHidden = false
+//                payHeight.constant = 40
+//                payTop.constant = 15
+//            }else{
+//                payBtn.isHidden = true
+//                payHeight.constant = 0
+//                payTop.constant = 0
+//            }
+//            goDebt.isHidden = false
+//            debtHeight.constant = 40
+//            debtTop.constant = 15
+//        }
         var sumA = String(format:"%.2f", item.sumAccrued!)
         if item.sumAccrued! > 999.00 || item.sumAccrued! < -999.00{
             let i = Int(sumA.distance(from: sumA.startIndex, to: sumA.index(of: ".")!)) - 3

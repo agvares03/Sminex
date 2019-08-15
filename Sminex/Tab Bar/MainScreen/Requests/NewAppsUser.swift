@@ -101,6 +101,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
         automaticallyAdjustsScrollViewInsets     = false
         
         self.startAnimator()
+        self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }else{
@@ -668,41 +669,44 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                         
                     }
-                }
-                var typeIn = false
-                let dataType1 = self.dataType
-                self.dataType.removeAll()
-                self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
-                for k in 0...dataType1.count - 1{
-                    for i in 0...self.fullData.count - 1{
-                        if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
-                            if dataType1[k].title == "Дополнительные услуги" && !typeIn{
-                                typeIn = true
-                            }
-                        }else{
-                            
-                            if (self.fullData[i].title == dataType1[k].title) && !typeIn{
-                                typeIn = true
-                            }
-                        }
-                    }
-                    if typeIn{
-                        if self.dataType.count == 0{
-                            self.dataType.append(dataType1[k])
-                        }else{
-                            var addT = false
-                            self.dataType.forEach{
-                                if $0.title == dataType1[k].title{
-                                    addT = true
+                    var typeIn = false
+                    let dataType1 = self.dataType
+                    self.dataType.removeAll()
+                    self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
+                    for k in 0...dataType1.count - 1{
+                        for i in 0...self.fullData.count - 1{
+                            if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
+                                if dataType1[k].title == "Дополнительные услуги" && !typeIn{
+                                    typeIn = true
+                                }
+                            }else{
+                                
+                                if (self.fullData[i].title == dataType1[k].title) && !typeIn{
+                                    typeIn = true
                                 }
                             }
-                            if !addT{
+                        }
+                        if typeIn{
+                            if self.dataType.count == 0{
                                 self.dataType.append(dataType1[k])
+                            }else{
+                                var addT = false
+                                self.dataType.forEach{
+                                    if $0.title == dataType1[k].title{
+                                        addT = true
+                                    }
+                                }
+                                if !addT{
+                                    self.dataType.append(dataType1[k])
+                                }
                             }
                         }
+                        typeIn = false
                     }
-                    typeIn = false
+                }else{
+                    self.collectionHeader?.isHidden = true
                 }
+                
                 self.collectionHeader?.reloadData()
                 self.collection?.reloadData()
                 if self.requestId_ != "" {

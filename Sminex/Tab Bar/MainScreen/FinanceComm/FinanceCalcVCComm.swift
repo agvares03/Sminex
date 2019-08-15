@@ -8,6 +8,7 @@
 import UIKit
 protocol PayDelegate{
     func requestPay(debt: String)
+    func goCalc()
 }
 class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PayDelegate {
     
@@ -75,12 +76,34 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "receiptArchive" {
-            let vc = segue.destination as! FinanceDebtArchiveVCComm
-            vc.data_ = dataDebt
+            let vc = segue.destination as! FinanceDebtVCComm
+            var dat: AccountBillsJson?
+            dataDebt.forEach{
+                if date.0 == $0.numMonth && date.1 == $0.numYear{
+                    dat = $0
+                }
+            }
+            vc.data_ = dat
         }
         if segue.identifier == "goPay" {
             let vc = segue.destination as! FinancePayVC
             vc.url_ = url
+        }
+    }
+    
+    func goCalc() {
+        var dat: AccountBillsJson?
+        dataDebt.forEach{
+            if date.0 == $0.numMonth && date.1 == $0.numYear{
+                dat = $0
+            }
+        }
+        if dat != nil{
+            self.performSegue(withIdentifier: "receiptArchive", sender: self)
+        }else{
+            let alert = UIAlertController(title: "", message: "Не найдена квитанция по выбранной дате!", preferredStyle: .alert)
+            alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+            self.present(alert, animated: true, completion: nil)
         }
     }
     override func viewDidLoad() {
@@ -244,6 +267,10 @@ final class FinanceCalcCommCell: UICollectionViewCell {
     
     @IBAction private func goPay(_ sender: UIButton) {
         self.delegate?.requestPay(debt: sumDebt.text!)
+    }
+    
+    @IBAction private func goCalc(_ sender: UIButton) {
+        self.delegate?.goCalc()
     }
     var delegate: PayDelegate?
     fileprivate func display(_ item: AccountCalculationsJson, pay: PayDelegate) {
