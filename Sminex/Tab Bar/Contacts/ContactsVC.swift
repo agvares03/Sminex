@@ -305,11 +305,11 @@ final class ContactsCell: UICollectionViewCell {
     }
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         var type = 0
-        if (title.text?.contains(find: "консьерж"))!{
+        if (title.text?.containsIgnoringCase(find: "консьерж"))!{
             type = 0
-        }else if (title.text?.contains(find: "предложения"))!{
+        }else if (title.text?.containsIgnoringCase(find: "предложения"))!{
             type = 1
-        }else if (title.text?.contains(find: "поддержка"))!{
+        }else if (title.text?.containsIgnoringCase(find: "поддержка"))!{
             type = 2
         }
         delegate?.btnPressed(type, email.text ?? "")

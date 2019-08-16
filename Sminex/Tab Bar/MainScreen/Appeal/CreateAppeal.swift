@@ -43,7 +43,7 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
     }
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
-        if !Server().isValidEmail(testStr: edEmail.text!){
+        if !Server().isValidEmail(testStr: edEmail.text!) && edContact.text == ""{
             let alert = UIAlertController(title: "Ошибка!", message: "Введите корректный E-mail", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
@@ -316,7 +316,7 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
                         var titleA = ""
                         if self.typeReq == "Консьержу/ в службу комфорта"{
                             titleA = "Сообщение отправлено в службу комфорта"
-                        }else if self.typeReq == "Директору службы комфорта"{
+                        }else if self.typeReq.containsIgnoringCase(find: "директор"){
                             titleA = "Сообщение Директору службы комфорта отправлено"
                         }else if self.typeReq == "в Техподдержку приложения"{
                             titleA = "Сообщение отправлено в техподдержку приложения"
@@ -343,7 +343,7 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         group.enter()
         let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "+skip\(uid).jpg", mimeType: "image/jpeg")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
             
             switch result {

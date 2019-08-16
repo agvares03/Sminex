@@ -35,6 +35,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var gosLine:         UILabel!
     @IBOutlet private weak var markLine:        UILabel!
     @IBOutlet private weak var pickerLine:      UILabel!
+    @IBOutlet private weak var descInfoLbl:     UILabel!
+    @IBOutlet private weak var descInfoView:    UIView!
     @IBOutlet weak var heigthFooter: NSLayoutConstraint!
     @IBOutlet weak var phone_service: UILabel!
     @IBOutlet weak var img_phone_service: UIImageView!
@@ -394,7 +396,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
         edFio.textColor = UIColor.lightGray
         edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
-        
+        heigthFooter.constant = 0
+        heigth_phone_service.constant = 0
+        descInfoLbl.isHidden = true
+        descInfoView.isHidden = true
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMMM HH:mm"
         let calendar = Calendar.current
@@ -488,67 +493,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         self.sendViewConst.constant = (keyboardSize?.height)!
         
         // При показе клавиатуры оставим только кнопку
-        heigthFooter.constant = 59
         
-//        var height_top:CGFloat = 370// высота верхних элементов
-//        var k:CGFloat = 0
-//        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")){
-//            k = 51
-//        }
-//        if Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
-//            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
-//            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
-//            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
-//            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
-//            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-//            height_top = 267
-//        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
-//            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
-//            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
-//            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
-//            height_top = 405
-//        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
-//            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
-//            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
-//            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-//            height_top = 445
-//        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX)  {
-//            height_top = 470
-//        }
-//
-//
-//        let userInfo = sender?.userInfo
-//        let kbFrameSize = (userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-//        let numb_to_move:CGFloat = kbFrameSize.height
-//        //        scroll.contentOffset = CGPoint(x: 0, y: kbFrameSize.height)
-//        if !isNeedToScrollMore() {
-////            sendBtnConst.constant = view.frame.size.height - numb_to_move - height_top//getPoint() - numb_to_move
-//            sendViewConst.constant = view.frame.size.height - numb_to_move - height_top + k
-//        } else {
-////            sendBtnConst.constant = getPoint() - 150
-//            sendViewConst.constant = getPoint() - 150 + k
-//        }
-//
-//        if !picker.isHidden {
-//            datePickerPressed(nil)
-//        }
-//
-//        if gosNumber.isHidden == false{
-////            sendBtnConst.constant = sendBtnConst.constant - 55
-//            sendViewConst.constant = sendViewConst.constant - 57 + k
-//        }
-//
-//        if isNeedToScroll() {
-//            if images.count != 0 {
-//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 200)
-//            } else {
-//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 50)
-//            }
-//            scroll.contentOffset = CGPoint(x: 0, y: 140)
-//        }
-//        if FioConst.constant == 57{
-//            sendViewConst.constant -= 20 + k
-//        }
     }
     
     // И вниз при исчезновении
@@ -557,30 +502,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         // Покажем или нет информацию в подвале
         changeFooter()
-//        if !isNeedToScrollMore() {
-////            sendBtnConst.constant = getPoint()
-//            sendViewConst.constant = getPoint()
-//        } else {
-////            sendBtnConst.constant = getPoint()
-//            sendViewConst.constant = getPoint()
-//        }
-//
-//        if gosNumber.isHidden == false{
-////            sendBtnConst.constant = sendBtnConst.constant - 55
-//            sendViewConst.constant = sendViewConst.constant - 55
-//        }
-//
-//        if isNeedToScroll() {
-//            if images.count != 0 {
-//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 200)
-//            } else {
-//                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 50)
-//            }
-//            scroll.contentOffset = CGPoint(x: 0, y: 0)
-//        }
-//        if FioConst.constant == 57{
-//            sendViewConst.constant -= 20
-//        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
@@ -631,14 +552,18 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //            sendViewConst.constant = sendViewConst.constant + 57
             
             // Уменьшим подвал для показа информации
-            heigthFooter.constant = 59
+//            heigthFooter.constant = 59
+            descInfoLbl.isHidden = true
+            descInfoView.isHidden = true
+            heigth_phone_service.constant = 0
         }
     }
     
     private func changeFooter() {
         if (transportSwitch.isOn) {
             if (UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
-                heigthFooter.constant = 160
+//                heigthFooter.constant = 160
+                descInfoLbl.isHidden = false
                 let data_: [ContactsJson] = TemporaryHolder.instance.contactsList
                 var phone: String = ""
                 for data in data_ {
@@ -648,21 +573,26 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 }
                 if (phone != "") {
                     
-                    heigthFooter.constant = 270
+//                    heigthFooter.constant = 270
+                    descInfoView.isHidden = false
                     heigth_phone_service.constant = 110
                     phone_service.text = phone
                     
                 } else {
                     
-                    heigthFooter.constant = 160
+//                    heigthFooter.constant = 160
                     heigth_phone_service.constant = 0
                     
                 }
             } else {
-                heigthFooter.constant = 59
+                descInfoLbl.isHidden = true
+                descInfoView.isHidden = true
+                heigth_phone_service.constant = 0
             }
         } else {
-            heigthFooter.constant = 59
+            descInfoLbl.isHidden = true
+            descInfoView.isHidden = true
+            heigth_phone_service.constant = 0
         }
     }
     
@@ -670,7 +600,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         if images.count == 0 {
             imgScroll.isHidden = true
-            
+            heigthFooter.constant = 0
             if !picker.isHidden {
                 imageConst.constant = 8
 //                sendBtnConst.constant = 350
@@ -683,7 +613,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 
         } else {
             imgScroll.isHidden = false
-            
+            heigthFooter.constant = 150
             if !picker.isHidden {
                 imageConst.constant = 180
 //                sendBtnConst.constant = 350
@@ -871,7 +801,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         group.enter()
         let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "+skip\(uid).jpg", mimeType: "image/jpeg")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
             
             switch result {
@@ -976,7 +906,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         if textView == gosNumber{
             if updatedText.isEmpty {
-                textView.text = "Госномер (или номера через запятую) например А 033 ЕО 77"
+                textView.text = "Госномер (или номера через запятую, например, А 033 ЕО 77)."
                 sendButton.alpha     = 0.5
                 sendButton.isEnabled = false
                 textView.textColor = UIColor.lightGray

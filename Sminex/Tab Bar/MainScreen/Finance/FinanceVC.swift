@@ -299,8 +299,9 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             }
             return cell
         }else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCell", for: indexPath) as! FinanceCell
-            cell.display(title: "История оплат", desc: "")
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCell", for: indexPath) as! FinanceSectionCell
+            cell.display("История оплат")
+//            cell.display(title: "История оплат", desc: "")
             cell.contentView.backgroundColor = .white
             return cell
         }
@@ -559,16 +560,25 @@ final class FinanceSectionCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var img:     UIImageView!
+    @IBOutlet private weak var imgHeight: NSLayoutConstraint!
+    @IBOutlet private weak var imgWidth: NSLayoutConstraint!
     
     func display(_ title: String) {
         self.title.text     = title
         self.img.image = UIImage(named: "expand")
+        imgHeight.constant = 8
+        imgWidth.constant = 14
+        if title == "История оплат"{
+            self.img.image = UIImage(named: "arrow_right")
+            imgHeight.constant = 14
+            imgWidth.constant = 8
+        }
     }
     
     func expand(_ isExpanded: Bool) {
         if !isExpanded {
             self.img.image = UIImage(named: "expand")
-        
+            
         } else {
             self.img.image = UIImage(named: "expanded")
         }

@@ -623,7 +623,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         group.enter()
         let uid = UUID().uuidString
         Alamofire.upload(multipartFormData: { multipartFromdata in
-            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
+            multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "+skip\(uid).jpg", mimeType: "image/jpeg")
         }, to: Server.SERVER + Server.ADD_FILE + "reqID=" + reqID! + "&accID=" + id!) { (result) in
             
             switch result {

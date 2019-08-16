@@ -260,42 +260,60 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     
     func dataWithType(){
         if selType != 0{
-            self.data.removeAll()
-            let dat = fullData
-            data.removeAll()
-            dataChoice = dat.filter(){ $0.title == dataType[selType].title || ($0.title == "Заявка на услугу" && dataType[selType].title == "Дополнительные услуги") }
-            self.choiceCount = self.dataChoice.count
-            self.data.removeAll()
-            if dataChoice.count > 20{
-                for i in 0...19{
-                    self.data.append(dataChoice[i])
+            DispatchQueue.global(qos: .background).async {
+                self.data.removeAll()
+                let dat = self.fullData
+                self.data.removeAll()
+                self.dataChoice = dat.filter(){ $0.title == self.dataType[self.selType].title || ($0.title == "Заявка на услугу" && self.dataType[self.selType].title == "Дополнительные услуги") }
+                self.choiceCount = self.dataChoice.count
+                self.data.removeAll()
+                if self.dataChoice.count > 20{
+                    for i in 0...19{
+                        self.data.append(self.dataChoice[i])
+                    }
+                }else{
+                    for i in 0...self.dataChoice.count - 1{
+                        self.data.append(self.dataChoice[i])
+                    }
                 }
-            }else{
-                for i in 0...dataChoice.count - 1{
-                    self.data.append(dataChoice[i])
+                self.offset = 19
+                self.self.reachedEndOfItems = false
+                DispatchQueue.main.async {
+                    self.collection?.reloadData()
+                    self.stopAnimatior()
+                    if #available(iOS 10.0, *) {
+                        self.collection?.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                 }
             }
-            offset = 19
-            reachedEndOfItems = false
-            collection?.reloadData()
-            self.stopAnimatior()
         }else{
-            offset = 19
-            reachedEndOfItems = false
-            self.data.removeAll()
-            if fullData.count > 20{
-                for i in 0...19{
-                    self.data.append(fullData[i])
-                    //                        firstArr.removeFirst()
+            DispatchQueue.global(qos: .background).async {
+                self.offset = 19
+                self.reachedEndOfItems = false
+                self.data.removeAll()
+                if self.fullData.count > 20{
+                    for i in 0...19{
+                        self.data.append(self.fullData[i])
+                        //                        firstArr.removeFirst()
+                    }
+                }else{
+                    for i in 0...self.fullData.count - 1{
+                        self.data.append(self.fullData[i])
+                        //                        firstArr.removeFirst()
+                    }
                 }
-            }else{
-                for i in 0...fullData.count - 1{
-                    self.data.append(fullData[i])
-                    //                        firstArr.removeFirst()
+                DispatchQueue.main.async {
+                    self.collection?.reloadData()
+                    self.stopAnimatior()
+                    if #available(iOS 10.0, *) {
+                        self.collection?.refreshControl?.endRefreshing()
+                    } else {
+                        self.refreshControl?.endRefreshing()
+                    }
                 }
             }
-            collection?.reloadData()
-            self.stopAnimatior()
         }
         
     }
@@ -340,11 +358,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         // append the new items to the data source for the table view
                         self.data += thisBatchOfItems
                         // reload the table view
-                        if self.selType != 0{
-                            self.dataWithType()
-                        }else{
-                            self.collection?.reloadData()
-                        }
+                        self.collection?.reloadData()
                         
                         self.stopAnimatior()
                         if #available(iOS 10.0, *) {
@@ -393,11 +407,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         // append the new items to the data source for the table view
                         self.data += thisBatchOfItems
                         // reload the table view
-                        if self.selType != 0{
-                            self.dataWithType()
-                        }else{
-                            self.collection?.reloadData()
-                        }
+                        self.collection?.reloadData()
                         
                         self.stopAnimatior()
                         if #available(iOS 10.0, *) {
@@ -800,30 +810,8 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     }
                     
                     var images: [String] = []
-                    self.rowFiles.forEach {
-                        if self.dateTeck($0.dateTime!) == self.dateTeck(row.dateFrom!) {
-                            images.append($0.fileId!)
-                        }
-                    }
                     
-                    self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
-                                                         gosti: persons == "" ? "Не указано" : persons,
-                                                         mobileNumber: row.phoneNum ?? "",
-                                                         gosNumber: auto, mark: mark,
-                                                         date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
-                                                         status: row.status ?? "",
-                                                         images: [],
-                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     self.admissionComm = []
-                    //                    if row.text != ""{
-                    //                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
-                    //                                                                             title: "Примечание",
-                    //                                                                             comment: row.text ?? "",
-                    //                                                                             date: row.added ?? "",
-                    //                                                                             commImg: nil,
-                    //                                                                             commImgUrl: nil,
-                    //                                                                             id: "-1") )
-                    //                    }
                     self.rowComms[row.id!]!.forEach { comm in
                         
                         var commImg: String?
@@ -834,14 +822,25 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                                 commImg = $0.fileId
                             }
                         }
-                        
-                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
-                                                                             title: comm.name ?? "",
-                                                                             comment: comm.text ?? "",
-                                                                             date: comm.createdDate ?? "",
-                                                                             commImg: nil,
-                                                                             commImgUrl: commImg,
-                                                                             id: comm.id ?? "") )
+                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+                            self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
+                                                                                 title: comm.name ?? "",
+                                                                                 comment: comm.text ?? "",
+                                                                                 date: comm.createdDate ?? "",
+                                                                                 commImg: nil,
+                                                                                 commImgUrl: commImg,
+                                                                                 id: comm.id ?? "") )
+                        }else{
+                            images.append(commImg!)
+                        }
+                        self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
+                                                             gosti: persons == "" ? "Не указано" : persons,
+                                                             mobileNumber: row.phoneNum ?? "",
+                                                             gosNumber: auto, mark: mark,
+                                                             date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
+                                                             status: row.status ?? "",
+                                                             images: [],
+                                                             imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     }
                     
                     self.reqId = row.id ?? ""
@@ -853,13 +852,6 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услуг"){
                     let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
-                    
-                    self.rowFiles.forEach {
-                        
-                        if self.dateTeck($0.dateTime!) == self.dateTeck(row.dateFrom!) {
-                            images.append($0.fileId!)
-                        }
-                    }
                     var dataServ: ServicesUKJson!
                     self.dataService.forEach{
                         if $0.name == self.data[indexPath.row].desc || $0.name == self.data[indexPath.row].stickTitle{
@@ -892,7 +884,6 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }else{
                             place = row.premises!
                         }
-                        self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
                         
                         self.techServiceComm = []
                         self.rowComms[row.id!]!.forEach { comm in
@@ -905,15 +896,20 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                                     commImg = $0.fileId!
                                 }
                             }
-                            
-                            self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
-                                                                                 title: comm.name ?? "",
-                                                                                 comment: comm.text ?? "",
-                                                                                 date: comm.createdDate ?? "",
-                                                                                 commImg: nil,
-                                                                                 commImgUrl: commImg,
-                                                                                 id: comm.id ?? ""))
+                            print(comm.text)
+                            if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+                                self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
+                                                                                     title: comm.name ?? "",
+                                                                                     comment: comm.text ?? "",
+                                                                                     date: comm.createdDate ?? "",
+                                                                                     commImg: nil,
+                                                                                     commImgUrl: commImg,
+                                                                                     id: comm.id ?? ""))
+                            }else{
+                                images.append(commImg!)
+                            }
                         }
+                        self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
                         self.reqId = row.id ?? ""
                         if self.collection != nil {
                             self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
@@ -925,20 +921,6 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     let row = self.rows[self.fullData[indexPath.row].id]!
                     var images: [String] = []
                     
-                    self.rowFiles.forEach {
-                        
-                        if self.dateTeck($0.dateTime!) == self.dateTeck(row.dateFrom!) {
-                            images.append($0.fileId!)
-                        }
-                    }
-                    
-                    self.techService = ServiceHeaderData(icon: self.fullData[indexPath.row].icon,
-                                                         problem: row.text ?? "",
-                                                         date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
-                                                         status: row.status ?? "",
-                                                         images: [],
-                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible)
-                    
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
                         
@@ -946,19 +928,29 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         
                         self.rowFiles.forEach {
                             
-                            if $0.fileId == comm.idFile {
+                            if $0.fileId == comm.idFile{
                                 commImg = $0.fileId!
                             }
                         }
+                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+                            self.techServiceComm.append( ServiceCommentCellData(icon: UIImage(named: "account")!,
+                                                                                title: comm.name ?? "",
+                                                                                desc: comm.text ?? "",
+                                                                                date: comm.createdDate ?? "",
+                                                                                image: nil,
+                                                                                imageUrl: commImg,
+                                                                                id: comm.id ?? ""))
+                        }else{
+                            images.append(commImg!)
+                        }
                         
-                        self.techServiceComm.append( ServiceCommentCellData(icon: UIImage(named: "account")!,
-                                                                            title: comm.name ?? "",
-                                                                            desc: comm.text ?? "",
-                                                                            date: comm.createdDate ?? "",
-                                                                            image: nil,
-                                                                            imageUrl: commImg,
-                                                                            id: comm.id ?? ""))
                     }
+                    self.techService = ServiceHeaderData(icon: self.fullData[indexPath.row].icon,
+                                                         problem: row.text ?? "",
+                                                         date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
+                                                         status: row.status ?? "",
+                                                         images: [],
+                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible)
                     self.reqId = row.id ?? ""
                     if self.collection != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toService, sender: self)
@@ -1024,6 +1016,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
             vc.serviceData = data
+            vc.comments_ = serviceUKComm
             vc.data_ = serviceUK!
             vc.reqId_ = reqId
             vc.delegate = self
