@@ -8,7 +8,7 @@
 import UIKit
 
 final class CounterCellNew: UICollectionViewCell {
-    
+    @IBOutlet private weak var sendLbl:         UILabel!
     @IBOutlet private weak var counter_name:    UILabel!
     @IBOutlet private weak var income:          UILabel!
     @IBOutlet private weak var outcome:         UILabel!
@@ -21,7 +21,6 @@ final class CounterCellNew: UICollectionViewCell {
     @IBOutlet private weak var oneTarifWidth:   NSLayoutConstraint!
     @IBOutlet private weak var twoTarif:        UILabel!
     @IBOutlet private weak var twoTarifLbl:     UILabel!
-    @IBOutlet private weak var twoTarigWidth:   NSLayoutConstraint!
     @IBOutlet private weak var tarif:           UILabel!
     @IBOutlet private weak var tarifLbl:        UILabel!
     @IBOutlet private weak var tarifWidth:      NSLayoutConstraint!
@@ -37,6 +36,17 @@ final class CounterCellNew: UICollectionViewCell {
     var delegate2: NewCounterDelegate!
     var index = 0
     func display(_ item: MeterValue, delegate: UIViewController, index: Int, delegate2: NewCounterDelegate, date: String, canCount: Bool) {
+        let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
+        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+        let calendar = Calendar.current
+        let curDay = calendar.component(.day, from: Date())
+        if curDay > dateTo || curDay < dateFrom{
+            sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
+        }else if !canCount{
+            sendLbl.text = "Данные по приборам учета собираются УК самостоятельно"
+        }else{
+            sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
+        }
         self.delegate = delegate
         self.delegate2 = delegate2
         self.index = index
@@ -85,7 +95,10 @@ final class CounterCellNew: UICollectionViewCell {
             oneTarifLbl.isHidden = true
             twoTarif.isHidden = true
             twoTarifLbl.isHidden = true
-            tarif.text = item.tarifPrice1
+            tarif.text = item.tarifPrice1! + "₽/\(item.units!)"
+            if item.tarifPrice1 == "0"{
+                tarif.text = "0,00 ₽/\(item.units!)"
+            }
             tarifLbl.isHidden = true
         }else if item.typeTarif == "2"{
             kolTarif.text = "2 - Тарифный"
@@ -93,9 +106,15 @@ final class CounterCellNew: UICollectionViewCell {
             tarifWidth.constant = 0
             oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 2
             tarifBot.constant = 74
-            oneTarif.text = item.tarifPrice1
+            oneTarif.text = item.tarifPrice1! + "₽/\(item.units!)"
+            if item.tarifPrice1 == "0"{
+                oneTarif.text = "0,00 ₽/\(item.units!)"
+            }
             oneTarifLbl.text = item.tarifName1
-            twoTarif.text = item.tarifPrice2
+            twoTarif.text = item.tarifPrice2! + "₽/\(item.units!)"
+            if item.tarifPrice2 == "0"{
+                twoTarif.text = "0,00 ₽/\(item.units!)"
+            }
             twoTarifLbl.text = item.tarifName2
             oneTarif.isHidden = false
             oneTarifLbl.isHidden = false
@@ -109,11 +128,20 @@ final class CounterCellNew: UICollectionViewCell {
             tarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
             oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
             tarifBot.constant = 74
-            oneTarif.text = item.tarifPrice1
+            oneTarif.text = item.tarifPrice1! + "₽/\(item.units!)"
+            if item.tarifPrice1 == "0"{
+                oneTarif.text = "0,00 ₽/\(item.units!)"
+            }
             oneTarifLbl.text = item.tarifName1
-            twoTarif.text = item.tarifPrice2
+            twoTarif.text = item.tarifPrice2! + "₽/\(item.units!)"
+            if item.tarifPrice2 == "0"{
+                twoTarif.text = "0,00 ₽/\(item.units!)"
+            }
             twoTarifLbl.text = item.tarifName2
-            tarif.text = item.tarifPrice3
+            tarif.text = item.tarifPrice3! + "₽/\(item.units!)"
+            if item.tarifPrice3 == "0"{
+                tarif.text = "0,00 ₽/\(item.units!)"
+            }
             tarifLbl.text = item.tarifName3
             oneTarif.isHidden = false
             oneTarifLbl.isHidden = false

@@ -25,7 +25,7 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     public var canCount: Bool?
     
     @IBOutlet weak var collView:    UICollectionView!
-    @IBOutlet weak var sendLbl:     UILabel!
+    
     var fetchedResultsController: NSFetchedResultsController<Counters>?
     
     @IBAction func BackPressed(_ sender: UIBarButtonItem) {
@@ -39,12 +39,7 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
         let calendar = Calendar.current
         let curDay = calendar.component(.day, from: Date())
         if curDay > dateTo || curDay < dateFrom{
-            sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
             canCount = false
-        }else if !canCount!{
-            sendLbl.text = "Данные по приборам учета собираются УК самостоятельно"
-        }else{
-            sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
         }
         collView.delegate = self
         collView.dataSource = self
