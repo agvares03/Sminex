@@ -116,21 +116,6 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         updateUserInterface()
         endAnimating()
         automaticallyAdjustsScrollViewInsets = false
-        print(data_.images)
-        if data_.images.count > 0{
-            data_.images.forEach{
-                comments_.append(AdmissionCommentCellData(image: UIImage(named: "account")!, title: UserDefaults.standard.string(forKey: "name") ?? "", comment: "", date: data_.date, commImg: $0, commImgUrl: nil, id: "-1"))
-            }
-        }
-//        if data_.desc != ""{
-//            comments_.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
-//                                                                 title: "Примечание",
-//                                                                 comment: data_.desc ?? "",
-//                                                                 date: data_.date ?? "",
-//                                                                 commImg: nil,
-//                                                                 commImgUrl: nil,
-//                                                                 id: "-1") )
-//        }
         arr = comments_
         arr.insert(data_, at: 0)
         
@@ -632,13 +617,13 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
 
 final class AdmissionHeader: UICollectionViewCell {
     
-//    @IBOutlet private weak var imgsLoader:      UIActivityIndicatorView!
+    @IBOutlet private weak var imageLoader: UIActivityIndicatorView!
+    @IBOutlet private weak var imageConst:  NSLayoutConstraint!
+    @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var gosConstant:     NSLayoutConstraint!
     @IBOutlet private weak var markConstant:     NSLayoutConstraint!
     @IBOutlet private weak var gostiConstant:     NSLayoutConstraint!
-//    @IBOutlet private weak var imgsHeight:      NSLayoutConstraint!
-//    @IBOutlet private weak var imgsTop:         NSLayoutConstraint!
-//    @IBOutlet private weak var imgs:            UIScrollView!
+    
     @IBOutlet private weak var image:           UIImageView!
     @IBOutlet private weak var gosti:           UILabel!
     @IBOutlet private weak var mobileNumber:    UILabel!
@@ -684,7 +669,8 @@ final class AdmissionHeader: UICollectionViewCell {
         self.delegate = delegate
 //        imgsLoader.isHidden = true
 //        imgsLoader.stopAnimating()
-        
+        imageLoader.isHidden = true
+        imageLoader.stopAnimating()
         if item.gosNumber == "" {
             gosConstant?.constant = 0
             gosNumbers.isHidden  = true
@@ -762,20 +748,71 @@ final class AdmissionHeader: UICollectionViewCell {
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
         
-//        if item.images.count == 0 && item.imgsUrl.count == 0 {
-//            imgs.isHidden       = true
-//            if item.desc == "" {
-//                imgsTop.constant = 0
-//            } else {
-//                let k = heightForTitle(text: item.desc, width: gosti.frame.size.width)
-//                print(k)
-//                if k == 20.5{
-//                    imgsTop.constant = 35 + k
-//                }else{
-//                    imgsTop.constant = 25 + k
-//                }
-//            }
-//            imgsHeight.constant = 0
+        if item.images.count == 0 {
+            imageConst.constant = 0
+            //            scrollTop.constant  = 0
+            scroll.isHidden = true
+            
+        } else {
+            imageConst.constant = 150
+            //            scrollTop.constant  = 16
+            scroll.isHidden = false
+        }
+        
+        if item.imgsUrl.count == 0 {
+            
+            var x = 0.0
+            item.images.forEach {
+                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
+                image.image = $0
+                x += 165.0
+                let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+                image.isUserInteractionEnabled = true
+                image.addGestureRecognizer(tap)
+                scroll.addSubview(image)
+            }
+            scroll.contentSize = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
+            
+        } else {
+            imageConst.constant = 150
+            //            scrollTop.constant  = 16
+            scroll.isHidden = false
+            imageLoader.isHidden = false
+            imageLoader.startAnimating()
+            
+            var rowImgs: [UIImage] = []
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                
+                item.imgsUrl.forEach { img in
+                    
+                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
+                    request.httpMethod = "GET"
+                    
+                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+                    
+                    if data != nil {
+                        rowImgs.append(UIImage(data: data!)!)
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    var x = 0.0
+                    rowImgs.forEach {
+                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
+                        image.image = $0
+                        x += 165.0
+                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(_:)))
+                        image.isUserInteractionEnabled = true
+                        image.addGestureRecognizer(tap)
+                        self.scroll.addSubview(image)
+                    }
+                    self.scroll.contentSize = CGSize(width: CGFloat(x), height: self.scroll.frame.size.height)
+                    self.imageLoader.isHidden = true
+                    self.imageLoader.stopAnimating()
+                }
+            }
+        }
         
         let tap_phone = UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:)))
         img_phone_service.isUserInteractionEnabled   = true

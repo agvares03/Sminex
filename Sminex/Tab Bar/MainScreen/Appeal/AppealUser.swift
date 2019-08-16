@@ -535,11 +535,6 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 }
                 
                 var images: [String] = []
-                self.rowFiles.forEach {
-                    if self.dateTeck($0.dateTime!) == self.dateTeck(row.dateFrom!) {
-                        images.append($0.fileId!)
-                    }
-                }
                 var name = ""
                 if (row.responsiblePerson?.contains("онсьерж"))! || (row.name?.contains("онсьерж"))!{
                     name                = "Консьержу"
@@ -548,7 +543,6 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 } else if (row.responsiblePerson?.contains("иректор"))! || (row.name?.contains("иректор"))!{
                     name                = "Директору службы комфорта"
                 }
-                self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: "", desc: row.text!)
                 self.AppealComm = []
                 self.rowComms[row.id!]!.forEach { comm in
                     
@@ -560,14 +554,18 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                             commImg = $0.fileId
                         }
                     }
-                    
-                    self.AppealComm.append ( AppealCommentCellData(image: UIImage(named: "account")!,
-                                                                         title: comm.name ?? "",
-                                                                         comment: comm.text ?? "",
-                                                                         date: comm.createdDate ?? "",
-                                                                         commImg: nil,
-                                                                         commImgUrl: commImg,
-                                                                         id: comm.id ?? "") )
+                    if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+                        self.AppealComm.append ( AppealCommentCellData(image: UIImage(named: "account")!,
+                                                                       title: comm.name ?? "",
+                                                                       comment: comm.text ?? "",
+                                                                       date: comm.createdDate ?? "",
+                                                                       commImg: nil,
+                                                                       commImgUrl: commImg,
+                                                                       id: comm.id ?? "") )
+                    }else{
+                        images.append(commImg!)
+                    }
+                    self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: "", desc: row.text!, imagesUrl: images)
                 }
                 
                 self.reqId = row.id ?? ""

@@ -597,6 +597,9 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
 
 final class AppealHeader: UICollectionViewCell {
     
+    @IBOutlet private weak var imageLoader: UIActivityIndicatorView!
+    @IBOutlet private weak var imageConst:  NSLayoutConstraint!
+    @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var descHeight:      NSLayoutConstraint!
     @IBOutlet private weak var mobileNumber:    UILabel!
     @IBOutlet private weak var descText:        UILabel?
@@ -614,6 +617,8 @@ final class AppealHeader: UICollectionViewCell {
         self.delegate1 = delegate1
         descText?.text = item.desc
         descTitle?.text = item.title
+        imageLoader.isHidden = true
+        imageLoader.stopAnimating()
         if item.email.contains(find: "@"){
             email?.text = item.email
         }else{
@@ -626,6 +631,72 @@ final class AppealHeader: UICollectionViewCell {
         }
         ident?.text = item.ident
         descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width - 95)
+        
+        if item.images.count == 0 {
+            imageConst.constant = 0
+            //            scrollTop.constant  = 0
+            scroll.isHidden = true
+            
+        } else {
+            imageConst.constant = 150
+            //            scrollTop.constant  = 16
+            scroll.isHidden = false
+        }
+        
+        if item.imgsString.count == 0 {
+            
+            var x = 0.0
+            item.images.forEach {
+                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
+                image.image = $0
+                x += 165.0
+                let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+                image.isUserInteractionEnabled = true
+                image.addGestureRecognizer(tap)
+                scroll.addSubview(image)
+            }
+            scroll.contentSize = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
+            
+        } else {
+            imageConst.constant = 150
+            //            scrollTop.constant  = 16
+            scroll.isHidden = false
+            imageLoader.isHidden = false
+            imageLoader.startAnimating()
+            
+            var rowImgs: [UIImage] = []
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                
+                item.imgsString.forEach { img in
+                    
+                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
+                    request.httpMethod = "GET"
+                    
+                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+                    
+                    if data != nil {
+                        rowImgs.append(UIImage(data: data!)!)
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    var x = 0.0
+                    rowImgs.forEach {
+                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
+                        image.image = $0
+                        x += 165.0
+                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(_:)))
+                        image.isUserInteractionEnabled = true
+                        image.addGestureRecognizer(tap)
+                        self.scroll.addSubview(image)
+                    }
+                    self.scroll.contentSize = CGSize(width: CGFloat(x), height: self.scroll.frame.size.height)
+                    self.imageLoader.isHidden = true
+                    self.imageLoader.stopAnimating()
+                }
+            }
+        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -660,14 +731,18 @@ final class AppealHeaderData: AppealProtocol {
     let desc:           String
     let email:          String
     let ident:          String
+    let images:        [UIImage]
+    let imgsString:    [String]
     
-    init(title: String, mobileNumber: String, ident: String, email: String, desc: String) {
+    init(title: String, mobileNumber: String, ident: String, email: String, desc: String, images: [UIImage] = [], imagesUrl: [String] = []) {
         
         self.title          = title
         self.mobileNumber   = mobileNumber
         self.ident          = ident
         self.email          = email
         self.desc           = desc
+        self.images         = images
+        self.imgsString     = imagesUrl
     }
 }
 
