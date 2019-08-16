@@ -398,7 +398,7 @@ final class FinanceDebtCommHeader: UICollectionReusableView {
             sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
         }
         self.title.text = title
-        self.obj_sum.text = sum + " ₽"
+        self.obj_sum.text = sum.replacingOccurrences(of: ".", with: ",") + " ₽"
     }
 }
 
@@ -418,7 +418,7 @@ final class FinanceDebtCommCell: UICollectionViewCell {
             sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
         }
         self.title.text = title
-        self.desc.text = sum
+        self.desc.text = sum.replacingOccurrences(of: ".", with: ",")
         
         if isBold {
             self.title.font = UIFont.boldSystemFont(ofSize: self.title.font.pointSize)

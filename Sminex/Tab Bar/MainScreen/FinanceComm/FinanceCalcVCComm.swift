@@ -304,7 +304,7 @@ final class FinanceCalcCommCell: UICollectionViewCell {
         if sumA.first == "-" {
             sumA.insert(" ", at: sumA.index(sumA.startIndex, offsetBy: 1))
         }
-        sumAccured.text = sumA
+        sumAccured.text = sumA.replacingOccurrences(of: ".", with: ",")
         
         var sumD = String(format:"%.2f", item.sumDebt!)
         if item.sumDebt! > 999.00 || item.sumDebt! < -999.00{
@@ -314,7 +314,7 @@ final class FinanceCalcCommCell: UICollectionViewCell {
         if sumD.first == "-" {
             sumD.insert(" ", at: sumD.index(sumD.startIndex, offsetBy: 1))
         }
-        sumDebt.text = sumD
+        sumDebt.text = sumD.replacingOccurrences(of: ".", with: ",")
         
         var sumP = String(format:"%.2f", item.sumPay!)
         if item.sumPay! > 999.00 || item.sumPay! < -999.00{
@@ -324,7 +324,7 @@ final class FinanceCalcCommCell: UICollectionViewCell {
         if sumP.first == "-" {
             sumP.insert(" ", at: sumP.index(sumP.startIndex, offsetBy: 1))
         }
-        sumPay.text = sumP
+        sumPay.text = sumP.replacingOccurrences(of: ".", with: ",")
         title.text = item.type
         
 //        if item.type == "Итого" {
