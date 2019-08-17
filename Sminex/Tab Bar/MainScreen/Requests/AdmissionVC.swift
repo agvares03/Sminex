@@ -664,7 +664,12 @@ final class AdmissionHeader: UICollectionViewCell {
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
-            placeHeight?.isActive = false
+            let k = heightForTitle(text: item.placeHome, width: place.frame.size.width)
+            if k > 24{
+                placeHeight?.constant = k + 36
+            }else{
+                placeHeight?.constant = 58
+            }
         }
         self.delegate = delegate
 //        imgsLoader.isHidden = true
@@ -704,7 +709,12 @@ final class AdmissionHeader: UICollectionViewCell {
                 heigthFooter?.constant = 0
                 heigth_phone_service?.constant = 0
             }
-            gosConstant?.constant = 58
+            let k = heightForTitle(text: item.gosNumber, width: gosNumbers.frame.size.width)
+            if k > 24{
+                gosConstant?.constant = k + 36
+            }else{
+                gosConstant?.constant = 58
+            }
             gosNumbers.isHidden  = false
             gosLine.isHidden     = false
             gosTitle.isHidden    = false
@@ -716,7 +726,12 @@ final class AdmissionHeader: UICollectionViewCell {
             markLine.isHidden    = true
             markTitle.isHidden   = true
         } else {
-            markConstant?.constant = 58
+            let k = heightForTitle(text: item.mark, width: markAuto.frame.size.width)
+            if k > 24{
+                markConstant?.constant = k + 36
+            }else{
+                markConstant?.constant = 58
+            }
             markAuto.isHidden    = false
             markLine.isHidden    = false
             markTitle.isHidden   = false
@@ -729,7 +744,12 @@ final class AdmissionHeader: UICollectionViewCell {
             descLine?.isHidden  = true
             descText?.text = ""
         } else {
-            descConstant?.constant = 58
+            let k = heightForTitle(text: item.desc, width: descText!.frame.size.width)
+            if k > 24{
+                descConstant?.constant = k + 36
+            }else{
+                descConstant?.constant = 58
+            }
             descText?.isHidden  = false
             descTitle?.isHidden = false
             descLine?.isHidden  = false

@@ -375,7 +375,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             transportTitle.isHidden = true
             transportConst.constant = 0
         }else if !(defaults.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (defaults.bool(forKey: "denyIssuanceOfPassSingle")){
-            transportConst.constant = 51
+            transportConst.constant = 53
             transportSwitch.isOn = true
             transportSwitch.isUserInteractionEnabled = false
             commentConst.constant   = 120

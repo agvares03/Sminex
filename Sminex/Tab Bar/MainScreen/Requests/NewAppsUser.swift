@@ -833,16 +833,15 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }else{
                             images.append(commImg!)
                         }
-                        self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
-                                                             gosti: persons == "" ? "Не указано" : persons,
-                                                             mobileNumber: row.phoneNum ?? "",
-                                                             gosNumber: auto, mark: mark,
-                                                             date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
-                                                             status: row.status ?? "",
-                                                             images: [],
-                                                             imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     }
-                    
+                    self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
+                                                         gosti: persons == "" ? "Не указано" : persons,
+                                                         mobileNumber: row.phoneNum ?? "",
+                                                         gosNumber: auto, mark: mark,
+                                                         date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
+                                                         status: row.status ?? "",
+                                                         images: [],
+                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     self.reqId = row.id ?? ""
                     if self.collection != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toAdmission, sender: self)

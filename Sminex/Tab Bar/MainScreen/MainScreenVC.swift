@@ -204,6 +204,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     self.collection.reloadData()
                 }
             }
+            DB().del_db(table_name: "Notifications")
+            DB().parse_Notifications(id_account: UserDefaults.standard.string(forKey: "id_account")  ?? "")
             self.fetchQuestions()
             self.fetchDeals()
             self.fetchDebt()

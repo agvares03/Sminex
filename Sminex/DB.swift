@@ -454,6 +454,7 @@ final class DB: NSObject, XMLParserDelegate {
                                                                 }
                                                             }
                                                         }
+                                                        UserDefaults.standard.set(true, forKey: "successParse")
                                                         TemporaryHolder.instance.menuNotifications = readedKol
                                                     } catch let error as NSError {
                                                         print(error)

@@ -306,8 +306,9 @@ class CustomAlertViewController: UIViewController {
                     // ПОКАЗАНИЯ СЧЕТЧИКОВ
                     // Удалим данные из базы данных
                     db.del_db(table_name: "Counters")
+                    db.del_db(table_name: "TypesCounters")
                     // Получим данные в базу данных
-                    db.parse_Countrers(login: self.edLoginText, pass: self.edPassText, history: answer[7])
+                    db.parse_Countrers(login: self.edLoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: self.edLoginText)), history: answer[7])
                     
                     // ВЕДОМОСТЬ (Пока данные тестовые)
                     // Удалим данные из базы данных
@@ -319,7 +320,8 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Applications")
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "0")
-                    
+                    db.del_db(table_name: "Notifications")
+                    db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                     var imageList   : [String:Data] = [:]
                     
                     let login = UserDefaults.standard.string(forKey: "login")!
