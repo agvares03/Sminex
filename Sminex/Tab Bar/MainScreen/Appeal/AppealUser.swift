@@ -565,9 +565,8 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     }else{
                         images.append(commImg!)
                     }
-                    self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: "", desc: row.text!, imagesUrl: images)
                 }
-                
+                self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: row.emails ?? "", desc: row.text!, imagesUrl: images)
                 self.reqId = row.id ?? ""
                 if self.collection != nil {
                     self.performSegue(withIdentifier: "showAppeal", sender: self)

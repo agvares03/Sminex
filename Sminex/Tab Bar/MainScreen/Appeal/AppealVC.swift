@@ -622,7 +622,7 @@ final class AppealHeader: UICollectionViewCell {
         if item.email.contains(find: "@"){
             email?.text = item.email
         }else{
-            email?.text = "-"
+            email?.text = "Не указано"
         }
         if item.mobileNumber != "" || item.mobileNumber != "-" || item.mobileNumber != " "{
             mobileNumber?.text = item.mobileNumber
