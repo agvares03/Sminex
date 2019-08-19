@@ -62,7 +62,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    func goCalc() {
+    func goCalc(indexPath: IndexPath) {
         var dat: AccountBillsJson?
         dataDebt.forEach{
             if date.0 == $0.numMonth && date.1 == $0.numYear{
@@ -143,7 +143,7 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     private var url: URLRequest!
-    func requestPay(debt: String) {
+    func requestPay(debt: String, indexPath: IndexPath) {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
@@ -224,10 +224,10 @@ final class FinanceCalcCell: UICollectionViewCell {
     @IBOutlet private weak var debtHeight:   NSLayoutConstraint!
     @IBOutlet private weak var debtTop:      NSLayoutConstraint!
     @IBAction private func goPay(_ sender: UIButton) {
-        self.delegate?.requestPay(debt: sumDebt.text!)
+        self.delegate?.requestPay(debt: sumDebt.text!, indexPath: IndexPath())
     }
     @IBAction private func goCalc(_ sender: UIButton) {
-        self.delegate?.goCalc()
+        self.delegate?.goCalc(indexPath: IndexPath())
     }
     var delegate: PayDelegate?
     fileprivate func display(_ item: AccountCalculationsJson, pay: PayDelegate) {
