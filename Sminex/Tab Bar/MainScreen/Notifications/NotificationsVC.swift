@@ -25,10 +25,12 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     private var appsUser: NewAppsUser?
     private var dataService: [ServicesUKJson] = []
     private var mainScreenXml:  XML.Accessor?
+    private var refreshControl: UIRefreshControl?
     var fetchedResultsController: NSFetchedResultsController<Notifications>?
     @IBAction func BackPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
+    var timer: Timer? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +46,76 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             print(error)
         }
         self.getServices()
+        UserDefaults.standard.set(false, forKey: "successParse")
+
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        if #available(iOS 10.0, *) {
+            tableView?.refreshControl = refreshControl
+        } else {
+            tableView?.addSubview(refreshControl!)
+        }
+        timer = Timer(timeInterval: 20, target: self, selector: #selector(refresh(_:)), userInfo: ["start" : "ok"], repeats: true)
+        RunLoop.main.add(timer!, forMode: .defaultRunLoopMode)
+    }
+    
+//    @objc func reload() {
+//        //        let db = DB()
+//        //        if (db.isNotification()) {
+//        DispatchQueue.main.async(execute: {
+//            self.load_new_data()
+//        })
+//        //        }
+//    }
+    
+    @objc private func refresh(_ sender: UIRefreshControl) {
+        UserDefaults.standard.addObserver(self, forKeyPath: "successParse", options:NSKeyValueObservingOptions.new, context: nil)
+        DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .background).async {
+                sleep(2)
+                DispatchQueue.main.sync {
+                    self.load_new_data()
+                }
+            }
+        }
+    }
+    
+    func load_new_data() {
+        // Экземпляр класса DB
+        let db = DB()
+        
+        // КОММЕНТАРИИ ПО УКАЗАННОЙ ЗАЯВКЕ
+        db.del_db(table_name: "Notifications")
+        db.parse_Notifications(id_account: UserDefaults.standard.string(forKey: "id_account")  ?? "")
+        
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if UserDefaults.standard.bool(forKey: "successParse"){
+            DispatchQueue.global(qos: .userInitiated).async {
+                DispatchQueue.global(qos: .background).async {
+                    DispatchQueue.main.sync {
+                        UserDefaults.standard.set(false, forKey: "successParse")
+                        self.load_data()
+                        self.tableView.reloadData()
+                        if #available(iOS 10.0, *) {
+                            self.tableView.refreshControl?.endRefreshing()
+                        } else {
+                            self.refreshControl?.endRefreshing()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func load_data() {
+        fetchedResultsController = funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch {
+            print(error)
+        }
     }
     
     func funcFetchedResultsController(entityName: String, keysForSort: [String], predicateFormat: String? = nil) -> NSFetchedResultsController<Counters> {
@@ -241,11 +313,11 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             vc.canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
         }
         if segue.identifier == "goFinance" {
-            let vc = segue.destination as! FinancePayAcceptVC
-            vc.accountData_ = debt
+            let vc = segue.destination as! FinanceVC
+//            vc.debt = debt
         } else if segue.identifier == "goFinanceComm" {
-            let vc = segue.destination as! FinancePayAcceptVCComm
-            vc.accountData_ = debt
+            let vc = segue.destination as! FinanceVCComm
+//            vc.accountData_ = debt
         }
     }
     public var delegate: MainScreenDelegate?

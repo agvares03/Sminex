@@ -14,6 +14,7 @@ target 'Sminex' do
     pod 'Alamofire', '~> 4.7'
     pod 'Firebase/Messaging'
     pod 'Firebase/Core'
+    pod 'Firebase/Analytics'
     pod 'ExpyTableView'
     pod 'FSPagerView'
     pod 'DeviceKit'

@@ -40,8 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         FirebaseApp.configure()
-        application.registerForRemoteNotifications()
-        requestNotificationAuthorization(application: application)
+//        application.registerForRemoteNotifications()
+//        requestNotificationAuthorization(application: application)
+        
+        self.configureNotification()
+        
         Fabric.with([Crashlytics.self])
 
         // Инициализация AppMetrica SDK
@@ -57,21 +60,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         YMMYandexMetrica.activate(with: configuration!)
 
         if let notification = launchOptions?[.remoteNotification] as? [String:AnyObject]{
-            let aps = notification["aps"] as! [String:AnyObject]
-            var body: String = ""
-            var title: String = ""
-            if let alert = aps["alert"] as? String {
-                body = alert
-            } else if let alert = aps["alert"] as? [String : String] {
-                body = alert["body"]!
-                title = alert["title"]!
-            }
-            print(body, title)
-            let notifi = notification["gcm.notification.type_push"] as? String
-            if (notifi?.containsIgnoringCase(find: "question"))!{
+            let message = notification["message"]!
+            let title = notification["title"]!
+            
+            let notifiType = notification["type"] as? String
+            let notifiIdent = notification["ident"] as? String
+            
+            if (notifiType?.containsIgnoringCase(find: "question"))!{
                 //                UserDefaults.standard.set(true, forKey: "newNotifi")
-                UserDefaults.standard.set(body, forKey: "bodyNotifi")
+                UserDefaults.standard.set(message, forKey: "bodyNotifi")
                 UserDefaults.standard.set(title, forKey: "titleNotifi")
+                UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
+                UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
                 UserDefaults.standard.set(true, forKey: "openNotification")
                 UserDefaults.standard.synchronize()
             }
@@ -86,6 +86,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         let core = CoreDataManager()
         core.saveContext()
+    }
+    
+    func configureNotification() {
+        if #available(iOS 10.0, *) {
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+        }
+        UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+        UIApplication.shared.registerForRemoteNotifications()
     }
 
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
@@ -111,30 +120,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
         print("---УВЕДОМЛЕНИЕ---")
-        guard let notifi = userInfo["aps"] as? [String : AnyObject] else {
+        guard (userInfo["aps"] as? [String : AnyObject]) != nil else {
             print("Error parsing")
             return
         }
-        var body = ""
-        var title = ""
-        //        var msgURL = ""
-        if let alert = notifi["alert"] as? String {
-            body = alert
-        } else if let alert = notifi["alert"] as? [String : String] {
-            body = alert["body"]!
-            title = alert["title"]!
-        }
-        if userInfo["gcm.notification.type_push"] as? String == "comment"{
-            print("---isCOMMENT---")
-        }
-        print("Body:", body, "Title:", title)
-        print(body, title)
+        let message = userInfo["message"]! as? String
+        let title = userInfo["title"]! as? String
         
-        let notification = notifi["gcm.notification.type_push"] as? String
-        if (notification?.containsIgnoringCase(find: "question"))!{
+        let notifiType = userInfo["type"] as? String
+        let notifiIdent = userInfo["ident"] as? String
+        
+        if (notifiType?.containsIgnoringCase(find: "question"))!{
             //                UserDefaults.standard.set(true, forKey: "newNotifi")
-            UserDefaults.standard.set(body, forKey: "bodyNotifi")
+            UserDefaults.standard.set(message, forKey: "bodyNotifi")
             UserDefaults.standard.set(title, forKey: "titleNotifi")
+            UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
+            UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
             UserDefaults.standard.set(true, forKey: "openNotification")
             UserDefaults.standard.synchronize()
         }
@@ -143,8 +144,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        }
         if UIApplication.shared.applicationState == .active {
             //TODO: Handle foreground notification
+            let content = UNMutableNotificationContent()
+            content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
+            content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
+            content.sound = UNNotificationSound.default()
+            content.categoryIdentifier = "com.elonchan.localNotification"
+//            let calendar = Calendar.current
+//            let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.date)
+//            // Deliver the notification in 60 seconds.
+//            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+            
+            // Schedule the notification.
+            let center = UNUserNotificationCenter.current()
+            center.add(request)
         } else {
             //TODO: Handle background notification
+            let content = UNMutableNotificationContent()
+            content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
+            content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
+            content.sound = UNNotificationSound.default()
+            content.categoryIdentifier = "com.elonchan.localNotification"
+            //            let calendar = Calendar.current
+            //            let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.date)
+            //            // Deliver the notification in 60 seconds.
+            //            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+            
+            // Schedule the notification.
+            let center = UNUserNotificationCenter.current()
+            center.add(request)
         }
     }
     
@@ -209,7 +238,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = notification.request.content.userInfo
         NSLog("[UserNotificationCenter] applicationState: \(applicationStateString) willPresentNotification: \(userInfo)")
         //TODO: Handle foreground notification
-        completionHandler([.alert])
+        completionHandler([.alert, .badge, .sound])
     }
     
     // iOS10+, called when received response (default open, dismiss or custom action) for a notification
@@ -217,32 +246,32 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = response.notification.request.content.userInfo
         NSLog("[UserNotificationCenter] applicationState: \(applicationStateString) didReceiveResponse: \(userInfo)")
         //TODO: Handle background notification
-        let aps = userInfo["aps"] as! [String:AnyObject]
-        var body: String = ""
-        var title: String = ""
-        if let alert = aps["alert"] as? String {
-            body = alert
-        } else if let alert = aps["alert"] as? [String : String] {
-            body = alert["body"]!
-            title = alert["title"]!
-        }
-        if userInfo["gcm.notification.type_push"] as? String == "announcement"{
-            if UIApplication.shared.applicationState == .active {
-                //TODO: Handle foreground notification
-                UserDefaults.standard.set(true, forKey: "newNotifi")
-                UserDefaults.standard.set(body, forKey: "bodyNotifi")
-                UserDefaults.standard.set(title, forKey: "titleNotifi")
-                UserDefaults.standard.synchronize()
-                let main: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let initialView: UIViewController = main.instantiateViewController(withIdentifier: "notifi") as UIViewController
-                self.window = UIWindow(frame: UIScreen.main.bounds)
-                self.window?.rootViewController = initialView
-                self.window?.makeKeyAndVisible()
-            } else {
-                //TODO: Handle background notification
-            }
-            print("---isNEWS---")
-        }
+//        let aps = userInfo["aps"] as! [String:AnyObject]
+//        var body: String = ""
+//        var title: String = ""
+//        if let alert = aps["alert"] as? String {
+//            body = alert
+//        } else if let alert = aps["alert"] as? [String : String] {
+//            body = alert["body"]!
+//            title = alert["title"]!
+//        }
+//        if userInfo["gcm.notification.type_push"] as? String == "announcement"{
+//            if UIApplication.shared.applicationState == .active {
+//                //TODO: Handle foreground notification
+//                UserDefaults.standard.set(true, forKey: "newNotifi")
+//                UserDefaults.standard.set(body, forKey: "bodyNotifi")
+//                UserDefaults.standard.set(title, forKey: "titleNotifi")
+//                UserDefaults.standard.synchronize()
+//                let main: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//                let initialView: UIViewController = main.instantiateViewController(withIdentifier: "notifi") as UIViewController
+//                self.window = UIWindow(frame: UIScreen.main.bounds)
+//                self.window?.rootViewController = initialView
+//                self.window?.makeKeyAndVisible()
+//            } else {
+//                //TODO: Handle background notification
+//            }
+//            print("---isNEWS---")
+//        }
         completionHandler()
     }
 }
