@@ -241,7 +241,7 @@ func saveGlobalData(date1:              String,
     defaults.setValue(buisness, forKey: "buisness")
     defaults.setValue(desc, forKey: "accDesc")
     if typeОfBuildings != "" || typeОfBuildings != "-" || typeОfBuildings != " "{
-        defaults.setValue("test", forKey: "typeBuilding")
+        defaults.setValue(typeОfBuildings, forKey: "typeBuilding")
     }else{
         defaults.setValue("", forKey: "typeBuilding")
     }
