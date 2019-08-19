@@ -40,8 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         FirebaseApp.configure()
-        application.registerForRemoteNotifications()
-        requestNotificationAuthorization(application: application)
+//        application.registerForRemoteNotifications()
+//        requestNotificationAuthorization(application: application)
+        
+        self.configureNotification()
+        
         Fabric.with([Crashlytics.self])
 
         // Инициализация AppMetrica SDK
@@ -84,6 +87,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let core = CoreDataManager()
         core.saveContext()
     }
+    
+    func configureNotification() {
+        if #available(iOS 10.0, *) {
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+        }
+        UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+        UIApplication.shared.registerForRemoteNotifications()
+    }
 
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         YMMYandexMetrica.handleOpen(url)
@@ -105,8 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any],
-                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
         print("---УВЕДОМЛЕНИЕ---")
         guard (userInfo["aps"] as? [String : AnyObject]) != nil else {
@@ -150,6 +161,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             center.add(request)
         } else {
             //TODO: Handle background notification
+            let content = UNMutableNotificationContent()
+            content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
+            content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
+            content.sound = UNNotificationSound.default()
+            content.categoryIdentifier = "com.elonchan.localNotification"
+            //            let calendar = Calendar.current
+            //            let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.date)
+            //            // Deliver the notification in 60 seconds.
+            //            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+            
+            // Schedule the notification.
+            let center = UNUserNotificationCenter.current()
+            center.add(request)
         }
     }
     
