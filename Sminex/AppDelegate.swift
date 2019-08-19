@@ -113,8 +113,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Error parsing")
             return
         }
-        let message = userInfo["message"]!
-        let title = userInfo["title"]!
+        let message = userInfo["message"]! as? String
+        let title = userInfo["title"]! as? String
         
         let notifiType = userInfo["type"] as? String
         let notifiIdent = userInfo["ident"] as? String
@@ -133,6 +133,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        }
         if UIApplication.shared.applicationState == .active {
             //TODO: Handle foreground notification
+            let content = UNMutableNotificationContent()
+            content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
+            content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
+            content.sound = UNNotificationSound.default()
+            content.categoryIdentifier = "com.elonchan.localNotification"
+//            let calendar = Calendar.current
+//            let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.date)
+//            // Deliver the notification in 60 seconds.
+//            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+            
+            // Schedule the notification.
+            let center = UNUserNotificationCenter.current()
+            center.add(request)
         } else {
             //TODO: Handle background notification
         }
