@@ -40,8 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         FirebaseApp.configure()
-        application.registerForRemoteNotifications()
-        requestNotificationAuthorization(application: application)
+//        application.registerForRemoteNotifications()
+//        requestNotificationAuthorization(application: application)
+        
+        self.configureNotification()
+        
         Fabric.with([Crashlytics.self])
 
         // Инициализация AppMetrica SDK
@@ -83,6 +86,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         let core = CoreDataManager()
         core.saveContext()
+    }
+    
+    func configureNotification() {
+        if #available(iOS 10.0, *) {
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+        }
+        UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+        UIApplication.shared.registerForRemoteNotifications()
     }
 
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
