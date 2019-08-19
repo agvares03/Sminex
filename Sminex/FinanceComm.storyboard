@@ -1196,13 +1196,19 @@
                                     </connections>
                                 </collectionReusableView>
                             </collectionView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Gb4-wb-xgH">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="2OL-t0-NyI" firstAttribute="top" secondItem="GhP-XX-42M" secondAttribute="bottom" id="GhZ-Km-W6y"/>
+                            <constraint firstItem="Gb4-wb-xgH" firstAttribute="centerX" secondItem="l0r-l6-fbU" secondAttribute="centerX" id="Sa2-ug-3Lb"/>
                             <constraint firstAttribute="trailing" secondItem="GhP-XX-42M" secondAttribute="trailing" id="Yyc-CF-rIL"/>
                             <constraint firstItem="GhP-XX-42M" firstAttribute="top" secondItem="eg1-sL-IZP" secondAttribute="bottom" id="b7X-hQ-Ki2"/>
+                            <constraint firstItem="Gb4-wb-xgH" firstAttribute="centerY" secondItem="l0r-l6-fbU" secondAttribute="centerY" id="buI-yy-uVJ"/>
                             <constraint firstItem="GhP-XX-42M" firstAttribute="leading" secondItem="l0r-l6-fbU" secondAttribute="leading" id="rMo-q9-pc6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IiK-Nr-ww9"/>
@@ -1221,6 +1227,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collection" destination="GhP-XX-42M" id="v88-JF-7i2"/>
+                        <outlet property="loader" destination="Gb4-wb-xgH" id="fpi-db-5cY"/>
                         <segue destination="IKy-B1-0S4" kind="show" identifier="goPay" id="WbD-0S-Hgc"/>
                         <segue destination="rgs-yw-6Z6" kind="show" identifier="receiptArchive" id="dTD-Fk-cta"/>
                     </connections>

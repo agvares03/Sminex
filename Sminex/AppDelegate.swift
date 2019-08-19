@@ -131,6 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        if title.contains("поступил комментарий"){
         //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTheTable"), object: nil)
         //        }
+//        application.applicationState == .active
         if UIApplication.shared.applicationState == .active {
             //TODO: Handle foreground notification
             let content = UNMutableNotificationContent()

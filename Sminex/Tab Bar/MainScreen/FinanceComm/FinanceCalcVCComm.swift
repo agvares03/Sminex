@@ -7,70 +7,132 @@
 
 import UIKit
 protocol PayDelegate{
-    func requestPay(debt: String)
-    func goCalc()
+    func requestPay(debt: String, indexPath: IndexPath)
+    func goCalc(indexPath: IndexPath)
 }
 class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PayDelegate {
     
-    @IBOutlet private weak var collection: UICollectionView!
-    
+    @IBOutlet weak var collection: UICollectionView!
+    @IBOutlet private weak var loader:  UIActivityIndicatorView!
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
     
     public var data_: [AccountCalculationsJson] = []
+    var dataYear = [Int:[AccountCalculationsJson]]()
     public var dataDebt: [AccountBillsJson] = []
     public var filteredCalcs: [AccountCalculationsJson] = []
     public var calcs: [AccountCalculationsJson] = []
     public var index = Int()
     public var date: (Int?, Int?)
-    
+    var dateArr: [(Int?, Int?)] = []
     @IBAction func SwipeRight(_ sender: UISwipeGestureRecognizer) {
         if index > 0{
-            index -= 1
-            date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
-            data_ = calcs.filter {
-                return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
-            }
-            if data_.count != 0{
-                var cont = false
-                for k in 0...data_.count - 1{
-                    if !cont{
-                        if (data_[k].type?.containsIgnoringCase(find: "пени"))!{
-                            if UserDefaults.standard.bool(forKey: "denyShowFine"){
-                                data_.remove(at: k)
-                                cont = true
+            self.startAnimation()
+            DispatchQueue.global(qos: .background).async {
+                self.index -= 1
+                var s = 0
+                for k in 0...self.filteredCalcs.count - 1{
+                    let d = self.filteredCalcs[k].numYearSet! - self.date.1!
+                    if d == 1 && s == 0{
+                        s = 1
+                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
+                    }
+                }
+                self.data_ = self.calcs.filter {
+                    return self.date.1 == $0.numYearSet
+                }
+                var year = self.date.1
+                var month = 0
+                self.dateArr.removeAll()
+                if self.data_.count != 0{
+                    var cont = false
+                    for k in 0...self.data_.count - 1{
+                        if !cont{
+                            if (self.data_[k].type?.containsIgnoringCase(find: "пени"))!{
+                                if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                                    self.data_.remove(at: k)
+                                    cont = true
+                                }
                             }
+                        }
+                        if self.data_[k].numMonthSet != month && self.data_[k].numYearSet == year{
+                            month = self.data_[k].numMonthSet!
+                            year = self.data_[k].numYearSet!
+                            self.dateArr.append((self.data_[k].numMonthSet!, self.data_[k].numYearSet!))
                         }
                     }
                 }
+                self.dataYear.removeAll()
+                for i in 0...self.dateArr.count - 1{
+                    var dat: [AccountCalculationsJson] = []
+                    for k in 0...self.data_.count - 1{
+                        if self.dateArr[i].0 == self.data_[k].numMonthSet!{
+                            dat.append(self.data_[k])
+                        }
+                    }
+                    self.dataYear[i] = dat
+                }
+                DispatchQueue.main.async {
+                    self.collection.reloadData()
+                    self.stopAnimation()
+                }
             }
-            collection.reloadData()
         }
     }
     
     @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
         if index < filteredCalcs.count - 1{
-            index += 1
-            date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
-            data_ = calcs.filter {
-                return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
-            }
-            if data_.count != 0{
-                var cont = false
-                for k in 0...data_.count - 1{
-                    if !cont{
-                        if (data_[k].type?.containsIgnoringCase(find: "пени"))!{
-                            if UserDefaults.standard.bool(forKey: "denyShowFine"){
-                                data_.remove(at: k)
-                                cont = true
+            self.startAnimation()
+            DispatchQueue.global(qos: .background).async {
+                self.index += 1
+                var s = 0
+                for k in 0...self.filteredCalcs.count - 1{
+                    let d = self.date.1! - self.filteredCalcs[k].numYearSet!
+                    if d == 1 && s == 0{
+                        s = 1
+                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
+                    }
+                }
+                self.data_ = self.calcs.filter {
+                    return self.date.1 == $0.numYearSet
+                }
+                var year = self.date.1
+                var month = 0
+                self.dateArr.removeAll()
+                if self.data_.count != 0{
+                    var cont = false
+                    for k in 0...self.data_.count - 1{
+                        if !cont{
+                            if (self.data_[k].type?.containsIgnoringCase(find: "пени"))!{
+                                if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                                    self.data_.remove(at: k)
+                                    cont = true
+                                }
                             }
+                        }
+                        if self.data_[k].numMonthSet != month && self.data_[k].numYearSet == year{
+                            month = self.data_[k].numMonthSet!
+                            year = self.data_[k].numYearSet!
+                            self.dateArr.append((self.data_[k].numMonthSet!, self.data_[k].numYearSet!))
                         }
                     }
                 }
+                self.dataYear.removeAll()
+                for i in 0...self.dateArr.count - 1{
+                    var dat: [AccountCalculationsJson] = []
+                    for k in 0...self.data_.count - 1{
+                        if self.dateArr[i].0 == self.data_[k].numMonthSet!{
+                            dat.append(self.data_[k])
+                        }
+                    }
+                    self.dataYear[i] = dat
+                }
+                DispatchQueue.main.async {
+                    self.collection.reloadData()
+                    self.stopAnimation()
+                }
             }
-            
-            collection.reloadData()
         }
     }
     
@@ -91,8 +153,9 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func goCalc() {
+    func goCalc(indexPath: IndexPath) {
         var dat: AccountBillsJson?
+        date = (dataYear[indexPath.section]![0].numMonthSet, dataYear[indexPath.section]![0].numYearSet)
         dataDebt.forEach{
             if date.0 == $0.numMonth && date.1 == $0.numYear{
                 dat = $0
@@ -111,36 +174,89 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
-        if data_.count != 0{
-            var cont = false
-            for k in 0...data_.count - 1{
-                if !cont{
-                    if (data_[k].type?.containsIgnoringCase(find: "пени"))!{
-                        if UserDefaults.standard.bool(forKey: "denyShowFine"){
-                            data_.remove(at: k)
-                            cont = true
+    }
+    
+    var load = true
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        if load{
+            load = false
+            self.startAnimation()
+            DispatchQueue.global(qos: .background).async {
+                var year = self.date.1
+                var month = 0
+                if self.data_.count != 0{
+                    var cont = false
+                    for k in 0...self.data_.count - 1{
+                        if !cont{
+                            if (self.data_[k].type?.containsIgnoringCase(find: "пени"))!{
+                                if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                                    self.data_.remove(at: k)
+                                    cont = true
+                                }
+                            }
+                        }
+                        if self.data_[k].numMonthSet != month && self.data_[k].numYearSet == year{
+                            month = self.data_[k].numMonthSet!
+                            year = self.data_[k].numYearSet!
+                            self.dateArr.append((self.data_[k].numMonthSet!, self.data_[k].numYearSet!))
                         }
                     }
+                }
+                for i in 0...self.dateArr.count - 1{
+                    var dat: [AccountCalculationsJson] = []
+                    for k in 0...self.data_.count - 1{
+                        if self.dateArr[i].0 == self.data_[k].numMonthSet!{
+                            dat.append(self.data_[k])
+                        }
+                    }
+                    self.dataYear[i] = dat
+                }
+                DispatchQueue.main.async {
+                    var selSection = 0
+                    for i in 0...self.dateArr.count - 1{
+                        if self.dateArr[i].0 == self.date.0{
+                            selSection = i
+                        }
+                    }
+                    self.collection.reloadData()
+//                    if self.collection.dataSource?.collectionView(self.collection, cellForItemAt: IndexPath(row: 0, section: 0)) != nil{
+//                        if selSection != 0{
+//                            self.collection.scrollToItem(at: IndexPath(item: self.dataYear[selSection - 1]!.count, section: selSection - 1), at: .top, animated: true)
+//                        }
+//                    }
+                    if self.collection?.dataSource?.collectionView(self.collection!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                        let rect = self.collection.layoutAttributesForItem(at: IndexPath(item: 0, section: selSection))?.frame
+                        self.collection.setContentOffset(CGPoint(x: 0, y: (rect?.origin.y)! - 50), animated: true)
+                    }
+                    self.stopAnimation()
                 }
             }
         }
     }
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if dataYear.count != 0{
+            return dataYear.count
+        }else{
+            return 0
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data_.count == 0 ? 0 : data_.count + 1
+        return dataYear[section]!.count == 0 ? 0 : dataYear[section]!.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 0.0
         let cell = FinanceCalcCommCell.fromNib()
-        if indexPath.row != data_.count {
-            cell?.display(data_[indexPath.row], pay: self)
-            
+        if indexPath.row != dataYear[indexPath.section]!.count {
+            cell?.display(dataYear[indexPath.section]![indexPath.row], pay: self, indexPath: indexPath)
         } else {
-            cell?.display( AccountCalculationsJson(type: "Итого", sumAccrued: 0, sumDebt: 0, sumPay: 0), pay: self)
+            cell?.display( AccountCalculationsJson(type: "Итого", sumAccrued: 0, sumDebt: 0, sumPay: 0), pay: self, indexPath: indexPath)
             var sumDebt     = 0.0
             
-            data_.forEach {
+            dataYear[indexPath.section]!.forEach {
                 sumDebt     += $0.sumDebt       ?? 0.0
             }
             if sumDebt > 0.00{
@@ -156,21 +272,20 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcCommCell", for: indexPath) as! FinanceCalcCommCell
-        if indexPath.row != data_.count {
-            cell.display(data_[indexPath.row], pay: self)
-            
+        if indexPath.row != dataYear[indexPath.section]!.count {
+            cell.display(dataYear[indexPath.section]![indexPath.row], pay: self, indexPath: indexPath)
         } else {
             var sumAccured  = 0.0
             var sumDebt     = 0.0
             var sumPay      = 0.0
             
-            data_.forEach {
+            dataYear[indexPath.section]!.forEach {
                 sumAccured  += $0.sumAccrued    ?? 0.0
                 sumDebt     += $0.sumDebt       ?? 0.0
                 sumPay      += $0.sumPay        ?? 0.0
             }
             
-            cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: sumAccured, sumDebt: sumDebt, sumPay: sumPay), pay: self)
+            cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: sumAccured, sumDebt: sumDebt, sumPay: sumPay), pay: self, indexPath: indexPath)
         }
         return cell
     }
@@ -178,16 +293,17 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceCalcCommHeader", for: indexPath) as! FinanceCalcCommHeader
-        header.display(getNameAndMonth(data_.first?.numMonthSet ?? 0) + " \(data_.first?.numYearSet ?? 0)")
+        header.display(getNameAndMonth(dateArr[indexPath.section].0!) + " \(dateArr[indexPath.section].1!)")
         return header
     }
     private var url: URLRequest!
-    func requestPay(debt: String) {
+    func requestPay(debt: String, indexPath: IndexPath) {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         var billsData_: AccountBillsJson?
         for i in 0...dataDebt.count - 1 {
+            date = (dataYear[indexPath.section]![0].numMonthSet, dataYear[indexPath.section]![0].numYearSet)
             if date.0 == dataDebt[i].numMonth && date.1 == dataDebt[i].numYear{
                 billsData_ = dataDebt[i]
             }
@@ -241,6 +357,18 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             
             }.resume()
     }
+    
+    func startAnimation() {
+        self.collection.isHidden  = true
+        self.loader.isHidden = false
+        self.loader.startAnimating()
+    }
+    
+    func stopAnimation() {
+        self.loader.stopAnimating()
+        self.loader.isHidden = true
+        self.collection.isHidden  = false
+    }
 }
 
 final class FinanceCalcCommHeader: UICollectionReusableView {
@@ -264,16 +392,17 @@ final class FinanceCalcCommCell: UICollectionViewCell {
     @IBOutlet private weak var payTop:      NSLayoutConstraint!
     @IBOutlet private weak var debtHeight:   NSLayoutConstraint!
     @IBOutlet private weak var debtTop:      NSLayoutConstraint!
-    
+    var indexPath = IndexPath()
     @IBAction private func goPay(_ sender: UIButton) {
-        self.delegate?.requestPay(debt: sumDebt.text!)
+        self.delegate?.requestPay(debt: sumDebt.text!, indexPath: self.indexPath)
     }
     
     @IBAction private func goCalc(_ sender: UIButton) {
-        self.delegate?.goCalc()
+        self.delegate?.goCalc(indexPath: self.indexPath)
     }
     var delegate: PayDelegate?
-    fileprivate func display(_ item: AccountCalculationsJson, pay: PayDelegate) {
+    fileprivate func display(_ item: AccountCalculationsJson, pay: PayDelegate, indexPath: IndexPath) {
+        self.indexPath = indexPath
         self.delegate = pay
         if item.type != "Итого"{
             payBtn.isHidden = true

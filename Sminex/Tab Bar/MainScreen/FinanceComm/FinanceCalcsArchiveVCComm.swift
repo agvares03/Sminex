@@ -220,7 +220,7 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
             vc.filteredCalcs = filteredData
             vc.calcs = data_
             vc.data_ = data_.filter {
-                return (date.0 == $0.numMonthSet && date.1 == $0.numYearSet)
+                return (date.1 == $0.numYearSet)
             }
         }
     }

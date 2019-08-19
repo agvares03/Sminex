@@ -12,7 +12,7 @@ import ExpyTableView
 class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
     @IBOutlet private weak var loader:  UIActivityIndicatorView!
-    @IBOutlet private weak var table:   ExpyTableView!
+    @IBOutlet weak var table:   ExpyTableView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -93,6 +93,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
+        self.stopAnimation()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -399,6 +400,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             
         } else if indexPath.section == 2 {
             guard indexPath.row != 0 else { return }
+            self.startAnimation()
             if Double((self.debt!.sumPay)!) < 0.00{
                 if indexPath.row == 5 {
                     performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
@@ -469,15 +471,15 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     }
     
     private func startAnimation() {
-        loader.startAnimating()
-        loader.isHidden = false
-        table.isHidden  = true
+        self.table.isHidden  = true
+        self.loader.isHidden = false
+        self.loader.startAnimating()
     }
     
     private func stopAnimation() {
-        loader.stopAnimating()
-        loader.isHidden = true
-        table.isHidden  = false
+        self.loader.stopAnimating()
+        self.loader.isHidden = true
+        self.table.isHidden  = false
     }
     
     private func getNameAndMonth(_ number_month: Int) -> String {
@@ -535,10 +537,9 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             vc.date = date
             vc.filteredCalcs = filteredCalcs
             vc.calcs = calcs
-            vc.data_ = calcs.filter {
-                return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
+            vc.data_ = self.calcs.filter {
+                return date.1 == $0.numYearSet
             }
-            
         } else if segue.identifier == Segues.fromFinanceVC.toHistory {
 //            let vc = segue.destination as! FinanceHistoryPayController
             
