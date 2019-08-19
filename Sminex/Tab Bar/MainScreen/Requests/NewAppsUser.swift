@@ -884,7 +884,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                             place = row.premises!
                         }
                         
-                        self.techServiceComm = []
+                        self.serviceUKComm = []
                         self.rowComms[row.id!]!.forEach { comm in
                             
                             var commImg: String?
@@ -895,7 +895,6 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                                     commImg = $0.fileId!
                                 }
                             }
-                            print(comm.text)
                             if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
                                 self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
                                                                                      title: comm.name ?? "",
