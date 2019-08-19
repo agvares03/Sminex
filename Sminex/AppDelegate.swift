@@ -105,7 +105,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
         print("---УВЕДОМЛЕНИЕ---")
         guard (userInfo["aps"] as? [String : AnyObject]) != nil else {
@@ -198,7 +199,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = notification.request.content.userInfo
         NSLog("[UserNotificationCenter] applicationState: \(applicationStateString) willPresentNotification: \(userInfo)")
         //TODO: Handle foreground notification
-        completionHandler([.alert])
+        completionHandler([.alert, .badge, .sound])
     }
     
     // iOS10+, called when received response (default open, dismiss or custom action) for a notification
