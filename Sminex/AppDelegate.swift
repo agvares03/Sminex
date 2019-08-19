@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         YMMYandexMetrica.activate(with: configuration!)
 
         if let notification = launchOptions?[.remoteNotification] as? [String:AnyObject]{
-            let message = notification["body"]!
+            let message = notification["message"]!
             let title = notification["title"]!
             
             let notifiType = notification["type"] as? String
@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Error parsing")
             return
         }
-        let message = userInfo["body"]!
+        let message = userInfo["message"]!
         let title = userInfo["title"]!
         
         let notifiType = userInfo["type"] as? String
