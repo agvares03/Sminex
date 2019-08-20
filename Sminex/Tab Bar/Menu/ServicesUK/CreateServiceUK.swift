@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import DeviceKit
 
 class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, HomePlaceCellDelegate {
     
@@ -394,6 +395,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         edProblem.text = "Введите описание"
         edProblem.textColor = UIColor.lightGray
         edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
+        self.btnConst.constant = 0
+        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
+            btnConst.constant = 25
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -422,6 +427,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @objc func keyboardWillHide(sender: NSNotification?) {
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
         self.btnConst.constant = 0
+        self.btnConst.constant = 0
+        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
+            btnConst.constant = 25
+        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {

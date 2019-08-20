@@ -937,7 +937,7 @@ final class ServiceAppCommentUserCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -1061,7 +1061,7 @@ final class ServiceAppCommentConstCell: UICollectionViewCell{
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{

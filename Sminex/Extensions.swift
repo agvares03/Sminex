@@ -240,6 +240,7 @@ func saveGlobalData(date1:              String,
     defaults.setValue(contactNumber, forKey: "contactNumber")
     defaults.setValue(buisness, forKey: "buisness")
     defaults.setValue(desc, forKey: "accDesc")
+    print("Жил/КОм: ", typeОfBuildings)
     if typeОfBuildings != "" || typeОfBuildings != "-" || typeОfBuildings != " "{
         defaults.setValue(typeОfBuildings, forKey: "typeBuilding")
     }else{
