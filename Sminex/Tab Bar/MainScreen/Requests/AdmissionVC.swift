@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyXMLParser
+import DeviceKit
 
 private protocol AdmissionProtocol: class {}
 private var mainScreenXml:  XML.Accessor?
@@ -996,6 +997,9 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
             }
         }
         commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+//            commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 110)
+        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{

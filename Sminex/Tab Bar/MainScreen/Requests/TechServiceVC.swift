@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyXMLParser
+import DeviceKit
 
 private protocol TechServiceProtocol: class { }
 private protocol TechServiceCellsProtocol: class {
@@ -1064,6 +1065,9 @@ final class ServiceCommentConstCell: UICollectionViewCell {
             }
         }
         commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 100)
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+            commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 90)
+        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
