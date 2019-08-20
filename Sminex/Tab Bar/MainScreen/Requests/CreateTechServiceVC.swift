@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import DeviceKit
 
 protocol HomePlaceCellDelegate: class {
     func placeCheck(text: String, del: Bool)
@@ -17,6 +18,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
+    @IBOutlet private weak var sendBtnBot:  NSLayoutConstraint!
     @IBOutlet private weak var edConst:     NSLayoutConstraint!
     @IBOutlet private weak var btnConst:    NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
@@ -320,6 +322,9 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         edProblem.text = "Введите описание"
         edProblem.textColor = UIColor.lightGray
         edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
+        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
+            btnConst.constant = 25
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -348,6 +353,9 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     @objc func keyboardWillHide(sender: NSNotification?) {
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
         self.btnConst.constant = 0
+        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
+            btnConst.constant = 25
+        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
