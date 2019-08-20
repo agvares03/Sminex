@@ -313,7 +313,8 @@ class NewRequestTypeCell: UICollectionViewCell {
     @IBOutlet private weak var divider:     UILabel!
     @IBOutlet private weak var imageView:   UIImageView!
     @IBOutlet private weak var circleView:  CircleView!
-    
+    @IBOutlet private weak var viewConst:   NSLayoutConstraint!
+    @IBOutlet private weak var viewConst2:  NSLayoutConstraint!
     @IBAction private func goButtonPressed(_ sender: UIButton) {
         delegate?.pressed(at: indexPath!)
     }
@@ -321,6 +322,10 @@ class NewRequestTypeCell: UICollectionViewCell {
     private var indexPath: IndexPath?
     
     fileprivate func display(_ item: NewRequestTypeCellData, delegate: CellsDelegate, indexPath: IndexPath, displayWidth: CGFloat) {
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
+            viewConst.constant = 10
+            viewConst2.constant = 10
+        }
         self.delegate    = delegate
         self.indexPath   = indexPath
         title.text       = item.title
@@ -332,6 +337,9 @@ class NewRequestTypeCell: UICollectionViewCell {
         }else if displayWidth == 375{
             title.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         }
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
+            title.font = UIFont.systemFont(ofSize: 10, weight: .regular)
+        }
         let image: UIImage? = item.picture
         if image != nil{
             circleView.image = item.picture
@@ -341,6 +349,9 @@ class NewRequestTypeCell: UICollectionViewCell {
             // Углы
             circleView.layer.cornerRadius = ((displayWidth / 4) - 40) / 2
             // Поправим отображения слоя за его границами
+            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
+                circleView.layer.cornerRadius = ((displayWidth / 4) - 20) / 2
+            }
             circleView.layer.masksToBounds = true
             print(circleView.frame.size.width)
         }else{
@@ -399,6 +410,9 @@ struct NewRequestTypeCellData {
         let screenSize: CGRect = UIScreen.main.bounds
         let size = screenSize.width / 4
         imageView.frame = CGRect(x: 10, y: 10, width: size - 60, height: size - 60)
+        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
+            imageView.frame = CGRect(x: 10, y: 10, width: size - 40, height: size - 40)
+        }
         imageView.contentMode = .scaleAspectFit
         addSubview(imageView)
     }

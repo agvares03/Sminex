@@ -304,7 +304,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     index += 1
 //                    self.arr = self.comments_
                     if index > self.arr.count{
-                        self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: row.attributes["Name"]!, desc: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        if !(row.attributes["text"]!.containsIgnoringCase(find: "+skip")){
+                            self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: row.attributes["Name"]!, desc: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        }
                     }
 //                    self.arr.append( ServiceCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
 //                    if index < self.arr.count{

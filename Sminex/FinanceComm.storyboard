@@ -1026,40 +1026,43 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DXg-AP-EB7">
                                                     <rect key="frame" x="16" y="0.0" width="343" height="109"/>
                                                     <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ywC-TP-bL6">
+                                                            <rect key="frame" x="32" y="5" width="295" height="20"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начислено" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xcz-dD-k12">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="98.5" height="20"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Оплачено" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTz-kd-QfJ">
+                                                                    <rect key="frame" x="98.5" y="0.0" width="98" height="20"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Долг" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAx-65-ueu">
+                                                                    <rect key="frame" x="196.5" y="0.0" width="98.5" height="20"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="20" id="ohD-u2-03y"/>
+                                                            </constraints>
+                                                        </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Машиноместа по прайс листу" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UPZ-yY-Q15">
-                                                            <rect key="frame" x="16" y="5" width="327" height="36"/>
+                                                            <rect key="frame" x="16" y="35" width="327" height="31"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HaN-jc-sMv">
-                                                            <rect key="frame" x="32" y="49" width="295" height="50"/>
+                                                            <rect key="frame" x="32" y="74" width="295" height="25"/>
                                                             <subviews>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ywC-TP-bL6">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="295" height="25"/>
-                                                                    <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начислено" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xcz-dD-k12">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="98.5" height="25"/>
-                                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                                            <nil key="textColor"/>
-                                                                            <nil key="highlightedColor"/>
-                                                                        </label>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Оплачено" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTz-kd-QfJ">
-                                                                            <rect key="frame" x="98.5" y="0.0" width="98" height="25"/>
-                                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                                            <nil key="textColor"/>
-                                                                            <nil key="highlightedColor"/>
-                                                                        </label>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Долг" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAx-65-ueu">
-                                                                            <rect key="frame" x="196.5" y="0.0" width="98.5" height="25"/>
-                                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                                            <nil key="textColor"/>
-                                                                            <nil key="highlightedColor"/>
-                                                                        </label>
-                                                                    </subviews>
-                                                                </stackView>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="y9P-m0-Ef1">
-                                                                    <rect key="frame" x="0.0" y="25" width="295" height="25"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="295" height="25"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Начислено*" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="3rq-3W-pfA">
                                                                             <rect key="frame" x="0.0" y="0.0" width="98.5" height="25"/>
@@ -1083,7 +1086,7 @@
                                                                 </stackView>
                                                             </subviews>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="50" id="fcm-wt-bGe"/>
+                                                                <constraint firstAttribute="height" constant="25" id="fcm-wt-bGe"/>
                                                             </constraints>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHp-km-ojn">
@@ -1099,14 +1102,17 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="ywC-TP-bL6" secondAttribute="trailing" constant="16" id="4p9-2z-FTU"/>
                                                         <constraint firstAttribute="trailing" secondItem="UPZ-yY-Q15" secondAttribute="trailing" id="6HF-Np-ddC"/>
                                                         <constraint firstItem="UPZ-yY-Q15" firstAttribute="leading" secondItem="DXg-AP-EB7" secondAttribute="leading" constant="16" id="HSl-xD-X4H"/>
-                                                        <constraint firstItem="UPZ-yY-Q15" firstAttribute="top" secondItem="DXg-AP-EB7" secondAttribute="top" constant="5" id="K4f-80-C5a"/>
+                                                        <constraint firstItem="UPZ-yY-Q15" firstAttribute="top" secondItem="ywC-TP-bL6" secondAttribute="bottom" constant="10" id="IiN-v5-Q5b"/>
                                                         <constraint firstAttribute="bottom" secondItem="HaN-jc-sMv" secondAttribute="bottom" constant="10" id="P2F-vE-l4C"/>
                                                         <constraint firstItem="KHp-km-ojn" firstAttribute="leading" secondItem="DXg-AP-EB7" secondAttribute="leading" id="W1f-Vt-bu7"/>
                                                         <constraint firstAttribute="trailing" secondItem="HaN-jc-sMv" secondAttribute="trailing" constant="16" id="ZEu-Cg-T5c"/>
                                                         <constraint firstAttribute="bottom" secondItem="KHp-km-ojn" secondAttribute="bottom" id="dMb-CI-4ov"/>
                                                         <constraint firstItem="HaN-jc-sMv" firstAttribute="top" secondItem="UPZ-yY-Q15" secondAttribute="bottom" constant="8" id="gNM-bq-onn"/>
+                                                        <constraint firstItem="ywC-TP-bL6" firstAttribute="leading" secondItem="DXg-AP-EB7" secondAttribute="leading" constant="32" id="hOr-3X-lQk"/>
+                                                        <constraint firstItem="ywC-TP-bL6" firstAttribute="top" secondItem="DXg-AP-EB7" secondAttribute="top" constant="5" id="jZv-31-q74"/>
                                                         <constraint firstItem="HaN-jc-sMv" firstAttribute="leading" secondItem="UPZ-yY-Q15" secondAttribute="leading" constant="16" id="ptV-v0-tcs"/>
                                                         <constraint firstAttribute="trailing" secondItem="KHp-km-ojn" secondAttribute="trailing" id="tct-nO-uUb"/>
                                                     </constraints>
@@ -1164,6 +1170,8 @@
                                             <outlet property="debtHeight" destination="4nt-LC-Hy8" id="h7Q-gk-jkl"/>
                                             <outlet property="debtTop" destination="nIN-3I-t83" id="glN-CZ-AE1"/>
                                             <outlet property="goDebt" destination="7XO-zZ-LoJ" id="jhu-qX-fe1"/>
+                                            <outlet property="headerHeight" destination="ohD-u2-03y" id="omm-Wd-Myj"/>
+                                            <outlet property="headerStack" destination="ywC-TP-bL6" id="ulL-l0-NCg"/>
                                             <outlet property="payBtn" destination="bL4-XD-kEl" id="Tiy-ug-Agi"/>
                                             <outlet property="payHeight" destination="aay-Ov-8u3" id="VLS-wE-5Dl"/>
                                             <outlet property="payTop" destination="3ms-NU-feO" id="T0h-ZR-zev"/>

@@ -524,6 +524,8 @@ final class FinanceCalcCommHeader: UICollectionReusableView {
 
 final class FinanceCalcCommCell: UICollectionViewCell {
     
+    @IBOutlet private weak var headerStack: UIStackView!
+    @IBOutlet private weak var headerHeight: NSLayoutConstraint!
     @IBOutlet private weak var sumAccured:  UILabel!
     @IBOutlet private weak var sumDebt:     UILabel!
     @IBOutlet private weak var sumPay:      UILabel!
@@ -546,6 +548,13 @@ final class FinanceCalcCommCell: UICollectionViewCell {
     fileprivate func display(_ item: AccountCalculationsJson, pay: PayDelegate, indexPath: IndexPath) {
         self.indexPath = indexPath
         self.delegate = pay
+        if indexPath.row != 0{
+            headerStack.isHidden = true
+            headerHeight.constant = 0
+        }else{
+            headerStack.isHidden = false
+            headerHeight.constant = 20
+        }
         if item.type != "Итого"{
             payBtn.isHidden = true
             payHeight.constant = 0
