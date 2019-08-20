@@ -906,7 +906,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         if textView == gosNumber{
             if updatedText.isEmpty {
-                textView.text = "Госномер (или номера через запятую, например, А 033 ЕО 77)."
+                textView.text = "Госномер (или номера через запятую, например, А 033 ЕО 77)"
                 sendButton.alpha     = 0.5
                 sendButton.isEnabled = false
                 textView.textColor = UIColor.lightGray
