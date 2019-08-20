@@ -234,7 +234,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         if indexPath.row == 0 {
 
             let cell = AdmissionHeader.fromNib()
-            cell?.display((arr[0] as! AdmissionHeaderData), delegate: self)
+            cell?.display((arr[0] as! AdmissionHeaderData), delegate: self, view: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
             return CGSize(width: view.frame.size.width, height: size.height)
             
@@ -313,7 +313,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdmissionHeader1", for: indexPath) as! AdmissionHeader
-            cell.display((arr[0] as! AdmissionHeaderData), delegate: self)
+            cell.display((arr[0] as! AdmissionHeaderData), delegate: self, view: self)
             return cell
         
         } else {
@@ -653,7 +653,7 @@ final class AdmissionHeader: UICollectionViewCell {
     
     private var delegate: AdmissionCellsProtocol?
     
-    fileprivate func display(_ item: AdmissionHeaderData, delegate: AdmissionCellsProtocol) {
+    fileprivate func display(_ item: AdmissionHeaderData, delegate: AdmissionCellsProtocol, view: UIViewController) {
         if item.placeHome == ""{
             place.isHidden = true
             placeLbl.isHidden = true
@@ -665,7 +665,7 @@ final class AdmissionHeader: UICollectionViewCell {
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
-            let k = heightForTitle(text: item.placeHome, width: place.frame.size.width)
+            let k = heightForView(text: item.placeHome, font: place.font, width: view.view.frame.size.width - 32)
             if k > 24{
                 placeHeight?.constant = k + 36
             }else{
@@ -710,7 +710,7 @@ final class AdmissionHeader: UICollectionViewCell {
                 heigthFooter?.constant = 0
                 heigth_phone_service?.constant = 0
             }
-            let k = heightForTitle(text: item.gosNumber, width: gosNumbers.frame.size.width)
+            let k = heightForView(text: item.gosNumber, font: gosNumbers.font, width: gosNumbers.frame.size.width)
             if k > 24{
                 gosConstant?.constant = k + 36
             }else{
@@ -727,7 +727,7 @@ final class AdmissionHeader: UICollectionViewCell {
             markLine.isHidden    = true
             markTitle.isHidden   = true
         } else {
-            let k = heightForTitle(text: item.mark, width: markAuto.frame.size.width)
+            let k = heightForView(text: item.mark, font: markAuto.font, width: markAuto.frame.size.width)
             if k > 24{
                 markConstant?.constant = k + 36
             }else{
@@ -745,7 +745,7 @@ final class AdmissionHeader: UICollectionViewCell {
             descLine?.isHidden  = true
             descText?.text = ""
         } else {
-            let k = heightForTitle(text: item.desc, width: descText!.frame.size.width)
+            let k = heightForView(text: item.desc, font: descText!.font, width: descText!.frame.size.width)
             if k > 24{
                 descConstant?.constant = k + 36
             }else{
@@ -763,8 +763,12 @@ final class AdmissionHeader: UICollectionViewCell {
         gosNumbers.text     = item.gosNumber
         markAuto.text       = item.mark
         status.text         = item.status
-        let k = heightForTitle(text: item.gosti, width: gosti.frame.size.width)
-        gostiConstant?.constant = k
+        let k = heightForView(text: item.gosti, font: gosti.font, width: view.view.frame.size.width - 32)
+        if k > 20.5{
+            gostiConstant?.constant = k
+        }else{
+            gostiConstant?.constant = 20.5
+        }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
@@ -851,13 +855,14 @@ final class AdmissionHeader: UICollectionViewCell {
         }
     }
     
-    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
         label.text = text
         label.sizeToFit()
-        
+        print(label.frame.height, width)
         return label.frame.height
     }
     
