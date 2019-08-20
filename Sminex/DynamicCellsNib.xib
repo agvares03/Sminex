@@ -5408,6 +5408,47 @@
             </connections>
             <point key="canvasLocation" x="400" y="857.72113943028489"/>
         </collectionViewCell>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalcYearCell" id="1ce-EC-ZEj" customClass="CalcYearCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2019" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pn9-3U-Omc">
+                        <rect key="frame" x="0.0" y="0.0" width="100" height="28"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JVE-DC-TfN">
+                        <rect key="frame" x="5" y="28" width="90" height="2"/>
+                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="Yoq-Ga-hsr"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="JVE-DC-TfN" firstAttribute="top" secondItem="Pn9-3U-Omc" secondAttribute="bottom" id="4R2-56-zPJ"/>
+                <constraint firstAttribute="bottom" secondItem="JVE-DC-TfN" secondAttribute="bottom" id="WWq-wG-Eta"/>
+                <constraint firstItem="Pn9-3U-Omc" firstAttribute="top" secondItem="1ce-EC-ZEj" secondAttribute="top" id="hNE-RP-VdJ"/>
+                <constraint firstItem="JVE-DC-TfN" firstAttribute="leading" secondItem="1ce-EC-ZEj" secondAttribute="leading" constant="5" id="qec-MM-CoU"/>
+                <constraint firstItem="Pn9-3U-Omc" firstAttribute="leading" secondItem="1ce-EC-ZEj" secondAttribute="leading" id="wGO-ag-Fga"/>
+                <constraint firstAttribute="trailing" secondItem="Pn9-3U-Omc" secondAttribute="trailing" id="yUa-7w-hXK"/>
+                <constraint firstAttribute="trailing" secondItem="JVE-DC-TfN" secondAttribute="trailing" constant="5" id="yxD-26-np5"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="3FI-O5-reB"/>
+            <size key="customSize" width="100" height="30"/>
+            <connections>
+                <outlet property="selLine" destination="JVE-DC-TfN" id="76z-nP-gnX"/>
+                <outlet property="title" destination="Pn9-3U-Omc" id="L2q-Ex-p8C"/>
+            </connections>
+        </collectionViewCell>
     </objects>
     <resources>
         <image name="account" width="25" height="28"/>

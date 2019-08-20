@@ -1007,7 +1007,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GhP-XX-42M">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="104" width="375" height="563"/>
                                 <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="POw-1N-G8P">
                                     <size key="itemSize" width="375" height="219"/>
@@ -1195,27 +1195,85 @@
                                         <outlet property="title" destination="KHA-d4-K9g" id="k9m-f4-fhA"/>
                                     </connections>
                                 </collectionReusableView>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="lM7-ND-4bM" appends="YES" id="xos-kb-CdO"/>
+                                    <outletCollection property="gestureRecognizers" destination="V1K-ex-a6v" appends="YES" id="iig-h5-lbk"/>
+                                </connections>
                             </collectionView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Gb4-wb-xgH">
                                 <rect key="frame" x="169" y="315" width="37" height="37"/>
                                 <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Hxp-zU-gee">
+                                <rect key="frame" x="0.0" y="64" width="375" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="iyz-cc-1jO"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="5" id="qh8-x9-Aed">
+                                    <size key="itemSize" width="96" height="30"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalcYearCell" id="1WW-kb-Dh7" customClass="CalcYearCell" customModule="Sminex" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="5" width="100" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2019" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXI-0D-tff">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="28"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jXq-wG-dyf">
+                                                    <rect key="frame" x="5" y="28" width="90" height="2"/>
+                                                    <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="2" id="Tn8-2p-Aag"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="rXI-0D-tff" firstAttribute="leading" secondItem="1WW-kb-Dh7" secondAttribute="leading" id="44y-d2-Rc0"/>
+                                            <constraint firstItem="jXq-wG-dyf" firstAttribute="top" secondItem="rXI-0D-tff" secondAttribute="bottom" id="5Q5-Yf-FVR"/>
+                                            <constraint firstAttribute="bottom" secondItem="jXq-wG-dyf" secondAttribute="bottom" id="IkB-bI-aZd"/>
+                                            <constraint firstItem="rXI-0D-tff" firstAttribute="top" secondItem="1WW-kb-Dh7" secondAttribute="top" id="JIl-dL-Vvb"/>
+                                            <constraint firstItem="jXq-wG-dyf" firstAttribute="leading" secondItem="1WW-kb-Dh7" secondAttribute="leading" constant="5" id="qpu-Qt-fjV"/>
+                                            <constraint firstAttribute="trailing" secondItem="jXq-wG-dyf" secondAttribute="trailing" constant="5" id="sqE-TJ-mm4"/>
+                                            <constraint firstAttribute="trailing" secondItem="rXI-0D-tff" secondAttribute="trailing" id="znW-0U-abi"/>
+                                        </constraints>
+                                        <size key="customSize" width="100" height="30"/>
+                                        <connections>
+                                            <outlet property="selLine" destination="jXq-wG-dyf" id="cIY-90-eHX"/>
+                                            <outlet property="title" destination="rXI-0D-tff" id="NhG-Kd-uZ0"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Hxp-zU-gee" secondAttribute="trailing" id="9aV-3k-WcS"/>
                             <constraint firstItem="2OL-t0-NyI" firstAttribute="top" secondItem="GhP-XX-42M" secondAttribute="bottom" id="GhZ-Km-W6y"/>
                             <constraint firstItem="Gb4-wb-xgH" firstAttribute="centerX" secondItem="l0r-l6-fbU" secondAttribute="centerX" id="Sa2-ug-3Lb"/>
+                            <constraint firstItem="Hxp-zU-gee" firstAttribute="leading" secondItem="IiK-Nr-ww9" secondAttribute="leading" id="YLX-Fw-8nz"/>
                             <constraint firstAttribute="trailing" secondItem="GhP-XX-42M" secondAttribute="trailing" id="Yyc-CF-rIL"/>
-                            <constraint firstItem="GhP-XX-42M" firstAttribute="top" secondItem="eg1-sL-IZP" secondAttribute="bottom" id="b7X-hQ-Ki2"/>
                             <constraint firstItem="Gb4-wb-xgH" firstAttribute="centerY" secondItem="l0r-l6-fbU" secondAttribute="centerY" id="buI-yy-uVJ"/>
+                            <constraint firstItem="Hxp-zU-gee" firstAttribute="top" secondItem="eg1-sL-IZP" secondAttribute="bottom" id="nSR-pH-paE"/>
                             <constraint firstItem="GhP-XX-42M" firstAttribute="leading" secondItem="l0r-l6-fbU" secondAttribute="leading" id="rMo-q9-pc6"/>
+                            <constraint firstItem="GhP-XX-42M" firstAttribute="top" secondItem="Hxp-zU-gee" secondAttribute="bottom" id="y2l-h6-RaB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IiK-Nr-ww9"/>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="V1K-ex-a6v" appends="YES" id="ExZ-0c-QOY"/>
-                            <outletCollection property="gestureRecognizers" destination="lM7-ND-4bM" appends="YES" id="sSc-Lw-irh"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Взаиморасчеты" id="9wz-kZ-ZeK">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="2cc-97-DaA">
@@ -1227,6 +1285,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collection" destination="GhP-XX-42M" id="v88-JF-7i2"/>
+                        <outlet property="collectionYear" destination="Hxp-zU-gee" id="sXn-lV-tEe"/>
                         <outlet property="loader" destination="Gb4-wb-xgH" id="fpi-db-5cY"/>
                         <segue destination="IKy-B1-0S4" kind="show" identifier="goPay" id="WbD-0S-Hgc"/>
                         <segue destination="rgs-yw-6Z6" kind="show" identifier="receiptArchive" id="dTD-Fk-cta"/>
