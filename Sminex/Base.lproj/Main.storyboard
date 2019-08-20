@@ -127,14 +127,14 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ContactsCell" id="zUX-rX-bYQ" customClass="ContactsCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="27.5" y="53" width="320" height="404"/>
+                                        <rect key="frame" x="27.5" y="53" width="320" height="336"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="404"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="336"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pUE-ud-H2n">
-                                                    <rect key="frame" x="16" y="28" width="288" height="368"/>
+                                                    <rect key="frame" x="16" y="28" width="288" height="303"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Консьерж/Служба комфорта" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C2z-Sv-Swg">
                                                             <rect key="frame" x="15" y="10" width="265" height="48"/>
@@ -146,16 +146,16 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" text="Круглосуточно" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1Q-iw-JfH">
-                                                            <rect key="frame" x="15" y="61" width="265" height="90"/>
+                                                            <rect key="frame" x="15" y="61" width="265" height="20"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="90" id="azs-qF-rQq"/>
+                                                                <constraint firstAttribute="height" constant="20" id="azs-qF-rQq"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61v-U7-DGx">
-                                                            <rect key="frame" x="15" y="235" width="265" height="75"/>
+                                                            <rect key="frame" x="15" y="165" width="265" height="75"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XIh-vI-kHb">
                                                                     <rect key="frame" x="0.0" y="0.0" width="265" height="1"/>
@@ -203,7 +203,7 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1QD-6t-Zcx">
-                                                            <rect key="frame" x="15" y="159" width="265" height="70.5"/>
+                                                            <rect key="frame" x="15" y="89" width="265" height="70.5"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ho8-Ec-Aso">
                                                                     <rect key="frame" x="0.0" y="0.0" width="265" height="1"/>
@@ -259,7 +259,7 @@
                                                             </constraints>
                                                         </view>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XzP-zv-Sgt">
-                                                            <rect key="frame" x="15" y="315" width="260" height="48"/>
+                                                            <rect key="frame" x="15" y="245" width="260" height="48"/>
                                                             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="48" id="KxB-8N-Kbt"/>
@@ -281,6 +281,7 @@
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="61v-U7-DGx" firstAttribute="leading" secondItem="j1Q-iw-JfH" secondAttribute="leading" id="1AE-2X-Dkm"/>
+                                                        <constraint firstAttribute="bottom" secondItem="XzP-zv-Sgt" secondAttribute="bottom" constant="10" id="2tu-ab-czA"/>
                                                         <constraint firstItem="61v-U7-DGx" firstAttribute="trailing" secondItem="j1Q-iw-JfH" secondAttribute="trailing" id="4e0-xc-4M2"/>
                                                         <constraint firstItem="C2z-Sv-Swg" firstAttribute="top" secondItem="pUE-ud-H2n" secondAttribute="top" constant="10" id="Fr9-Yr-Bcb"/>
                                                         <constraint firstItem="1QD-6t-Zcx" firstAttribute="trailing" secondItem="j1Q-iw-JfH" secondAttribute="trailing" id="HCs-iB-rOK"/>
@@ -296,7 +297,6 @@
                                                         <constraint firstItem="XzP-zv-Sgt" firstAttribute="trailing" secondItem="wPn-ni-vk1" secondAttribute="trailing" id="oZ3-36-wgK"/>
                                                         <constraint firstItem="i0v-Bq-8K7" firstAttribute="leading" secondItem="id5-KN-Stk" secondAttribute="leading" id="qV5-2f-TIx"/>
                                                         <constraint firstItem="XzP-zv-Sgt" firstAttribute="leading" secondItem="j1Q-iw-JfH" secondAttribute="leading" id="r2B-NN-zOb"/>
-                                                        <constraint firstAttribute="bottom" secondItem="XzP-zv-Sgt" secondAttribute="bottom" constant="5" id="sSH-tr-mQL"/>
                                                         <constraint firstItem="1QD-6t-Zcx" firstAttribute="leading" secondItem="j1Q-iw-JfH" secondAttribute="leading" id="vnG-Va-j8E"/>
                                                         <constraint firstItem="1QD-6t-Zcx" firstAttribute="top" secondItem="j1Q-iw-JfH" secondAttribute="bottom" constant="8" id="z01-1X-YPp"/>
                                                     </constraints>
@@ -312,8 +312,9 @@
                                             <constraint firstItem="pUE-ud-H2n" firstAttribute="top" secondItem="zUX-rX-bYQ" secondAttribute="topMargin" id="0ho-nN-JnR"/>
                                             <constraint firstItem="pUE-ud-H2n" firstAttribute="leading" secondItem="zUX-rX-bYQ" secondAttribute="leadingMargin" constant="8" id="4zr-PP-GVr"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="pUE-ud-H2n" secondAttribute="trailing" constant="8" id="KAm-do-QWe"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="pUE-ud-H2n" secondAttribute="bottom" id="onI-cg-cQ4"/>
+                                            <constraint firstAttribute="bottom" secondItem="pUE-ud-H2n" secondAttribute="bottom" constant="5" id="PmA-nr-Y0s"/>
                                         </constraints>
+                                        <size key="customSize" width="320" height="336"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                                         </userDefinedRuntimeAttributes>
