@@ -801,6 +801,9 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Нас топят соседи! Не можем с ними связаться. Срочно вызывайте сантехника" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PFg-dh-FAY">
                                                     <rect key="frame" x="16" y="32" width="280" height="61"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="61" id="Ovm-Ye-DfI"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -950,7 +953,6 @@
                                         </view>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Hx2-ME-0ns" secondAttribute="trailing" id="042-qM-kzA"/>
-                                            <constraint firstItem="kzq-qG-m9R" firstAttribute="trailing" secondItem="PFg-dh-FAY" secondAttribute="trailing" id="0aM-bn-jvS"/>
                                             <constraint firstItem="9CT-wf-yut" firstAttribute="centerX" secondItem="rQJ-6h-jQ8" secondAttribute="centerX" id="0wy-pU-86n"/>
                                             <constraint firstItem="PFg-dh-FAY" firstAttribute="leading" secondItem="2Qn-N1-Gl6" secondAttribute="leading" id="58k-ak-TQY"/>
                                             <constraint firstItem="fIO-Xg-QsS" firstAttribute="leading" secondItem="03u-1D-IRJ" secondAttribute="leading" id="79g-32-fUR"/>
@@ -958,6 +960,7 @@
                                             <constraint firstItem="bMY-Wb-sMk" firstAttribute="leading" secondItem="rQJ-6h-jQ8" secondAttribute="leading" id="B3q-Ve-bHh"/>
                                             <constraint firstAttribute="bottom" secondItem="bMY-Wb-sMk" secondAttribute="bottom" id="COQ-dY-T1e"/>
                                             <constraint firstItem="6NA-Tv-nFn" firstAttribute="leading" secondItem="rQJ-6h-jQ8" secondAttribute="leading" constant="16" id="Eya-st-2KV"/>
+                                            <constraint firstAttribute="trailing" secondItem="kzq-qG-m9R" secondAttribute="trailing" constant="24" id="FQV-uk-NxW"/>
                                             <constraint firstItem="drZ-Zg-u6C" firstAttribute="top" secondItem="TjN-90-LgY" secondAttribute="bottom" constant="9.5" id="GRF-Mn-UVp"/>
                                             <constraint firstItem="yDT-Ed-DyK" firstAttribute="top" secondItem="Mwv-VW-OPn" secondAttribute="bottom" constant="5" id="IAf-CY-YeE"/>
                                             <constraint firstItem="TjN-90-LgY" firstAttribute="leading" secondItem="6NA-Tv-nFn" secondAttribute="leading" id="ICQ-ET-fzX"/>
@@ -1006,6 +1009,7 @@
                                             <outlet property="placeHeight" destination="7ak-9V-naA" id="mEi-Ru-Jrx"/>
                                             <outlet property="placeLbl" destination="6NA-Tv-nFn" id="8m8-4J-BNQ"/>
                                             <outlet property="problem" destination="PFg-dh-FAY" id="Xm4-yd-RBZ"/>
+                                            <outlet property="problemHeight" destination="Ovm-Ye-DfI" id="CYa-bs-AXA"/>
                                             <outlet property="scroll" destination="kzq-qG-m9R" id="114-VR-UXj"/>
                                             <outlet property="separator" destination="drZ-Zg-u6C" id="OQI-lW-VGy"/>
                                             <outlet property="status" destination="MQr-p1-L75" id="9jo-NF-XIK"/>

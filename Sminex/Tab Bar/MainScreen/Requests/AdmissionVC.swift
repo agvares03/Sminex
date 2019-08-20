@@ -146,6 +146,23 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         }
         commentField.inputAccessoryView = nil
         collection.reloadData()
+        self.view.isUserInteractionEnabled = true
+        if #available(iOS 10.0, *) {
+            self.collection.refreshControl?.endRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        collection.reloadData()
+        self.view.isUserInteractionEnabled = true
+        if #available(iOS 10.0, *) {
+            self.collection.refreshControl?.endRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
+        }
     }
     
     func updateUserInterface() {
