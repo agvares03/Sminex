@@ -995,7 +995,7 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -1068,7 +1068,7 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
         
         title.text      = item.title
         comment.text    = item.comment
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 140)
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         let dat = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")

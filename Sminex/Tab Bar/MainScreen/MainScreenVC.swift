@@ -1371,7 +1371,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             for (ind, item) in decodedNewsDict[1]!.enumerated() {
                 if ind < 3 {
                     //                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.dateStart ?? "")
-                    self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
+                    if item.isImportant != nil{
+                        self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: item.isImportant!)
+                    }else{
+                        self.data[4]![ind + 1] = NewsCellData(title: item.header ?? "", desc: item.shortContent ?? "", date: item.created ?? "", isImportant: false)
+                    }
                 }
             }
             

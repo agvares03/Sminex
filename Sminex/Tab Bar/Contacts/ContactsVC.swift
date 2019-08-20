@@ -80,7 +80,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ContactsCell", for: indexPath) as! ContactsCell
-        cell.display(data_[indexPath.row], delegate: self)
+        cell.display(data_[indexPath.row], delegate: self, viewSize: self.view.frame.size.width)
         return cell
     }
     
@@ -93,7 +93,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cell = ContactsCell.fromNib()
-        cell?.display(data_[indexPath.row], delegate: self)
+        cell?.display(data_[indexPath.row], delegate: self, viewSize: self.view.frame.size.width)
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
         let isSupport = data_[indexPath.row].name?.contains(find: "оддержка") ?? false
 //        return CGSize(width: view.frame.size.width, height: isSupport ? size.height + 5 : size.height - 18)
@@ -103,15 +103,15 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
                 return CGSize(width: view.frame.size.width, height: 0)
             }
         }
-        if (data_[indexPath.row].name?.contains(find: "Предложения"))! {
-            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone4s || Device() == .simulator(.iPhone4s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c){
-                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 30)
-            }else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
-                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
-            }else{
-                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
-            }
-        }
+//        if (data_[indexPath.row].name?.contains(find: "Предложения"))! {
+//            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone4s || Device() == .simulator(.iPhone4s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c){
+//                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 30)
+//            }else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
+//                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
+//            }else{
+//                return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 40)
+//            }
+//        }
 //        return CGSize(width: view.frame.size.width, height: isSupport ? size.height - 10 : size.height - 20)
         return CGSize(width: view.frame.size.width, height: isSupport ? size.height : size.height - 20)
     }
@@ -208,6 +208,8 @@ final class ContactsCell: UICollectionViewCell {
     @IBOutlet private weak var phoneHeight:     NSLayoutConstraint!
     @IBOutlet private weak var emailHeight:     NSLayoutConstraint!
     @IBOutlet private weak var btnTopHeight:    NSLayoutConstraint!
+    @IBOutlet private weak var titleHeight:     NSLayoutConstraint!
+    @IBOutlet private weak var descHeight:      NSLayoutConstraint!
     @IBOutlet private weak var messageImage:    UIImageView!
     @IBOutlet private weak var phoneImage:      UIImageView!
     @IBOutlet private weak var emailImage:      UIImageView!
@@ -221,7 +223,7 @@ final class ContactsCell: UICollectionViewCell {
     
     private var delegate: ContactsCellDelegate?
     
-    fileprivate func display(_ item: ContactsJson, delegate: ContactsCellDelegate?) {
+    fileprivate func display(_ item: ContactsJson, delegate: ContactsCellDelegate?, viewSize: CGFloat) {
         self.delegate = delegate
         title.text = item.name
         desc.text  = item.description
@@ -263,7 +265,12 @@ final class ContactsCell: UICollectionViewCell {
                 emailView.isHidden   = true
             }
         }
-        
+        titleHeight.constant = heightForTitle(text: item.name!, width: title.frame.size.width)
+        if (item.name?.containsIgnoringCase(find: "поддержка мобильного"))!{
+            titleHeight.constant = 50
+            title.text = "Поддержка мобильного\nприложения"
+        }
+        descHeight.constant = heightForTitle(text: item.description!, width: desc.frame.size.width)
         messageImage.isUserInteractionEnabled = true
         phoneImage.isUserInteractionEnabled   = true
         emailImage.isUserInteractionEnabled   = true
@@ -279,6 +286,16 @@ final class ContactsCell: UICollectionViewCell {
         
         cornerRadius = 16
 //        dropShadow(superview: self)
+    }
+    
+    func heightForTitle(text:String, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     class func fromNib() -> ContactsCell? {
