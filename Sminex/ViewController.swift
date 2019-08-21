@@ -56,6 +56,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
 //    private vals = ""
     
     @IBAction private func enter(_ sender: UIButton) {
+        
         errorLabel.isHidden = true
         view.endEditing(true)
         auth = true
