@@ -430,7 +430,7 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                 print("responseString = \(self.responseString)")
                 #endif
                 
-                self.choice()
+                self.choice()//89955029865
                 
                 }.resume()
             
