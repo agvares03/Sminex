@@ -267,10 +267,12 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm:String = edComment.text
         var name = ""
+        print(self.typeReq)
+        
         if self.typeReq == "Консьержу/ в службу комфорта"{
             name = "Обращение к консьержу \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
-        }else if self.typeReq == "Директору службы комфорта \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"{
-            name = "Обращение к директору службы комфорта"
+        }else if self.typeReq == "Директору службы комфорта"{
+            name = "Обращение к директору службы комфорта \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
         }else if self.typeReq == "в Техподдержку приложения"{
             name = "Обращение в техподдержку приложения \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
         }

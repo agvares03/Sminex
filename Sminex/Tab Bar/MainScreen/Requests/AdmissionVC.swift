@@ -702,7 +702,7 @@ final class AdmissionHeader: UICollectionViewCell {
             heigthFooter?.constant = 0
             heigth_phone_service?.constant = 0
         } else {
-            if (UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
+            if !(UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
                 heigthFooter?.constant = 100
                 let data_: [ContactsJson] = TemporaryHolder.instance.contactsList
                 var phone: String = ""

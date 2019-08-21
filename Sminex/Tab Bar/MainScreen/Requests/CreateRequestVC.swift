@@ -19,7 +19,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var imageConst:      NSLayoutConstraint!
     @IBOutlet weak var commentConst: NSLayoutConstraint!
     @IBOutlet private weak var transportConst:    NSLayoutConstraint!
-    @IBOutlet weak var sendViewConst: NSLayoutConstraint!
+//    @IBOutlet weak var sendViewConst: NSLayoutConstraint!
     @IBOutlet weak var edConst: NSLayoutConstraint!
     @IBOutlet weak var FioConst: NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
@@ -389,7 +389,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             gosLine.isHidden        = false
             markAuto.isHidden       = false
             markLine.isHidden       = false
-            sendViewConst.constant = sendViewConst.constant - 57
+//            sendViewConst.constant = sendViewConst.constant - 57
         }
         
         edComment.text = "Примечания"
@@ -422,7 +422,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         let tap_phone = UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:)))
         img_phone_service.isUserInteractionEnabled   = true
         img_phone_service.addGestureRecognizer(tap_phone)
-        
+//        let scrollSize = scroll.contentSize
+//        if scrollSize.height < view.frame.size.height{
+//            scroll.contentSize = CGSize(width: scroll.frame.size.width, height: view.frame.size.height)
+//        }
     }
     
     var isExpanded = true
@@ -479,9 +482,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                          name: .flagsChanged,
                          object: Network.reachability)
         updateUserInterface()
-        edFio.becomeFirstResponder()
+//        edFio.becomeFirstResponder()
 //        sendBtnConst.constant = getPoint()
-        sendViewConst.constant = getPoint() - 60
+//        sendViewConst.constant = getPoint() - 60
         tabBarController?.tabBar.isHidden = true
         picker.addTarget(self, action: #selector(
             datePickerValueChanged), for: UIControlEvents.valueChanged)
@@ -495,18 +498,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         let info = sender?.userInfo!
-        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-        self.sendViewConst.constant = (keyboardSize?.height)!
-        
-        // При показе клавиатуры оставим только кнопку
-        
+        keyboardSize = ((info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size)!
+        view.frame.origin.y = 0 - keyboardSize.height
+        scroll.contentInset.top = keyboardSize.height
     }
-    
+    var keyboardSize = CGSize()
     // И вниз при исчезновении
+    var keyboardShow = true
     @objc func keyboardWillHide(sender: NSNotification?) {
-        self.sendViewConst.constant = 0
-        
-        // Покажем или нет информацию в подвале
+        view.frame.origin.y = 0
+        scroll.contentInset.top = 0
         changeFooter()
     }
     
@@ -567,7 +568,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     private func changeFooter() {
         if (transportSwitch.isOn) {
-            if (UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
+            if !(UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
 //                heigthFooter.constant = 160
                 descInfoLbl.isHidden = false
                 let data_: [ContactsJson] = TemporaryHolder.instance.contactsList
@@ -610,11 +611,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             if !picker.isHidden {
                 imageConst.constant = 8
 //                sendBtnConst.constant = 350
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 350)
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.contentSize.height - 350)
                 
             } else {
 //                sendBtnConst.constant = 8
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height - 170)
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.contentSize.height - 170)
             }
 
         } else {
@@ -623,11 +624,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             if !picker.isHidden {
                 imageConst.constant = 180
 //                sendBtnConst.constant = 350
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 350)
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.contentSize.height + 350)
             
             } else {
 //                sendBtnConst.constant = 170
-                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.frame.size.height + 170)
+                scroll.contentSize = CGSize(width: scroll.frame.size.width, height: scroll.contentSize.height + 170)
             }
             
             imgScroll.subviews.forEach {
