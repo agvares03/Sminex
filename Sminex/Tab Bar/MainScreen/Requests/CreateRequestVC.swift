@@ -930,7 +930,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             }
         }else if textView == markAuto{
             if updatedText.isEmpty {
-                textView.text = "Марка автомобиля (или марки через запятую)"
+                textView.text = "Марка автомобиля \n(или марки через запятую)"
                 sendButton.alpha     = 0.5
                 sendButton.isEnabled = false
                 textView.textColor = placeholderColor
