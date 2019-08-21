@@ -17,11 +17,14 @@ final class CounterCellNew: UICollectionViewCell {
     @IBOutlet private weak var tarifBot:        NSLayoutConstraint!
     @IBOutlet private weak var tarifHeight:     NSLayoutConstraint!
     @IBOutlet private weak var oneTarif:        UILabel!
+    @IBOutlet private weak var oneTarifDrop:    UILabel!
     @IBOutlet private weak var oneTarifLbl:     UILabel!
     @IBOutlet private weak var oneTarifWidth:   NSLayoutConstraint!
     @IBOutlet private weak var twoTarif:        UILabel!
+    @IBOutlet private weak var twoTarifDrop:    UILabel!
     @IBOutlet private weak var twoTarifLbl:     UILabel!
     @IBOutlet private weak var tarif:           UILabel!
+    @IBOutlet private weak var tarifDrop:       UILabel!
     @IBOutlet private weak var tarifLbl:        UILabel!
     @IBOutlet private weak var tarifWidth:      NSLayoutConstraint!
     @IBOutlet private weak var dateCheck:       UILabel!
@@ -88,32 +91,88 @@ final class CounterCellNew: UICollectionViewCell {
             outcome.text = item.valueInput1! + " " + item.units!
         }
         if item.typeTarif == "1" || item.typeTarif == " " || item.typeTarif == ""{
-            kolTarif.text = "1 - Тарифный"
+            kolTarif.text = "1 - тарифный"
             tarifHeight.constant = 0
-            tarifBot.constant = 0
+            tarifBot.constant = 5
             oneTarif.isHidden = true
+            oneTarifDrop.isHidden = true
             oneTarifLbl.isHidden = true
             twoTarif.isHidden = true
+            twoTarifDrop.isHidden = true
             twoTarifLbl.isHidden = true
-            tarif.text = item.tarifPrice1! + "₽/\(item.units!)"
+            var am = item.tarifPrice1!
+            var am2 = item.tarifPrice1!
+            if am == "0 ₽"{
+                am = "0.00 ₽"
+                am2 = "0.00 ₽"
+            }
+            am.forEach{_ in
+                if am.contains(find: "."){
+                    am.removeLast()
+                }
+            }
+            am2.forEach{_ in
+                if am2.contains(find: "."){
+                    am2.removeFirst()
+                }
+            }
+            self.tarif.text    = am
+            self.tarifDrop.text = "," + am2  + "₽/\(item.units!)"
             if item.tarifPrice1 == "0"{
-                tarif.text = "0,00 ₽/\(item.units!)"
+                self.tarif.text    = "0"
+                self.tarifDrop.text = ",00 ₽/\(item.units!)"
             }
             tarifLbl.isHidden = true
         }else if item.typeTarif == "2"{
-            kolTarif.text = "2 - Тарифный"
+            kolTarif.text = "2 - тарифный"
             tarifHeight.constant = 70
             tarifWidth.constant = 0
             oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 2
             tarifBot.constant = 74
-            oneTarif.text = item.tarifPrice1! + "₽/\(item.units!)"
+            var am = item.tarifPrice1!
+            var am2 = item.tarifPrice1!
+            if am == "0 ₽"{
+                am = "0.00 ₽"
+                am2 = "0.00 ₽"
+            }
+            am.forEach{_ in
+                if am.contains(find: "."){
+                    am.removeLast()
+                }
+            }
+            am2.forEach{_ in
+                if am2.contains(find: "."){
+                    am2.removeFirst()
+                }
+            }
+            self.oneTarif.text    = am
+            self.oneTarifDrop.text = "," + am2  + "₽/\(item.units!)"
             if item.tarifPrice1 == "0"{
-                oneTarif.text = "0,00 ₽/\(item.units!)"
+                self.oneTarif.text    = "0"
+                self.oneTarifDrop.text = ",00 ₽/\(item.units!)"
             }
             oneTarifLbl.text = item.tarifName1
-            twoTarif.text = item.tarifPrice2! + "₽/\(item.units!)"
+            var am1 = item.tarifPrice2!
+            var am12 = item.tarifPrice2!
+            if am1 == "0 ₽"{
+                am1 = "0.00 ₽"
+                am12 = "0.00 ₽"
+            }
+            am1.forEach{_ in
+                if am1.contains(find: "."){
+                    am1.removeLast()
+                }
+            }
+            am12.forEach{_ in
+                if am12.contains(find: "."){
+                    am12.removeFirst()
+                }
+            }
+            self.twoTarif.text    = am1
+            self.twoTarifDrop.text = "," + am12  + "₽/\(item.units!)"
             if item.tarifPrice2 == "0"{
-                twoTarif.text = "0,00 ₽/\(item.units!)"
+                self.twoTarif.text    = "0"
+                self.twoTarifDrop.text = ",00 ₽/\(item.units!)"
             }
             twoTarifLbl.text = item.tarifName2
             oneTarif.isHidden = false
@@ -121,26 +180,81 @@ final class CounterCellNew: UICollectionViewCell {
             twoTarif.isHidden = false
             twoTarifLbl.isHidden = false
             tarif.isHidden = true
+            tarifDrop.isHidden = true
             tarifLbl.isHidden = true
         }else if item.typeTarif == "3"{
-            kolTarif.text = "3 - Тарифный"
+            kolTarif.text = "3 - тарифный"
             tarifHeight.constant = 70
             tarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
             oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
             tarifBot.constant = 74
-            oneTarif.text = item.tarifPrice1! + "₽/\(item.units!)"
+            var am = item.tarifPrice1!
+            var am2 = item.tarifPrice1!
+            if am == "0 ₽"{
+                am = "0.00 ₽"
+                am2 = "0.00 ₽"
+            }
+            am.forEach{_ in
+                if am.contains(find: "."){
+                    am.removeLast()
+                }
+            }
+            am2.forEach{_ in
+                if am2.contains(find: "."){
+                    am2.removeFirst()
+                }
+            }
+            self.oneTarif.text    = am
+            self.oneTarifDrop.text = "," + am2  + "₽/\(item.units!)"
             if item.tarifPrice1 == "0"{
-                oneTarif.text = "0,00 ₽/\(item.units!)"
+                self.oneTarif.text    = "0"
+                self.oneTarifDrop.text = ",00 ₽/\(item.units!)"
             }
             oneTarifLbl.text = item.tarifName1
-            twoTarif.text = item.tarifPrice2! + "₽/\(item.units!)"
+            var am1 = item.tarifPrice2!
+            var am12 = item.tarifPrice2!
+            if am1 == "0 ₽"{
+                am1 = "0.00 ₽"
+                am12 = "0.00 ₽"
+            }
+            am1.forEach{_ in
+                if am1.contains(find: "."){
+                    am1.removeLast()
+                }
+            }
+            am12.forEach{_ in
+                if am12.contains(find: "."){
+                    am12.removeFirst()
+                }
+            }
+            self.twoTarif.text    = am1
+            self.twoTarifDrop.text = "," + am12  + "₽/\(item.units!)"
             if item.tarifPrice2 == "0"{
-                twoTarif.text = "0,00 ₽/\(item.units!)"
+                self.twoTarif.text    = "0"
+                self.twoTarifDrop.text = ",00 ₽/\(item.units!)"
             }
             twoTarifLbl.text = item.tarifName2
-            tarif.text = item.tarifPrice3! + "₽/\(item.units!)"
+            var am3 = item.tarifPrice3!
+            var am32 = item.tarifPrice3!
+            if am3 == "0 ₽"{
+                am3 = "0.00 ₽"
+                am32 = "0.00 ₽"
+            }
+            am3.forEach{_ in
+                if am3.contains(find: "."){
+                    am3.removeLast()
+                }
+            }
+            am32.forEach{_ in
+                if am32.contains(find: "."){
+                    am32.removeFirst()
+                }
+            }
+            self.tarif.text    = am3
+            self.tarifDrop.text = "," + am32  + "₽/\(item.units!)"
             if item.tarifPrice3 == "0"{
-                tarif.text = "0,00 ₽/\(item.units!)"
+                self.tarif.text    = "0"
+                self.tarifDrop.text = ",00 ₽/\(item.units!)"
             }
             tarifLbl.text = item.tarifName3
             oneTarif.isHidden = false
