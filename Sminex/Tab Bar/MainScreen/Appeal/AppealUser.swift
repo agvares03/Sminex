@@ -309,7 +309,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&appealsOnly=1")!)
             request.httpMethod = "GET"
-            //            print(request)
+                        print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -324,6 +324,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 }
                 #if DEBUG
                 print(String(data: data!, encoding: .utf8)!)
+                
                 #endif
                 let xml = XML.parse(data!)
                 self.parse(xml: xml)

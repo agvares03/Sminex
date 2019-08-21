@@ -163,7 +163,6 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
-        print(push.date!, push.id, push.ident!, push.isReaded, push.name!, " --", push.type!)
         let cell: NotificationTableCell = self.tableView.dequeueReusableCell(withIdentifier: "NotificationTableCell") as! NotificationTableCell
         
         cell.Name_push.text = getTitle(type: push.type!)

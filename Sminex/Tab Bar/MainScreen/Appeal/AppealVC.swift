@@ -639,12 +639,12 @@ final class AppealHeader: UICollectionViewCell {
         if item.email.contains(find: "@"){
             email?.text = item.email
         }else{
-            email?.text = "Не указано"
+            email?.text = UserDefaults.standard.string(forKey: "mail") ?? ""
         }
         if item.mobileNumber != "" || item.mobileNumber != "-" || item.mobileNumber != " "{
             mobileNumber?.text = item.mobileNumber
         }else{
-            mobileNumber?.text = "-"
+            mobileNumber?.text = UserDefaults.standard.string(forKey: "phone") ?? ""
         }
         ident?.text = item.ident
         descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width - 95)
