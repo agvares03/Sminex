@@ -55,7 +55,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         } else {
             tableView?.addSubview(refreshControl!)
         }
-        timer = Timer(timeInterval: 20, target: self, selector: #selector(refresh(_:)), userInfo: ["start" : "ok"], repeats: true)
+        timer = Timer(timeInterval: 20, target: self, selector: #selector(ref), userInfo: ["start" : "ok"], repeats: true)
         RunLoop.main.add(timer!, forMode: .defaultRunLoopMode)
     }
     
@@ -67,14 +67,22 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
 //        })
 //        //        }
 //    }
-    
+    @objc func ref() {
+//        startAnimation()
+        refresh(refreshControl!)
+    }
+    var refresh = false
     @objc private func refresh(_ sender: UIRefreshControl) {
-        UserDefaults.standard.addObserver(self, forKeyPath: "successParse", options:NSKeyValueObservingOptions.new, context: nil)
-        DispatchQueue.global(qos: .userInitiated).async {
-            DispatchQueue.global(qos: .background).async {
-                sleep(2)
-                DispatchQueue.main.sync {
-                    self.load_new_data()
+        if !refresh{
+            refresh = true
+            tableView.isUserInteractionEnabled = false
+            UserDefaults.standard.addObserver(self, forKeyPath: "successParse", options:NSKeyValueObservingOptions.new, context: nil)
+            DispatchQueue.global(qos: .userInitiated).async {
+                DispatchQueue.global(qos: .background).async {
+                    sleep(2)
+                    DispatchQueue.main.sync {
+                        self.load_new_data()
+                    }
                 }
             }
         }
@@ -98,6 +106,9 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                         UserDefaults.standard.set(false, forKey: "successParse")
                         self.load_data()
                         self.tableView.reloadData()
+                        self.tableView.isUserInteractionEnabled = true
+//                        self.stopAnimation()
+                        self.refresh = false
                         if #available(iOS 10.0, *) {
                             self.tableView.refreshControl?.endRefreshing()
                         } else {
