@@ -127,6 +127,23 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
         }
         commentField.inputAccessoryView = nil
         collection.reloadData()
+        self.view.isUserInteractionEnabled = true
+        if #available(iOS 10.0, *) {
+            self.collection.refreshControl?.endRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        collection.reloadData()
+        self.view.isUserInteractionEnabled = true
+        if #available(iOS 10.0, *) {
+            self.collection.refreshControl?.endRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
+        }
     }
     
     func updateUserInterface() {
@@ -622,12 +639,12 @@ final class AppealHeader: UICollectionViewCell {
         if item.email.contains(find: "@"){
             email?.text = item.email
         }else{
-            email?.text = "Не указано"
+            email?.text = UserDefaults.standard.string(forKey: "mail") ?? ""
         }
         if item.mobileNumber != "" || item.mobileNumber != "-" || item.mobileNumber != " "{
             mobileNumber?.text = item.mobileNumber
         }else{
-            mobileNumber?.text = "-"
+            mobileNumber?.text = UserDefaults.standard.string(forKey: "phone") ?? ""
         }
         ident?.text = item.ident
         descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width - 95)

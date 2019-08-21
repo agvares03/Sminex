@@ -33,7 +33,8 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         if index == (Int(kolTarif!)! - 1){
             if count.text != "" && count.text.last != ","{
-                allValue![index - 1] = count.text
+                print(index)
+                allValue![index] = count.text
             }
             goButton.setTitle("Передать показания", for: .normal)
             goButton.isEnabled = true
@@ -155,6 +156,9 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             tarifText.isHidden = true
         }
         pager.numberOfPages = Int(kolTarif!)!
+        if pager.numberOfPages == 1 || pager.numberOfPages == 0{
+            pager.isHidden = true
+        }
         count.bottomBorderColor = .clear
         count.nextDigitBottomBorderColor = .clear
         count.backColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
@@ -399,6 +403,7 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             var request = URLRequest(url: URL(string: urlPath)!)
             request.httpMethod = "GET"
             print(request)
+            
             URLSession.shared.dataTask(with: request) {
                 data, response, error in
                 
@@ -425,7 +430,7 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                 print("responseString = \(self.responseString)")
                 #endif
                 
-                self.choice()
+                self.choice()//89955029865
                 
                 }.resume()
             

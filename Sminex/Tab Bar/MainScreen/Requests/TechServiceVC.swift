@@ -158,8 +158,24 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             collection.addSubview(refreshControl!)
         }
         collection.reloadData()
+        self.view.isUserInteractionEnabled = true
+        if #available(iOS 10.0, *) {
+            self.collection.refreshControl?.endRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
+        }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        collection.reloadData()
+        self.view.isUserInteractionEnabled = true
+        if #available(iOS 10.0, *) {
+            self.collection.refreshControl?.endRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
+        }
+    }
     func updateUserInterface() {
         switch Network.reachability.status {
         case .unreachable:
@@ -304,7 +320,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     index += 1
 //                    self.arr = self.comments_
                     if index > self.arr.count{
-                        self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: row.attributes["Name"]!, desc: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        if !(row.attributes["text"]!.containsIgnoringCase(find: "+skip")){
+                            self.arr.append( ServiceCommentCellData(icon: UIImage(named: "account")!, title: row.attributes["Name"]!, desc: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        }
                     }
 //                    self.arr.append( ServiceCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
 //                    if index < self.arr.count{
@@ -677,6 +695,7 @@ final class ServiceHeader: UICollectionViewCell {
 //    @IBOutlet private weak var scrollTop:   NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var problem:     UILabel!
+    @IBOutlet private weak var problemHeight: NSLayoutConstraint!
     @IBOutlet private weak var place:       UILabel!
     @IBOutlet private weak var placeLbl:    UILabel!
     @IBOutlet private weak var placeHeight: NSLayoutConstraint!
@@ -711,7 +730,12 @@ final class ServiceHeader: UICollectionViewCell {
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
-            placeHeight.constant = heightForView(text: item.placeHome, font: place.font, width: place.frame.size.width)
+            let k = heightForView(text: item.placeHome, font: place.font, width: place.frame.size.width)
+            if k > 20{
+                placeHeight.constant = k
+            }else{
+                placeHeight.constant = 20
+            }
         }
         self.delegate = delegate
         imageLoader.isHidden = true
@@ -719,6 +743,12 @@ final class ServiceHeader: UICollectionViewCell {
         noDateHeight.constant = 0
         noDateLbl.isHidden = true
         problem.text = item.problem
+        let k = heightForView(text: item.problem, font: problem.font, width: problem.frame.size.width)
+        if k > 20{
+            problemHeight.constant = k
+        }else{
+            problemHeight.constant = 20
+        }
         icon.image = item.icon
         status.text = item.status
         
@@ -736,6 +766,7 @@ final class ServiceHeader: UICollectionViewCell {
                 noDateLbl.isHidden = true
             }
         }
+        scroll.isScrollEnabled = true
         if item.images.count == 0 {
             imageConst.constant = 0
 //            scrollTop.constant  = 0
@@ -749,9 +780,9 @@ final class ServiceHeader: UICollectionViewCell {
         
         if item.imgsString.count == 0 {
 
-            var x = 0.0
+            var x: CGFloat = 0.0
             item.images.forEach {
-                let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
+                let image = UIImageView(frame: CGRect(x: x, y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
                 image.image = $0
                 x += 165.0
                 let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
@@ -759,7 +790,8 @@ final class ServiceHeader: UICollectionViewCell {
                 image.addGestureRecognizer(tap)
                 scroll.addSubview(image)
             }
-            scroll.contentSize = CGSize(width: CGFloat(x), height: scroll.frame.size.height)
+            print(x)
+            scroll.contentSize = CGSize(width: x, height: scroll.frame.size.height)
 
         } else {
             imageConst.constant = 150

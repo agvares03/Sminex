@@ -58,6 +58,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction private func enter(_ sender: UIButton) {
         errorLabel.isHidden = true
         view.endEditing(true)
+        auth = true
         // Проверка на заполнение
         var ret     = false;
         var message = ""
@@ -387,7 +388,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
         let txtLogin = login == nil ? self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let txtPass = pass == nil ? self.edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
-        
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
         request.httpMethod = "GET"
             print(request)
@@ -417,7 +417,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             }.resume()
         }
     }
-    
+    var auth = false
     private func choice() {
         
         DispatchQueue.main.async {
@@ -439,7 +439,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 if !self.isFromSettings_ {
                     self.errorLabel.isHidden = true
                 }
-                self.saveUsersDefaults()
+                if self.auth{
+                    self.saveUsersDefaults()
+                }
                 // авторизация на сервере - получение данных пользователя
                 var answer = self.responseString.components(separatedBy: ";")
 //                print(answer)
