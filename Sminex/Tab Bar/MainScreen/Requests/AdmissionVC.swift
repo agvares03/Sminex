@@ -776,7 +776,35 @@ final class AdmissionHeader: UICollectionViewCell {
         
         image.image         = item.icons
         gosti.text          = item.gosti
-        mobileNumber.text   = item.mobileNumber
+        var phone = item.mobileNumber
+        if phone.first == "8" && phone.count > 10{
+            phone.removeFirst()
+            phone = "+7" + phone
+        }
+        var phoneOperator = ""
+        if phone.count > 10{
+            phone = phone.replacingOccurrences(of: " ", with: "")
+            phone = phone.replacingOccurrences(of: "-", with: "")
+            if !(phone.contains(")")) && phone != ""{
+                for i in 0...11{
+                    if i == 2{
+                        phoneOperator = phoneOperator + " (" + String(phone.first!)
+                    }else if i == 5{
+                        phoneOperator = phoneOperator + ") " + String(phone.first!)
+                    }else if i == 8{
+                        phoneOperator = phoneOperator + "-" + String(phone.first!)
+                    }else{
+                        phoneOperator = phoneOperator + String(phone.first!)
+                    }
+                    phone.removeFirst()
+                }
+            }else{
+                phoneOperator = phone
+            }
+        }else{
+            phoneOperator = phone
+        }
+        mobileNumber.text   = phoneOperator
         gosNumbers.text     = item.gosNumber
         markAuto.text       = item.mark
         status.text         = item.status
