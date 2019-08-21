@@ -27,6 +27,7 @@ final class CounterCellNew: UICollectionViewCell {
     @IBOutlet private weak var tarifDrop:       UILabel!
     @IBOutlet private weak var tarifLbl:        UILabel!
     @IBOutlet private weak var tarifWidth:      NSLayoutConstraint!
+    @IBOutlet private weak var tarifLine:       UILabel!
     @IBOutlet private weak var dateCheck:       UILabel!
     @IBOutlet private weak var dateCheckLbl:    UILabel!
     @IBOutlet private weak var dateCheckHeight: NSLayoutConstraint!
@@ -122,8 +123,10 @@ final class CounterCellNew: UICollectionViewCell {
                 self.tarif.text    = "0"
                 self.tarifDrop.text = ",00 ₽/\(item.units!)"
             }
+            tarifLine.isHidden = true
             tarifLbl.isHidden = true
         }else if item.typeTarif == "2"{
+            tarifLine.isHidden = false
             kolTarif.text = "2 - тарифный"
             tarifHeight.constant = 70
             tarifWidth.constant = 0
@@ -183,6 +186,7 @@ final class CounterCellNew: UICollectionViewCell {
             tarifDrop.isHidden = true
             tarifLbl.isHidden = true
         }else if item.typeTarif == "3"{
+            tarifLine.isHidden = false
             kolTarif.text = "3 - тарифный"
             tarifHeight.constant = 70
             tarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
