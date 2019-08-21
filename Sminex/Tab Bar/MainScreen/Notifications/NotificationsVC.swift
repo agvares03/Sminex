@@ -164,17 +164,17 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
         let cell: NotificationTableCell = self.tableView.dequeueReusableCell(withIdentifier: "NotificationTableCell") as! NotificationTableCell
-        
-        cell.Name_push.text = getTitle(type: push.type!)
-        cell.Body_push.text = push.name!
-        let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        df.isLenient = true
-        
-        cell.Date_push.text = dayDifference(from: df.date(from: push.date!) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
-            ? dayDifference(from: df.date(from: push.date!) ?? Date(), style: "HH:mm")
-            : dayDifference(from: df.date(from: push.date!) ?? Date(), style: "dd MMMM")
-        
+        if push.type != nil{
+            cell.Name_push.text = getTitle(type: push.type!)
+            cell.Body_push.text = push.name!
+            let df = DateFormatter()
+            df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+            df.isLenient = true
+            
+            cell.Date_push.text = dayDifference(from: df.date(from: push.date!) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
+                ? dayDifference(from: df.date(from: push.date!) ?? Date(), style: "HH:mm")
+                : dayDifference(from: df.date(from: push.date!) ?? Date(), style: "dd MMMM")
+        }
         return cell
     }
     var select = IndexPath()
