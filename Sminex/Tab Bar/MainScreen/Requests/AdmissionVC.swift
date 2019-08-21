@@ -33,7 +33,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         
         } else if isFromNotifi_ {
             let viewControllers = navigationController?.viewControllers
-            navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 2], animated: true)
             
         } else if isFromMain_ {
             navigationController?.popToRootViewController(animated: true)

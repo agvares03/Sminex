@@ -55,8 +55,9 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         } else {
             tableView?.addSubview(refreshControl!)
         }
-        timer = Timer(timeInterval: 20, target: self, selector: #selector(ref), userInfo: ["start" : "ok"], repeats: true)
-        RunLoop.main.add(timer!, forMode: .defaultRunLoopMode)
+//        timer = Timer(timeInterval: 5, target: self, selector: #selector(ref), userInfo: ["start" : "ok"], repeats: true)
+//        RunLoop.main.add(timer!, forMode: .defaultRunLoopMode)
+//        timer?.invalidate()
     }
     
 //    @objc func reload() {
@@ -67,10 +68,10 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
 //        })
 //        //        }
 //    }
-    @objc func ref() {
-//        startAnimation()
-        refresh(refreshControl!)
-    }
+//    @objc func ref() {
+////        startAnimation()
+//        refresh(refreshControl!)
+//    }
     var refresh = false
     @objc private func refresh(_ sender: UIRefreshControl) {
         if !refresh{
