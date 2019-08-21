@@ -2076,14 +2076,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Контактный номер" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="9T8-L3-vKZ">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Контактный номер" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="9T8-L3-vKZ" customClass="AKMaskField" customModule="AKMaskField">
                                         <rect key="frame" x="16" y="64" width="347" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="0Jz-GO-T5F"/>
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q3F-FX-ito">
                                         <rect key="frame" x="12" y="55" width="347" height="1"/>
@@ -2459,7 +2459,7 @@
                         <outlet property="descInfoView" destination="r5v-2d-dPR" id="l7h-vo-RSH"/>
                         <outlet property="edComment" destination="qyc-VX-4dW" id="7a4-WJ-ey4"/>
                         <outlet property="edConst" destination="cml-Pk-HH2" id="X6u-2s-yGl"/>
-                        <outlet property="edContact" destination="9T8-L3-vKZ" id="SAf-rz-6kz"/>
+                        <outlet property="edContact" destination="9T8-L3-vKZ" id="FjA-Uh-70f"/>
                         <outlet property="edFio" destination="ybN-K9-ey0" id="G9o-hE-cDX"/>
                         <outlet property="expImg" destination="okI-eg-dFU" id="Ef4-8y-s03"/>
                         <outlet property="gosLine" destination="S1L-Tn-bWa" id="7Vv-N7-Ec4"/>

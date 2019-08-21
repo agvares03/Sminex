@@ -25,6 +25,7 @@ target 'Sminex' do
     pod 'AFDateHelper'
     pod 'SimpleImageViewer'
     pod 'CropViewController'
+    pod 'AKMaskField'
 end
 
 # Workaround for Cocoapods issue #7606

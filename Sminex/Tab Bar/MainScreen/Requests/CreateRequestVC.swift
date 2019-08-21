@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import DeviceKit
+import AKMaskField
 
 final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, HomePlaceCellDelegate, UITableViewDelegate, UITableViewDataSource {
     
@@ -25,7 +26,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var imgScroll:       UIScrollView!
     @IBOutlet private weak var picker:          UIDatePicker!
     @IBOutlet private weak var edFio:           UITextView!
-    @IBOutlet private weak var edContact:       UITextField!
+    @IBOutlet weak var edContact:       AKMaskField!
     @IBOutlet private weak var gosNumber:       UITextView!
     @IBOutlet private weak var markAuto:        UITextView!
     @IBOutlet private weak var edComment:       UITextView!
@@ -291,7 +292,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
-        
+        edContact.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
         tableView.dataSource = self
@@ -348,7 +349,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         gosLine.isHidden        = true
         markAuto.isHidden       = true
         markLine.isHidden       = true
-        edContact.delegate  = self
         edFio.delegate      = self
         gosNumber.delegate  = self
         markAuto.delegate  = self
@@ -364,7 +364,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if UserDefaults.standard.string(forKey: "contactNumber") == "-" || UserDefaults.standard.string(forKey: "contactNumber") == "" || UserDefaults.standard.string(forKey: "contactNumber") == " "{
             edContact.text = ""
         }else{
-            edContact.text = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+            var phone = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+            if phone.first == "8" && phone.count > 10{
+                phone.removeFirst()
+            }else if phone.first == "+" && phone.count > 10{
+                phone.replacingOccurrences(of: "+7", with: "")
+            }
+            edContact.text = phone
         }
         
         let defaults = UserDefaults.standard
