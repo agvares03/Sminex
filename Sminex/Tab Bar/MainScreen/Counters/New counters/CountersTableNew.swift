@@ -98,6 +98,7 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
             vc.value_   = data_[index]
             vc.period_ = period_
             vc.kolTarif = data_[index].typeTarif ?? ""
+//            vc.kolTarif = "2"
             //            vc.month_   = getNameAndMonth(periods.last?.numMonth ?? "1")
             vc.month_   = getNameAndMonth(period_![0].numMonth ?? "1")
             vc.year_    = period_![0].year ?? ""
