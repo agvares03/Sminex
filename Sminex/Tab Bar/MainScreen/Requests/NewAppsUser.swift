@@ -963,7 +963,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     private func startAnimator() {
 //        DispatchQueue.main.sync{
             self.activity?.isHidden       = false
-            self.createButton?.isHidden   = true
+//            self.createButton?.isHidden   = true
 //            self.collectionHeader?.isHidden = true
             self.activity?.startAnimating()
 //        }
@@ -974,7 +974,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             self.activity?.stopAnimating()
 //            self.collectionHeader?.isHidden = false
             self.activity?.isHidden       = true
-            self.createButton?.isHidden   = false
+//            self.createButton?.isHidden   = false
 //        }
         
     }
