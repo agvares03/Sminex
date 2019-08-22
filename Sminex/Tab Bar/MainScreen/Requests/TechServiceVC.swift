@@ -887,6 +887,8 @@ final class ServiceCommentUserCell: UICollectionViewCell {
     @IBOutlet private      var commConst:   NSLayoutConstraint!
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
+    @IBOutlet private      var imgHeight:   NSLayoutConstraint!
+    @IBOutlet private      var imgWidth:    NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
@@ -910,6 +912,8 @@ final class ServiceCommentUserCell: UICollectionViewCell {
             commConst.isActive = true
             imgs2Const?.isActive = false
             comm2Const?.isActive = true
+            imgWidth.constant = 150
+            imgHeight.constant = 150
             desc.text = ""
         } else {
             desc.isHidden = false
@@ -918,6 +922,8 @@ final class ServiceCommentUserCell: UICollectionViewCell {
             commConst.isActive = false
             imgs2Const?.isActive = true
             comm2Const?.isActive = false
+            imgWidth.constant = 50
+            imgHeight.constant = 50
         }
         
         desc.text    = item.desc
@@ -1009,6 +1015,8 @@ final class ServiceCommentConstCell: UICollectionViewCell {
     @IBOutlet private      var commConst:   NSLayoutConstraint!
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
+    @IBOutlet private      var imgHeight:   NSLayoutConstraint!
+    @IBOutlet private      var imgWidth:    NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private      var commHeight:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
@@ -1033,6 +1041,8 @@ final class ServiceCommentConstCell: UICollectionViewCell {
             commConst.isActive = true
             imgs2Const?.isActive = false
             comm2Const?.isActive = true
+            imgWidth.constant = 150
+            imgHeight.constant = 150
             desc.text = ""
         } else {
             desc.isHidden = false
@@ -1041,6 +1051,8 @@ final class ServiceCommentConstCell: UICollectionViewCell {
             commConst.isActive = false
             imgs2Const?.isActive = true
             comm2Const?.isActive = false
+            imgWidth.constant = 50
+            imgHeight.constant = 50
         }
         
         title.text      = item.title

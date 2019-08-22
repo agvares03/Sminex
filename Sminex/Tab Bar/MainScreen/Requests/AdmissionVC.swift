@@ -966,6 +966,8 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
     @IBOutlet private      var imgs2Const:  NSLayoutConstraint!
     @IBOutlet private      var comm2Const:  NSLayoutConstraint!
     @IBOutlet private      var commHeight:  NSLayoutConstraint!
+    @IBOutlet private      var imgHeight:   NSLayoutConstraint!
+    @IBOutlet private      var imgWidth:    NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var comment: 	UILabel!
@@ -987,6 +989,8 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
             commConst.isActive = true
             imgs2Const?.isActive = false
             comm2Const?.isActive = true
+            imgWidth.constant = 150
+            imgHeight.constant = 150
             comment.text = ""
         } else {
             comment.isHidden = false
@@ -995,6 +999,8 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
             commConst.isActive = false
             imgs2Const?.isActive = true
             comm2Const?.isActive = false
+            imgWidth.constant = 50
+            imgHeight.constant = 50
         }
         comment.text    = item.comment
         
@@ -1087,6 +1093,8 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
     @IBOutlet private      var imgs2Const:   NSLayoutConstraint!
     @IBOutlet private      var comm2Const:   NSLayoutConstraint!
     @IBOutlet private      var commHeight:  NSLayoutConstraint!
+    @IBOutlet private      var imgHeight:   NSLayoutConstraint!
+    @IBOutlet private      var imgWidth:    NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var title:       UILabel!
@@ -1110,6 +1118,8 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
             commConst.isActive = true
             imgs2Const?.isActive = false
             comm2Const?.isActive = true
+            imgWidth.constant = 150
+            imgHeight.constant = 150
             comment.text = ""
         } else {
             comment.isHidden = false
@@ -1117,6 +1127,8 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
             imgsConst.isActive = true
             commConst.isActive = false
             imgs2Const?.isActive = true
+            imgWidth.constant = 50
+            imgHeight.constant = 50
             comm2Const?.isActive = false
         }
         

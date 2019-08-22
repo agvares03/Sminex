@@ -329,7 +329,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i0o-7y-7Mn">
-                                                            <rect key="frame" x="10" y="5" width="50" height="50"/>
+                                                            <rect key="frame" x="10" y="10" width="50" height="50"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="50" id="GKC-hb-pRd"/>
                                                                 <constraint firstAttribute="height" constant="50" id="s7u-Fn-Fen"/>
@@ -345,7 +345,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="76V-PS-PyR">
-                                                            <rect key="frame" x="25" y="20" width="20" height="20"/>
+                                                            <rect key="frame" x="25" y="25" width="20" height="20"/>
                                                         </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.75344706890000002" green="0.90812471459999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -356,7 +356,7 @@
                                                         <constraint firstItem="YhK-7G-1F9" firstAttribute="top" secondItem="WYP-6d-sZ2" secondAttribute="bottom" id="GZS-UB-a9H"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="i0o-7y-7Mn" secondAttribute="trailing" constant="10" id="JTY-Mh-RqD"/>
                                                         <constraint firstItem="WYP-6d-sZ2" firstAttribute="leading" secondItem="IPB-L3-PX7" secondAttribute="leading" constant="15" id="KEc-G4-QYa"/>
-                                                        <constraint firstItem="i0o-7y-7Mn" firstAttribute="top" secondItem="IPB-L3-PX7" secondAttribute="top" constant="5" id="SOb-Ni-6zc"/>
+                                                        <constraint firstItem="i0o-7y-7Mn" firstAttribute="top" secondItem="IPB-L3-PX7" secondAttribute="top" constant="10" id="SOb-Ni-6zc"/>
                                                         <constraint firstAttribute="bottom" secondItem="YhK-7G-1F9" secondAttribute="bottom" constant="4" id="UI6-nY-su7"/>
                                                         <constraint firstAttribute="trailing" secondItem="WYP-6d-sZ2" secondAttribute="trailing" constant="15" id="cmL-ok-81f"/>
                                                         <constraint firstItem="76V-PS-PyR" firstAttribute="centerX" secondItem="i0o-7y-7Mn" secondAttribute="centerX" id="jGF-gM-nAg"/>
@@ -389,6 +389,8 @@
                                             <outlet property="comment" destination="WYP-6d-sZ2" id="CZn-IU-Oyt"/>
                                             <outlet property="date" destination="va4-A0-heS" id="Ltk-wX-Swn"/>
                                             <outlet property="heightDate" destination="9gs-Cu-R4c" id="fH5-eX-2p9"/>
+                                            <outlet property="imgHeight" destination="s7u-Fn-Fen" id="SAb-jU-Vzf"/>
+                                            <outlet property="imgWidth" destination="GKC-hb-pRd" id="jYY-MK-dxz"/>
                                             <outlet property="imgs2Const" destination="cmL-ok-81f" id="3vD-Hr-Msg"/>
                                             <outlet property="imgsConst" destination="GZS-UB-a9H" id="qFP-FX-QZM"/>
                                             <outlet property="imgsLoader" destination="76V-PS-PyR" id="AFV-94-jNv"/>
@@ -511,6 +513,8 @@
                                             <outlet property="comment" destination="YGl-Pi-nNx" id="5Dv-Lw-Ywh"/>
                                             <outlet property="date" destination="T4m-ax-tty" id="PVZ-CZ-dqK"/>
                                             <outlet property="heightDate" destination="fM2-A8-NtK" id="Pp8-Xq-KYz"/>
+                                            <outlet property="imgHeight" destination="cRf-zx-HGM" id="e7l-B7-AvV"/>
+                                            <outlet property="imgWidth" destination="pqI-zj-dV3" id="t0m-sL-gGo"/>
                                             <outlet property="imgs2Const" destination="vde-d7-2WI" id="lJK-9G-vQk"/>
                                             <outlet property="imgsConst" destination="RWw-CC-T8F" id="UAG-KW-qz6"/>
                                             <outlet property="imgsLoader" destination="Sgm-Ze-c3j" id="Kje-2x-w5Q"/>
