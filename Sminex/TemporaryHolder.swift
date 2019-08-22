@@ -143,7 +143,7 @@ final class TemporaryHolder {
             guard data != nil else { return }
             
             #if DEBUG
-//            print(String(data: data!, encoding: .utf8) ?? "")
+            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
             
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {

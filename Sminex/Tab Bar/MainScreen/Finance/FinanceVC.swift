@@ -321,17 +321,17 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             
         } else if section == 2 {
             if filteredCalcs.count == 0 {
-//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-//                    return 1
-//                }else{
+                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
+                    return 1
+                }else{
                     return 0
-//                }
+                }
             } else if filteredCalcs.count < 3 {
-//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-//                    return filteredCalcs.count + 3
-//                }else{
+                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
+                    return filteredCalcs.count + 3
+                }else{
                     return filteredCalcs.count + 2
-//                }
+                }
             
             } else {
 //                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
@@ -464,6 +464,10 @@ final class FinanceVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewD
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.debt = AccountDebtData(json: json!)?.data
 //                self.debt?.sumPay = -12345.00
+            }
+            DispatchQueue.main.async {
+                self.table.reloadData()
+                //                self.stopAnimation()
             }
         
         }.resume()

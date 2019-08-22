@@ -54,10 +54,6 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             self.receipts = TemporaryHolder.instance.receipts
             self.filteredCalcs = TemporaryHolder.instance.filteredCalcs
             self.getAccountDebt()
-            DispatchQueue.main.async {
-                self.table.reloadData()
-                //                self.stopAnimation()
-            }
         }
     }
     

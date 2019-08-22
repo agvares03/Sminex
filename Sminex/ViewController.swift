@@ -390,7 +390,11 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
         let txtLogin = login == nil ? self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let txtPass = pass == nil ? self.edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt())) + "&addBcGuid=1")!)
+        let pwd = getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt()))
+        let defaults = UserDefaults.standard
+        defaults.setValue(pwd, forKey: "pwd")
+        defaults.synchronize()
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + pwd + "&addBcGuid=1")!)
         request.httpMethod = "GET"
             print(request)
             URLSession.shared.dataTask(with: request) {
@@ -441,9 +445,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 if !self.isFromSettings_ {
                     self.errorLabel.isHidden = true
                 }
-                if self.auth{
-                    self.saveUsersDefaults()
-                }
+//                if self.auth{
+//                    self.saveUsersDefaults()
+//                }
                 // авторизация на сервере - получение данных пользователя
                 var answer = self.responseString.components(separatedBy: ";")
 //                print(answer)
