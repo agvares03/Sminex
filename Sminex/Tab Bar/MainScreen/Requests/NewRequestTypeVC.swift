@@ -353,7 +353,6 @@ class NewRequestTypeCell: UICollectionViewCell {
                 circleView.layer.cornerRadius = ((displayWidth / 4) - 20) / 2
             }
             circleView.layer.masksToBounds = true
-            print(circleView.frame.size.width)
         }else{
             circleView.isHidden = true
         }

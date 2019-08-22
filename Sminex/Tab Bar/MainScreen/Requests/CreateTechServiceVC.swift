@@ -53,7 +53,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     var choiceBtn = 1
-    var choiceColor = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1.0)
+    var choiceColor = UIColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1.0)
     var unChoiceColor = UIColor(red: 246/255, green: 249/255, blue: 249/255, alpha: 1.0)
     var extTime = false
     @IBAction private func timeBtn1Action(_ sender: UIButton){
@@ -63,10 +63,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             noDateLbl.isHidden = false
             dateBtn.isHidden = true
             extTime = true
-            timeBtn2.setTitleColor(.darkGray, for: .normal)
-            timeBtn2.backgroundColor = choiceColor
+            timeBtn2.setTitleColor(.lightGray, for: .normal)
+            timeBtn2.backgroundColor = .white
             timeBtn1.setTitleColor(.black, for: .normal)
-            timeBtn1.backgroundColor = unChoiceColor
+            timeBtn1.backgroundColor = choiceColor
             if !picker.isHidden{
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd MMMM HH:mm"
@@ -86,10 +86,10 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             noDateLbl.isHidden = true
             dateBtn.isHidden = false
             extTime = false
-            timeBtn1.setTitleColor(.darkGray, for: .normal)
-            timeBtn1.backgroundColor = choiceColor
+            timeBtn1.setTitleColor(.lightGray, for: .normal)
+            timeBtn1.backgroundColor = .white
             timeBtn2.setTitleColor(.black, for: .normal)
-            timeBtn2.backgroundColor = unChoiceColor
+            timeBtn2.backgroundColor = choiceColor
         }
     }
     
@@ -325,6 +325,23 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
             btnConst.constant = 25
         }
+        timeBtn1.setTitleColor(.lightGray, for: .normal)
+        timeBtn1.backgroundColor = .white
+        timeBtn2.setTitleColor(.black, for: .normal)
+        timeBtn2.backgroundColor = choiceColor
+        timeBtn1.layer.borderColor = UIColor.lightGray.cgColor
+        timeBtn1.layer.borderWidth = 1.5
+        // Углы
+        timeBtn1.layer.cornerRadius = 12
+        // Поправим отображения слоя за его границами
+        timeBtn1.layer.masksToBounds = true
+        
+        timeBtn2.layer.borderColor = UIColor.lightGray.cgColor
+        timeBtn2.layer.borderWidth = 1.5
+        // Углы
+        timeBtn2.layer.cornerRadius = 12
+        // Поправим отображения слоя за его границами
+        timeBtn2.layer.masksToBounds = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
