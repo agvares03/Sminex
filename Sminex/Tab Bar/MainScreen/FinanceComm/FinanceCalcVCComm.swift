@@ -35,7 +35,11 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                 self.selType = self.index
                 DispatchQueue.main.async {
                     self.collectionYear?.selectItem(at: [0, self.index], animated: true, scrollPosition: .centeredVertically)
-                    self.collectionYear?.reloadData()
+                    self.collectionYear.reloadData()
+                    if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                        let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: self.index, section: 0))?.frame
+                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                    }
                 }
                 var s = 0
                 for k in 0...self.filteredCalcs.count - 1{
@@ -97,6 +101,10 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                 DispatchQueue.main.async {
                     self.collectionYear?.selectItem(at: [0, self.index], animated: true, scrollPosition: .centeredVertically)
                     self.collectionYear?.reloadData()
+                    if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                        let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: self.index, section: 0))?.frame
+                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                    }
                 }
                 
                 var s = 0
@@ -256,12 +264,22 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                 }
                 DispatchQueue.main.async {
                     var selSection = 0
+                    var selYear = 0
+                    for k in 0...self.yearArr.count - 1{
+                        if self.yearArr[k].year == self.date.1{
+                            selYear = k
+                        }
+                    }
                     for i in 0...self.dateArr.count - 1{
                         if self.dateArr[i].0 == self.date.0{
                             selSection = i
                         }
                     }
                     self.collectionYear.reloadData()
+                    if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                        let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: selYear, section: 0))?.frame
+                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                    }
                     self.collection.reloadData()
                     //                    if self.collection.dataSource?.collectionView(self.collection, cellForItemAt: IndexPath(row: 0, section: 0)) != nil{
                     //                        if selSection != 0{

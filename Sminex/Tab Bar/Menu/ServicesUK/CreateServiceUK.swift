@@ -730,6 +730,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     }
     
     @objc func goService() {
+        view.endEditing(true)
+        keyboardHeight = 0
         self.performSegue(withIdentifier: "goService", sender: self)
     }
     
