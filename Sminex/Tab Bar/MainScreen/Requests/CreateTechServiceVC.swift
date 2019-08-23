@@ -300,10 +300,9 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         let date = calendar.date(from: components)
         dateBtn.setTitle(dateFormatter.string(from: date!), for: .normal)
         picker.minimumDate = date!
-        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
+        tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
-        view.addGestureRecognizer(tap)
         
         sendBtn.isEnabled   = false
         sendBtn.alpha       = 0.5
@@ -343,7 +342,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         // Поправим отображения слоя за его границами
         timeBtn2.layer.masksToBounds = true
     }
-    
+    var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -364,10 +363,12 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         self.btnConst.constant = (keyboardSize?.height)!
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + (keyboardSize?.height)!)
         keyboardHeight = keyboardSize!.height
+        view.addGestureRecognizer(tap)
     }
     var keyboardHeight: CGFloat = 0.0
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
+        view.removeGestureRecognizer(tap)
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
         self.btnConst.constant = 0
         if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
@@ -703,9 +704,18 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HomePlaceCell", for: indexPath) as! HomePlaceCell
-        print(checkPlace)
         cell.display(item: parkingsPlace![indexPath.row], isChecked: checkPlace[indexPath.row], delegate: self)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !checkPlace[indexPath.row] == true{
+            placeCheck(text: parkingsPlace![indexPath.row], del: false)
+        }else {
+            placeCheck(text: parkingsPlace![indexPath.row], del: true)
+        }
+        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func placeCheck(text: String, del: Bool) {
