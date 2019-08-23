@@ -338,11 +338,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
+        tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
-        view.addGestureRecognizer(tap)
-        
         sendButton.alpha     = 0.5
         sendButton.isEnabled = false
         gosNumber.isHidden      = true
@@ -427,7 +425,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //            scroll.contentSize = CGSize(width: scroll.frame.size.width, height: view.frame.size.height)
 //        }
     }
-    
+    var tap = UIGestureRecognizer()
     var isExpanded = true
     @objc func expand() {
         if !isExpanded {
@@ -501,11 +499,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         keyboardSize = ((info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size)!
         view.frame.origin.y = 0 - keyboardSize.height
         scroll.contentInset.top = keyboardSize.height
+        view.addGestureRecognizer(tap)
     }
     var keyboardSize = CGSize()
     // И вниз при исчезновении
     var keyboardShow = true
     @objc func keyboardWillHide(sender: NSNotification?) {
+        view.removeGestureRecognizer(tap)
         view.frame.origin.y = 0
         scroll.contentInset.top = 0
         changeFooter()
@@ -1050,9 +1050,18 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HomePlaceCell", for: indexPath) as! HomePlaceCell
-        print(checkPlace)
         cell.display(item: parkingsPlace![indexPath.row], isChecked: checkPlace[indexPath.row], delegate: self)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !checkPlace[indexPath.row] == true{
+            placeCheck(text: parkingsPlace![indexPath.row], del: false)
+        }else {
+            placeCheck(text: parkingsPlace![indexPath.row], del: true)
+        }
+        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func placeCheck(text: String, del: Bool) {

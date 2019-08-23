@@ -308,6 +308,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.allowsSelection = true
         placeHeight.constant = 0
         tableHeight.constant = 0
         plcLbl.isHidden = true
@@ -385,10 +386,9 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         endAnimator()
         automaticallyAdjustsScrollViewInsets = false
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
+        tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
-        view.addGestureRecognizer(tap)
         
         sendBtn.isEnabled   = false
         sendBtn.alpha       = 0.5
@@ -425,7 +425,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             btnConst.constant = 25
         }
     }
-    
+    var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -455,10 +455,12 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + (keyboardSize?.height)!)
             keyboardHeight = keyboardSize!.height
         }
+        view.addGestureRecognizer(tap)
     }
     var keyboardHeight: CGFloat = 0.0
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
+        view.removeGestureRecognizer(tap)
         scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
         keyboardHeight = 0.0
         self.btnConst.constant = 0
@@ -813,9 +815,18 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HomePlaceCell", for: indexPath) as! HomePlaceCell
-        print(checkPlace)
         cell.display(item: parkingsPlace![indexPath.row], isChecked: checkPlace[indexPath.row], delegate: self)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !checkPlace[indexPath.row] == true{
+            placeCheck(text: parkingsPlace![indexPath.row], del: false)
+        }else {
+            placeCheck(text: parkingsPlace![indexPath.row], del: true)
+        }
+        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func placeCheck(text: String, del: Bool) {
@@ -858,10 +869,5 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             }
         }
     }
-    
-    //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    //        tableView.deselectRow(at: indexPath, animated: true)
-    //
-    //    }
     
 }
