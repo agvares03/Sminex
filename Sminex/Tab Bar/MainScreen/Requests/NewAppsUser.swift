@@ -226,7 +226,6 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewAppsUserCell", for: indexPath) as! NewAppsUserCell
             cell.display(data[indexPath.row])
             if indexPath.row == self.data.count - 1 {
-                self.startAnimator()
                 self.loadMore()
             }
             return cell
