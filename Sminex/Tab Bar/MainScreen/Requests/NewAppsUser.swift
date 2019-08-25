@@ -662,62 +662,72 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     self.fullData = firstArr
                     self.fullCount = self.fullData.count
                     self.data.removeAll()
-                    if self.isFromMain{
-                        self.data = firstArr
+                    if self.selType != 0{
+                        self.dataWithType()
                     }else{
-                        if firstArr.count > 20{
-                            for i in 0...19{
-                                self.data.append(firstArr[i])
-                                //                        firstArr.removeFirst()
-                            }
+                        if self.isFromMain{
+                            self.data = firstArr
                         }else{
-                            for i in 0...firstArr.count - 1{
-                                self.data.append(firstArr[i])
-                                //                        firstArr.removeFirst()
-                            }
-                        }
-                        
-                    }
-                    var typeIn = false
-                    let dataType1 = self.dataType
-                    self.dataType.removeAll()
-                    self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
-                    for k in 0...dataType1.count - 1{
-                        for i in 0...self.fullData.count - 1{
-                            if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
-                                if dataType1[k].title == "Дополнительные услуги" && !typeIn{
-                                    typeIn = true
+                            if firstArr.count > 20{
+                                for i in 0...19{
+                                    self.data.append(firstArr[i])
+                                    //                        firstArr.removeFirst()
                                 }
                             }else{
-                                
-                                if (self.fullData[i].title == dataType1[k].title) && !typeIn{
-                                    typeIn = true
+                                for i in 0...firstArr.count - 1{
+                                    self.data.append(firstArr[i])
+                                    //                        firstArr.removeFirst()
                                 }
                             }
+                            
                         }
-                        if typeIn{
-                            if self.dataType.count == 0{
-                                self.dataType.append(dataType1[k])
-                            }else{
-                                var addT = false
-                                self.dataType.forEach{
-                                    if $0.title == dataType1[k].title{
-                                        addT = true
+                        var typeIn = false
+                        let dataType1 = self.dataType
+                        self.dataType.removeAll()
+                        self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
+                        for k in 0...dataType1.count - 1{
+                            for i in 0...self.fullData.count - 1{
+                                if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
+                                    if dataType1[k].title == "Дополнительные услуги" && !typeIn{
+                                        typeIn = true
+                                    }
+                                }else{
+                                    
+                                    if (self.fullData[i].title == dataType1[k].title) && !typeIn{
+                                        typeIn = true
                                     }
                                 }
-                                if !addT{
+                            }
+                            if typeIn{
+                                if self.dataType.count == 0{
                                     self.dataType.append(dataType1[k])
+                                }else{
+                                    var addT = false
+                                    self.dataType.forEach{
+                                        if $0.title == dataType1[k].title{
+                                            addT = true
+                                        }
+                                    }
+                                    if !addT{
+                                        self.dataType.append(dataType1[k])
+                                    }
                                 }
                             }
+                            typeIn = false
                         }
-                        typeIn = false
+                        self.collectionHeader?.reloadData()
+                        self.collection?.reloadData()
+                        self.stopAnimatior()
+                        if #available(iOS 10.0, *) {
+                            self.collection?.refreshControl?.endRefreshing()
+                        } else {
+                            self.refreshControl?.endRefreshing()
+                        }
                     }
                 }else{
                     self.collectionHeader?.isHidden = true
                 }
                 
-                self.collectionHeader?.reloadData()
-                self.collection?.reloadData()
                 if self.requestId_ != "" {
                     for index in 0...self.fullCount - 1{
                         if self.fullData[index].id == self.requestId_ || self.fullData[index].webID == self.requestId_{
@@ -731,13 +741,6 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                     }
                     
-                } else {
-                    self.stopAnimatior()
-                    if #available(iOS 10.0, *) {
-                        self.collection?.refreshControl?.endRefreshing()
-                    } else {
-                        self.refreshControl?.endRefreshing()
-                    }
                 }
             }
             sleep(2)
