@@ -75,6 +75,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             picker.isHidden         = false
             pickerLine.isHidden     = false
             imageConst.constant = 150
+            if transportSwitch.isOn{
+                sendBtnTop.constant = 5
+            }else{
+                if sendBtnTop.constant > 150{
+                    sendBtnTop.constant = sendBtnTop.constant - 150
+                }else{
+                    sendBtnTop.constant = 5
+                }
+            }
         } else {
             
             let dateFormatter = DateFormatter()
@@ -92,7 +101,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 //imageConst.constant     = 5
             }
             imageConst.constant = 0
-            
+            if transportSwitch.isOn{
+                changeFooter()
+            }else{
+                sendBtnTop.constant = sendBtnTopConstant
+            }
         }
     }
     
@@ -294,6 +307,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
+        scroll.isHidden = true
         edContact.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
@@ -440,6 +454,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 sendBtnTopConstant = UIScreen.main.bounds.height - scroll.contentSize.height - 110
             }
         }
+        scroll.isHidden = false
     }
     var sendBtnTopConstant = CGFloat()
     var tap = UIGestureRecognizer()
@@ -517,6 +532,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         view.frame.origin.y = 0 - keyboardHeight
         scroll.contentInset.top = keyboardHeight
         view.addGestureRecognizer(tap)
+        let desiredOffset = CGPoint(x: 0, y: -scroll.contentInset.top)
+        scroll.setContentOffset(desiredOffset, animated: false)
         if transportSwitch.isOn{
             sendBtnTop.constant = 5
         }else{
