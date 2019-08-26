@@ -40,13 +40,14 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     }
                 }
                 var s = 0
-                for k in 0...self.filteredCalcs.count - 1{
-                    let d = self.filteredCalcs[k].numYearSet! - self.date.1!
-                    if d == 1 && s == 0{
-                        s = 1
-                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
-                    }
-                }
+//                for k in 0...self.filteredCalcs.count - 1{
+//                    let d = self.filteredCalcs[k].numYearSet! - self.date.1!
+//                    if d == 1 && s == 0{
+//                        s = 1
+//                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
+//                    }
+//                }
+                self.date = (self.yearArr[self.index].month, self.yearArr[self.index].year)
                 self.data_ = self.calcs.filter {
                     return self.date.1 == $0.numYearSet
                 }
@@ -108,13 +109,14 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                 }
                 
                 var s = 0
-                for k in 0...self.filteredCalcs.count - 1{
-                    let d = self.date.1! - self.filteredCalcs[k].numYearSet!
-                    if d == 1 && s == 0{
-                        s = 1
-                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
-                    }
-                }
+//                for k in 0...self.filteredCalcs.count - 1{
+//                    let d = self.date.1! - self.filteredCalcs[k].numYearSet!
+//                    if d == 1 && s == 0{
+//                        s = 1
+//                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
+//                    }
+//                }
+                self.date = (self.yearArr[self.index].month, self.yearArr[self.index].year)
                 self.data_ = self.calcs.filter {
                     return self.date.1 == $0.numYearSet
                 }
@@ -235,7 +237,6 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
             DispatchQueue.global(qos: .background).async {
                 var year = self.date.1
                 var month = 0
-                print(self.date)
                 if self.data_.count != 0{
                     var cont = false
                     for k in 0...self.data_.count - 1{
@@ -373,8 +374,12 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcCell") as! TestCalcCell
-        if indexPath.row != dataYear[indexPath.section]!.count + 1 {
-            cell.display(dataYear[indexPath.section]![indexPath.row - 1], pay: self, indexPath: indexPath)
+        if indexPath.row < dataYear[indexPath.section]!.count + 1 {
+            print(indexPath.row, dataYear[indexPath.section]!.count)
+            if dataYear[indexPath.section]![indexPath.row - 1] != nil{
+                cell.display(dataYear[indexPath.section]![indexPath.row - 1], pay: self, indexPath: indexPath)
+            }
+            
         } else {
             var sumAccured  = 0.0
             var sumDebt     = 0.0
