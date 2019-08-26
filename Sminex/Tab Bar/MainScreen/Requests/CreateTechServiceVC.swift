@@ -18,6 +18,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
+    @IBOutlet private weak var imgsHeight:  NSLayoutConstraint!
     @IBOutlet private weak var sendBtnBot:  NSLayoutConstraint!
     @IBOutlet private weak var edConst:     NSLayoutConstraint!
     @IBOutlet private weak var btnConst:    NSLayoutConstraint!
@@ -341,6 +342,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         timeBtn2.layer.cornerRadius = 12
         // Поправим отображения слоя за его границами
         timeBtn2.layer.masksToBounds = true
+        imgsHeight.constant = 0
     }
     var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
@@ -358,18 +360,24 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if !picker.isHidden {
             dateButtonPressed(nil)
         }
+        self.btnConst.constant = 0
         let info = sender?.userInfo!
         let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-        self.btnConst.constant = (keyboardSize?.height)!
-        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + (keyboardSize?.height)!)
         keyboardHeight = keyboardSize!.height
+        view.frame.origin.y = 0 - keyboardHeight
+        scroll.contentInset.top = keyboardHeight
+        let desiredOffset = CGPoint(x: 0, y: -scroll.contentInset.top)
+        scroll.setContentOffset(desiredOffset, animated: false)
         view.addGestureRecognizer(tap)
     }
     var keyboardHeight: CGFloat = 0.0
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         view.removeGestureRecognizer(tap)
-        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
+        //        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
+        view.frame.origin.y = 0
+        scroll.contentInset.top = 0
+        keyboardHeight = 0
         self.btnConst.constant = 0
         if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
             btnConst.constant = 25
@@ -385,7 +393,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         if imagesArr.count == 0 {
             images.isHidden = true
             imageConst.constant = 8
-            
+            imgsHeight.constant = 0
 //            if !picker.isHidden && isNeedToScrollMore() {
 //                btnConst.constant = 100
 //
@@ -403,7 +411,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
 //            }
             
             images.isHidden = false
-            
+            imgsHeight.constant = 150
             if picker.isHidden {
                 imageConst.constant = 8
                 

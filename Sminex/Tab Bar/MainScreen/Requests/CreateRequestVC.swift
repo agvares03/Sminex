@@ -38,9 +38,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var pickerLine:      UILabel!
     @IBOutlet private weak var descInfoLbl:     UILabel!
     @IBOutlet private weak var descInfoView:    UIView!
+    @IBOutlet weak var sendBtnTop: NSLayoutConstraint!
     @IBOutlet weak var heigthFooter: NSLayoutConstraint!
     @IBOutlet weak var phone_service: UILabel!
     @IBOutlet weak var img_phone_service: UIImageView!
+    @IBOutlet weak var dopInfoHeight: NSLayoutConstraint!
     @IBOutlet weak var heigth_phone_service: NSLayoutConstraint!
     
     @IBOutlet private weak var tableView:   UITableView!
@@ -402,6 +404,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
         heigthFooter.constant = 0
         heigth_phone_service.constant = 0
+        dopInfoHeight.constant = 0
         descInfoLbl.isHidden = true
         descInfoView.isHidden = true
         let dateFormatter = DateFormatter()
@@ -425,6 +428,20 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //            scroll.contentSize = CGSize(width: scroll.frame.size.width, height: view.frame.size.height)
 //        }
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(true)
+        if scroll.contentSize.height < UIScreen.main.bounds.height{
+            sendBtnTop.constant = UIScreen.main.bounds.height - scroll.contentSize.height - 60
+            sendBtnTopConstant = UIScreen.main.bounds.height - scroll.contentSize.height - 60
+            if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
+                sendBtnTop.constant = UIScreen.main.bounds.height - scroll.contentSize.height - 110
+                sendBtnTopConstant = UIScreen.main.bounds.height - scroll.contentSize.height - 110
+            }
+        }
+    }
+    var sendBtnTopConstant = CGFloat()
     var tap = UIGestureRecognizer()
     var isExpanded = true
     @objc func expand() {
@@ -496,18 +513,27 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
         let info = sender?.userInfo!
-        keyboardSize = ((info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size)!
-        view.frame.origin.y = 0 - keyboardSize.height
-        scroll.contentInset.top = keyboardSize.height
+        keyboardHeight = ((info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size.height)!
+        view.frame.origin.y = 0 - keyboardHeight
+        scroll.contentInset.top = keyboardHeight
         view.addGestureRecognizer(tap)
+        if transportSwitch.isOn{
+            sendBtnTop.constant = 5
+        }else{
+            sendBtnTop.constant = sendBtnTop.constant - keyboardHeight
+            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+                sendBtnTop.constant = 5
+            }
+        }
     }
-    var keyboardSize = CGSize()
+    var keyboardHeight = CGFloat()
     // И вниз при исчезновении
     var keyboardShow = true
     @objc func keyboardWillHide(sender: NSNotification?) {
         view.removeGestureRecognizer(tap)
         view.frame.origin.y = 0
         scroll.contentInset.top = 0
+        keyboardHeight = 0
         changeFooter()
     }
     
@@ -563,14 +589,23 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             descInfoLbl.isHidden = true
             descInfoView.isHidden = true
             heigth_phone_service.constant = 0
+            dopInfoHeight.constant = 0
+            if keyboardHeight != 0{
+                sendBtnTop.constant = sendBtnTopConstant - keyboardHeight
+                if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+                    sendBtnTop.constant = 5
+                }
+            }else{
+                sendBtnTop.constant = sendBtnTopConstant
+            }
         }
     }
     
-    private func changeFooter() {
-        if (transportSwitch.isOn) {
+    func changeFooter() {
+        if (self.transportSwitch.isOn) {
             if !(UserDefaults.standard.bool(forKey: "denyImportExportPropertyRequest")) {
 //                heigthFooter.constant = 160
-                descInfoLbl.isHidden = false
+                self.descInfoLbl.isHidden = false
                 let data_: [ContactsJson] = TemporaryHolder.instance.contactsList
                 var phone: String = ""
                 for data in data_ {
@@ -578,28 +613,42 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                         phone = data.phone ?? "";
                     }
                 }
+                self.dopInfoHeight.constant = heightForView(text: "Вниманию арендаторов помещений! В случае планируемого вывоза имущества Вам необходимо получить подтверждение владельца помещения на вывоз.", font: self.descInfoLbl.font, width: self.view.frame.size.width - 16)
                 if (phone != "") {
                     
 //                    heigthFooter.constant = 270
-                    descInfoView.isHidden = false
-                    heigth_phone_service.constant = 110
-                    phone_service.text = phone
-                    
+                    self.descInfoView.isHidden = false
+                    self.heigth_phone_service.constant = 110
+                    self.phone_service.text = phone
                 } else {
-                    
 //                    heigthFooter.constant = 160
-                    heigth_phone_service.constant = 0
-                    
+                    self.heigth_phone_service.constant = 0
+                }
+                if keyboardHeight != 0{
+                    self.sendBtnTop.constant = 5
+                }else{
+                    if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax){
+                        self.sendBtnTop.constant = sendBtnTopConstant - 110 - self.heigth_phone_service.constant - self.dopInfoHeight.constant
+                    }else{
+                        self.sendBtnTop.constant = 5
+                    }
                 }
             } else {
-                descInfoLbl.isHidden = true
-                descInfoView.isHidden = true
-                heigth_phone_service.constant = 0
+                self.descInfoLbl.isHidden = true
+                self.descInfoView.isHidden = true
+                self.heigth_phone_service.constant = 0
+                self.dopInfoHeight.constant = 0
             }
         } else {
-            descInfoLbl.isHidden = true
-            descInfoView.isHidden = true
-            heigth_phone_service.constant = 0
+            self.descInfoLbl.isHidden = true
+            self.descInfoView.isHidden = true
+            self.heigth_phone_service.constant = 0
+            self.dopInfoHeight.constant = 0
+            if self.scroll.contentSize.height < self.view.frame.size.height{
+                self.sendBtnTop.constant = sendBtnTopConstant
+            }else{
+                self.sendBtnTop.constant = 5
+            }
         }
     }
     
@@ -1103,5 +1152,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 }
             }
         }
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        print(label.frame.height, width)
+        return label.frame.height
     }
 }

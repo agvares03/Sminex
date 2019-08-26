@@ -46,11 +46,12 @@ class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         if TemporaryHolder.instance.newsNew != nil {
             data = TemporaryHolder.instance.newsNew!
         }
-        
+        startAnimation()
         if tappedNews != nil {
+            hideTable = true
+            tableView.isHidden = true
             performSegue(withIdentifier: Segues.fromNewsList.toNews, sender: self)
         }
-        startAnimation()
         getNews()
     }
     
@@ -85,6 +86,7 @@ class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.stopAnimation()
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
     }
     
@@ -356,9 +358,13 @@ class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         tableView.isHidden = true
         loader.startAnimating()
     }
-    
+    var hideTable = false
     private func stopAnimation() {
-        tableView.isHidden = false
+        if hideTable {
+            tableView.isHidden = true
+        }else{
+            tableView.isHidden = false
+        }
         loader.stopAnimating()
         loader.isHidden     = true
     }

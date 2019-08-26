@@ -426,7 +426,9 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
                     //                    self.arr = self.comments_
                     //                    self.arr.insert(self.data_, at: 0)
                     if index > self.arr.count{
-                        self.arr.append( ServiceAppCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        if !(row.attributes["text"]!.containsIgnoringCase(find: "+skip")){
+                            self.arr.append( ServiceAppCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        }
                     }
                     //                    if index < self.arr.count{
                     //                        self.arr.removeLast()

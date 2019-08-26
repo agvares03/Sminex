@@ -414,7 +414,9 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
                     //                    self.arr = self.comments_
                     //                    self.arr.insert(self.data_, at: 0)
                     if index > self.arr.count{
-                        self.arr.append( AppealCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        if !(row.attributes["text"]!.containsIgnoringCase(find: "+skip")){
+                            self.arr.append( AppealCommentCellData(image: UIImage(named: "account")!, title: row.attributes["Name"]!, comment: row.attributes["text"]!, date: row.attributes["CreatedDate"]!, id: row.attributes["ID"]!))
+                        }
                     }
                     //                    if index < self.arr.count{
                     //                        self.arr.removeLast()
@@ -614,15 +616,21 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
 
 final class AppealHeader: UICollectionViewCell {
     
-    @IBOutlet private weak var imageLoader: UIActivityIndicatorView!
-    @IBOutlet private weak var imageConst:  NSLayoutConstraint!
-    @IBOutlet private weak var scroll:      UIScrollView!
+    @IBOutlet private weak var imageLoader:     UIActivityIndicatorView!
+    @IBOutlet private weak var imageConst:      NSLayoutConstraint!
+    @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var descHeight:      NSLayoutConstraint!
+    @IBOutlet private weak var mobileHeight:    NSLayoutConstraint!
+    @IBOutlet private weak var emailHeight:     NSLayoutConstraint!
     @IBOutlet private weak var mobileNumber:    UILabel!
+    @IBOutlet private weak var mobileText:      UILabel!
+    @IBOutlet private weak var emailText:       UILabel!
     @IBOutlet private weak var descText:        UILabel?
     @IBOutlet private weak var descTitle:       UILabel?
     @IBOutlet private weak var email:           UILabel?
     @IBOutlet private weak var ident:           UILabel?
+    @IBOutlet private weak var mobileSep:       UILabel!
+    @IBOutlet private weak var emailSep:        UILabel!
     
     private var delegate: AppealCellsProtocol?
     private var delegate1: AppealVC?
@@ -638,13 +646,29 @@ final class AppealHeader: UICollectionViewCell {
         imageLoader.stopAnimating()
         if item.email.contains(find: "@"){
             email?.text = item.email
+            email?.isHidden = false
+            emailText.isHidden = false
+            emailSep.isHidden = false
+            emailHeight.constant = 60
         }else{
-            email?.text = UserDefaults.standard.string(forKey: "mail") ?? ""
+            email?.text = ""
+            email?.isHidden = true
+            emailText.isHidden = true
+            emailSep.isHidden = true
+            emailHeight.constant = 0
         }
         if item.mobileNumber != "" || item.mobileNumber != "-" || item.mobileNumber != " "{
             mobileNumber?.text = item.mobileNumber
+            mobileNumber?.isHidden = false
+            mobileText.isHidden = false
+            mobileSep.isHidden = false
+            mobileHeight.constant = 60
         }else{
-            mobileNumber?.text = UserDefaults.standard.string(forKey: "phone") ?? ""
+            mobileNumber?.text = ""
+            mobileNumber?.isHidden = true
+            mobileText.isHidden = true
+            mobileSep.isHidden = true
+            mobileHeight.constant = 0
         }
         ident?.text = item.ident
         descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width - 95)

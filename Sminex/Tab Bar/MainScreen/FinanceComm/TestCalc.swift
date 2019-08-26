@@ -1,19 +1,16 @@
 //
-//  FinanceCalcVCComm.swift
+//  TestCalc.swift
 //  Sminex
 //
-//  Created by Sergey Ivanov on 18/07/2019.
+//  Created by Sergey Ivanov on 26/08/2019.
 //
 
 import UIKit
-protocol PayDelegate{
-    func requestPay(debt: String, indexPath: IndexPath)
-    func goCalc(indexPath: IndexPath)
-}
-class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PayDelegate {
+
+class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PayDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var collection: UICollectionView!
-    @IBOutlet weak var collectionYear: UICollectionView!
+    @IBOutlet weak var collectionYear:  UICollectionView!
+    @IBOutlet weak var table:           UITableView!
     @IBOutlet private weak var loader:  UIActivityIndicatorView!
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -38,17 +35,19 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                     self.collectionYear.reloadData()
                     if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
                         let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: self.index, section: 0))?.frame
-                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                        let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                        self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
                     }
                 }
                 var s = 0
-                for k in 0...self.filteredCalcs.count - 1{
-                    let d = self.filteredCalcs[k].numYearSet! - self.date.1!
-                    if d == 1 && s == 0{
-                        s = 1
-                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
-                    }
-                }
+//                for k in 0...self.filteredCalcs.count - 1{
+//                    let d = self.filteredCalcs[k].numYearSet! - self.date.1!
+//                    if d == 1 && s == 0{
+//                        s = 1
+//                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
+//                    }
+//                }
+                self.date = (self.yearArr[self.index].month, self.yearArr[self.index].year)
                 self.data_ = self.calcs.filter {
                     return self.date.1 == $0.numYearSet
                 }
@@ -84,8 +83,9 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                     self.dataYear[i] = dat
                 }
                 DispatchQueue.main.async {
-                    self.collection.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-                    self.collection.reloadData()
+                    let indexPath = NSIndexPath(row: 0, section: 0)
+                    self.table.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
+                    self.table.reloadData()
                     self.stopAnimation()
                 }
             }
@@ -103,18 +103,20 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                     self.collectionYear?.reloadData()
                     if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
                         let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: self.index, section: 0))?.frame
-                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                        let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                        self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
                     }
                 }
                 
                 var s = 0
-                for k in 0...self.filteredCalcs.count - 1{
-                    let d = self.date.1! - self.filteredCalcs[k].numYearSet!
-                    if d == 1 && s == 0{
-                        s = 1
-                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
-                    }
-                }
+//                for k in 0...self.filteredCalcs.count - 1{
+//                    let d = self.date.1! - self.filteredCalcs[k].numYearSet!
+//                    if d == 1 && s == 0{
+//                        s = 1
+//                        self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
+//                    }
+//                }
+                self.date = (self.yearArr[self.index].month, self.yearArr[self.index].year)
                 self.data_ = self.calcs.filter {
                     return self.date.1 == $0.numYearSet
                 }
@@ -150,8 +152,9 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                     self.dataYear[i] = dat
                 }
                 DispatchQueue.main.async {
-                    self.collection.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-                    self.collection.reloadData()
+                    let indexPath = NSIndexPath(row: 0, section: 0)
+                    self.table.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
+                    self.table.reloadData()
                     self.stopAnimation()
                 }
             }
@@ -194,8 +197,8 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
-        collection.delegate     = self
-        collection.dataSource   = self
+        table.delegate     = self
+        table.dataSource   = self
         
         collectionYear.delegate     = self
         collectionYear.dataSource   = self
@@ -234,7 +237,6 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             DispatchQueue.global(qos: .background).async {
                 var year = self.date.1
                 var month = 0
-                print(self.date)
                 if self.data_.count != 0{
                     var cont = false
                     for k in 0...self.data_.count - 1{
@@ -278,17 +280,18 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                     self.collectionYear.reloadData()
                     if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
                         let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: selYear, section: 0))?.frame
-                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                        let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                        self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
                     }
-                    self.collection.reloadData()
+                    self.table.reloadData()
                     //                    if self.collection.dataSource?.collectionView(self.collection, cellForItemAt: IndexPath(row: 0, section: 0)) != nil{
                     //                        if selSection != 0{
                     //                            self.collection.scrollToItem(at: IndexPath(item: self.dataYear[selSection - 1]!.count, section: selSection - 1), at: .top, animated: true)
                     //                        }
                     //                    }
-                    if self.collection?.dataSource?.collectionView(self.collection!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
-                        let rect = self.collection.layoutAttributesForItem(at: IndexPath(item: 0, section: selSection))?.frame
-                        self.collection.setContentOffset(CGPoint(x: 0, y: (rect?.origin.y)! - 50), animated: true)
+                    if self.table?.dataSource?.tableView(self.table!, cellForRowAt: IndexPath(row: 0, section: 0)) != nil {
+                        let indexPath = NSIndexPath(row: 0, section: selSection)
+                        self.table.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
                     }
                     self.collectionYear.isHidden = false
                     self.stopAnimation()
@@ -302,13 +305,13 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         DispatchQueue.global(qos: .background).async {
             self.index = self.selType
             var s = 0
-//            for k in 0...self.filteredCalcs.count - 1{
-//                let d = self.filteredCalcs[k].numYearSet! - self.date.1!
-//                if d == 1 && s == 0{
-//                    s = 1
-//                    self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
-//                }
-//            }
+            //            for k in 0...self.filteredCalcs.count - 1{
+            //                let d = self.filteredCalcs[k].numYearSet! - self.date.1!
+            //                if d == 1 && s == 0{
+            //                    s = 1
+            //                    self.date = (self.filteredCalcs[k].numMonthSet, self.filteredCalcs[k].numYearSet)
+            //                }
+            //            }
             self.data_ = self.calcs.filter {
                 return self.date.1 == $0.numYearSet
             }
@@ -344,106 +347,85 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                 self.dataYear[i] = dat
             }
             DispatchQueue.main.async {
-                self.collection.reloadData()
+                self.table.reloadData()
                 self.stopAnimation()
             }
         }
     }
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if collectionView == self.collection{
-            if dataYear.count != 0{
-                return dataYear.count
-            }else{
-                return 0
-            }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if dataYear.count != 0{
+            return dataYear.count
         }else{
-            return 1
+            return 0
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == self.collection{
-            return dataYear[section]!.count == 0 ? 0 : dataYear[section]!.count + 1
-        }else{
-            return yearArr.count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataYear[section]!.count + 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcHeader") as! TestCalcHeader
+            cell.display(getNameAndMonth(dateArr[indexPath.section].0!) + " \(dateArr[indexPath.section].1!)")
+            
+            //do other header related calls or settups
+            return cell
         }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcCell") as! TestCalcCell
+        if indexPath.row < dataYear[indexPath.section]!.count + 1 {
+            print(indexPath.row, dataYear[indexPath.section]!.count)
+            if dataYear[indexPath.section]![indexPath.row - 1] != nil{
+                cell.display(dataYear[indexPath.section]![indexPath.row - 1], pay: self, indexPath: indexPath)
+            }
+            
+        } else {
+            var sumAccured  = 0.0
+            var sumDebt     = 0.0
+            var sumPay      = 0.0
+            
+            dataYear[indexPath.section]!.forEach {
+                sumAccured  += $0.sumAccrued    ?? 0.0
+                sumDebt     += $0.sumDebt       ?? 0.0
+                sumPay      += $0.sumPay        ?? 0.0
+            }
+            
+            cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: sumAccured, sumDebt: sumDebt, sumPay: sumPay), pay: self, indexPath: indexPath)
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return yearArr.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 0.0
-        if collectionView == self.collection{
-            let cell = FinanceCalcCommCell.fromNib()
-            if indexPath.row != dataYear[indexPath.section]!.count {
-                cell?.display(dataYear[indexPath.section]![indexPath.row], pay: self, indexPath: indexPath)
-            } else {
-                cell?.display( AccountCalculationsJson(type: "Итого", sumAccrued: 0, sumDebt: 0, sumPay: 0), pay: self, indexPath: indexPath)
-                var sumDebt     = 0.0
-                
-                dataYear[indexPath.section]!.forEach {
-                    sumDebt     += $0.sumDebt       ?? 0.0
-                }
-                if sumDebt > 0.00{
-                    height = 50
-                }else{
-                    height = 0
-                }
-            }
-            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height + height)
+        let cell = CalcYearCell1.fromNib()
+        if firstLoad && indexPath.row == 0{
+            firstLoad = false
+            cell?.display(yearArr[indexPath.row], selectIndex: true)
+        }else if selType == indexPath.row{
+            cell?.display(yearArr[indexPath.row], selectIndex: true)
         }else{
-            let cell = CalcYearCell.fromNib()
-            if firstLoad && indexPath.row == 0{
-                firstLoad = false
-                cell?.display(yearArr[indexPath.row], selectIndex: true)
-            }else if selType == indexPath.row{
-                cell?.display(yearArr[indexPath.row], selectIndex: true)
-            }else{
-                cell?.display(yearArr[indexPath.row], selectIndex: false)
-            }
-            return CGSize(width: view.frame.size.width / 3, height: 40)
+            cell?.display(yearArr[indexPath.row], selectIndex: false)
         }
+        return CGSize(width: view.frame.size.width / 3, height: 40)
     }
     var firstLoad = true
     var selType = 0
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == collection{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceCalcCommCell", for: indexPath) as! FinanceCalcCommCell
-            if indexPath.row != dataYear[indexPath.section]!.count {
-                cell.display(dataYear[indexPath.section]![indexPath.row], pay: self, indexPath: indexPath)
-            } else {
-                var sumAccured  = 0.0
-                var sumDebt     = 0.0
-                var sumPay      = 0.0
-                
-                dataYear[indexPath.section]!.forEach {
-                    sumAccured  += $0.sumAccrued    ?? 0.0
-                    sumDebt     += $0.sumDebt       ?? 0.0
-                    sumPay      += $0.sumPay        ?? 0.0
-                }
-                
-                cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: sumAccured, sumDebt: sumDebt, sumPay: sumPay), pay: self, indexPath: indexPath)
-            }
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalcYearCell1", for: indexPath) as! CalcYearCell1
+        if firstLoad && indexPath.row == 0{
+            firstLoad = false
+            cell.display(yearArr[indexPath.row], selectIndex: true)
+        }else if selType == indexPath.row{
+            cell.display(yearArr[indexPath.row], selectIndex: true)
         }else{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalcYearCell", for: indexPath) as! CalcYearCell
-            if firstLoad && indexPath.row == 0{
-                firstLoad = false
-                cell.display(yearArr[indexPath.row], selectIndex: true)
-            }else if selType == indexPath.row{
-                cell.display(yearArr[indexPath.row], selectIndex: true)
-            }else{
-                cell.display(yearArr[indexPath.row], selectIndex: false)
-            }
-            return cell
+            cell.display(yearArr[indexPath.row], selectIndex: false)
         }
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceCalcCommHeader", for: indexPath) as! FinanceCalcCommHeader
-        header.display(getNameAndMonth(dateArr[indexPath.section].0!) + " \(dateArr[indexPath.section].1!)")
-        return header
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -451,6 +433,11 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             self.startAnimation()
             selType = indexPath.row
             collectionYear?.reloadData()
+            if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: selType, section: 0))?.frame
+                let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
+            }
             self.date = (self.yearArr[selType].month, self.yearArr[selType].year)
             loadData()
         }
@@ -519,7 +506,7 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func startAnimation() {
-        self.collection.isHidden  = true
+        self.table.isHidden  = true
         self.loader.isHidden = false
         self.loader.startAnimating()
     }
@@ -527,11 +514,11 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     func stopAnimation() {
         self.loader.stopAnimating()
         self.loader.isHidden = true
-        self.collection.isHidden  = false
+        self.table.isHidden  = false
     }
 }
 
-final class FinanceCalcCommHeader: UICollectionReusableView {
+final class TestCalcHeader: UITableViewCell {
     
     @IBOutlet private weak var title: UILabel!
     
@@ -540,7 +527,7 @@ final class FinanceCalcCommHeader: UICollectionReusableView {
     }
 }
 
-final class FinanceCalcCommCell: UICollectionViewCell {
+final class TestCalcCell: UITableViewCell {
     
     @IBOutlet private weak var headerStack: UIStackView!
     @IBOutlet private weak var headerHeight: NSLayoutConstraint!
@@ -625,25 +612,25 @@ final class FinanceCalcCommCell: UICollectionViewCell {
         sumPay.text = sumP.replacingOccurrences(of: ".", with: ",")
         title.text = item.type
         
-//        if item.type == "Итого" {
-//            sumAccured.font = UIFont.boldSystemFont(ofSize: sumAccured.font.pointSize)
-//            sumDebt.font    = UIFont.boldSystemFont(ofSize: sumDebt.font.pointSize)
-//            sumPay.font     = UIFont.boldSystemFont(ofSize: sumPay.font.pointSize)
-//            title.font      = UIFont.boldSystemFont(ofSize: title.font.pointSize)
-//
-//        } else {
-            sumAccured.font = UIFont.systemFont(ofSize: sumAccured.font.pointSize, weight: .light)
-            sumDebt.font    = UIFont.systemFont(ofSize: sumDebt.font.pointSize, weight: .light)
-            sumPay.font     = UIFont.systemFont(ofSize: sumPay.font.pointSize, weight: .light)
-            title.font      = UIFont.systemFont(ofSize: title.font.pointSize, weight: .light)
-//        }
+        //        if item.type == "Итого" {
+        //            sumAccured.font = UIFont.boldSystemFont(ofSize: sumAccured.font.pointSize)
+        //            sumDebt.font    = UIFont.boldSystemFont(ofSize: sumDebt.font.pointSize)
+        //            sumPay.font     = UIFont.boldSystemFont(ofSize: sumPay.font.pointSize)
+        //            title.font      = UIFont.boldSystemFont(ofSize: title.font.pointSize)
+        //
+        //        } else {
+        sumAccured.font = UIFont.systemFont(ofSize: sumAccured.font.pointSize, weight: .light)
+        sumDebt.font    = UIFont.systemFont(ofSize: sumDebt.font.pointSize, weight: .light)
+        sumPay.font     = UIFont.systemFont(ofSize: sumPay.font.pointSize, weight: .light)
+        title.font      = UIFont.systemFont(ofSize: title.font.pointSize, weight: .light)
+        //        }
     }
     
-    class func fromNib() -> FinanceCalcCommCell? {
-        var cell: FinanceCalcCommCell?
+    class func fromNib() -> TestCalcCell? {
+        var cell: TestCalcCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? FinanceCalcCommCell {
+            if let view = $0 as? TestCalcCell {
                 cell = view
             }
         }
@@ -652,7 +639,7 @@ final class FinanceCalcCommCell: UICollectionViewCell {
     }
 }
 
-final class CalcYearCell: UICollectionViewCell {
+final class CalcYearCell1: UICollectionViewCell {
     
     @IBOutlet private weak var title:           UILabel!
     @IBOutlet private weak var selLine:         UILabel!
@@ -668,11 +655,11 @@ final class CalcYearCell: UICollectionViewCell {
         }
     }
     
-    class func fromNib() -> CalcYearCell? {
-        var cell: CalcYearCell?
+    class func fromNib() -> CalcYearCell1? {
+        var cell: CalcYearCell1?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? CalcYearCell {
+            if let view = $0 as? CalcYearCell1 {
                 cell = view
             }
         }

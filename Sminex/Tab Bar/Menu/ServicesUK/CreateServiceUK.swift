@@ -441,19 +441,29 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         if !picker.isHidden {
             dateButtonPressed(nil)
         }
+        self.btnConst.constant = 0
+        let info = sender?.userInfo!
+        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
         if keyboardHeight == 0.0{
-            let info = sender?.userInfo!
-            let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-            self.btnConst.constant = (keyboardSize?.height)!
-            scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + (keyboardSize?.height)!)
+//            self.btnConst.constant = (keyboardSize?.height)!
+//            scroll.contentSize.height = scroll.contentSize.height + (keyboardSize?.height)!
             keyboardHeight = keyboardSize!.height
+            view.frame.origin.y = 0 - keyboardHeight
+            scroll.contentInset.top = keyboardHeight
+            let desiredOffset = CGPoint(x: 0, y: -scroll.contentInset.top)
+            scroll.setContentOffset(desiredOffset, animated: false)
         }else{
-            let info = sender?.userInfo!
-            let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-            self.btnConst.constant = (keyboardSize?.height)!
-            scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
-            scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + (keyboardSize?.height)!)
+//            self.btnConst.constant = (keyboardSize?.height)!
+//            scroll.contentSize.height = scroll.contentSize.height - keyboardHeight
+//            scroll.contentSize.height = scroll.contentSize.height + (keyboardSize?.height)!
+//            keyboardHeight = keyboardSize!.height
+            view.frame.origin.y = 0 + keyboardHeight
+            scroll.contentInset.top = scroll.contentInset.top - keyboardHeight
             keyboardHeight = keyboardSize!.height
+            view.frame.origin.y = 0 - keyboardHeight
+            scroll.contentInset.top = keyboardHeight
+            let desiredOffset = CGPoint(x: 0, y: -scroll.contentInset.top)
+            scroll.setContentOffset(desiredOffset, animated: false)
         }
         view.addGestureRecognizer(tap)
     }
@@ -461,8 +471,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         view.removeGestureRecognizer(tap)
-        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
-        keyboardHeight = 0.0
+//        scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - keyboardHeight)
+        view.frame.origin.y = 0
+        scroll.contentInset.top = 0
+        keyboardHeight = 0
         self.btnConst.constant = 0
         if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
             btnConst.constant = 25
@@ -718,6 +730,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     }
     
     @objc func goService() {
+        view.endEditing(true)
+        keyboardHeight = 0
         self.performSegue(withIdentifier: "goService", sender: self)
     }
     

@@ -1,8 +1,8 @@
 //
-//  NewAppsUser.swift
+//  TestAppsUser.swift
 //  Sminex
 //
-//  Created by Sergey Ivanov on 01/08/2019.
+//  Created by Sergey Ivanov on 26/08/2019.
 //
 
 import UIKit
@@ -10,7 +10,7 @@ import CoreData
 import Gloss
 import SwiftyXMLParser
 
-final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppsUserDelegate {
+class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppsUserDelegate {
     
     @IBOutlet         weak var collection:      UICollectionView?
     @IBOutlet         weak var collectionHeader:UICollectionView?
@@ -84,7 +84,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     var serviceUKComm: [ServiceAppCommentCellData] = []
     private var rows: [String:Request] = [:]
     public var dataService: [ServicesUKJson] = []
-    private var dataType: [NewAppsUserHeaderData] = []
+    private var dataType: [TestAppsUserHeaderData] = []
     private var dataT = [RequestTypeStruct]()
     
     override func viewDidLoad() {
@@ -101,7 +101,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
         automaticallyAdjustsScrollViewInsets     = false
         
         self.startAnimator()
-        self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
+        self.dataType.append(TestAppsUserHeaderData(title: "Все", id: "0"))
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }else{
@@ -113,11 +113,11 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 }
                 self.dataT = types
                 self.dataT.forEach{
-                    self.dataType.append(NewAppsUserHeaderData(title: $0.name!, id: $0.id!))
+                    self.dataType.append(TestAppsUserHeaderData(title: $0.name!, id: $0.id!))
                 }
             }
         }
-        self.dataType.append(NewAppsUserHeaderData(title: "Дополнительные услуги", id: "0"))
+        self.dataType.append(TestAppsUserHeaderData(title: "Дополнительные услуги", id: "0"))
         if xml_ != nil && !isFromNotifi_{
             collection?.alpha   = 0
             createButton?.alpha = 0
@@ -186,63 +186,53 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
         tabBarController?.tabBar.isHidden = false
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == self.collection{
-            return data.count
-        }else{
-            return dataType.count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TestAppsUserCell", for: indexPath) as! TestAppsUserCell
+        cell.display(data[indexPath.row])
+        if indexPath.row == self.data.count - 1 {
+            self.loadMore()
         }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return dataType.count
     }
     var firstLoad = true
     var selType = 0
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == self.collection{
-            let cell = NewAppsUserCell.fromNib()
-            cell?.display(data[indexPath.row])
-            let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+        let cell = TestAppsUserHeader.fromNib()
+        if firstLoad && indexPath.row == 0{
+            firstLoad = false
+            cell?.display(dataType[indexPath.row], selectIndex: true)
+        }else if selType == indexPath.row{
+            cell?.display(dataType[indexPath.row], selectIndex: true)
         }else{
-            let cell = NewAppsUserHeader.fromNib()
-            if firstLoad && indexPath.row == 0{
-                firstLoad = false
-                cell?.display(dataType[indexPath.row], selectIndex: true)
-            }else if selType == indexPath.row{
-                cell?.display(dataType[indexPath.row], selectIndex: true)
-            }else{
-                cell?.display(dataType[indexPath.row], selectIndex: false)
-            }
-            
-            var size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            if size.width < 50{
-                size.width = 50
-            }
-            return CGSize(width: size.width, height: 40)
+            cell?.display(dataType[indexPath.row], selectIndex: false)
         }
         
+        var size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
+        if size.width < 50{
+            size.width = 50
+        }
+        return CGSize(width: size.width, height: 40)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == self.collection{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewAppsUserCell", for: indexPath) as! NewAppsUserCell
-            cell.display(data[indexPath.row])
-            if indexPath.row == self.data.count - 1 {
-                self.loadMore()
-            }
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestAppsUserHeader", for: indexPath) as! TestAppsUserHeader
+        if firstLoad && indexPath.row == 0{
+            firstLoad = false
+            cell.display(dataType[indexPath.row], selectIndex: true)
+        }else if selType == indexPath.row{
+            cell.display(dataType[indexPath.row], selectIndex: true)
         }else{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewAppsUserHeader", for: indexPath) as! NewAppsUserHeader
-            if firstLoad && indexPath.row == 0{
-                firstLoad = false
-                cell.display(dataType[indexPath.row], selectIndex: true)
-            }else if selType == indexPath.row{
-                cell.display(dataType[indexPath.row], selectIndex: true)
-            }else{
-                cell.display(dataType[indexPath.row], selectIndex: false)
-            }
-            return cell
+            cell.display(dataType[indexPath.row], selectIndex: false)
         }
-        
-        
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -325,7 +315,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     var choiceCount = 0
     // a flag for when all database items have already been loaded
     var reachedEndOfItems = false
-
+    
     func loadMore() {
         // don't bother doing another db query if already have everything
         if selType != 0{
@@ -353,7 +343,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 DispatchQueue.main.async {
                     
                     if thisBatchOfItems.count != 0 {
-    //                    if thisBatchOfItems.title
+                        //                    if thisBatchOfItems.title
                         // append the new items to the data source for the table view
                         self.data += thisBatchOfItems
                         // reload the table view
@@ -471,8 +461,8 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         TemporaryHolder.instance.choise(json!)
                         
                     }
-//                    let type: RequestTypeStruct
-//                    type = .init(id: "3", name: "Услуги службы комфорта")
+                    //                    let type: RequestTypeStruct
+                    //                    type = .init(id: "3", name: "Услуги службы комфорта")
                     if var types = TemporaryHolder.instance.requestTypes?.types {
                         for i in 0...types.count - 1{
                             if types[i].name == "Обращение"{
@@ -481,7 +471,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         }
                         self.dataT = types
                         self.dataT.forEach{
-                            self.dataType.append(NewAppsUserHeaderData(title: $0.name!, id: $0.id!))
+                            self.dataType.append(TestAppsUserHeaderData(title: $0.name!, id: $0.id!))
                         }
                     }
                 }
@@ -514,7 +504,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                     return
                 }
                 #if DEBUG
-//                print(String(data: data!, encoding: .utf8)!)
+                //                print(String(data: data!, encoding: .utf8)!)
                 #endif
                 let xml = XML.parse(data!)
                 self.parse(xml: xml)
@@ -684,7 +674,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                         var typeIn = false
                         let dataType1 = self.dataType
                         self.dataType.removeAll()
-                        self.dataType.append(NewAppsUserHeaderData(title: "Все", id: "0"))
+                        self.dataType.append(TestAppsUserHeaderData(title: "Все", id: "0"))
                         for k in 0...dataType1.count - 1{
                             for i in 0...self.fullData.count - 1{
                                 if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
@@ -963,21 +953,21 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     private func startAnimator() {
-//        DispatchQueue.main.sync{
-            self.activity?.isHidden       = false
-//            self.createButton?.isHidden   = true
-//            self.collectionHeader?.isHidden = true
-            self.activity?.startAnimating()
-//        }
+        //        DispatchQueue.main.sync{
+        self.activity?.isHidden       = false
+        //            self.createButton?.isHidden   = true
+        //            self.collectionHeader?.isHidden = true
+        self.activity?.startAnimating()
+        //        }
     }
     
     private func stopAnimatior() {
-//        DispatchQueue.main.sync{
-            self.activity?.stopAnimating()
-//            self.collectionHeader?.isHidden = false
-            self.activity?.isHidden       = true
-//            self.createButton?.isHidden   = false
-//        }
+        //        DispatchQueue.main.sync{
+        self.activity?.stopAnimating()
+        //            self.collectionHeader?.isHidden = false
+        self.activity?.isHidden       = true
+        //            self.createButton?.isHidden   = false
+        //        }
         
     }
     
@@ -1077,14 +1067,14 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     }
 }
 
-final class NewAppsUserHeader: UICollectionViewCell {
+final class TestAppsUserHeader: UICollectionViewCell {
     
     @IBOutlet private weak var title:           UILabel!
     @IBOutlet private weak var selLine:         UILabel!
     
     private var type: String?
     
-    fileprivate func display(_ item: NewAppsUserHeaderData, selectIndex: Bool) {
+    fileprivate func display(_ item: TestAppsUserHeaderData, selectIndex: Bool) {
         title.text = item.title
         if selectIndex{
             selLine.backgroundColor = .darkGray
@@ -1093,11 +1083,11 @@ final class NewAppsUserHeader: UICollectionViewCell {
         }
     }
     
-    class func fromNib() -> NewAppsUserHeader? {
-        var cell: NewAppsUserHeader?
+    class func fromNib() -> TestAppsUserHeader? {
+        var cell: TestAppsUserHeader?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? NewAppsUserHeader {
+            if let view = $0 as? TestAppsUserHeader {
                 cell = view
             }
         }
@@ -1106,7 +1096,7 @@ final class NewAppsUserHeader: UICollectionViewCell {
     }
 }
 
-final class NewAppsUserCell: UICollectionViewCell {
+final class TestAppsUserCell: UITableViewCell {
     
     @IBOutlet private weak var skTitleHeight: NSLayoutConstraint!
     @IBOutlet private weak var skTitleBottm: NSLayoutConstraint!
@@ -1174,11 +1164,11 @@ final class NewAppsUserCell: UICollectionViewCell {
         }
     }
     
-    class func fromNib() -> NewAppsUserCell? {
-        var cell: NewAppsUserCell?
+    class func fromNib() -> TestAppsUserCell? {
+        var cell: TestAppsUserCell?
         let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
         views?.forEach {
-            if let view = $0 as? NewAppsUserCell {
+            if let view = $0 as? TestAppsUserCell {
                 cell = view
             }
         }
@@ -1187,7 +1177,7 @@ final class NewAppsUserCell: UICollectionViewCell {
         return cell
     }
 }
-private final class NewAppsUserHeaderData {
+private final class TestAppsUserHeaderData {
     
     let title:      String
     let id:         String

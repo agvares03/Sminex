@@ -98,9 +98,6 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 7 983 256 75 87" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egX-dX-p1V">
                                                     <rect key="frame" x="16" y="179" width="288" height="20"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="gJk-1Y-0mk"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -126,9 +123,6 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="test@test.ru" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JvC-im-l24">
                                                     <rect key="frame" x="16" y="240" width="280" height="20"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="AJ0-ba-TLy"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -251,6 +245,7 @@
                                             <constraint firstItem="NIf-Di-wCR" firstAttribute="leading" secondItem="bip-xg-7O3" secondAttribute="leading" id="Zu0-eR-Xn5"/>
                                             <constraint firstItem="XC2-Ny-yy3" firstAttribute="top" secondItem="c4f-cO-nwC" secondAttribute="top" constant="15" id="b3K-Kb-gMo"/>
                                             <constraint firstItem="Kph-Sz-4Bg" firstAttribute="centerX" secondItem="S9Z-NC-waf" secondAttribute="centerX" id="c6O-OV-MUR"/>
+                                            <constraint firstItem="QcS-vQ-NgD" firstAttribute="top" secondItem="2fo-x6-XAH" secondAttribute="bottom" constant="60" id="ct3-RD-mKW"/>
                                             <constraint firstItem="0cd-jq-JFy" firstAttribute="leading" secondItem="c4f-cO-nwC" secondAttribute="leading" constant="16" id="d6s-tH-Zkg"/>
                                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="bip-xg-7O3" secondAttribute="trailing" constant="16" id="dqC-6X-W57"/>
                                             <constraint firstItem="i5U-F0-Chz" firstAttribute="leading" secondItem="NIf-Di-wCR" secondAttribute="leading" id="dsI-Vt-PvZ"/>
@@ -260,6 +255,7 @@
                                             <constraint firstItem="bip-xg-7O3" firstAttribute="top" secondItem="M2q-n3-eiv" secondAttribute="bottom" constant="10" id="kFL-Im-bCa"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="JvC-im-l24" secondAttribute="trailing" constant="16" id="kmS-cf-uUY"/>
                                             <constraint firstAttribute="bottom" secondItem="pjt-Kp-2vt" secondAttribute="bottom" constant="3" id="l4D-T6-100"/>
+                                            <constraint firstItem="2fo-x6-XAH" firstAttribute="top" secondItem="i5U-F0-Chz" secondAttribute="bottom" constant="60" id="lvm-rm-zcV"/>
                                             <constraint firstItem="SH5-6X-bJk" firstAttribute="leading" secondItem="c4f-cO-nwC" secondAttribute="leading" constant="20" id="mtM-5j-gIm"/>
                                             <constraint firstAttribute="trailing" secondItem="pjt-Kp-2vt" secondAttribute="trailing" id="nMF-3s-IB8"/>
                                             <constraint firstItem="i5U-F0-Chz" firstAttribute="top" secondItem="NIf-Di-wCR" secondAttribute="bottom" constant="8" id="oFN-SV-Lvv"/>
@@ -278,10 +274,16 @@
                                             <outlet property="descText" destination="NIf-Di-wCR" id="974-GK-FXz"/>
                                             <outlet property="descTitle" destination="UBw-1k-uOx" id="53X-B4-qAc"/>
                                             <outlet property="email" destination="JvC-im-l24" id="waa-zl-FyQ"/>
+                                            <outlet property="emailHeight" destination="ct3-RD-mKW" id="Qi6-FS-hyZ"/>
+                                            <outlet property="emailSep" destination="QcS-vQ-NgD" id="7tA-DX-frQ"/>
+                                            <outlet property="emailText" destination="Lld-xw-jGB" id="rLq-is-SaR"/>
                                             <outlet property="ident" destination="343-Ui-SUq" id="xsf-gl-ald"/>
                                             <outlet property="imageConst" destination="na1-VY-Otb" id="HeL-H8-L9W"/>
                                             <outlet property="imageLoader" destination="Kph-Sz-4Bg" id="SZ1-Hh-J77"/>
+                                            <outlet property="mobileHeight" destination="lvm-rm-zcV" id="S3d-t2-qcr"/>
                                             <outlet property="mobileNumber" destination="egX-dX-p1V" id="R43-7J-bEM"/>
+                                            <outlet property="mobileSep" destination="2fo-x6-XAH" id="kGn-qo-hry"/>
+                                            <outlet property="mobileText" destination="0cd-jq-JFy" id="fnG-4q-dsw"/>
                                             <outlet property="scroll" destination="SH5-6X-bJk" id="EXp-vG-E0f"/>
                                         </connections>
                                     </collectionViewCell>
