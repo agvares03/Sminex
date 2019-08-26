@@ -198,7 +198,9 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.collection{
             let cell = NewAppsUserCell.fromNib()
-            cell?.display(data[indexPath.row])
+            if data[indexPath.row] != nil{
+                cell?.display(data[indexPath.row])
+            }
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
             return CGSize(width: view.frame.size.width, height: size.height)
         }else{
@@ -224,7 +226,9 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.collection{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewAppsUserCell", for: indexPath) as! NewAppsUserCell
-            cell.display(data[indexPath.row])
+            if data[indexPath.row] != nil{
+                cell.display(data[indexPath.row])
+            }
             if indexPath.row == self.data.count - 1 {
                 self.loadMore()
             }
