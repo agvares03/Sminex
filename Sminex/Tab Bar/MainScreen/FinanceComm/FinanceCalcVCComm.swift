@@ -93,7 +93,7 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
-        if index < filteredCalcs.count - 1{
+        if index < yearArr.count - 1{
             self.startAnimation()
             DispatchQueue.global(qos: .background).async {
                 self.index += 1

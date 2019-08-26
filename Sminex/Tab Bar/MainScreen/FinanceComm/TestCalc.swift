@@ -35,7 +35,8 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     self.collectionYear.reloadData()
                     if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
                         let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: self.index, section: 0))?.frame
-                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                        let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                        self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
                     }
                 }
                 var s = 0
@@ -91,7 +92,7 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
     @IBAction func SwipeLeft(_ sender: UISwipeGestureRecognizer) {
-        if index < filteredCalcs.count - 1{
+        if index < yearArr.count - 1{
             self.startAnimation()
             DispatchQueue.global(qos: .background).async {
                 self.index += 1
@@ -101,7 +102,8 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     self.collectionYear?.reloadData()
                     if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
                         let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: self.index, section: 0))?.frame
-                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                        let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                        self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
                     }
                 }
                 
@@ -277,7 +279,8 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     self.collectionYear.reloadData()
                     if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
                         let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: selYear, section: 0))?.frame
-                        self.collectionYear.setContentOffset(CGPoint(x: (rect?.origin.x)!, y: 0), animated: true)
+                        let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                        self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
                     }
                     self.table.reloadData()
                     //                    if self.collection.dataSource?.collectionView(self.collection, cellForItemAt: IndexPath(row: 0, section: 0)) != nil{
@@ -425,6 +428,11 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
             self.startAnimation()
             selType = indexPath.row
             collectionYear?.reloadData()
+            if self.collectionYear?.dataSource?.collectionView(self.collectionYear!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                let rect = self.collectionYear.layoutAttributesForItem(at: IndexPath(item: selType, section: 0))?.frame
+                let pointX = (self.view.frame.size.width / 2) - (self.view.frame.size.width / 3) / 2
+                self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
+            }
             self.date = (self.yearArr[selType].month, self.yearArr[selType].year)
             loadData()
         }
