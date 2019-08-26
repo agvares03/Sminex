@@ -192,7 +192,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TestAppsUserCell", for: indexPath) as! TestAppsUserCell
-        cell.display(data[indexPath.row])
+        if data[indexPath.row] != nil{
+            cell.display(data[indexPath.row])
+        }
         if indexPath.row == self.data.count - 1 {
             self.loadMore()
         }
