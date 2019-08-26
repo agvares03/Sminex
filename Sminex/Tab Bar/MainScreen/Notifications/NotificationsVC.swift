@@ -22,7 +22,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
-    private var appsUser: NewAppsUser?
+    private var appsUser: TestAppsUser?
     private var dataService: [ServicesUKJson] = []
     private var mainScreenXml:  XML.Accessor?
     private var refreshControl: UIRefreshControl?
@@ -199,7 +199,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         if (push.type! == "REQUEST_COMMENT") {
             let requestId = push.ident!
-            appsUser = NewAppsUser()
+            appsUser = TestAppsUser()
             appsUser?.dataService = dataService
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
@@ -223,7 +223,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             }
         } else if (push.type! == "REQUEST_STATUS") {
             let requestId = push.ident!
-            appsUser = NewAppsUser()
+            appsUser = TestAppsUser()
             appsUser?.dataService = dataService
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml

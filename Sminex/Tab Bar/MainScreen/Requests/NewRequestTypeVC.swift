@@ -194,7 +194,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
-        let AppsUserDelegate = self.delegate as! NewAppsUser
+        let AppsUserDelegate = self.delegate as! TestAppsUser
         
         if (AppsUserDelegate.isCreatingRequest_) {
             navigationController?.popToRootViewController(animated: true)

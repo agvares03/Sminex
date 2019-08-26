@@ -10,9 +10,9 @@ import CoreData
 import Gloss
 import SwiftyXMLParser
 
-class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppsUserDelegate {
+class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppsUserDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet         weak var collection:      UICollectionView?
+    @IBOutlet         weak var table:           UITableView!
     @IBOutlet         weak var collectionHeader:UICollectionView?
     @IBOutlet private weak var createButton:    UIButton?
     @IBOutlet private weak var activity:        UIActivityIndicatorView?
@@ -94,11 +94,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         updateUserInterface()
         prepareGroup?.enter()
         
-        collection?.delegate                     = self
-        collection?.dataSource                   = self
-        collectionHeader?.delegate               = self
-        collectionHeader?.dataSource             = self
-        automaticallyAdjustsScrollViewInsets     = false
+        table?.delegate                         = self
+        table?.dataSource                       = self
+        collectionHeader?.delegate              = self
+        collectionHeader?.dataSource            = self
+        automaticallyAdjustsScrollViewInsets    = false
         
         self.startAnimator()
         self.dataType.append(TestAppsUserHeaderData(title: "Все", id: "0"))
@@ -119,7 +119,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         }
         self.dataType.append(TestAppsUserHeaderData(title: "Дополнительные услуги", id: "0"))
         if xml_ != nil && !isFromNotifi_{
-            collection?.alpha   = 0
+            table?.alpha   = 0
             createButton?.alpha = 0
             DispatchQueue.global(qos: .userInitiated).async {
                 self.parse(xml: self.xml_!)
@@ -138,9 +138,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             refreshControl = UIRefreshControl()
             refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
             if #available(iOS 10.0, *) {
-                collection?.refreshControl = refreshControl
+                table?.refreshControl = refreshControl
             } else {
-                collection?.addSubview(refreshControl!)
+                table?.addSubview(refreshControl!)
             }
         }
     }
@@ -199,6 +199,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.startAnimator()
+        prepareTapped(indexPath)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataType.count
     }
@@ -236,15 +241,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == self.collection{
-            self.startAnimator()
-            prepareTapped(indexPath)
-        }else{
-            self.startAnimator()
-            collectionHeader?.reloadData()
-            selType = indexPath.row
-            dataWithType()
-        }
+        self.startAnimator()
+        collectionHeader?.reloadData()
+        selType = indexPath.row
+        dataWithType()
     }
     
     func dataWithType(){
@@ -268,10 +268,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 self.offset = 19
                 self.self.reachedEndOfItems = false
                 DispatchQueue.main.async {
-                    self.collection?.reloadData()
+                    self.table?.reloadData()
                     self.stopAnimatior()
                     if #available(iOS 10.0, *) {
-                        self.collection?.refreshControl?.endRefreshing()
+                        self.table?.refreshControl?.endRefreshing()
                     } else {
                         self.refreshControl?.endRefreshing()
                     }
@@ -294,10 +294,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     }
                 }
                 DispatchQueue.main.async {
-                    self.collection?.reloadData()
+                    self.table?.reloadData()
                     self.stopAnimatior()
                     if #available(iOS 10.0, *) {
-                        self.collection?.refreshControl?.endRefreshing()
+                        self.table?.refreshControl?.endRefreshing()
                     } else {
                         self.refreshControl?.endRefreshing()
                     }
@@ -347,11 +347,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         // append the new items to the data source for the table view
                         self.data += thisBatchOfItems
                         // reload the table view
-                        self.collection?.reloadData()
+                        self.table?.reloadData()
                         
                         self.stopAnimatior()
                         if #available(iOS 10.0, *) {
-                            self.collection?.refreshControl?.endRefreshing()
+                            self.table?.refreshControl?.endRefreshing()
                         } else {
                             self.refreshControl?.endRefreshing()
                         }
@@ -396,11 +396,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         // append the new items to the data source for the table view
                         self.data += thisBatchOfItems
                         // reload the table view
-                        self.collection?.reloadData()
+                        self.table?.reloadData()
                         
                         self.stopAnimatior()
                         if #available(iOS 10.0, *) {
-                            self.collection?.refreshControl?.endRefreshing()
+                            self.table?.refreshControl?.endRefreshing()
                         } else {
                             self.refreshControl?.endRefreshing()
                         }
@@ -706,10 +706,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             typeIn = false
                         }
                         self.collectionHeader?.reloadData()
-                        self.collection?.reloadData()
+                        self.table?.reloadData()
                         self.stopAnimatior()
                         if #available(iOS 10.0, *) {
-                            self.collection?.refreshControl?.endRefreshing()
+                            self.table?.refreshControl?.endRefreshing()
                         } else {
                             self.refreshControl?.endRefreshing()
                         }
@@ -721,9 +721,8 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 if self.requestId_ != "" {
                     for index in 0...self.fullCount - 1{
                         if self.fullData[index].id == self.requestId_ || self.fullData[index].webID == self.requestId_{
-                            if self.collection != nil {
-                                self.collectionView(self.collection!, didSelectItemAt: IndexPath(row: index, section: 0))
-                                
+                            if self.table != nil {
+                                self.tableView(self.table, didSelectRowAt: IndexPath(row: index, section: 0))
                             } else {
                                 print(self.fullData[index].title, self.fullData[index].stickTitle, self.fullData[index].desc)
                                 self.prepareTapped(IndexPath(row: index, section: 0))
@@ -835,7 +834,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                          images: [],
                                                          imagesUrl: images, desc: row.text!, placeHome: row.premises!)
                     self.reqId = row.id ?? ""
-                    if self.collection != nil {
+                    if self.table != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toAdmission, sender: self)
                     }
                     self.prepareGroup?.leave()
@@ -901,7 +900,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         }
                         self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
                         self.reqId = row.id ?? ""
-                        if self.collection != nil {
+                        if self.table != nil {
                             self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
                         }
                         self.prepareGroup?.leave()
@@ -942,7 +941,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                          images: [],
                                                          imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible)
                     self.reqId = row.id ?? ""
-                    if self.collection != nil {
+                    if self.table != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toService, sender: self)
                     }
                     self.prepareGroup?.leave()

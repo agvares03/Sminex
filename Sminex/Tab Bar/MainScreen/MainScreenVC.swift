@@ -91,7 +91,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var filteredNews: [NewsJson] = []
     private var dealsIndex = 0
     private var numSections = 0
-    private var appsUser: NewAppsUser?
+    private var appsUser: TestAppsUser?
     private var dataService: [ServicesUKJson] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -753,7 +753,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if (collection.cellForItem(at: indexPath) as? RequestCell) != nil {
             self.requestId = (self.data[0]![indexPath.row + 1] as? RequestCellData)?.id ?? ""
-            appsUser = NewAppsUser()
+            appsUser = TestAppsUser()
             appsUser?.dataService = dataService
             appsUser?.requestId_ = requestId
             appsUser?.xml_ = mainScreenXml
@@ -1528,7 +1528,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromMainScreenVC.toCreateRequest {
-            let vc = segue.destination as! NewAppsUser
+            let vc = segue.destination as! TestAppsUser
             vc.dataService = dataService
             vc.isCreatingRequest_ = true
             vc.delegate = self
@@ -1539,7 +1539,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             (vc.viewControllers.first as! ViewController).roleReg_ = "1"
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
-            let vc = segue.destination as! NewAppsUser
+            let vc = segue.destination as! TestAppsUser
             vc.dataService = dataService
             vc.delegate = self
             
@@ -1574,7 +1574,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             vc.tappedNews = tappedNews
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequestAnim {
-            let vc = segue.destination as! NewAppsUser
+            let vc = segue.destination as! TestAppsUser
             vc.dataService = dataService
             vc.requestId_ = requestId
             vc.xml_ = mainScreenXml

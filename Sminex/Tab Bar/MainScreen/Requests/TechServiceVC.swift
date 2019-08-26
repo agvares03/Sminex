@@ -725,6 +725,7 @@ final class ServiceHeader: UICollectionViewCell {
             place.isHidden = true
             placeLbl.isHidden = true
             separator.isHidden = true
+            placeHeight.constant = 0
         }else{
             place.text = item.placeHome
             place.isHidden = false
@@ -732,9 +733,9 @@ final class ServiceHeader: UICollectionViewCell {
             separator.isHidden = false
             let k = heightForView(text: item.placeHome, font: place.font, width: place.frame.size.width)
             if k > 20{
-                placeHeight.constant = k
+                placeHeight.constant = k + 40
             }else{
-                placeHeight.constant = 20
+                placeHeight.constant = 60
             }
         }
         self.delegate = delegate
@@ -778,8 +779,8 @@ final class ServiceHeader: UICollectionViewCell {
             scroll.isHidden = false
         }
         
-        if item.imgsString.count == 0 {
-
+        if item.imgsString.count == 0 && item.images.count != 0 {
+            imageConst.constant = 150
             var x: CGFloat = 0.0
             item.images.forEach {
                 let image = UIImageView(frame: CGRect(x: x, y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
@@ -790,10 +791,9 @@ final class ServiceHeader: UICollectionViewCell {
                 image.addGestureRecognizer(tap)
                 scroll.addSubview(image)
             }
-            print(x)
             scroll.contentSize = CGSize(width: x, height: scroll.frame.size.height)
 
-        } else {
+        } else if item.imgsString.count != 0{
             imageConst.constant = 150
             //            scrollTop.constant  = 16
             scroll.isHidden = false
@@ -808,7 +808,8 @@ final class ServiceHeader: UICollectionViewCell {
 
                     var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
                     request.httpMethod = "GET"
-
+                    print(request)
+                    
                     let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
 
                     if data != nil {
@@ -832,6 +833,9 @@ final class ServiceHeader: UICollectionViewCell {
                     self.imageLoader.stopAnimating()
                 }
             }
+        }else{
+            imageConst.constant = 0
+            scroll.isHidden = true
         }
     }
     
