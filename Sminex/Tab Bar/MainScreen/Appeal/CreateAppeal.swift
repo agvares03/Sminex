@@ -267,7 +267,6 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         let pass = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let comm:String = edComment.text
         var name = ""
-        print(self.typeReq)
         
         if self.typeReq == "Консьержу/ в службу комфорта"{
             name = "Обращение к консьержу \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
@@ -276,10 +275,17 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         }else if self.typeReq == "в Техподдержку приложения"{
             name = "Обращение в техподдержку приложения \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
         }
-        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id ?? "")&name=\(name)&text=\(comm)&phonenum=\(self.edContact.text ?? "")&email=\(self.edEmail.text ?? "")&appealMail=\(selEmail)&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&ResponsiblePerson=\(self.typeReq)&isAppeal=1")
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(name.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(self.edContact.text?.stringByAddingPercentEncodingForRFC3986() ?? "")&email=\(self.edEmail.text?.stringByAddingPercentEncodingForRFC3986() ?? "")&appealMail=\(selEmail.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(self.typeReq.stringByAddingPercentEncodingForRFC3986()!)&isAppeal=1"
+//        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id ?? "")&name=\(name)&text=\(comm)&phonenum=\(self.edContact.text ?? "")&emails=\(self.edEmail.text ?? "")&appealMail=\(selEmail)&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&ResponsiblePerson=\(self.typeReq)&isAppeal=1")
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(name.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(self.edContact.text?.stringByAddingPercentEncodingForRFC3986() ?? "")&emails=\(self.edEmail.text?.stringByAddingPercentEncodingForRFC3986() ?? "")&appealMail=\(selEmail.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(self.typeReq.stringByAddingPercentEncodingForRFC3986()!)&isAppeal=1"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
+        var requestBody: [String:[Any]] = ["persons":[], "autos":[]]
+        requestBody["persons"]?.append(["FIO":self.typeReq.stringByAddingPercentEncodingForRFC3986() ?? "", "PassportData":""])
+        
+        if let json = try? JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted) {
+            request.httpBody = Data(json)
+        }
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in

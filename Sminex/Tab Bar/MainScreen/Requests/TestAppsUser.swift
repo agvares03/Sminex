@@ -26,7 +26,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             index -= 1
             self.startAnimator()
             collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
-            collectionHeader?.reloadData()
+            self.collectionHeader!.reloadData()
+            if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                self.collectionHeader!.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            }
             selType = index
             dataWithType()
         }
@@ -38,6 +41,14 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             self.startAnimator()
             collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
             collectionHeader?.reloadData()
+            if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+                let rect = self.collectionHeader!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame
+                if index == dataType.count - 1{
+                    let pointX = (self.collectionHeader?.contentSize.width)! - self.view.frame.size.width
+                    self.collectionHeader!.setContentOffset(CGPoint(x: pointX + 8, y: 0), animated: true)
+                    self.collectionHeader!.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
+                }
+            }
             selType = index
             dataWithType()
         }
@@ -246,6 +257,15 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         self.startAnimator()
         collectionHeader?.reloadData()
         selType = indexPath.row
+        if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
+            let rect = self.collectionHeader!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame
+            if selType == dataType.count - 1{
+                let pointX = (self.collectionHeader?.contentSize.width)! - self.view.frame.size.width
+                self.collectionHeader!.setContentOffset(CGPoint(x: pointX + 8, y: 0), animated: true)
+            }else{
+                self.collectionHeader!.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            }
+        }
         dataWithType()
     }
     
