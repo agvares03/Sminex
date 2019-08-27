@@ -61,8 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if let notification = launchOptions?[.remoteNotification] as? [String:AnyObject]{
             if notification["message"] != nil{
-                let message = notification["message"]!
-                let title = notification["title"]!
+                let message = notification["message"] as? String
+                let title = notification["title"] as? String
                 
                 let notifiType = notification["type"] as? String
                 let notifiIdent = notification["ident"] as? String
@@ -122,11 +122,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
         print("---УВЕДОМЛЕНИЕ---")
-        guard (userInfo["aps"] as? [String : AnyObject]) != nil else {
-            print("Error parsing")
-            return
-        }
-        if let message = userInfo["message"]! as? String{
+//        guard (userInfo["aps"] as? [String : AnyObject]) != nil else {
+//            print("Error parsing")
+//            return
+//        }
+        if userInfo["message"] != nil{
+            let message = userInfo["message"]! as? String
             let title = userInfo["title"]! as? String
             
             let notifiType = userInfo["type"] as? String
@@ -145,7 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //TODO: Handle foreground notification
                 let content = UNMutableNotificationContent()
                 content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
-                content.body = NSString.localizedUserNotificationString(forKey: message, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
                 content.sound = UNNotificationSound.default()
                 content.categoryIdentifier = "com.elonchan.localNotification"
                 let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
@@ -157,7 +158,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //TODO: Handle background notification
                 let content = UNMutableNotificationContent()
                 content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
-                content.body = NSString.localizedUserNotificationString(forKey: message, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
+                content.sound = UNNotificationSound.default()
+                content.categoryIdentifier = "com.elonchan.localNotification"
+                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                
+                // Schedule the notification.
+                let center = UNUserNotificationCenter.current()
+                center.add(request)
+            }
+        }else{
+            let aps = userInfo["aps"] as! [String:AnyObject]
+            var body: String = ""
+            var title: String = ""
+            if let alert = aps["alert"] as? String {
+                body = alert
+            } else if let alert = aps["alert"] as? [String : String] {
+                body = alert["body"]!
+                title = alert["title"]!
+            }
+            if UIApplication.shared.applicationState == .active {
+                //TODO: Handle foreground notification
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
+                content.sound = UNNotificationSound.default()
+                content.categoryIdentifier = "com.elonchan.localNotification"
+                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                
+                // Schedule the notification.
+                let center = UNUserNotificationCenter.current()
+                center.add(request)
+            } else {
+                //TODO: Handle background notification
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
                 content.sound = UNNotificationSound.default()
                 content.categoryIdentifier = "com.elonchan.localNotification"
                 let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
