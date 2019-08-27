@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import DeviceKit
 
 class CounterStatementVCNew: UIViewController, CounterDelegate {
     
@@ -58,8 +59,15 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                 }
                 monthValLabel.text = round_value
                 pager.currentPage = index
-                count.textField?.text = allValue![index]
-                count.setup()
+                if allValue![index] != "0.0"{
+                    count.textField?.text = allValue![index]
+                    count.setup(Count: allValue![index])
+                }else{
+                    allValue![index] = ""
+                    count.textField?.text = allValue![index]
+                    print(allValue![index])
+                    count.setup(Count: allValue![index])
+                }
                 if index == Int(kolTarif!)! - 1{
                     goButton.setTitle("Передать показания", for: .normal)
                     goButton.isEnabled = true
@@ -89,7 +97,7 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             monthValLabel.text = round_value
             pager.currentPage = index
             count.textField?.text = allValue![index]
-            count.setup()
+            count.setup(Count: allValue![index])
         }
     }
     
@@ -113,8 +121,15 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             }
             monthValLabel.text = round_value
             pager.currentPage = index
-            count.textField?.text = allValue![index]
-            count.setup()
+            if allValue![index] != "0.0"{
+                count.textField?.text = allValue![index]
+                count.setup(Count: allValue![index])
+            }else{
+                allValue![index] = ""
+                count.textField?.text = allValue![index]
+                print(allValue![index])
+                count.setup(Count: allValue![index])
+            }
             if index == Int(kolTarif!)! - 1{
                 goButton.setTitle("Передать показания", for: .normal)
                 goButton.isEnabled = true
@@ -337,10 +352,13 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         tabBarController?.tabBar.isHidden = false
     }
-    
+    var keyboardHeight = CGFloat()
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
-        
+        let info = sender?.userInfo!
+        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+        keyboardHeight = keyboardSize!.height
+        goButtonConst.constant = keyboardSize!.height
         if isNeedToScrollMore() {
             scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 240.0)
             scroll.contentOffset = CGPoint(x: 0, y: 50)
@@ -349,13 +367,14 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             //            if isNeedToScroll() {
             //                goBottomConst.constant = 215
             //            }
-            scroll.contentInset.bottom = 265
+            scroll.contentInset.bottom = 200
         }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
-        
+        keyboardHeight = 0
+        goButtonConst.constant = 0
         if isNeedToScrollMore() {
             scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - 240.0)
             scroll.contentOffset = CGPoint(x: 0, y: 0)
@@ -471,10 +490,10 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                 let newCount1 = self.count.text.replacingOccurrences(of: ",", with: ".")
                 //                print(self.count.text)
                 self.monthValLabel.text    = (self.self.value_?.fractionalNumber?.contains(find: "alse") ?? true)
-                    ? String(describing: Int(newCount1)!)
-                    : String(describing: Float(newCount1)!)
+                    ? String(describing: Double(newCount1)!)
+                    : String(describing: Double(newCount1)!)
                 self.count.textField?.text = ""
-                self.count.setup()
+                self.count.setup(Count: "")
                 let alert = UIAlertController(title: "Показания успешно приняты", message: "", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in
                     self.navigationController?.popViewController(animated: true)

@@ -24,7 +24,7 @@ open class DigitInputView: UIView {
     open var numberOfDigits: Int = 5 {
         
         didSet {
-            setup()
+            setup(Count: "")
         }
         
     }
@@ -37,7 +37,7 @@ open class DigitInputView: UIView {
     open var bottomBorderColor = UIColor.lightGray {
         
         didSet {
-            setup()
+            setup(Count: "")
         }
         
     }
@@ -48,7 +48,7 @@ open class DigitInputView: UIView {
     open var backColor = UIColor.clear {
         
         didSet {
-            setup()
+            setup(Count: "")
         }
     }
     
@@ -58,7 +58,7 @@ open class DigitInputView: UIView {
     open var nextDigitBottomBorderColor = UIColor.gray {
         
         didSet {
-            setup()
+            setup(Count: "")
         }
         
     }
@@ -69,7 +69,7 @@ open class DigitInputView: UIView {
     open var textColor: UIColor = .black {
         
         didSet {
-            setup()
+            setup(Count: "")
         }
         
     }
@@ -125,14 +125,14 @@ open class DigitInputView: UIView {
     override init(frame: CGRect) {
         
         super.init(frame: frame)
-        setup()
+        setup(Count: "")
         
     }
     
     required public init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        setup()
+        setup(Count: "")
         
     }
     
@@ -196,7 +196,7 @@ open class DigitInputView: UIView {
     /**
      Sets up the required views
      */
-    open func setup() {
+    open func setup(Count: String) {
         
         isUserInteractionEnabled = true
         clipsToBounds = true
@@ -240,6 +240,47 @@ open class DigitInputView: UIView {
             underline.removeFromSuperview()
         }
         underlines.removeAll()
+        var str = ""
+        if Count != ""{
+            str = Count.replacingOccurrences(of: ",", with: ".")
+            if numberOfDigits < 9{
+                for _ in 0...numberOfDigits - 1{
+                    if str.count < numberOfDigits{
+                        str = "0" + str
+                    }
+                }
+            }else{
+                if !str.contains(find: "."){
+                    for _ in 0...4{
+                        if str.count < 5{
+                            str = "0" + str
+                        }
+                    }
+                }else{
+                    var am = str
+                    var am2 = str
+                    am.forEach{_ in
+                        if am.contains(find: "."){
+                            am.removeLast()
+                        }
+                    }
+                    am2.forEach{_ in
+                        if am2.contains(find: "."){
+                            am2.removeFirst()
+                        }
+                    }
+                    for _ in 0...4{
+                        if am.count < 5{
+                            am = "0" + am
+                        }
+                        if am2.count < 3{
+                            am2 = am2 + "0"
+                        }
+                    }
+                    str = am + "." + am2
+                }
+            }
+        }
         
         for i in 0..<numberOfDigits {
             let label = DigitLabel()
@@ -249,7 +290,11 @@ open class DigitInputView: UIView {
             label.textColor = textColor
             label.backgroundColor = backColor
             label.cornerRadius = 8
-            label.text = "0"
+            if Count != ""{
+                label.text = str[i]
+            }else{
+                label.text = "0"
+            }
             label.font = font
             
             let underline = UIView()
@@ -288,9 +333,8 @@ open class DigitInputView: UIView {
         }
         
         var txt = textField.text!.replacingOccurrences(of: ",", with: ".")
+        print("didChange: " + (textField.text ?? "empty"))
         if numberOfDigits == 9 {
-            
-            print("didChange: " + (textField.text ?? "empty"))
             
             
             if (txt.contains(find: ".") == false){
