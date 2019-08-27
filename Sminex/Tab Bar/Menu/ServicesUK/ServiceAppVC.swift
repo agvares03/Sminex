@@ -675,14 +675,13 @@ final class ServiceAppHeader: UICollectionViewCell {
             place.isHidden = true
             placeLbl.isHidden = true
             separator.isHidden = true
-            placeHeight.isActive = true
             placeHeight.constant = 0
         }else{
             place.text = item.placeHome
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
-            placeHeight.isActive = false
+            placeHeight.constant = heightForTitle(text: item.placeHome, width: place.frame.size.width) + 38
         }
         self.delegate = delegate
         imageLoader.isHidden = true
