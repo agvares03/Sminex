@@ -54,6 +54,14 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                 }else if index == 2{
                     round_value = value_?.previousValue3?.replacingOccurrences(of: ",00", with: "")
                 }
+                tarifText.text = value_?.tarifName1
+                if index == 1{
+                    round_value = value_?.previousValue2?.replacingOccurrences(of: ",00", with: "")
+                    tarifText.text = value_?.tarifName2
+                }else if index == 2{
+                    round_value = value_?.previousValue3?.replacingOccurrences(of: ",00", with: "")
+                    tarifText.text = value_?.tarifName3
+                }
                 if count.text != "" && count.text.last != ","{
                     allValue![index - 1] = count.text
                 }
