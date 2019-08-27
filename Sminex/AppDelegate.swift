@@ -133,15 +133,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let notifiType = userInfo["type"] as? String
             let notifiIdent = userInfo["ident"] as? String
             
-            if (notifiType?.containsIgnoringCase(find: "question"))!{
+            
                 //                UserDefaults.standard.set(true, forKey: "newNotifi")
-                UserDefaults.standard.set(message, forKey: "bodyNotifi")
-                UserDefaults.standard.set(title, forKey: "titleNotifi")
-                UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
-                UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
+            UserDefaults.standard.set(message, forKey: "bodyNotifi")
+            UserDefaults.standard.set(title, forKey: "titleNotifi")
+            UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
+            UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
+            if (notifiType?.containsIgnoringCase(find: "question"))!{
                 UserDefaults.standard.set(true, forKey: "openNotification")
-                UserDefaults.standard.synchronize()
             }
+            UserDefaults.standard.synchronize()
+            
             if UIApplication.shared.applicationState == .active {
                 //TODO: Handle foreground notification
                 let content = UNMutableNotificationContent()
