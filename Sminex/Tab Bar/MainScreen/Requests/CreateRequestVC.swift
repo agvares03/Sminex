@@ -460,22 +460,49 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     var sendBtnTopConstant = CGFloat()
     var tap = UIGestureRecognizer()
     var isExpanded = true
+    var expandHeigth = CGFloat()
     @objc func expand() {
         if !isExpanded {
             self.expImg.image = UIImage(named: "expand")
             isExpanded = true
             showTable = false
             tableView.reloadData()
-            changeFooter()
+            DispatchQueue.main.async{
+                if self.transportSwitch.isOn{
+                    self.sendBtnTop.constant = 5
+                }else{
+                    if self.keyboardHeight != 0{
+                        self.sendBtnTop.constant = self.expandHeigth
+                    }else{
+                        self.sendBtnTop.constant = self.sendBtnTop.constant + self.tableH
+                    }
+                }
+            }
         } else {
             self.expImg.image = UIImage(named: "expanded")
             isExpanded = false
             showTable = true
             tableView.reloadData()
-            changeFooter()
+            DispatchQueue.main.async{
+                if self.parkingsPlace!.count <= 4{
+                    self.tableH = CGFloat(44 * self.parkingsPlace!.count)
+                }else{
+                    self.tableH = 44 * 4
+                }
+                if self.transportSwitch.isOn{
+                    self.sendBtnTop.constant = 5
+                }else{
+                    if self.keyboardHeight != 0{
+                        self.expandHeigth = self.sendBtnTop.constant
+                        self.sendBtnTop.constant = 5
+                    }else{
+                        self.sendBtnTop.constant = self.sendBtnTop.constant - self.tableH
+                    }
+                }
+            }
         }
     }
-    
+    var tableH = CGFloat()
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
         let newPhone = phone_service.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
         if let url = URL(string: "tel://" + newPhone!) {
@@ -539,6 +566,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         scroll.setContentOffset(desiredOffset, animated: false)
         if transportSwitch.isOn{
             sendBtnTop.constant = 5
+        }else if isExpanded == false{
+            self.sendBtnTop.constant = 5
         }else{
             sendBtnTop.constant = sendBtnTop.constant - keyboardHeight
             if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
@@ -616,7 +645,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     sendBtnTop.constant = 5
                 }
             }else{
-                sendBtnTop.constant = sendBtnTopConstant
+                if isExpanded == true{
+                    sendBtnTop.constant = sendBtnTopConstant
+                }else{
+                    sendBtnTop.constant = sendBtnTopConstant - tableH
+                }
             }
         }
     }
@@ -664,10 +697,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             self.descInfoView.isHidden = true
             self.heigth_phone_service.constant = 0
             self.dopInfoHeight.constant = 0
-            if self.scroll.contentSize.height < self.view.frame.size.height{
-                self.sendBtnTop.constant = sendBtnTopConstant
+            if isExpanded == true{
+                if self.scroll.contentSize.height < self.view.frame.size.height{
+                    self.sendBtnTop.constant = sendBtnTopConstant
+                }else{
+                    self.sendBtnTop.constant = 5
+                }
             }else{
-                self.sendBtnTop.constant = 5
+                sendBtnTop.constant = sendBtnTopConstant - tableH
             }
         }
     }

@@ -43,7 +43,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             collectionHeader?.reloadData()
             if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
                 let rect = self.collectionHeader!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame
-                if index == dataType.count - 1{
+                if index >= dataType.count - 2{
                     let pointX = (self.collectionHeader?.contentSize.width)! - self.view.frame.size.width
                     self.collectionHeader!.setContentOffset(CGPoint(x: pointX + 8, y: 0), animated: true)
                     self.collectionHeader!.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
@@ -237,7 +237,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         if size.width < 50{
             size.width = 50
         }
-        return CGSize(width: size.width, height: 40)
+        return CGSize(width: size.width + 4, height: 40)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -258,14 +258,14 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         collectionHeader?.reloadData()
         selType = indexPath.row
         if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
-            let rect = self.collectionHeader!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame
-            if selType == dataType.count - 1{
+            if selType >= dataType.count - 2 && index < selType{
                 let pointX = (self.collectionHeader?.contentSize.width)! - self.view.frame.size.width
                 self.collectionHeader!.setContentOffset(CGPoint(x: pointX + 8, y: 0), animated: true)
             }else{
                 self.collectionHeader!.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             }
         }
+        index = selType
         dataWithType()
     }
     
@@ -1080,7 +1080,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     func update() {
-        self.createButton?.isHidden = true
+        startAnimator()
         DispatchQueue.main.async {
             self.delegate?.update(method: "Request")
             self.getRequests()
