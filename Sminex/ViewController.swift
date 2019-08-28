@@ -505,6 +505,9 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                 } else {                         // пользователь
                     
                     if !self.isFromSettings_ {
+                        // УВЕДОМЛЕНИЯ
+                        db.del_db(table_name: "Notifications")
+                        db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                         // ПОКАЗАНИЯ СЧЕТЧИКОВ
                         // Удалим данные из базы данных
                         db.del_db(table_name: "Counters")
@@ -523,9 +526,6 @@ final class ViewController: UIViewController, UITextFieldDelegate {
                         db.del_db(table_name: "Comments")
                         db.parse_Apps(login: self.LoginText, pass: self.edPass.text ?? "", isCons: "0")
                         
-                        // УВЕДОМЛЕНИЯ
-                        db.del_db(table_name: "Notifications")
-                        db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                         self.performSegue(withIdentifier: Segues.fromViewController.toAppsUser, sender: self)
                     }
                 }
