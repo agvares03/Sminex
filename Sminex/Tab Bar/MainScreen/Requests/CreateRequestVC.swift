@@ -235,7 +235,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     }
                 }
             }
-            if edComment.text == "Примечания" && edComment.textColor == placeholderColor{
+            if edComment.text == "Примечание" && edComment.textColor == placeholderColor{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
                                            mobileNumber: edContact.text!,
@@ -309,6 +309,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         updateUserInterface()
         scroll.isHidden = true
         edContact.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+        edContact.maskTemplate = " "
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
         tableView.dataSource = self
@@ -406,7 +407,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //            sendViewConst.constant = sendViewConst.constant - 57
         }
         
-        edComment.text = "Примечания"
+        edComment.text = "Примечание"
         edFio.text = "ФИО гостей"
         gosNumber.textColor = placeholderColor
         gosNumber.selectedTextRange = gosNumber.textRange(from: gosNumber.beginningOfDocument, to: gosNumber.beginningOfDocument)
@@ -465,11 +466,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             isExpanded = true
             showTable = false
             tableView.reloadData()
+            changeFooter()
         } else {
             self.expImg.image = UIImage(named: "expanded")
             isExpanded = false
             showTable = true
             tableView.reloadData()
+            changeFooter()
         }
     }
     
@@ -1014,7 +1017,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }else{
             if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
                 if updatedText.isEmpty {
-                    textView.text = "Примечания"
+                    textView.text = "Примечание"
                     if textView.frame.origin.y < 100{
                         textView.text = "ФИО гостей"
                         sendButton.alpha     = 0.5
@@ -1036,7 +1039,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 }
             }else {
                 if updatedText.isEmpty {
-                    textView.text = "Примечания"
+                    textView.text = "Примечание"
                     if textView.frame.origin.y < 100{
                         textView.text = "ФИО гостей"
                         sendButton.alpha     = 0.5
