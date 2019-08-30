@@ -32,10 +32,10 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AdmissionHeader1" id="SIv-67-Hoq" customClass="AdmissionHeader" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="27.5" y="0.0" width="320" height="865"/>
+                                        <rect key="frame" x="27.5" y="0.0" width="320" height="842"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="865"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="842"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Гости" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6l0-IW-CDD">
@@ -163,13 +163,16 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xp8-aG-9tr">
-                                                    <rect key="frame" x="38" y="468.5" width="91" height="57"/>
+                                                    <rect key="frame" x="38" y="462.5" width="91" height="23"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="8eT-z3-CbO"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TvB-e1-XiB">
-                                                    <rect key="frame" x="0.0" y="664" width="320" height="1"/>
+                                                    <rect key="frame" x="0.0" y="641" width="320" height="1"/>
                                                     <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="dpW-tK-ZQN"/>
@@ -179,14 +182,14 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mIG-i6-8Hc">
-                                                    <rect key="frame" x="16" y="490" width="14" height="14"/>
+                                                    <rect key="frame" x="16" y="467" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="gdv-4d-lWq"/>
                                                         <constraint firstAttribute="width" constant="14" id="xEZ-iC-PUw"/>
                                                     </constraints>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iaN-Nn-2b3">
-                                                    <rect key="frame" x="0.0" y="765" width="320" height="100"/>
+                                                    <rect key="frame" x="0.0" y="742" width="320" height="100"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Для получения дополнительной информации просим связаться с консьержем по телефону:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g13-eV-wUr">
                                                             <rect key="frame" x="8" y="4" width="304" height="54"/>
@@ -221,7 +224,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="clip" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jdi-iO-FaA">
-                                                    <rect key="frame" x="10" y="665" width="300" height="100"/>
+                                                    <rect key="frame" x="10" y="642" width="300" height="100"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="100" id="rZh-OI-tf1"/>
                                                     </constraints>
@@ -265,7 +268,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l7z-MM-6le">
-                                                    <rect key="frame" x="20" y="509" width="280" height="150"/>
+                                                    <rect key="frame" x="20" y="486" width="280" height="150"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="szx-g6-oYL">
                                                             <rect key="frame" x="0.0" y="0.0" width="280" height="150"/>
@@ -283,7 +286,7 @@
                                                     </constraints>
                                                 </scrollView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IDu-Xj-FPc">
-                                                    <rect key="frame" x="135" y="559" width="50" height="50"/>
+                                                    <rect key="frame" x="135" y="536" width="50" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="lEi-BH-al2"/>
                                                         <constraint firstAttribute="height" constant="50" id="sqm-Dy-nQE"/>
@@ -351,7 +354,6 @@
                                             <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="wF3-9C-0Ks" secondAttribute="trailing" constant="200" id="GrI-aY-1OO"/>
                                             <constraint firstItem="QZS-Gm-P6w" firstAttribute="trailing" secondItem="qZd-64-Z4j" secondAttribute="trailing" id="Hbw-Xg-Iu1"/>
                                             <constraint firstItem="dRe-SY-7Fp" firstAttribute="leading" secondItem="qZd-64-Z4j" secondAttribute="leading" id="I29-6U-ijt"/>
-                                            <constraint firstItem="xp8-aG-9tr" firstAttribute="top" secondItem="w90-dH-di7" secondAttribute="bottom" constant="8" id="IMj-6M-dtO"/>
                                             <constraint firstItem="j0O-VP-thh" firstAttribute="top" secondItem="cAN-Ni-EGe" secondAttribute="bottom" constant="58" id="Jtl-ul-0qN"/>
                                             <constraint firstAttribute="trailing" secondItem="Jdi-iO-FaA" secondAttribute="trailing" constant="10" id="K0A-Xe-W2n"/>
                                             <constraint firstAttribute="trailing" secondItem="PrH-BQ-daa" secondAttribute="trailing" id="K4o-HL-OKd"/>
@@ -390,6 +392,7 @@
                                             <constraint firstItem="vWf-Xj-htX" firstAttribute="leading" secondItem="eIb-bT-wxs" secondAttribute="leading" id="hMq-cB-hzW"/>
                                             <constraint firstAttribute="trailing" secondItem="j0O-VP-thh" secondAttribute="trailing" id="hiY-VR-f1i"/>
                                             <constraint firstItem="RPh-ah-GdZ" firstAttribute="top" secondItem="PrH-BQ-daa" secondAttribute="bottom" constant="58" id="lV6-HZ-kM4"/>
+                                            <constraint firstItem="xp8-aG-9tr" firstAttribute="top" secondItem="w90-dH-di7" secondAttribute="bottom" constant="2" id="lvl-rd-mre"/>
                                             <constraint firstItem="gKW-Bq-Buj" firstAttribute="leading" secondItem="wF3-9C-0Ks" secondAttribute="leading" id="mFQ-VB-B78"/>
                                             <constraint firstItem="QZS-Gm-P6w" firstAttribute="top" secondItem="hZj-bm-VDz" secondAttribute="bottom" constant="2" id="oJ3-HA-LMI"/>
                                             <constraint firstAttribute="trailing" secondItem="Qcn-x2-JmC" secondAttribute="trailing" id="odi-Kg-GFE"/>
@@ -410,7 +413,7 @@
                                             <constraint firstItem="IDu-Xj-FPc" firstAttribute="centerX" secondItem="szx-g6-oYL" secondAttribute="centerX" id="ygd-F7-FJV"/>
                                             <constraint firstItem="hZj-bm-VDz" firstAttribute="top" secondItem="b6h-0H-eVL" secondAttribute="bottom" constant="8" id="zgz-ZW-GxI"/>
                                         </constraints>
-                                        <size key="customSize" width="320" height="865"/>
+                                        <size key="customSize" width="320" height="842"/>
                                         <connections>
                                             <outlet property="date" destination="QZS-Gm-P6w" id="Bvn-dx-I10"/>
                                             <outlet property="descConstant" destination="7pX-bS-60N" id="NS0-Wq-eAe"/>
@@ -444,7 +447,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AdmissionCommentUserCell" id="GOS-ad-Vwl" customClass="AdmissionCommentUserCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="27.5" y="875" width="320" height="182"/>
+                                        <rect key="frame" x="27.5" y="852" width="320" height="182"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="182"/>
@@ -556,7 +559,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AdmissionCommentConstCell" id="6O7-X6-lnS" customClass="AdmissionCommentConstCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="27.5" y="1067" width="320" height="157"/>
+                                        <rect key="frame" x="27.5" y="1044" width="320" height="157"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="157"/>
