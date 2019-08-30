@@ -98,7 +98,7 @@ final class TemporaryHolder {
             var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
             request.httpMethod = "GET"
             
-//            print(request.url)
+            print(request.url)
             
             receiptsGroup.enter()
             URLSession.shared.dataTask(with: request) {
@@ -110,7 +110,8 @@ final class TemporaryHolder {
                 guard data != nil else { return }
                 
                 #if DEBUG
-//                print(String(data: data!, encoding: .utf8) ?? "")
+                print(String(data: data!, encoding: .utf8) ?? "")
+                
                 #endif
                 self.receipts.removeAll()
                 if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
@@ -131,6 +132,7 @@ final class TemporaryHolder {
         let url = Server.SERVER + Server.CALCULATIONS + "login=" + (login.stringByAddingPercentEncodingForRFC3986() ?? "")
         var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
         request.httpMethod = "GET"
+        print(request)
         
         calcsGroup.enter()
         URLSession.shared.dataTask(with: request) {
@@ -144,6 +146,7 @@ final class TemporaryHolder {
             
             #if DEBUG
             print(String(data: data!, encoding: .utf8) ?? "")
+            
             #endif
             
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {

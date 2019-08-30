@@ -60,20 +60,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         YMMYandexMetrica.activate(with: configuration!)
 
         if let notification = launchOptions?[.remoteNotification] as? [String:AnyObject]{
-            let message = notification["message"]!
-            let title = notification["title"]!
-            
-            let notifiType = notification["type"] as? String
-            let notifiIdent = notification["ident"] as? String
-            
-            if (notifiType?.containsIgnoringCase(find: "question"))!{
-                //                UserDefaults.standard.set(true, forKey: "newNotifi")
-                UserDefaults.standard.set(message, forKey: "bodyNotifi")
-                UserDefaults.standard.set(title, forKey: "titleNotifi")
-                UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
-                UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
-                UserDefaults.standard.set(true, forKey: "openNotification")
-                UserDefaults.standard.synchronize()
+            if notification["message"] != nil{
+                let message = notification["message"] as? String
+                let title = notification["title"] as? String
+                
+                let notifiType = notification["type"] as? String
+                let notifiIdent = notification["ident"] as? String
+                
+                if (notifiType?.containsIgnoringCase(find: "question"))!{
+                    //                UserDefaults.standard.set(true, forKey: "newNotifi")
+                    UserDefaults.standard.set(message, forKey: "bodyNotifi")
+                    UserDefaults.standard.set(title, forKey: "titleNotifi")
+                    UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
+                    UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
+                    UserDefaults.standard.set(true, forKey: "openNotification")
+                    UserDefaults.standard.synchronize()
+                }
             }
         }
         return true
@@ -120,61 +122,88 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         NSLog("[RemoteNotification] applicationState: \(applicationStateString) didReceiveRemoteNotification for iOS9: \(userInfo)")
         print("---УВЕДОМЛЕНИЕ---")
-        guard (userInfo["aps"] as? [String : AnyObject]) != nil else {
-            print("Error parsing")
-            return
-        }
-        let message = userInfo["message"]! as? String
-        let title = userInfo["title"]! as? String
-        
-        let notifiType = userInfo["type"] as? String
-        let notifiIdent = userInfo["ident"] as? String
-        
-        if (notifiType?.containsIgnoringCase(find: "question"))!{
-            //                UserDefaults.standard.set(true, forKey: "newNotifi")
+//        guard (userInfo["aps"] as? [String : AnyObject]) != nil else {
+//            print("Error parsing")
+//            return
+//        }
+        if userInfo["message"] != nil{
+            let message = userInfo["message"]! as? String
+            let title = userInfo["title"]! as? String
+            
+            let notifiType = userInfo["type"] as? String
+            let notifiIdent = userInfo["ident"] as? String
+            
+            
+                //                UserDefaults.standard.set(true, forKey: "newNotifi")
             UserDefaults.standard.set(message, forKey: "bodyNotifi")
             UserDefaults.standard.set(title, forKey: "titleNotifi")
             UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
             UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
-            UserDefaults.standard.set(true, forKey: "openNotification")
+            if (notifiType?.containsIgnoringCase(find: "question"))!{
+                UserDefaults.standard.set(true, forKey: "openNotification")
+            }
             UserDefaults.standard.synchronize()
-        }
-        //        if title.contains("поступил комментарий"){
-        //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTheTable"), object: nil)
-        //        }
-//        application.applicationState == .active
-        if UIApplication.shared.applicationState == .active {
-            //TODO: Handle foreground notification
-            let content = UNMutableNotificationContent()
-            content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
-            content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
-            content.sound = UNNotificationSound.default()
-            content.categoryIdentifier = "com.elonchan.localNotification"
-//            let calendar = Calendar.current
-//            let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.date)
-//            // Deliver the notification in 60 seconds.
-//            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-            let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
             
-            // Schedule the notification.
-            let center = UNUserNotificationCenter.current()
-            center.add(request)
-        } else {
-            //TODO: Handle background notification
-            let content = UNMutableNotificationContent()
-            content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
-            content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
-            content.sound = UNNotificationSound.default()
-            content.categoryIdentifier = "com.elonchan.localNotification"
-            //            let calendar = Calendar.current
-            //            let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.date)
-            //            // Deliver the notification in 60 seconds.
-            //            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-            let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
-            
-            // Schedule the notification.
-            let center = UNUserNotificationCenter.current()
-            center.add(request)
+            if UIApplication.shared.applicationState == .active {
+                //TODO: Handle foreground notification
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
+                content.sound = UNNotificationSound.default()
+                content.categoryIdentifier = "com.elonchan.localNotification"
+                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                
+                // Schedule the notification.
+                let center = UNUserNotificationCenter.current()
+                center.add(request)
+            } else {
+                //TODO: Handle background notification
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
+                content.sound = UNNotificationSound.default()
+                content.categoryIdentifier = "com.elonchan.localNotification"
+                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                
+                // Schedule the notification.
+                let center = UNUserNotificationCenter.current()
+                center.add(request)
+            }
+        }else{
+            let aps = userInfo["aps"] as! [String:AnyObject]
+            var body: String = ""
+            var title: String = ""
+            if let alert = aps["alert"] as? String {
+                body = alert
+            } else if let alert = aps["alert"] as? [String : String] {
+                body = alert["body"]!
+                title = alert["title"]!
+            }
+            if UIApplication.shared.applicationState == .active {
+                //TODO: Handle foreground notification
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
+                content.sound = UNNotificationSound.default()
+                content.categoryIdentifier = "com.elonchan.localNotification"
+                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                
+                // Schedule the notification.
+                let center = UNUserNotificationCenter.current()
+                center.add(request)
+            } else {
+                //TODO: Handle background notification
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
+                content.sound = UNNotificationSound.default()
+                content.categoryIdentifier = "com.elonchan.localNotification"
+                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                
+                // Schedule the notification.
+                let center = UNUserNotificationCenter.current()
+                center.add(request)
+            }
         }
     }
     

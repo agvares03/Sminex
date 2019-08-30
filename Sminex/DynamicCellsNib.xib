@@ -5214,47 +5214,6 @@
                 <outlet property="scroll" destination="biC-xj-KjW" id="9ir-6t-G3b"/>
             </connections>
         </collectionViewCell>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TestAppsUserHeader" id="dCE-WL-fPX" customClass="TestAppsUserHeader" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="290" height="30"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="290" height="30"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Шиномонтаж /Сезонное хранение колес" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GuB-QA-bgh">
-                        <rect key="frame" x="0.0" y="0.0" width="290" height="28"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Km0-dX-FDr">
-                        <rect key="frame" x="5" y="28" width="280" height="2"/>
-                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="2" id="uot-AF-SVk"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </subviews>
-            </view>
-            <constraints>
-                <constraint firstAttribute="trailing" secondItem="GuB-QA-bgh" secondAttribute="trailing" id="MxL-g0-MtV"/>
-                <constraint firstItem="GuB-QA-bgh" firstAttribute="leading" secondItem="dCE-WL-fPX" secondAttribute="leading" id="Wbh-fg-evN"/>
-                <constraint firstItem="Km0-dX-FDr" firstAttribute="leading" secondItem="dCE-WL-fPX" secondAttribute="leading" constant="5" id="Y4M-WS-Z7V"/>
-                <constraint firstItem="Km0-dX-FDr" firstAttribute="top" secondItem="GuB-QA-bgh" secondAttribute="bottom" id="dWn-K0-6xG"/>
-                <constraint firstAttribute="bottom" secondItem="Km0-dX-FDr" secondAttribute="bottom" id="lsd-ti-sNe"/>
-                <constraint firstItem="GuB-QA-bgh" firstAttribute="top" secondItem="dCE-WL-fPX" secondAttribute="top" id="m4A-cB-eHQ"/>
-                <constraint firstAttribute="trailing" secondItem="Km0-dX-FDr" secondAttribute="trailing" constant="5" id="n51-bc-WiI"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="deB-g9-M2i"/>
-            <size key="customSize" width="290" height="30"/>
-            <connections>
-                <outlet property="selLine" destination="Km0-dX-FDr" id="xgl-TF-dJ0"/>
-                <outlet property="title" destination="GuB-QA-bgh" id="tz6-eD-oUG"/>
-            </connections>
-        </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ServiceHeader" id="KKC-4s-92O" customClass="ServiceHeader" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="575"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5848,6 +5807,47 @@
                 <outlet property="serviceTitle" destination="BhZ-YC-mlX" id="WfW-JP-c4o"/>
                 <outlet property="status" destination="dg8-FA-xz9" id="D9M-jy-qUG"/>
                 <outlet property="titleHeight" destination="rBf-r7-odx" id="Qpv-In-GNa"/>
+            </connections>
+        </collectionViewCell>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TestAppsUserHeader" id="ZOb-Gv-h5c" customClass="TestAppsUserHeader" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="290" height="30"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="290" height="30"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Шиномонтаж /Сезонное хранение колес" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYp-gb-ayd">
+                        <rect key="frame" x="0.0" y="0.0" width="290" height="28"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ygg-1R-vJ5">
+                        <rect key="frame" x="0.0" y="28" width="290" height="2"/>
+                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="2Ov-VI-efO"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="LYp-gb-ayd" firstAttribute="leading" secondItem="ZOb-Gv-h5c" secondAttribute="leading" id="7da-EF-3jM"/>
+                <constraint firstAttribute="bottom" secondItem="Ygg-1R-vJ5" secondAttribute="bottom" id="R1v-bD-JrA"/>
+                <constraint firstItem="Ygg-1R-vJ5" firstAttribute="top" secondItem="LYp-gb-ayd" secondAttribute="bottom" id="SCQ-fe-9In"/>
+                <constraint firstItem="LYp-gb-ayd" firstAttribute="top" secondItem="ZOb-Gv-h5c" secondAttribute="top" id="VdQ-0h-Pps"/>
+                <constraint firstItem="Ygg-1R-vJ5" firstAttribute="leading" secondItem="ZOb-Gv-h5c" secondAttribute="leading" id="WFW-Rr-KWz"/>
+                <constraint firstAttribute="trailing" secondItem="LYp-gb-ayd" secondAttribute="trailing" id="elU-Me-98L"/>
+                <constraint firstAttribute="trailing" secondItem="Ygg-1R-vJ5" secondAttribute="trailing" id="jQw-QB-1I2"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="GQv-xM-714"/>
+            <size key="customSize" width="290" height="30"/>
+            <connections>
+                <outlet property="selLine" destination="Ygg-1R-vJ5" id="3hf-50-AVj"/>
+                <outlet property="title" destination="LYp-gb-ayd" id="3Ak-89-ch5"/>
             </connections>
         </collectionViewCell>
     </objects>

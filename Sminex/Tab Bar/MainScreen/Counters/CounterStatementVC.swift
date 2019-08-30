@@ -357,7 +357,7 @@ final class CounterStatementVC: UIViewController, CounterDelegate {
                                                 ? String(describing: Int(newCount1)!)
                                                 : String(describing: Float(newCount1)!)
                 self.count.textField?.text = ""
-                self.count.setup()
+                self.count.setup(Count: "")
             }
         }
     }

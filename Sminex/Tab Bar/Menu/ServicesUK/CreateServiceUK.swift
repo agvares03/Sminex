@@ -652,7 +652,9 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 #if DEBUG
                 print(String(data: responce!, encoding: .utf8)!)
                 #endif
-                
+                DispatchQueue.main.async {
+                    self.delegate?.update()
+                }
                 self.reqId = String(data: responce!, encoding: .utf8)
                 DispatchQueue.global(qos: .userInteractive).async {
                     
@@ -662,7 +664,6 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                     DispatchQueue.main.sync {
                         
                         self.endAnimator()
-                        self.delegate?.update()
                         let viewControllers = self.navigationController?.viewControllers
                         self.navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
                     }

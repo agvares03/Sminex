@@ -75,6 +75,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             picker.isHidden         = false
             pickerLine.isHidden     = false
             imageConst.constant = 150
+            if transportSwitch.isOn{
+                sendBtnTop.constant = 5
+            }else{
+                if sendBtnTop.constant > 150{
+                    sendBtnTop.constant = sendBtnTop.constant - 150
+                }else{
+                    sendBtnTop.constant = 5
+                }
+            }
         } else {
             
             let dateFormatter = DateFormatter()
@@ -92,7 +101,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 //imageConst.constant     = 5
             }
             imageConst.constant = 0
-            
+            if transportSwitch.isOn{
+                changeFooter()
+            }else{
+                sendBtnTop.constant = sendBtnTopConstant
+            }
         }
     }
     
@@ -222,7 +235,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     }
                 }
             }
-            if edComment.text == "Примечания" && edComment.textColor == placeholderColor{
+            if edComment.text == "Примечание" && edComment.textColor == placeholderColor{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
                                            mobileNumber: edContact.text!,
@@ -294,7 +307,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
+        scroll.isHidden = true
         edContact.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+        edContact.maskTemplate = " "
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
         tableView.dataSource = self
@@ -392,7 +407,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //            sendViewConst.constant = sendViewConst.constant - 57
         }
         
-        edComment.text = "Примечания"
+        edComment.text = "Примечание"
         edFio.text = "ФИО гостей"
         gosNumber.textColor = placeholderColor
         gosNumber.selectedTextRange = gosNumber.textRange(from: gosNumber.beginningOfDocument, to: gosNumber.beginningOfDocument)
@@ -440,24 +455,54 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 sendBtnTopConstant = UIScreen.main.bounds.height - scroll.contentSize.height - 110
             }
         }
+        scroll.isHidden = false
     }
     var sendBtnTopConstant = CGFloat()
     var tap = UIGestureRecognizer()
     var isExpanded = true
+    var expandHeigth = CGFloat()
     @objc func expand() {
         if !isExpanded {
             self.expImg.image = UIImage(named: "expand")
             isExpanded = true
             showTable = false
             tableView.reloadData()
+            DispatchQueue.main.async{
+                if self.transportSwitch.isOn{
+                    self.sendBtnTop.constant = 5
+                }else{
+                    if self.keyboardHeight != 0{
+                        self.sendBtnTop.constant = self.expandHeigth
+                    }else{
+                        self.sendBtnTop.constant = self.sendBtnTop.constant + self.tableH
+                    }
+                }
+            }
         } else {
             self.expImg.image = UIImage(named: "expanded")
             isExpanded = false
             showTable = true
             tableView.reloadData()
+            DispatchQueue.main.async{
+                if self.parkingsPlace!.count <= 4{
+                    self.tableH = CGFloat(44 * self.parkingsPlace!.count)
+                }else{
+                    self.tableH = 44 * 4
+                }
+                if self.transportSwitch.isOn{
+                    self.sendBtnTop.constant = 5
+                }else{
+                    if self.keyboardHeight != 0{
+                        self.expandHeigth = self.sendBtnTop.constant
+                        self.sendBtnTop.constant = 5
+                    }else{
+                        self.sendBtnTop.constant = self.sendBtnTop.constant - self.tableH
+                    }
+                }
+            }
         }
     }
-    
+    var tableH = CGFloat()
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
         let newPhone = phone_service.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
         if let url = URL(string: "tel://" + newPhone!) {
@@ -517,8 +562,12 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         view.frame.origin.y = 0 - keyboardHeight
         scroll.contentInset.top = keyboardHeight
         view.addGestureRecognizer(tap)
+        let desiredOffset = CGPoint(x: 0, y: -scroll.contentInset.top)
+        scroll.setContentOffset(desiredOffset, animated: false)
         if transportSwitch.isOn{
             sendBtnTop.constant = 5
+        }else if isExpanded == false{
+            self.sendBtnTop.constant = 5
         }else{
             sendBtnTop.constant = sendBtnTop.constant - keyboardHeight
             if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
@@ -596,7 +645,11 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     sendBtnTop.constant = 5
                 }
             }else{
-                sendBtnTop.constant = sendBtnTopConstant
+                if isExpanded == true{
+                    sendBtnTop.constant = sendBtnTopConstant
+                }else{
+                    sendBtnTop.constant = sendBtnTopConstant - tableH
+                }
             }
         }
     }
@@ -644,10 +697,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             self.descInfoView.isHidden = true
             self.heigth_phone_service.constant = 0
             self.dopInfoHeight.constant = 0
-            if self.scroll.contentSize.height < self.view.frame.size.height{
-                self.sendBtnTop.constant = sendBtnTopConstant
+            if isExpanded == true{
+                if self.scroll.contentSize.height < self.view.frame.size.height{
+                    self.sendBtnTop.constant = sendBtnTopConstant
+                }else{
+                    self.sendBtnTop.constant = 5
+                }
             }else{
-                self.sendBtnTop.constant = 5
+                sendBtnTop.constant = sendBtnTopConstant - tableH
             }
         }
     }
@@ -997,7 +1054,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }else{
             if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
                 if updatedText.isEmpty {
-                    textView.text = "Примечания"
+                    textView.text = "Примечание"
                     if textView.frame.origin.y < 100{
                         textView.text = "ФИО гостей"
                         sendButton.alpha     = 0.5
@@ -1019,7 +1076,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 }
             }else {
                 if updatedText.isEmpty {
-                    textView.text = "Примечания"
+                    textView.text = "Примечание"
                     if textView.frame.origin.y < 100{
                         textView.text = "ФИО гостей"
                         sendButton.alpha     = 0.5
@@ -1057,15 +1114,20 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             }
             
             if (textView.text as NSString).components(separatedBy: .newlines).count < 4 && lines < 4 && textView.frame.origin.y < 100 {
-                self.FioConst.constant = textView.contentSize.height
-                if self.FioConst.constant == 57 && self.show == false{
+                var height = textView.contentSize.height
+                if height == 57 && self.show == false{
                     self.show = true
                 }else if (currentRect.origin.y > previousValue.origin.y) && self.show == true{
-                    self.FioConst.constant -= 20
+                    height -= 20
                     self.show = true
                 }
-                if self.FioConst.constant == 37{
+                if height == 37{
                     self.show = false
+                }
+                if height < 40{
+                    self.FioConst.constant = 40
+                }else{
+                    self.FioConst.constant = height
                 }
             }
             previousValue = currentRect

@@ -362,7 +362,9 @@ class FirstController: UIViewController {
                     self.performSegue(withIdentifier: Segues.fromFirstController.toAppsCons, sender: self)
                     
                 } else {                         // пользователь
-                    
+                    // УВЕДОМЛЕНИЯ
+                    db.del_db(table_name: "Notifications")
+                    db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                     // ПОКАЗАНИЯ СЧЕТЧИКОВ
                     // Удалим данные из базы данных
                     db.del_db(table_name: "Counters")
@@ -380,10 +382,6 @@ class FirstController: UIViewController {
                     db.del_db(table_name: "Applications")
                     db.del_db(table_name: "Comments")
                     db.parse_Apps(login: login, pass: pass, isCons: "0")
-                    
-                    // УВЕДОМЛЕНИЯ
-                    db.del_db(table_name: "Notifications")
-                    db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                     
                     self.performSegue(withIdentifier: Segues.fromFirstController.toAppsUserNow, sender: self)
 //                    self.performSegue(withIdentifier: Segues.fromFirstController.toNewMain, sender: self)
