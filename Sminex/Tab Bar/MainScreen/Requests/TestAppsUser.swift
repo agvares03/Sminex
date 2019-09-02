@@ -1132,6 +1132,7 @@ final class TestAppsUserCell: UITableViewCell {
     private var type: String?
     
     fileprivate func display(_ item: AppsUserCellData) {
+        desc.isHidden = false
         if item.desc.contains(find: "Отправлен новый файл:"){
             desc.text = "Добавлен файл"
         }else{
@@ -1148,13 +1149,13 @@ final class TestAppsUserCell: UITableViewCell {
             stickTitle.text = ""
             
         } else {
-            skTitleBottm.constant = 8
-            skTitleHeight.constant = 30
+            skTitleBottm.constant = 15
+            skTitleHeight.constant = 42
             stickTitle.text = item.stickTitle
             let k = stickTitle.calculateMaxLines()
             if k == 1{
-                skTitleBottm.constant = 8
-                skTitleHeight.constant = 15
+                skTitleBottm.constant = 15
+                skTitleHeight.constant = 21
             }
         }
         
@@ -1170,6 +1171,16 @@ final class TestAppsUserCell: UITableViewCell {
             
         } else {
             back.isHidden = true
+            stickTitle.text = item.desc
+            desc.text = ""
+            desc.isHidden = true
+            skTitleBottm.constant = -25
+            skTitleHeight.constant = 42
+            let k = stickTitle.calculateMaxLines()
+            if k == 1{
+                skTitleBottm.constant = -25
+                skTitleHeight.constant = 21
+            }
         }
         
         let currTitle = item.title
