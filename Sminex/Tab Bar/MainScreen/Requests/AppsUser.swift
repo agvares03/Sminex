@@ -1059,11 +1059,13 @@ struct Request {
             
         } else if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
-        } else if (name?.contains("Обращение к консьержу"))! {
+        } else if (name?.containsIgnoringCase(find: "консьержу"))! {
             name                = "Обращение к консьержу"
-        } else if (name?.contains("Обращение в техподдержку"))! {
+        } else if (name?.containsIgnoringCase(find: "техподдержк"))! {
             name                = "Обращение в техподдержку"
-        } else if (name?.contains("Обращение к директору"))! {
+        } else if (name?.containsIgnoringCase(find: "предложения"))! {
+            name                = "Обращение к директору"
+        } else if (name?.containsIgnoringCase(find: "директор"))!{
             name                = "Обращение к директору"
         } else if (name?.contains("Обращение"))! {
             name                = "Обращение"
