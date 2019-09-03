@@ -385,7 +385,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
                     v = componentsUpd.second! - componentsAdd.second!
                 }
-                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                if lastComm != nil && ((lastComm?.text?.contains(find: "Отправлен новый файл:"))! || (lastComm?.text?.contains(find: "Прикреплён файл"))!) && v != 0 && v <= 10{
                     lastComm = nil
                     isAnswered = false
                 }
@@ -567,6 +567,21 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                         images.append(commImg!)
                     }
                 }
+                if images.count == 0{
+                    self.rowFiles.forEach { files in
+                        if files.reqID == row.id{
+                            var i = false
+                            self.techServiceComm.forEach { comm in
+                                if comm.imgUrl == files.fileId!{
+                                    i = true
+                                }
+                            }
+                            if i == false{
+                                images.append(files.fileId!)
+                            }
+                        }
+                    }
+                }
                 self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: row.emails ?? "", desc: row.text!, imagesUrl: images)
                 self.reqId = row.id ?? ""
                 if self.collection != nil {
@@ -653,7 +668,7 @@ final class AppealUserCell: UICollectionViewCell {
     private var type: String?
     
     fileprivate func display(_ item: AppealUserCellData) {
-        if item.desc.contains(find: "Отправлен новый файл:"){
+        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
             desc.text = "Добавлен файл"
         }else{
             //            let mySubstring = item.desc.prefix(30)

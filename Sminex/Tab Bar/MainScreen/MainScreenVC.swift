@@ -271,6 +271,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         tabBarController?.tabBar.tintColor = .black
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
+        navigationController?.isNavigationBarHidden = false
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
     }
     
@@ -872,11 +873,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             data, responce, error in
             
             if error != nil {
-                DispatchQueue.main.sync {
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
-                    self.present(alert, animated: true, completion: nil)
-                }
+//                DispatchQueue.main.sync {
+//                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+//                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in }))
+//                    self.present(alert, animated: true, completion: nil)
+//                }
                 return
             }
             
@@ -923,7 +924,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
             request.httpMethod = "GET"
-            //            print(request)
+            print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -981,7 +982,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
                         v = componentsUpd.second! - componentsAdd.second!
                     }
-                    if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                    if lastComm != nil && ((lastComm?.text?.contains(find: "Отправлен новый файл:"))! || (lastComm?.text?.contains(find: "Прикреплён файл"))!) && v != 0 && v <= 10{
                         lastComm = nil
                         isAnswered = false
                     }
@@ -1153,6 +1154,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
         request.httpMethod = "GET"
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -1987,7 +1989,7 @@ final class RequestCell: UICollectionViewCell {
             title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .regular)
         }
         stickTitle?.text = item.stickTitle
-        if item.desc.contains(find: "Отправлен новый файл:"){
+        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
             desc.text = "Добавлен файл"
         }else{
             //            let mySubstring = item.desc.prefix(30)

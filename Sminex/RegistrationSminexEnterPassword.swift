@@ -84,8 +84,12 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                     self.descTxt.textColor = .red
 
                 } else {
-                    UserDefaults.standard.set(self.passTextField.text ?? "", forKey: "pwd")
-                    self.makeAuth()
+//                    if !self.isReg_ {
+//                        self.performSegue(withIdentifier: "toAuth", sender: self)
+//                    }else{
+                        self.saveUsersDefaults()
+                        self.makeAuth()
+//                    }
                 }
             }
         }.resume()
@@ -200,7 +204,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         tabBarController?.tabBar.isHidden = false
-        navigationController?.isNavigationBarHidden  = false
+        navigationController?.isNavigationBarHidden  = true
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -267,7 +271,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         
         waitView.stopAnimating()
     }
-    
+    private var salt = Data()
     // Качаем соль
     private func getSalt(login: String) -> Data {
         
@@ -293,7 +297,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
                 }
                 return
             }
-            
+            self.salt = data!
             salt = data
             TemporaryHolder.instance.salt = data
             }.resume()
@@ -303,42 +307,153 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
     }
     
     private func makeAuth() {
-        
-        // Авторизация пользователя
-        let txtLogin = login_.stringByAddingPercentEncodingForRFC3986() ?? ""
-        let txtPass = passTextField.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + getHash(pass: txtPass, salt: getSalt(login: txtLogin)) + "&addBcGuid=1")!)
-        request.httpMethod = "GET"
-        
-//        print(request.url)
-        
-        URLSession.shared.dataTask(with: request) {
-            data, response, error in
+        DispatchQueue.main.async {
+            // Авторизация пользователя
+            let txtLogin = self.login_.stringByAddingPercentEncodingForRFC3986() ?? ""
+            let txtPass = self.passTextField.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+            let pwd = self.getHash(pass: txtPass, salt: self.getSalt(login: txtLogin))
+            let defaults = UserDefaults.standard
+            defaults.setValue(pwd, forKey: "pwd")
+            defaults.synchronize()
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + pwd + "&addBcGuid=1")!)
+            request.httpMethod = "GET"
             
-            if error != nil || data == nil {
-                DispatchQueue.main.sync {
-                    
-                    self.stopAnimation()
-                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-                    alert.addAction(cancelAction)
-                    self.present(alert, animated: true, completion: nil)
+            print(request.url)
+            
+            URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                if error != nil || data == nil {
+                    DispatchQueue.main.sync {
+                        
+                        self.stopAnimation()
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                        alert.addAction(cancelAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
                 }
-                return
+                
+                self.responseString = String(data: data!, encoding: .utf8) ?? ""
+                
+                #if DEBUG
+                    print("responseString = \(self.responseString)")
+                #endif
+                
+                DispatchQueue.main.async {
+                    self.choice()
+                }
+                
+                }.resume()
+        }
+    }
+    var auth = false
+    private func choice() {
+        
+        DispatchQueue.main.async {
+            self.stopAnimation()
+            
+            if self.responseString == "1" {
+                let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+                
+            } else if self.responseString == "2" || self.responseString.contains("error") {
+                let alert = UIAlertController(title: "Ошибка", message: "Попробуйте позже", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                //                if self.auth{
+                //                    self.saveUsersDefaults()
+                //                }
+                // авторизация на сервере - получение данных пользователя
+                var answer = self.responseString.components(separatedBy: ";")
+                //                print(answer)
+                
+                getBCImage(id: answer[safe: 17] ?? "")
+                // сохраним значения в defaults
+                saveGlobalData(date1:               answer[safe: 0]  ?? "",
+                               date2:               answer[safe: 1]  ?? "",
+                               can_count:           answer[safe: 2]  ?? "",
+                               mail:                answer[safe: 3]  ?? "",
+                               id_account:          answer[safe: 4]  ?? "",
+                               isCons:              answer[safe: 5]  ?? "",
+                               name:                answer[safe: 6]  ?? "",
+                               history_counters:    answer[safe: 7]  ?? "",
+                               phone:               answer[safe: 14] ?? "",
+                               contactNumber:       answer[safe: 18] ?? "",
+                               adress:              answer[safe: 10] ?? "",
+                               roomsCount:          answer[safe: 11] ?? "",
+                               residentialArea:     answer[safe: 12] ?? "",
+                               totalArea:           answer[safe: 13] ?? "",
+                               strah:               "0",
+                               buisness:            answer[safe: 9]  ?? "",
+                               lsNumber:            answer[safe: 16] ?? "",
+                               desc:                answer[safe: 15] ?? "",
+                               typeОfBuildings:     answer[safe: 19] ?? "")
+                
+                TemporaryHolder.instance.getFinance()
+                // отправим на сервер данные об ид. устройства для отправки уведомлений
+                let token = Messaging.messaging().fcmToken
+                if token != nil {
+                    self.sendAppId(id_account: answer[4], token: token!)
+                }
+                
+                // Экземпляр класса DB
+                let db = DB()
+                
+                // Если пользователь - окно пользователя, если консультант - другое окно
+                if answer[5] == "1" {          // консультант
+                    
+                    // ЗАЯВКИ С КОММЕНТАРИЯМИ
+                    db.del_db(table_name: "Comments")
+                    db.del_db(table_name: "Applications")
+                    db.parse_Apps(login: self.login_, pass: self.getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.salt) , isCons: "1")
+                    
+                    // Дома, квартиры, лицевые счета
+                    db.del_db(table_name: "Houses")
+                    db.del_db(table_name: "Flats")
+                    db.del_db(table_name: "Ls")
+                    db.parse_Houses()
+                    
+                    self.performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toAppCons, sender: self)
+                    
+                } else {
+                    // УВЕДОМЛЕНИЯ
+                    db.del_db(table_name: "Notifications")
+                    db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
+                    // ПОКАЗАНИЯ СЧЕТЧИКОВ
+                    // Удалим данные из базы данных
+                    db.del_db(table_name: "Counters")
+                    db.del_db(table_name: "TypesCounters")
+                    // Получим данные в базу данных
+                    db.parse_Countrers(login: self.login_, pass: self.getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.salt), history: answer[7])
+                    
+                    // ВЕДОМОСТЬ (Пока данные тестовые)
+                    // Удалим данные из базы данных
+                    db.del_db(table_name: "Saldo")
+                    // Получим данные в базу данных
+                    db.parse_OSV(login: self.login_, pass: self.passTextField.text ?? "")
+                    
+                    // ЗАЯВКИ С КОММЕНТАРИЯМИ
+                    db.del_db(table_name: "Applications")
+                    db.del_db(table_name: "Comments")
+                    db.parse_Apps(login: self.login_, pass: self.passTextField.text ?? "", isCons: "0")
+                    
+                    if !self.isReg_ {
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
+//                        self.performSegue(withIdentifier: "toAppsUser", sender: self)
+//                        self.performSegue(withIdentifier: "toAuth", sender: self)
+                    } else {
+                        self.performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toComplete, sender: self)
+                    }
+                }
             }
-            
-            self.responseString = String(data: data!, encoding: .utf8) ?? ""
-            
-            #if DEBUG
-                print("responseString = \(self.responseString)")
-            #endif
-            
-            DispatchQueue.main.async {
-                self.choice()
-            }
-            
-            }.resume()
+        }
     }
     
     private func choiseSMS() {
@@ -358,108 +473,125 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         }
     }
     
-    private func choice() {
+//    private func choice() {
+//
+//        self.stopAnimation()
+//
+//        if responseString == "1" {
+//
+//            let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
+//            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//            alert.addAction(cancelAction)
+//            present(alert, animated: true, completion: nil)
+//
+//        } else if responseString == "2" || responseString.contains("error") {
+//
+//            let alert = UIAlertController(title: "Ошибка", message: "Попробуйте позже", preferredStyle: .alert)
+//            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//            alert.addAction(cancelAction)
+//            present(alert, animated: true, completion: nil)
+//
+//        } else {
+//
+//            UserDefaults.standard.setValue(passTextField.text ?? "", forKey: "pass")
+//            UserDefaults.standard.synchronize()
+//            // авторизация на сервере - получение данных пользователя
+//            var answer = responseString.components(separatedBy: ";")
+//
+//            getBCImage(id: answer[safe: 17] ?? "")
+//            // сохраним значения в defaults
+//            saveGlobalData(date1:               answer[safe: 0]  ?? "",
+//                           date2:               answer[safe: 1]  ?? "",
+//                           can_count:           answer[safe: 2]  ?? "",
+//                           mail:                answer[safe: 3]  ?? "",
+//                           id_account:          answer[safe: 4]  ?? "",
+//                           isCons:              answer[safe: 5]  ?? "",
+//                           name:                answer[safe: 6]  ?? "",
+//                           history_counters:    answer[safe: 7]  ?? "",
+//                           phone:               answer[safe: 14] ?? "",
+//                           contactNumber:       answer[safe: 18] ?? "",
+//                           adress:              answer[safe: 10] ?? "",
+//                           roomsCount:          answer[safe: 11] ?? "",
+//                           residentialArea:     answer[safe: 12] ?? "",
+//                           totalArea:           answer[safe: 13] ?? "",
+//                           strah:               "0",
+//                           buisness:            answer[safe: 9]  ?? "",
+//                           lsNumber:            answer[safe: 16] ?? "",
+//                           desc:                answer[safe: 15] ?? "",
+//                           typeОfBuildings:     answer[safe: 19] ?? "")
+//
+//            TemporaryHolder.instance.getFinance()
+//            // отправим на сервер данные об ид. устройства для отправки уведомлений
+//            let token = Messaging.messaging().fcmToken
+//            if token != nil {
+//                sendAppId(id_account: answer[4], token: token!)
+//            }
+//
+//            // Экземпляр класса DB
+//            let db = DB()
+//
+//            // Если пользователь - окно пользователя, если консультант - другое окно
+//            if answer[5] == "1" {          // консультант
+//
+//                // ЗАЯВКИ С КОММЕНТАРИЯМИ
+//                db.del_db(table_name: "Comments")
+//                db.del_db(table_name: "Applications")
+//                db.parse_Apps(login: login_, pass: passTextField.text ?? "", isCons: "1")
+//
+//                // Дома, квартиры, лицевые счета
+//                db.del_db(table_name: "Houses")
+//                db.del_db(table_name: "Flats")
+//                db.del_db(table_name: "Ls")
+//                db.parse_Houses()
+//
+//                self.performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toAppCons, sender: self)
+//
+//            } else {                         // пользователь
+//                // УВЕДОМЛЕНИЯ
+//                db.del_db(table_name: "Notifications")
+//                db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
+//                // ПОКАЗАНИЯ СЧЕТЧИКОВ
+//                // Удалим данные из базы данных
+//                db.del_db(table_name: "Counters")
+//                db.del_db(table_name: "TypesCounters")
+//                // Получим данные в базу данных
+//                db.parse_Countrers(login: login_, pass: self.pwdHash, history: answer[7])
+//
+//                // ВЕДОМОСТЬ (Пока данные тестовые)
+//                // Удалим данные из базы данных
+//                db.del_db(table_name: "Saldo")
+//                // Получим данные в базу данных
+//                db.parse_OSV(login: login_, pass: self.passTextField.text ?? "")
+//
+//                // ЗАЯВКИ С КОММЕНТАРИЯМИ
+//                db.del_db(table_name: "Applications")
+//                db.del_db(table_name: "Comments")
+//                db.parse_Apps(login: login_, pass: passTextField.text ?? "", isCons: "0")
+//
+//                if !isReg_ {
+////                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+////                    self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
+//                    self.performSegue(withIdentifier: "toAppsUser", sender: self)
+//                } else {
+//                    performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toComplete, sender: self)
+//                }
+//
+//            }
+//        }
+//    }
+    
+    private func saveUsersDefaults() {
+//        let txtLogin = login_.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let txtPass = passTextField.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+        let pwd = getHash(pass: txtPass, salt: self.salt)
+        print(pwd)
         
-        self.stopAnimation()
-        
-        if responseString == "1" {
-            
-            let alert = UIAlertController(title: "Ошибка", message: "Не переданы обязательные параметры", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-            alert.addAction(cancelAction)
-            present(alert, animated: true, completion: nil)
-            
-        } else if responseString == "2" || responseString.contains("error") {
-            
-            let alert = UIAlertController(title: "Ошибка", message: "Попробуйте позже", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-            alert.addAction(cancelAction)
-            present(alert, animated: true, completion: nil)
-            
-        } else {
-            
-            UserDefaults.standard.setValue(passTextField.text ?? "", forKey: "pass")
-            UserDefaults.standard.synchronize()
-            
-            // авторизация на сервере - получение данных пользователя
-            var answer = responseString.components(separatedBy: ";")
-            
-            getBCImage(id: answer[safe: 17] ?? "")
-            // сохраним значения в defaults
-            saveGlobalData(date1:               answer[safe: 0]  ?? "",
-                           date2:               answer[safe: 1]  ?? "",
-                           can_count:           answer[safe: 2]  ?? "",
-                           mail:                answer[safe: 3]  ?? "",
-                           id_account:          answer[safe: 4]  ?? "",
-                           isCons:              answer[safe: 5]  ?? "",
-                           name:                answer[safe: 6]  ?? "",
-                           history_counters:    answer[safe: 7]  ?? "",
-                           phone:               answer[safe: 14] ?? "",
-                           contactNumber:       answer[safe: 18] ?? "",
-                           adress:              answer[safe: 10] ?? "",
-                           roomsCount:          answer[safe: 11] ?? "",
-                           residentialArea:     answer[safe: 12] ?? "",
-                           totalArea:           answer[safe: 13] ?? "",
-                           strah:               "0",
-                           buisness:            answer[safe: 9]  ?? "",
-                           lsNumber:            answer[safe: 16] ?? "",
-                           desc:                answer[safe: 15] ?? "",
-                           typeОfBuildings:     answer[safe: 19] ?? "")
-            
-            TemporaryHolder.instance.getFinance()
-            // отправим на сервер данные об ид. устройства для отправки уведомлений
-            let token = Messaging.messaging().fcmToken
-            if token != nil {
-                sendAppId(id_account: answer[4], token: token!)
-            }
-            
-            // Экземпляр класса DB
-            let db = DB()
-            
-            // Если пользователь - окно пользователя, если консультант - другое окно
-            if answer[5] == "1" {          // консультант
-                
-                // ЗАЯВКИ С КОММЕНТАРИЯМИ
-                db.del_db(table_name: "Comments")
-                db.del_db(table_name: "Applications")
-                db.parse_Apps(login: login_, pass: passTextField.text ?? "", isCons: "1")
-                
-                // Дома, квартиры, лицевые счета
-                db.del_db(table_name: "Houses")
-                db.del_db(table_name: "Flats")
-                db.del_db(table_name: "Ls")
-                db.parse_Houses()
-                
-                self.performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toAppCons, sender: self)
-                
-            } else {                         // пользователь
-                
-                // ПОКАЗАНИЯ СЧЕТЧИКОВ
-                // Удалим данные из базы данных
-                db.del_db(table_name: "Counters")
-                // Получим данные в базу данных
-                db.parse_Countrers(login: login_, pass: passTextField.text ?? "", history: answer[7])
-                
-                // ВЕДОМОСТЬ (Пока данные тестовые)
-                // Удалим данные из базы данных
-                db.del_db(table_name: "Saldo")
-                // Получим данные в базу данных
-                db.parse_OSV(login: login_, pass: self.passTextField.text ?? "")
-                
-                // ЗАЯВКИ С КОММЕНТАРИЯМИ
-                db.del_db(table_name: "Applications")
-                db.del_db(table_name: "Comments")
-                db.parse_Apps(login: login_, pass: passTextField.text ?? "", isCons: "0")
-                
-                if !isReg_ {
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    self.present(storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq"), animated: true, completion: nil)
-                
-                } else {
-                    performSegue(withIdentifier: Segues.fromRegistrationSminexEnterPassword.toComplete, sender: self)
-                }
-                
-            }
+        let defaults = UserDefaults.standard
+        defaults.setValue(login_, forKey: "login")
+        DispatchQueue.main.async {
+            defaults.setValue(self.passTextField.text ?? "", forKey: "pass")
+            defaults.setValue(pwd, forKey: "pwd")
+            defaults.synchronize()
         }
     }
     
@@ -528,7 +660,10 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
         UserDefaults.standard.synchronize()
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         getContacts(login: login, pwd: getHash(pass: login, salt: getSalt(login: login)))
-        
+        if segue.identifier == "toAppsUser" {
+            let login = UserDefaults.standard.string(forKey: "login") ?? ""
+            getContacts(login: login, pwd: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.salt))
+        }
         if segue.identifier == Segues.fromRegistrationSminexEnterPassword.toComplete {
             let vc = (segue.destination as! UINavigationController).topViewController as! AccountSettingsVC
             vc.isReg_          = true

@@ -512,7 +512,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"
-            //            print(request)
+                        print(request)
             
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
@@ -526,7 +526,8 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     return
                 }
                 #if DEBUG
-                //                print(String(data: data!, encoding: .utf8)!)
+                                print(String(data: data!, encoding: .utf8)!)
+                
                 #endif
                 let xml = XML.parse(data!)
                 self.parse(xml: xml)
@@ -537,7 +538,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     
     func parse(xml: XML.Accessor) {
         let requests = xml["Requests"]
-        
+        rowFiles.removeAll()
         let row = requests["Row"]
         self.rows.removeAll()
         
@@ -587,7 +588,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
                     v = componentsUpd.second! - componentsAdd.second!
                 }
-                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                if lastComm != nil && ((lastComm?.text?.contains(find: "Отправлен новый файл:"))! || (lastComm?.text?.contains(find: "Прикреплён файл"))!) && v != 0 && v <= 10{
                     lastComm = nil
                     isAnswered = false
                 }
@@ -847,6 +848,21 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             images.append(commImg!)
                         }
                     }
+                    if images.count == 0{
+                        self.rowFiles.forEach { files in
+                            if files.reqID == row.id{
+                                var i = false
+                                self.techServiceComm.forEach { comm in
+                                    if comm.imgUrl == files.fileId!{
+                                        i = true
+                                    }
+                                }
+                                if i == false{
+                                    images.append(files.fileId!)
+                                }
+                            }
+                        }
+                    }
                     self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
@@ -920,6 +936,21 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                 images.append(commImg!)
                             }
                         }
+                        if images.count == 0{
+                            self.rowFiles.forEach { files in
+                                if files.reqID == row.id{
+                                    var i = false
+                                    self.techServiceComm.forEach { comm in
+                                        if comm.imgUrl == files.fileId!{
+                                            i = true
+                                        }
+                                    }
+                                    if i == false{
+                                        images.append(files.fileId!)
+                                    }
+                                }
+                            }
+                        }
                         self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
                         self.reqId = row.id ?? ""
                         if self.table != nil {
@@ -955,6 +986,21 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             images.append(commImg!)
                         }
                         
+                    }
+                    if images.count == 0{
+                        self.rowFiles.forEach { files in
+                            if files.reqID == row.id{
+                                var i = false
+                                self.techServiceComm.forEach { comm in
+                                    if comm.imgUrl == files.fileId!{
+                                        i = true
+                                    }
+                                }
+                                if i == false{
+                                    images.append(files.fileId!)
+                                }
+                            }
+                        }
                     }
                     self.techService = ServiceHeaderData(icon: self.fullData[indexPath.row].icon,
                                                          problem: row.text ?? "",
@@ -1133,7 +1179,7 @@ final class TestAppsUserCell: UITableViewCell {
     
     fileprivate func display(_ item: AppsUserCellData) {
         desc.isHidden = false
-        if item.desc.contains(find: "Отправлен новый файл:"){
+        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
             desc.text = "Добавлен файл"
         }else{
             //            let mySubstring = item.desc.prefix(30)
