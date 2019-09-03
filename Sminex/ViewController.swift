@@ -397,6 +397,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + pwd + "&addBcGuid=1")!)
         request.httpMethod = "GET"
             print(request)
+            
             URLSession.shared.dataTask(with: request) {
             data, response, error in
         

@@ -323,7 +323,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     return
                 }
                 #if DEBUG
-                print(String(data: data!, encoding: .utf8)!)
+//                print(String(data: data!, encoding: .utf8)!)
                 
                 #endif
                 let xml = XML.parse(data!)
@@ -385,7 +385,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
                     v = componentsUpd.second! - componentsAdd.second!
                 }
-                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                if lastComm != nil && ((lastComm?.text?.contains(find: "Отправлен новый файл:"))! || (lastComm?.text?.contains(find: "Прикреплён файл"))!) && v != 0 && v <= 10{
                     lastComm = nil
                     isAnswered = false
                 }
@@ -418,7 +418,8 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 } else if (curr.responsiblePerson?.contains("иректор"))! || (curr.name?.contains("иректор"))! || (curr.responsiblePerson?.containsIgnoringCase(find: "предложения"))! || (curr.name?.containsIgnoringCase(find: "предложения"))!{
                     name                = " Обращение к директору службы комфорта"
                 }
-                newData.append( AppealUserCellData(title: name ?? "",
+                print(name, curr.name, curr.responsiblePerson, curr.dateFrom)
+                newData.append( AppealUserCellData(title: name,
                                                  desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
                                                  icon: icon,
                                                  status: curr.status ?? "",
@@ -430,7 +431,6 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                                                  stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? "", respPerson: curr.responsiblePerson ?? ""))
                 
             }
-            print("NewDATA: ", newData.count)
             var firstArr = newData.filter {
                 $0.status.contains(find: "обработке")
                     ||  $0.status.contains(find: "Отправлена")
@@ -567,6 +567,21 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                         images.append(commImg!)
                     }
                 }
+                if images.count == 0{
+                    self.rowFiles.forEach { files in
+                        if files.reqID == row.id{
+                            var i = false
+                            self.techServiceComm.forEach { comm in
+                                if comm.imgUrl == files.fileId!{
+                                    i = true
+                                }
+                            }
+                            if i == false{
+                                images.append(files.fileId!)
+                            }
+                        }
+                    }
+                }
                 self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: row.emails ?? "", desc: row.text!, imagesUrl: images)
                 self.reqId = row.id ?? ""
                 if self.collection != nil {
@@ -653,7 +668,7 @@ final class AppealUserCell: UICollectionViewCell {
     private var type: String?
     
     fileprivate func display(_ item: AppealUserCellData) {
-        if item.desc.contains(find: "Отправлен новый файл:"){
+        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
             desc.text = "Добавлен файл"
         }else{
             //            let mySubstring = item.desc.prefix(30)
@@ -704,7 +719,7 @@ final class AppealUserCell: UICollectionViewCell {
         } else {
             title.text = item.title
         }
-        print(title.text, desc.text)
+        print(item.title, desc.text)
     }
     
     class func fromNib() -> AppealUserCell? {

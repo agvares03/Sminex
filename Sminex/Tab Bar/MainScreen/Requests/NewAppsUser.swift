@@ -579,7 +579,7 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
                     v = componentsUpd.second! - componentsAdd.second!
                 }
-                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                if lastComm != nil && ((lastComm?.text?.contains(find: "Отправлен новый файл:"))! || (lastComm?.text?.contains(find: "Прикреплён файл"))!) && v != 0 && v <= 10{
                     lastComm = nil
                     isAnswered = false
                 }
@@ -1125,7 +1125,7 @@ final class NewAppsUserCell: UICollectionViewCell {
     private var type: String?
     
     fileprivate func display(_ item: AppsUserCellData) {
-        if item.desc.contains(find: "Отправлен новый файл:"){
+        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
             desc.text = "Добавлен файл"
         }else{
             //            let mySubstring = item.desc.prefix(30)

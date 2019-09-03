@@ -514,6 +514,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 }
             }
         }
+        place = place.replacingOccurrences(of: "; ", with: ";")
         var soonPossible = ""
         if extTime{
             soonPossible = "1"

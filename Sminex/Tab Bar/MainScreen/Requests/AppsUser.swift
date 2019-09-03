@@ -370,7 +370,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 if componentsUpd.day == componentsAdd.day && componentsUpd.month == componentsAdd.month && componentsUpd.year == componentsAdd.year && componentsUpd.hour == componentsAdd.hour && componentsUpd.minute == componentsAdd.minute{
                     v = componentsUpd.second! - componentsAdd.second!
                 }
-                if lastComm != nil && (lastComm?.text?.contains(find: "Отправлен новый файл:"))! && v != 0 && v <= 10{
+                if lastComm != nil && ((lastComm?.text?.contains(find: "Отправлен новый файл:"))! || (lastComm?.text?.contains(find: "Прикреплён файл"))!) && v != 0 && v <= 10{
                     lastComm = nil
                     isAnswered = false
                 }
@@ -849,7 +849,7 @@ final class AppsUserCell: UICollectionViewCell {
     private var type: String?
     
     fileprivate func display(_ item: AppsUserCellData) {
-        if item.desc.contains(find: "Отправлен новый файл:"){
+        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
             desc.text = "Добавлен файл"
         }else{
 //            let mySubstring = item.desc.prefix(30)
@@ -1059,11 +1059,13 @@ struct Request {
             
         } else if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
-        } else if (name?.contains("Обращение к консьержу"))! {
+        } else if (name?.containsIgnoringCase(find: "консьержу"))! {
             name                = "Обращение к консьержу"
-        } else if (name?.contains("Обращение в техподдержку"))! {
+        } else if (name?.containsIgnoringCase(find: "техподдержк"))! {
             name                = "Обращение в техподдержку"
-        } else if (name?.contains("Обращение к директору"))! {
+        } else if (name?.containsIgnoringCase(find: "предложения"))! {
+            name                = "Обращение к директору"
+        } else if (name?.containsIgnoringCase(find: "директор"))!{
             name                = "Обращение к директору"
         } else if (name?.contains("Обращение"))! {
             name                = "Обращение"
@@ -1158,6 +1160,7 @@ struct RequestFile {
     let isCons:     String?
     let isCurrUsr:  String?
     let userId:     String?
+    let reqID:      String?
     
     init(row: XML.Accessor) {
         
@@ -1168,6 +1171,7 @@ struct RequestFile {
         isCons      = row.attributes["IsConsultant"]
         isCurrUsr   = row.attributes["IsCurrentUser"]
         userId      = row.attributes["UserID"]
+        reqID       = row.attributes["RequestID"]
     }
 }
 
