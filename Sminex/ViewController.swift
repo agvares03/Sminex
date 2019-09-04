@@ -376,7 +376,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func enter(login: String? = nil, pass: String? = nil){
+    func enter(login: String? = nil, pass: String? = nil, pwdE: String? = nil){
         
         if !isFromSettings_ {
             startIndicator()
@@ -390,7 +390,10 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
         let txtLogin = login == nil ? self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : login?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let txtPass = pass == nil ? self.edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? "" : pass ?? ""
-        let pwd = getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt()))
+        var pwd = getHash(pass: txtPass, salt: (login == nil ? self.getSalt(login: txtLogin) : Sminex.getSalt()))
+            if pwdE != nil{
+                pwd = pwdE ?? ""
+            }
         let defaults = UserDefaults.standard
         defaults.setValue(pwd, forKey: "pwd")
         defaults.synchronize()

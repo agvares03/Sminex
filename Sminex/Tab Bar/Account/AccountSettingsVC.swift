@@ -310,7 +310,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let login   = isReg_ ? login_ : (UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? "")
         let defName = isReg_ ? String(answers[safe: 6] ?? "") : (UserDefaults.standard.string(forKey: "name") ?? "")
         let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (defName.stringByAddingPercentEncodingForRFC3986() ?? "")
-        let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
+//        let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
+        let pass: String = UserDefaults.standard.string(forKey: "pwd") ?? ""
         var comment_txt = commentField.text?.stringByAddingPercentEncodingForRFC3986()
         if comment_txt == "Добавить комментарий (например, «не звонить с 10 до 12»)"{
             comment_txt = ""
@@ -319,6 +320,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         print(request)
+        
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -352,7 +354,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             } else {
                 let vc = ViewController()
                 vc.isFromSettings_ = true
-                vc.enter(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pass") ?? "")
+                vc.enter(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pass") ?? "", pwdE: UserDefaults.standard.string(forKey: "pwd") ?? "")
                 let alert = UIAlertController(title: nil, message: "Изменения успешно сохранены!", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in
                     self.navigationController?.popViewController(animated: true)
