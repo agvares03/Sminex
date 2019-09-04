@@ -95,7 +95,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func getLSforNumber(){
+    private func getLSforNumber(){  
         
         var phone = self.edLogin.text!
         let ls_1 = self.edLogin.text!.index(self.edLogin.text!.startIndex, offsetBy: 1)
