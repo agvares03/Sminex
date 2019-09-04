@@ -224,8 +224,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     }
                 }
             }else{
-                if place.contains(find: ", "){
-                    let str = place.components(separatedBy: ", ")
+                if place.contains(find: "; "){
+                    let str = place.components(separatedBy: "; ")
                     place = ""
                     str.forEach{
                         place = place + $0 + ";"
@@ -824,8 +824,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 }
             }
         }else{
-            if place.contains(find: ", "){
-                let str = place.components(separatedBy: ", ")
+            if place.contains(find: "; "){
+                let str = place.components(separatedBy: "; ")
                 place = ""
                 str.forEach{
                     place = place + $0 + ";"

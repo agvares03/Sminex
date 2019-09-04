@@ -231,8 +231,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 }
             }
         }else{
-            if place.contains(find: ", "){
-                let str = place.components(separatedBy: ", ")
+            if place.contains(find: "; "){
+                let str = place.components(separatedBy: "; ")
                 place = ""
                 str.forEach{
                     place = place + $0 + ";"
@@ -600,8 +600,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 }
             }
         }else{
-            if place.contains(find: ", "){
-                let str = place.components(separatedBy: ", ")
+            if place.contains(find: "; "){
+                let str = place.components(separatedBy: "; ")
                 place = ""
                 str.forEach{
                     place = place + $0 + ";"
