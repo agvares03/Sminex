@@ -220,8 +220,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                     }
                 }
             }else{
-                if place.contains(find: ", "){
-                    let str = place.components(separatedBy: ", ")
+                if place.contains(find: "; "){
+                    let str = place.components(separatedBy: "; ")
                     place = ""
                     str.forEach{
                         place = place + $0 + ";"
@@ -503,8 +503,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
                 }
             }
         }else{
-            if place.contains(find: ", "){
-                let str = place.components(separatedBy: ", ")
+            if place.contains(find: "; "){
+                let str = place.components(separatedBy: "; ")
                 place = ""
                 str.forEach{
                     place = place + $0 + ";"
@@ -758,7 +758,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             if str == "Выбрать помещение(я)"{
                 placeLbl.text = text
             }else{
-                placeLbl.text = str! + ", " + text
+                placeLbl.text = str! + "; " + text
             }
             for i in 0...parkingsPlace!.count - 1{
                 if parkingsPlace![i] == text{

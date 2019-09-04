@@ -884,7 +884,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-//            print(responceString)
+            print(responceString)
+            
             #endif
             
             DispatchQueue.main.sync {
