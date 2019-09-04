@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import DeviceKit
+import AKMaskField
 
 class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
@@ -15,7 +16,7 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
     @IBOutlet private weak var sendViewConst: NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
-    @IBOutlet private weak var edContact:       UITextField!
+    @IBOutlet private weak var edContact:       AKMaskField!
     @IBOutlet private weak var edEmail:         UITextField!
     @IBOutlet private weak var edIdent:         UITextField!
     @IBOutlet private weak var TypeRequest:     UILabel!
@@ -43,7 +44,7 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
     }
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
-        if !Server().isValidEmail(testStr: edEmail.text!) && edContact.text == ""{
+        if (!Server().isValidEmail(testStr: edEmail.text!) && edEmail.text != "") || (!Server().isValidEmail(testStr: edEmail.text!) && edContact.text == ""){
             let alert = UIAlertController(title: "Ошибка!", message: "Введите корректный E-mail", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
@@ -110,11 +111,11 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
         view.addGestureRecognizer(tap)
-        
+        edContact.maskExpression = "+7 ({ddd}) {ddd}-{dd}-{dd}"
+        edContact.maskTemplate = " "
         sendButton.alpha     = 0.5
         sendButton.isEnabled = false
         TypeRequest.text = typeReq
-        edContact.delegate  = self
         edEmail.delegate = self
         edIdent.delegate = self
         edComment.delegate  = self
@@ -132,9 +133,13 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         if UserDefaults.standard.string(forKey: "contactNumber") == "-" || UserDefaults.standard.string(forKey: "contactNumber") == "" || UserDefaults.standard.string(forKey: "contactNumber") == " "{
             edContact.text = ""
         }else{
-            edContact.text = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+            var phone = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+            if phone.first == "8"{
+                phone.removeFirst()
+            }
+            edContact.text = phone
         }
-        edContact.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+//        edContact.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         edEmail.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         edIdent.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         edComment.text = "Описание"

@@ -657,18 +657,19 @@ final class AppealHeader: UICollectionViewCell {
             emailSep.isHidden = true
             emailHeight.constant = 0
         }
-        if item.mobileNumber != "" || item.mobileNumber != "-" || item.mobileNumber != " "{
-            mobileNumber?.text = item.mobileNumber
-            mobileNumber?.isHidden = false
-            mobileText.isHidden = false
-            mobileSep.isHidden = false
-            mobileHeight.constant = 60
-        }else{
+        print("MOBILA: -\(item.mobileNumber)-")
+        if item.mobileNumber == "" || item.mobileNumber == "-" || item.mobileNumber == " "{
             mobileNumber?.text = ""
             mobileNumber?.isHidden = true
             mobileText.isHidden = true
             mobileSep.isHidden = true
             mobileHeight.constant = 0
+        }else{
+            mobileNumber?.text = item.mobileNumber
+            mobileNumber?.isHidden = false
+            mobileText.isHidden = false
+            mobileSep.isHidden = false
+            mobileHeight.constant = 60
         }
         ident?.text = item.ident
         descHeight?.constant = heightForTitle(text: item.desc, width: self.delegate1!.view.frame.size.width - 95)
