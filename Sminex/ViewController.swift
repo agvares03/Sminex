@@ -63,7 +63,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         // Проверка на заполнение
         var ret     = false;
         var message = ""
-        self.errorLabel.text = "Не правильный логин или пароль"
+        self.errorLabel.text = "Неправильный логин или пароль"
         if edLogin.text == "" {
             message = "Не указан логин. "
             ret     = true
