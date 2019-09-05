@@ -186,7 +186,7 @@ final class ContactsVC: UIViewController, UICollectionViewDelegate, UICollection
             }else if typeRequest == 1{
                 vc.typeReq = "Директору службы комфорта"
             }else if typeRequest == 2{
-                vc.typeReq = "в Техподдержку приложения"
+                vc.typeReq = "В техподдержку приложения"
             }
         }
     }

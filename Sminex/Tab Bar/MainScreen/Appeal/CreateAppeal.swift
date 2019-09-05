@@ -277,7 +277,7 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
             name = "Обращение к консьержу \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
         }else if self.typeReq == "Директору службы комфорта"{
             name = "Обращение к директору службы комфорта \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
-        }else if self.typeReq == "в Техподдержку приложения"{
+        }else if self.typeReq == "В техподдержку приложения"{
             name = "Обращение в техподдержку приложения \(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))"
         }
         let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(type_?.id?.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(name.stringByAddingPercentEncodingForRFC3986()!)&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(self.edContact.text?.stringByAddingPercentEncodingForRFC3986() ?? "")&emails=\(self.edEmail.text?.stringByAddingPercentEncodingForRFC3986() ?? "")&appealMail=\(selEmail.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=&isNotify=1&dateFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&ResponsiblePerson=\(self.typeReq.stringByAddingPercentEncodingForRFC3986()!)&isAppeal=1"
@@ -329,8 +329,8 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
                         if self.typeReq == "Консьержу/ в службу комфорта"{
                             titleA = "Сообщение отправлено в службу комфорта"
                         }else if self.typeReq.containsIgnoringCase(find: "директор"){
-                            titleA = "Сообщение Директору службы комфорта отправлено"
-                        }else if self.typeReq == "в Техподдержку приложения"{
+                            titleA = "Сообщение директору службы комфорта отправлено"
+                        }else if self.typeReq == "В техподдержку приложения"{
                             titleA = "Сообщение отправлено в техподдержку приложения"
                         }
                         let alert = UIAlertController(title: "Спасибо!", message: titleA, preferredStyle: .alert)

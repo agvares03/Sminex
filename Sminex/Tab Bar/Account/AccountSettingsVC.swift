@@ -333,6 +333,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             
             #if DEBUG
                 print(String(data: data!, encoding: .utf8)!)
+            
             #endif
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
