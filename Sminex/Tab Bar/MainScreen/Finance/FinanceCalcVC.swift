@@ -30,6 +30,19 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
             data_ = calcs.filter {
                 return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }
+            if self.data_.count != 0{
+                var cont = false
+                for k in 0...self.data_.count - 1{
+                    if !cont{
+                        if (self.data_[k].type?.containsIgnoringCase(find: "пени"))!{
+                            if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                                self.data_.remove(at: k)
+                                cont = true
+                            }
+                        }
+                    }
+                }
+            }
             collection.reloadData()
         }
     }
@@ -41,7 +54,19 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
             data_ = calcs.filter {
                 return date.0 == $0.numMonthSet && date.1 == $0.numYearSet
             }
-            
+            if self.data_.count != 0{
+                var cont = false
+                for k in 0...self.data_.count - 1{
+                    if !cont{
+                        if (self.data_[k].type?.containsIgnoringCase(find: "пени"))!{
+                            if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                                self.data_.remove(at: k)
+                                cont = true
+                            }
+                        }
+                    }
+                }
+            }
             collection.reloadData()
         }
     }
@@ -80,7 +105,19 @@ final class FinanceCalcVC: UIViewController, UICollectionViewDelegate, UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if self.data_.count != 0{
+            var cont = false
+            for k in 0...self.data_.count - 1{
+                if !cont{
+                    if (self.data_[k].type?.containsIgnoringCase(find: "пени"))!{
+                        if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                            self.data_.remove(at: k)
+                            cont = true
+                        }
+                    }
+                }
+            }
+        }
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self

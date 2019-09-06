@@ -302,7 +302,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             #if DEBUG
-//            print(String(data: data!, encoding: .utf8)!)
+            print(String(data: data!, encoding: .utf8)!)
             
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
@@ -2177,9 +2177,10 @@ final class ForPayCell: UICollectionViewCell {
         
         if item.title.contains(find: "-") {
             title.textColor = .green
-            
+            titleDrob.textColor = .green
         } else {
             title.textColor = .black
+            titleDrob.textColor = .black
         }
         
         if item.date != "" {

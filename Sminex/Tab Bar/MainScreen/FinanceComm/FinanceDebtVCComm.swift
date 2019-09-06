@@ -261,7 +261,23 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.receipts = ReceiptsDataJson(json: json!)?.data
             }
-            
+            if self.receipts!.count != 0{
+                var cont = false
+                for k in 0...self.receipts!.count - 1{
+                    if !cont{
+                        if (self.receipts![k].type?.containsIgnoringCase(find: "пени"))!{
+                            if UserDefaults.standard.bool(forKey: "denyShowFine"){
+                                self.receipts?.remove(at: k)
+                                cont = true
+                            }
+                        }
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                self.stopAnimation()
+                self.collection.reloadData()
+            }
             #if DEBUG
             //                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
             #endif
