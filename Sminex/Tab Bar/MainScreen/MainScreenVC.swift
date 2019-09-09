@@ -574,7 +574,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if busines_center_denyTotalOnlinePayments == true || business_center_info == true || self.payNil {
                 return CGSize(width: view.frame.size.width - 32, height: 67.0)
             } else {
-                return CGSize(width: view.frame.size.width - 32, height: 110.0)
+                return CGSize(width: view.frame.size.width - 32, height: 103.0)
             }
         } else if title == "Счетчики" {
             let cell = SchetCell.fromNib()
