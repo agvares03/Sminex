@@ -265,7 +265,7 @@ final class FinanceCalcsArchiveCommCell: UITableViewCell {
         self.title.text = title
         self.desc.text  = desc.replacingOccurrences(of: ".", with: ",")
         if title == "Аванс" || desc.contains(find: "-"){
-            self.desc.textColor = .green
+            self.desc.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
             self.desc.alpha = 1
         }else{
             self.desc.textColor = .darkText

@@ -969,7 +969,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     var isAnswered = (rowComms[row.id!]?.count ?? 0) <= 0 ? false : true
                     
                     var lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
-                    if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") {
+                    if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") && lastComm?.name != nil{
                         commentCount += 1
                     }
                     let df = DateFormatter()
@@ -2176,8 +2176,8 @@ final class ForPayCell: UICollectionViewCell {
         
         
         if item.title.contains(find: "-") {
-            title.textColor = .green
-            titleDrob.textColor = .green
+            title.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
+            titleDrob.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
         } else {
             title.textColor = .black
             titleDrob.textColor = .black
