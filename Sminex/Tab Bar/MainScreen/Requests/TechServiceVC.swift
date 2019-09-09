@@ -299,7 +299,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
             
-            let uid = UUID().uuidString
+//            let uid = UUID().uuidString
 //            print(uid)
             row1.forEach { row1 in
                 rows[row1.attributes["Status"]!]?.append(Request(row: row1))

@@ -401,7 +401,7 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
     
     // Передача показаний
     private func sendCount() {
-        print(allValue)
+//        print(allValue)
         if allValue?[index] != "" {
             
             let edLogin = UserDefaults.standard.string(forKey: "login") ?? ""

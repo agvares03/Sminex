@@ -39,7 +39,7 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                         self.collectionYear.setContentOffset(CGPoint(x: ((rect?.origin.x)! - pointX), y: 0), animated: true)
                     }
                 }
-                var s = 0
+//                var s = 0
 //                for k in 0...self.filteredCalcs.count - 1{
 //                    let d = self.filteredCalcs[k].numYearSet! - self.date.1!
 //                    if d == 1 && s == 0{
@@ -108,7 +108,7 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     }
                 }
                 
-                var s = 0
+//                var s = 0
 //                for k in 0...self.filteredCalcs.count - 1{
 //                    let d = self.date.1! - self.filteredCalcs[k].numYearSet!
 //                    if d == 1 && s == 0{
@@ -304,7 +304,7 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
         self.startAnimation()
         DispatchQueue.global(qos: .background).async {
             self.index = self.selType
-            var s = 0
+//            var s = 0
             //            for k in 0...self.filteredCalcs.count - 1{
             //                let d = self.filteredCalcs[k].numYearSet! - self.date.1!
             //                if d == 1 && s == 0{
@@ -375,10 +375,10 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcCell") as! TestCalcCell
         if indexPath.row < dataYear[indexPath.section]!.count + 1 {
-            print(indexPath.row, dataYear[indexPath.section]!.count)
-            if dataYear[indexPath.section]![indexPath.row - 1] != nil{
+//            print(indexPath.row, dataYear[indexPath.section]!.count)
+//            if dataYear[indexPath.section]![indexPath.row - 1] != nil{
                 cell.display(dataYear[indexPath.section]![indexPath.row - 1], pay: self, indexPath: indexPath)
-            }
+//            }
             
         } else {
             var sumAccured  = 0.0
@@ -401,7 +401,7 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var height: CGFloat = 0.0
+//        var height: CGFloat = 0.0
         let cell = CalcYearCell1.fromNib()
         if firstLoad && indexPath.row == 0{
             firstLoad = false

@@ -399,7 +399,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
             row1.forEach { row1 in
                 rows[row1.attributes["Status"]!]?.append(Request(row: row1))
                 rowComms[row1.attributes["ID"]!] = []
-                let status = row1.attributes["Status"]!
+//                let status = row1.attributes["Status"]!
                 row2.forEach { row in
                     rowComms[row.attributes["ID"]!]?.append( RequestComment(row: row) )
                     rowComms[row.attributes["text"]!]?.append( RequestComment(row: row) )

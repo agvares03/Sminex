@@ -301,7 +301,7 @@ class FinanceCalcVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         self.startAnimation()
         DispatchQueue.global(qos: .background).async {
             self.index = self.selType
-            var s = 0
+//            var s = 0
 //            for k in 0...self.filteredCalcs.count - 1{
 //                let d = self.filteredCalcs[k].numYearSet! - self.date.1!
 //                if d == 1 && s == 0{

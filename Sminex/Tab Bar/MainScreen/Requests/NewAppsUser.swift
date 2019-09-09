@@ -198,9 +198,9 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.collection{
             let cell = NewAppsUserCell.fromNib()
-            if data[indexPath.row] != nil{
+//            if data[indexPath.row] != nil{
                 cell?.display(data[indexPath.row])
-            }
+//            }
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
             return CGSize(width: view.frame.size.width, height: size.height)
         }else{
@@ -226,9 +226,9 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.collection{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewAppsUserCell", for: indexPath) as! NewAppsUserCell
-            if data[indexPath.row] != nil{
+//            if data[indexPath.row] != nil{
                 cell.display(data[indexPath.row])
-            }
+//            }
             if indexPath.row == self.data.count - 1 {
                 self.loadMore()
             }
@@ -766,16 +766,16 @@ final class NewAppsUser: UIViewController, UICollectionViewDelegate, UICollectio
                 
                 var type = self.data[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
-                var itsNever: Bool = false
+//                var itsNever: Bool = false
                 print(type)
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
-                        itsNever = true
+//                        itsNever = true
                     }
                     
                 }
-                print(TemporaryHolder.instance.requestTypes?.types)
+//                print(TemporaryHolder.instance.requestTypes?.types)
                 print(type)
                 //                if (!itsNever) {
                 //                    type = "Гостевой пропуск"

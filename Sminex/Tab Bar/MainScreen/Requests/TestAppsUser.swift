@@ -42,7 +42,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             collectionHeader?.selectItem(at: [0, index], animated: true, scrollPosition: .centeredVertically)
             collectionHeader?.reloadData()
             if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
-                let rect = self.collectionHeader!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame
+//                let rect = self.collectionHeader!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame
                 if index >= dataType.count - 2{
                     let pointX = (self.collectionHeader?.contentSize.width)! - self.view.frame.size.width
                     self.collectionHeader!.setContentOffset(CGPoint(x: pointX + 8, y: 0), animated: true)
@@ -774,16 +774,16 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 
                 var type = self.data[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
-                var itsNever: Bool = false
+//                var itsNever: Bool = false
                 print(type)
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
-                        itsNever = true
+//                        itsNever = true
                     }
                     
                 }
-                print(TemporaryHolder.instance.requestTypes?.types)
+//                print(TemporaryHolder.instance.requestTypes?.types)
                 print(type)
                 //                if (!itsNever) {
                 //                    type = "Гостевой пропуск"

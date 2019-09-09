@@ -105,9 +105,9 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
                         }
                     }
                 }
-                let type: RequestTypeStruct
-                type = .init(id: "3", name: "Услуги службы комфорта")
-                print(TemporaryHolder.instance.requestTypes?.types)
+//                let type: RequestTypeStruct
+//                type = .init(id: "3", name: "Услуги службы комфорта")
+//                print(TemporaryHolder.instance.requestTypes?.types)
                 if var types = TemporaryHolder.instance.requestTypes?.types {
                     for i in 0...types.count - 1{
                         if types[i].name == "Обращение"{

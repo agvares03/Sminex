@@ -323,13 +323,13 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             let vc = segue.destination as! CounterChoiceType
             vc.canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
         }
-        if segue.identifier == "goFinance" {
-            let vc = segue.destination as! FinanceVC
-//            vc.debt = debt
-        } else if segue.identifier == "goFinanceComm" {
-            let vc = segue.destination as! FinanceVCComm
-//            vc.accountData_ = debt
-        }
+//        if segue.identifier == "goFinance" {
+//            let vc = segue.destination as! FinanceVC
+////            vc.debt = debt
+//        } else if segue.identifier == "goFinanceComm" {
+//            let vc = segue.destination as! FinanceVCComm
+////            vc.accountData_ = debt
+//        }
     }
     public var delegate: MainScreenDelegate?
     private var questions: [QuestionDataJson]? = []

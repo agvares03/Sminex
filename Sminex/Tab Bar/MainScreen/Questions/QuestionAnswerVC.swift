@@ -336,13 +336,13 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         request.httpBody = jsonData
         
         print(request)
-        print(String(data: request.httpBody!, encoding: .utf8))
+//        print(String(data: request.httpBody!, encoding: .utf8))
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
             guard data != nil else { return }
-            print(String(data: data!, encoding: .utf8))
+//            print(String(data: data!, encoding: .utf8))
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 DispatchQueue.main.async{

@@ -517,16 +517,16 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 var type = self.data[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
-                var itsNever: Bool = false
+//                var itsNever: Bool = false
                 print(type)
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
-                        itsNever = true
+//                        itsNever = true
                     }
                     
                 }
-                print(TemporaryHolder.instance.requestTypes?.types)
+//                print(TemporaryHolder.instance.requestTypes?.types)
                 print(type)
 //                if (!itsNever) {
 //                    type = "Гостевой пропуск"

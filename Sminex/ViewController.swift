@@ -82,7 +82,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             self.present(alert, animated: true, completion: nil)
             
         } else {
-            print("PHONE = ", edLogin.text?.count, itsPhone)
+//            print("PHONE = ", edLogin.text?.count, itsPhone)
             if (itsPhone && (edLogin.text?.count == 10 || edLogin.text?.count == 11 || edLogin.text?.count == 12)) || (edLogin.text?.first == "9" && edLogin.text?.count == 10){
                 self.getLSforNumber()
             }else{
@@ -741,7 +741,7 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func saveUsersDefaults() {
-        let txtLogin = self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
+//        let txtLogin = self.LoginText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let txtPass = self.edPass.text?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed) ?? ""
         let pwd = getHash(pass: txtPass, salt: self.salt)
         let defaults = UserDefaults.standard

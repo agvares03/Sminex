@@ -14,9 +14,9 @@ protocol AppealUserDelegate: class {
     func update()
 }
 
-class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AppealUserDelegate {
+class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, AppealUserDelegate {
     
-    @IBOutlet private weak var collection:      UICollectionView!
+    @IBOutlet private weak var tableView:      UITableView!
     @IBOutlet private weak var activity:        UIActivityIndicatorView?
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -75,8 +75,8 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         updateUserInterface()
         prepareGroup?.enter()
         
-        collection.delegate                     = self
-        collection.dataSource                   = self
+        tableView.delegate                     = self
+        tableView.dataSource                   = self
         automaticallyAdjustsScrollViewInsets    = false
         
         startAnimator()
@@ -86,7 +86,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         }
         
         if xml_ != nil {
-            collection.alpha   = 0
+            tableView.alpha   = 0
             DispatchQueue.global(qos: .userInitiated).async {
                 self.parse(xml: self.xml_!)
             }
@@ -104,18 +104,18 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             refreshControl = UIRefreshControl()
             refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
             if #available(iOS 10.0, *) {
-                collection.refreshControl = refreshControl
+                tableView.refreshControl = refreshControl
             } else {
-                collection.addSubview(refreshControl!)
+                tableView.addSubview(refreshControl!)
             }
         }
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         if #available(iOS 10.0, *) {
-            collection.refreshControl = refreshControl
+            tableView.refreshControl = refreshControl
         } else {
-            collection.addSubview(refreshControl!)
+            tableView.addSubview(refreshControl!)
         }
         title = "Обращения"
     }
@@ -161,34 +161,23 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         tabBarController?.tabBar.isHidden = false
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(data.count)
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let cell = AppealUserCell.fromNib()
-        cell?.display(data[indexPath.row])
-        let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        print(CGSize(width: view.frame.size.width, height: size.height))
-        return CGSize(width: view.frame.size.width, height: size.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AppealUserCell", for: indexPath) as! AppealUserCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "AppealUserCell", for: indexPath) as! AppealUserCell
+        //        if data[indexPath.row] != nil{
         cell.display(data[indexPath.row])
+        //        }
         if indexPath.row == self.data.count - 1 {
             self.loadMore()
         }
         return cell
-        
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        startAnimator()
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.startAnimator()
         prepareTapped(indexPath)
     }
     // number of items to be fetched each time (i.e., database LIMIT)
@@ -231,10 +220,10 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     // append the new items to the data source for the table view
                     self.data += thisBatchOfItems
                     // reload the table view
-                    self.collection.reloadData()
+                    self.tableView.reloadData()
                     self.stopAnimatior()
                     if #available(iOS 10.0, *) {
-                        self.collection.refreshControl?.endRefreshing()
+                        self.tableView.refreshControl?.endRefreshing()
                     } else {
                         self.refreshControl?.endRefreshing()
                     }
@@ -418,7 +407,6 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 } else if (curr.responsiblePerson?.contains("иректор"))! || (curr.name?.contains("иректор"))! || (curr.responsiblePerson?.containsIgnoringCase(find: "предложения"))! || (curr.name?.containsIgnoringCase(find: "предложения"))!{
                     name                = " Обращение к директору службы комфорта"
                 }
-                print(name, curr.name, curr.responsiblePerson, curr.dateFrom)
                 newData.append( AppealUserCellData(title: name,
                                                  desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
                                                  icon: icon,
@@ -477,13 +465,13 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                     }
                 }
                 
-                self.collection.reloadData()
+                self.tableView.reloadData()
                 
                 if self.requestId_ != "" {
                     for (index, item) in self.data.enumerated() {
                         if item.id == self.requestId_ {
-                            if self.collection != nil {
-                                self.collectionView(self.collection!, didSelectItemAt: IndexPath(row: index, section: 0))
+                            if self.tableView != nil {
+                                self.tableView(self.tableView, didSelectRowAt: IndexPath(row: index, section: 0))
                                 
                             } else {
                                 self.prepareTapped(IndexPath(row: index, section: 0))
@@ -494,7 +482,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 } else {
                     self.stopAnimatior()
                     if #available(iOS 10.0, *) {
-                        self.collection.refreshControl?.endRefreshing()
+                        self.tableView.refreshControl?.endRefreshing()
                     } else {
                         self.refreshControl?.endRefreshing()
                     }
@@ -584,7 +572,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 }
                 self.Appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: row.emails ?? "", desc: row.text!, imagesUrl: images)
                 self.reqId = row.id ?? ""
-                if self.collection != nil {
+                if self.tableView != nil {
                     self.performSegue(withIdentifier: "showAppeal", sender: self)
                 }
                 self.prepareGroup?.leave()
@@ -653,7 +641,7 @@ class AppealUser: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     }
 }
 
-final class AppealUserCell: UICollectionViewCell {
+final class AppealUserCell: UITableViewCell {
     
     @IBOutlet private weak var skTitleHeight: NSLayoutConstraint!
     @IBOutlet private weak var skTitleBottm: NSLayoutConstraint!
@@ -668,6 +656,7 @@ final class AppealUserCell: UICollectionViewCell {
     private var type: String?
     
     fileprivate func display(_ item: AppealUserCellData) {
+        desc.isHidden = false
         if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
             desc.text = "Добавлен файл"
         }else{
@@ -684,13 +673,13 @@ final class AppealUserCell: UICollectionViewCell {
             stickTitle.text = ""
             
         } else {
-            skTitleBottm.constant = 8
-            skTitleHeight.constant = 30
+            skTitleBottm.constant = 15
+            skTitleHeight.constant = 42
             stickTitle.text = item.stickTitle
             let k = stickTitle.calculateMaxLines()
             if k == 1{
-                skTitleBottm.constant = 8
-                skTitleHeight.constant = 15
+                skTitleBottm.constant = 15
+                skTitleHeight.constant = 21
             }
         }
         
@@ -706,6 +695,16 @@ final class AppealUserCell: UICollectionViewCell {
             
         } else {
             back.isHidden = true
+            stickTitle.text = item.desc
+            desc.text = ""
+            desc.isHidden = true
+            skTitleBottm.constant = -25
+            skTitleHeight.constant = 42
+            let k = stickTitle.calculateMaxLines()
+            if k == 1{
+                skTitleBottm.constant = -25
+                skTitleHeight.constant = 21
+            }
         }
         
         let currTitle = item.title
@@ -719,21 +718,20 @@ final class AppealUserCell: UICollectionViewCell {
         } else {
             title.text = item.title
         }
-        print(item.title, desc.text)
     }
     
-    class func fromNib() -> AppealUserCell? {
-        var cell: AppealUserCell?
-        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
-        views?.forEach {
-            if let view = $0 as? AppealUserCell {
-                cell = view
-            }
-        }
-        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
-        return cell
-    }
+//    class func fromNib() -> AppealUserCell? {
+//        var cell: AppealUserCell?
+//        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
+//        views?.forEach {
+//            if let view = $0 as? AppealUserCell {
+//                cell = view
+//            }
+//        }
+//        cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
+//        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
+//        return cell
+//    }
 }
 
 private final class AppealUserCellData {

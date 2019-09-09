@@ -383,7 +383,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             if phone.first == "8" && phone.count > 10{
                 phone.removeFirst()
             }else if phone.first == "+" && phone.count > 10{
-                phone.replacingOccurrences(of: "+7", with: "")
+                phone = phone.replacingOccurrences(of: "+7", with: "")
             }
             edContact.text = phone
         }

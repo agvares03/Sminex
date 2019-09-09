@@ -318,7 +318,7 @@ final class RegistrationSminexEnterPassword: UIViewController, UIGestureRecogniz
             var request = URLRequest(url: URL(string: Server.SERVER + Server.ENTER + "login=" + txtLogin + "&pwd=" + pwd + "&addBcGuid=1")!)
             request.httpMethod = "GET"
             
-            print(request.url)
+//            print(request.url)
             
             URLSession.shared.dataTask(with: request) {
                 data, response, error in

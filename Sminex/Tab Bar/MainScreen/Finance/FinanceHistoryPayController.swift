@@ -187,7 +187,7 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
                                                         var bill_ident   = ""
                                                         var bill_idPay   = ""
                                                         var bill_status  = ""
-                                                        var bill_desc    = ""
+//                                                        var bill_desc    = ""
                                                         var bill_sum     = ""
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
                                                         //                                                        print(json)
@@ -215,9 +215,9 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
                                                                         if obj.key == "Status" {
                                                                             bill_status = obj.value as! String
                                                                         }
-                                                                        if obj.key == "Desc" {
-                                                                            bill_desc = obj.value as! String
-                                                                        }
+//                                                                        if obj.key == "Desc" {
+//                                                                            bill_desc = obj.value as! String
+//                                                                        }
                                                                         if obj.key == "Sum" {
                                                                             bill_sum = String(describing: obj.value as! NSNumber)
                                                                         }
@@ -281,7 +281,8 @@ class HistoryPayCell: UITableViewCell {
     
     fileprivate func display(_ item: HistoryPayCellData) {
         if item.payType == 0{
-            let date1: String = item.date.substring(to: item.date.index(item.date.endIndex, offsetBy: -9))
+//            let date1: String = item.date.substring(to: item.date.index(item.date.endIndex, offsetBy: -9))
+            let date1: String = String(item.date[..<item.date.index(item.date.endIndex, offsetBy: -9)])
             if !item.sum.contains("."){
                 self.summ.text = item.sum + ".00"
             }else{

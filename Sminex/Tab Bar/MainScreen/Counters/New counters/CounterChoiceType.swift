@@ -163,7 +163,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Counters" {
-            let vc     = segue.destination as! CountersTableNew
+//            let vc     = segue.destination as! CountersTableNew
 //            vc.data_   = meterArr
 //            vc.period_ = periods
         }else if segue.identifier == Segues.fromCounterTableVC.toHistory {

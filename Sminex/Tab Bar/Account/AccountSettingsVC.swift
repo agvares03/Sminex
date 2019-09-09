@@ -417,7 +417,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         saveButton.isHidden = false
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    @objc private func textFieldDidChange(_ textField: UITextField) {
         
         if contactNumber.text == "" {
             contactLabel.isHidden = true

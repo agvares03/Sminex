@@ -26,9 +26,9 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
     }
     
     @IBAction private func sendNotification(_ sender: UIButton){
-        if sender != nil {
+//        if sender != nil {
             view.endEditing(true)
-        }
+//        }
         picker.isHidden     = false
         pickerHeight.constant = 185
     }
