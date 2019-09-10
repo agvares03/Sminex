@@ -105,7 +105,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             
             #if DEBUG
-            print("счетчики:", String(data: data!, encoding: .utf8)!)
+//            print("счетчики:", String(data: data!, encoding: .utf8)!)
             #endif
             
             if (String(data: data!, encoding: .utf8)?.contains(find: "error"))! {

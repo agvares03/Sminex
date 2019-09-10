@@ -66,7 +66,7 @@ final class CounterCellNew: UICollectionViewCell {
                 dat.removeLast()
             }
         }
-        let dat1 = dat.components(separatedBy: ".")
+        var dat1 = dat.components(separatedBy: ".")
         dat = dat1[0] + " " + getNameAndMonth(dat1[1]) + " " + dat1[2]
         dateSend.text = dat
         dateCheck.text = item.checkDate
@@ -272,27 +272,27 @@ final class CounterCellNew: UICollectionViewCell {
     
     private func getNameAndMonth(_ number_month: String) -> String {
         
-        if number_month == "1" {
+        if number_month == "01" || number_month == "1"{
             return "Января"
-        } else if number_month == "2" {
+        } else if number_month == "02"  || number_month == "2"{
             return "Февраля"
-        } else if number_month == "3" {
+        } else if number_month == "03"  || number_month == "3"{
             return "Марта"
-        } else if number_month == "4" {
+        } else if number_month == "04"  || number_month == "4"{
             return "Апреля"
-        } else if number_month == "5" {
+        } else if number_month == "05"  || number_month == "5"{
             return "Мая"
-        } else if number_month == "6" {
+        } else if number_month == "06"  || number_month == "6"{
             return "Июня"
-        } else if number_month == "7" {
+        } else if number_month == "07"  || number_month == "7"{
             return "Июля"
-        } else if number_month == "8" {
+        } else if number_month == "08"  || number_month == "8"{
             return "Августа"
-        } else if number_month == "9" {
+        } else if number_month == "09"  || number_month == "9"{
             return "Сентября"
-        } else if number_month == "10" {
+        } else if number_month == "10"  || number_month == "10"{
             return "Октября"
-        } else if number_month == "11" {
+        } else if number_month == "11"  || number_month == "11"{
             return "Ноября"
         } else {
             return "Декабря"
