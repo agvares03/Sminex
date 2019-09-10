@@ -445,10 +445,10 @@
                                                     </constraints>
                                                 </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDa-YA-nRA">
-                                                    <rect key="frame" x="18" y="33" width="339" height="35"/>
+                                                    <rect key="frame" x="18" y="33" width="339" height="40"/>
                                                     <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="35" id="e2b-bj-tlm"/>
+                                                        <constraint firstAttribute="height" constant="40" id="e2b-bj-tlm"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <state key="normal" title="Оплатить квитанцию">
@@ -652,12 +652,12 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IGR-fh-ZkV">
-                                                            <rect key="frame" x="20" y="111" width="315" height="35"/>
+                                                            <rect key="frame" x="20" y="111" width="315" height="40"/>
                                                             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="35" id="k9b-Wb-PsB"/>
+                                                                <constraint firstAttribute="height" constant="40" id="k9b-Wb-PsB"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <state key="normal" title="Оплатить">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
@@ -671,13 +671,13 @@
                                                             </connections>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*До 31.01.2018*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bwG-Mu-38N">
-                                                            <rect key="frame" x="20" y="171" width="110" height="19"/>
+                                                            <rect key="frame" x="20" y="171" width="110" height="29"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XXx-T6-Rmn">
-                                                            <rect key="frame" x="253" y="164" width="59" height="33"/>
+                                                            <rect key="frame" x="253" y="169" width="59" height="33"/>
                                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                                             <state key="normal" title="QR-код">
                                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -688,7 +688,7 @@
                                                             </connections>
                                                         </button>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icQrCode" translatesAutoresizingMaskIntoConstraints="NO" id="7wt-5K-hNa">
-                                                            <rect key="frame" x="320" y="173" width="15" height="15"/>
+                                                            <rect key="frame" x="320" y="178" width="15" height="15"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="15" id="9nl-st-qAq"/>
                                                                 <constraint firstAttribute="height" constant="15" id="hd3-KM-wyp"/>
@@ -741,7 +741,7 @@
                                                         <constraint firstItem="bwG-Mu-38N" firstAttribute="top" secondItem="RUu-no-Ka1" secondAttribute="bottom" constant="75" id="jvK-mV-jxY"/>
                                                         <constraint firstAttribute="height" constant="200" id="lW1-lG-hth"/>
                                                         <constraint firstItem="YHQ-jg-v5t" firstAttribute="top" secondItem="V8I-Tv-aEa" secondAttribute="top" constant="20" id="mXj-wF-shs"/>
-                                                        <constraint firstItem="bwG-Mu-38N" firstAttribute="top" secondItem="IGR-fh-ZkV" secondAttribute="bottom" constant="25" id="o0U-Q8-sfx"/>
+                                                        <constraint firstItem="bwG-Mu-38N" firstAttribute="top" secondItem="IGR-fh-ZkV" secondAttribute="bottom" constant="20" id="q3g-6J-436"/>
                                                         <constraint firstItem="7wt-5K-hNa" firstAttribute="trailing" secondItem="IGR-fh-ZkV" secondAttribute="trailing" id="smR-IP-Ags"/>
                                                         <constraint firstItem="RUu-no-Ka1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="V8I-Tv-aEa" secondAttribute="leading" constant="20" id="v3Q-X4-AgU"/>
                                                         <constraint firstItem="bwG-Mu-38N" firstAttribute="leading" secondItem="IGR-fh-ZkV" secondAttribute="leading" id="wPn-7h-ae5"/>
@@ -1527,11 +1527,11 @@
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rfk-7s-WDa"/>
-        <segue reference="Uw4-h9-Yot"/>
-        <segue reference="ePG-cd-LPa"/>
+        <segue reference="1Br-lY-lXV"/>
+        <segue reference="4n2-x9-AVr"/>
+        <segue reference="UqP-vz-sNh"/>
         <segue reference="M1z-fP-A6K"/>
-        <segue reference="pwy-L0-UOd"/>
-        <segue reference="IJ7-Wm-IW6"/>
+        <segue reference="m9y-y7-qtt"/>
+        <segue reference="JVI-Y8-j4K"/>
     </inferredMetricsTieBreakers>
 </document>

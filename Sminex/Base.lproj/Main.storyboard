@@ -127,14 +127,14 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ContactsCell" id="zUX-rX-bYQ" customClass="ContactsCell" customModule="Sminex" customModuleProvider="target">
-                                        <rect key="frame" x="27.5" y="53" width="320" height="336"/>
+                                        <rect key="frame" x="27.5" y="53" width="320" height="330"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="336"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="330"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pUE-ud-H2n">
-                                                    <rect key="frame" x="16" y="28" width="288" height="303"/>
+                                                    <rect key="frame" x="16" y="28" width="288" height="297"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Консьерж/Служба комфорта" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C2z-Sv-Swg">
                                                             <rect key="frame" x="15" y="10" width="265" height="48"/>
@@ -259,12 +259,12 @@
                                                             </constraints>
                                                         </view>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XzP-zv-Sgt">
-                                                            <rect key="frame" x="15" y="245" width="260" height="48"/>
+                                                            <rect key="frame" x="15" y="245" width="260" height="42"/>
                                                             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="48" id="KxB-8N-Kbt"/>
+                                                                <constraint firstAttribute="height" constant="42" id="KxB-8N-Kbt"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                             <state key="normal" title="Написать">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
@@ -281,7 +281,6 @@
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="61v-U7-DGx" firstAttribute="leading" secondItem="j1Q-iw-JfH" secondAttribute="leading" id="1AE-2X-Dkm"/>
-                                                        <constraint firstAttribute="bottom" secondItem="XzP-zv-Sgt" secondAttribute="bottom" constant="10" id="2tu-ab-czA"/>
                                                         <constraint firstItem="61v-U7-DGx" firstAttribute="trailing" secondItem="j1Q-iw-JfH" secondAttribute="trailing" id="4e0-xc-4M2"/>
                                                         <constraint firstItem="C2z-Sv-Swg" firstAttribute="top" secondItem="pUE-ud-H2n" secondAttribute="top" constant="10" id="Fr9-Yr-Bcb"/>
                                                         <constraint firstItem="1QD-6t-Zcx" firstAttribute="trailing" secondItem="j1Q-iw-JfH" secondAttribute="trailing" id="HCs-iB-rOK"/>
@@ -297,6 +296,7 @@
                                                         <constraint firstItem="XzP-zv-Sgt" firstAttribute="trailing" secondItem="wPn-ni-vk1" secondAttribute="trailing" id="oZ3-36-wgK"/>
                                                         <constraint firstItem="i0v-Bq-8K7" firstAttribute="leading" secondItem="id5-KN-Stk" secondAttribute="leading" id="qV5-2f-TIx"/>
                                                         <constraint firstItem="XzP-zv-Sgt" firstAttribute="leading" secondItem="j1Q-iw-JfH" secondAttribute="leading" id="r2B-NN-zOb"/>
+                                                        <constraint firstAttribute="bottom" secondItem="XzP-zv-Sgt" secondAttribute="bottom" constant="10" id="v9g-Qm-xlh"/>
                                                         <constraint firstItem="1QD-6t-Zcx" firstAttribute="leading" secondItem="j1Q-iw-JfH" secondAttribute="leading" id="vnG-Va-j8E"/>
                                                         <constraint firstItem="1QD-6t-Zcx" firstAttribute="top" secondItem="j1Q-iw-JfH" secondAttribute="bottom" constant="8" id="z01-1X-YPp"/>
                                                     </constraints>
@@ -314,7 +314,7 @@
                                             <constraint firstAttribute="trailingMargin" secondItem="pUE-ud-H2n" secondAttribute="trailing" constant="8" id="KAm-do-QWe"/>
                                             <constraint firstAttribute="bottom" secondItem="pUE-ud-H2n" secondAttribute="bottom" constant="5" id="PmA-nr-Y0s"/>
                                         </constraints>
-                                        <size key="customSize" width="320" height="336"/>
+                                        <size key="customSize" width="320" height="330"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                                         </userDefinedRuntimeAttributes>
@@ -863,12 +863,12 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5d-Rz-0GF">
-                                                    <rect key="frame" x="16" y="91" width="285" height="43"/>
+                                                    <rect key="frame" x="16" y="92" width="285" height="42"/>
                                                     <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="43" id="yOa-61-BeY"/>
+                                                        <constraint firstAttribute="height" constant="42" id="yOa-61-BeY"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <state key="normal" title="Перейти к опросу">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
@@ -1072,7 +1072,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="aRA-ua-uD0"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <state key="normal" title="Оплатить">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
@@ -1164,12 +1164,12 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wmi-Re-TJb">
-                                                    <rect key="frame" x="16" y="85" width="277" height="43"/>
+                                                    <rect key="frame" x="16" y="86" width="277" height="42"/>
                                                     <color key="backgroundColor" red="0.0" green="0.47843137254901957" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="43" id="uSb-r3-aks"/>
+                                                        <constraint firstAttribute="height" constant="42" id="uSb-r3-aks"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <state key="normal" title="Передать показания">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
@@ -1825,14 +1825,14 @@
         <image name="sminex_logo.png" width="582" height="126"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="N5g-VE-Zg6"/>
-        <segue reference="8he-B8-Gnd"/>
-        <segue reference="Lrg-1z-tbA"/>
-        <segue reference="AB9-zB-ayT"/>
-        <segue reference="t3B-Fb-YCZ"/>
+        <segue reference="cut-Ue-rY9"/>
+        <segue reference="Ggi-Bk-Rzm"/>
+        <segue reference="efl-bX-pxf"/>
+        <segue reference="E5J-g1-PDx"/>
+        <segue reference="JHZ-fd-xvP"/>
         <segue reference="6VF-iA-wXk"/>
-        <segue reference="5gl-5c-IU0"/>
-        <segue reference="BjC-Ae-fyV"/>
-        <segue reference="9hd-uD-Ovc"/>
+        <segue reference="7Ci-na-4TA"/>
+        <segue reference="bJH-94-Q3L"/>
+        <segue reference="OmP-vx-cpo"/>
     </inferredMetricsTieBreakers>
 </document>

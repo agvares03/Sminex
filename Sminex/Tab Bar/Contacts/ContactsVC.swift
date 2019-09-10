@@ -231,14 +231,14 @@ final class ContactsCell: UICollectionViewCell {
         self.delegate = delegate
         title.text = item.name
         desc.text  = item.description
-        sendBtnHeight.constant = 45
+        sendBtnHeight.constant = 42
 //        if item.name?.contains(find: "оддержка") ?? false {
 //            item.email = ""
 //        }
         if item.isVisibleCreate! == false{
             sendBtnHeight.constant = 0
         }else{
-            sendBtnHeight.constant = 45
+            sendBtnHeight.constant = 42
         }
         if item.phone != nil && item.phone != ""{
             phoneHeight.constant = 70.5
