@@ -96,8 +96,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             center.requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
         }else{
             UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-            UIApplication.shared.registerForRemoteNotifications()
         }
+        UIApplication.shared.registerForRemoteNotifications()
     }
 
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
