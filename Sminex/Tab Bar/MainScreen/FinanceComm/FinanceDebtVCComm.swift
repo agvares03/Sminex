@@ -412,6 +412,7 @@ final class FinanceDebtCommHeader: UICollectionReusableView {
         }
         if sum.first == "-" {
             sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+            self.obj_sum.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
         }
         self.title.text = title
         self.obj_sum.text = sum.replacingOccurrences(of: ".", with: ",") + " ₽"
@@ -432,6 +433,7 @@ final class FinanceDebtCommCell: UICollectionViewCell {
         }
         if sum.first == "-" {
             sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+            self.desc.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
         }
         self.title.text = title
         self.desc.text = sum.replacingOccurrences(of: ".", with: ",")

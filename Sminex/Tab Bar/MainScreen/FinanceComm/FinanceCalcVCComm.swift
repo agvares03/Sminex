@@ -611,6 +611,7 @@ final class FinanceCalcCommCell: UICollectionViewCell {
         }
         if sumD.first == "-" {
             sumD.insert(" ", at: sumD.index(sumD.startIndex, offsetBy: 1))
+            sumDebt.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
         }
         sumDebt.text = sumD.replacingOccurrences(of: ".", with: ",")
         
