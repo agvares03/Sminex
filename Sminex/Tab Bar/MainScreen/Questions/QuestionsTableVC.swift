@@ -103,7 +103,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if questions![indexPath.row].dateStart != ""{
+        if questions![indexPath.row].dateStart != "" && questions![indexPath.row].dateStart != nil && !(questions![indexPath.row].dateStart?.contains(find: "/"))!{
             return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 80)
         }else{
             return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 55)
@@ -215,7 +215,8 @@ final class QuestionsTableCell: UICollectionViewCell {
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var dateStart:   UILabel!
-    @IBOutlet weak var titleHeight: NSLayoutConstraint!
+    @IBOutlet weak var titleHeight:     NSLayoutConstraint!
+    @IBOutlet weak var dateHeight:      NSLayoutConstraint!
     
     fileprivate func display(_ item: QuestionDataJson) {
         
@@ -228,12 +229,14 @@ final class QuestionsTableCell: UICollectionViewCell {
             }
         }
         */
-        if item.dateStart != ""{
+        if item.dateStart != "" && item.dateStart != nil && !(item.dateStart?.contains(find: "/"))!{
             dateStart.text = "Опрос проводится с \(item.dateStart ?? "")"
             if item.dateStop != ""{
                 dateStart.text = "Опрос проводится с \(item.dateStart ?? "") по \(item.dateStop ?? "")"
             }
+            dateHeight.constant = 17
         }else{
+            dateHeight.constant = 0
             dateStart.text = ""
             dateStart.isHidden = true
         }

@@ -1713,6 +1713,7 @@ class SurveyCell: UICollectionViewCell {
     @IBOutlet private weak var questions:   UILabel!
     @IBOutlet private weak var divider:     UILabel!
     @IBOutlet private weak var dateStart:   UILabel!
+    @IBOutlet weak var dateHeight:      NSLayoutConstraint!
     
     @IBAction private func goButtonPressed(_ sender: UIButton) {
         delegate?.pressed(at: indexPath!)
@@ -1730,12 +1731,16 @@ class SurveyCell: UICollectionViewCell {
         questions.text   = item.question
         divider.isHidden = isLast
         
-        if item.dateStart != ""{
+        if item.dateStart != "" && item.dateStart != nil && !(item.dateStart.contains(find: "/")){
+            print(item.dateStart)
+            
             dateStart.text = "Опрос проводится с \(item.dateStart)"
             if item.dateStop != ""{
                 dateStart.text = "Опрос проводится с \(item.dateStart) по \(item.dateStop)"
             }
+            dateHeight.constant = 20.5
         }else{
+            dateHeight.constant = 0
             dateStart.text = ""
             dateStart.isHidden = true
         }

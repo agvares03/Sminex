@@ -893,6 +893,9 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опрос проводится с" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Hb-vn-3dQ">
                                                     <rect key="frame" x="16" y="33.5" width="273" height="20.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20.5" id="Mqj-1I-do0"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.49514431419999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -925,6 +928,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <outlet property="dateHeight" destination="Mqj-1I-do0" id="h5R-go-8e1"/>
                                             <outlet property="dateStart" destination="9Hb-vn-3dQ" id="7xe-Rz-UqF"/>
                                             <outlet property="divider" destination="Zgg-bt-2IZ" id="FZO-NE-bQC"/>
                                             <outlet property="questions" destination="Dxj-E5-gQN" id="I3d-a8-LN3"/>
