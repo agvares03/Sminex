@@ -104,6 +104,9 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if questions![indexPath.row].dateStart != "" && questions![indexPath.row].dateStart != nil && !(questions![indexPath.row].dateStart?.contains(find: "/"))!{
+            if questions![indexPath.row].dateStop != ""{
+                return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 95)
+            }
             return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 80)
         }else{
             return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 55)
@@ -230,11 +233,13 @@ final class QuestionsTableCell: UICollectionViewCell {
         }
         */
         if item.dateStart != "" && item.dateStart != nil && !(item.dateStart?.contains(find: "/"))!{
-            dateStart.text = "Опрос проводится с \(item.dateStart ?? "")"
-            if item.dateStop != ""{
-                dateStart.text = "Опрос проводится с \(item.dateStart ?? "") по \(item.dateStop ?? "")"
-            }
+            dateStart.text = "Опрос проводится с \(item.dateStart?.replacingOccurrences(of: " 00:00:00", with: "") ?? "")"
             dateHeight.constant = 17
+            if item.dateStop != ""{
+                dateStart.text = "Опрос проводится с \(item.dateStart!.replacingOccurrences(of: " 00:00:00", with: "")) по \(item.dateStop!.replacingOccurrences(of: " 00:00:00", with: ""))"
+                dateHeight.constant = 42
+            }
+            dateStart.isHidden = false
         }else{
             dateHeight.constant = 0
             dateStart.text = ""

@@ -44,6 +44,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet private weak var collection: UICollectionView!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     @IBAction private func payButtonPressed(_ sender: UIButton) {
         if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
@@ -222,6 +229,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notifiPressed = false
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),
@@ -1732,13 +1740,13 @@ class SurveyCell: UICollectionViewCell {
         divider.isHidden = isLast
         
         if item.dateStart != "" && item.dateStart != nil && !(item.dateStart.contains(find: "/")){
-            print(item.dateStart)
-            
-            dateStart.text = "Опрос проводится с \(item.dateStart)"
+            dateStart.text = "Опрос проводится с \(item.dateStart.replacingOccurrences(of: " 00:00:00", with: ""))"
+            dateHeight.constant = 17
             if item.dateStop != ""{
-                dateStart.text = "Опрос проводится с \(item.dateStart) по \(item.dateStop)"
+                dateStart.text = "Опрос проводится с \(item.dateStart.replacingOccurrences(of: " 00:00:00", with: "")) по \(item.dateStop.replacingOccurrences(of: " 00:00:00", with: ""))"
+                dateHeight.constant = 42
             }
-            dateHeight.constant = 20.5
+            dateStart.isHidden = false
         }else{
             dateHeight.constant = 0
             dateStart.text = ""

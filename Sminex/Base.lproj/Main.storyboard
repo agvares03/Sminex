@@ -891,7 +891,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опрос проводится с" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Hb-vn-3dQ">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опрос проводится с" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Hb-vn-3dQ">
                                                     <rect key="frame" x="16" y="33.5" width="273" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20.5" id="Mqj-1I-do0"/>
@@ -1340,7 +1340,7 @@
                     <navigationItem key="navigationItem" title="JAZZ by SMINEX" id="kF1-CK-0xZ">
                         <barButtonItem key="rightBarButtonItem" image="notifi1" width="50" id="fiD-t7-Dbl">
                             <connections>
-                                <segue destination="2uc-1H-2RF" kind="show" id="OmP-vx-cpo"/>
+                                <action selector="goNotifi:" destination="1ZO-FU-KIK" id="ofE-e8-Yar"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1365,6 +1365,7 @@
                         <segue destination="0wj-KN-t0z" kind="show" identifier="payComm" id="v3e-6m-Ep5"/>
                         <segue destination="Ges-82-KDd" kind="show" identifier="financeComm" id="cut-Ue-rY9"/>
                         <segue destination="In5-Jx-mRX" kind="show" identifier="toServiceUK" id="HpL-d8-eJS"/>
+                        <segue destination="2uc-1H-2RF" kind="show" identifier="goNotifi" id="WEl-HK-CAh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iaa-22-iNE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1837,6 +1838,6 @@
         <segue reference="6VF-iA-wXk"/>
         <segue reference="7Ci-na-4TA"/>
         <segue reference="bJH-94-Q3L"/>
-        <segue reference="OmP-vx-cpo"/>
+        <segue reference="WEl-HK-CAh"/>
     </inferredMetricsTieBreakers>
 </document>
