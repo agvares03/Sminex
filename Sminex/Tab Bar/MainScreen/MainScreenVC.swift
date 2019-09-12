@@ -931,7 +931,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let login = UserDefaults.standard.string(forKey: "login") ?? ""
             let pass  = UserDefaults.standard.string(forKey: "pwd") ?? ""
             
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
+//            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&onlyLast=1")!)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             request.httpMethod = "GET"
             print(request)
             
@@ -943,7 +944,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 guard data != nil else { return }
                 
-                print(String(data: data!, encoding: .utf8) ?? "")
+//                print(String(data: data!, encoding: .utf8) ?? "")
                 
                 if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
                     self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
@@ -973,13 +974,20 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 
                 var commentCount = 0
+                var rows2: [Request] = []
                 rows.forEach { row in
-                    var isAnswered = (rowComms[row.id!]?.count ?? 0) <= 0 ? false : true
-                    
-                    var lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
+                    let lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
                     if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") && lastComm?.name != nil{
                         commentCount += 1
                     }
+                    if rows2.count < 3{
+                        rows2.append(row)
+                    }
+                }
+                rows2.forEach { row in
+                    var isAnswered = (rowComms[row.id!]?.count ?? 0) <= 0 ? false : true
+                    
+                    var lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
                     let df = DateFormatter()
                     df.dateFormat = "dd.MM.yyyy HH:mm:ss"
                     let addReq = df.date(from: row.added!)

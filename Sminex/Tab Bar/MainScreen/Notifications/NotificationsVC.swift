@@ -39,7 +39,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         let _ = getRequests()
         tableView.delegate = self
         tableView.dataSource = self
-        fetchedResultsController = funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
+        fetchedResultsController = self.funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date1"], predicateFormat: nil)
         do {
             try fetchedResultsController?.performFetch()
         } catch {
@@ -60,24 +60,11 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
 //        timer?.invalidate()
     }
     
-//    @objc func reload() {
-//        //        let db = DB()
-//        //        if (db.isNotification()) {
-//        DispatchQueue.main.async(execute: {
-//            self.load_new_data()
-//        })
-//        //        }
-//    }
-//    @objc func ref() {
-////        startAnimation()
-//        refresh(refreshControl!)
-//    }
     var refresh = false
     @objc private func refresh(_ sender: UIRefreshControl) {
         if !refresh{
             refresh = true
             tableView.isUserInteractionEnabled = false
-            UserDefaults.standard.addObserver(self, forKeyPath: "successParse", options:NSKeyValueObservingOptions.new, context: nil)
             DispatchQueue.global(qos: .userInitiated).async {
                 DispatchQueue.global(qos: .background).async {
                     sleep(2)
@@ -122,7 +109,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func load_data() {
-        fetchedResultsController = funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
+        fetchedResultsController = self.funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date1"], predicateFormat: nil)
         do {
             try fetchedResultsController?.performFetch()
         } catch {
@@ -130,22 +117,22 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    func funcFetchedResultsController(entityName: String, keysForSort: [String], predicateFormat: String? = nil) -> NSFetchedResultsController<Counters> {
+    func funcFetchedResultsController(entityName: String, keysForSort: [String], predicateFormat: String? = nil) -> NSFetchedResultsController<Notifications> {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-        
+
         var sortDescriptors = [NSSortDescriptor]()
         for key in keysForSort {
             let sortDescriptor = NSSortDescriptor(key: key, ascending: false)
             sortDescriptors.append(sortDescriptor)
         }
         fetchRequest.sortDescriptors = sortDescriptors
-        
+
         if predicateFormat != nil {
             fetchRequest.predicate = NSPredicate(format: predicateFormat!)
         }
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.instance.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        return fetchedResultsController as! NSFetchedResultsController<Counters>
+
+        return fetchedResultsController as! NSFetchedResultsController<Notifications>
     }
     
     func updateUserInterface() {
@@ -166,6 +153,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController?.sections {
+            print(sections[section].numberOfObjects)
             return sections[section].numberOfObjects
         } else {
             return 0
@@ -183,9 +171,9 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             df.dateFormat = "dd.MM.yyyy HH:mm:ss"
             df.isLenient = true
             
-            cell.Date_push.text = dayDifference(from: df.date(from: push.date!) ?? Date(), style: "dd MMMM").contains(find: "Сегодня")
-                ? dayDifference(from: df.date(from: push.date!) ?? Date(), style: "HH:mm")
-                : dayDifference(from: df.date(from: push.date!) ?? Date(), style: "dd MMMM")
+            cell.Date_push.text = dayDifference(from: push.date1!, style: "dd MMMM").contains(find: "Сегодня")
+                ? dayDifference(from: push.date1!, style: "HH:mm")
+                : dayDifference(from: push.date1!, style: "dd MMMM")
         }
         return cell
     }
@@ -354,13 +342,18 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        fetchedResultsController = funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date"], predicateFormat: nil) as? NSFetchedResultsController<Notifications>
+        UserDefaults.standard.addObserver(self, forKeyPath: "successParse", options:NSKeyValueObservingOptions.new, context: nil)
+        fetchedResultsController = self.funcFetchedResultsController(entityName: "Notifications", keysForSort: ["date1"], predicateFormat: nil)
         do {
             try fetchedResultsController?.performFetch()
         } catch {
             print(error)
         }
         tableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        UserDefaults.standard.removeObserver(self, forKeyPath: "successParse", context: nil)
     }
     
     private func readNotifi() {

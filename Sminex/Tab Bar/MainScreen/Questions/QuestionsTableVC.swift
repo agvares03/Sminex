@@ -188,6 +188,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
             self.questions = filtered
+            TemporaryHolder.instance.menuQuesions = filtered.count
             }.resume()
     }
     

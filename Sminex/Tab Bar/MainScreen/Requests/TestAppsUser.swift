@@ -526,7 +526,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     return
                 }
                 #if DEBUG
-                                print(String(data: data!, encoding: .utf8)!)
+//                                print(String(data: data!, encoding: .utf8)!)
                 
                 #endif
                 let xml = XML.parse(data!)
@@ -541,7 +541,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         rowFiles.removeAll()
         let row = requests["Row"]
         self.rows.removeAll()
-        
+        var commentCount = 0
         DispatchQueue.global(qos: .userInitiated).async {
             
             row.forEach { row in
@@ -577,6 +577,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
                 var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
+                if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") && lastComm?.name != nil{
+                    commentCount += 1
+                }
                 let df = DateFormatter()
                 df.dateFormat = "dd.MM.yyyy HH:mm:ss"
                 let addReq = df.date(from: curr.added!)
@@ -755,6 +758,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     
                 }
             }
+            TemporaryHolder.instance.menuRequests = commentCount
             sleep(2)
             DispatchQueue.main.async {
                 self.createButton?.isUserInteractionEnabled = true
@@ -772,7 +776,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             DispatchQueue.main.async {
                 self.stopAnimatior()
                 
-                var type = self.data[indexPath.row].type
+                var type = self.fullData[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
 //                var itsNever: Bool = false
                 print(type)
@@ -789,10 +793,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 //                    type = "Гостевой пропуск"
                 //                }
                 
-                if self.data[indexPath.row].title.contains(find: "ропуск") {
+                if self.fullData[indexPath.row].title.contains(find: "ропуск") {
                     self.typeName = type
                     print(self.rows)
-                    let row = self.rows[self.data[indexPath.row].id]!
+                    let row = self.rows[self.fullData[indexPath.row].id]!
                     var persons = row.responsiblePerson ?? ""
                     
                     if persons == "" {
@@ -863,7 +867,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             }
                         }
                     }
-                    self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
+                    self.admission = AdmissionHeaderData(icon: self.fullData[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
                                                          gosNumber: auto, mark: mark,
@@ -877,12 +881,12 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     }
                     self.prepareGroup?.leave()
                     
-                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услуг"){
-                    let row = self.rows[self.data[indexPath.row].id]!
+                } else if self.fullData[indexPath.row].title.containsIgnoringCase(find: "услуг"){
+                    let row = self.rows[self.fullData[indexPath.row].id]!
                     var images: [String] = []
                     var dataServ: ServicesUKJson!
                     self.dataService.forEach{
-                        if $0.name == self.data[indexPath.row].desc || $0.name == self.data[indexPath.row].stickTitle{
+                        if $0.name == self.fullData[indexPath.row].desc || $0.name == self.fullData[indexPath.row].stickTitle{
                             dataServ = $0
                         }
                     }

@@ -417,7 +417,7 @@ final class DB: NSObject, XMLParserDelegate {
                                                         var date          = ""
                                                         var isReaded      = false
                                                         var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-                                                        print("JSON",json)
+//                                                        print("JSON",json)
                                                         
                                                         if let json_notifications = json["data"] {
                                                             let int_end = (json_notifications.count)!-1
@@ -455,6 +455,7 @@ final class DB: NSObject, XMLParserDelegate {
                                                                 }
                                                             }
                                                         }
+                                                        
                                                         UserDefaults.standard.set(true, forKey: "successParse")
                                                         TemporaryHolder.instance.menuNotifications = readedKol
                                                     } catch let error as NSError {
@@ -471,7 +472,10 @@ final class DB: NSObject, XMLParserDelegate {
         managedObject.name             = name
         managedObject.type             = type
         managedObject.ident            = ident
+        let df = DateFormatter()
         managedObject.date             = date
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        managedObject.date1            = df.date(from: date)
         managedObject.isReaded         = isReaded
         
         CoreDataManager.instance.saveContext()
