@@ -146,17 +146,57 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
         updateUserInterface()
         if UserDefaults.standard.bool(forKey: "openNotification"){
-            DispatchQueue.main.async {
-                UserDefaults.standard.set(false, forKey: "openNotification")
-                if self.activeQuestionCount == 1{
-                    UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
-                }else{
-                    UserDefaults.standard.set("У вас есть непройденные опросы", forKey: "titleNotifi")
+            UserDefaults.standard.set(false, forKey: "openNotification")
+            if (UserDefaults.standard.string(forKey: "typeNotifi") == "question"){
+                DispatchQueue.main.async {
+                    UserDefaults.standard.set(false, forKey: "openNotification")
+                    if self.activeQuestionCount == 1{
+                        UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
+                    }else{
+                        UserDefaults.standard.set("У вас есть непройденные опросы", forKey: "titleNotifi")
+                    }
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomNotifiAlertController") as! CustomNotifiAlert
+                    vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+                    self.addChildViewController(vc)
+                    self.view.addSubview(vc.view)
                 }
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomNotifiAlertController") as! CustomNotifiAlert
-                vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-                self.addChildViewController(vc)
-                self.view.addSubview(vc.view)
+            }else if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
+                self.requestId = UserDefaults.standard.string(forKey: "identNotifi") ?? ""
+                appsUser = TestAppsUser()
+                appsUser?.dataService = dataService
+                appsUser?.requestId_ = requestId
+                appsUser?.xml_ = mainScreenXml
+                appsUser?.isFromMain = true
+                appsUser?.delegate = self
+                appsUser?.prepareGroup = DispatchGroup()
+                appsUser?.viewDidLoad()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.appsUser?.prepareGroup?.wait()
+                    DispatchQueue.main.async {
+                        if self.appsUser?.admission != nil {
+                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
+                        } else if self.appsUser?.techService != nil {
+                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+                        } else {
+                            self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                        }
+                    }
+                }
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "NEWS") {
+                filteredNews.forEach{
+                    if String($0.newsId!) == UserDefaults.standard.string(forKey: "identNotifi") ?? ""{
+                        self.tappedNews = $0
+                    }
+                }
+                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "DEBT") {
+                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+                }else{
+                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
+                }
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "METER_VALUE") {
+                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
             }
         }
     }

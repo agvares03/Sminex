@@ -75,6 +75,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
                     UserDefaults.standard.set(true, forKey: "openNotification")
                     UserDefaults.standard.synchronize()
+                }else{
+                    //                UserDefaults.standard.set(true, forKey: "newNotifi")
+                    UserDefaults.standard.set(message, forKey: "bodyNotifi")
+                    UserDefaults.standard.set(title, forKey: "titleNotifi")
+                    UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
+                    UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
+                    UserDefaults.standard.set(true, forKey: "openNotification")
+                    UserDefaults.standard.synchronize()
                 }
             }
         }
@@ -140,9 +148,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(title, forKey: "titleNotifi")
             UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
             UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
-            if (notifiType?.containsIgnoringCase(find: "question"))!{
-                UserDefaults.standard.set(true, forKey: "openNotification")
-            }
+//            if (notifiType?.containsIgnoringCase(find: "question"))!{
+//                UserDefaults.standard.set(true, forKey: "openNotification")
+//            }
             UserDefaults.standard.synchronize()
             
             if UIApplication.shared.applicationState == .active {
@@ -180,6 +188,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 body = alert["body"]!
                 title = alert["title"]!
             }
+            
             if UIApplication.shared.applicationState == .active {
                 //TODO: Handle foreground notification
                 let content = UNMutableNotificationContent()
@@ -204,6 +213,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Schedule the notification.
                 let center = UNUserNotificationCenter.current()
                 center.add(request)
+            }
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let homePage = storyboard.instantiateViewController(withIdentifier: "HomePageVC") as? MainScreenVC{
+                self.window?.rootViewController = homePage
             }
         }
     }
