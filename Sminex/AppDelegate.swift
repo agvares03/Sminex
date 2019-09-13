@@ -148,9 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(title, forKey: "titleNotifi")
             UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
             UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
-//            if (notifiType?.containsIgnoringCase(find: "question"))!{
-//                UserDefaults.standard.set(true, forKey: "openNotification")
-//            }
+            UserDefaults.standard.set(true, forKey: "openNotification")
             UserDefaults.standard.synchronize()
             
             if UIApplication.shared.applicationState == .active {

@@ -95,7 +95,7 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
     public var isCreated_  = false
     public var isFromMain_ = false
     public var isFromNotifi_ = false
-    public var data_: ServiceAppHeaderData = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: UIImage(named: "account")!, selectPrice: true, selectPlace: true)
+    public var data_: ServiceAppHeaderData = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: UIImage(named: "account")!, selectPrice: true, selectPlace: true, isReaded: "")
     public var serviceData: ServicesUKJson?
     public var comments_: [ServiceAppCommentCellData] = []
     
@@ -143,6 +143,35 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
         } else {
             self.refreshControl?.endRefreshing()
         }
+        if data_.isReaded == "0"{
+            sendRead()
+        }
+    }
+    
+    private func sendRead() {
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let idGroup = reqId_.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetQuestionGroupReadedState.ashx?" + "groupID=" + idGroup + "&accID=" + id)!)
+        request.httpMethod = "GET"
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            
+            #endif
+            TemporaryHolder.instance.menuRequests = TemporaryHolder.instance.menuRequests - 1
+            }.resume()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -843,8 +872,9 @@ final class ServiceAppHeaderData: ServiceAppProtocol {
     let soonPossible:   Bool
     let selectPrice:    Bool
     let selectPlace:    Bool
+    let isReaded:       String
     
-    init(icon: UIImage, price: String, mobileNumber: String, servDesc: String, email: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String, placeHome: String, soonPossible: Bool, title: String, servIcon: UIImage, selectPrice: Bool, selectPlace: Bool) {
+    init(icon: UIImage, price: String, mobileNumber: String, servDesc: String, email: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String, placeHome: String, soonPossible: Bool, title: String, servIcon: UIImage, selectPrice: Bool, selectPlace: Bool, isReaded: String) {
         
         self.icons          = icon
         self.servDesc       = servDesc
@@ -862,6 +892,7 @@ final class ServiceAppHeaderData: ServiceAppProtocol {
         self.servIcon       = servIcon
         self.selectPrice    = selectPrice
         self.selectPlace    = selectPlace
+        self.isReaded       = isReaded
     }
 }
 

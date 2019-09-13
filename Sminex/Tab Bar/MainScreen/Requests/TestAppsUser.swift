@@ -526,7 +526,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     return
                 }
                 #if DEBUG
-//                                print(String(data: data!, encoding: .utf8)!)
+                print(String(data: data!, encoding: .utf8)!)
                 
                 #endif
                 let xml = XML.parse(data!)
@@ -577,7 +577,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
                 var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
-                if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") && lastComm?.name != nil{
+                if curr.isReadedOnDevice == "0"{
                     commentCount += 1
                 }
                 let df = DateFormatter()
@@ -874,7 +874,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!)
+                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!, isReaded: row.isReadedOnDevice!)
                     self.reqId = row.id ?? ""
                     if self.table != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toAdmission, sender: self)
@@ -955,7 +955,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                 }
                             }
                         }
-                        self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
+                        self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!, isReaded: row.isReadedOnDevice!)
                         self.reqId = row.id ?? ""
                         if self.table != nil {
                             self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
@@ -1006,12 +1006,14 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             }
                         }
                     }
+                    print(row.isReadedOnDevice)
+                    
                     self.techService = ServiceHeaderData(icon: self.fullData[indexPath.row].icon,
                                                          problem: row.text ?? "",
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible)
+                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible, isReaded: row.isReadedOnDevice!)
                     self.reqId = row.id ?? ""
                     if self.table != nil {
                         self.performSegue(withIdentifier: Segues.fromAppsUser.toService, sender: self)

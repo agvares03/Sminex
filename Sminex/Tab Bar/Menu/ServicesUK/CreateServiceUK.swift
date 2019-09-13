@@ -242,7 +242,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 }
             }
         }
-        data = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: servicePrice.text ?? "", mobileNumber: edPhone.text ?? "", servDesc: serviceDesc.text ?? "", email: edEmail.text ?? "", date: dateFormatter.string(from: picker.date), status: "В ОБРАБОТКЕ", images: imagesArr, imagesUrl: [], desc: edProblem.text!, placeHome: place, soonPossible: extTime, title: data_?.name ?? "", servIcon: serviceIcon.image!, selectPrice: (data_?.selectCost)!, selectPlace: (data_?.selectPlace)!)
+        data = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: servicePrice.text ?? "", mobileNumber: edPhone.text ?? "", servDesc: serviceDesc.text ?? "", email: edEmail.text ?? "", date: dateFormatter.string(from: picker.date), status: "В ОБРАБОТКЕ", images: imagesArr, imagesUrl: [], desc: edProblem.text!, placeHome: place, soonPossible: extTime, title: data_?.name ?? "", servIcon: serviceIcon.image!, selectPrice: (data_?.selectCost)!, selectPlace: (data_?.selectPlace)!, isReaded: "1")
         uploadRequest()
         //        }
     }
@@ -742,7 +742,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             let vc = segue.destination as! ServiceAppVC
             vc.isCreated_ = true
             vc.serviceData = data_
-            vc.data_ = data ?? ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: serviceIcon.image!, selectPrice: true, selectPlace: true)
+            vc.data_ = data ?? ServiceAppHeaderData(icon: UIImage(named: "account")!, price: "", mobileNumber: "", servDesc: "", email: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", soonPossible: false, title: "", servIcon: serviceIcon.image!, selectPrice: true, selectPlace: true, isReaded: "")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }

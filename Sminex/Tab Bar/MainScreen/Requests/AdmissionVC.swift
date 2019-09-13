@@ -104,7 +104,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                                                                 date: "9 Сентября 10:00",
                                                                 status: "В ОБРАБОТКЕ",
                                                                 images: [],
-                                                                imagesUrl: [], desc: "", placeHome: "")
+                                                                imagesUrl: [], desc: "", placeHome: "", isReaded: "")
     public var comments_: [AdmissionCommentCellData] = []
     
     private var arr: [AdmissionProtocol] = []
@@ -152,6 +152,35 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
         } else {
             self.refreshControl?.endRefreshing()
         }
+        if data_.isReaded == "0"{
+            sendRead()
+        }
+    }
+    
+    private func sendRead() {
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let idGroup = reqId_.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetQuestionGroupReadedState.ashx?" + "groupID=" + idGroup + "&accID=" + id)!)
+        request.httpMethod = "GET"
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            
+            #endif
+            TemporaryHolder.instance.menuRequests = TemporaryHolder.instance.menuRequests - 1
+            }.resume()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -940,8 +969,9 @@ final class AdmissionHeaderData: AdmissionProtocol {
     var desc:           String
     var mark:           String
     let placeHome:      String
+    let isReaded:       String
     
-    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, mark: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String, placeHome: String) {
+    init(icon: UIImage, gosti: String, mobileNumber: String, gosNumber: String, mark: String, date: String, status: String, images: [UIImage], imagesUrl: [String], desc: String, placeHome: String, isReaded: String) {
         
         self.icons          = icon
         self.gosti          = gosti
@@ -954,6 +984,7 @@ final class AdmissionHeaderData: AdmissionProtocol {
         self.desc           = desc
         self.mark           = mark
         self.placeHome      = placeHome
+        self.isReaded       = isReaded
     }
 }
 

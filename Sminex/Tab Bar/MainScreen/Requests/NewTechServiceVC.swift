@@ -279,7 +279,7 @@ class NewTechServiceVC: UIViewController {
                                  problem: detailText,
                                  date: date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")),
                                  status: "В ОБРАБОТКЕ",
-                                 images: images, isPaid: "0", placeHome: "", soonPossible: false)
+                                 images: images, isPaid: "0", placeHome: "", soonPossible: false, isReaded: "1")
         uploadRequest()
     }
     
@@ -290,7 +290,7 @@ class NewTechServiceVC: UIViewController {
         if segue.identifier == Segues.fromCreateTechService.toService {
             let vc = segue.destination as! TechServiceVC
             vc.isCreate_ = true
-            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0", placeHome: "", soonPossible: false)
+            vc.data_ = data ?? ServiceHeaderData(icon: UIImage(), problem: "", date: "", status: "", isPaid: "0", placeHome: "", soonPossible: false, isReaded: "")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
         }

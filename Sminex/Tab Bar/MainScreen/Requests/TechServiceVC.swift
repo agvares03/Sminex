@@ -107,7 +107,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                                                           problem: "Нас топят соседи! Не можем с ними связаться. Срочно вызвайте сантехника",
                                                           date: "9 сентября 10:00",
                                                           status: "В ОБРАБОТКЕ",
-                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0", placeHome: "", soonPossible: false)
+                                                          images: [UIImage(named: "account")!, UIImage(named: "account")!, UIImage(named: "account")!], isPaid: "0", placeHome: "", soonPossible: false, isReaded: "")
     
     public var comments_: [ServiceCommentCellData] = []
     private var arr:    [TechServiceProtocol]    = []
@@ -164,6 +164,35 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         } else {
             self.refreshControl?.endRefreshing()
         }
+        print(data_.isReaded)
+        if data_.isReaded == "0"{
+            sendRead()
+        }
+    }
+    
+    private func sendRead() {
+        let idGroup = reqId_.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetRequestReadedState.ashx?" + "id=" + idGroup)!)
+        request.httpMethod = "GET"
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            
+            #endif
+            TemporaryHolder.instance.menuRequests = TemporaryHolder.instance.menuRequests - 1
+            }.resume()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -867,9 +896,10 @@ final class ServiceHeaderData: TechServiceProtocol {
     let imgsString: [String]
     let placeHome:  String
     let soonPossible: Bool
+    let isReaded:   String
 //    let desc:       String
     
-    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String, placeHome: String, soonPossible: Bool) {
+    init(icon: UIImage, problem: String, date: String, status: String, images: [UIImage] = [], imagesUrl: [String] = [], isPaid: String, placeHome: String, soonPossible: Bool, isReaded: String) {
         
         self.icon       = icon
         self.problem    = problem
@@ -880,6 +910,7 @@ final class ServiceHeaderData: TechServiceProtocol {
         self.isPaid     = isPaid
         self.placeHome  = placeHome
         self.soonPossible = soonPossible
+        self.isReaded   = isReaded
 //        self.desc       = desc
     }
 }

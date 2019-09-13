@@ -271,7 +271,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             UserDefaults.standard.set(false, forKey: "openNotification")
             if (UserDefaults.standard.string(forKey: "typeNotifi") == "question"){
                 DispatchQueue.main.async {
-                    UserDefaults.standard.set(false, forKey: "openNotification")
+//                    UserDefaults.standard.set(false, forKey: "openNotification")
                     if self.activeQuestionCount == 1{
                         UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
                     }else{
@@ -1016,8 +1016,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 var commentCount = 0
                 var rows2: [Request] = []
                 rows.forEach { row in
-                    let lastComm = (rowComms[row.id!]?.count ?? 0) <= 0 ? nil : rowComms[row.id!]?[(rowComms[row.id!]?.count ?? 1) - 1]
-                    if (lastComm?.name ?? "") != (UserDefaults.standard.string(forKey: "name") ?? "") && lastComm?.name != nil{
+                    if row.isReadedOnDevice == "0"{
                         commentCount += 1
                     }
                     if rows2.count < 3{

@@ -243,7 +243,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                            date: dateFormatter.string(from: picker.date),
                                            status: "В ОБРАБОТКЕ",
                                            images: images,
-                                           imagesUrl: [], desc: "", placeHome: place)
+                                           imagesUrl: [], desc: "", placeHome: place, isReaded: "1")
             }else{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
                                            gosti: edFio.text!,
@@ -252,7 +252,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                            date: dateFormatter.string(from: picker.date),
                                            status: "В ОБРАБОТКЕ",
                                            images: images,
-                                           imagesUrl: [], desc: edComment.text!, placeHome: place)
+                                           imagesUrl: [], desc: edComment.text!, placeHome: place, isReaded: "1")
             }
             
             uploadRequest()
@@ -955,7 +955,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if segue.identifier == Segues.fromCreateRequest.toAdmission {
             let vc = segue.destination as! AdmissionVC
             vc.isCreated_ = true
-            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", mark: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "")
+            vc.data_ = data ?? AdmissionHeaderData(icon: UIImage(), gosti: "", mobileNumber: "", gosNumber: "", mark: "", date: "", status: "", images: [], imagesUrl: [], desc: "", placeHome: "", isReaded: "")
             vc.reqId_ = reqId ?? ""
             vc.delegate = delegate
             vc.name_ = name_

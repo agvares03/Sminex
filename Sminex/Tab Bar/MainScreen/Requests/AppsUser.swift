@@ -579,7 +579,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!)
+                                                         imagesUrl: images, desc: row.text!, placeHome: row.premises!, isReaded: row.isReadedOnDevice!)
                     self.admissionComm = []
 //                    if row.text != ""{
 //                        self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
@@ -657,7 +657,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                     }else{
                         place = row.premises!
                     }
-                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.comment ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!)
+                    self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.comment ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!, isReaded: row.isReadedOnDevice!)
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
@@ -701,7 +701,7 @@ final class AppsUser: UIViewController, UICollectionViewDelegate, UICollectionVi
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
                                                          images: [],
-                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible)
+                                                         imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible, isReaded: row.isReadedOnDevice!)
                     
                     self.techServiceComm = []
                     self.rowComms[row.id!]!.forEach { comm in
@@ -950,6 +950,7 @@ struct Request {
     
     let isWait:                 String?
     let isReadedByClient:   	String?
+    let isReadedOnDevice:       String?
     let cusName:            	String?
     let idWorktype:         	String?
     let siteUrl: 	        	String?
@@ -1011,6 +1012,7 @@ struct Request {
     init(row: XML.Accessor) {
         isWait                  = row.attributes["isWait"]
         isReadedByClient        = row.attributes["isReadedByClient"]
+        isReadedOnDevice        = row.attributes["IsReadedOnDevice"]
         cusName                 = row.attributes["cusName"]
         idWorktype              = row.attributes["id_worktype"]
         siteUrl                 = row.attributes["SiteURL"]
