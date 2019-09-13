@@ -26,6 +26,7 @@ struct QuestionDataJson: JSONDecodable {
     let id:         Int?
     let dateStart:  String?
     let dateStop:   String?
+    let isReaded:   Bool?
     
     init?(json: JSON) {
         questions   = "Questions"   <~~ json
@@ -33,6 +34,7 @@ struct QuestionDataJson: JSONDecodable {
         id          = "ID"          <~~ json
         dateStart   = "DateStart"   <~~ json
         dateStop    = "DateStop"    <~~ json
+        isReaded    = "IsReaded"    <~~ json
     }
 }
 

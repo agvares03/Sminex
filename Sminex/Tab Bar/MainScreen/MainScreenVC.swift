@@ -1138,6 +1138,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             filtered.append(json)
                         }
                     }
+                    var kol = 0
                     if filtered.count == 0 {
                         self.questionSize = CGSize(width: 0, height: 0)
                         
@@ -1148,9 +1149,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             self.data[5] = [0:CellsHeaderData(title: "Опросы")]
                             var count = 1
                             filtered.forEach {
-                                
-                                
-                                
+                                if !$0.isReaded!{
+                                    kol += 1
+                                }
                                 var txt = " вопроса"
                                 let col_questions = ($0.questions?.count)!
                                 if (col_questions > 4) {
@@ -1188,7 +1189,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             UserDefaults.standard.set(self.activeQuestionCount, forKey: "activeQuestion")
                         }
                     }
-                    TemporaryHolder.instance.menuQuesions = filtered.count
+                    TemporaryHolder.instance.menuQuesions = kol
                     
                     DispatchQueue.main.sync {
                         self.collection.reloadData()

@@ -187,8 +187,14 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                     filtered.append(json)
                 }
             }
+            var kol = 0
+            filtered.forEach{
+                if !$0.isReaded!{
+                    kol += 1
+                }
+            }
             self.questions = filtered
-            TemporaryHolder.instance.menuQuesions = filtered.count
+            TemporaryHolder.instance.menuQuesions = kol
             }.resume()
     }
     
