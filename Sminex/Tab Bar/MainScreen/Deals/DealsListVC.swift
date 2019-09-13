@@ -131,7 +131,13 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.data_ = (DealsDataJson(json: json!)?.data)!
             }
-            
+            var kol = 0
+            self.data_.forEach{
+                if !$0.isReaded!{
+                    kol += 1
+                }
+            }
+            TemporaryHolder.instance.menuDeals = kol
             #if DEBUG
 //                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
@@ -288,6 +294,7 @@ struct DealsJson: JSONDecodable {
     let link:       String?
     let delay:      Int?
     let id:         Int?
+    let isReaded:   Bool?
     
     init?(json: JSON) {
         
@@ -301,6 +308,7 @@ struct DealsJson: JSONDecodable {
         link        = "Link"        <~~ json
         delay       = "Delay"       <~~ json
         id          = "ID"          <~~ json
+        isReaded    = "IsReaded"    <~~ json
         img         = UIImage(data: Data(base64Encoded: (picture?.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)!)
     }
     

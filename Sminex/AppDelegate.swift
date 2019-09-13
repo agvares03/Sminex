@@ -215,7 +215,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 center.add(request)
             }
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            if let homePage = storyboard.instantiateViewController(withIdentifier: "HomePageVC") as? MainScreenVC{
+            if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
                 self.window?.rootViewController = homePage
             }
         }

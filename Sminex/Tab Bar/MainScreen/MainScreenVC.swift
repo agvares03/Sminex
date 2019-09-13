@@ -145,60 +145,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             notifiBtn.image = UIImage(named: "notifi0")!
         }
         updateUserInterface()
-        if UserDefaults.standard.bool(forKey: "openNotification"){
-            UserDefaults.standard.set(false, forKey: "openNotification")
-            if (UserDefaults.standard.string(forKey: "typeNotifi") == "question"){
-                DispatchQueue.main.async {
-                    UserDefaults.standard.set(false, forKey: "openNotification")
-                    if self.activeQuestionCount == 1{
-                        UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
-                    }else{
-                        UserDefaults.standard.set("У вас есть непройденные опросы", forKey: "titleNotifi")
-                    }
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomNotifiAlertController") as! CustomNotifiAlert
-                    vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-                    self.addChildViewController(vc)
-                    self.view.addSubview(vc.view)
-                }
-            }else if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
-                self.requestId = UserDefaults.standard.string(forKey: "identNotifi") ?? ""
-                appsUser = TestAppsUser()
-                appsUser?.dataService = dataService
-                appsUser?.requestId_ = requestId
-                appsUser?.xml_ = mainScreenXml
-                appsUser?.isFromMain = true
-                appsUser?.delegate = self
-                appsUser?.prepareGroup = DispatchGroup()
-                appsUser?.viewDidLoad()
-                DispatchQueue.global(qos: .userInitiated).async {
-                    self.appsUser?.prepareGroup?.wait()
-                    DispatchQueue.main.async {
-                        if self.appsUser?.admission != nil {
-                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
-                        } else if self.appsUser?.techService != nil {
-                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
-                        } else {
-                            self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
-                        }
-                    }
-                }
-            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "NEWS") {
-                filteredNews.forEach{
-                    if String($0.newsId!) == UserDefaults.standard.string(forKey: "identNotifi") ?? ""{
-                        self.tappedNews = $0
-                    }
-                }
-                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
-            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "DEBT") {
-                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
-                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
-                }else{
-                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
-                }
-            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "METER_VALUE") {
-                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
-            }
-        }
     }
     
     func updateUserInterface() {
@@ -321,6 +267,60 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = false
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
+        if UserDefaults.standard.bool(forKey: "openNotification"){
+            UserDefaults.standard.set(false, forKey: "openNotification")
+            if (UserDefaults.standard.string(forKey: "typeNotifi") == "question"){
+                DispatchQueue.main.async {
+                    UserDefaults.standard.set(false, forKey: "openNotification")
+                    if self.activeQuestionCount == 1{
+                        UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
+                    }else{
+                        UserDefaults.standard.set("У вас есть непройденные опросы", forKey: "titleNotifi")
+                    }
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomNotifiAlertController") as! CustomNotifiAlert
+                    vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+                    self.addChildViewController(vc)
+                    self.view.addSubview(vc.view)
+                }
+            }else if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
+                self.requestId = UserDefaults.standard.string(forKey: "identNotifi") ?? ""
+                appsUser = TestAppsUser()
+                appsUser?.dataService = dataService
+                appsUser?.requestId_ = requestId
+                appsUser?.xml_ = mainScreenXml
+                appsUser?.isFromMain = true
+                appsUser?.delegate = self
+                appsUser?.prepareGroup = DispatchGroup()
+                appsUser?.viewDidLoad()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.appsUser?.prepareGroup?.wait()
+                    DispatchQueue.main.async {
+                        if self.appsUser?.admission != nil {
+                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
+                        } else if self.appsUser?.techService != nil {
+                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+                        } else {
+                            self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                        }
+                    }
+                }
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "NEWS") {
+                filteredNews.forEach{
+                    if String($0.newsId!) == UserDefaults.standard.string(forKey: "identNotifi") ?? ""{
+                        self.tappedNews = $0
+                    }
+                }
+                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "DEBT") {
+                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+                }else{
+                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
+                }
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "METER_VALUE") {
+                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -1243,14 +1243,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.data[3]![1] = StockCellData(images: [])
             } else {
                 self.dealsSize = CGSize(width: 0, height: 0)
+                var kol = 0
                 self.deals.forEach {
+                    if !$0.isReaded!{
+                        kol += 1
+                    }
                     imgs.append( $0.img ?? UIImage() )
                 }
                 self.data[3]![1] = StockCellData(images: imgs)
-                TemporaryHolder.instance.menuDeals = imgs.count
+                TemporaryHolder.instance.menuDeals = kol
                 
                 #if DEBUG
-                //                print(String(data: data!, encoding: .utf8) ?? "")
+//                print(String(data: data!, encoding: .utf8) ?? "")
                 #endif
                 
             }
