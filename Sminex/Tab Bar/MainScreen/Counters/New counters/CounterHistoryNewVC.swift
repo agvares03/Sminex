@@ -76,14 +76,20 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         view3.isHidden = true
         collection2.isHidden = true
         collection3.isHidden = true
+        collHeight1.constant = 380
+        collHeight2.constant = 0
+        collHeight3.constant = 0
         if data_?.typeTarif == "2"{
             view2.isHidden = false
             collection2.isHidden = false
+            collHeight2.constant = 380
         }else if data_?.typeTarif == "3"{
             view2.isHidden = false
             view3.isHidden = false
             collection2.isHidden = false
             collection3.isHidden = false
+            collHeight2.constant = 380
+            collHeight3.constant = 380
         }
         // Выбор года - уберем с экрана
         picker.isHidden = true
@@ -101,6 +107,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         }
         name.text = "Счетчик " + (data_?.meterUniqueNum)!
         years.append(period_![0].year!)
+        selectedYear = period_![0].year!
         var i = 0
         period_?.forEach { period in
             if period.year! != years[i]{
@@ -137,13 +144,14 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         var predInput2 = "0,00"
         var predInput3 = "0,00"
         values.removeAll()
+        values2.removeAll()
+        values3.removeAll()
         period_?.forEach { period in
-            guard period.year == dateBtn.titleLabel?.text?.replacingOccurrences(of: "▼ ", with: "") else { return }
+            guard period.year == selectedYear else { return }
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
                 if val.meterUniqueNum == data_?.meterUniqueNum {
                     metValues.append(val)
-                    print(val)
                     arrInput.append(val.valueInput1!)
                     arrValue.append(val.value1!)
                     if data_?.typeTarif == "2"{
@@ -159,8 +167,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
             }
         }
         period_?.forEach { period in
-            let str: String = (dateBtn.titleLabel?.text?.replacingOccurrences(of: "▼ ", with: ""))!
-            guard period.year == String((Int(str)! - 1)) else { return }
+            guard period.year == String((Int(selectedYear!)! - 1)) else { return }
             period.perXml["MeterValue"].forEach {
                 let val = MeterValue($0, period: period.numMonth ?? "1")
                 if val.meterUniqueNum == data_?.meterUniqueNum {
@@ -183,6 +190,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
             }
         }
         var i = 0
+        print(metValues.count)
         metValues.forEach {
             var income = "0,00"
             var income2 = "0,00"
@@ -285,7 +293,11 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
                 values3.append( CounterHistoryCellData(value: $0.value3, previousValue: $0.difference3, period: Int($0.period ?? "1") ?? 1, income: income3, fraction: fraction!) )
             }
         }
-        
+        var dat = ""
+        values.forEach{
+            dat = dat + ", " + $0.month
+        }
+        print(dat)
         values.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }
         values2.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }
         values3.sort { (Int($0.month) ?? 0 > Int($1.month) ?? 0) }
@@ -295,30 +307,30 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.collHeight1.constant = 1000
-        self.collHeight2.constant = 1000
-        self.collHeight2.constant = 1000
-        var height1: CGFloat = 0
-        for cell in self.collection.visibleCells {
-            height1 += cell.bounds.height
-        }
-        self.collHeight1.constant = height1
-        var height2: CGFloat = 0
-        for cell in self.collection2.visibleCells {
-            height2 += cell.bounds.height
-        }
-        self.collHeight2.constant = height2
-        var height3: CGFloat = 0
-        for cell in self.collection3.visibleCells {
-            height3 += cell.bounds.height
-        }
-        self.collHeight3.constant = height3
         if collectionView == collection{
-            return values.count
+            if values.count != 0{
+                self.collHeight1.constant = CGFloat(30 * values.count)
+                return values.count
+            }else{
+                self.collHeight1.constant = 0
+                return 0
+            }
         }else if collectionView == collection2{
-            return values2.count
+            if values2.count != 0{
+                self.collHeight2.constant = CGFloat(30 * values2.count)
+                return values2.count
+            }else{
+                self.collHeight2.constant = 0
+                return 0
+            }
         }else{
-            return values3.count
+            if values3.count != 0{
+                self.collHeight3.constant = CGFloat(30 * values3.count)
+                return values3.count
+            }else{
+                self.collHeight3.constant = 0
+                return 0
+            }
         }
         
     }
@@ -371,9 +383,11 @@ extension CounterHistoryNewVC: UIPickerViewDelegate, UIPickerViewDataSource {
         
         selectedYear = years[row]
         self.setData()
-        dateBtn.setTitle("▼ " + selectedYear!, for: .normal)
-        dateBtn2.setTitle("▼ " + selectedYear!, for: .normal)
-        dateBtn3.setTitle("▼ " + selectedYear!, for: .normal)
+        DispatchQueue.main.async {
+            self.dateBtn.setTitle("▼ " + self.selectedYear!, for: .normal)
+            self.dateBtn2.setTitle("▼ " + self.selectedYear!, for: .normal)
+            self.dateBtn3.setTitle("▼ " + self.selectedYear!, for: .normal)
+        }
         picker.isHidden = true
         picker2.isHidden = true
         picker3.isHidden = true

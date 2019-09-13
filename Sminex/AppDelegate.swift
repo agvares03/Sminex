@@ -85,6 +85,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     UserDefaults.standard.synchronize()
                 }
             }
+            if notification["gcm.notification.message"] != nil{
+                let message = notification["gcm.notification.message"]! as? String
+                let aps = notification["aps"] as! [String:AnyObject]
+                var body: String = ""
+                var title: String = ""
+                if let alert = aps["alert"] as? String {
+                    body = alert
+                } else if let alert = aps["alert"] as? [String : String] {
+                    body = alert["body"]!
+                    title = alert["title"]!
+                }
+                let notifiType = notification["gcm.notification.type"] as? String
+                let notifiIdent = notification["ident"] as? String
+                
+                
+                //                UserDefaults.standard.set(true, forKey: "newNotifi")
+                UserDefaults.standard.set(message, forKey: "bodyNotifi")
+                UserDefaults.standard.set(title, forKey: "titleNotifi")
+                UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
+                UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
+                UserDefaults.standard.set(true, forKey: "openNotification")
+                UserDefaults.standard.synchronize()
+            }
         }
         return true
     }
@@ -186,7 +209,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 body = alert["body"]!
                 title = alert["title"]!
             }
-            
+            if userInfo["gcm.notification.message"] != nil{
+                let message = userInfo["gcm.notification.message"]! as? String
+                
+                let notifiType = userInfo["gcm.notification.type"] as? String
+                let notifiIdent = userInfo["ident"] as? String
+                
+                
+                //                UserDefaults.standard.set(true, forKey: "newNotifi")
+                UserDefaults.standard.set(message, forKey: "bodyNotifi")
+                UserDefaults.standard.set(title, forKey: "titleNotifi")
+                UserDefaults.standard.set(notifiType, forKey: "typeNotifi")
+                UserDefaults.standard.set(notifiIdent, forKey: "identNotifi")
+                UserDefaults.standard.set(true, forKey: "openNotification")
+                UserDefaults.standard.synchronize()
+            }
             if UIApplication.shared.applicationState == .active {
                 //TODO: Handle foreground notification
                 let content = UNMutableNotificationContent()
@@ -212,10 +249,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let center = UNUserNotificationCenter.current()
                 center.add(request)
             }
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
-                self.window?.rootViewController = homePage
-            }
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
+            self.window?.rootViewController = homePage
         }
     }
     
@@ -280,6 +317,11 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = notification.request.content.userInfo
         NSLog("[UserNotificationCenter] applicationState: \(applicationStateString) willPresentNotification: \(userInfo)")
         //TODO: Handle foreground notification
+        UserDefaults.standard.set(true, forKey: "openNotification")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
+            self.window?.rootViewController = homePage
+        }
         completionHandler([.alert, .badge, .sound])
     }
     
@@ -314,6 +356,11 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 //            }
 //            print("---isNEWS---")
 //        }
+        UserDefaults.standard.set(true, forKey: "openNotification")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
+            self.window?.rootViewController = homePage
+        }
         completionHandler()
     }
 }

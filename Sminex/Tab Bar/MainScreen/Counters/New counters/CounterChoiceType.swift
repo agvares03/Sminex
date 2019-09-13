@@ -39,7 +39,6 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         historyBtn.isHidden = true
         self.indicator.startAnimating()
         self.indicator.isHidden = false
-        getCounters()
         fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "TypesCounters", keysForSort: ["name"], predicateFormat: nil) as? NSFetchedResultsController<TypesCounters>
         do {
             try fetchedResultsController?.performFetch()
@@ -47,6 +46,11 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
             print(error)
         }
         tableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getCounters()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

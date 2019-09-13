@@ -519,10 +519,12 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     private func startAnimation() {
         indicator.isHidden = false
         indicator.startAnimating()
+        tableView.isUserInteractionEnabled = false
     }
     
     private func stopAnimation() {
         indicator.isHidden = true
         indicator.stopAnimating()
+        tableView.isUserInteractionEnabled = true
     }
 }
