@@ -350,7 +350,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return
             }
             #if DEBUG
-            print(String(data: data!, encoding: .utf8)!)
+//            print(String(data: data!, encoding: .utf8)!)
             
             #endif
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
@@ -932,7 +932,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let responceString = String(data: data!, encoding: .utf8) ?? ""
             
             #if DEBUG
-            print(responceString)
+//            print(responceString)
             
             #endif
             
@@ -985,7 +985,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 guard data != nil else { return }
                 
 //                print(String(data: data!, encoding: .utf8) ?? "")
-                
+                let responceString = String(data: data!, encoding: .utf8) ?? ""
                 if (String(data: data!, encoding: .utf8)?.contains(find: "логин или пароль"))!{
                     self.performSegue(withIdentifier: Segues.fromFirstController.toLoginActivity, sender: self)
                     return
@@ -1013,12 +1013,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
                 
-                var commentCount = 0
+                let s = "IsReadedOnDevice=\"0\""
+                let commentCount = responceString.components(separatedBy: s).count - 1
                 var rows2: [Request] = []
                 rows.forEach { row in
-                    if row.isReadedOnDevice == "0"{
-                        commentCount += 1
-                    }
                     if rows2.count < 3{
                         rows2.append(row)
                     }

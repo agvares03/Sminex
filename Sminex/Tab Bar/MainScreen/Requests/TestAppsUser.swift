@@ -526,10 +526,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     return
                 }
                 #if DEBUG
-                print(String(data: data!, encoding: .utf8)!)
-                
+                self.responceString = String(data: data!, encoding: .utf8)!
+//                print(String(data: data!, encoding: .utf8)!)
                 #endif
                 let xml = XML.parse(data!)
+                print(xml)
                 self.parse(xml: xml)
                 group.leave()
                 }.resume()
@@ -541,11 +542,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         rowFiles.removeAll()
         let row = requests["Row"]
         self.rows.removeAll()
-        var commentCount = 0
+        let s = "IsReadedOnDevice=\"0\""
+        let commentCount = self.responceString.components(separatedBy: s).count - 1
         DispatchQueue.global(qos: .userInitiated).async {
-            
             row.forEach { row in
-                
                 self.rows[row.attributes["ID"]!] = Request(row: row)
                 self.rowComms[row.attributes["ID"]!] = []
                 self.rowPersons[row.attributes["ID"]!] = []
@@ -577,9 +577,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 var isAnswered = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? false : true
                 
                 var lastComm = (self.rowComms[curr.id!]?.count ?? 0) <= 0 ? nil : self.rowComms[curr.id!]?[(self.rowComms[curr.id!]?.count)! - 1]
-                if curr.isReadedOnDevice == "0"{
-                    commentCount += 1
-                }
+//                if curr.isReadedOnDevice == "0"{
+//                    commentCount += 1
+//                }
                 let df = DateFormatter()
                 df.dateFormat = "dd.MM.yyyy HH:mm:ss"
                 let addReq = df.date(from: curr.added!)
@@ -646,7 +646,6 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                      updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
                                                      stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? "", webID: curr.webID ?? ""))
                 }
-                
             }
             
             var firstArr = newData.filter {
