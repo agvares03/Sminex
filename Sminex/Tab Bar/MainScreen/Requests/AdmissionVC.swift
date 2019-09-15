@@ -158,9 +158,8 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     private func sendRead() {
-        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986() ?? ""
         let idGroup = reqId_.stringByAddingPercentEncodingForRFC3986() ?? ""
-        var request = URLRequest(url: URL(string: Server.SERVER + "SetQuestionGroupReadedState.ashx?" + "groupID=" + idGroup + "&accID=" + id)!)
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetRequestReadedState.ashx?" + "id=" + idGroup)!)
         request.httpMethod = "GET"
         print(request)
         

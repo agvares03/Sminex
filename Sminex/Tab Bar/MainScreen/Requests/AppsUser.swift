@@ -1058,7 +1058,7 @@ struct Request {
         webID                   = row.attributes["WEBID"]
         
         if (name?.contains("услуг"))! {
-            name                = "Заявка услугу"
+//            name                = "Заявка услугу"
         } else if (name?.contains("ропуск"))! {
             name                = "Гостевой пропуск"
         } else if (name?.containsIgnoringCase(find: "консьержу"))! {

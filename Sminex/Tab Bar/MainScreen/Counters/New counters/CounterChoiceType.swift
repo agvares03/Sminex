@@ -88,7 +88,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         vc.period_ = periods
         vc.title = counter.name
         vc.title_name = counter.name
-
+        tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.pushViewController(vc, animated: true)
     }
     

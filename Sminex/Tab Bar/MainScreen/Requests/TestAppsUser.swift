@@ -100,8 +100,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(isFromMain, isFromNotifi_)
-        
+        TemporaryHolder.instance.menuRequests = 0
         updateUserInterface()
         prepareGroup?.enter()
         
@@ -215,6 +214,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.startAnimator()
         prepareTapped(indexPath)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -527,7 +527,8 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 }
                 #if DEBUG
                 self.responceString = String(data: data!, encoding: .utf8)!
-//                print(String(data: data!, encoding: .utf8)!)
+                print(String(data: data!, encoding: .utf8)!)
+                
                 #endif
                 let xml = XML.parse(data!)
                 print(xml)
@@ -542,8 +543,8 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         rowFiles.removeAll()
         let row = requests["Row"]
         self.rows.removeAll()
-        let s = "IsReadedOnDevice=\"0\""
-        let commentCount = self.responceString.components(separatedBy: s).count - 1
+//        let s = "IsReadedOnDevice=\"0\""
+//        let commentCount = self.responceString.components(separatedBy: s).count - 1
         DispatchQueue.global(qos: .userInitiated).async {
             row.forEach { row in
                 self.rows[row.attributes["ID"]!] = Request(row: row)
@@ -633,7 +634,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                      type: curr.idType ?? "",
                                                      id: curr.id ?? "",
                                                      updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                     stickTitle: isAnswered ? name! : "", isPaid: curr.isPaid!, webID: curr.webID ?? ""))
+                                                     stickTitle: isAnswered ? name! : "", isPaid: curr.isPaid!, webID: curr.webID ?? "", isReaded: curr.isReadedOnDevice ?? ""))
                 }else{
                     newData.append( AppsUserCellData(title: curr.name ?? "",
                                                      desc: (self.rowComms[curr.id!]?.count == 0 || lastComm == nil) ? descText : lastComm?.text ?? "",
@@ -644,7 +645,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                      type: curr.idType ?? "",
                                                      id: curr.id ?? "",
                                                      updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
-                                                     stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? "", webID: curr.webID ?? ""))
+                                                     stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? "", webID: curr.webID ?? "", isReaded: curr.isReadedOnDevice ?? ""))
                 }
             }
             
@@ -757,13 +758,42 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     
                 }
             }
-            TemporaryHolder.instance.menuRequests = commentCount
+//            TemporaryHolder.instance.menuRequests = commentCount
+            self.fullData.forEach{
+                if $0.isReaded == "0"{
+                    self.sendRead(reqId: $0.id)
+                }
+            }
+            TemporaryHolder.instance.menuRequests = 0
             sleep(2)
             DispatchQueue.main.async {
                 self.createButton?.isUserInteractionEnabled = true
                 self.createButton?.isHidden = false
             }
         }
+    }
+    
+    private func sendRead(reqId: String) {
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let idGroup = reqId.stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetRequestReadedState.ashx?" + "id=" + idGroup)!)
+        request.httpMethod = "GET"
+//        print(request)
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            #endif
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            }.resume()
     }
     
     func prepareTapped(_ indexPath: IndexPath) {
@@ -1005,7 +1035,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             }
                         }
                     }
-                    print(row.isReadedOnDevice)
+//                    print(row.isReadedOnDevice)
                     
                     self.techService = ServiceHeaderData(icon: self.fullData[indexPath.row].icon,
                                                          problem: row.text ?? "",
@@ -1285,8 +1315,9 @@ private final class AppsUserCellData {
     let isBack:     Bool
     let isPaid:     String
     let webID:      String
+    let isReaded:   String
     
-    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String, webID: String) {
+    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String, webID: String, isReaded: String) {
         
         self.updateDate = updateDate
         self.title      = title
@@ -1300,5 +1331,6 @@ private final class AppsUserCellData {
         self.stickTitle = stickTitle
         self.isPaid     = isPaid
         self.webID      = webID
+        self.isReaded   = isReaded
     }
 }

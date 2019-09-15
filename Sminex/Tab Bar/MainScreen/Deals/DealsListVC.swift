@@ -26,6 +26,7 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        TemporaryHolder.instance.menuDeals = 0
         updateUserInterface()
         if pressedData_ != nil {
             performSegue(withIdentifier: Segues.fromDealsListVC.toDealsAnim, sender: self)
@@ -131,18 +132,44 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
                 self.data_ = (DealsDataJson(json: json!)?.data)!
             }
-            var kol = 0
+//            var kol = 0
             self.data_.forEach{
                 if !$0.isReaded!{
-                    kol += 1
+                    self.sendRead(dealsID: $0.id!)
                 }
             }
-            TemporaryHolder.instance.menuDeals = kol
+//            TemporaryHolder.instance.menuDeals = kol
+            TemporaryHolder.instance.menuDeals = 0
             #if DEBUG
 //                print(String(data: data!, encoding: .utf8) ?? "")
             #endif
         
         }.resume()
+    }
+    
+    private func sendRead(dealsID: Int) {
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let idDeals = String(dealsID).stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetProposalsReadedState.ashx?" + "proposalID=" + idDeals + "&accID=" + id)!)
+        request.httpMethod = "GET"
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            
+            #endif
+            }.resume()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

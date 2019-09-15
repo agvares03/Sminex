@@ -34,6 +34,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
+        TemporaryHolder.instance.menuQuesions = 0
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
@@ -194,7 +195,38 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
             self.questions = filtered
-            TemporaryHolder.instance.menuQuesions = kol
+//            TemporaryHolder.instance.menuQuesions = kol
+            filtered.forEach{
+                if !$0.isReaded!{
+                    self.sendRead(groupID: $0.id!)
+                }
+            }
+            TemporaryHolder.instance.menuQuesions = 0
+            }.resume()
+    }
+    
+    private func sendRead(groupID: Int) {
+        let id = UserDefaults.standard.string(forKey: "id_account")!.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let idGroup = String(groupID).stringByAddingPercentEncodingForRFC3986() ?? ""
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetQuestionGroupReadedState.ashx?" + "groupID=" + idGroup + "&accID=" + id)!)
+        request.httpMethod = "GET"
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            
+            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
+                let alert = UIAlertController(title: "Ошбика сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            #if DEBUG
+            print(String(data: data!, encoding: .utf8)!)
+            
+            #endif
             }.resume()
     }
     

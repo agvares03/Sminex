@@ -391,7 +391,7 @@ final class DB: NSObject, XMLParserDelegate {
     }
     
     // Уведомления
-    func parse_Notifications(id_account: String) {
+    func parse_Notifications(id_account: String, readed: Bool = false) {
         var readedKol = 0
         let urlPath = Server.SERVER + Server.GET_NOTIFICATIONS + "accID=" + id_account.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
         
@@ -448,7 +448,11 @@ final class DB: NSObject, XMLParserDelegate {
                                                                         }
                                                                     }
                                                                     if !isReaded{
-                                                                        readedKol += 1
+                                                                        if readed{
+                                                                            self.readNotifi(id: id)
+                                                                        }else{
+                                                                            readedKol += 1
+                                                                        }
                                                                     }
                                                                     self.add_data_notification(id: id, name: name, type: type, ident: ident, date: date, isReaded: isReaded)
 
@@ -480,6 +484,23 @@ final class DB: NSObject, XMLParserDelegate {
         managedObject.isReaded         = isReaded
         
         CoreDataManager.instance.saveContext()
+    }
+    
+    private func readNotifi(id: Int) {
+        //        let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetNotificationReadedState.ashx?id=" + String(id))!)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {
+            data, error, responce in
+            guard data != nil else { return }
+            let responseString = String(data: data!, encoding: .utf8)!
+            if responseString == "ok"{
+                
+            }else{
+                return
+            }
+            }.resume()
     }
     
     // Заявки с комментариями

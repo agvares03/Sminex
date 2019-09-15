@@ -34,6 +34,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        TemporaryHolder.instance.menuNotifications = 0
         self.stopAnimation()
         updateUserInterface()
         let _ = getRequests()
@@ -82,8 +83,8 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         // КОММЕНТАРИИ ПО УКАЗАННОЙ ЗАЯВКЕ
         db.del_db(table_name: "Notifications")
-        db.parse_Notifications(id_account: UserDefaults.standard.string(forKey: "id_account")  ?? "")
-        
+        db.parse_Notifications(id_account: UserDefaults.standard.string(forKey: "id_account")  ?? "", readed: true)
+        TemporaryHolder.instance.menuNotifications = 0
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -153,7 +154,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController?.sections {
-            print(sections[section].numberOfObjects)
+//            print(sections[section].numberOfObjects)
             return sections[section].numberOfObjects
         } else {
             return 0
@@ -182,9 +183,6 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         select = indexPath
         self.startAnimation()
         let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
-        if !push.isReaded{
-            readNotifi()
-        }
         if (push.type! == "REQUEST_COMMENT") {
             let requestId = push.ident!
             appsUser = TestAppsUser()
@@ -356,9 +354,9 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         UserDefaults.standard.removeObserver(self, forKeyPath: "successParse", context: nil)
     }
     
-    private func readNotifi() {
-        let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
-        var request = URLRequest(url: URL(string: Server.SERVER + "SetNotificationReadedState.ashx?id=" + String(push.id))!)
+    private func readNotifi(id: Int) {
+//        let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
+        var request = URLRequest(url: URL(string: Server.SERVER + "SetNotificationReadedState.ashx?id=" + String(id))!)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
