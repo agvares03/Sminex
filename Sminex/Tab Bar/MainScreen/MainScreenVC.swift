@@ -202,8 +202,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
             }
         }
+        startApp = false
     }
-    
+    var startApp = true
     func updateUserInterface() {
         switch Network.reachability.status {
         case .unreachable:
@@ -272,9 +273,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.collection.isHidden = false
-        loader.stopAnimating()
-        loader.isHidden = true
+//        self.collection.isHidden = false
+//        loader.stopAnimating()
+//        loader.isHidden = true
         notifiPressed = false
         NotificationCenter.default
             .addObserver(self,
@@ -327,10 +328,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = false
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
-        if UserDefaults.standard.bool(forKey: "openNotification"){
-            self.collection.isHidden = true
-            loader.startAnimating()
-            loader.isHidden = false
+        if UserDefaults.standard.bool(forKey: "openNotification") && startApp == false{
+//            self.collection.isHidden = true
+//            loader.startAnimating()
+//            loader.isHidden = false
             UserDefaults.standard.set(false, forKey: "openNotification")
             if (UserDefaults.standard.string(forKey: "typeNotifi") == "question"){
                 fetchQuestions()

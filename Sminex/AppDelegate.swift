@@ -117,6 +117,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {}
     func applicationDidBecomeActive(_ application: UIApplication) {}
     func applicationWillTerminate(_ application: UIApplication) {
+        UserDefaults.standard.set("", forKey: "bodyNotifi")
+        UserDefaults.standard.set("", forKey: "titleNotifi")
+        UserDefaults.standard.set("", forKey: "typeNotifi")
+        UserDefaults.standard.set("", forKey: "identNotifi")
+        UserDefaults.standard.set(false, forKey: "openNotification")
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
         let core = CoreDataManager()
         core.saveContext()
     }

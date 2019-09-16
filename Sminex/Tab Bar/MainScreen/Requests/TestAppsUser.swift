@@ -744,7 +744,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     self.collectionHeader?.isHidden = true
                 }
                 
-                if self.requestId_ != "" {
+                if self.requestId_ != "" && self.fullData.count != 0{
                     for index in 0...self.fullCount - 1{
                         if self.fullData[index].id == self.requestId_ || self.fullData[index].webID == self.requestId_{
                             if self.table != nil {
