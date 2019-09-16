@@ -621,13 +621,13 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         if data_?.name == "Дополнительное обслуживание"{
             paidEmergency = "1"
         }
-        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(data_?.name! ?? "")&text=\(comm)&phonenum=\(edPhone.text! )&responsiblePerson=\(data_?.name! ?? "")&emails=\(edEmail.text!)&isPaidEmergencyRequest=\(paidEmergency)&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(data_?.id! ?? "")&premises=\(place)&asSoonAsPossible=\(soonPossible)")
+//        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(data_?.name! ?? "")&text=\(comm)&phonenum=\(edPhone.text! )&responsiblePerson=\(data_?.name! ?? "")&emails=\(edEmail.text!)&isPaidEmergencyRequest=\(paidEmergency)&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(data_?.id! ?? "")&premises=\(place)&asSoonAsPossible=\(soonPossible)")
         
         let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&responsiblePerson=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&emails=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=\(paidEmergency.stringByAddingPercentEncodingForRFC3986() ?? "")&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
-        print(request)
+//        print(request)
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in

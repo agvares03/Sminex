@@ -527,7 +527,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 }
                 #if DEBUG
                 self.responceString = String(data: data!, encoding: .utf8)!
-                print(String(data: data!, encoding: .utf8)!)
+//                print(String(data: data!, encoding: .utf8)!)
                 
                 #endif
                 let xml = XML.parse(data!)
@@ -750,7 +750,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             if self.table != nil {
                                 self.tableView(self.table, didSelectRowAt: IndexPath(row: index, section: 0))
                             } else {
-                                print(self.fullData[index].title, self.fullData[index].stickTitle, self.fullData[index].desc)
+//                                print(self.fullData[index].title, self.fullData[index].stickTitle, self.fullData[index].desc)
                                 self.prepareTapped(IndexPath(row: index, section: 0))
                             }
                         }
@@ -808,7 +808,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 var type = self.fullData[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
 //                var itsNever: Bool = false
-                print(type)
+//                print(type)
                 TemporaryHolder.instance.requestTypes?.types?.forEach {
                     if $0.id == type {
                         type = $0.name ?? ""
@@ -818,13 +818,14 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 }
 //                print(TemporaryHolder.instance.requestTypes?.types)
                 print(type)
+                
                 //                if (!itsNever) {
                 //                    type = "Гостевой пропуск"
                 //                }
                 
                 if self.fullData[indexPath.row].title.contains(find: "ропуск") {
                     self.typeName = type
-                    print(self.rows)
+//                    print(self.rows)
                     let row = self.rows[self.fullData[indexPath.row].id]!
                     var persons = row.responsiblePerson ?? ""
                     

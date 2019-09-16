@@ -20,7 +20,7 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    let notificationCenter = UNUserNotificationCenter.current()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         do {
             try Network.reachability = Reachability(hostname: "www.google.com")
@@ -88,12 +88,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if notification["gcm.notification.message"] != nil{
                 let message = notification["gcm.notification.message"]! as? String
                 let aps = notification["aps"] as! [String:AnyObject]
-                var body: String = ""
+//                var body: String = ""
                 var title: String = ""
                 if let alert = aps["alert"] as? String {
-                    body = alert
+//                    body = alert
                 } else if let alert = aps["alert"] as? [String : String] {
-                    body = alert["body"]!
+//                    body = alert["body"]!
                     title = alert["title"]!
                 }
                 let notifiType = notification["gcm.notification.type"] as? String
@@ -119,16 +119,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         let core = CoreDataManager()
         core.saveContext()
-    }
-    
-    func configureNotification() {
-        if #available(iOS 10.0, *) {
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
-        }else{
-            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-        }
-        UIApplication.shared.registerForRemoteNotifications()
     }
 
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
@@ -177,27 +167,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if UIApplication.shared.applicationState == .active {
                 //TODO: Handle foreground notification
                 let content = UNMutableNotificationContent()
+                let categoryIdentifire = "Delete Notification Type"
+                
                 content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
                 content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
                 content.sound = UNNotificationSound.default()
-                content.categoryIdentifier = "com.elonchan.localNotification"
-                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                content.categoryIdentifier = categoryIdentifire
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+                let identifier = "Local Notification"
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
                 
                 // Schedule the notification.
-                let center = UNUserNotificationCenter.current()
-                center.add(request)
+                notificationCenter.add(request)
             } else {
                 //TODO: Handle background notification
                 let content = UNMutableNotificationContent()
+                let categoryIdentifire = "Delete Notification Type"
+                
                 content.title = NSString.localizedUserNotificationString(forKey: title!, arguments: nil)
                 content.body = NSString.localizedUserNotificationString(forKey: message!, arguments: nil)
                 content.sound = UNNotificationSound.default()
-                content.categoryIdentifier = "com.elonchan.localNotification"
-                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                content.categoryIdentifier = categoryIdentifire
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+                let identifier = "Local Notification"
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
                 
                 // Schedule the notification.
-                let center = UNUserNotificationCenter.current()
-                center.add(request)
+                notificationCenter.add(request)
             }
         }else{
             let aps = userInfo["aps"] as! [String:AnyObject]
@@ -227,32 +225,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if UIApplication.shared.applicationState == .active {
                 //TODO: Handle foreground notification
                 let content = UNMutableNotificationContent()
+                let categoryIdentifire = "Delete Notification Type"
+                
                 content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
                 content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
                 content.sound = UNNotificationSound.default()
-                content.categoryIdentifier = "com.elonchan.localNotification"
-                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                content.categoryIdentifier = categoryIdentifire
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+                let identifier = "Local Notification"
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
                 
                 // Schedule the notification.
-                let center = UNUserNotificationCenter.current()
-                center.add(request)
+                notificationCenter.add(request)
             } else {
                 //TODO: Handle background notification
                 let content = UNMutableNotificationContent()
+                let categoryIdentifire = "Delete Notification Type"
+                
                 content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
                 content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
                 content.sound = UNNotificationSound.default()
-                content.categoryIdentifier = "com.elonchan.localNotification"
-                let request = UNNotificationRequest.init(identifier: "FiveSecond", content: content, trigger: .none)
+                content.categoryIdentifier = categoryIdentifire
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+                let identifier = "Local Notification"
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
                 
                 // Schedule the notification.
-                let center = UNUserNotificationCenter.current()
-                center.add(request)
+                notificationCenter.add(request)
             }
-        }
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
-            self.window?.rootViewController = homePage
         }
     }
     
@@ -270,13 +272,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func configureNotification() {
+        if #available(iOS 10.0, *) {
+            notificationCenter.delegate = self
+            notificationCenter.requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+        }else{
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+        }
+        UIApplication.shared.registerForRemoteNotifications()
+    }
+    
     func requestNotificationAuthorization(application: UIApplication) {
         Messaging.messaging().delegate = self
         if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self
+            notificationCenter.delegate = self
             //            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             //            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: {_, _ in })
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) {
                 (granted, error) in
                 print("Permission granted: \(granted)")
                 guard granted else { return }
@@ -286,10 +298,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
+        UIApplication.shared.registerForRemoteNotifications()
     }
     
     func getNotificationSettings() {
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+        notificationCenter.getNotificationSettings { (settings) in
             print("Notification settings: \(settings)")
             guard settings.authorizationStatus == .authorized else { return }
             DispatchQueue.main.async {
@@ -317,11 +330,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = notification.request.content.userInfo
         NSLog("[UserNotificationCenter] applicationState: \(applicationStateString) willPresentNotification: \(userInfo)")
         //TODO: Handle foreground notification
-        UserDefaults.standard.set(true, forKey: "openNotification")
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
-            self.window?.rootViewController = homePage
-        }
+//        UserDefaults.standard.set(true, forKey: "openNotification")
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+////        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
+//        self.window?.rootViewController = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC
+//        (self.window?.rootViewController as? UITabBarController)?.selectedIndex = 0
+//        self.window?.makeKeyAndVisible()
+//        }
         completionHandler([.alert, .badge, .sound])
     }
     
@@ -329,38 +344,17 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         NSLog("[UserNotificationCenter] applicationState: \(applicationStateString) didReceiveResponse: \(userInfo)")
-        //TODO: Handle background notification
-//        let aps = userInfo["aps"] as! [String:AnyObject]
-//        var body: String = ""
-//        var title: String = ""
-//        if let alert = aps["alert"] as? String {
-//            body = alert
-//        } else if let alert = aps["alert"] as? [String : String] {
-//            body = alert["body"]!
-//            title = alert["title"]!
-//        }
-//        if userInfo["gcm.notification.type_push"] as? String == "announcement"{
-//            if UIApplication.shared.applicationState == .active {
-//                //TODO: Handle foreground notification
-//                UserDefaults.standard.set(true, forKey: "newNotifi")
-//                UserDefaults.standard.set(body, forKey: "bodyNotifi")
-//                UserDefaults.standard.set(title, forKey: "titleNotifi")
-//                UserDefaults.standard.synchronize()
-//                let main: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//                let initialView: UIViewController = main.instantiateViewController(withIdentifier: "notifi") as UIViewController
-//                self.window = UIWindow(frame: UIScreen.main.bounds)
-//                self.window?.rootViewController = initialView
-//                self.window?.makeKeyAndVisible()
-//            } else {
-//                //TODO: Handle background notification
-//            }
-//            print("---isNEWS---")
-//        }
         UserDefaults.standard.set(true, forKey: "openNotification")
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
-            self.window?.rootViewController = homePage
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialView: UITabBarController = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as! UITabBarController
+//        if let homePage = storyboard.instantiateViewController(withIdentifier: "UITabBarController-An5-M4-dcq") as? MainScreenVC{
+        if response.notification.request.identifier == "Local Notification" {
+            print("Handling notifications with the Local Notification Identifier")
         }
+            self.window?.rootViewController = initialView
+            (self.window?.rootViewController as? UITabBarController)?.selectedIndex = 0
+            self.window?.makeKeyAndVisible()
+//        }
         completionHandler()
     }
 }

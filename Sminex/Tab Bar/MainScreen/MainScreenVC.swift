@@ -42,6 +42,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var busines_center_CompanyService: Bool? = false
     private var busines_center_denyShowFine: Bool?
     @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var loader: UIActivityIndicatorView!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
@@ -102,6 +103,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var dataService: [ServicesUKJson] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        loader.stopAnimating()
+        loader.isHidden = true
         // Получим данные по Бизнес-центру (выводить или нет Оплаты)
         get_info_business_center()
         getAccIcon()
@@ -269,6 +272,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.collection.isHidden = false
+        loader.stopAnimating()
+        loader.isHidden = true
         notifiPressed = false
         NotificationCenter.default
             .addObserver(self,
@@ -322,7 +328,64 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.isNavigationBarHidden = false
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
         if UserDefaults.standard.bool(forKey: "openNotification"){
-            self.viewDidLoad()
+            self.collection.isHidden = true
+            loader.startAnimating()
+            loader.isHidden = false
+            UserDefaults.standard.set(false, forKey: "openNotification")
+            if (UserDefaults.standard.string(forKey: "typeNotifi") == "question"){
+                fetchQuestions()
+                DispatchQueue.main.async {
+                    //                    UserDefaults.standard.set(false, forKey: "openNotification")
+                    if self.activeQuestionCount == 1{
+                        UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
+                    }else{
+                        UserDefaults.standard.set("У вас есть непройденные опросы", forKey: "titleNotifi")
+                    }
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomNotifiAlertController") as! CustomNotifiAlert
+                    vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+                    self.addChildViewController(vc)
+                    self.view.addSubview(vc.view)
+                }
+            }else if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
+                fetchRequests()
+                self.requestId = UserDefaults.standard.string(forKey: "identNotifi") ?? ""
+                appsUser = TestAppsUser()
+                appsUser?.dataService = dataService
+                appsUser?.requestId_ = requestId
+                appsUser?.xml_ = mainScreenXml
+                appsUser?.isFromMain = true
+                appsUser?.delegate = self
+                appsUser?.prepareGroup = DispatchGroup()
+                appsUser?.viewDidLoad()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.appsUser?.prepareGroup?.wait()
+                    DispatchQueue.main.async {
+                        if self.appsUser?.admission != nil {
+                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
+                        } else if self.appsUser?.techService != nil {
+                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+                        } else {
+                            self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                        }
+                    }
+                }
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "NEWS") {
+                fetchNews()
+                filteredNews.forEach{
+                    if String($0.newsId!) == UserDefaults.standard.string(forKey: "identNotifi") ?? ""{
+                        self.tappedNews = $0
+                    }
+                }
+                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "DEBT") {
+                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+                }else{
+                    self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
+                }
+            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "METER_VALUE") {
+                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
+            }
         }
     }
     

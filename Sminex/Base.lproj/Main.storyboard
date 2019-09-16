@@ -1328,9 +1328,15 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </collectionView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="7xS-dP-w5T">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="7xS-dP-w5T" firstAttribute="centerX" secondItem="TTP-Xh-viz" secondAttribute="centerX" id="4JV-At-sGG"/>
+                            <constraint firstItem="7xS-dP-w5T" firstAttribute="centerY" secondItem="TTP-Xh-viz" secondAttribute="centerY" id="E0m-fP-Oj1"/>
                             <constraint firstItem="2hd-5f-zOb" firstAttribute="top" secondItem="GZD-P1-1h8" secondAttribute="bottom" id="HJq-jr-2Zl"/>
                             <constraint firstItem="fvx-8J-cf7" firstAttribute="top" secondItem="2hd-5f-zOb" secondAttribute="bottom" id="Zm3-9Y-lTR"/>
                             <constraint firstItem="2hd-5f-zOb" firstAttribute="leading" secondItem="TTP-Xh-viz" secondAttribute="leading" id="lvk-8J-zHy"/>
@@ -1346,6 +1352,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collection" destination="2hd-5f-zOb" id="poe-oT-ahr"/>
+                        <outlet property="loader" destination="7xS-dP-w5T" id="3Q1-9B-gLw"/>
                         <outlet property="notifiBtn" destination="fiD-t7-Dbl" id="A6W-h4-YNf"/>
                         <segue destination="yMo-H9-2l4" kind="show" identifier="Request" id="FAf-8f-1ee"/>
                         <segue destination="PNL-ER-y4X" kind="show" identifier="schet" id="JHZ-fd-xvP"/>
