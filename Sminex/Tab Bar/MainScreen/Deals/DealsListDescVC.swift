@@ -59,7 +59,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
             print(String(data: data!, encoding: .utf8)!)
             
             #endif
-            TemporaryHolder.instance.menuDeals = TemporaryHolder.instance.menuDeals - 1
+//            TemporaryHolder.instance.menuDeals = TemporaryHolder.instance.menuDeals - 1
             }.resume()
     }
     

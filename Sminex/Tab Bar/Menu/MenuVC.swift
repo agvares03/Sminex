@@ -36,7 +36,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         collection.delegate   = self
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("DealsMenu"), object: nil, queue: nil) { (_) in
-            if TemporaryHolder.instance.menuDeals != 0 {
+            if TemporaryHolder.instance.menuDeals > 0 {
                 if TemporaryHolder.instance.menuDeals > 99{
                     self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "+99")
                 }else{
@@ -48,7 +48,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             }
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name("RequestsMenu"), object: nil, queue: nil) { (_) in
-            if TemporaryHolder.instance.menuRequests != 0 {
+            if TemporaryHolder.instance.menuRequests > 0 {
                 if TemporaryHolder.instance.menuRequests > 99{
                     self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "+99")
                 }else{
@@ -60,7 +60,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             }
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name("QuestionsMenu"), object: nil, queue: nil) { (_) in
-            if TemporaryHolder.instance.menuQuesions != 0 {
+            if TemporaryHolder.instance.menuQuesions > 0 {
                 if TemporaryHolder.instance.menuQuesions > 99{
                     self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "+99")
                 }else{
@@ -108,36 +108,48 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
                          object: Network.reachability)
         updateUserInterface()
         self.navigationController?.isNavigationBarHidden = true
-        if TemporaryHolder.instance.menuDeals != 0 {
+        if TemporaryHolder.instance.menuDeals > 0 {
             if TemporaryHolder.instance.menuDeals > 99{
                 self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "+99")
             }else{
                 self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
             }
             self.collection.reloadData()
+        }else{
+            self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "")
+            self.collection.reloadData()
         }
-        if TemporaryHolder.instance.menuNotifications != 0 {
+        if TemporaryHolder.instance.menuNotifications > 0 {
             if TemporaryHolder.instance.menuNotifications > 99{
                 self.data[8] = MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: "+99")
             }else{
                 self.data[8] = MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: "\(TemporaryHolder.instance.menuNotifications)")
             }
             self.collection.reloadData()
+        }else{
+            self.data[8] = MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: "")
+            self.collection.reloadData()
         }
-        if TemporaryHolder.instance.menuRequests != 0 {
+        if TemporaryHolder.instance.menuRequests > 0 {
             if TemporaryHolder.instance.menuRequests > 99{
                 self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "+99")
             }else{
                 self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "\(TemporaryHolder.instance.menuRequests)")
             }
             self.collection.reloadData()
+        }else{
+            self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "")
+            self.collection.reloadData()
         }
-        if TemporaryHolder.instance.menuQuesions != 0 {
+        if TemporaryHolder.instance.menuQuesions > 0 {
             if TemporaryHolder.instance.menuQuesions > 99{
                 self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "+99")
             }else{
                 self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
             }
+            self.collection.reloadData()
+        }else{
+            self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "")
             self.collection.reloadData()
         }
     }
