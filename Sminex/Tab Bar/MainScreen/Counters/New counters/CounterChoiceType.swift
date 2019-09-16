@@ -50,6 +50,8 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        DB().del_db(table_name: "TypesCounters")
+//        DB().parse_Countrers(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pwd") ?? "", history: "0")
         getCounters()
     }
     
@@ -155,6 +157,13 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                 DispatchQueue.main.async {
                     self.dateLbl.text = self.getNameAndMonth(self.periods.first?.numMonth ?? "1") + " " + (self.periods.first?.year ?? "")
                     self.tableView.isHidden = false
+                    self.fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "TypesCounters", keysForSort: ["name"], predicateFormat: nil) as? NSFetchedResultsController<TypesCounters>
+                    do {
+                        try self.fetchedResultsController?.performFetch()
+                    } catch {
+                        print(error)
+                    }
+                    self.tableView.reloadData()
                     self.dateLbl.isHidden = false
                     self.historyBtn.isHidden = false
                     self.indicator.stopAnimating()

@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     let notificationCenter = UNUserNotificationCenter.current()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        UserDefaults.standard.set(false, forKey: "startApp")
         do {
             try Network.reachability = Reachability(hostname: "www.google.com")
         }
@@ -117,6 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {}
     func applicationDidBecomeActive(_ application: UIApplication) {}
     func applicationWillTerminate(_ application: UIApplication) {
+        UserDefaults.standard.set(false, forKey: "startApp")
         UserDefaults.standard.set("", forKey: "bodyNotifi")
         UserDefaults.standard.set("", forKey: "titleNotifi")
         UserDefaults.standard.set("", forKey: "typeNotifi")
@@ -358,10 +360,11 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         if response.notification.request.identifier == "Local Notification" {
             print("Handling notifications with the Local Notification Identifier")
         }
+        if UserDefaults.standard.bool(forKey: "startApp"){
             self.window?.rootViewController = initialView
             (self.window?.rootViewController as? UITabBarController)?.selectedIndex = 0
             self.window?.makeKeyAndVisible()
-//        }
+        }
         completionHandler()
     }
 }

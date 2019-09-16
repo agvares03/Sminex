@@ -199,10 +199,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
                 }
             } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "METER_VALUE") {
+//                DB().del_db(table_name: "Counters")
+//                DB().del_db(table_name: "TypesCounters")
+//                DB().parse_Countrers(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pwd") ?? "", history: "0")
                 self.performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
             }
         }
-        startApp = false
+        UserDefaults.standard.set(true, forKey: "startApp")
     }
     var startApp = true
     func updateUserInterface() {
@@ -392,6 +395,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        startApp = false
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
     }
