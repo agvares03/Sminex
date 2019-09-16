@@ -25,7 +25,11 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         imgs = [:]
-        if isFromMain_ {
+        if isFromNotifi_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 2], animated: true)
+            
+        } else if isFromMain_ {
             navigationController?.popToRootViewController(animated: true)
             
         } else {
@@ -85,6 +89,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
     public var delegate:   AppealUserDelegate?
     public var reqId_      = ""
     public var isFromMain_ = false
+    public var isFromNotifi_ = false
     public var data_: AppealHeaderData = AppealHeaderData(title: "Консьержу", mobileNumber: "89246785645", ident: "1478", email: "test@test.ru", desc: "Описание")
     public var comments_: [AppealCommentCellData] = []
     

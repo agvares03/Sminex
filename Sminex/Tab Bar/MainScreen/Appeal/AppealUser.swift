@@ -53,6 +53,7 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     public var delegate: MainScreenDelegate?
     public var xml_: XML.Accessor?
     public var isFromMain: Bool = false
+    public var isFromNotifi_: Bool = false
     private var refreshControl: UIRefreshControl?
     var reqId = ""
     private var responceString = ""
@@ -75,8 +76,8 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         updateUserInterface()
         prepareGroup?.enter()
         
-        tableView.delegate                     = self
-        tableView.dataSource                   = self
+        tableView?.delegate                     = self
+        tableView?.dataSource                   = self
         automaticallyAdjustsScrollViewInsets    = false
         
         startAnimator()
@@ -85,8 +86,8 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             getRequestTypes()
         }
         
-        if xml_ != nil {
-            tableView.alpha   = 0
+        if xml_ != nil && !isFromNotifi_{
+            tableView?.alpha   = 0
             DispatchQueue.global(qos: .userInitiated).async {
                 self.parse(xml: self.xml_!)
             }
@@ -104,18 +105,18 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             refreshControl = UIRefreshControl()
             refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
             if #available(iOS 10.0, *) {
-                tableView.refreshControl = refreshControl
+                tableView?.refreshControl = refreshControl
             } else {
-                tableView.addSubview(refreshControl!)
+                tableView?.addSubview(refreshControl!)
             }
         }
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
+            tableView?.refreshControl = refreshControl
         } else {
-            tableView.addSubview(refreshControl!)
+            tableView?.addSubview(refreshControl!)
         }
         title = "Обращения"
     }
@@ -221,10 +222,10 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     // append the new items to the data source for the table view
                     self.data += thisBatchOfItems
                     // reload the table view
-                    self.tableView.reloadData()
+                    self.tableView?.reloadData()
                     self.stopAnimatior()
                     if #available(iOS 10.0, *) {
-                        self.tableView.refreshControl?.endRefreshing()
+                        self.tableView?.refreshControl?.endRefreshing()
                     } else {
                         self.refreshControl?.endRefreshing()
                     }
@@ -313,7 +314,7 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     return
                 }
                 #if DEBUG
-//                print(String(data: data!, encoding: .utf8)!)
+                print(String(data: data!, encoding: .utf8)!)
                 
                 #endif
                 let xml = XML.parse(data!)
@@ -415,7 +416,7 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                                                  date: curr.updateDate ?? "",
                                                  isBack: isAnswered,
                                                  type: curr.idType ?? "",
-                                                 id: curr.id ?? "",
+                                                 id: curr.id ?? "", webId: curr.webID ?? "",
                                                  updateDate: (curr.updateDate == "" ? curr.dateFrom : curr.updateDate) ?? "",
                                                  stickTitle: isAnswered ? descText : "", isPaid: curr.isPaid ?? "", respPerson: curr.responsiblePerson ?? ""))
                 
@@ -466,11 +467,12 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     }
                 }
                 
-                self.tableView.reloadData()
+                self.tableView?.reloadData()
                 
                 if self.requestId_ != "" {
+                    print(self.requestId_)
                     for (index, item) in self.data.enumerated() {
-                        if item.id == self.requestId_ {
+                        if item.id == self.requestId_ || item.webId == self.requestId_{
                             if self.tableView != nil {
                                 self.tableView(self.tableView, didSelectRowAt: IndexPath(row: index, section: 0))
                                 
@@ -483,7 +485,7 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 } else {
                     self.stopAnimatior()
                     if #available(iOS 10.0, *) {
-                        self.tableView.refreshControl?.endRefreshing()
+                        self.tableView?.refreshControl?.endRefreshing()
                     } else {
                         self.refreshControl?.endRefreshing()
                     }
@@ -604,7 +606,13 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             if self.requestId_ != "" {
                 self.requestId_ = ""
                 self.xml_ = nil
-                vc.isFromMain_ = true
+                if isFromMain{
+                    vc.isFromMain_ = true
+                }
+                if isFromNotifi_{
+                    vc.isFromMain_ = false
+                    vc.isFromNotifi_ = true
+                }
             }
             
         } else if segue.identifier == "addAppeal"{
@@ -745,12 +753,13 @@ private final class AppealUserCellData {
     let status:     String
     let date:       String
     let id:         String
+    let webId:      String
     let stickTitle: String
     let isBack:     Bool
     let isPaid:     String
     let respPerson: String
     
-    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, updateDate: String, stickTitle: String, isPaid: String, respPerson: String) {
+    init(title: String, desc: String, icon: UIImage, status: String, date: String, isBack: Bool, type: String, id: String, webId: String, updateDate: String, stickTitle: String, isPaid: String, respPerson: String) {
         
         self.updateDate = updateDate
         self.title      = title
@@ -761,6 +770,7 @@ private final class AppealUserCellData {
         self.isBack     = isBack
         self.type       = type
         self.id         = id
+        self.webId       = webId
         self.stickTitle = stickTitle
         self.isPaid     = isPaid
         self.respPerson = respPerson

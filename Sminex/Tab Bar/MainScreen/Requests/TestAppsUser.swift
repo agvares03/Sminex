@@ -90,9 +90,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     var admission: AdmissionHeaderData?
     var techService: ServiceHeaderData?
     var serviceUK: ServiceAppHeaderData?
+    var appeal: AppealHeaderData?
     var admissionComm: [AdmissionCommentCellData] = []
     var techServiceComm: [ServiceCommentCellData] = []
     var serviceUKComm: [ServiceAppCommentCellData] = []
+    var appealComm: [AppealCommentCellData] = []
     private var rows: [String:Request] = [:]
     public var dataService: [ServicesUKJson] = []
     private var dataType: [TestAppsUserHeaderData] = []

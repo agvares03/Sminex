@@ -23,6 +23,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     private var appsUser: TestAppsUser?
+    private var appealUser: AppealUser?
     private var dataService: [ServicesUKJson] = []
     private var mainScreenXml:  XML.Accessor?
     private var refreshControl: UIRefreshControl?
@@ -48,7 +49,13 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         self.getServices()
         UserDefaults.standard.set(false, forKey: "successParse")
-
+        if let sections = fetchedResultsController?.sections {
+            for i in 0...sections[0].numberOfObjects - 1{
+                let indexPath = IndexPath(row: i, section: 0)
+                let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
+                readNotifi(id: Int(push.id))
+            }
+        }
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         if #available(iOS 10.0, *) {
@@ -165,6 +172,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
         let cell: NotificationTableCell = self.tableView.dequeueReusableCell(withIdentifier: "NotificationTableCell") as! NotificationTableCell
+        readNotifi(id: Int(push.id))
         if push.type != nil{
             cell.Name_push.text = getTitle(type: push.type!)
             cell.Body_push.text = push.name!
@@ -183,7 +191,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         select = indexPath
         self.startAnimation()
         let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
-        if (push.type! == "REQUEST_COMMENT") {
+        if (push.type! == "REQUEST_COMMENT") || (push.type! == "REQUEST_STATUS") {
             let requestId = push.ident!
             appsUser = TestAppsUser()
             appsUser?.dataService = dataService
@@ -202,33 +210,25 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                         self.performSegue(withIdentifier: "goAdmission", sender: self)
                     } else if self.appsUser?.techService != nil {
                         self.performSegue(withIdentifier: "goTechService", sender: self)
-                    } else {
+                    } else if self.appsUser?.serviceUK != nil{
                         self.performSegue(withIdentifier: "goServiceUK", sender: self)
                     }
                 }
             }
-        } else if (push.type! == "REQUEST_STATUS") {
-            let requestId = push.ident!
-            appsUser = TestAppsUser()
-            appsUser?.dataService = dataService
-            appsUser?.requestId_ = requestId
-            appsUser?.xml_ = mainScreenXml
-            appsUser?.isFromNotifi_ = true
-            appsUser?.isFromMain = false
-            appsUser?.delegate = self
-            appsUser?.prepareGroup = DispatchGroup()
-            appsUser?.viewDidLoad()
+            appealUser = AppealUser()
+            appealUser?.requestId_ = requestId
+            appealUser?.xml_ = mainScreenXml
+            appealUser?.isFromMain = false
+            appealUser?.isFromNotifi_ = true
+            appealUser?.delegate = self
+            appealUser?.prepareGroup = DispatchGroup()
+            appealUser?.viewDidLoad()
             DispatchQueue.global(qos: .userInitiated).async {
-                self.appsUser?.prepareGroup?.wait()
+                self.appealUser?.prepareGroup?.wait()
                 DispatchQueue.main.async {
-                    self.stopAnimation()
-                    if self.appsUser?.admission != nil {
-                        self.performSegue(withIdentifier: "goAdmission", sender: self)
-                        
-                    } else if self.appsUser?.techService != nil {
-                        self.performSegue(withIdentifier: "goTechService", sender: self)
-                    } else {
-                        self.performSegue(withIdentifier: "goServiceUK", sender: self)
+                    if self.appealUser?.Appeal != nil {
+                        self.stopAnimation()
+                        self.performSegue(withIdentifier: "goAppeal", sender: self)
                     }
                 }
             }
@@ -290,7 +290,20 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 vc.isFromMain_ = false
                 vc.isFromNotifi_ = true
             }
-        } else if segue.identifier == "goTechService" {
+        } else if segue.identifier == "goAppeal"{
+            let vc = segue.destination as! AppealVC
+            vc.data_ = (appealUser?.Appeal!)!
+            vc.comments_ = (appealUser?.AppealComm)!
+            vc.reqId_ = appealUser?.reqId ?? ""
+            //            vc.delegate = self
+            vc.name_ = ""
+            if appealUser?.requestId_ != "" {
+                appealUser?.requestId_ = ""
+                appealUser?.xml_ = nil
+                vc.isFromMain_ = false
+                vc.isFromNotifi_ = true
+            }
+        }else if segue.identifier == "goTechService" {
             
             let vc = segue.destination as! TechServiceVC
             vc.data_ = (appsUser?.techService!)!
@@ -365,9 +378,10 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             let responseString = String(data: data!, encoding: .utf8)!
             if responseString == "ok"{
                 DispatchQueue.main.async {
-                    let db = DB()
-                    db.del_db(table_name: "Notifications")
-                    db.parse_Notifications(id_account: UserDefaults.standard.string(forKey: "id_account")  ?? "")
+                    print("OK")
+//                    let db = DB()
+//                    db.del_db(table_name: "Notifications")
+//                    db.parse_Notifications(id_account: UserDefaults.standard.string(forKey: "id_account")  ?? "")
 //                    self.tableView.reloadData()
                 }
             }else{

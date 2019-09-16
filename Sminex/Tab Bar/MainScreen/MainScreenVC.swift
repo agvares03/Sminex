@@ -100,6 +100,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     private var dealsIndex = 0
     private var numSections = 0
     private var appsUser: TestAppsUser?
+    private var appealUser: AppealUser?
     private var dataService: [ServicesUKJson] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,8 +181,23 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
                         } else if self.appsUser?.techService != nil {
                             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
-                        } else {
+                        } else if self.appsUser?.serviceUK != nil {
                             self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                        }
+                    }
+                }
+                appealUser = AppealUser()
+                appealUser?.requestId_ = requestId
+                appealUser?.xml_ = mainScreenXml
+                appealUser?.isFromMain = true
+                appealUser?.delegate = self
+                appealUser?.prepareGroup = DispatchGroup()
+                appealUser?.viewDidLoad()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.appealUser?.prepareGroup?.wait()
+                    DispatchQueue.main.async {
+                        if self.appealUser?.Appeal != nil {
+                            self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
                         }
                     }
                 }
@@ -368,8 +384,23 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
                         } else if self.appsUser?.techService != nil {
                             self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
-                        } else {
+                        } else if self.appsUser?.serviceUK != nil {
                             self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                        }
+                    }
+                }
+                appealUser = AppealUser()
+                appealUser?.requestId_ = requestId
+                appealUser?.xml_ = mainScreenXml
+                appealUser?.isFromMain = true
+                appealUser?.delegate = self
+                appealUser?.prepareGroup = DispatchGroup()
+                appealUser?.viewDidLoad()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.appealUser?.prepareGroup?.wait()
+                    DispatchQueue.main.async {
+                        if self.appealUser?.Appeal != nil {
+                            self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
                         }
                     }
                 }
@@ -1734,6 +1765,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if appsUser?.requestId_ != "" {
                 appsUser?.requestId_ = ""
                 appsUser?.xml_ = nil
+                vc.isFromMain_ = true
+            }
+        } else if segue.identifier == Segues.fromAppsUser.toAppeal{
+            let vc = segue.destination as! AppealVC
+            vc.data_ = (appealUser?.Appeal!)!
+            vc.comments_ = (appealUser?.AppealComm)!
+            vc.reqId_ = appealUser?.reqId ?? ""
+//            vc.delegate = self
+            vc.name_ = ""
+            if appealUser?.requestId_ != "" {
+                appealUser?.requestId_ = ""
+                appealUser?.xml_ = nil
                 vc.isFromMain_ = true
             }
         } else if segue.identifier == Segues.fromMainScreenVC.toService {

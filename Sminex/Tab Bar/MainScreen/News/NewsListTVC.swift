@@ -218,6 +218,7 @@ class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         let login  = UserDefaults.standard.string(forKey: "id_account") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_NEWS + "accID=" + login)!)
         print("REQUEST = \(request)")
+        
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -236,7 +237,7 @@ class NewsListTVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
             }
             
             guard data != nil else { return }
-            //            print(String(data: data!, encoding: .utf8) ?? "")
+//            print(String(data: data!, encoding: .utf8) ?? "")
             
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)

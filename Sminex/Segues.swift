@@ -121,6 +121,7 @@ struct Segues {
         static let toRequestType     = "requestType"
         static let toAdmission       = "admission"
         static let toServiceUK       = "toServiceUK"
+        static let toAppeal          = "toAppeal"
         static let toService         = "service"
         static let toServiceDisp     = "serviceDisp"
     }
