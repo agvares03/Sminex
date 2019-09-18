@@ -192,43 +192,46 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         self.startAnimation()
         let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
         if (push.type! == "REQUEST_COMMENT") || (push.type! == "REQUEST_STATUS") {
-            let requestId = push.ident!
-            appsUser = TestAppsUser()
-            appsUser?.dataService = dataService
-            appsUser?.requestId_ = requestId
-            appsUser?.xml_ = mainScreenXml
-            appsUser?.isFromNotifi_ = true
-            appsUser?.isFromMain = false
-            appsUser?.delegate = self
-            appsUser?.prepareGroup = DispatchGroup()
-            appsUser?.viewDidLoad()
+            let requestId = push.ident
+            self.appsUser = TestAppsUser()
+            self.appsUser?.dataService = self.dataService
+            self.appsUser?.requestId_ = requestId!
+            self.appsUser?.pushReqID = requestId!
+            self.appsUser?.xml_ = self.mainScreenXml
+            self.appsUser?.isFromMain = false
+            self.appsUser?.isFromNotifi_ = true
+            self.appsUser?.delegate = self
+            self.appsUser?.prepareGroup = DispatchGroup()
+            self.appsUser?.viewDidLoad()
             DispatchQueue.global(qos: .userInitiated).async {
                 self.appsUser?.prepareGroup?.wait()
                 DispatchQueue.main.async {
-                    self.stopAnimation()
                     if self.appsUser?.admission != nil {
-                        self.performSegue(withIdentifier: "goAdmission", sender: self)
+                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
                     } else if self.appsUser?.techService != nil {
-                        self.performSegue(withIdentifier: "goTechService", sender: self)
-                    } else if self.appsUser?.serviceUK != nil{
-                        self.performSegue(withIdentifier: "goServiceUK", sender: self)
+                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+                    } else if self.appsUser?.serviceUK != nil {
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                    } else if self.appsUser?.appeal != nil {
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
                     }
                 }
             }
-            appealUser = AppealUser()
-            appealUser?.requestId_ = requestId
-            appealUser?.xml_ = mainScreenXml
-            appealUser?.isFromMain = false
-            appealUser?.isFromNotifi_ = true
-            appealUser?.delegate = self
-            appealUser?.prepareGroup = DispatchGroup()
-            appealUser?.viewDidLoad()
+            self.appsUser = TestAppsUser()
+            self.appsUser?.dataService = self.dataService
+            self.appsUser?.requestId_ = requestId!
+            self.appsUser?.pushAppealID = requestId!
+            self.appsUser?.xml_ = self.mainScreenXml
+            self.appsUser?.isFromMain = false
+            self.appsUser?.isFromNotifi_ = true
+            self.appsUser?.delegate = self
+            self.appsUser?.prepareGroup = DispatchGroup()
+            self.appsUser?.viewDidLoad()
             DispatchQueue.global(qos: .userInitiated).async {
-                self.appealUser?.prepareGroup?.wait()
+                self.appsUser?.prepareGroup?.wait()
                 DispatchQueue.main.async {
-                    if self.appealUser?.Appeal != nil {
-                        self.stopAnimation()
-                        self.performSegue(withIdentifier: "goAppeal", sender: self)
+                    if self.appsUser?.appeal != nil {
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
                     }
                 }
             }
@@ -292,14 +295,14 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             }
         } else if segue.identifier == "goAppeal"{
             let vc = segue.destination as! AppealVC
-            vc.data_ = (appealUser?.Appeal!)!
-            vc.comments_ = (appealUser?.AppealComm)!
-            vc.reqId_ = appealUser?.reqId ?? ""
+            vc.data_ = (appsUser?.appeal!)!
+            vc.comments_ = (appsUser?.appealComm)!
+            vc.reqId_ = appsUser?.reqId ?? ""
             //            vc.delegate = self
             vc.name_ = ""
-            if appealUser?.requestId_ != "" {
-                appealUser?.requestId_ = ""
-                appealUser?.xml_ = nil
+            if appsUser?.requestId_ != "" {
+                appsUser?.requestId_ = ""
+                appsUser?.xml_ = nil
                 vc.isFromMain_ = false
                 vc.isFromNotifi_ = true
             }
