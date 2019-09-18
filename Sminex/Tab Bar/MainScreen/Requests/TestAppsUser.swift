@@ -95,6 +95,8 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     var techServiceComm: [ServiceCommentCellData] = []
     var serviceUKComm: [ServiceAppCommentCellData] = []
     var appealComm: [AppealCommentCellData] = []
+    var pushReqID: String = ""
+    var pushAppealID: String = ""
     private var rows: [String:Request] = [:]
     public var dataService: [ServicesUKJson] = []
     private var dataType: [TestAppsUserHeaderData] = []
@@ -146,14 +148,15 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             if isCreatingRequest_ {
                 addRequestPressed(nil)
             }
-            
-            refreshControl = UIRefreshControl()
-            refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-            if #available(iOS 10.0, *) {
-                table?.refreshControl = refreshControl
-            } else {
-                table?.addSubview(refreshControl!)
-            }
+            if requestId_ == ""{
+                refreshControl = UIRefreshControl()
+                refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+                if #available(iOS 10.0, *) {
+                    table?.refreshControl = refreshControl
+                } else {
+                    table?.addSubview(refreshControl!)
+                }
+            }            
         }
     }
     
@@ -511,8 +514,14 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             
             let login = UserDefaults.standard.string(forKey: "login")!
             let pass  = UserDefaults.standard.string(forKey: "pwd") ?? ""
-            
+            let reqID = self.pushReqID.stringByAddingPercentEncodingForRFC3986() ?? ""
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
+            if self.pushReqID != ""{
+                request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&WEBID=" + reqID)!)
+            }
+            if self.pushAppealID != ""{
+                request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&appealsOnly=1" + "&WEBID=" + reqID)!)
+            }
             request.httpMethod = "GET"
                         print(request)
             
@@ -745,7 +754,6 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 }else{
                     self.collectionHeader?.isHidden = true
                 }
-                
                 if self.requestId_ != "" && self.fullData.count != 0{
                     for index in 0...self.fullCount - 1{
                         if self.fullData[index].id == self.requestId_ || self.fullData[index].webID == self.requestId_{
@@ -995,6 +1003,84 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         self.prepareGroup?.leave()
                     }
                     
+                } else if self.fullData[indexPath.row].title.containsIgnoringCase(find: "обращение"){
+                    let row = self.rows[self.data[indexPath.row].id]!
+                    var persons = row.responsiblePerson ?? ""
+                    
+                    if persons == "" {
+                        self.rowPersons[row.id ?? ""]?.forEach {
+                            if $0.id == self.rowPersons[row.id ?? ""]?.last?.id {
+                                persons += ($0.fio ?? "") + " "
+                                
+                            } else {
+                                persons += ($0.fio ?? "") + ", "
+                            }
+                        }
+                    }
+                    
+                    var auto = ""
+                    self.rowAutos[row.id!]?.forEach {
+                        if $0.number != "" && $0.number != nil {
+                            auto = auto + ($0.number ?? "")
+                        }
+                        if $0.number != self.rowAutos[row.id!]?.last?.number {
+                            auto = auto + ", "
+                        }
+                    }
+                    
+                    var images: [String] = []
+                    var name = ""
+                    if (row.responsiblePerson?.contains("онсьерж"))! || (row.name?.contains("онсьерж"))!{
+                        name                = "Консьержу"
+                    } else if (row.responsiblePerson?.contains("поддержк"))! || (row.name?.contains("поддержк"))!{
+                        name                = "в Техподдержку"
+                    } else if (row.responsiblePerson?.contains("иректор"))! || (row.name?.contains("иректор"))!{
+                        name                = "Директору службы комфорта"
+                    }
+                    self.appealComm = []
+                    self.rowComms[row.id!]!.forEach { comm in
+                        
+                        var commImg: String?
+                        
+                        self.rowFiles.forEach {
+                            
+                            if $0.fileId == comm.idFile {
+                                commImg = $0.fileId
+                            }
+                        }
+                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+                            self.appealComm.append ( AppealCommentCellData(image: UIImage(named: "account")!,
+                                                                           title: comm.name ?? "",
+                                                                           comment: comm.text ?? "",
+                                                                           date: comm.createdDate ?? "",
+                                                                           commImg: nil,
+                                                                           commImgUrl: commImg,
+                                                                           id: comm.id ?? "") )
+                        }else{
+                            images.append(commImg!)
+                        }
+                    }
+                    if images.count == 0{
+                        self.rowFiles.forEach { files in
+                            if files.reqID == row.id{
+                                var i = false
+                                self.techServiceComm.forEach { comm in
+                                    if comm.imgUrl == files.fileId!{
+                                        i = true
+                                    }
+                                }
+                                if i == false{
+                                    images.append(files.fileId!)
+                                }
+                            }
+                        }
+                    }
+                    self.appeal = AppealHeaderData(title: name, mobileNumber: row.phoneNum ?? "", ident: row.ident ?? "", email: row.emails ?? "", desc: row.text!, imagesUrl: images)
+                    self.reqId = row.id ?? ""
+                    if self.table != nil {
+                        self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
+                    }
+                    self.prepareGroup?.leave()
                 } else {
                     let row = self.rows[self.fullData[indexPath.row].id]!
                     var images: [String] = []

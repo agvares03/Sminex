@@ -183,9 +183,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 content.sound = UNNotificationSound.default()
                 content.categoryIdentifier = categoryIdentifire
                 
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+//                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
                 let identifier = "Local Notification"
-                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: nil)
                 
                 // Schedule the notification.
                 notificationCenter.add(request)
@@ -199,9 +199,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 content.sound = UNNotificationSound.default()
                 content.categoryIdentifier = categoryIdentifire
                 
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+//                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
                 let identifier = "Local Notification"
-                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: nil)
                 
                 // Schedule the notification.
                 notificationCenter.add(request)
@@ -241,12 +241,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 content.sound = UNNotificationSound.default()
                 content.categoryIdentifier = categoryIdentifire
                 
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+//                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
                 let identifier = "Local Notification"
-                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: nil)
                 
                 // Schedule the notification.
-                notificationCenter.add(request)
+//                notificationCenter.add(request)
             } else {
                 //TODO: Handle background notification
                 let content = UNMutableNotificationContent()
@@ -257,12 +257,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 content.sound = UNNotificationSound.default()
                 content.categoryIdentifier = categoryIdentifire
                 
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+//                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
                 let identifier = "Local Notification"
-                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: trigger)
+                let request = UNNotificationRequest.init(identifier: identifier, content: content, trigger: nil)
                 
                 // Schedule the notification.
-                notificationCenter.add(request)
+//                notificationCenter.add(request)
             }
         }
     }
@@ -284,11 +284,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func configureNotification() {
         if #available(iOS 10.0, *) {
             notificationCenter.delegate = self
-            notificationCenter.requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+            notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) {
+                (granted, error) in
+                print("Permission granted: \(granted)")
+                guard granted else { return }
+                self.getNotificationSettings()
+            }
         }else{
             UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
         }
-        UIApplication.shared.registerForRemoteNotifications()
     }
     
     func requestNotificationAuthorization(application: UIApplication) {
