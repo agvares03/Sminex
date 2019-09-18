@@ -1023,8 +1023,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             #if DEBUG
             //            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
-            if !onePush{
-                onePush = true
+            if !self.onePush{
+                self.onePush = true
                 if UserDefaults.standard.bool(forKey: "openNotification"){
                     if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
                         DispatchQueue.main.async {
