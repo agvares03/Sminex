@@ -148,7 +148,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             if isCreatingRequest_ {
                 addRequestPressed(nil)
             }
-            if requestId_ == ""{
+//            if requestId_ == ""{
                 refreshControl = UIRefreshControl()
                 refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
                 if #available(iOS 10.0, *) {
@@ -156,10 +156,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 } else {
                     table?.addSubview(refreshControl!)
                 }
-            }            
+//            }            
         }
+        load = true
     }
-    
+    var load = false
     @objc private func refresh(_ sender: UIRefreshControl) {
         DispatchQueue.main.async {
             self.getRequests()
@@ -192,6 +193,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if load{
+            startAnimator()
+            getRequests()
+        }
+        
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),
@@ -518,9 +524,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass)!)
             if self.pushReqID != ""{
                 request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&WEBID=" + reqID)!)
+                self.isFromMain = true
             }
             if self.pushAppealID != ""{
                 request = URLRequest(url: URL(string: Server.SERVER + Server.GET_APPS_COMM + "login=" + login + "&pwd=" + pass + "&appealsOnly=1" + "&WEBID=" + reqID)!)
+                self.isFromMain = true
             }
             request.httpMethod = "GET"
                         print(request)
@@ -766,6 +774,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         }
                     }
                     
+                }else if self.fullData.count == 0{
+                    self.pushAppealID = self.pushReqID
+                    self.pushReqID = ""
+                    self.getRequests()
                 }
             }
 //            TemporaryHolder.instance.menuRequests = commentCount
@@ -926,6 +938,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     var images: [String] = []
                     var dataServ: ServicesUKJson!
                     self.dataService.forEach{
+                        print("--", $0.name)
                         if $0.name == self.fullData[indexPath.row].desc || $0.name == self.fullData[indexPath.row].stickTitle{
                             dataServ = $0
                         }
@@ -1163,7 +1176,8 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        self.pushAppealID = ""
+        self.pushReqID = ""
         if segue.identifier == Segues.fromAppsUser.toAdmission {
             let vc = segue.destination as! AdmissionVC
             vc.data_ = admission!
@@ -1230,7 +1244,25 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 }
             }
             
-        } else if segue.identifier == Segues.fromAppsUser.toRequestType {
+        } else if segue.identifier == Segues.fromAppsUser.toAppeal {
+            let vc = segue.destination as! AppealVC
+            vc.data_ = appeal!
+            vc.comments_ = appealComm
+            vc.reqId_ = reqId
+//            vc.delegate = self
+            if self.requestId_ != "" {
+                self.requestId_ = ""
+                self.xml_ = nil
+                if isFromMain{
+                    vc.isFromMain_ = true
+                }
+                if isFromNotifi_{
+                    vc.isFromMain_ = false
+                    vc.isFromNotifi_ = true
+                }
+            }
+            
+        }else if segue.identifier == Segues.fromAppsUser.toRequestType {
             let vc = segue.destination as! NewRequestTypeVC
             vc.delegate = self
         }

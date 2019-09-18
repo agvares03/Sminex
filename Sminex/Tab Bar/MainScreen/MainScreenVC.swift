@@ -111,7 +111,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         getAccIcon()
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
-        getServices()
+        
         fetchDebt()
         if UserDefaults.standard.bool(forKey: "openNotification"){
             DispatchQueue.global(qos: .background).async {
@@ -135,48 +135,50 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         self.view.addSubview(vc.view)
                     }
                 }else if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
-                    UserDefaults.standard.set(false, forKey: "openNotification")
+//                    UserDefaults.standard.set(false, forKey: "openNotification")
                     self.requestId = UserDefaults.standard.string(forKey: "identNotifi") ?? ""
-                    self.appsUser = TestAppsUser()
-                    self.appsUser?.dataService = self.dataService
-                    self.appsUser?.requestId_ = self.requestId
-                    self.appsUser?.pushReqID = self.requestId
-                    self.appsUser?.xml_ = self.mainScreenXml
-                    self.appsUser?.isFromMain = true
-                    self.appsUser?.delegate = self
-                    self.appsUser?.prepareGroup = DispatchGroup()
-                    self.appsUser?.viewDidLoad()
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        self.appsUser?.prepareGroup?.wait()
-                        DispatchQueue.main.async {
-                            if self.appsUser?.admission != nil {
-                                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
-                            } else if self.appsUser?.techService != nil {
-                                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
-                            } else if self.appsUser?.serviceUK != nil {
-                                self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
-                            } else if self.appsUser?.appeal != nil {
-                                self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
-                            }
-                        }
-                    }
-                    self.appsUser = TestAppsUser()
-                    self.appsUser?.dataService = self.dataService
-                    self.appsUser?.requestId_ = self.requestId
-                    self.appsUser?.pushAppealID = self.requestId
-                    self.appsUser?.xml_ = self.mainScreenXml
-                    self.appsUser?.isFromMain = true
-                    self.appsUser?.delegate = self
-                    self.appsUser?.prepareGroup = DispatchGroup()
-                    self.appsUser?.viewDidLoad()
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        self.appsUser?.prepareGroup?.wait()
-                        DispatchQueue.main.async {
-                            if self.appsUser?.appeal != nil {
-                                self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
-                            }
-                        }
-                    }
+                    self.getServices()
+                    
+//                    self.appsUser = TestAppsUser()
+//                    self.appsUser?.dataService = self.dataService
+//                    self.appsUser?.requestId_ = self.requestId
+//                    self.appsUser?.pushReqID = self.requestId
+//                    self.appsUser?.xml_ = self.mainScreenXml
+//                    self.appsUser?.isFromMain = true
+//                    self.appsUser?.delegate = self
+//                    self.appsUser?.prepareGroup = DispatchGroup()
+//                    self.appsUser?.viewDidLoad()
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        self.appsUser?.prepareGroup?.wait()
+//                        DispatchQueue.main.async {
+//                            if self.appsUser?.admission != nil {
+//                                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
+//                            } else if self.appsUser?.techService != nil {
+//                                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+//                            } else if self.appsUser?.serviceUK != nil {
+//                                self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+//                            } else if self.appsUser?.appeal != nil {
+//                                self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
+//                            }
+//                        }
+//                    }
+//                    self.appsUser = TestAppsUser()
+//                    self.appsUser?.dataService = self.dataService
+//                    self.appsUser?.requestId_ = self.requestId
+//                    self.appsUser?.pushAppealID = self.requestId
+//                    self.appsUser?.xml_ = self.mainScreenXml
+//                    self.appsUser?.isFromMain = true
+//                    self.appsUser?.delegate = self
+//                    self.appsUser?.prepareGroup = DispatchGroup()
+//                    self.appsUser?.viewDidLoad()
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        self.appsUser?.prepareGroup?.wait()
+//                        DispatchQueue.main.async {
+//                            if self.appsUser?.appeal != nil {
+//                                self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
+//                            }
+//                        }
+//                    }
                 } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "NEWS") {
                     self.fetchNews(newsId: UserDefaults.standard.string(forKey: "identNotifi") ?? "")
                     //                filteredNews.forEach{
@@ -201,6 +203,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
         }
+        getServices()
         fetchNews(newsId: "")
         fetchDeals()
         getRequestTypes()
@@ -995,7 +998,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             }
         }
     }
-    
+    var onePush = false
     private func getServices() {
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
@@ -1020,6 +1023,16 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             #if DEBUG
             //            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
+            if !onePush{
+                onePush = true
+                if UserDefaults.standard.bool(forKey: "openNotification"){
+                    if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toRequest, sender: self)
+                        }
+                    }
+                }
+            }
             }.resume()
     }
     
@@ -1741,6 +1754,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             
         } else if segue.identifier == Segues.fromMainScreenVC.toRequest {
             let vc = segue.destination as! TestAppsUser
+            if UserDefaults.standard.bool(forKey: "openNotification"){
+                if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
+                    UserDefaults.standard.set(false, forKey: "openNotification")
+                    vc.requestId_ = self.requestId
+                    vc.pushReqID = self.requestId
+                }
+            }
+            print(dataService)
             vc.dataService = dataService
             vc.delegate = self
             
