@@ -113,6 +113,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
         
         fetchDebt()
+        var notifi = false
         if UserDefaults.standard.bool(forKey: "openNotification"){
             DispatchQueue.global(qos: .background).async {
                 DispatchQueue.main.async {
@@ -136,6 +137,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }else if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
 //                    UserDefaults.standard.set(false, forKey: "openNotification")
+                    notifi = true
                     self.requestId = UserDefaults.standard.string(forKey: "identNotifi") ?? ""
                     self.getServices()
                     
@@ -203,7 +205,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
         }
-        getServices()
+        if !notifi{
+            getServices()
+        }
         fetchNews(newsId: "")
         fetchDeals()
         getRequestTypes()
@@ -1000,31 +1004,31 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     var onePush = false
     private func getServices() {
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
+        if !self.onePush{
+            self.onePush = true
+            let login = UserDefaults.standard.string(forKey: "login") ?? ""
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_SERVICES + "ident=\(login)")!)
+            request.httpMethod = "GET"
             
-            guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else {
-                let alert = UIAlertController(title: "Ошибка серевера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true, completion: nil)
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
+                
+                guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false) else {
+                    let alert = UIAlertController(title: "Ошибка серевера", message: "Попробуйте позже", preferredStyle: .alert)
+                    alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                    DispatchQueue.main.async {
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
                 }
-                return
-            }
-            
-            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                self.dataService = ServicesUKDataJson(json: json!)?.data ?? []
-            }
-            
-            #if DEBUG
-            //            print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-            if !self.onePush{
-                self.onePush = true
+                
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    self.dataService = ServicesUKDataJson(json: json!)?.data ?? []
+                }
+                
+                #if DEBUG
+                //            print(String(data: data!, encoding: .utf8) ?? "")
+                #endif
                 if UserDefaults.standard.bool(forKey: "openNotification"){
                     if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
                         DispatchQueue.main.async {
@@ -1032,8 +1036,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         }
                     }
                 }
-            }
             }.resume()
+        }
     }
     
     func getRequestTypes() {
@@ -1761,7 +1765,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     vc.pushReqID = self.requestId
                 }
             }
-            print(dataService)
             vc.dataService = dataService
             vc.delegate = self
             

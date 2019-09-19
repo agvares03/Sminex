@@ -158,7 +158,6 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 }
 //            }            
         }
-        load = true
     }
     var load = false
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -193,10 +192,6 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if load{
-            startAnimator()
-            getRequests()
-        }
         
         NotificationCenter.default
             .addObserver(self,
@@ -1147,7 +1142,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                          imagesUrl: images, isPaid: row.isPaid ?? "", placeHome: row.premises ?? "", soonPossible: row.soonPossible, isReaded: row.isReadedOnDevice!)
                     self.reqId = row.id ?? ""
                     if self.table != nil {
-                        self.performSegue(withIdentifier: Segues.fromAppsUser.toService, sender: self)
+//                        if self.pushAppealID != "" || self.pushReqID != ""{
+//
+//                        }else{
+                            self.performSegue(withIdentifier: Segues.fromAppsUser.toService, sender: self)
+//                        }
                     }
                     self.prepareGroup?.leave()
                     
