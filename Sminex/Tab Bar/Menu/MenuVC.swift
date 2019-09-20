@@ -38,7 +38,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         NotificationCenter.default.addObserver(forName: NSNotification.Name("DealsMenu"), object: nil, queue: nil) { (_) in
             if TemporaryHolder.instance.menuDeals > 0 {
                 if TemporaryHolder.instance.menuDeals > 99{
-                    self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "+99")
+                    self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "99+")
                 }else{
                     self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
                 }
@@ -50,7 +50,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         NotificationCenter.default.addObserver(forName: NSNotification.Name("RequestsMenu"), object: nil, queue: nil) { (_) in
             if TemporaryHolder.instance.menuRequests > 0 {
                 if TemporaryHolder.instance.menuRequests > 99{
-                    self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "+99")
+                    self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "99+")
                 }else{
                     self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "\(TemporaryHolder.instance.menuRequests)")
                 }
@@ -62,7 +62,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         NotificationCenter.default.addObserver(forName: NSNotification.Name("QuestionsMenu"), object: nil, queue: nil) { (_) in
             if TemporaryHolder.instance.menuQuesions > 0 {
                 if TemporaryHolder.instance.menuQuesions > 99{
-                    self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "+99")
+                    self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "99+")
                 }else{
                     self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
                 }
@@ -110,7 +110,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         self.navigationController?.isNavigationBarHidden = true
         if TemporaryHolder.instance.menuDeals > 0 {
             if TemporaryHolder.instance.menuDeals > 99{
-                self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "+99")
+                self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "99+")
             }else{
                 self.data[7] = MenuCellData(icon: UIImage(named: "menu_sales")!, title: "Акции и предложения", notification: "\(TemporaryHolder.instance.menuDeals)")
             }
@@ -121,7 +121,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         }
         if TemporaryHolder.instance.menuNotifications > 0 {
             if TemporaryHolder.instance.menuNotifications > 99{
-                self.data[8] = MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: "+99")
+                self.data[8] = MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: "99+")
             }else{
                 self.data[8] = MenuCellData(icon: UIImage(named: "menu_notifications")!, title: "Уведомления", notification: "\(TemporaryHolder.instance.menuNotifications)")
             }
@@ -132,7 +132,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         }
         if TemporaryHolder.instance.menuRequests > 0 {
             if TemporaryHolder.instance.menuRequests > 99{
-                self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "+99")
+                self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "99+")
             }else{
                 self.data[2] = MenuCellData(icon: UIImage(named: "menu_request")!, title: "Заявки", notification: "\(TemporaryHolder.instance.menuRequests)")
             }
@@ -143,7 +143,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
         }
         if TemporaryHolder.instance.menuQuesions > 0 {
             if TemporaryHolder.instance.menuQuesions > 99{
-                self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "+99")
+                self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "99+")
             }else{
                 self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "\(TemporaryHolder.instance.menuQuesions)")
             }
