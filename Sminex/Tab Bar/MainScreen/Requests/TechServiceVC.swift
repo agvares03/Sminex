@@ -814,18 +814,19 @@ final class ServiceHeader: UICollectionViewCell {
         
         if item.imgsString.count == 0 && item.images.count != 0 {
             imageConst.constant = 150
-            var x: CGFloat = 0.0
-            item.images.forEach {
-                let image = UIImageView(frame: CGRect(x: x, y: 0, width: CGFloat(150.0), height: scroll.frame.size.height))
-                image.image = $0
-                x += 165.0
-                let tap = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
-                image.isUserInteractionEnabled = true
-                image.addGestureRecognizer(tap)
-                scroll.addSubview(image)
+            DispatchQueue.main.async {
+                var x: CGFloat = 0.0
+                item.images.forEach {
+                    let image = UIImageView(frame: CGRect(x: x, y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
+                    image.image = $0
+                    x += 165.0
+                    let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
+                    image.isUserInteractionEnabled = true
+                    image.addGestureRecognizer(tap)
+                    self.scroll.addSubview(image)
+                }
+                self.scroll.contentSize = CGSize(width: x, height: self.scroll.frame.size.height)
             }
-            scroll.contentSize = CGSize(width: x, height: scroll.frame.size.height)
-
         } else if item.imgsString.count != 0{
             imageConst.constant = 150
             //            scrollTop.constant  = 16
