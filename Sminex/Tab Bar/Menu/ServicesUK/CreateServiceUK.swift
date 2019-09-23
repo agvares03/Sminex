@@ -653,14 +653,14 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 print(String(data: responce!, encoding: .utf8)!)
                 
                 #endif
-                DispatchQueue.main.async {
-                    self.delegate?.update()
-                }
                 self.reqId = String(data: responce!, encoding: .utf8)
                 DispatchQueue.global(qos: .userInteractive).async {
                     
                     self.imagesArr.forEach {
                         self.uploadPhoto($0)
+                    }
+                    DispatchQueue.main.async {
+                        self.delegate?.update()
                     }
                     DispatchQueue.main.sync {
                         

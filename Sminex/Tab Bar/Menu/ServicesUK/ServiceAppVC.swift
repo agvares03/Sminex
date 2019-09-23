@@ -752,6 +752,10 @@ final class ServiceAppHeader: UICollectionViewCell {
                 noDateLbl.isHidden = true
             }
         }
+        if item.status == "Закрыта"{
+            noDateHeight.constant = 0
+            noDateLbl.isHidden = true
+        }
         
         if item.images.count == 0 {
             imageConst.constant = 0

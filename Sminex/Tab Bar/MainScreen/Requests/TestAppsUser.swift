@@ -43,7 +43,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             collectionHeader?.reloadData()
             if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
 //                let rect = self.collectionHeader!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame
-                if index >= dataType.count - 2{
+                if index >= dataType.count - 2 && dataType.count == 4{
                     let pointX = (self.collectionHeader?.contentSize.width)! - self.view.frame.size.width
                     self.collectionHeader!.setContentOffset(CGPoint(x: pointX + 8, y: 0), animated: true)
                     self.collectionHeader!.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
@@ -100,6 +100,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     private var rows: [String:Request] = [:]
     public var dataService: [ServicesUKJson] = []
     private var dataType: [TestAppsUserHeaderData] = []
+    private var dataType1: [TestAppsUserHeaderData] = []
     private var dataT = [RequestTypeStruct]()
     
     override func viewDidLoad() {
@@ -115,7 +116,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         automaticallyAdjustsScrollViewInsets    = false
         
         self.startAnimator()
-        self.dataType.append(TestAppsUserHeaderData(title: "Все", id: "0"))
+        self.dataType1.append(TestAppsUserHeaderData(title: "Все", id: "0"))
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }else{
@@ -127,11 +128,11 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 }
                 self.dataT = types
                 self.dataT.forEach{
-                    self.dataType.append(TestAppsUserHeaderData(title: $0.name!, id: $0.id!))
+                    self.dataType1.append(TestAppsUserHeaderData(title: $0.name!, id: $0.id!))
                 }
             }
         }
-        self.dataType.append(TestAppsUserHeaderData(title: "Дополнительные услуги", id: "0"))
+        self.dataType1.append(TestAppsUserHeaderData(title: "Дополнительные услуги", id: "0"))
         if xml_ != nil && !isFromNotifi_{
             table?.alpha   = 0
             createButton?.alpha = 0
@@ -264,7 +265,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         collectionHeader?.reloadData()
         selType = indexPath.row
         if self.collectionHeader?.dataSource?.collectionView(self.collectionHeader!, cellForItemAt: IndexPath(row: 0, section: 0)) != nil {
-            if selType >= dataType.count - 2 && index < selType{
+            if selType >= dataType.count - 2 && index < selType && dataType.count == 4{
                 let pointX = (self.collectionHeader?.contentSize.width)! - self.view.frame.size.width
                 self.collectionHeader!.setContentOffset(CGPoint(x: pointX + 8, y: 0), animated: true)
             }else{
@@ -545,7 +546,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 
                 #endif
                 let xml = XML.parse(data!)
-                print(xml)
+//                print(xml)
                 self.parse(xml: xml)
                 group.leave()
                 }.resume()
@@ -712,34 +713,33 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             
                         }
                         var typeIn = false
-                        let dataType1 = self.dataType
                         self.dataType.removeAll()
                         self.dataType.append(TestAppsUserHeaderData(title: "Все", id: "0"))
-                        for k in 0...dataType1.count - 1{
+                        for k in 0...self.dataType1.count - 1{
                             for i in 0...self.fullData.count - 1{
                                 if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
-                                    if dataType1[k].title == "Дополнительные услуги" && !typeIn{
+                                    if self.dataType1[k].title == "Дополнительные услуги" && !typeIn{
                                         typeIn = true
                                     }
                                 }else{
                                     
-                                    if (self.fullData[i].title == dataType1[k].title) && !typeIn{
+                                    if (self.fullData[i].title == self.dataType1[k].title) && !typeIn{
                                         typeIn = true
                                     }
                                 }
                             }
                             if typeIn{
                                 if self.dataType.count == 0{
-                                    self.dataType.append(dataType1[k])
+                                    self.dataType.append(self.dataType1[k])
                                 }else{
                                     var addT = false
                                     self.dataType.forEach{
-                                        if $0.title == dataType1[k].title{
+                                        if $0.title == self.dataType1[k].title{
                                             addT = true
                                         }
                                     }
                                     if !addT{
-                                        self.dataType.append(dataType1[k])
+                                        self.dataType.append(self.dataType1[k])
                                     }
                                 }
                             }
