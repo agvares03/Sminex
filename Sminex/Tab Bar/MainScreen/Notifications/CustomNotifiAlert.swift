@@ -14,6 +14,7 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
     }
     
     @IBOutlet weak var nameLbl: UILabel!
+    @IBOutlet private weak var pickerView: UIView!
     @IBOutlet private weak var picker:      UIDatePicker!
     @IBOutlet private weak var pickerHeight: NSLayoutConstraint!
     
@@ -30,6 +31,7 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
             view.endEditing(true)
 //        }
         picker.isHidden     = false
+        pickerView.isHidden = false
         pickerHeight.constant = 185
     }
     
@@ -41,6 +43,7 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
     @IBAction private func closePicker(_ sender: UIButton){
         pickerHeight.constant = 0
         picker.isHidden = true
+        pickerView.isHidden = true
     }
     @IBAction private func sendDate(_ sender: UIButton){
         let content = UNMutableNotificationContent()
@@ -68,6 +71,7 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
         nameLbl.text = name
         pickerHeight.constant = 0
         picker.isHidden = true
+        pickerView.isHidden = true
         picker.addTarget(self, action: #selector(
             datePickerValueChanged), for: UIControlEvents.valueChanged)
         // Do any additional setup after loading the view.
@@ -84,6 +88,7 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
         }else{
             pickerHeight.constant = 0
             picker.isHidden = true
+            pickerView.isHidden = true
         }
     }
     

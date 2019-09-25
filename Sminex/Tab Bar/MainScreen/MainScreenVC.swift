@@ -124,6 +124,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 if ((UserDefaults.standard.string(forKey: "typeNotifi")?.containsIgnoringCase(find: "question"))!){
                     UserDefaults.standard.set(false, forKey: "openNotification")
                     DispatchQueue.main.async {
+                        self.loader.isHidden = true
+                        self.collection.isHidden = false
+                        self.loader.stopAnimating()
                         //                    UserDefaults.standard.set(false, forKey: "openNotification")
                         if self.activeQuestionCount == 1{
                             UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
@@ -330,72 +333,6 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }else{
             notifiBtn.image = UIImage(named: "notifi0")!
         }
-//        if UserDefaults.standard.bool(forKey: "openNotification") && startApp == false{
-//            //            self.collection.isHidden = true
-//            //            loader.startAnimating()
-//            //            loader.isHidden = false
-//            if ((UserDefaults.standard.string(forKey: "typeNotifi")?.containsIgnoringCase(find: "question"))!){
-//                UserDefaults.standard.set(false, forKey: "openNotification")
-//                fetchQuestions()
-//                DispatchQueue.main.async {
-//                    //                    UserDefaults.standard.set(false, forKey: "openNotification")
-//                    if self.activeQuestionCount == 1{
-//                        UserDefaults.standard.set((self.activeQuestion_?.name!)!, forKey: "titleNotifi")
-//                    }else{
-//                        UserDefaults.standard.set("У вас есть непройденные опросы", forKey: "titleNotifi")
-//                    }
-//                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomNotifiAlertController") as! CustomNotifiAlert
-//                    vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-//                    self.addChildViewController(vc)
-//                    self.view.addSubview(vc.view)
-//                }
-//            }else if (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_COMMENT") || (UserDefaults.standard.string(forKey: "typeNotifi") == "REQUEST_STATUS"){
-//                UserDefaults.standard.set(false, forKey: "openNotification")
-////                fetchRequests()
-//                self.requestId = UserDefaults.standard.string(forKey: "identNotifi") ?? ""
-//                appsUser = TestAppsUser()
-//                appsUser?.dataService = dataService
-//                appsUser?.requestId_ = requestId
-//                appsUser?.pushReqID = requestId
-//                appsUser?.xml_ = mainScreenXml
-//                appsUser?.isFromMain = true
-//                appsUser?.delegate = self
-//                appsUser?.prepareGroup = DispatchGroup()
-//                appsUser?.viewDidLoad()
-//                DispatchQueue.global(qos: .userInitiated).async {
-//                    self.appsUser?.prepareGroup?.wait()
-//                    DispatchQueue.main.async {
-//                        if self.appsUser?.admission != nil {
-//                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
-//                        } else if self.appsUser?.techService != nil {
-//                            self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
-//                        } else if self.appsUser?.serviceUK != nil {
-//                            self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
-//                        } else if self.appsUser?.appeal != nil {
-//                            self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
-//                        }
-//                    }
-//                }
-//            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "NEWS") {
-//                fetchNews()
-//                //                filteredNews.forEach{
-//                //                    if String($0.newsId!) == UserDefaults.standard.string(forKey: "identNotifi") ?? ""{
-//                //                        self.tappedNews = $0
-//                //                    }
-//                //                }
-//                //                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
-//            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "DEBT") {
-//                UserDefaults.standard.set(false, forKey: "openNotification")
-//                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
-//                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
-//                }else{
-//                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
-//                }
-//            } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "METER_VALUE") {
-//                UserDefaults.standard.set(false, forKey: "openNotification")
-//                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
-//            }
-//        }else
         if UserDefaults.standard.bool(forKey: "backBtn"){
             self.viewDidLoad()
             //            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
