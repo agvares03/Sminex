@@ -168,7 +168,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="og4-iB-GFd">
-                                <rect key="frame" x="0.0" y="64" width="375" height="550"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="548"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="5" id="yMs-hA-BU0">
                                     <size key="itemSize" width="375" height="300"/>
@@ -305,7 +305,7 @@
                                                     <rect key="frame" x="10" y="57" width="339" height="81"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                             <real key="value" value="4"/>
@@ -366,7 +366,7 @@
                             <constraint firstAttribute="trailing" secondItem="og4-iB-GFd" secondAttribute="trailing" id="5WT-iV-4sF"/>
                             <constraint firstItem="og4-iB-GFd" firstAttribute="leading" secondItem="pdO-gD-Ry9" secondAttribute="leading" id="8P3-Gc-QYo"/>
                             <constraint firstItem="g6W-MS-cuO" firstAttribute="centerY" secondItem="doL-fK-g9Z" secondAttribute="centerY" id="Idw-dF-dCm"/>
-                            <constraint firstItem="doL-fK-g9Z" firstAttribute="top" secondItem="og4-iB-GFd" secondAttribute="bottom" constant="3" id="Pdx-hi-LR1"/>
+                            <constraint firstItem="doL-fK-g9Z" firstAttribute="top" secondItem="og4-iB-GFd" secondAttribute="bottom" constant="5" id="Pdx-hi-LR1"/>
                             <constraint firstItem="og4-iB-GFd" firstAttribute="top" secondItem="oHx-ak-zG5" secondAttribute="bottom" id="Xw8-kV-09R"/>
                             <constraint firstItem="doL-fK-g9Z" firstAttribute="leading" secondItem="pdO-gD-Ry9" secondAttribute="leadingMargin" id="hS7-vG-Q8w"/>
                             <constraint firstItem="g6W-MS-cuO" firstAttribute="centerX" secondItem="doL-fK-g9Z" secondAttribute="centerX" id="z4c-gg-ajO"/>

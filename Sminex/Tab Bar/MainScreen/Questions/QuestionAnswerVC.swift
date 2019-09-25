@@ -17,6 +17,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var collection:  UICollectionView!
     @IBOutlet private weak var goButton:    UIButton!
     @IBOutlet private weak var comment:    UITextView!
+    @IBOutlet private weak var btnBotConst: NSLayoutConstraint!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -229,13 +230,20 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @objc func keyboardWillShow(sender: NSNotification?) {
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap!)
-        view.frame.origin.y = -125
+//        view.frame.origin.y = -125
+        if let keyboardSize = (sender?.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            view.frame.origin.y = 0 - keyboardHeight
+            collection.contentInset.top = keyboardHeight
+        }
     }
     
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         view.removeGestureRecognizer(tap!)
+//        view.frame.origin.y = 0
         view.frame.origin.y = 0
+        collection.contentInset.top = 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
