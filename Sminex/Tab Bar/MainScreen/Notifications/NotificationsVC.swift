@@ -206,35 +206,36 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             DispatchQueue.global(qos: .userInitiated).async {
                 self.appsUser?.prepareGroup?.wait()
                 DispatchQueue.main.async {
+                    self.stopAnimation()
                     if self.appsUser?.admission != nil {
-                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toAdmission, sender: self)
+                        self.performSegue(withIdentifier: "goAdmission", sender: self)
                     } else if self.appsUser?.techService != nil {
-                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toService, sender: self)
+                        self.performSegue(withIdentifier: "goTechService", sender: self)
                     } else if self.appsUser?.serviceUK != nil {
-                        self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
+                        self.performSegue(withIdentifier: "goServiceUK", sender: self)
                     } else if self.appsUser?.appeal != nil {
-                        self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
+                        self.performSegue(withIdentifier: "goAppeal", sender: self)
                     }
                 }
             }
-            self.appsUser = TestAppsUser()
-            self.appsUser?.dataService = self.dataService
-            self.appsUser?.requestId_ = requestId!
-            self.appsUser?.pushAppealID = requestId!
-            self.appsUser?.xml_ = self.mainScreenXml
-            self.appsUser?.isFromMain = false
-            self.appsUser?.isFromNotifi_ = true
-            self.appsUser?.delegate = self
-            self.appsUser?.prepareGroup = DispatchGroup()
-            self.appsUser?.viewDidLoad()
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.appsUser?.prepareGroup?.wait()
-                DispatchQueue.main.async {
-                    if self.appsUser?.appeal != nil {
-                        self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
-                    }
-                }
-            }
+//            self.appsUser = TestAppsUser()
+//            self.appsUser?.dataService = self.dataService
+//            self.appsUser?.requestId_ = requestId!
+//            self.appsUser?.pushAppealID = requestId!
+//            self.appsUser?.xml_ = self.mainScreenXml
+//            self.appsUser?.isFromMain = false
+//            self.appsUser?.isFromNotifi_ = true
+//            self.appsUser?.delegate = self
+//            self.appsUser?.prepareGroup = DispatchGroup()
+//            self.appsUser?.viewDidLoad()
+//            DispatchQueue.global(qos: .userInitiated).async {
+//                self.appsUser?.prepareGroup?.wait()
+//                DispatchQueue.main.async {
+//                    if self.appsUser?.appeal != nil {
+//                        self.performSegue(withIdentifier: Segues.fromAppsUser.toAppeal, sender: self)
+//                    }
+//                }
+//            }
         } else if (push.type! == "NEWS") {
             fetchNews()
         } else if (push.type! == "QUESTION") {
