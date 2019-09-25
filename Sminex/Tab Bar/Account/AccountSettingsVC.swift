@@ -161,7 +161,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         }
         
         commentField.text       = defaults.string(forKey: "accDesc")
-        if (defaults.string(forKey: "accDesc") == "-") {
+        if (defaults.string(forKey: "accDesc") == "-") || ((defaults.string(forKey: "accDesc")?.containsIgnoringCase(find: "добавить комментарий"))!){
             commentField.text   = "Добавить комментарий (например, «не звонить с 10 до 12»)"
             commentField.textColor = UIColor.lightGray
         }
