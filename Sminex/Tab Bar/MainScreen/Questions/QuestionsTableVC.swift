@@ -180,20 +180,20 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                         isContains = false
                     }
                 }
-//                if json.dateStop != nil{
-//                    let df = DateFormatter()
-//                    df.dateFormat = "dd.MM.yyyy"
-//                    let dat: Date = df.date(from: json.dateStop!)!
-//                    let teckS: String = df.string(from: Date())
-//                    let teckDat: Date = df.date(from: teckS)!
-//                    if !isContains && dat >= teckDat{
-//                        filtered.append(json)
-//                    }
-//                }else{
+                if json.dateStop != nil{
+                    let df = DateFormatter()
+                    df.dateFormat = "dd.MM.yyyy"
+                    let dat: Date = df.date(from: json.dateStop!)!
+                    let teckS: String = df.string(from: Date())
+                    let teckDat: Date = df.date(from: teckS)!
+                    if !isContains && dat >= teckDat{
+                        filtered.append(json)
+                    }
+                }else{
                     if !isContains{
                         filtered.append(json)
                     }
-//                }
+                }
             }
             var kol = 0
             filtered.forEach{
