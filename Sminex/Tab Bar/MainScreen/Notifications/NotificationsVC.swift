@@ -254,13 +254,13 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
     var index = -1
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goQuestion" {
             let vc = segue.destination as! QuestionsTableVC
             let push = (self.fetchedResultsController?.object(at: self.select))! as Notifications
-            print(push.name!)
-            vc.performName_ = push.name!
+            vc.performID_ = Int(push.ident!)!
             vc.delegate = self
         }
         if segue.identifier == "goNews"{

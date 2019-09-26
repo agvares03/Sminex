@@ -64,10 +64,12 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
         self.view.removeFromSuperview()
     }
     public var name = ""
+    public var ident = ""
     public var date = Date()
     override func viewDidLoad() {
         super.viewDidLoad()
         name = UserDefaults.standard.string(forKey: "titleNotifi")!
+        ident = UserDefaults.standard.string(forKey: "identNotifi")!
         nameLbl.text = name
         pickerHeight.constant = 0
         picker.isHidden = true
@@ -96,7 +98,7 @@ class CustomNotifiAlert: UIViewController, MainScreenDelegate, UIGestureRecogniz
         
         if segue.identifier == "toQuestion" {
             let vc = segue.destination as! QuestionsTableVC
-            vc.performName_ = name
+            vc.performID_ = Int(ident)!
             vc.delegate = self
         }
         if segue.identifier == "questionTable" {

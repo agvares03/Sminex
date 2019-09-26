@@ -26,6 +26,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     
     public var delegate: MainScreenDelegate?
     public var performName_ = ""
+    public var performID_ = 0
     
     private var refreshControl: UIRefreshControl?
     private var questions: [QuestionDataJson]? = []
@@ -85,11 +86,13 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                          object: Network.reachability)
         updateUserInterface()
         self.refresh(nil)
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
+        tabBarController?.tabBar.isHidden = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -128,7 +131,7 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
         index = indexPath.row
         performSegue(withIdentifier: Segues.fromQuestionsTableVC.toQuestion, sender: self)
     }
-    
+    var oneShow = false
     func getQuestions() {
         
         let id = UserDefaults.standard.string(forKey: "id_account") ?? ""
@@ -160,13 +163,6 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                         self.emptyLabel.isHidden = true
                     }
                     
-                    for (index, item) in (self.questions?.enumerated())! {
-                        if item.name == self.performName_ {
-                            self.index = index
-                            self.performSegue(withIdentifier: Segues.fromQuestionsTableVC.toQuestion, sender: self)
-                        }
-                    }
-                    
                 }
             }
             guard data != nil else { return }
@@ -184,20 +180,20 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
                         isContains = false
                     }
                 }
-                if json.dateStop != nil{
-                    let df = DateFormatter()
-                    df.dateFormat = "dd.MM.yyyy"
-                    let dat: Date = df.date(from: json.dateStop!)!
-                    let teckS: String = df.string(from: Date())
-                    let teckDat: Date = df.date(from: teckS)!
-                    if !isContains && dat >= teckDat{
-                        filtered.append(json)
-                    }
-                }else{
+//                if json.dateStop != nil{
+//                    let df = DateFormatter()
+//                    df.dateFormat = "dd.MM.yyyy"
+//                    let dat: Date = df.date(from: json.dateStop!)!
+//                    let teckS: String = df.string(from: Date())
+//                    let teckDat: Date = df.date(from: teckS)!
+//                    if !isContains && dat >= teckDat{
+//                        filtered.append(json)
+//                    }
+//                }else{
                     if !isContains{
                         filtered.append(json)
                     }
-                }
+//                }
             }
             var kol = 0
             filtered.forEach{
@@ -210,6 +206,17 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
             filtered.forEach{
                 if !$0.isReaded!{
                     self.sendRead(groupID: $0.id!)
+                }
+            }
+            for (index, item) in (self.questions?.enumerated())! {
+                print(item.id, "==", self.performID_)
+                
+                if (item.name == self.performName_ || item.id == self.performID_) {
+                    self.oneShow = true
+                    self.index = index
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: Segues.fromQuestionsTableVC.toQuestion, sender: self)
+                    }
                 }
             }
             TemporaryHolder.instance.menuQuesions = 0
@@ -252,8 +259,10 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
             vc.question_ = questions?[index]
             vc.delegate = delegate
             vc.isFromMain_ = performName_ != ""
+            vc.isFromNotifi_ = performID_ != 0
             vc.questionDelegate = self
             performName_ = ""
+            performID_ = 0
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
             
             let vc = segue.destination as! UINavigationController

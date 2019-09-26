@@ -27,7 +27,11 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         userDefaults.synchronize()
         i = 0
         
-        if !isFromMain_ {
+        if isFromNotifi_ {
+            let viewControllers = navigationController?.viewControllers
+            navigationController?.popToViewController(viewControllers![viewControllers!.count - 3], animated: true)
+            
+        } else if !isFromMain_ {
             navigationController?.popViewController(animated: true)
         
         } else {
@@ -81,6 +85,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     public var isFromMain_ = false
+    public var isFromNotifi_ = false
     public var delegate: MainScreenDelegate?
     public var question_: QuestionDataJson?
     public var questionDelegate: QuestionTableDelegate?

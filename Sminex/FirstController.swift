@@ -39,7 +39,6 @@ class FirstController: UIViewController {
         if name_uk_let != nil {
             nameUK = String(describing: name_uk_let)
         }
-        
         // Если необходимо - покажем окно выбора управляющей компании
         startActivity()
     }
