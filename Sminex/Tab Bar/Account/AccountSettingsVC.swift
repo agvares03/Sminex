@@ -164,6 +164,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         if (defaults.string(forKey: "accDesc") == "-") || ((defaults.string(forKey: "accDesc")?.containsIgnoringCase(find: "добавить комментарий"))!){
             commentField.text   = "Добавить комментарий (например, «не звонить с 10 до 12»)"
             commentField.textColor = UIColor.lightGray
+            commentField.selectedTextRange = commentField.textRange(from: commentField.beginningOfDocument, to: commentField.beginningOfDocument)
         }
         
         let name                = defaults.string(forKey: "name")?.split(separator: " ")
@@ -450,7 +451,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         
         let currentText:String = textView.text
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-        
+//        if textView.text == "Добавить комментарий (например, «не звонить с 10 до 12»)"{
+//            textView.text = ""
+//        }
         if updatedText.isEmpty {
             textView.text = "Добавить комментарий (например, «не звонить с 10 до 12»)"
             textView.textColor = UIColor.lightGray
@@ -466,11 +469,12 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         return false
     }
     
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        if self.view.window != nil {
-            if textView.textColor == UIColor.lightGray {
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            }
-        }
-    }
+//    func textViewDidChangeSelection(_ textView: UITextView) {
+//
+//        if self.view.window != nil {
+//            if textView.textColor == UIColor.lightGray {
+////                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+//            }
+//        }
+//    }
 }
