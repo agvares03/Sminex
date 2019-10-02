@@ -67,6 +67,7 @@ final class TemporaryHolder {
             }
         }
     }
+    public var oldDeals: [DealsJson] = []
     public var newsNew: [NewsJson]? = []
     public var contactsList: [ContactsJson] = []
     public var allLS: [AllLsData] = []

@@ -53,6 +53,7 @@ final class Server {
     static let EDIT_ACCOUNT        = "EditAccountInfo.ashx?"           // Изменение настроек аккаунта
     static let CONFIGURE_NOTIFY    = "SetNotifySettings.ashx?"         // Изменение настроек уведомлении
     static let PROPOSALS           = "GetProposals.ashx?"              // Получение списка акции
+    static let PROPOSALS_NEW       = "GetProposalsNew.ashx?"           // Получение списка акции
     static let ACCOUNT_DEBT        = "GetAccountDebt.ashx?"            // Баланс аккаунта
     static let ACCOUNT_PHONE       = "GetAccountsByPhoneNumber.ashx?"  // Получить список ЛС по номеру телефона
     static let GET_ALL_ACCOUNTS    = "GetAllAccounts.ashx?"            // Получить данные всех аккаунтов

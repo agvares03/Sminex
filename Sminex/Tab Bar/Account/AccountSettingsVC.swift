@@ -71,6 +71,8 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     func exit(){
+        UserDefaults.standard.removeObject(forKey: "dealsJSON")
+        UserDefaults.standard.removeObject(forKey: "deals")
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "pass"), forKey: "exitPass")
         UserDefaults.standard.setValue(UserDefaults.standard.string(forKey: "login"), forKey: "exitLogin")
         UserDefaults.standard.setValue("", forKey: "pass")

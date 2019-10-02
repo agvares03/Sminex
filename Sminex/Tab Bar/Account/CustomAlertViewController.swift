@@ -150,6 +150,8 @@ class CustomAlertViewController: UIViewController {
     }
     
     private func exit() {
+        UserDefaults.standard.removeObject(forKey: "dealsJSON")
+        UserDefaults.standard.removeObject(forKey: "deals")
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
         let deviceId = UserDefaults.standard.string(forKey: "googleToken") ?? ""

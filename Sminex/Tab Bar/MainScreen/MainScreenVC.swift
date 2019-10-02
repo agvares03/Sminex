@@ -1285,58 +1285,155 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     var activeQuestionCount = 0
     var activeQuestion_: QuestionDataJson?
     private final func fetchDeals() {
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
-        request.httpMethod = "GET"
-        print(request)
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
+        var idArray:[String] = []
+        if UserDefaults.standard.array(forKey: "deals") != nil{
+            idArray = UserDefaults.standard.array(forKey: "deals") as! [String]
+        }
+        if idArray.count == 0{
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
+            request.httpMethod = "GET"
+            print(request)
             
-            defer {
-                DispatchQueue.main.async {
-                    self.collection.reloadData()
-                }
-            }
-            guard data != nil else { return }
-            
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
                 
-                DispatchQueue.main.sync {
-                    //                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            
-            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                self.deals = (DealsDataJson(json: json!)?.data)!
-            }
-            var imgs: [UIImage] = []
-            
-            if (self.deals.count == 0) {
-                self.dealsSize = nil
-                self.data[3]![1] = StockCellData(images: [])
-            } else {
-                self.dealsSize = CGSize(width: 0, height: 0)
-                var kol = 0
-                self.deals.forEach {
-                    if !$0.isReaded!{
-                        kol += 1
+                defer {
+                    DispatchQueue.main.async {
+                        self.collection.reloadData()
                     }
-                    imgs.append( $0.img ?? UIImage() )
                 }
-                self.data[3]![1] = StockCellData(images: imgs)
-                TemporaryHolder.instance.menuDeals = kol
+                guard data != nil else { return }
                 
-                #if DEBUG
-//                print(String(data: data!, encoding: .utf8) ?? "")
-                #endif
+                if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                    
+                    DispatchQueue.main.sync {
+                        //                    self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
                 
-            }
-            
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    self.deals = (DealsDataJson(json: json!)?.data)!
+                }
+                var imgs: [UIImage] = []
+                
+                if (self.deals.count == 0) {
+                    self.dealsSize = nil
+                    self.data[3]![1] = StockCellData(images: [])
+                } else {
+                    self.dealsSize = CGSize(width: 0, height: 0)
+                    var kol = 0
+                    var idArr: [String] = []
+                    self.deals.forEach {
+                        if !$0.isReaded!{
+                            kol += 1
+                        }
+                        imgs.append( $0.img ?? UIImage() )
+                        let id: Int = $0.id!
+                        idArr.append(String(id))
+                    }
+                    self.data[3]![1] = StockCellData(images: imgs)
+                    TemporaryHolder.instance.menuDeals = kol
+                    TemporaryHolder.instance.oldDeals = self.deals
+                    UserDefaults.standard.set(String(data: data!, encoding: .utf8) ?? "", forKey: "dealsJSON")
+                    UserDefaults.standard.set(idArr, forKey: "deals")
+                    #if DEBUG
+                    //                print(String(data: data!, encoding: .utf8) ?? "")
+                    #endif
+                    
+                }
+                
             }.resume()
+        }else{
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS_NEW + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
+            request.httpMethod = "POST"
+            if let json = try? JSONSerialization.data(withJSONObject: idArray, options: .prettyPrinted) {
+                request.httpBody = Data(json)
+            }
+            print(request, idArray)
+            
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
+
+                defer {
+                    DispatchQueue.main.async {
+                        self.collection.reloadData()
+                    }
+                }
+//                #if DEBUG
+//                print(String(data: data!, encoding: .utf8) ?? "")
+//                #endif
+                guard data != nil else { return }
+
+                if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+
+                    DispatchQueue.main.sync {
+                        //                    self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    self.deals = (DealsDataJson(json: json!)?.data)!
+                }
+                let dealsJSON: String = UserDefaults.standard.string(forKey: "dealsJSON") ?? ""
+                let jsonData = dealsJSON.data(using: .utf8)!
+                var dealsOld:  [DealsJson] = []
+                if let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? JSON {
+                    dealsOld = (DealsDataJson(json: json!)?.data)!
+                }
+                dealsOld.forEach{
+                    self.deals.append($0)
+                }
+                var imgs: [UIImage] = []
+
+                if (self.deals.count == 0) {
+                    self.dealsSize = CGSize(width: 0, height: 0)
+                    var kol = 0
+                    TemporaryHolder.instance.oldDeals.forEach {
+                        if !$0.isReaded!{
+                            kol += 1
+                        }
+                        imgs.append( $0.img ?? UIImage() )
+                    }
+                    self.data[3]![1] = StockCellData(images: imgs)
+                } else {
+                    self.dealsSize = CGSize(width: 0, height: 0)
+                    var kol = 0
+                    var idArr: [String] = []
+                    self.deals.forEach {
+                        if !$0.isReaded!{
+                            kol += 1
+                        }
+                        imgs.append( $0.img ?? UIImage() )
+                        let id: Int = $0.id!
+                        idArr.append(String(id))
+                    }
+                    self.data[3]![1] = StockCellData(images: imgs)
+                    TemporaryHolder.instance.menuDeals = TemporaryHolder.instance.menuDeals + kol
+                    TemporaryHolder.instance.oldDeals = self.deals
+                    UserDefaults.standard.set(idArr, forKey: "deals")
+                    
+                    var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
+                    request.httpMethod = "GET"
+                    URLSession.shared.dataTask(with: request) {
+                        data, error, responce in
+                        guard data != nil else { return }
+                        UserDefaults.standard.set(String(data: data!, encoding: .utf8) ?? "", forKey: "dealsJSON")
+                    }.resume()
+                    #if DEBUG
+                    //                print(String(data: data!, encoding: .utf8) ?? "")
+                    #endif
+
+                }
+
+            }.resume()
+        }
+        
     }
     var payNil = false
     private func fetchDebt() {

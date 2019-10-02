@@ -105,46 +105,105 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     private final func getDeals() {
-        
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
-        request.httpMethod = "GET"
-        print(request)
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            defer {
-                DispatchQueue.main.async {
-                    self.collection.reloadData()
-                    self.stopAnimator()
-                }
-            }
-            
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+        if TemporaryHolder.instance.oldDeals.count == 0{
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
+            request.httpMethod = "GET"
+            print(request)
+            URLSession.shared.dataTask(with: request) {
+                data, error, responce in
                 
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
+                defer {
+                    DispatchQueue.main.async {
+                        self.collection.reloadData()
+                        self.stopAnimator()
+                    }
                 }
-                return
-            }
+                
+                if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                    
+                    DispatchQueue.main.sync {
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    return
+                }
+                
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                    self.data_ = (DealsDataJson(json: json!)?.data)!
+                }
+    //            var kol = 0
+                self.data_.forEach{
+                    if !$0.isReaded!{
+                        self.sendRead(dealsID: $0.id!)
+                    }
+                }
+    //            TemporaryHolder.instance.menuDeals = kol
+                TemporaryHolder.instance.menuDeals = 0
+                TemporaryHolder.instance.oldDeals = self.data_
+                #if DEBUG
+    //                print(String(data: data!, encoding: .utf8) ?? "")
+                #endif
             
-            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                self.data_ = (DealsDataJson(json: json!)?.data)!
-            }
-//            var kol = 0
-            self.data_.forEach{
-                if !$0.isReaded!{
-                    self.sendRead(dealsID: $0.id!)
+            }.resume()
+        }else{
+                var request = URLRequest(url: URL(string: Server.SERVER + Server.PROPOSALS_NEW + "ident=\(UserDefaults.standard.string(forKey: "login") ?? "")" + "&isIOS=1")!)
+                request.httpMethod = "POST"
+                var requestBody: [String:[Any]] = ["ID":[]]
+                var strID = ""
+                TemporaryHolder.instance.oldDeals.forEach{
+                    let id: Int = $0.id!
+                    if strID == ""{
+                        strID = String(id)
+                    }else{
+                        strID = strID + ", " + String(id)
+                    }
                 }
+                requestBody["ID"]?.append(strID)
+
+                if let json = try? JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted) {
+                    request.httpBody = Data(json)
+                }
+                print(request, request.httpBody!)
+            
+                URLSession.shared.dataTask(with: request) {
+                    data, error, responce in
+                    
+                    defer {
+                        DispatchQueue.main.async {
+                            self.collection.reloadData()
+                            self.stopAnimator()
+                        }
+                    }
+                    
+                    if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
+                        let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                        alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                        
+                        DispatchQueue.main.sync {
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                        return
+                        
+                    }
+                    
+                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
+                        self.data_ = (DealsDataJson(json: json!)?.data)!
+                    }
+        //            var kol = 0
+                    self.data_.forEach{
+                        if !$0.isReaded!{
+                            self.sendRead(dealsID: $0.id!)
+                        }
+                    }
+        //            TemporaryHolder.instance.menuDeals = kol
+                    TemporaryHolder.instance.menuDeals = 0
+                    #if DEBUG
+        //                print(String(data: data!, encoding: .utf8) ?? "")
+                    #endif
+                
+                }.resume()
             }
-//            TemporaryHolder.instance.menuDeals = kol
-            TemporaryHolder.instance.menuDeals = 0
-            #if DEBUG
-//                print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-        
-        }.resume()
     }
     
     private func sendRead(dealsID: Int) {
