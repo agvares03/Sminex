@@ -471,12 +471,11 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         return false
     }
     
-//    func textViewDidChangeSelection(_ textView: UITextView) {
-//
-//        if self.view.window != nil {
-//            if textView.textColor == UIColor.lightGray {
-////                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-//            }
-//        }
-//    }
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if self.view.window != nil {
+            if textView.textColor == UIColor.lightGray {
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
+        }
+    }
 }
