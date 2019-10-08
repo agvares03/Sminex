@@ -31,6 +31,10 @@ class FirstController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if #available(iOS 13.0, *) {
+            overrideUserInterfaceStyle = .unspecified
+        }
+        
         // запустим индикатор
         self.indicator.startAnimating()
         
