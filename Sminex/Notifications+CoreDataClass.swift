@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(Notifications)
 public class Notifications: NSManagedObject {
     convenience init() {
         

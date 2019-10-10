@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(Appeals)
 public class Appeals: NSManagedObject {
 
     convenience init() {

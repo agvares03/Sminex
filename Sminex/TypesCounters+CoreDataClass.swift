@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(TypesCounters)
 public class TypesCounters: NSManagedObject {
     convenience init() {
         

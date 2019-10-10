@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(Houses)
 public class Houses: NSManagedObject {
 
     convenience init() {

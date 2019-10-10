@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(Saldo)
 public class Saldo: NSManagedObject {
 
     convenience init() {

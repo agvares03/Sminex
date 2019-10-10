@@ -274,7 +274,10 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         
         let cropViewController = CropViewController.init(croppingStyle: .circular, image: Image)
         cropViewController.delegate = self
-        present(cropViewController, animated: true, completion: nil)
+        if #available(iOS 13.0, *) {
+            cropViewController.modalPresentationStyle = .fullScreen
+        }
+        self.present(cropViewController, animated: true, completion: nil)
     }
     
     func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
@@ -295,7 +298,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             UserDefaults.standard.setValue(imageList, forKey: "allIcon")
             UserDefaults.standard.setValue(UIImageJPEGRepresentation(resizeImageWith(image: image, newSize: CGSize(width: 128, height: 128)), 128), forKey: "accountIcon")
         }
-        dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     private func editAccountInfo() {
@@ -356,14 +359,14 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                 }
             
             } else {
-                let vc = ViewController()
-                vc.isFromSettings_ = true
-                vc.enter(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pass") ?? "", pwdE: UserDefaults.standard.string(forKey: "pwd") ?? "")
-                let alert = UIAlertController(title: nil, message: "Изменения успешно сохранены!", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in
-                    self.navigationController?.popViewController(animated: true)
-                } ) )
                 DispatchQueue.main.async {
+                    let vc = ViewController()
+                    vc.isFromSettings_ = true
+                    vc.enter(login: UserDefaults.standard.string(forKey: "login") ?? "", pass: UserDefaults.standard.string(forKey: "pass") ?? "", pwdE: UserDefaults.standard.string(forKey: "pwd") ?? "")
+                    let alert = UIAlertController(title: nil, message: "Изменения успешно сохранены!", preferredStyle: .alert)
+                    alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                        self.navigationController?.popViewController(animated: true)
+                    } ) )
                     self.present(alert, animated: true, completion: nil)
                 }
             }

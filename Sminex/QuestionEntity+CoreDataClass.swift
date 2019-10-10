@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(QuestionEntity)
 public class QuestionEntity: NSManagedObject {
     
     convenience init() {

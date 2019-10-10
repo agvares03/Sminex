@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(Flats)
 public class Flats: NSManagedObject {
 
     convenience init() {

@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
+@objc(Ls)
 public class Ls: NSManagedObject {
 
     convenience init() {

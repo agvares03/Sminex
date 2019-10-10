@@ -70,12 +70,12 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     var AppealComm: [AppealCommentCellData] = []
     var techServiceComm: [ServiceCommentCellData] = []
     private var rows: [String:Request] = [:]
-    
+    var isHidNav = false
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUserInterface()
         prepareGroup?.enter()
-        
+        isHidNav = isCreatingRequest_
         tableView?.delegate                     = self
         tableView?.dataSource                   = self
         automaticallyAdjustsScrollViewInsets    = false
@@ -148,11 +148,18 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        isHidNav = false
+        navigationController?.setNavigationBarHidden(false, animated: animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if isHidNav {
+            navigationController?.setNavigationBarHidden(true, animated: false)
+        }else{
+            navigationController?.setNavigationBarHidden(false, animated: animated)
+        }
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),

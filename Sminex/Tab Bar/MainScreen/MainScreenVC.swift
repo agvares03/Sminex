@@ -282,9 +282,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
         
     }
-    
+    var refresh = false
     @objc private func refresh(_ sender: UIRefreshControl) {
-        
+        refresh = true
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.global(qos: .background).async {
                 let res = self.getRequests()
@@ -297,22 +297,22 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         count += 1
                     }
                     self.data[0]![count] = RequestAddCellData(title: "Оставить заявку")
-                    self.collection.reloadData()
+//                    self.collection.reloadData()
                 }
             }
             DB().del_db(table_name: "Notifications")
             DB().parse_Notifications(id_account: UserDefaults.standard.string(forKey: "id_account")  ?? "")
             self.fetchQuestions()
-            self.fetchDeals()
-            self.fetchDebt()
-            self.fetchNews(newsId: "")
-            DispatchQueue.main.async {
-                if #available(iOS 10.0, *) {
-                    self.collection.refreshControl?.endRefreshing()
-                } else {
-                    self.refreshControl?.endRefreshing()
-                }
-            }
+//            self.fetchDeals()
+//            self.fetchDebt()
+//            self.fetchNews(newsId: "")
+//            DispatchQueue.main.async {
+//                if #available(iOS 10.0, *) {
+//                    self.collection.refreshControl?.endRefreshing()
+//                } else {
+//                    self.refreshControl?.endRefreshing()
+//                }
+//            }
         }
     }
     
@@ -1266,16 +1266,19 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         }
                     }
                     TemporaryHolder.instance.menuQuesions = kol
-                    
-                    DispatchQueue.main.sync {
-                        self.collection.reloadData()
-                    }
-                    
-                    if unfilteredData?.count == 0 {
+                    if !self.refresh{
                         DispatchQueue.main.sync {
-                            self.questionSize = CGSize(width: 0, height: 0)
                             self.collection.reloadData()
                         }
+                        
+                        if unfilteredData?.count == 0 {
+                            DispatchQueue.main.sync {
+                                self.questionSize = CGSize(width: 0, height: 0)
+                                self.collection.reloadData()
+                            }
+                        }
+                    }else{
+                        self.fetchDeals()
                     }
                 }
                 
@@ -1298,8 +1301,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 data, error, responce in
                 
                 defer {
-                    DispatchQueue.main.async {
-                        self.collection.reloadData()
+                    if !self.refresh{
+                        DispatchQueue.main.async {
+                            self.collection.reloadData()
+                        }
+                    }else{
+                        self.fetchDebt()
                     }
                 }
                 guard data != nil else { return }
@@ -1358,8 +1365,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 data, error, responce in
 
                 defer {
-                    DispatchQueue.main.async {
-                        self.collection.reloadData()
+                    if !self.refresh{
+                        DispatchQueue.main.async {
+                            self.collection.reloadData()
+                        }
+                    }else{
+                        self.fetchDebt()
                     }
                 }
 //                #if DEBUG
@@ -1452,8 +1463,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             data, error, responce in
             
             defer {
-                DispatchQueue.main.sync {
-                    self.collection.reloadData()
+                if !self.refresh{
+                    DispatchQueue.main.sync {
+                        self.collection.reloadData()
+                    }
+                }else{
+                    self.fetchNews(newsId: "")
                 }
             }
             guard data != nil else { return }
@@ -1493,8 +1508,12 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 defaults.setValue(String(0) + " ₽", forKey: "ForPayTitle")
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()
-                DispatchQueue.main.sync {
-                    self.collection.reloadData()
+                if !self.refresh{
+                    DispatchQueue.main.sync {
+                        self.collection.reloadData()
+                    }
+                }else{
+                    self.fetchNews(newsId: "")
                 }
                 return
             }
@@ -1517,9 +1536,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()
             }
-            DispatchQueue.main.sync {
-                self.collection.reloadData()
-            }
+//            DispatchQueue.main.sync {
+//                self.collection.reloadData()
+//            }
             
             #if DEBUG
             //            print(String(data: data!, encoding: .utf8)!)
@@ -1610,6 +1629,14 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }else{
                         DispatchQueue.main.sync {
                             self.collection.reloadData()
+                        }
+                        DispatchQueue.main.async {
+                            self.refresh = false
+                            if #available(iOS 10.0, *) {
+                                self.collection.refreshControl?.endRefreshing()
+                            } else {
+                                self.refreshControl?.endRefreshing()
+                            }
                         }
                     }
                     return
