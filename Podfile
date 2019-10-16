@@ -21,7 +21,6 @@ target 'Sminex' do
     pod 'Arcane'
     pod 'Gloss'
     pod 'YandexMobileMetrica'
-    pod 'UITextView+Placeholder'
     pod 'AFDateHelper'
     pod 'SimpleImageViewer'
     pod 'CropViewController'
