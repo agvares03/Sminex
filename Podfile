@@ -17,7 +17,7 @@ target 'Sminex' do
     pod 'Firebase/Analytics'
     pod 'ExpyTableView'
     pod 'FSPagerView'
-    pod 'DeviceKit'
+    pod 'DeviceKit', '~> 1.3'
     pod 'Arcane'
     pod 'Gloss'
     pod 'YandexMobileMetrica'

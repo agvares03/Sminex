@@ -272,6 +272,7 @@ class FirstController: UIViewController {
         var salt: Data?
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        //var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login.suffix(4))!)
         request.httpMethod = "GET"
         
         TemporaryHolder.instance.SaltQueue.enter()

@@ -426,8 +426,9 @@ func getSalt() -> Data {
             
         } else {
             var salt: Data?
-            
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + (UserDefaults.standard.string(forKey: "login") ?? ""))!)
+            let strLogin: String = (UserDefaults.standard.string(forKey: "login") ?? "")!
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + strLogin)!)
+            //var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + strLogin.suffix(4))!)
             request.httpMethod = "GET"
             print(request)
             TemporaryHolder.instance.SaltQueue.enter()

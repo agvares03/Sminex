@@ -381,6 +381,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let queue = DispatchGroup()
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        //var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login.suffix(4))!)
         request.httpMethod = "GET"
         
         queue.enter()

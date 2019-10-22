@@ -228,6 +228,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         var salt: Data?
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login)!)
+        //var request = URLRequest(url: URL(string: Server.SERVER + Server.SOLE + "login=" + login.suffix(4))!)
         request.httpMethod = "GET"
         print(request)
         URLSession.shared.dataTask(with: request) {
