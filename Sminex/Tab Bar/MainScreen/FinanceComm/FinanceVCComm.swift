@@ -248,9 +248,11 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                         year.removeFirst()
                     }
                 }else{
-                    if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
-                        year.removeFirst()
-                        year.removeFirst()
+                    if receipts.count > 0 {
+                        if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
+                            year.removeFirst()
+                            year.removeFirst()
+                        }
                     }
                 }
                 var sum = String(format:"%.2f", debt)
