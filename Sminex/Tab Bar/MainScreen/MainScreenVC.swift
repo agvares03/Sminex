@@ -71,7 +71,8 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         ],
         2 : [
             0 : CellsHeaderData(title: "Счетчики"),
-            1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")],
+//            1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")],
+            1 : SchetCellData(title: "", date: "")],
         3 : [
             0 : CellsHeaderData(title: "Акции и предложения"),
             1 : StockCellData(images: [])
@@ -83,8 +84,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             0 : CellsHeaderData(title: "Опросы")
         ],
         6 : [
-            0 : CellsHeaderData(title: "Версия"),
-            1 : SchetCellData(title: "Осталось 4 дня для передачи показаний", date: "Передача с 20 по 25 января")]]
+            0 : CellsHeaderData(title: "Версия")]]
     //            1 : VersionCellData()]]
     private var questionSize:   CGSize?
     private var newsSize:       CGSize?
@@ -560,6 +560,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         self.data[2]![1] = SchetCellData(title: "До передачи показаний осталось \(leftDays) дней", date: "Передача с \(dateFrom) по \(dateFormatter.string(from: endDate!))")
                     }
                 }
+            }
+            DispatchQueue.main.async{
+                self.collection.reloadData()
             }
             }.resume()
     }
