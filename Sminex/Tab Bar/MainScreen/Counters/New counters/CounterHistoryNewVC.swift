@@ -11,26 +11,38 @@ import DeviceKit
 
 class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate {
     
-    @IBOutlet private weak var collection:  UICollectionView!
-    @IBOutlet private weak var collection2:  UICollectionView!
-    @IBOutlet private weak var collection3:  UICollectionView!
-    @IBOutlet private weak var res:         UILabel!
-    @IBOutlet private weak var name:        UILabel!
-    @IBOutlet private weak var date:        UILabel!
-    @IBOutlet private weak var dateBtn:     UIButton!
-    @IBOutlet private weak var dateBtn2:     UIButton!
-    @IBOutlet private weak var dateBtn3:     UIButton!
-    @IBOutlet private weak var outcome:     UILabel!
-    @IBOutlet private weak var outcome2:     UILabel!
-    @IBOutlet private weak var outcome3:     UILabel!
-    @IBOutlet private weak var collHeight1: NSLayoutConstraint!
-    @IBOutlet private weak var collHeight2: NSLayoutConstraint!
-    @IBOutlet private weak var collHeight3: NSLayoutConstraint!
-    @IBOutlet private weak var picker:      UIPickerView!
-    @IBOutlet private weak var picker2:      UIPickerView!
-    @IBOutlet private weak var picker3:      UIPickerView!
-    @IBOutlet private weak var view2:       UIView!
-    @IBOutlet private weak var view3:       UIView!
+    @IBOutlet private weak var collection:      UICollectionView!
+    @IBOutlet private weak var collection2:     UICollectionView!
+    @IBOutlet private weak var collection3:     UICollectionView!
+    @IBOutlet private weak var res:             UILabel!
+    @IBOutlet private weak var name:            UILabel!
+    @IBOutlet private weak var tarifName1:      UILabel!
+    @IBOutlet private weak var tarifName2:      UILabel!
+    @IBOutlet private weak var tarifName3:      UILabel!
+    @IBOutlet private weak var tarifView1:      UIView!
+    @IBOutlet private weak var tarifView2:      UIView!
+    @IBOutlet private weak var tarifView3:      UIView!
+    @IBOutlet private weak var date:            UILabel!
+    @IBOutlet private weak var dateBtn:         UIButton!
+    @IBOutlet private weak var dateBtn2:        UIButton!
+    @IBOutlet private weak var dateBtn3:        UIButton!
+    @IBOutlet private weak var outcome:         UILabel!
+    @IBOutlet private weak var outcome2:        UILabel!
+    @IBOutlet private weak var outcome3:        UILabel!
+    @IBOutlet private weak var collHeight1:     NSLayoutConstraint!
+    @IBOutlet private weak var collHeight2:     NSLayoutConstraint!
+    @IBOutlet private weak var collHeight3:     NSLayoutConstraint!
+    @IBOutlet private weak var headerHeight1:   NSLayoutConstraint!
+    @IBOutlet private weak var headerHeight2:   NSLayoutConstraint!
+    @IBOutlet private weak var headerHeight3:   NSLayoutConstraint!
+    @IBOutlet private weak var nameHeight1:     NSLayoutConstraint!
+    @IBOutlet private weak var nameHeight2:     NSLayoutConstraint!
+    @IBOutlet private weak var nameHeight3:     NSLayoutConstraint!
+    @IBOutlet private weak var picker:          UIPickerView!
+    @IBOutlet private weak var picker2:         UIPickerView!
+    @IBOutlet private weak var picker3:         UIPickerView!
+    @IBOutlet private weak var view2:           UIView!
+    @IBOutlet private weak var view3:           UIView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -74,22 +86,46 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         }
         view2.isHidden = true
         view3.isHidden = true
+        tarifName2.isHidden = true
+        tarifName3.isHidden = true
+        tarifView2.isHidden = true
+        tarifView3.isHidden = true
         collection2.isHidden = true
         collection3.isHidden = true
         collHeight1.constant = 380
         collHeight2.constant = 0
         collHeight3.constant = 0
+        nameHeight2.constant = 0
+        nameHeight3.constant = 0
+        headerHeight2.constant = 0
+        headerHeight3.constant = 0
+        tarifName1.text = "Тариф - Т1(" + (data_?.tarifName1)! + ")"
         if data_?.typeTarif == "2"{
             view2.isHidden = false
             collection2.isHidden = false
             collHeight2.constant = 380
+            nameHeight2.constant = 40
+            headerHeight2.constant = 45
+            tarifName2.isHidden = false
+            tarifView2.isHidden = false
+            tarifName2.text = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
         }else if data_?.typeTarif == "3"{
             view2.isHidden = false
             view3.isHidden = false
             collection2.isHidden = false
             collection3.isHidden = false
+            tarifName2.isHidden = false
+            tarifName3.isHidden = false
+            tarifView2.isHidden = false
+            tarifView3.isHidden = false
             collHeight2.constant = 380
             collHeight3.constant = 380
+            nameHeight2.constant = 40
+            nameHeight3.constant = 40
+            headerHeight2.constant = 45
+            headerHeight3.constant = 45
+            tarifName2.text = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
+            tarifName3.text = "Тариф - Т3(" + (data_?.tarifName3)! + ")"
         }
         // Выбор года - уберем с экрана
         picker.isHidden = true

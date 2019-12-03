@@ -306,13 +306,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //            self.fetchDeals()
 //            self.fetchDebt()
 //            self.fetchNews(newsId: "")
-//            DispatchQueue.main.async {
-//                if #available(iOS 10.0, *) {
-//                    self.collection.refreshControl?.endRefreshing()
-//                } else {
-//                    self.refreshControl?.endRefreshing()
-//                }
-//            }
+            DispatchQueue.main.async {
+                if #available(iOS 10.0, *) {
+                    self.collection.refreshControl?.endRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
         }
     }
     
@@ -1635,11 +1635,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                         }
                         DispatchQueue.main.async {
                             self.refresh = false
-                            if #available(iOS 10.0, *) {
-                                self.collection.refreshControl?.endRefreshing()
-                            } else {
-                                self.refreshControl?.endRefreshing()
-                            }
+//                            if #available(iOS 10.0, *) {
+//                                self.collection.refreshControl?.endRefreshing()
+//                            } else {
+//                                self.refreshControl?.endRefreshing()
+//                            }
                         }
                     }
                     return

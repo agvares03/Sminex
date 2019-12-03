@@ -455,10 +455,11 @@ func getBCImage(id: String) {
     DispatchQueue.global(qos: .background).async {
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BC_IMAGE + "guid=" + id)!)
         request.httpMethod = "GET"
-        
+        print("GET_IMG: ", request)
         let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
         if data != nil {
             let data = String(data: data!, encoding: .utf8) ?? ""
+            print("GET IMG DATA = ", data)
             if !data.contains(find: "not found") && !data.contains(find: "error") {
                 TemporaryHolder.instance.bcImage = UIImage(data: Data(base64Encoded: (data.replacingOccurrences(of: "data:image/png;base64,", with: "")))!)
             }

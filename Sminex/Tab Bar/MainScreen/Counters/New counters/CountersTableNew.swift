@@ -55,6 +55,12 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("DATA: ", data_)
+        collView.reloadData()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if data_.count != 0{
             return data_.count

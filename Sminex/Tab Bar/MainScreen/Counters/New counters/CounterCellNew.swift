@@ -101,8 +101,8 @@ final class CounterCellNew: UICollectionViewCell {
             twoTarif.isHidden = true
             twoTarifDrop.isHidden = true
             twoTarifLbl.isHidden = true
-            var am = item.tarifPrice1!
-            var am2 = item.tarifPrice1!
+            var am = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
+            var am2 = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
             if am == "0 ₽"{
                 am = "0.00 ₽"
                 am2 = "0.00 ₽"
@@ -132,8 +132,8 @@ final class CounterCellNew: UICollectionViewCell {
             tarifWidth.constant = 0
             oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 2
             tarifBot.constant = 74
-            var am = item.tarifPrice1!
-            var am2 = item.tarifPrice1!
+            var am = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
+            var am2 = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
             if am == "0 ₽"{
                 am = "0.00 ₽"
                 am2 = "0.00 ₽"
@@ -154,9 +154,9 @@ final class CounterCellNew: UICollectionViewCell {
                 self.oneTarif.text    = "0"
                 self.oneTarifDrop.text = ",00 ₽/\(item.units!)"
             }
-            oneTarifLbl.text = item.tarifName1
-            var am1 = item.tarifPrice2!
-            var am12 = item.tarifPrice2!
+            oneTarifLbl.text = "Тариф - Т1(" + item.tarifName1! + ")"
+            var am1 = item.tarifPrice2!.replacingOccurrences(of: ",", with: ".")
+            var am12 = item.tarifPrice2!.replacingOccurrences(of: ",", with: ".")
             if am1 == "0 ₽"{
                 am1 = "0.00 ₽"
                 am12 = "0.00 ₽"
@@ -177,7 +177,7 @@ final class CounterCellNew: UICollectionViewCell {
                 self.twoTarif.text    = "0"
                 self.twoTarifDrop.text = ",00 ₽/\(item.units!)"
             }
-            twoTarifLbl.text = item.tarifName2
+            twoTarifLbl.text = "Тариф - Т2(" + item.tarifName2! + ")"
             oneTarif.isHidden = false
             oneTarifLbl.isHidden = false
             twoTarif.isHidden = false
@@ -192,8 +192,8 @@ final class CounterCellNew: UICollectionViewCell {
             tarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
             oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
             tarifBot.constant = 74
-            var am = item.tarifPrice1!
-            var am2 = item.tarifPrice1!
+            var am = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
+            var am2 = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
             if am == "0 ₽"{
                 am = "0.00 ₽"
                 am2 = "0.00 ₽"
@@ -214,9 +214,9 @@ final class CounterCellNew: UICollectionViewCell {
                 self.oneTarif.text    = "0"
                 self.oneTarifDrop.text = ",00 ₽/\(item.units!)"
             }
-            oneTarifLbl.text = item.tarifName1
-            var am1 = item.tarifPrice2!
-            var am12 = item.tarifPrice2!
+            oneTarifLbl.text = "Тариф - Т1(" + item.tarifName1! + ")"
+            var am1 = item.tarifPrice2!.replacingOccurrences(of: ",", with: ".")
+            var am12 = item.tarifPrice2!.replacingOccurrences(of: ",", with: ".")
             if am1 == "0 ₽"{
                 am1 = "0.00 ₽"
                 am12 = "0.00 ₽"
@@ -237,9 +237,9 @@ final class CounterCellNew: UICollectionViewCell {
                 self.twoTarif.text    = "0"
                 self.twoTarifDrop.text = ",00 ₽/\(item.units!)"
             }
-            twoTarifLbl.text = item.tarifName2
-            var am3 = item.tarifPrice3!
-            var am32 = item.tarifPrice3!
+            twoTarifLbl.text = "Тариф - Т2(" + item.tarifName2! + ")"
+            var am3 = item.tarifPrice3!.replacingOccurrences(of: ",", with: ".")
+            var am32 = item.tarifPrice3!.replacingOccurrences(of: ",", with: ".")
             if am3 == "0 ₽"{
                 am3 = "0.00 ₽"
                 am32 = "0.00 ₽"
@@ -260,7 +260,7 @@ final class CounterCellNew: UICollectionViewCell {
                 self.tarif.text    = "0"
                 self.tarifDrop.text = ",00 ₽/\(item.units!)"
             }
-            tarifLbl.text = item.tarifName3
+            tarifLbl.text = "Тариф - Т3(" + item.tarifName3! + ")"
             oneTarif.isHidden = false
             oneTarifLbl.isHidden = false
             twoTarif.isHidden = false

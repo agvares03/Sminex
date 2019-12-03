@@ -7,12 +7,4 @@ PODS_ROOT = ${SRCROOT}
 PODS_TARGET_SRCROOT = ${PODS_ROOT}/Arcane
 PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
 SKIP_INSTALL = YES
-SWIFT_INCLUDE_PATHS[sdk=appletvos*] = $(PODS_ROOT)/Arcane/CocoaPods/appletvos
-SWIFT_INCLUDE_PATHS[sdk=appletvsimulator*] = $(PODS_ROOT)/Arcane/CocoaPods/appletvsimulator
-SWIFT_INCLUDE_PATHS[sdk=iphoneos*] = $(PODS_ROOT)/Arcane/CocoaPods/iphoneos
-SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*] = $(PODS_ROOT)/Arcane/CocoaPods/iphonesimulator
-SWIFT_INCLUDE_PATHS[sdk=macosx*] = $(PODS_ROOT)/Arcane/CocoaPods/macosx
-SWIFT_INCLUDE_PATHS[sdk=watchos*] = $(PODS_ROOT)/Arcane/CocoaPods/watchos
-SWIFT_INCLUDE_PATHS[sdk=watchsimulator*] = $(PODS_ROOT)/Arcane/CocoaPods/watchsimulator
-SWIFT_VERSION = 4.0
 USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES

@@ -81,10 +81,12 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         var metArr = meterArr
         metArr.removeAll()
         meterArr.forEach{
-            if ($0.resource?.containsIgnoringCase(find: counter.name!))!{
+            if ($0.resource?.containsIgnoringCase(find: counter.name!))! || ($0.meterType?.containsIgnoringCase(find: counter.name!))!{
                 metArr.append($0)
             }
         }
+//        print("COUNTER = ", counter.name)
+//        print("DATA_: ", meterArr)
         vc.canCount = canCount
         vc.data_ = metArr
         vc.period_ = periods
@@ -101,7 +103,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_METERS + "login=" + login.stringByAddingPercentEncodingForRFC3986()! + "&pwd=" + pass)!)
         request.httpMethod = "GET"
         
-        print(request)
+        print("URL COUNTERS: ", request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -111,7 +113,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             
             #if DEBUG
-            print("счетчики:", String(data: data!, encoding: .utf8)!)
+//            print("счетчики:", String(data: data!, encoding: .utf8)!)
             #endif
             
             if (String(data: data!, encoding: .utf8)?.contains(find: "error"))! {
