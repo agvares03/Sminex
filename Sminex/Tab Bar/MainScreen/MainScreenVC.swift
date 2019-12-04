@@ -334,7 +334,10 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             notifiBtn.image = UIImage(named: "notifi0")!
         }
         if UserDefaults.standard.bool(forKey: "backBtn"){
-            self.viewDidLoad()
+            fetchNews(newsId: "")
+            fetchDeals()
+            fetchQuestions()
+//            self.viewDidLoad()
             //            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
             //            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
             //            DispatchQueue.global(qos: .userInitiated).async {
