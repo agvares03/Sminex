@@ -81,15 +81,15 @@ final class CounterCellNew: UICollectionViewCell {
         }
         
         if item.value1 == "" || item.value1 == " " || item.value1 == "-" || item.value1 == nil{
-            income.text = "0,00 " + item.units!
-        }else{
-            income.text = item.value1! + " " + item.units!
-        }
-        
-        if item.valueInput1 == "" || item.valueInput1 == " " || item.valueInput1 == "-" || item.valueInput1 == nil{
             outcome.text = "0,00 " + item.units!
         }else{
-            outcome.text = item.valueInput1! + " " + item.units!
+            outcome.text = item.value1! + " " + item.units!
+        }
+        
+        if item.previousValue1 == "" || item.previousValue1 == " " || item.previousValue1 == "-" || item.previousValue1 == nil{
+            income.text = "0,00 " + item.units!
+        }else{
+            income.text = item.previousValue1! + " " + item.units!
         }
         if item.typeTarif == "1" || item.typeTarif == " " || item.typeTarif == ""{
             kolTarif.text = "1 - тарифный"

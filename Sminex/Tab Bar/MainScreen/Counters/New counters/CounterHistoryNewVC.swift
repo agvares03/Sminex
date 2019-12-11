@@ -185,7 +185,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         period_?.forEach { period in
             guard period.year == selectedYear else { return }
             period.perXml["MeterValue"].forEach {
-                let val = MeterValue($0, period: period.numMonth ?? "1")
+                let val = MeterValue($0, period: period.numMonth!)
                 if val.meterUniqueNum == data_?.meterUniqueNum {
                     metValues.append(val)
                     arrInput.append(val.valueInput1!)
@@ -321,12 +321,12 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
                 income3 = predInput3
             }
             i += 1
-            values.append( CounterHistoryCellData(value: $0.value1, previousValue: $0.difference1, period: Int($0.period ?? "1") ?? 1, income: income, fraction: fraction!) )
+            values.append( CounterHistoryCellData(value: $0.value1, previousValue: $0.difference1, period: Int($0.period ?? "1") ?? 1, income: $0.previousValue1!, fraction: fraction!) )
             if data_?.typeTarif == "2"{
-                values2.append( CounterHistoryCellData(value: $0.value2, previousValue: $0.difference2, period: Int($0.period ?? "1") ?? 1, income: income2, fraction: fraction!) )
+                values2.append( CounterHistoryCellData(value: $0.value2, previousValue: $0.difference2, period: Int($0.period ?? "1") ?? 1, income: $0.previousValue2!, fraction: fraction!) )
             }else if data_?.typeTarif == "3"{
-                values2.append( CounterHistoryCellData(value: $0.value2, previousValue: $0.difference2, period: Int($0.period ?? "1") ?? 1, income: income2, fraction: fraction!) )
-                values3.append( CounterHistoryCellData(value: $0.value3, previousValue: $0.difference3, period: Int($0.period ?? "1") ?? 1, income: income3, fraction: fraction!) )
+                values2.append( CounterHistoryCellData(value: $0.value2, previousValue: $0.difference2, period: Int($0.period ?? "1") ?? 1, income: $0.previousValue2!, fraction: fraction!) )
+                values3.append( CounterHistoryCellData(value: $0.value3, previousValue: $0.difference3, period: Int($0.period ?? "1") ?? 1, income: $0.previousValue3!, fraction: fraction!) )
             }
         }
         var dat = ""

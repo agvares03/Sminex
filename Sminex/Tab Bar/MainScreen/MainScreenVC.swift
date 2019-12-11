@@ -337,7 +337,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             fetchNews(newsId: "")
             fetchDeals()
             fetchQuestions()
-//            self.viewDidLoad()
+            self.viewDidLoad()
             //            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
             //            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
             //            DispatchQueue.global(qos: .userInitiated).async {
