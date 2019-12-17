@@ -81,13 +81,14 @@ static NSString *GDTCORStoragePath() {
   [self createEventDirectoryIfNotExists];
 
   __block GDTCORBackgroundIdentifier bgID = GDTCORBackgroundIdentifierInvalid;
-  bgID = [[GDTCORApplication sharedApplication]
-      beginBackgroundTaskWithName:@"GDTStorage"
-                expirationHandler:^{
-                  // End the background task if it's still valid.
-                  [[GDTCORApplication sharedApplication] endBackgroundTask:bgID];
-                  bgID = GDTCORBackgroundIdentifierInvalid;
-                }];
+  if (_runningInBackground) {
+    bgID = [[GDTCORApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+      if (bgID != GDTCORBackgroundIdentifierInvalid) {
+        [[GDTCORApplication sharedApplication] endBackgroundTask:bgID];
+        bgID = GDTCORBackgroundIdentifierInvalid;
+      }
+    }];
+  }
 
   dispatch_async(_storageQueue, ^{
     // Check that a backend implementation is available for this target.
@@ -116,24 +117,25 @@ static NSString *GDTCORStoragePath() {
       [self.uploadCoordinator forceUploadForTarget:target];
     }
 
-    // Write state to disk if we're in the background.
-    if ([[GDTCORApplication sharedApplication] isRunningInBackground]) {
+    // Write state to disk.
+    if (self->_runningInBackground) {
       if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
-        NSError *error;
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self
                                              requiringSecureCoding:YES
-                                                             error:&error];
+                                                             error:nil];
         [data writeToFile:[GDTCORStorage archivePath] atomically:YES];
       } else {
-#if !TARGET_OS_MACCATALYST
+#if !defined(TARGET_OS_MACCATALYST)
         [NSKeyedArchiver archiveRootObject:self toFile:[GDTCORStorage archivePath]];
 #endif
       }
     }
 
-    // Cancel or end the associated background task if it's still valid.
-    [[GDTCORApplication sharedApplication] endBackgroundTask:bgID];
-    bgID = GDTCORBackgroundIdentifierInvalid;
+    // If running in the background, save state to disk and end the associated background task.
+    if (bgID != GDTCORBackgroundIdentifierInvalid) {
+      [[GDTCORApplication sharedApplication] endBackgroundTask:bgID];
+      bgID = GDTCORBackgroundIdentifierInvalid;
+    }
   });
 }
 
@@ -215,56 +217,53 @@ static NSString *GDTCORStoragePath() {
 
 - (void)appWillForeground:(GDTCORApplication *)app {
   if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
-    NSError *error;
     NSData *data = [NSData dataWithContentsOfFile:[GDTCORStorage archivePath]];
-    if (data) {
-      [NSKeyedUnarchiver unarchivedObjectOfClass:[GDTCORStorage class] fromData:data error:&error];
-    }
+    [NSKeyedUnarchiver unarchivedObjectOfClass:[GDTCORStorage class] fromData:data error:nil];
   } else {
-#if !TARGET_OS_MACCATALYST
+#if !defined(TARGET_OS_MACCATALYST)
     [NSKeyedUnarchiver unarchiveObjectWithFile:[GDTCORStorage archivePath]];
 #endif
   }
 }
 
 - (void)appWillBackground:(GDTCORApplication *)app {
+  self->_runningInBackground = YES;
   dispatch_async(_storageQueue, ^{
-    // Immediately request a background task to run until the end of the current queue of work, and
-    // cancel it once the work is done.
-    __block GDTCORBackgroundIdentifier bgID =
-        [app beginBackgroundTaskWithName:@"GDTStorage"
-                       expirationHandler:^{
-                         [app endBackgroundTask:bgID];
-                         bgID = GDTCORBackgroundIdentifierInvalid;
-                       }];
-
     if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
-      NSError *error;
       NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self
                                            requiringSecureCoding:YES
-                                                           error:&error];
+                                                           error:nil];
       [data writeToFile:[GDTCORStorage archivePath] atomically:YES];
     } else {
-#if !TARGET_OS_MACCATALYST
+#if !defined(TARGET_OS_MACCATALYST)
       [NSKeyedArchiver archiveRootObject:self toFile:[GDTCORStorage archivePath]];
 #endif
     }
+  });
 
-    // End the background task if it's still valid.
-    [app endBackgroundTask:bgID];
-    bgID = GDTCORBackgroundIdentifierInvalid;
+  // Create an immediate background task to run until the end of the current queue of work.
+  __block GDTCORBackgroundIdentifier bgID = [app beginBackgroundTaskWithExpirationHandler:^{
+    if (bgID != GDTCORBackgroundIdentifierInvalid) {
+      [app endBackgroundTask:bgID];
+      bgID = GDTCORBackgroundIdentifierInvalid;
+    }
+  }];
+  dispatch_async(_storageQueue, ^{
+    if (bgID != GDTCORBackgroundIdentifierInvalid) {
+      [app endBackgroundTask:bgID];
+      bgID = GDTCORBackgroundIdentifierInvalid;
+    }
   });
 }
 
 - (void)appWillTerminate:(GDTCORApplication *)application {
   if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
-    NSError *error;
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self
                                          requiringSecureCoding:YES
-                                                         error:&error];
+                                                         error:nil];
     [data writeToFile:[GDTCORStorage archivePath] atomically:YES];
   } else {
-#if !TARGET_OS_MACCATALYST
+#if !defined(TARGET_OS_MACCATALYST)
     [NSKeyedArchiver archiveRootObject:self toFile:[GDTCORStorage archivePath]];
 #endif
   }

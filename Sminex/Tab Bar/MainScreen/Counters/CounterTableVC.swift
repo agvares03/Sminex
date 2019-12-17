@@ -508,7 +508,7 @@ struct CounterPeriod {
         perXml      = row
         periodDate  = row.attributes["PeriodDate"]
         numMonth    = row.attributes["NumMonth"]
-        lastModf    = row.attributes["LastModified"]
+        lastModf    = row.attributes["LastModified"] ?? ""
         year        = row.attributes["Year"]
     }
 }

@@ -38,7 +38,7 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
         let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
         let calendar = Calendar.current
         let curDay = calendar.component(.day, from: Date())
-        if curDay > dateTo || curDay < dateFrom{
+        if curDay > dateTo || curDay < dateFrom || UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             canCount = false
         }
         collView.delegate = self

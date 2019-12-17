@@ -9,6 +9,7 @@ import UIKit
 
 final class CounterCellNew: UICollectionViewCell {
     @IBOutlet private weak var sendLbl:         UILabel!
+    @IBOutlet private weak var sendLblHeight:   NSLayoutConstraint!
     @IBOutlet private weak var counter_name:    UILabel!
     @IBOutlet private weak var income:          UILabel!
     @IBOutlet private weak var outcome:         UILabel!
@@ -32,6 +33,7 @@ final class CounterCellNew: UICollectionViewCell {
     @IBOutlet private weak var dateCheckLbl:    UILabel!
     @IBOutlet private weak var dateCheckHeight: NSLayoutConstraint!
     @IBOutlet private weak var sendBtn:         UIButton!
+    @IBOutlet private weak var sendBtnHeight:   NSLayoutConstraint!
     
     @IBAction private func go_action(_ sender: UIButton) {
         self.delegate2.pressed(index: index)
@@ -55,20 +57,31 @@ final class CounterCellNew: UICollectionViewCell {
         self.delegate2 = delegate2
         self.index = index
         if canCount{
+            sendBtnHeight.constant = 42
+            sendLblHeight.constant = 45
             sendBtn.isHidden = false
+            sendLbl.isHidden = false
         }else{
+            sendBtnHeight.constant = 1
+            sendLblHeight.constant = 1
             sendBtn.isHidden = true
+            sendLbl.isHidden = true
         }
         counter_name.text = "Счетчик №" + item.meterUniqueNum!
         var dat = date
-        date.forEach{_ in 
-            if dat.contains(find: " "){
-                dat.removeLast()
+        if date != nil && date != "" && date != " "{
+            date.forEach{_ in
+                if dat.contains(find: " "){
+                    dat.removeLast()
+                }
             }
+            let dat1 = dat.components(separatedBy: ".")
+            dat = dat1[0] + " " + getNameAndMonth(dat1[1]) + " " + dat1[2]
+            dateSend.text = dat
+        }else{
+            dateSend.text = "-"
         }
-        var dat1 = dat.components(separatedBy: ".")
-        dat = dat1[0] + " " + getNameAndMonth(dat1[1]) + " " + dat1[2]
-        dateSend.text = dat
+        
         dateCheck.text = item.checkDate
         if item.checkDate == ""{
             dateCheck.isHidden = true

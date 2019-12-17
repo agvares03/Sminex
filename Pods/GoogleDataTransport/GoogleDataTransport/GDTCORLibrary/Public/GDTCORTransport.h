@@ -35,10 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
  * @param target The target backend of this transport.
  * @return A transport that will send events.
  */
-- (nullable instancetype)initWithMappingID:(NSString *)mappingID
-                              transformers:
-                                  (nullable NSArray<id<GDTCOREventTransformer>> *)transformers
-                                    target:(NSInteger)target NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithMappingID:(NSString *)mappingID
+                     transformers:(nullable NSArray<id<GDTCOREventTransformer>> *)transformers
+                           target:(NSInteger)target NS_DESIGNATED_INITIALIZER;
 
 /** Copies and sends an internal telemetry event. Events sent using this API are lower in priority,
  * and sometimes won't be sent on their own.

@@ -23,17 +23,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FIRComponentContainer ()
+@interface FIRComponentContainer () {
+  dispatch_queue_t _containerQueue;
+}
 
-/// The dictionary of components that are registered for a particular app. The key is an `NSString`
+/// The dictionary of components that are registered for a particular app. The key is an NSString
 /// of the protocol.
 @property(nonatomic, strong) NSMutableDictionary<NSString *, FIRComponentCreationBlock> *components;
 
 /// Cached instances of components that requested to be cached.
 @property(nonatomic, strong) NSMutableDictionary<NSString *, id> *cachedInstances;
-
-/// Protocols of components that have requested to be eagerly instantiated.
-@property(nonatomic, strong, nullable) NSMutableArray<Protocol *> *eagerProtocolsToInstantiate;
 
 @end
 
@@ -70,6 +69,8 @@ static NSMutableSet<Class> *sFIRComponentRegistrants;
     _app = app;
     _cachedInstances = [NSMutableDictionary<NSString *, id> dictionary];
     _components = [NSMutableDictionary<NSString *, FIRComponentCreationBlock> dictionary];
+    _containerQueue =
+        dispatch_queue_create("com.google.FirebaseComponentContainer", DISPATCH_QUEUE_SERIAL);
 
     [self populateComponentsFromRegisteredClasses:allRegistrants forApp:app];
   }
@@ -77,9 +78,6 @@ static NSMutableSet<Class> *sFIRComponentRegistrants;
 }
 
 - (void)populateComponentsFromRegisteredClasses:(NSSet<Class> *)classes forApp:(FIRApp *)app {
-  // Keep track of any components that need to eagerly instantiate after all components are added.
-  self.eagerProtocolsToInstantiate = [[NSMutableArray alloc] init];
-
   // Loop through the verified component registrants and populate the components array.
   for (Class<FIRLibrary> klass in classes) {
     // Loop through all the components being registered and store them as appropriate.
@@ -98,16 +96,14 @@ static NSMutableSet<Class> *sFIRComponentRegistrants;
       // Store the creation block for later usage.
       self.components[protocolName] = component.creationBlock;
 
-      // Queue any protocols that should be eagerly instantiated. Don't instantiate them yet
-      // because they could depend on other components that haven't been added to the components
-      // array yet.
+      // Instantiate the instance if it has requested to be instantiated.
       BOOL shouldInstantiateEager =
           (component.instantiationTiming == FIRInstantiationTimingAlwaysEager);
       BOOL shouldInstantiateDefaultEager =
           (component.instantiationTiming == FIRInstantiationTimingEagerInDefaultApp &&
            [app isDefaultApp]);
       if (shouldInstantiateEager || shouldInstantiateDefaultEager) {
-        [self.eagerProtocolsToInstantiate addObject:component.protocol];
+        [self instantiateInstanceForProtocol:component.protocol withBlock:component.creationBlock];
       }
     }
   }
@@ -115,28 +111,11 @@ static NSMutableSet<Class> *sFIRComponentRegistrants;
 
 #pragma mark - Instance Creation
 
-- (void)instantiateEagerComponents {
-  // After all components are registered, instantiate the ones that are requesting eager
-  // instantiation.
-  @synchronized(self) {
-    for (Protocol *protocol in self.eagerProtocolsToInstantiate) {
-      // Get an instance for the protocol, which will instantiate it since it couldn't have been
-      // cached yet. Ignore the instance coming back since we don't need it.
-      __unused id unusedInstance = [self instanceForProtocol:protocol];
-    }
-
-    // All eager instantiation is complete, clear the stored property now.
-    self.eagerProtocolsToInstantiate = nil;
-  }
-}
-
 /// Instantiate an instance of a class that conforms to the specified protocol.
 /// This will:
 ///   - Call the block to create an instance if possible,
 ///   - Validate that the instance returned conforms to the protocol it claims to,
 ///   - Cache the instance if the block requests it
-///
-/// Note that this method assumes the caller already has @sychronized on self.
 - (nullable id)instantiateInstanceForProtocol:(Protocol *)protocol
                                     withBlock:(FIRComponentCreationBlock)creationBlock {
   if (!creationBlock) {
@@ -161,7 +140,9 @@ static NSMutableSet<Class> *sFIRComponentRegistrants;
 
   // The instance is ready to be returned, but check if it should be cached first before returning.
   if (shouldCache) {
-    self.cachedInstances[protocolName] = instance;
+    dispatch_sync(_containerQueue, ^{
+      self.cachedInstances[protocolName] = instance;
+    });
   }
 
   return instance;
@@ -172,35 +153,47 @@ static NSMutableSet<Class> *sFIRComponentRegistrants;
 - (nullable id)instanceForProtocol:(Protocol *)protocol {
   // Check if there is a cached instance, and return it if so.
   NSString *protocolName = NSStringFromProtocol(protocol);
-
-  id cachedInstance;
-  @synchronized(self) {
+  __block id cachedInstance;
+  dispatch_sync(_containerQueue, ^{
     cachedInstance = self.cachedInstances[protocolName];
-    if (!cachedInstance) {
-      // Use the creation block to instantiate an instance and return it.
-      FIRComponentCreationBlock creationBlock = self.components[protocolName];
-      cachedInstance = [self instantiateInstanceForProtocol:protocol withBlock:creationBlock];
-    }
+  });
+
+  if (cachedInstance) {
+    return cachedInstance;
   }
-  return cachedInstance;
+
+  // Use the creation block to instantiate an instance and return it.
+  FIRComponentCreationBlock creationBlock = self.components[protocolName];
+  return [self instantiateInstanceForProtocol:protocol withBlock:creationBlock];
 }
 
 #pragma mark - Lifecycle
 
 - (void)removeAllCachedInstances {
-  @synchronized(self) {
-    // Loop through the cache and notify each instance that is a maintainer to clean up after
-    // itself.
-    for (id instance in self.cachedInstances.allValues) {
-      if ([instance conformsToProtocol:@protocol(FIRComponentLifecycleMaintainer)] &&
-          [instance respondsToSelector:@selector(appWillBeDeleted:)]) {
-        [instance appWillBeDeleted:self.app];
-      }
-    }
+  // Loop through the cache and notify each instance that is a maintainer to clean up after itself.
+  // Design note: we're getting a copy here, unlocking the cached instances, iterating over the
+  // copy, then locking and removing all cached instances. A race condition *could* exist where a
+  // new cached instance is created between the copy and the removal, but the chances are slim and
+  // side-effects are significantly smaller than including the entire loop in the `dispatch_sync`
+  // block (access to the cache from inside the block would deadlock and crash).
+  __block NSDictionary<NSString *, id> *instancesCopy;
+  dispatch_sync(_containerQueue, ^{
+    instancesCopy = [self.cachedInstances copy];
+  });
 
-    // Empty the cache.
-    [self.cachedInstances removeAllObjects];
+  for (id instance in instancesCopy.allValues) {
+    if ([instance conformsToProtocol:@protocol(FIRComponentLifecycleMaintainer)] &&
+        [instance respondsToSelector:@selector(appWillBeDeleted:)]) {
+      [instance appWillBeDeleted:self.app];
+    }
   }
+
+  instancesCopy = nil;
+
+  // Empty the cache.
+  dispatch_sync(_containerQueue, ^{
+    [self.cachedInstances removeAllObjects];
+  });
 }
 
 @end

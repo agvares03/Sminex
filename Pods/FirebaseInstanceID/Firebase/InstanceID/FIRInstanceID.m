@@ -22,7 +22,6 @@
 #import <FirebaseCore/FIRLibrary.h>
 #import <FirebaseCore/FIROptions.h>
 #import <GoogleUtilities/GULAppEnvironmentUtil.h>
-#import <GoogleUtilities/GULUserDefaults.h>
 #import "FIRInstanceID+Private.h"
 #import "FIRInstanceIDAuthService.h"
 #import "FIRInstanceIDCheckinPreferences.h"
@@ -68,8 +67,8 @@ static NSString *const kEntitlementsKeyForMac = @"Entitlements";
 static NSString *const kAPSEnvironmentDevelopmentValue = @"development";
 /// FIRMessaging selector that returns the current FIRMessaging auto init
 /// enabled flag.
-static NSString *const kFIRInstanceIDFCMSelectorAutoInitEnabled =
-    @"isAutoInitEnabledWithUserDefaults:";
+static NSString *const kFIRInstanceIDFCMSelectorAutoInitEnabled = @"isAutoInitEnabled";
+static NSString *const kFIRInstanceIDFCMSelectorInstance = @"messaging";
 
 static NSString *const kFIRInstanceIDAPNSTokenType = @"APNSTokenType";
 static NSString *const kFIRIIDAppReadyToConfigureSDKNotification =
@@ -77,6 +76,8 @@ static NSString *const kFIRIIDAppReadyToConfigureSDKNotification =
 static NSString *const kFIRIIDAppNameKey = @"FIRAppNameKey";
 static NSString *const kFIRIIDErrorDomain = @"com.firebase.instanceid";
 static NSString *const kFIRIIDServiceInstanceID = @"InstanceID";
+
+static NSInteger const kFIRIIDErrorCodeInstanceIDFailed = -121;
 
 typedef void (^FIRInstanceIDKeyPairHandler)(FIRInstanceIDKeyPair *keyPair, NSError *error);
 
@@ -638,47 +639,67 @@ static FIRInstanceID *gInstanceID;
 + (nonnull NSArray<FIRComponent *> *)componentsToRegister {
   FIRComponentCreationBlock creationBlock =
       ^id _Nullable(FIRComponentContainer *container, BOOL *isCacheable) {
-    // InstanceID only works with the default app.
-    if (!container.app.isDefaultApp) {
-      // Only configure for the default FIRApp.
-      FIRInstanceIDLoggerDebug(kFIRInstanceIDMessageCodeFIRApp002,
-                               @"Firebase Instance ID only works with the default app.");
-      return nil;
-    }
-
     // Ensure it's cached so it returns the same instance every time instanceID is called.
     *isCacheable = YES;
     FIRInstanceID *instanceID = [[FIRInstanceID alloc] initPrivately];
     [instanceID start];
-    [instanceID configureInstanceIDWithOptions:container.app.options];
     return instanceID;
   };
   FIRComponent *instanceIDProvider =
       [FIRComponent componentWithProtocol:@protocol(FIRInstanceIDInstanceProvider)
-                      instantiationTiming:FIRInstantiationTimingEagerInDefaultApp
+                      instantiationTiming:FIRInstantiationTimingLazy
                              dependencies:@[]
                             creationBlock:creationBlock];
   return @[ instanceIDProvider ];
 }
 
-- (void)configureInstanceIDWithOptions:(FIROptions *)options {
++ (void)configureWithApp:(FIRApp *)app {
+  if (!app.isDefaultApp) {
+    // Only configure for the default FIRApp.
+    FIRInstanceIDLoggerDebug(kFIRInstanceIDMessageCodeFIRApp002,
+                             @"Firebase Instance ID only works with the default app.");
+    return;
+  }
+  [[FIRInstanceID instanceID] configureInstanceIDWithOptions:app.options app:app];
+}
+
+- (void)configureInstanceIDWithOptions:(FIROptions *)options app:(FIRApp *)firApp {
   NSString *GCMSenderID = options.GCMSenderID;
   if (!GCMSenderID.length) {
     FIRInstanceIDLoggerError(kFIRInstanceIDMessageCodeFIRApp000,
                              @"Firebase not set up correctly, nil or empty senderID.");
-    [NSException raise:kFIRIIDErrorDomain
-                format:@"Could not configure Firebase InstanceID. GCMSenderID must not be nil or "
-                       @"empty."];
+    [FIRInstanceID exitWithReason:@"GCM_SENDER_ID must not be nil or empty." forFirebaseApp:firApp];
+    return;
   }
 
   self.fcmSenderID = GCMSenderID;
-  self.firebaseAppID = options.googleAppID;
+  self.firebaseAppID = firApp.options.googleAppID;
 
   // FCM generates a FCM token during app start for sending push notification to device.
   // This is not needed for app extension.
   if (![GULAppEnvironmentUtil isAppExtension]) {
     [self didCompleteConfigure];
   }
+}
+
++ (NSError *)configureErrorWithReason:(nonnull NSString *)reason {
+  NSString *description =
+      [NSString stringWithFormat:@"Configuration failed for service %@.", kFIRIIDServiceInstanceID];
+  if (!reason.length) {
+    reason = @"Unknown reason";
+  }
+
+  NSDictionary *userInfo =
+      @{NSLocalizedDescriptionKey : description, NSLocalizedFailureReasonErrorKey : reason};
+
+  return [NSError errorWithDomain:kFIRIIDErrorDomain
+                             code:kFIRIIDErrorCodeInstanceIDFailed
+                         userInfo:userInfo];
+}
+
++ (void)exitWithReason:(nonnull NSString *)reason forFirebaseApp:(FIRApp *)firebaseApp {
+  [NSException raise:kFIRIIDErrorDomain
+              format:@"Could not configure Firebase InstanceID. %@", reason];
 }
 
 // This is used to start any operations when we receive FirebaseSDK setup notification
@@ -688,9 +709,7 @@ static FIRInstanceID *gInstanceID;
   // When there is a cached token, do the token refresh.
   if (cachedToken) {
     // Clean up expired tokens by checking the token refresh policy.
-    NSError *error;
-    NSString *cachedIID = [self.keyPairStore appIdentityWithError:&error];
-    if ([self.tokenManager checkTokenRefreshPolicyWithIID:cachedIID]) {
+    if ([self.tokenManager checkForTokenRefreshPolicy]) {
       // Default token is expired, fetch default token from server.
       [self defaultTokenWithHandler:nil];
     }
@@ -717,20 +736,29 @@ static FIRInstanceID *gInstanceID;
     return NO;
   }
 
-  // Messaging doesn't have the class method, auto init should be enabled since FCM exists.
-  SEL autoInitSelector = NSSelectorFromString(kFIRInstanceIDFCMSelectorAutoInitEnabled);
-  if (![messagingClass respondsToSelector:autoInitSelector]) {
+  // Messaging doesn't have the singleton method, auto init should be enabled since FCM exists.
+  SEL instanceSelector = NSSelectorFromString(kFIRInstanceIDFCMSelectorInstance);
+  if (![messagingClass respondsToSelector:instanceSelector]) {
     return YES;
   }
 
-  // Get the autoInitEnabled class method.
-  IMP isAutoInitEnabledIMP = [messagingClass methodForSelector:autoInitSelector];
-  BOOL(*isAutoInitEnabled)
-  (Class, SEL, GULUserDefaults *) = (BOOL(*)(id, SEL, GULUserDefaults *))isAutoInitEnabledIMP;
+  // Get FIRMessaging shared instance.
+  IMP messagingInstanceIMP = [messagingClass methodForSelector:instanceSelector];
+  id (*getMessagingInstance)(id, SEL) = (void *)messagingInstanceIMP;
+  id messagingInstance = getMessagingInstance(messagingClass, instanceSelector);
+
+  // Messaging doesn't have the property, auto init should be enabled since FCM exists.
+  SEL autoInitSelector = NSSelectorFromString(kFIRInstanceIDFCMSelectorAutoInitEnabled);
+  if (![messagingInstance respondsToSelector:autoInitSelector]) {
+    return YES;
+  }
+
+  // Get autoInitEnabled method.
+  IMP isAutoInitEnabledIMP = [messagingInstance methodForSelector:autoInitSelector];
+  BOOL (*isAutoInitEnabled)(id, SEL) = (BOOL(*)(id, SEL))isAutoInitEnabledIMP;
 
   // Check FCM's isAutoInitEnabled property.
-  return isAutoInitEnabled(messagingClass, autoInitSelector,
-                           [GULUserDefaults standardUserDefaults]);
+  return isAutoInitEnabled(messagingInstance, autoInitSelector);
 }
 
 // Actually makes InstanceID instantiate both the IID and Token-related subsystems.

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -180,7 +178,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 из 6" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQf-fz-R6U">
-                    <rect key="frame" x="32" y="5" width="35" height="15"/>
+                    <rect key="frame" x="32" y="5" width="34" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="v0w-J2-vQi"/>
                     </constraints>
@@ -241,7 +239,6 @@
                     </label>
                     <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Свой вариант" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Chy-Ne-sUF">
                         <rect key="frame" x="65" y="22" width="278" height="17"/>
-                        <nil key="textColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
@@ -1045,7 +1042,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*ГВС 283411*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7no-ky-R0P">
-                        <rect key="frame" x="24" y="30.5" width="89" height="15"/>
+                        <rect key="frame" x="24" y="30.5" width="86" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="SF8-8B-Ses"/>
                         </constraints>
@@ -1197,7 +1194,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MzA-sx-gkt">
-                        <rect key="frame" x="36" y="129.5" width="89.5" height="16"/>
+                        <rect key="frame" x="36" y="129.5" width="89" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -5419,7 +5416,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Название счетчика" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Wc-Qc-Xiz">
-                        <rect key="frame" x="30" y="26" width="346" height="28"/>
+                        <rect key="frame" x="30" y="6" width="346" height="48"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -5868,7 +5865,9 @@
                 <outlet property="oneTarifWidth" destination="3m7-q7-OEQ" id="5y5-lq-0Gi"/>
                 <outlet property="outcome" destination="Wcu-ER-Mte" id="vVT-Fa-zUg"/>
                 <outlet property="sendBtn" destination="0pZ-ju-9Ai" id="JLv-Hv-nvh"/>
+                <outlet property="sendBtnHeight" destination="SSz-NE-N2m" id="f2u-mL-nGN"/>
                 <outlet property="sendLbl" destination="pEX-cc-A4g" id="K6b-1C-9aT"/>
+                <outlet property="sendLblHeight" destination="B09-uO-qkC" id="EPb-Ij-B7T"/>
                 <outlet property="tarif" destination="Eh4-0V-FV8" id="fhK-lA-1ZU"/>
                 <outlet property="tarifBot" destination="bcD-wa-9U7" id="JWb-V4-cyW"/>
                 <outlet property="tarifDrop" destination="2h8-qj-OdK" id="vo4-cu-zTO"/>
