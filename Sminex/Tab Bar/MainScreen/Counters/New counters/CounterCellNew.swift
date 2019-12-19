@@ -68,7 +68,7 @@ final class CounterCellNew: UICollectionViewCell {
             sendLbl.isHidden = true
         }
         counter_name.text = "Счетчик №" + item.meterUniqueNum!
-        var dat = date
+        var dat: String = item.lastModf!
         if date != nil && date != "" && date != " "{
             date.forEach{_ in
                 if dat.contains(find: " "){

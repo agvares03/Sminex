@@ -457,6 +457,7 @@ struct MeterValue {
     let tarifPrice2:        String?
     let tarifPrice3:        String?
     let checkDate:          String?
+    let lastModf:           String?
     
     init(_ row: XML.Accessor, period: String) {
         
@@ -491,6 +492,7 @@ struct MeterValue {
         guid                = row.attributes["GUID"] ?? ""
         meterType           = row.attributes["MeterType"] ?? ""
         checkDate           = row.attributes["Check_date"] ?? ""
+        lastModf            = row.attributes["LastModified"] ?? ""
     }
 }
 
