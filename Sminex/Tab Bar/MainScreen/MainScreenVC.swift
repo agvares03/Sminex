@@ -334,9 +334,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             notifiBtn.image = UIImage(named: "notifi0")!
         }
         if UserDefaults.standard.bool(forKey: "backBtn"){
-            fetchNews(newsId: "")
-            fetchDeals()
-            fetchQuestions()
+//            fetchNews(newsId: "")
+//            fetchDeals()
+//            fetchQuestions()
             self.viewDidLoad()
             //            title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
             //            canCount = UserDefaults.standard.integer(forKey: "can_count") == 1 ? true : false
@@ -2561,9 +2561,13 @@ final class SchetCell: UICollectionViewCell {
             button.backgroundColor = button.backgroundColor?.withAlphaComponent(1.0)
         }
         if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
-            title.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
-            date.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
-            button.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
+            title.isHidden  = true
+            date.isHidden   = true
+            button.isHidden = true
+        }else{
+            title.isHidden  = false
+            date.isHidden   = false
+            button.isHidden = false
         }
     }
     

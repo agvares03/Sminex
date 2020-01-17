@@ -122,9 +122,9 @@ class CustomAlertViewController: UIViewController {
                 let responseString = String(data: data!, encoding: .utf8) ?? ""
                 
                 #if DEBUG
-                print("responseString = \(responseString)")
+                print("responseStringPWD = \(responseString)")
                 #endif
-                UserDefaults.standard.setValue(responseString, forKey: "pwd")
+                UserDefaults.standard.setValue(responseString.stringByAddingPercentEncodingForRFC3986()!, forKey: "pwd")
                 self.edLoginText = ident
                 self.edPassText = responseString
                 self.enter()
@@ -294,7 +294,7 @@ class CustomAlertViewController: UIViewController {
                     // ЗАЯВКИ С КОММЕНТАРИЯМИ
                     db.del_db(table_name: "Comments")
                     db.del_db(table_name: "Applications")
-                    db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "1")
+                    db.parse_Apps(login: self.edLoginText, pass: self.edPassText.stringByAddingPercentEncodingForRFC3986()!, isCons: "1")
                     
                     // Дома, квартиры, лицевые счета
                     db.del_db(table_name: "Houses")
@@ -310,18 +310,18 @@ class CustomAlertViewController: UIViewController {
                     db.del_db(table_name: "Counters")
                     db.del_db(table_name: "TypesCounters")
                     // Получим данные в базу данных
-                    db.parse_Countrers(login: self.edLoginText, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: self.edLoginText)), history: answer[7])
+                    db.parse_Countrers(login: self.edLoginText, pass: self.edPassText.stringByAddingPercentEncodingForRFC3986()!, history: answer[7])
                     
                     // ВЕДОМОСТЬ (Пока данные тестовые)
                     // Удалим данные из базы данных
                     db.del_db(table_name: "Saldo")
                     // Получим данные в базу данных
-                    db.parse_OSV(login: self.edLoginText, pass: self.edPassText)
+                    db.parse_OSV(login: self.edLoginText, pass: self.edPassText.stringByAddingPercentEncodingForRFC3986()!)
                     
                     // ЗАЯВКИ С КОММЕНТАРИЯМИ
                     db.del_db(table_name: "Applications")
                     db.del_db(table_name: "Comments")
-                    db.parse_Apps(login: self.edLoginText, pass: self.edPassText, isCons: "0")
+                    db.parse_Apps(login: self.edLoginText, pass: self.edPassText.stringByAddingPercentEncodingForRFC3986()!, isCons: "0")
                     db.del_db(table_name: "Notifications")
                     db.parse_Notifications(id_account: answer[safe: 4]  ?? "")
                     var imageList   : [String:Data] = [:]

@@ -157,7 +157,7 @@ class FirstController: UIViewController {
         
         let defaults    = UserDefaults.standard
         let login       = defaults.string(forKey: "login")
-        let pass        = defaults.string(forKey: "pass")
+        let pass        = defaults.string(forKey: "pwd")
         
         if login != nil && login != "" {
             if (UserDefaults.standard.string(forKey: "pwd") != "") && login != "" {
@@ -376,7 +376,7 @@ class FirstController: UIViewController {
                     db.del_db(table_name: "Counters")
                     db.del_db(table_name: "TypesCounters")
                     // Получим данные в базу данных
-                    db.parse_Countrers(login: login, pass: getHash(pass: UserDefaults.standard.string(forKey: "pass") ?? "", salt: self.getSalt(login: login)), history: answer[7])
+                    db.parse_Countrers(login: login, pass: pass, history: answer[7])
                     
                     // ВЕДОМОСТЬ (Пока данные тестовые)
                     // Удалим данные из базы данных
