@@ -182,7 +182,7 @@ final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
         
         var request = URLRequest(url: URL(string: url_str)!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             
@@ -192,7 +192,7 @@ final class FinancePayAcceptVC: UIViewController, UITextFieldDelegate {
                 }
             }
             guard data != nil else { return }
-            
+            print(String(data: data!, encoding: .utf8)!)
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error: ", with: "") ?? "", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )

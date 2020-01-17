@@ -34,12 +34,19 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
-        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
-        let calendar = Calendar.current
-        let curDay = calendar.component(.day, from: Date())
-        if curDay > dateTo || curDay < dateFrom || UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+//        let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
+//        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+//        let calendar = Calendar.current
+//        let curDay = calendar.component(.day, from: Date())
+//        if curDay > dateTo || curDay < dateFrom || UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+//            canCount = false
+//        }else{
+//            canCount = true
+//        }
+        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             canCount = false
+        }else{
+            canCount = true
         }
         collView.delegate = self
         collView.dataSource = self

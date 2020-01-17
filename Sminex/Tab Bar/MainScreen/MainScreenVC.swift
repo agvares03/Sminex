@@ -897,7 +897,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             performSegue(withIdentifier: Segues.fromMainScreenVC.toRequest, sender: self)
             
         } else if name == "Передать показания" {
-            if canCount {
+            if !UserDefaults.standard.bool(forKey: "onlyViewMeterReadings") {
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
             }
             
