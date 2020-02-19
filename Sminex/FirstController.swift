@@ -185,7 +185,7 @@ class FirstController: UIViewController {
         } else if segue.identifier == Segues.fromFirstController.toLoginActivity {
             
             let vc = segue.destination as! UINavigationController
-            (vc.viewControllers.first as! ViewController).roleReg_ = roleReg
+            (vc.viewControllers.first as! NewViewController).roleReg_ = roleReg
             
         } else if segue.identifier == Segues.fromFirstController.toChooiseUk {
             

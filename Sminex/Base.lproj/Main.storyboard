@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uII-yM-bRq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uII-yM-bRq">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,21 +23,22 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="gS4-oE-Fm4">
-                                <rect key="frame" x="177.5" y="377.5" width="20" height="20"/>
+                                <rect key="frame" x="177.5" y="401" width="20" height="20"/>
                                 <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </activityIndicatorView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sminex_logo_img1" translatesAutoresizingMaskIntoConstraints="NO" id="1vD-sA-orW">
-                                <rect key="frame" x="87.5" y="308.5" width="200" height="50"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sminex_logo_new" translatesAutoresizingMaskIntoConstraints="NO" id="1vD-sA-orW">
+                                <rect key="frame" x="60" y="285" width="255" height="97"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="J5W-GQ-fqN"/>
-                                    <constraint firstAttribute="height" constant="50" id="wyY-3x-QJx"/>
+                                    <constraint firstAttribute="width" secondItem="1vD-sA-orW" secondAttribute="height" multiplier="255:97" id="Oi0-Q5-5u8"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.37254901960784315" green="0.6470588235294118" blue="0.066666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="gQc-zZ-qEq" firstAttribute="top" secondItem="BnB-rG-kPb" secondAttribute="top" id="2si-Tv-UU6"/>
+                            <constraint firstAttribute="trailing" secondItem="1vD-sA-orW" secondAttribute="trailing" constant="60" id="GJe-yq-xkr"/>
                             <constraint firstItem="1vD-sA-orW" firstAttribute="centerX" secondItem="BnB-rG-kPb" secondAttribute="centerX" id="TEy-MC-s97"/>
+                            <constraint firstItem="1vD-sA-orW" firstAttribute="leading" secondItem="BnB-rG-kPb" secondAttribute="leading" constant="60" id="YmH-3C-fEh"/>
                             <constraint firstItem="gQc-zZ-qEq" firstAttribute="leading" secondItem="BnB-rG-kPb" secondAttribute="leading" id="a4l-iv-jhs"/>
                             <constraint firstItem="gS4-oE-Fm4" firstAttribute="centerX" secondItem="BnB-rG-kPb" secondAttribute="centerX" id="aoQ-x7-Wqa"/>
                             <constraint firstItem="gS4-oE-Fm4" firstAttribute="top" secondItem="1vD-sA-orW" secondAttribute="bottom" constant="19" id="bZA-Jl-WQg"/>
@@ -45,6 +46,11 @@
                             <constraint firstItem="1vD-sA-orW" firstAttribute="centerY" secondItem="BnB-rG-kPb" secondAttribute="centerY" id="iOr-jm-o5n"/>
                             <constraint firstItem="LTq-uo-GE3" firstAttribute="top" secondItem="gQc-zZ-qEq" secondAttribute="bottom" id="kAP-4f-WIR"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="gQc-zZ-qEq"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="r5j-bw-T42"/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -1471,20 +1477,20 @@
             </objects>
             <point key="canvasLocation" x="3561" y="-740"/>
         </scene>
-        <!--UINavigationController-yke-5M-97h-->
+        <!--navigation_login-->
         <scene sceneID="rNH-ea-17N">
             <objects>
-                <viewControllerPlaceholder storyboardName="Auth" referencedIdentifier="UINavigationController-yke-5M-97h" id="rgD-LZ-Fl0" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="AuthNew" referencedIdentifier="navigation_login" id="rgD-LZ-Fl0" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="b0t-jj-5gv"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VAG-CN-MjN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1058" y="-169"/>
+            <point key="canvasLocation" x="-1495" y="-169"/>
         </scene>
-        <!--login_activity-->
+        <!--login_activity_new-->
         <scene sceneID="ntp-L3-Lre">
             <objects>
-                <viewControllerPlaceholder storyboardIdentifier="login_activity" storyboardName="Auth" referencedIdentifier="login_activity" id="KT5-Zb-CaE" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardIdentifier="login_activity" storyboardName="AuthNew" referencedIdentifier="login_activity_new" id="KT5-Zb-CaE" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Txt-si-g57" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1058" y="-100"/>
@@ -1895,7 +1901,7 @@
         <image name="messageIcon" width="36" height="36"/>
         <image name="notifi1" width="25" height="25"/>
         <image name="rossNavbar" width="20" height="20"/>
-        <image name="sminex_logo_img1" width="974" height="242"/>
+        <image name="sminex_logo_new" width="730" height="260"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cut-Ue-rY9"/>

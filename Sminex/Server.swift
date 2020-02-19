@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LocalAuthentication
 
 final class Server {
     
@@ -107,6 +108,32 @@ final class Server {
         return emailTest.evaluate(with: testStr)
     }
     
+    func machineName() -> String {
+      var systemInfo = utsname()
+      uname(&systemInfo)
+      let machineMirror = Mirror(reflecting: systemInfo.machine)
+      return machineMirror.children.reduce("") { identifier, element in
+        guard let value = element.value as? Int8, value != 0 else { return identifier }
+        return identifier + String(UnicodeScalar(UInt8(value)))
+      }
+    }
+    
+    func biometricType() -> String {
+        let authContext = LAContext()
+        if #available(iOS 11, *) {
+            let _ = authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+            switch(authContext.biometryType) {
+            case .none:
+                return "none"
+            case .touchID:
+                return "touch"
+            case .faceID:
+                return "face"
+            }
+        } else {
+            return "touch"
+        }
+    }
 }
 
 
