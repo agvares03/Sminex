@@ -14,8 +14,9 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
 //    @IBOutlet private weak var loader:              UIActivityIndicatorView!
 //    @IBOutlet private weak var sendButtonBottom:    NSLayoutConstraint!
 //    @IBOutlet private weak var sendButtonTop:       NSLayoutConstraint!
-//    @IBOutlet private weak var sendButtonWidth:     NSLayoutConstraint!
-//    @IBOutlet private weak var imgsHeight:          NSLayoutConstraint!
+    @IBOutlet private weak var sendButtonHeight:     NSLayoutConstraint!
+    @IBOutlet private weak var problemHeight:       NSLayoutConstraint!
+    @IBOutlet private weak var problemLbl:          UILabel!
 //    @IBOutlet private weak var sendView:            UIView!
 //    @IBOutlet private weak var scroll:              UIScrollView!
 //    @IBOutlet private weak var imgsScroll:          UIScrollView!
@@ -117,6 +118,10 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
 //            currPoint = sendView.frame.origin.y - 200
 //            sendButtonWidth.constant = sendButtonWidth.constant - 50
         }
+        problemLbl.isHidden = true
+        problemHeight.constant = 0
+        sendButton.isHidden = true
+        sendButtonHeight.constant = 0
 //        currPoint = sendView.frame.origin.y
 //        sendButton.isEnabled = false
 //        sendButton.alpha     = 0.5
@@ -154,14 +159,21 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        
+        if textField == problemTextView{
+            if problemTextView.text == ""{
+                problemLbl.isHidden = true
+                problemHeight.constant = 0
+            }else{
+                problemLbl.isHidden = false
+                problemHeight.constant = 24
+            }
+        }
         if problemTextView.text == "" || emailTextView.text == "" {
-            sendButton.isEnabled = false
-            sendButton.alpha = 0.5
-            
+            sendButton.isHidden = true
+            sendButtonHeight.constant = 0
         } else {
-            sendButton.isEnabled = true
-            sendButton.alpha = 1
+            sendButton.isHidden = false
+            sendButtonHeight.constant = 48
         }
     }
     

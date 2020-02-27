@@ -63,13 +63,13 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
         // Проверка на заполнение
         var ret     = false;
         var message = ""
-        self.errorLabel.text = "Неправильный логин или пароль"
+        self.errorLabel.text = "НЕПРАВИЛЬНЫЙ ЛОГИН ИЛИ ПАРОЛЬ"
         if edLogin.text == "" {
-            message = "Не указан логин. "
+            message = "НЕ УКАЗАН ЛОГИН. "
             ret     = true
         }
         if edPass.text == "" {
-            message = message + "Не указан пароль."
+            message = message + "НЕ УКАЗАН ПАРОЛЬ."
             ret     = true
         }
         if edLogin.text == "disp" && edPass.text == "1" {
@@ -834,7 +834,8 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
 }
 
 public var mainGreenColor: UIColor = UIColor(red: 95/255, green: 165/255, blue: 17/255, alpha: 1.0)
-public var mainGrayColor: UIColor = UIColor(red: 89/255, green: 102/255, blue: 113/255, alpha: 1.0)
+public var mainGrayColor: UIColor = UIColor(red: 89/255, green: 102/255, blue: 112/255, alpha: 1.0)
 public var navigationGrayColor: UIColor = UIColor(red: 77/255, green: 86/255, blue: 97/255, alpha: 1.0)
 public var mainOrangeColor: UIColor = UIColor(red: 229/255, green: 135/255, blue: 10/255, alpha: 1.0)
+public var mainBeigeColor: UIColor = UIColor(red: 212/255, green: 209/255, blue: 196/255, alpha: 1.0)
 
