@@ -152,7 +152,7 @@ final class MenuVC: UIViewController, UICollectionViewDelegate, UICollectionView
             self.data[6] = MenuCellData(icon: UIImage(named: "menu_polls")!, title: "Опросы", notification: "")
             self.collection.reloadData()
         }
-        tabBarController?.tabBar.tintColor = .black
+        tabBarController?.tabBar.tintColor = mainGreenColor
         tabBarController?.tabBar.selectedItem?.title = "Меню"
         tabBarController?.tabBar.isHidden = false
     }

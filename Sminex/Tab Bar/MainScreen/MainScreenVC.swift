@@ -237,7 +237,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.navigationBar.layer.shadowOpacity   = 0.5
         navigationController?.navigationBar.layer.shadowOffset    = CGSize(width: 0, height: 1.0)
         navigationController?.navigationBar.layer.shadowRadius    = 1
-        tabBarController?.tabBar.tintColor = .black
+        tabBarController?.tabBar.tintColor = mainGreenColor
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 22, weight: .bold) ]
@@ -371,7 +371,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             //            }
         }
         UserDefaults.standard.set(false, forKey: "backBtn")
-        tabBarController?.tabBar.tintColor = .black
+        tabBarController?.tabBar.tintColor = mainGreenColor
         tabBarController?.tabBar.selectedItem?.title = "Главная"
         tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = false
