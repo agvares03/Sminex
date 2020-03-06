@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="7MZ-Df-9gQ" customClass="AppsPagerViewCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BxV-kd-GIg">
+                    <rect key="frame" x="13" y="77.5" width="349" height="455.5"/>
+                    <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="4"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Гостевой пропуск на 10 декабря" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nvx-dn-rUg">
+                    <rect key="frame" x="16" y="16" width="343" height="21.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                    <color key="textColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите, пожайлуста, другой номер. По " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wpC-Nz-qzc">
+                    <rect key="frame" x="21" y="83.5" width="333" height="443.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="orangeStatus" translatesAutoresizingMaskIntoConstraints="NO" id="wVM-48-V5w">
+                    <rect key="frame" x="16" y="558" width="14" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="Pdq-ss-Nmn"/>
+                        <constraint firstAttribute="width" constant="14" id="q0s-qF-Pe6"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В ОБРАБОТКЕ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UvK-Ja-jgE">
+                    <rect key="frame" x="36" y="558" width="84.5" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                    <color key="textColor" red="0.8980392157" green="0.52941176469999995" blue="0.039215686270000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Сегодня" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="vNe-bu-e7c">
+                    <rect key="frame" x="295.5" y="555.5" width="63.5" height="19.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Аренда на охраняемой территории и автостоянки" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpI-DR-4jk">
+                    <rect key="frame" x="16" y="39" width="343" height="36"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="36" id="I1E-Mq-JeO"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="BxV-kd-GIg" firstAttribute="leading" secondItem="wpC-Nz-qzc" secondAttribute="leading" constant="-8" id="1Bp-uI-33S"/>
+                <constraint firstItem="wpC-Nz-qzc" firstAttribute="top" secondItem="BxV-kd-GIg" secondAttribute="top" constant="6" id="1yh-WC-DWD"/>
+                <constraint firstItem="JpI-DR-4jk" firstAttribute="leading" secondItem="U8U-Rq-bZa" secondAttribute="leading" constant="16" id="2gx-Su-MTZ"/>
+                <constraint firstItem="vNe-bu-e7c" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UvK-Ja-jgE" secondAttribute="trailing" constant="10" id="3TP-2X-5Vq"/>
+                <constraint firstItem="wpC-Nz-qzc" firstAttribute="leading" secondItem="nvx-dn-rUg" secondAttribute="leading" constant="5" id="3fJ-3z-WGQ"/>
+                <constraint firstItem="BxV-kd-GIg" firstAttribute="bottom" secondItem="wpC-Nz-qzc" secondAttribute="bottom" constant="6" id="A8u-hk-Cbd"/>
+                <constraint firstItem="nvx-dn-rUg" firstAttribute="leading" secondItem="U8U-Rq-bZa" secondAttribute="leading" constant="16" id="BtF-oc-xrk"/>
+                <constraint firstItem="UvK-Ja-jgE" firstAttribute="leading" secondItem="wVM-48-V5w" secondAttribute="trailing" constant="6" id="DxD-dl-bEe"/>
+                <constraint firstItem="nvx-dn-rUg" firstAttribute="top" secondItem="U8U-Rq-bZa" secondAttribute="top" constant="16" id="MtO-zA-Wz7"/>
+                <constraint firstItem="vNe-bu-e7c" firstAttribute="trailing" secondItem="nvx-dn-rUg" secondAttribute="trailing" id="RE4-zr-hUd"/>
+                <constraint firstItem="U8U-Rq-bZa" firstAttribute="trailing" secondItem="nvx-dn-rUg" secondAttribute="trailing" constant="16" id="Rne-ev-1R9"/>
+                <constraint firstItem="wpC-Nz-qzc" firstAttribute="trailing" secondItem="nvx-dn-rUg" secondAttribute="trailing" constant="-5" id="SFV-Ma-hz6"/>
+                <constraint firstItem="UvK-Ja-jgE" firstAttribute="centerY" secondItem="wVM-48-V5w" secondAttribute="centerY" id="X9q-NO-Xlm"/>
+                <constraint firstItem="wVM-48-V5w" firstAttribute="top" secondItem="wpC-Nz-qzc" secondAttribute="bottom" constant="31" id="bSe-74-HJe"/>
+                <constraint firstItem="JpI-DR-4jk" firstAttribute="top" secondItem="nvx-dn-rUg" secondAttribute="bottom" constant="1.5" id="iB5-YP-SVb"/>
+                <constraint firstItem="BxV-kd-GIg" firstAttribute="trailing" secondItem="wpC-Nz-qzc" secondAttribute="trailing" constant="8" id="kP9-On-RDG"/>
+                <constraint firstItem="U8U-Rq-bZa" firstAttribute="bottom" secondItem="wVM-48-V5w" secondAttribute="bottom" constant="95" id="o3u-sO-fwX"/>
+                <constraint firstItem="vNe-bu-e7c" firstAttribute="centerY" secondItem="UvK-Ja-jgE" secondAttribute="centerY" id="qMS-vV-Fce"/>
+                <constraint firstItem="wVM-48-V5w" firstAttribute="leading" secondItem="nvx-dn-rUg" secondAttribute="leading" id="r5s-gV-N5a"/>
+                <constraint firstItem="wpC-Nz-qzc" firstAttribute="top" secondItem="nvx-dn-rUg" secondAttribute="bottom" constant="46" id="vMm-30-nij"/>
+                <constraint firstItem="U8U-Rq-bZa" firstAttribute="trailing" secondItem="JpI-DR-4jk" secondAttribute="trailing" constant="16" id="zTL-tY-1Eu"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="U8U-Rq-bZa"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="24"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="back" destination="BxV-kd-GIg" id="BTC-az-yBR"/>
+                <outlet property="backBottom" destination="A8u-hk-Cbd" id="Yr5-8A-iSd"/>
+                <outlet property="backTop" destination="1yh-WC-DWD" id="WdG-fh-78L"/>
+                <outlet property="date" destination="vNe-bu-e7c" id="jLd-nG-IAI"/>
+                <outlet property="desc" destination="wpC-Nz-qzc" id="hYc-pL-zo1"/>
+                <outlet property="descBottom" destination="bSe-74-HJe" id="H7S-tu-Ju1"/>
+                <outlet property="descTop" destination="vMm-30-nij" id="rh9-OQ-Vfw"/>
+                <outlet property="icon" destination="wVM-48-V5w" id="ssN-Op-bNf"/>
+                <outlet property="status" destination="UvK-Ja-jgE" id="xY1-m2-Tfd"/>
+                <outlet property="stickHeight" destination="I1E-Mq-JeO" id="AxB-iL-qvj"/>
+                <outlet property="stickTitle" destination="JpI-DR-4jk" id="Oqh-cl-Bdl"/>
+                <outlet property="title" destination="nvx-dn-rUg" id="iZW-SZ-eOk"/>
+            </connections>
+            <point key="canvasLocation" x="-79" y="-162"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="orangeStatus" width="17" height="17"/>
+    </resources>
+</document>

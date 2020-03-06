@@ -30,11 +30,10 @@ class FirstController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = .unspecified
         }
-        
+        navigationController?.navigationBar.barStyle = .black
         // запустим индикатор
         self.indicator.startAnimating()
         

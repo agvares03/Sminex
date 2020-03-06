@@ -1,7 +1,9 @@
 # ExpyTableView
 
 [![Version](https://img.shields.io/cocoapods/v/ExpyTableView.svg?style=flat)](http://cocoapods.org/pods/ExpyTableView)
-[![License](https://img.shields.io/cocoapods/l/ExpyTableView.svg?style=flat)](http://cocoapods.org/pods/ExpyTableView)
+[![Swift 4.0](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+![iOS 8.0+](https://img.shields.io/badge/iOS-8.0%2B-blue.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/okhanokbay/ExpyTableView/blob/master/LICENSE)
 [![Platform](https://img.shields.io/cocoapods/p/ExpyTableView.svg?style=flat)](http://cocoapods.org/pods/ExpyTableView)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/okhanokbay/ExpyTableView/issues)
 
@@ -17,6 +19,11 @@ When using ExpyTableView, sections are being expanded and collapsed. You impleme
 
 ## Requirements
 
+VERSION 1.0:
+- iOS 8.0+
+- Swift 4.0+
+
+VERSION 0.3.1:
 - iOS 8.0+
 - Swift 3.0+
 
@@ -28,7 +35,7 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'ExpyTableView'
 ```
-Or you can manually drag and drop the ExpyTableView.swift to your project, then use it.
+Or you can manually drag and drop the ExpyTableView.swift AND ExpyAbstractions.swift into your project, then use it.
 
 ## How to use
 
@@ -54,7 +61,7 @@ class ViewController: ExpyTableViewDataSource {
   }
 
   // Then return your expandable cell instance from this data source method.
-  func expandableCell(forSection section: Int, inTableView tableView: ExpyTableView) -> UITableViewCell {
+  func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
     // This cell will be displayed at IndexPath with (section: section and row: 0)
   }
 } 
@@ -67,7 +74,7 @@ class ViewController: ExpyTableViewDataSource {
 ```swift
 extension ViewController {
   //OPTIONAL DATA SOURCE METHOD, default is true for all sections.
-  func canExpand(section: Int, inTableView tableView: ExpyTableView) -> Bool {
+  func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
     return true //Return false if you want your section not to be expandable
   }
 }
