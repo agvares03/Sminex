@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SurveyPagerViewCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Лобби бар в доме РЕНОМЭ" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Isp-fd-Yqv">
+                    <rect key="frame" x="16" y="16" width="343" height="21.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                    <color key="textColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 вопросов" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v9c-fb-oDk">
+                    <rect key="frame" x="16" y="78" width="343" height="19.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Опрос проводится с" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gg-Oq-Cn7">
+                    <rect key="frame" x="16" y="52.5" width="343" height="20.5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20.5" id="Xr7-zX-aSl"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MZV-I3-jXE">
+                    <rect key="frame" x="72" y="595" width="231" height="48"/>
+                    <color key="backgroundColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="hiA-hG-qA9"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                    <state key="normal" title="УЧАСТВОВАТЬ">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="goButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="Qg1-Aq-jy9"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="v9c-fb-oDk" firstAttribute="top" secondItem="2gg-Oq-Cn7" secondAttribute="bottom" constant="5" id="4He-Na-6Kw"/>
+                <constraint firstItem="Isp-fd-Yqv" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="5OY-U9-aKi"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="MZV-I3-jXE" secondAttribute="bottom" constant="24" id="88D-Yg-Awu"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="v9c-fb-oDk" secondAttribute="trailing" constant="16" id="CGT-uF-mbE"/>
+                <constraint firstItem="Isp-fd-Yqv" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="Cbi-ZS-RkZ"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Isp-fd-Yqv" secondAttribute="trailing" constant="16" id="EHa-f6-6bl"/>
+                <constraint firstItem="2gg-Oq-Cn7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="PKQ-wj-q4k"/>
+                <constraint firstItem="MZV-I3-jXE" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="72" id="Rg8-Ld-RFw"/>
+                <constraint firstItem="v9c-fb-oDk" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="Y7Z-0m-3cZ"/>
+                <constraint firstItem="2gg-Oq-Cn7" firstAttribute="top" secondItem="Isp-fd-Yqv" secondAttribute="bottom" constant="15" id="cAV-zI-MPc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="MZV-I3-jXE" secondAttribute="trailing" constant="72" id="p3I-KP-nem"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2gg-Oq-Cn7" secondAttribute="trailing" constant="16" id="xIu-AX-s44"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="24"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="dateHeight" destination="Xr7-zX-aSl" id="vVn-Ho-8AD"/>
+                <outlet property="dateStart" destination="2gg-Oq-Cn7" id="nAC-3x-rVz"/>
+                <outlet property="questions" destination="v9c-fb-oDk" id="iUI-m7-eND"/>
+                <outlet property="title" destination="Isp-fd-Yqv" id="qbF-BU-Qet"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="131"/>
+        </view>
+    </objects>
+</document>

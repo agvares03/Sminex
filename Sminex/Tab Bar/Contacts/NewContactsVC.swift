@@ -25,6 +25,7 @@ class NewContactsVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .black
         updateUserInterface()
         automaticallyAdjustsScrollViewInsets = false
         data_ = TemporaryHolder.instance.contactsList
@@ -62,14 +63,14 @@ class NewContactsVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         updateUserInterface()
         data_ = TemporaryHolder.instance.contactsList
         collection.reloadData()
-        navigationController?.isNavigationBarHidden = true
+//        navigationController?.isNavigationBarHidden = true
         tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
-        navigationController?.isNavigationBarHidden = false
+//        navigationController?.isNavigationBarHidden = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -79,7 +80,7 @@ class NewContactsVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewContactsCell", for: indexPath) as! NewContactsCell
-        cell.display(data_[indexPath.row], delegate: self, viewSize: self.view.frame.size.width)
+        cell.display(data_[indexPath.row], delegate: self, viewSize: self.view.frame.size.width, rowNum: indexPath.row)
         return cell
     }
     
@@ -90,9 +91,13 @@ class NewContactsVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         return header
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 0)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cell = NewContactsCell.fromNib()
-        cell?.display(data_[indexPath.row], delegate: self, viewSize: self.view.frame.size.width)
+        cell?.display(data_[indexPath.row], delegate: self, viewSize: self.view.frame.size.width, rowNum: indexPath.row)
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
         let isSupport = data_[indexPath.row].name?.contains(find: "оддержка") ?? false
 //        return CGSize(width: view.frame.size.width, height: isSupport ? size.height + 5 : size.height - 18)
@@ -220,7 +225,7 @@ final class NewContactsCell: UICollectionViewCell {
     
     private var delegate: ContactsCellDelegate?
     
-    fileprivate func display(_ item: ContactsJson, delegate: ContactsCellDelegate?, viewSize: CGFloat) {
+    fileprivate func display(_ item: ContactsJson, delegate: ContactsCellDelegate?, viewSize: CGFloat, rowNum: Int) {
         self.delegate = delegate
         title.text = item.name
         desc.text  = item.description
@@ -262,16 +267,16 @@ final class NewContactsCell: UICollectionViewCell {
                 emailView.isHidden   = true
             }
         }
-        if (item.name?.containsIgnoringCase(find: "поддержка"))!{
-            fonImage.image = UIImage(named: "support_fon")!
-            fonWidth.constant = 170
-            fonHeight.constant = 110
-            fonImage.isHidden = false
-            fonTop.constant = 50
-        }else if (item.name?.containsIgnoringCase(find: "консьерж"))!{
+        if rowNum == 0{
             fonImage.image = UIImage(named: "contacts_fon")!
             fonWidth.constant = 217
             fonHeight.constant = 160
+            fonImage.isHidden = false
+            fonTop.constant = 50
+        }else if (item.name?.containsIgnoringCase(find: "поддержка"))!{
+            fonImage.image = UIImage(named: "support_fon")!
+            fonWidth.constant = 170
+            fonHeight.constant = 110
             fonImage.isHidden = false
             fonTop.constant = 50
         }else{

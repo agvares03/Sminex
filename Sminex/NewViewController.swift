@@ -215,7 +215,7 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
     private var salt = Data()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationController?.navigationBar.barStyle = .black 
         if #available(iOS 12, *) {
             // Disables the password autoFill accessory view.
             edLogin.textContentType = UITextContentType.oneTimeCode
@@ -241,15 +241,6 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
         
         edLogin.text = UserDefaults.standard.string(forKey: "exitLogin")
         edPass.text  = UserDefaults.standard.string(forKey: "exitPass")
-        // Поправим Navigation bar
-        navigationController?.navigationBar.isTranslucent         = true
-        navigationController?.navigationBar.backgroundColor       = .white
-        navigationController?.navigationBar.tintColor             = .white
-        navigationController?.navigationBar.barTintColor          = .white
-        navigationController?.navigationBar.layer.shadowColor     = UIColor.lightGray.cgColor
-        navigationController?.navigationBar.layer.shadowOpacity   = 0.5
-        navigationController?.navigationBar.layer.shadowOffset    = CGSize(width: 0, height: 1.0)
-        navigationController?.navigationBar.layer.shadowRadius    = 1
         
         if edLogin.text == "" {
             btnEnter.isEnabled = false

@@ -29,6 +29,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .black
         updateUserInterface()
         automaticallyAdjustsScrollViewInsets = false
         collection.dataSource = self
@@ -73,9 +74,9 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         
         // Поправим Navigation bar
         navigationController?.navigationBar.isTranslucent   = true
-        navigationController?.navigationBar.backgroundColor = .white
-        navigationController?.navigationBar.tintColor       = .white
-        navigationController?.navigationBar.barTintColor          = .white
+//        navigationController?.navigationBar.backgroundColor = .white
+//        navigationController?.navigationBar.tintColor       = .white
+//        navigationController?.navigationBar.barTintColor          = .white
         //navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16, weight: .bold) ]
     }
     
@@ -106,7 +107,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
                          name: .flagsChanged,
                          object: Network.reachability)
         updateUserInterface()
-        self.navigationController?.isNavigationBarHidden = true
+//        self.navigationController?.isNavigationBarHidden = true
         if TemporaryHolder.instance.menuDeals > 0 {
             if TemporaryHolder.instance.menuDeals > 99{
                 self.data[7] = MenuCellData(icon: UIImage(named: "new_menu_sales")!, title: "Акции и предложения", notification: "99+")
@@ -159,7 +160,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
-        self.navigationController?.isNavigationBarHidden = false
+//        self.navigationController?.isNavigationBarHidden = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -182,8 +183,8 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "MenuHeader", for: indexPath) as! MenuHeader
         if indexPath.section == 0 {
-            header.display("Быстрый доступ")
-            header.backgroundColor = mainGrayColor
+            header.display("")
+            header.backgroundColor = mainBeigeColor
         } else {
             header.display("")
             header.backgroundColor = mainBeigeColor
@@ -220,8 +221,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 {
-            return CGSize(width: view.frame.size.width, height: 50)
-        
+            return CGSize(width: view.frame.size.width, height: 8)
         } else if section == 4 {
             return CGSize(width: view.frame.size.width, height: 6)
         } else {

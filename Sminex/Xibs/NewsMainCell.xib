@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="NewsPagerViewCell" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отключение горячей воды" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iRb-I6-n9K">
+                    <rect key="frame" x="16" y="16" width="325" height="21.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                    <color key="textColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="749" text="22 ноября с 12:00 до 13:00 будет отключениа горячая вода..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.85000002384185791" translatesAutoresizingMaskIntoConstraints="NO" id="XiZ-jH-chw">
+                    <rect key="frame" x="16" y="40.5" width="329" height="38.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="Сегодня, 8:52" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IsU-LD-Bqs">
+                    <rect key="frame" x="16" y="638" width="94" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right" translatesAutoresizingMaskIntoConstraints="NO" id="EwY-oj-koD">
+                    <rect key="frame" x="346" y="19" width="10" height="16"/>
+                    <color key="tintColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="5D5-x7-9yJ"/>
+                        <constraint firstAttribute="width" constant="10" id="Wrl-j3-vt8"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="IsU-LD-Bqs" secondAttribute="bottom" constant="12" id="03f-oj-ahh"/>
+                <constraint firstItem="XiZ-jH-chw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="6iY-Ro-raN"/>
+                <constraint firstItem="IsU-LD-Bqs" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="8Zc-N4-srY"/>
+                <constraint firstItem="iRb-I6-n9K" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="9FO-1P-CyG"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="XiZ-jH-chw" secondAttribute="trailing" constant="30" id="Asq-p1-nE1"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="EwY-oj-koD" secondAttribute="trailing" constant="19" id="NGL-KX-48k"/>
+                <constraint firstItem="EwY-oj-koD" firstAttribute="centerY" secondItem="iRb-I6-n9K" secondAttribute="centerY" id="cCa-go-Jkl"/>
+                <constraint firstItem="IsU-LD-Bqs" firstAttribute="top" relation="greaterThanOrEqual" secondItem="XiZ-jH-chw" secondAttribute="bottom" constant="5" id="ehd-A4-T81"/>
+                <constraint firstItem="iRb-I6-n9K" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="oxN-B8-31z"/>
+                <constraint firstItem="XiZ-jH-chw" firstAttribute="top" secondItem="iRb-I6-n9K" secondAttribute="bottom" constant="3" id="xfq-u1-rv8"/>
+                <constraint firstItem="EwY-oj-koD" firstAttribute="leading" secondItem="iRb-I6-n9K" secondAttribute="trailing" constant="5" id="z4c-Hg-lZ2"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="24"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                    <real key="value" value="2"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                    <color key="value" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="date" destination="IsU-LD-Bqs" id="Bwt-vW-pJH"/>
+                <outlet property="desc" destination="XiZ-jH-chw" id="hBN-S3-uza"/>
+                <outlet property="title" destination="iRb-I6-n9K" id="ycz-FB-og3"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="149"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow_right" width="40" height="65"/>
+    </resources>
+</document>
