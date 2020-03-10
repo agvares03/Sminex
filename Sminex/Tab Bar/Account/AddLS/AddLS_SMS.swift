@@ -13,8 +13,6 @@ import FirebaseMessaging
 
 final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
-    @IBOutlet weak var didntEnter: UILabel!
-    @IBOutlet private weak var sprtBottom:  NSLayoutConstraint!
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
     @IBOutlet private weak var txtNameLS:   UILabel!
     @IBOutlet private weak var NameLS:      UILabel!
@@ -22,12 +20,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var smsField:    UITextField!
-    @IBOutlet private weak var showpswrd:   UIButton!
-    @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var againLabel:  UIButton!
-    @IBOutlet private weak var againLine:   UILabel!
-    @IBOutlet private weak var sprtLabel:   UILabel!
-    @IBOutlet private weak var backView:    UIView!
     
     
     
@@ -87,19 +80,6 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         }
     }
     
-    @IBAction private func showPasswordPressed(_ sender: UIButton) {
-        
-        if smsField.isSecureTextEntry {
-            
-            showpswrd.setImage(UIImage(named: "ic_show_password"), for: .normal)
-            smsField.isSecureTextEntry = false
-            
-        } else {
-            showpswrd.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
-            smsField.isSecureTextEntry = true
-        }
-    }
-    
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
@@ -128,7 +108,6 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             }
             }.resume()
         self.againLabel.isHidden    = true
-        self.againLine.isHidden     = true
         self.startTimer()
     }
     
@@ -173,14 +152,6 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         btn_go.alpha = 0.5
         
         smsField.delegate = self
-        
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
-        recognizer.delegate = self
-        backView.isUserInteractionEnabled = true
-        backView.addGestureRecognizer(recognizer)
-        
-        topConstant = sprtLabel.frame.origin.y
-        sprtTop.constant = getPoint()
         startTimer()
     }
     
@@ -206,33 +177,20 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification?) {
-        
-        if !isNeedToScrollMore() {
-            if !isNeedToScroll() {
-                sprtTop.constant = getPoint() - 210
-                
-            } else {
-                sprtTop.constant = getPoint() - 200
+    @objc func keyboardWillShow(sender: NSNotification) {
+    //        sprtTop.constant = 20
+        if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if Server().biometricType() == "face"{
+                sprtTop.constant = 0 + keyboardHeight - 34
+            }else{
+                sprtTop.constant = 0 + keyboardHeight
             }
-            
-        } else {
-            sprtTop.constant    -= getPoint() - 120
-            sprtBottom.constant += 200
         }
     }
     
-    // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
-        
-        if !isNeedToScrollMore() {
-            sprtTop.constant = getPoint()
-            
-        } else {
-            sprtTop.constant    = getPoint()
-            sprtBottom.constant -= 200
-        }
+        sprtTop.constant = 0
     }
     
     private func startTimer() {
@@ -241,7 +199,6 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             
             DispatchQueue.main.async {
                 self.againLabel.isHidden    = false
-                self.againLine.isHidden     = false
                 self.descTxt.text = self.descTxt.text?.replacingOccurrences(of: "Запросить новый код можно через минуту", with: "")
             }
         }
@@ -252,9 +209,12 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         DispatchQueue.main.sync {
             
             if self.responseString.contains(find: "error") {
-                self.descTxt.text       = self.responseString.replacingOccurrences(of: "error:", with: "")
-                self.descTxt.textColor  = .red
-                
+                var txt = self.responseString.replacingOccurrences(of: "error: ", with: "")
+                if txt.first == " "{
+                    txt.removeFirst()
+                }
+                self.descTxt.text = txt
+                self.descTxt.textColor  = mainOrangeColor
             } else {
                 
                 let ident: String = self.code
@@ -683,7 +643,6 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             } else if self.responseString.contains("ok") {
                 self.descTxt.text           = self.descText
                 self.againLabel.isHidden    = true
-                self.againLine.isHidden     = true
                 self.startTimer()
             }
         }

@@ -12,18 +12,11 @@ import Gloss
 
 final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var didntEnter: UILabel!
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
-    @IBOutlet private weak var edLsTop:     NSLayoutConstraint!
-    @IBOutlet private weak var btnGoTop:    NSLayoutConstraint!
     @IBOutlet private weak var edLS:        UITextField!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
-    @IBOutlet private weak var backButton:  UIButton!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var txtDesc:     UILabel!
-    @IBOutlet private weak var sprtLabel:   UILabel!
-    @IBOutlet private weak var scroll:      UIScrollView!
-    @IBOutlet private weak var backView:    UIView!
     
     public var isFromApp_ = false
     
@@ -194,9 +187,6 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
         
         if isFromApp_ {
             tabBarController?.tabBar.isHidden = true
-            //            navigationController?.isNavigationBarHidden = true
-            backView.isHidden   = true
-            backButton.isHidden = true
             let login   = UserDefaults.standard.string(forKey: "login") ?? ""
             ls          = login
             edLS.text   = login
@@ -205,23 +195,6 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             btn_go.isEnabled = false
             btn_go.alpha = 0.5
         }
-        
-        if isNeedToScrollMore() {
-            btnGoTop.constant = 15
-            edLsTop.constant  = 45
-        }
-        
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
-        recognizer.delegate = self
-        backView.addGestureRecognizer(recognizer)
-        backView.isUserInteractionEnabled = true
-        if Device() == .iPhoneX && Device() == .simulator(.iPhoneX) {
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 220
-        } else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 140
-        } else{
-            sprtTop.constant = (view.frame.size.height - sprtLabel.frame.origin.y) - 125
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -229,42 +202,36 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
         tabBarController?.tabBar.isHidden = true
         edLS.becomeFirstResponder()
         navigationController?.isNavigationBarHidden = false
-        
-        //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
-        
-        //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     @objc private func ViewTapped(recognizer: UIGestureRecognizer) {
         view.endEditing(true)
     }
     
-    // Двигаем view вверх при показе клавиатуры
-    //    @objc func keyboardWillShow(sender: NSNotification?) {
-    //        if !isNeedToScrollMore() {
-    //            sprtTop.constant -= 200
-    //
-    //        } else {
-    //            sprtTop.constant -= 120
-    //        }
-    //    }
+    @objc func keyboardWillShow(sender: NSNotification) {
+    //        sprtTop.constant = 20
+        if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if Server().biometricType() == "face"{
+                sprtTop.constant = 0 + keyboardHeight - 34
+            }else{
+                sprtTop.constant = 0 + keyboardHeight
+            }
+        }
+    }
     
-    // И вниз при исчезновении
-    //    @objc func keyboardWillHide(sender: NSNotification?) {
-    //
-    //        if !isNeedToScrollMore() {
-    //            sprtTop.constant += 200
-    //        } else {
-    //            sprtTop.constant += 120
-    //        }
-    //    }
+    @objc func keyboardWillHide(sender: NSNotification?) {
+        sprtTop.constant = 0
+    }
     
     private func startAnimation() {
         indicator.isHidden = false
@@ -347,23 +314,6 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             let vc  = segue.destination as!  AddLS_SMS
             vc.code = edLS.text!
             vc.phone_ = responseString
-        }
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if !isNeedToScrollMore() {
-            sprtTop.constant -= 200
-            
-        } else {
-            sprtTop.constant -= 120
-        }
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if !isNeedToScrollMore() {
-            sprtTop.constant += 200
-        } else {
-            sprtTop.constant += 120
         }
     }
     

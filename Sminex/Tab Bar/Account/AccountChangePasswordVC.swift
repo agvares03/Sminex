@@ -12,10 +12,12 @@ import DeviceKit
 final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     
     @IBOutlet private weak var loader:              UIActivityIndicatorView!
-    @IBOutlet private weak var forgotTop:           NSLayoutConstraint!
-    @IBOutlet private weak var saveButtonBottom:    NSLayoutConstraint!
+    @IBOutlet private weak var errorHeight:         NSLayoutConstraint!
+    @IBOutlet private weak var viewHeight:          NSLayoutConstraint!
     @IBOutlet private weak var oldPasswordField:    UITextField!
     @IBOutlet private weak var newPasswordField:    UITextField!
+    @IBOutlet private weak var oldPasswordIndicator: UILabel!
+    @IBOutlet private weak var newPasswordIndicator: UILabel!
     @IBOutlet private weak var saveButton:          UIButton!
     @IBOutlet private weak var oldPasswordSecure:   UIButton!
     @IBOutlet private weak var newPasswordSecure:   UIButton!
@@ -30,10 +32,11 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         if oldPasswordField.isSecureTextEntry {
             oldPasswordSecure.setImage(UIImage(named: "ic_show_password"), for: .normal)
             oldPasswordField.isSecureTextEntry = false
-            
+            oldPasswordSecure.tintColor = mainGreenColor
         } else {
             oldPasswordSecure.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
             oldPasswordField.isSecureTextEntry = true
+            oldPasswordSecure.tintColor = mainGrayColor
         }
     }
     
@@ -42,10 +45,11 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         if newPasswordField.isSecureTextEntry {
             newPasswordSecure.setImage(UIImage(named: "ic_show_password"), for: .normal)
             newPasswordField.isSecureTextEntry = false
-            
+            newPasswordSecure.tintColor = mainGreenColor
         } else {
             newPasswordSecure.setImage(UIImage(named: "ic_not_show_password"), for: .normal)
             newPasswordField.isSecureTextEntry = true
+            newPasswordSecure.tintColor = mainGrayColor
         }
     }
     
@@ -57,7 +61,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
         
         guard (UserDefaults.standard.string(forKey: "pass") ?? "") == (oldPasswordField.text ?? "") else {
             wrongPassLabel.isHidden = false
-            forgotTop.constant = 32
+            errorHeight.constant = 20
             return
         }
         startAnimator()
@@ -70,14 +74,14 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if Device().isOneOf([.iPhone4, .iPhone4s, .simulator(.iPhone4), .simulator(.iPhone4s)]) {
-            saveButtonBottom.constant = 50
-        }
-        
+        viewHeight.constant = 180
+        saveButton.isHidden = true
+        errorHeight.constant = 0
+        wrongPassLabel.isHidden = true
         oldPasswordSecureButtonPressed(nil)
         newPasswordSecureButtonPressed(nil)
-        
+        self.oldPasswordIndicator.backgroundColor = .lightGray
+        self.newPasswordIndicator.backgroundColor = .lightGray
         stopAnimator()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
@@ -133,9 +137,6 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
                          object: Network.reachability)
         updateUserInterface()
         tabBarController?.tabBar.isHidden = false
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -148,28 +149,48 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
+        DispatchQueue.main.async{
+            self.errorHeight.constant = 0
+            self.wrongPassLabel.isHidden = true
+            if textField == self.oldPasswordField{
+                self.oldPasswordIndicator.backgroundColor = mainGreenColor
+                self.newPasswordIndicator.backgroundColor = .lightGray
+            }else{
+                self.newPasswordIndicator.backgroundColor = mainGreenColor
+                self.oldPasswordIndicator.backgroundColor = .lightGray
+            }
+        }
         activateSaveButton()
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        let info = notification.userInfo!
-        let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-        self.saveButtonBottom.constant = (keyboardSize?.height)!
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        DispatchQueue.main.async{
+            if textField == self.oldPasswordField{
+                self.oldPasswordIndicator.backgroundColor = mainGreenColor
+                self.newPasswordIndicator.backgroundColor = .lightGray
+            }else{
+                self.newPasswordIndicator.backgroundColor = mainGreenColor
+                self.oldPasswordIndicator.backgroundColor = .lightGray
+            }
+        }
     }
     
-    @objc func keyboardWillHide() {
-        self.saveButtonBottom.constant = 18
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        DispatchQueue.main.async{
+            self.oldPasswordIndicator.backgroundColor = .lightGray
+            self.newPasswordIndicator.backgroundColor = .lightGray
+        }
     }
     
     private func activateSaveButton() {
-        
-        if oldPasswordField.text == "" || newPasswordField.text == "" {
-            saveButton.isEnabled    = false
-            saveButton.alpha        = 0.5
-        
-        } else {
-            saveButton.isEnabled    = true
-            saveButton.alpha        = 1
+        DispatchQueue.main.async {
+            if self.oldPasswordField.text == "" || self.newPasswordField.text == "" {
+                self.saveButton.isHidden = true
+                self.viewHeight.constant = 180
+            } else {
+                self.saveButton.isHidden = false
+                self.viewHeight.constant = 256
+            }
         }
     }
     

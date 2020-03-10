@@ -180,14 +180,6 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             otchestvoField.text     = String(describing: name?[safe: 2] ?? "")
         }
         
-        
-        // Поправим Navigation bar
-        navigationController?.navigationBar.isTranslucent   = true
-        navigationController?.navigationBar.backgroundColor = .white
-        navigationController?.navigationBar.tintColor       = .white
-        navigationController?.navigationBar.barTintColor          = .white
-        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17, weight: .bold) ]
-        
         contactNumber.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         privNumber.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         email.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
