@@ -682,7 +682,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             if reqDat.requestData.count > 0{
                 return CGSize(width: view.frame.size.width - 32, height: 255)
             }else{
-                return CGSize(width: view.frame.size.width - 32, height: 0)
+                return CGSize(width: view.frame.size.width - 32, height: 96)
             }
         } else if title == "К ОПЛАТЕ" {
             if busines_center_denyTotalOnlinePayments == true || business_center_info == true || self.payNil {
@@ -1123,11 +1123,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                     var icon = UIImage(named: "orangeStatus")!
                     if (row.status?.containsIgnoringCase(find: "закрыта"))! || (row.status?.containsIgnoringCase(find: "выполнена"))!{
-                        icon = UIImage(named: "greenStatus")!
-                    }else if (row.status?.containsIgnoringCase(find: "отправлена"))! || (row.status?.containsIgnoringCase(find: "в обработке"))!{
-                        icon = UIImage(named: "orangeStatus")!
-                    }else{
                         icon = UIImage(named: "grayStatus")!
+                    }else if (row.status?.containsIgnoringCase(find: "отправлена"))! || (row.status?.containsIgnoringCase(find: "принята"))!{
+                        icon = UIImage(named: "greenStatus")!
+                    }else if (row.status?.containsIgnoringCase(find: "в обработке"))!{
+                        icon = UIImage(named: "orangeStatus")!
                     }
                     var type = row.idType
                     TemporaryHolder.instance.requestTypes?.types?.forEach {
@@ -2016,7 +2016,6 @@ final class CellsHeader: UICollectionReusableView {
         //        }
         
         self.delegate = delegate
-        // programm version
         if item.title == "К ОПЛАТЕ" || item.title ==  "СЧЕТЧИКИ" {
             self.detail.setTitle("Подробнее", for: .normal)
             self.detail.setTitleColor(.white, for: .normal)
@@ -2524,10 +2523,14 @@ final class NewRequestCell: UICollectionViewCell, FSPagerViewDataSource, FSPager
         pagerView.dataSource = self
         pagerView.delegate   = self
         
-        pagerHeight.constant = 233
         isLoading = false
         self.itemRequest = item.requestData
         self.pageControl.numberOfPages = self.itemRequest.count
+        if self.itemRequest.count == 0{
+            pagerHeight.constant = 96
+        }else{
+            pagerHeight.constant = 233
+        }
         self.pagerView.transformer = FSPagerViewTransformer(type: .linear)
         self.pagerView.reloadData()
         self.pagerView.automaticSlidingInterval = 3.0

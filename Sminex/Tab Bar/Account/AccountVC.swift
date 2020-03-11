@@ -40,6 +40,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .black
         updateUserInterface()
 //        collection.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 20, right: 0)
         
@@ -76,13 +77,13 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
         updateUserInterface()
         collection.reloadData()
         tabBarController?.tabBar.isHidden = false
-        navigationController?.isNavigationBarHidden = true
+//        navigationController?.isNavigationBarHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
-        navigationController?.isNavigationBarHidden = false
+//        navigationController?.isNavigationBarHidden = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -106,17 +107,17 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "AccountHeader", for: indexPath) as! AccountHeader
         header.display()
         
-        if #available(iOS 11.0, *) {
-            header.headerView.clipsToBounds = false
-            header.headerView.layer.cornerRadius = 8
-            header.headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        } else {
-            let rectShape = CAShapeLayer()
-            rectShape.bounds = header.headerView.frame
-            rectShape.position = header.headerView.center
-            rectShape.path = UIBezierPath(roundedRect: header.headerView.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 8, height: 8)).cgPath
-            header.headerView.layer.mask = rectShape
-        }
+//        if #available(iOS 11.0, *) {
+//            header.headerView.clipsToBounds = false
+//            header.headerView.layer.cornerRadius = 8
+//            header.headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+//        } else {
+//            let rectShape = CAShapeLayer()
+//            rectShape.bounds = header.headerView.frame
+//            rectShape.position = header.headerView.center
+//            rectShape.path = UIBezierPath(roundedRect: header.headerView.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 8, height: 8)).cgPath
+//            header.headerView.layer.mask = rectShape
+//        }
         
         return header
     }
@@ -129,7 +130,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
         
         let header = AccountHeader.fromNib()
         header?.display()
-        let size = header?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: view.frame.size.width, height: 800.0)
+        let size = header?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: view.frame.size.width, height: 780.0)
         return CGSize(width: view.frame.size.width, height: size.height)
     }
     
@@ -249,27 +250,27 @@ final class AccountHeader: UICollectionReusableView {
                 comfortPhoneLabel.text = $0.phone
             }
         }
-        if TemporaryHolder.instance.bcImage != nil {
-            bcImageView.image = TemporaryHolder.instance.bcImage
-        
-        } else {
-            if let img = defaults.data(forKey: "BCImage") {
-                bcImageView.image = UIImage(data: img)
-            }
-            DispatchQueue.global(qos: .background).async {
-                TemporaryHolder.instance.bcQueue.wait()
-                if TemporaryHolder.instance.bcImage != nil {
-                    DispatchQueue.main.async {
-                        self.bcImageView.image = TemporaryHolder.instance.bcImage
-                    }
-                
-                } else {
-                    DispatchQueue.main.async {
+//        if TemporaryHolder.instance.bcImage != nil {
+//            bcImageView.image = TemporaryHolder.instance.bcImage
+//
+//        } else {
+//            if let img = defaults.data(forKey: "BCImage") {
+//                bcImageView.image = UIImage(data: img)
+//            }
+//            DispatchQueue.global(qos: .background).async {
+//                TemporaryHolder.instance.bcQueue.wait()
+//                if TemporaryHolder.instance.bcImage != nil {
+//                    DispatchQueue.main.async {
+//                        self.bcImageView.image = TemporaryHolder.instance.bcImage
+//                    }
+//
+//                } else {
+//                    DispatchQueue.main.async {
 //                        self.bcImageView.image = UIImage(named: "bcImg")
-                    }
-                }
-            }
-        }
+//                    }
+//                }
+//            }
+//        }
     }
     
     @objc private func holderPhonePressed(_ sender: UITapGestureRecognizer) {

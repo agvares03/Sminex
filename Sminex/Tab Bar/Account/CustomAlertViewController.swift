@@ -29,7 +29,7 @@ class CustomAlertViewController: UIViewController {
     private var debtOverSum    = 0.0
 
     @IBOutlet weak var backView: UIView!
-    @IBOutlet weak var viewConst: NSLayoutConstraint!
+//    @IBOutlet weak var viewConst: NSLayoutConstraint!
     @IBOutlet weak var tableConst: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
@@ -530,98 +530,12 @@ extension CustomAlertViewController: UITableViewDataSource, UITableViewDelegate 
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5 || Device() == .simulator(.iPhone5) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .simulator(.iPhone5) || Device() == .iPhone4 || Device() == .simulator(.iPhone4) || Device() == .simulator(.iPhone4s) || Device() == .iPhone5c || Device() == .simulator(.iPhone4s){
-            if data.count == 0{
-                self.tableView.isHidden = true
-                self.backView.isHidden = true
-            }else if data.count == 1{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 110 + 5
-                self.tableConst.constant = 110
-            }else if data.count == 2{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 41 + 5
-                self.tableConst.constant = 41
-            }else if data.count >= 3{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
+        DispatchQueue.main.async {
+            var height1: CGFloat = 0
+            for cell in self.tableView.visibleCells {
+                height1 += cell.bounds.height
             }
-        }else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX){
-            if data.count == 0{
-                self.tableView.isHidden = true
-                self.backView.isHidden = true
-            }else if data.count == 1{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 207 + 87 + 5
-                self.tableConst.constant = 207 + 87
-            }else if data.count == 2{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 138 + 87 + 5
-                self.tableConst.constant = 138 + 87
-            }else if data.count == 3{
-                self.viewConst.constant = 69 + 87 + 5
-                self.tableConst.constant = 69 + 87
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-            }else if data.count >= 4{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-            }
-        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) || Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) || Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) || Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-            if data.count == 0{
-                self.tableView.isHidden = true
-                self.backView.isHidden = true
-            }else if data.count == 1{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 207 + 69 + 5
-                self.tableConst.constant = 207 + 69
-            }else if data.count == 2{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.tableConst.constant = 138 + 69
-                self.viewConst.constant = 138 + 69 + 5
-            }else if data.count == 3{
-                self.tableConst.constant = 69 + 69
-                self.viewConst.constant = 69 + 69 + 5
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-            }else if data.count == 4{
-                self.tableConst.constant = 69
-                self.viewConst.constant = 69 + 5
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-            }else if data.count >= 4{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-            }
-        }else{
-            if data.count == 0{
-                self.tableView.isHidden = true
-                self.backView.isHidden = true
-            }else if data.count == 1{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 207 + 5
-                self.tableConst.constant = 207
-            }else if data.count == 2{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 138 + 5
-                self.tableConst.constant = 138
-            }else if data.count == 3{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-                self.viewConst.constant = 69 + 5
-                self.tableConst.constant = 69
-            }else if data.count >= 4{
-                self.tableView.isHidden = false
-                self.backView.isHidden = false
-            }
+            self.tableConst.constant = height1
         }
         return data.count
     }
