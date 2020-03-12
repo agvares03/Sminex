@@ -11,6 +11,7 @@ import UIKit
 final class CounterHistoryTableVC: UIViewController {
     
     @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet private weak var tableView: UITableView!
     
     // MARK: Properties
@@ -53,6 +54,13 @@ final class CounterHistoryTableVC: UIViewController {
 extension CounterHistoryTableVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        DispatchQueue.main.async {
+            var height1: CGFloat = 0
+            for cell in self.tableView.visibleCells {
+                height1 += cell.bounds.height
+            }
+            self.tableHeight.constant = height1
+        }
         return data_.count
     }
     

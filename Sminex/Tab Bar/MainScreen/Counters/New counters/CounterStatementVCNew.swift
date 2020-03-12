@@ -11,11 +11,8 @@ import DeviceKit
 class CounterStatementVCNew: UIViewController, CounterDelegate {
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
-    @IBOutlet private weak var goBottomConst:   NSLayoutConstraint!
     @IBOutlet private weak var goButtonConst:   NSLayoutConstraint!
     @IBOutlet private weak var count:           DigitInputView!
-    @IBOutlet private weak var scroll:          UIScrollView!
-    @IBOutlet private weak var numStack:        UIStackView!
     @IBOutlet private weak var goButton:        UIButton!
     @IBOutlet private weak var monthValLabel:   UILabel!
     @IBOutlet private weak var counterLabel:    UILabel!
@@ -37,9 +34,9 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                 print(index)
                 allValue![index] = count.text
             }
-            goButton.setTitle("Передать показания", for: .normal)
-            goButton.isEnabled = true
-            goButton.alpha     = 1
+            goButton.setTitle("ПЕРЕДАТЬ ПОКАЗАНИЯ", for: .normal)
+            goButton.isHidden = false
+            goButtonConst.constant = 48
             startAnimator()
             sendCount()
         }else{
@@ -77,9 +74,9 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                     count.setup(Count: allValue![index])
                 }
                 if index == Int(kolTarif!)! - 1{
-                    goButton.setTitle("Передать показания", for: .normal)
-                    goButton.isEnabled = true
-                    goButton.alpha     = 1
+                    goButton.setTitle("ПЕРЕДАТЬ ПОКАЗАНИЯ", for: .normal)
+                    goButton.isHidden = false
+                    goButtonConst.constant = 48
                 }
             }
         }
@@ -139,9 +136,9 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
                 count.setup(Count: allValue![index])
             }
             if index == Int(kolTarif!)! - 1{
-                goButton.setTitle("Передать показания", for: .normal)
-                goButton.isEnabled = true
-                goButton.alpha     = 1
+                goButton.setTitle("ПЕРЕДАТЬ ПОКАЗАНИЯ", for: .normal)
+                goButton.isHidden = false
+                goButtonConst.constant = 48
             }
         }
     }
@@ -173,7 +170,7 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             }
         }
         if Int(kolTarif!)! > 1{
-            goButton.setTitle("Далее", for: .normal)
+            goButton.setTitle("ДАЛЕЕ", for: .normal)
             tarifText.text = value_?.tarifName1
         }else{
             tarifText.isHidden = true
@@ -206,13 +203,19 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             //                goButtonConst.constant = 20
         }
         //        }
-        goButton.isEnabled = false
-        goButton.alpha     = 0.5
+        goButton.isHidden = true
+        goButtonConst.constant = 0
         if !UserDefaults.standard.bool(forKey: "didntSchet"){
             goButton.isHidden = true
+            goButtonConst.constant = 0
         }
         if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             goButton.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
+            if goButton.isHidden{
+                goButtonConst.constant = 0
+            }else{
+                goButtonConst.constant = 48
+            }
         }
         count.delegate     = self as CounterDelegate
         
@@ -241,10 +244,6 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap)
-        
-        // Подхватываем показ клавиатуры
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         let _ = count.becomeFirstResponder()
         
         //        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -315,12 +314,11 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
     func textFieldDidChange(_ textField: UITextField) {
         
         if count.text == "" {
-            goButton.isEnabled = false
-            goButton.alpha     = 0.5
-            
+            goButton.isHidden = true
+            goButtonConst.constant = 0
         } else {
-            goButton.isEnabled = true
-            goButton.alpha     = 1
+            goButton.isHidden = false
+            goButtonConst.constant = 48
         }
     }
     
@@ -359,40 +357,6 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: .flagsChanged, object: Network.reachability)
         tabBarController?.tabBar.isHidden = false
-    }
-    var keyboardHeight = CGFloat()
-    // Двигаем view вверх при показе клавиатуры
-    @objc func keyboardWillShow(sender: NSNotification?) {
-        let info = sender?.userInfo!
-        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-        keyboardHeight = keyboardSize!.height
-        goButtonConst.constant = keyboardSize!.height
-        if isNeedToScrollMore() {
-            scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height + 240.0)
-            scroll.contentOffset = CGPoint(x: 0, y: 50)
-            
-        } else {
-            //            if isNeedToScroll() {
-            //                goBottomConst.constant = 215
-            //            }
-            scroll.contentInset.bottom = 200
-        }
-    }
-    
-    // И вниз при исчезновении
-    @objc func keyboardWillHide(sender: NSNotification?) {
-        keyboardHeight = 0
-        goButtonConst.constant = 0
-        if isNeedToScrollMore() {
-            scroll.contentSize = CGSize(width: scroll.contentSize.width, height: scroll.contentSize.height - 240.0)
-            scroll.contentOffset = CGPoint(x: 0, y: 0)
-            
-        } else {
-            //            if isNeedToScroll() {
-            //                goBottomConst.constant = 8
-            //            }
-            scroll.contentInset.bottom = 0
-        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
@@ -514,17 +478,21 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
     
     private func startAnimator() {
         goButton.isHidden   = true
+        goButtonConst.constant = 0
         loader.isHidden     = false
         loader.startAnimating()
     }
     
     private func stopAnimator() {
         goButton.isHidden = false
+        goButtonConst.constant = 48
         if !UserDefaults.standard.bool(forKey: "didntSchet"){
             goButton.isHidden = true
+            goButtonConst.constant = 0
         }
         if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             goButton.isHidden   = true
+            goButtonConst.constant = 0
         }
         loader.stopAnimating()
         loader.isHidden = true
