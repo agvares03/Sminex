@@ -287,8 +287,8 @@ open class DigitInputView: UIView {
             label.textAlignment = .center
             label.isUserInteractionEnabled  = false
             label.adjustsFontSizeToFitWidth = false
-            label.textColor = textColor
-            label.backgroundColor = backColor
+            label.textColor = .white
+            label.backgroundColor = mainGreenColor
             label.cornerRadius = 8
             if Count != ""{
                 label.text = str[i]
@@ -520,7 +520,7 @@ final class DigitLabel: UILabel {
             if (text == "."){
                 self.backgroundColor = .clear
             } else {
-                self.backgroundColor = UIColor(white: 96/100, alpha: 1.0)
+                self.backgroundColor = mainGreenColor
             }
         }
     }

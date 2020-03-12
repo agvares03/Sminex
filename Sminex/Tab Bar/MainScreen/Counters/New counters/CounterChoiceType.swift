@@ -21,7 +21,9 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     
     @IBOutlet weak var tableView:   UITableView!
     @IBOutlet weak var dateLbl:     UILabel!
+    @IBOutlet weak var sendLbl:     UILabel!
     @IBOutlet weak var historyBtn:  UIButton!
+    @IBOutlet weak var tableHeight:  NSLayoutConstraint!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     var fetchedResultsController: NSFetchedResultsController<TypesCounters>?
@@ -31,7 +33,17 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     public var canCount = true
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
+        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
+        let calendar = Calendar.current
+        let curDay = calendar.component(.day, from: Date())
+        if curDay > dateTo || curDay < dateFrom{
+            sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
+        }else if !canCount{
+            sendLbl.text = "Данные по приборам учета собираются УК самостоятельно"
+        }else{
+            sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
+        }
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
@@ -56,6 +68,13 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        DispatchQueue.main.async {
+            var height1: CGFloat = 0
+            for cell in self.tableView.visibleCells {
+                height1 += cell.bounds.height
+            }
+            self.tableHeight.constant = height1
+        }
         if let sections = fetchedResultsController?.sections {
             return sections[section].numberOfObjects
         } else {
@@ -85,8 +104,6 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                 metArr.append($0)
             }
         }
-//        print("COUNTER = ", counter.name)
-//        print("DATA_: ", meterArr)
         vc.canCount = canCount
         vc.data_ = metArr
         vc.period_ = periods
@@ -191,29 +208,29 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     private func getNameAndMonth(_ number_month: String) -> String {
         
         if number_month == "1" {
-            return "Январь"
+            return "ЯНВАРЬ"
         } else if number_month == "2" {
-            return "Февраль"
+            return "ФЕВРАЛЬ"
         } else if number_month == "3" {
-            return "Март"
+            return "МАРТ"
         } else if number_month == "4" {
-            return "Апрель"
+            return "АПРЕЛЬ"
         } else if number_month == "5" {
-            return "Май"
+            return "МАЙ"
         } else if number_month == "6" {
-            return "Июнь"
+            return "ИЮНЬ"
         } else if number_month == "7" {
-            return "Июль"
+            return "ИЮЛЬ"
         } else if number_month == "8" {
-            return "Август"
+            return "АВГУСТ"
         } else if number_month == "9" {
-            return "Сентябрь"
+            return "СЕНТЯБРЬ"
         } else if number_month == "10" {
-            return "Октябрь"
+            return "ОКТЯБРЬ"
         } else if number_month == "11" {
-            return "Ноябрь"
+            return "НОЯБРЬ"
         } else {
-            return "Декабрь"
+            return "ДЕКАБРЬ"
         }
     }
 

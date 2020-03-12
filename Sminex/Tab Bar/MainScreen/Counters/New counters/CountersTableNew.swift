@@ -94,7 +94,7 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
         let cell = CounterCellNew.fromNib()
         cell?.display(data_[indexPath.row], delegate: self, index: indexPath.row, delegate2: self, date: period_![0].lastModf!, canCount: canCount!)
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
 
     var index = 0
@@ -130,29 +130,29 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     private func getNameAndMonth(_ number_month: String) -> String {
         
         if number_month == "1" {
-            return "Январь"
+            return "ЯНВАРЬ"
         } else if number_month == "2" {
-            return "Февраль"
+            return "ФЕВРАЛЬ"
         } else if number_month == "3" {
-            return "Март"
+            return "МАРТ"
         } else if number_month == "4" {
-            return "Апрель"
+            return "АПРЕЛЬ"
         } else if number_month == "5" {
-            return "Май"
+            return "МАЙ"
         } else if number_month == "6" {
-            return "Июнь"
+            return "ИЮНЬ"
         } else if number_month == "7" {
-            return "Июль"
+            return "ИЮЛЬ"
         } else if number_month == "8" {
-            return "Август"
+            return "АВГУСТ"
         } else if number_month == "9" {
-            return "Сентябрь"
+            return "СЕНТЯБРЬ"
         } else if number_month == "10" {
-            return "Октябрь"
+            return "ОКТЯБРЬ"
         } else if number_month == "11" {
-            return "Ноябрь"
+            return "НОЯБРЬ"
         } else {
-            return "Декабрь"
+            return "ДЕКАБРЬ"
         }
     }
     /*

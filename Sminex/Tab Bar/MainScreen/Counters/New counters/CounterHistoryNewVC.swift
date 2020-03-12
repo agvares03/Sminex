@@ -19,22 +19,19 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet private weak var tarifName1:      UILabel!
     @IBOutlet private weak var tarifName2:      UILabel!
     @IBOutlet private weak var tarifName3:      UILabel!
-    @IBOutlet private weak var tarifView1:      UIView!
-    @IBOutlet private weak var tarifView2:      UIView!
-    @IBOutlet private weak var tarifView3:      UIView!
-    @IBOutlet private weak var date:            UILabel!
     @IBOutlet private weak var dateBtn:         UIButton!
     @IBOutlet private weak var dateBtn2:        UIButton!
     @IBOutlet private weak var dateBtn3:        UIButton!
     @IBOutlet private weak var outcome:         UILabel!
     @IBOutlet private weak var outcome2:        UILabel!
     @IBOutlet private weak var outcome3:        UILabel!
+    @IBOutlet private weak var lastCount:       UILabel!
+    @IBOutlet private weak var lastCount2:      UILabel!
+    @IBOutlet private weak var lastCount3:      UILabel!
+    @IBOutlet private weak var resHeight:       NSLayoutConstraint!
     @IBOutlet private weak var collHeight1:     NSLayoutConstraint!
     @IBOutlet private weak var collHeight2:     NSLayoutConstraint!
     @IBOutlet private weak var collHeight3:     NSLayoutConstraint!
-    @IBOutlet private weak var headerHeight1:   NSLayoutConstraint!
-    @IBOutlet private weak var headerHeight2:   NSLayoutConstraint!
-    @IBOutlet private weak var headerHeight3:   NSLayoutConstraint!
     @IBOutlet private weak var nameHeight1:     NSLayoutConstraint!
     @IBOutlet private weak var nameHeight2:     NSLayoutConstraint!
     @IBOutlet private weak var nameHeight3:     NSLayoutConstraint!
@@ -73,23 +70,10 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) || Device() == .iPhone5s || Device() == .simulator(.iPhone5s) || Device() == .iPhone5c || Device() == .simulator(.iPhone5c) || Device() == .iPhone5 || Device() == .simulator(.iPhone5){
-            res.font = res.font.withSize(16)
-            dateBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-            dateBtn2.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-            dateBtn3.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        }
-        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        if (250.0...280.0).contains(points) {
-            name.font = name.font.withSize(22)
-            name.minimumScaleFactor = 1
-        }
         view2.isHidden = true
         view3.isHidden = true
         tarifName2.isHidden = true
         tarifName3.isHidden = true
-        tarifView2.isHidden = true
-        tarifView3.isHidden = true
         collection2.isHidden = true
         collection3.isHidden = true
         collHeight1.constant = 380
@@ -97,18 +81,16 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         collHeight3.constant = 0
         nameHeight2.constant = 0
         nameHeight3.constant = 0
-        headerHeight2.constant = 0
-        headerHeight3.constant = 0
-        tarifName1.text = "Тариф - Т1(" + (data_?.tarifName1)! + ")"
+        let tarif1 = "Тариф - Т1(" + (data_?.tarifName1)! + ")"
+        tarifName1.text = tarif1.uppercased()
         if data_?.typeTarif == "2"{
             view2.isHidden = false
             collection2.isHidden = false
             collHeight2.constant = 380
             nameHeight2.constant = 40
-            headerHeight2.constant = 45
             tarifName2.isHidden = false
-            tarifView2.isHidden = false
-            tarifName2.text = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
+            let tarif2 = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
+            tarifName1.text = tarif2.uppercased()
         }else if data_?.typeTarif == "3"{
             view2.isHidden = false
             view3.isHidden = false
@@ -116,16 +98,14 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
             collection3.isHidden = false
             tarifName2.isHidden = false
             tarifName3.isHidden = false
-            tarifView2.isHidden = false
-            tarifView3.isHidden = false
             collHeight2.constant = 380
             collHeight3.constant = 380
             nameHeight2.constant = 40
             nameHeight3.constant = 40
-            headerHeight2.constant = 45
-            headerHeight3.constant = 45
-            tarifName2.text = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
-            tarifName3.text = "Тариф - Т3(" + (data_?.tarifName3)! + ")"
+            let tarif2 = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
+            let tarif3 = "Тариф - Т3(" + (data_?.tarifName3)! + ")"
+            tarifName1.text = tarif2.uppercased()
+            tarifName1.text = tarif3.uppercased()
         }
         // Выбор года - уберем с экрана
         picker.isHidden = true
@@ -138,9 +118,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         fraction = data_?.fractionalNumber
         
         res.text = data_?.resource
-        if res.text!.contains(find: "лектроэнергия"){
-            res.text = res.text! + "\n"
-        }
+        resHeight.constant = heightForView(text: data_?.resource ?? "", font: res.font, width: view.frame.size.width - 48)
         name.text = "Счетчик " + (data_?.meterUniqueNum)!
         years.append(period_![0].year!)
         selectedYear = period_![0].year!
@@ -151,9 +129,9 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
                 i += 1
             }
         }
-        dateBtn.setTitle("▼ " + period_![0].year!, for: .normal)
-        dateBtn2.setTitle("▼ " + period_![0].year!, for: .normal)
-        dateBtn3.setTitle("▼ " + period_![0].year!, for: .normal)
+        dateBtn.setTitle(period_![0].year!, for: .normal)
+        dateBtn2.setTitle(period_![0].year!, for: .normal)
+        dateBtn3.setTitle(period_![0].year!, for: .normal)
         outcome.text = "Расход (" + (data_?.units ?? "") + ")"
         outcome2.text = "Расход (" + (data_?.units ?? "") + ")"
         outcome3.text = "Расход (" + (data_?.units ?? "") + ")"
@@ -166,6 +144,17 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         collection2.dataSource   = self
         collection3.delegate     = self
         collection3.dataSource   = self
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        print(label.frame.height, width)
+        return label.frame.height
     }
     
     func setData(){
@@ -344,24 +333,33 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == collection{
-            if values.count != 0{
-                self.collHeight1.constant = CGFloat(30 * values.count)
+            if values.count > 6{
+                self.collHeight1.constant = 302
+                return values.count
+            }else if values.count > 0{
+                self.collHeight1.constant = 130 + CGFloat(30 * values.count)
                 return values.count
             }else{
                 self.collHeight1.constant = 0
                 return 0
             }
         }else if collectionView == collection2{
-            if values2.count != 0{
-                self.collHeight2.constant = CGFloat(30 * values2.count)
+            if values2.count > 6{
+                self.collHeight2.constant = 302
+                return values2.count
+            }else if values2.count > 0{
+                self.collHeight2.constant = 130 + CGFloat(30 * values2.count)
                 return values2.count
             }else{
                 self.collHeight2.constant = 0
                 return 0
             }
         }else{
-            if values3.count != 0{
-                self.collHeight3.constant = CGFloat(30 * values3.count)
+            if values3.count > 6{
+                self.collHeight3.constant = 302
+                return values3.count
+            }else if values3.count != 0{
+                self.collHeight3.constant = 130 + CGFloat(30 * values3.count)
                 return values3.count
             }else{
                 self.collHeight3.constant = 0
@@ -374,14 +372,17 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == collection{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CounterHistoryNewCell", for: indexPath) as! CounterHistoryNewCell
+            lastCount.text = values[0].income.replacingOccurrences(of: ",00", with: "") + " " + (data_?.units ?? "")
             cell.display(values[indexPath.row])
             return cell
         }else if collectionView == collection2{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CounterHistoryNewCell2", for: indexPath) as! CounterHistoryNewCell
+            lastCount2.text = values[0].income.replacingOccurrences(of: ",00", with: "") + " " + (data_?.units ?? "")
             cell.display(values2[indexPath.row])
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CounterHistoryNewCell3", for: indexPath) as! CounterHistoryNewCell
+            lastCount3.text = values[0].income.replacingOccurrences(of: ",00", with: "") + " " + (data_?.units ?? "")
             cell.display(values3[indexPath.row])
             return cell
         }
@@ -389,11 +390,11 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == collection{
-            return CGSize(width: collection.frame.size.width, height: 30.0)
+            return CGSize(width: collection.frame.size.width - 32, height: 30.0)
         }else if collectionView == collection2{
-            return CGSize(width: collection2.frame.size.width, height: 30.0)
+            return CGSize(width: collection2.frame.size.width - 32, height: 30.0)
         }else{
-            return CGSize(width: collection3.frame.size.width, height: 30.0)
+            return CGSize(width: collection3.frame.size.width - 32, height: 30.0)
         }
     }
 }
@@ -420,9 +421,9 @@ extension CounterHistoryNewVC: UIPickerViewDelegate, UIPickerViewDataSource {
         selectedYear = years[row]
         self.setData()
         DispatchQueue.main.async {
-            self.dateBtn.setTitle("▼ " + self.selectedYear!, for: .normal)
-            self.dateBtn2.setTitle("▼ " + self.selectedYear!, for: .normal)
-            self.dateBtn3.setTitle("▼ " + self.selectedYear!, for: .normal)
+            self.dateBtn.setTitle(self.selectedYear!, for: .normal)
+            self.dateBtn2.setTitle(self.selectedYear!, for: .normal)
+            self.dateBtn3.setTitle(self.selectedYear!, for: .normal)
         }
         picker.isHidden = true
         picker2.isHidden = true
