@@ -17,7 +17,6 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var mobilePaysBtn: UIButton!
     @IBOutlet weak var selectAllPay: UILabel!
     @IBOutlet weak var selectMobilePay: UILabel!
-    @IBOutlet weak var headerViewTop: NSLayoutConstraint!
     
     @IBOutlet weak var dateConst2: NSLayoutConstraint!
     @IBOutlet weak var dateConst: NSLayoutConstraint!
@@ -34,19 +33,19 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
     @IBAction func allPaysAction(_ sender: UIButton) {
         paysType = 0
         parse_all(login: login, pass: pass)
-        allPaysBtn.tintColor = .black
-        selectAllPay.backgroundColor = .black
-        mobilePaysBtn.tintColor = .lightGray
-        selectMobilePay.backgroundColor = .lightGray
+        allPaysBtn.tintColor = mainGreenColor
+        selectAllPay.backgroundColor = mainGreenColor
+        mobilePaysBtn.tintColor = mainGrayColor
+        selectMobilePay.backgroundColor = mainGrayColor
     }
     
     @IBAction func mobilePaysAction(_ sender: UIButton) {
         paysType = 1
         parse_Mobile(login: login, pass: pass)
-        allPaysBtn.tintColor = .lightGray
-        selectAllPay.backgroundColor = .lightGray
-        mobilePaysBtn.tintColor = .black
-        selectMobilePay.backgroundColor = .black
+        allPaysBtn.tintColor = mainGrayColor
+        selectAllPay.backgroundColor = mainGrayColor
+        mobilePaysBtn.tintColor = mainGreenColor
+        selectMobilePay.backgroundColor = mainGreenColor
     }
     
     var login = ""
@@ -62,25 +61,14 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
         login = UserDefaults.standard.string(forKey: "login")!
         pass  = UserDefaults.standard.string(forKey: "pass")!
         parse_all(login: login, pass: pass)
-        #if isMupRCMytishi
-        #else
-        headerViewTop.constant = 0
-        allPaysBtn.isHidden = true
         mobilePaysBtn.isHidden = true
         selectMobilePay.isHidden = true
-        selectAllPay.isHidden = true
-        #endif
         tableView.delegate = self
         tableView.dataSource = self
-        allPaysBtn.tintColor = .black
-        selectAllPay.backgroundColor = .black
-        mobilePaysBtn.tintColor = .lightGray
-        selectMobilePay.backgroundColor = .lightGray
-//        if self.view.frame.size.width < 375{
-//            dateConst.constant = dateConst.constant - 6
-//            dateConst2.constant = dateConst2.constant - 6
-//            sumConst2.constant = sumConst2.constant - 6
-//        }
+        allPaysBtn.tintColor = mainGreenColor
+        selectAllPay.backgroundColor = mainGreenColor
+        mobilePaysBtn.tintColor = mainGrayColor
+        selectMobilePay.backgroundColor = mainGrayColor
     }
     
     override func viewWillAppear(_ animated: Bool) {

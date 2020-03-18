@@ -41,7 +41,7 @@ final class FinanceDebtArchiveVC: UIViewController, UICollectionViewDelegate, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 50.0)
+        return CGSize(width: view.frame.size.width - 32, height: 50.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

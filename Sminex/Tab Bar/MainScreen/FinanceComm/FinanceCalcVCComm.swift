@@ -663,9 +663,11 @@ final class CalcYearCell: UICollectionViewCell {
     fileprivate func display(_ item: CalcYearCellData, selectIndex: Bool) {
         title.text = item.title
         if selectIndex{
-            selLine.backgroundColor = .darkGray
+            selLine.backgroundColor = mainGrayColor
+            title.textColor = mainGrayColor
         }else{
             selLine.backgroundColor = .lightGray
+            title.textColor = .lightGray
         }
     }
     

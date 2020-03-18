@@ -177,25 +177,25 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if indexPath.row == receipts?.count {
-            let defaults = UserDefaults.standard
-            if (!defaults.bool(forKey: "denyOnlinePayments")) {
-                let kek = !(data_?.permit_online_payment!)!
-                if kek == true{
-                    return CGSize(width: view.frame.size.width, height: 130.0)
-                    
-                }
-            }
-            
-            return CGSize(width: view.frame.size.width, height: 193.0)
-            
-        }
+//        if indexPath.row == receipts?.count {
+//            let defaults = UserDefaults.standard
+//            if (!defaults.bool(forKey: "denyOnlinePayments")) {
+//                let kek = !(data_?.permit_online_payment!)!
+//                if kek == true{
+//                    return CGSize(width: view.frame.size.width - 32, height: 130.0)
+//
+//                }
+//            }
+//
+//            return CGSize(width: view.frame.size.width, height: 193.0)
+//
+//        }
         if indexPath.row == receipts?.count {
             let defaults = UserDefaults.standard
             if (defaults.bool(forKey: "denyInvoiceFiles")) {
-                return CGSize(width: view.frame.size.width, height: 80.0)
+                return CGSize(width: view.frame.size.width - 32, height: 55.0)
             }
-            return CGSize(width: view.frame.size.width, height: 193.0)
+            return CGSize(width: view.frame.size.width - 32, height: 55.0)
             
         } else {
             let cell = FinanceDebtCommCell.fromNib()
@@ -209,12 +209,18 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             var lblH: CGFloat = 0
             if !isBold {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
-                lblH = heightForView(text: receipts![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
+                lblH = heightForView(text: receipts![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 199) + 10
+                return CGSize(width: view.frame.size.width - 32, height: lblH)
             } else {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
-                lblH = heightForView(text: receipts![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
+                lblH = heightForView(text: receipts![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 159) + 10
+                if lblH > 39{
+                    return CGSize(width: view.frame.size.width - 32, height: lblH)
+                }else{
+                    return CGSize(width: view.frame.size.width - 32, height: 39)
+                }
             }
-            return CGSize(width: view.frame.size.width, height: lblH)
+            
         }
     }
     
@@ -423,6 +429,7 @@ final class FinanceDebtCommCell: UICollectionViewCell {
     
     @IBOutlet weak var title:   UILabel!
     @IBOutlet weak var desc:    UILabel!
+    @IBOutlet weak var leadingDesc:    NSLayoutConstraint!
     
     func display(title: String, desc: String, isBold: Bool) {
         let d: Double = Double(desc.replacingOccurrences(of: ",", with: "."))!
@@ -439,14 +446,17 @@ final class FinanceDebtCommCell: UICollectionViewCell {
         self.desc.text = sum.replacingOccurrences(of: ".", with: ",")
         
         if isBold {
+            self.leadingDesc.constant = 16
             self.title.font = UIFont.boldSystemFont(ofSize: self.title.font.pointSize)
             self.desc.font  = UIFont.boldSystemFont(ofSize: self.desc.font.pointSize)
             self.title.textColor = .black
-            
+            self.desc.textColor = .black
         } else {
-            self.title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .light)
-            self.desc.font  = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .light)
+            self.leadingDesc.constant = 40
+            self.title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .regular)
+            self.desc.font  = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .regular)
             self.title.textColor = .gray
+            self.desc.textColor = .gray
         }
     }
     
@@ -470,6 +480,7 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
     @IBOutlet private weak var dateLabel:   UILabel!
     //    @IBOutlet private weak var btnConst:   NSLayoutConstraint!
     @IBOutlet private weak var btnConst1:   NSLayoutConstraint!
+    @IBOutlet private weak var viewHeight:   NSLayoutConstraint!
     @IBOutlet weak var pay_button: UIButton!
     @IBOutlet weak var pay_QR: UIButton!
     @IBOutlet weak var pay_QR_image: UIImageView!
@@ -495,7 +506,11 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
             pay_QR.isHidden           = true
             pay_QR_image.isHidden     = true
         }
-        
+        pay_QR.isHidden         = true //Временно
+        pay_QR_image.isHidden   = true //Временно
+        pay_button.isHidden     = true //Временно
+        dateLabel.isHidden      = true //Временно
+        viewHeight.constant     = 0    //Временно
         if pay_button.isHidden {
             btnConst1.constant = 0
         }

@@ -142,20 +142,24 @@ class FinanceCalcVC3Comm: UIViewController, UICollectionViewDelegate, UICollecti
         if indexPath.row != data_.count {
             cell?.display(data_[indexPath.row], pay: self, indexPath: indexPath)
         } else {
-            cell?.display( AccountCalculationsJson(type: "Итого", sumAccrued: 0, sumDebt: 0, sumPay: 0), pay: self, indexPath: indexPath)
+            var sumAccured  = 0.0
             var sumDebt     = 0.0
+            var sumPay      = 0.0
             
             data_.forEach {
+                sumAccured  += $0.sumAccrued    ?? 0.0
                 sumDebt     += $0.sumDebt       ?? 0.0
+                sumPay      += $0.sumPay        ?? 0.0
             }
             if sumDebt > 0.00{
-                height = 50
+                height = 85
             }else{
                 height = 0
             }
+            cell?.display( AccountCalculationsJson(type: "Итого", sumAccrued: 0, sumDebt: 0, sumPay: 0), pay: self, indexPath: indexPath)
         }
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height + height)
+        return CGSize(width: view.frame.size.width - 32, height: size.height + height)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -258,6 +262,7 @@ final class FinanceCalcComm3Header: UICollectionReusableView {
 
 final class FinanceCalcComm3Cell: UICollectionViewCell {
     
+    @IBOutlet private weak var botConst:    NSLayoutConstraint!
     @IBOutlet private weak var headerStack: UIStackView!
     @IBOutlet private weak var headerHeight: NSLayoutConstraint!
     @IBOutlet private weak var sumAccured:  UILabel!
@@ -296,18 +301,21 @@ final class FinanceCalcComm3Cell: UICollectionViewCell {
             goDebt.isHidden = true
             debtHeight.constant = 0
             debtTop.constant = 0
+            botConst.constant = 0
         }else{
             if item.sumDebt! > 0.00{
                 payBtn.isHidden = false
-                payHeight.constant = 40
+                payHeight.constant = 48
                 payTop.constant = 15
+                botConst.constant = 20
             }else{
                 payBtn.isHidden = true
                 payHeight.constant = 0
                 payTop.constant = 0
+                botConst.constant = 0
             }
             goDebt.isHidden = false
-            debtHeight.constant = 40
+            debtHeight.constant = 20
             debtTop.constant = 15
         }
         var sumA = String(format:"%.2f", item.sumAccrued!)

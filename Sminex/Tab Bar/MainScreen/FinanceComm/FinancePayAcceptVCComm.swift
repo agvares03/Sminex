@@ -55,13 +55,13 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
             if (date?.count ?? 0) > 9 {
                 date?.removeLast(9)
             }
-            descLabel.text = "Оплата счета: \(billsData_?.number ?? "") от \(date ?? "")"
+            descLabel.text = "\(billsData_?.number ?? "") от \(date ?? "")"
             
         } else {
             sumTextField.text = String(format: "%.2f", (accountData_?.sumPay ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета"
             descLabel.isHidden = true
-            fieldTop.constant = 16
+//            fieldTop.constant = 16
         }
         
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(viewTapped(_:)))

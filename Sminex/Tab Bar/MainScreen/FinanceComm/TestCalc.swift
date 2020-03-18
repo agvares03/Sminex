@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import ExpyTableView
 
-class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PayDelegate, UITableViewDelegate, UITableViewDataSource {
+class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PayDelegate, UITableViewDelegate, UITableViewDataSource, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
     @IBOutlet weak var collectionYear:  UICollectionView!
-    @IBOutlet weak var table:           UITableView!
+    @IBOutlet weak var table:           ExpyTableView!
     @IBOutlet private weak var loader:  UIActivityIndicatorView!
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -197,8 +198,8 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
-        table.delegate     = self
-        table.dataSource   = self
+        table.dataSource    = self
+        table.delegate      = self
         
         collectionYear.delegate     = self
         collectionYear.dataSource   = self
@@ -355,10 +356,21 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if dataYear.count != 0{
+            dataYear.forEach{_ in
+                start.append(true)
+            }
             return dataYear.count
         }else{
             return 0
         }
+    }
+    var start:[Bool] = []
+    func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcHeader") as! TestCalcHeader
+        cell.display(getNameAndMonth(dateArr[section].0!) + " \(dateArr[section].1!)")
+        
+        //do other header related calls or settups
+        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -366,12 +378,8 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcHeader") as! TestCalcHeader
-            cell.display(getNameAndMonth(dateArr[indexPath.section].0!) + " \(dateArr[indexPath.section].1!)")
-            
-            //do other header related calls or settups
-            return cell
+        if start[indexPath.section]{
+            table.expand(indexPath.section)
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcCell") as! TestCalcCell
         if indexPath.row < dataYear[indexPath.section]!.count + 1 {
@@ -394,6 +402,27 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
             cell.display( AccountCalculationsJson(type: "Итого", sumAccrued: sumAccured, sumDebt: sumDebt, sumPay: sumPay), pay: self, indexPath: indexPath)
         }
         return cell
+    }
+    
+    func tableView(_ tableView: ExpyTableView, expyState state: ExpyState, changeForSection section: Int) {
+        
+        if state == .willExpand {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! TestCalcHeader
+            cell.expand(true)
+            
+        } else if state == .willCollapse {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! TestCalcHeader
+            cell.expand(false)
+        }
+    }
+    
+    func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
+        return true
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -518,12 +547,52 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
 }
 
-final class TestCalcHeader: UITableViewCell {
+final class TestCalcHeader: UITableViewCell, ExpyTableViewHeaderCell {
     
     @IBOutlet private weak var title: UILabel!
+    @IBOutlet weak var img: UIImageView!
+    @IBOutlet weak var circleView: UIView!
+    @IBOutlet weak var squareView: UIView!
     
     fileprivate func display(_ title: String) {
         self.title.text = title
+        self.circleView.isHidden = false
+        self.squareView.isHidden = true
+        self.img.image = UIImage(named: "expand")
+    }
+    
+    func changeState(_ state: ExpyState, cellReuseStatus cellReuse: Bool) {
+        switch state {
+        case .willExpand:
+            self.circleView.isHidden = true
+            self.squareView.isHidden = false
+            self.img.image = UIImage(named: "expanded")
+        case .willCollapse:
+            self.circleView.isHidden = false
+            self.squareView.isHidden = true
+            self.img.image = UIImage(named: "expand")
+        case .didExpand:
+            self.circleView.isHidden = true
+            self.squareView.isHidden = false
+            self.img.image = UIImage(named: "expanded")
+        case .didCollapse:
+            self.circleView.isHidden = false
+            self.squareView.isHidden = true
+            self.img.image = UIImage(named: "expand")
+        }
+    }
+    
+    func expand(_ isExpanded: Bool) {
+        if !isExpanded {
+            self.circleView.isHidden = false
+            self.squareView.isHidden = true
+            self.img.image = UIImage(named: "expand")
+            
+        } else {
+            self.circleView.isHidden = true
+            self.squareView.isHidden = false
+            self.img.image = UIImage(named: "expanded")
+        }
     }
 }
 
@@ -531,12 +600,14 @@ final class TestCalcCell: UITableViewCell {
     
     @IBOutlet private weak var headerStack: UIStackView!
     @IBOutlet private weak var headerHeight: NSLayoutConstraint!
+    @IBOutlet private weak var botConst:    NSLayoutConstraint!
     @IBOutlet private weak var sumAccured:  UILabel!
     @IBOutlet private weak var sumDebt:     UILabel!
     @IBOutlet private weak var sumPay:      UILabel!
     @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var payBtn:      UIButton!
     @IBOutlet private weak var goDebt:      UIButton!
+    @IBOutlet private weak var botView:     UIView!
     @IBOutlet private weak var payHeight:   NSLayoutConstraint!
     @IBOutlet private weak var payTop:      NSLayoutConstraint!
     @IBOutlet private weak var debtHeight:   NSLayoutConstraint!
@@ -561,24 +632,30 @@ final class TestCalcCell: UITableViewCell {
             headerHeight.constant = 20
         }
         if item.type != "Итого"{
+            botConst.constant = 0
             payBtn.isHidden = true
             payHeight.constant = 0
             payTop.constant = 0
             goDebt.isHidden = true
             debtHeight.constant = 0
             debtTop.constant = 0
+            botView.isHidden = true
+            botView.cornerRadius = 0
         }else{
             if item.sumDebt! > 0.00{
                 payBtn.isHidden = false
-                payHeight.constant = 40
+                payHeight.constant = 48
                 payTop.constant = 15
             }else{
                 payBtn.isHidden = true
                 payHeight.constant = 0
                 payTop.constant = 0
             }
+            botView.isHidden = false
+            botConst.constant = 20
+            botView.cornerRadius = 24
             goDebt.isHidden = false
-            debtHeight.constant = 40
+            debtHeight.constant = 20
             debtTop.constant = 15
         }
         var sumA = String(format:"%.2f", item.sumAccrued!)
@@ -650,9 +727,11 @@ final class CalcYearCell1: UICollectionViewCell {
     fileprivate func display(_ item: CalcYearCellData, selectIndex: Bool) {
         title.text = item.title
         if selectIndex{
-            selLine.backgroundColor = .darkGray
+            selLine.backgroundColor = mainGreenColor
+            title.textColor = mainGreenColor
         }else{
             selLine.backgroundColor = .lightGray
+            title.textColor = .lightGray
         }
     }
     
