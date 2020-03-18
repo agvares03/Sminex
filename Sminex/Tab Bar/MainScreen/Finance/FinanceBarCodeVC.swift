@@ -40,16 +40,7 @@ final class FinanceBarCodeVC: UIViewController {
                 }
             }
         }
-        if isNeedToScrollMore() {
-            topLayout.constant = 50
-        }
-        DispatchQueue.main.async{
-            if Device().isOneOf([.iPhoneSE, .iPhone5s, .iPhone5, .iPhone5c, .simulator(.iPhoneSE), .simulator(.iPhone5s), .simulator(.iPhone5), .simulator(.iPhone5c)]){
-                self.qrView.frame.origin.y = 20
-            }else{
-                self.topLayout.constant = 80
-            }
-        }
+        self.topLayout.constant = 62
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer) {

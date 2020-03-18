@@ -232,11 +232,11 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+//                if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
                     performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
-                }else{
-                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
-                }
+//                }else{
+//                    performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
+//                }
             } else if indexPath.row == 1 {
                 performSegue(withIdentifier: Segues.fromMenuVC.toSchet, sender: self)
             

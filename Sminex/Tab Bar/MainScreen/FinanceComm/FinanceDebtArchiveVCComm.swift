@@ -6,52 +6,140 @@
 //
 
 import UIKit
+import ExpyTableView
 
-class FinanceDebtArchiveVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
-    @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var table:   ExpyTableView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
     
+    struct Objects {
+        var sectionName : String!
+        var filteredData : [AccountBillsJson]!
+    }
+    
     public var data_: [AccountBillsJson] = []
+    public var filteredData: [AccountBillsJson] = []
+    var kolYear: [String] = []
+    var dataFilt = [Objects]()
     private var index = 0
+    private var section = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        var currMonth = 0
+        filteredData = data_.filter {
+            if ($0.numMonth ?? 0) != currMonth {
+                currMonth = ($0.numMonth ?? 0)
+                return true
+            }
+            return false
+        }
+        var year = 0
+        filteredData.forEach{
+            if $0.numYear != year{
+                year = $0.numYear!
+                kolYear.append(String($0.numYear!))
+            }
+        }
+        for i in 0...kolYear.count - 1{
+            var s = filteredData
+            s.removeAll()
+            filteredData.forEach{
+                if String($0.numYear!) == kolYear[i]{
+                    s.append($0)
+                }
+            }
+            dataFilt.append(Objects(sectionName: kolYear[i], filteredData: s))
+        }
         automaticallyAdjustsScrollViewInsets = false
-        collection.dataSource = self
-        collection.delegate   = self
+        table.dataSource = self
+        table.delegate   = self
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data_.count
+    func numberOfSections(in tableView: UITableView) -> Int {
+            return dataFilt.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtArchiveCommCell", for: indexPath) as! FinanceDebtArchiveCommCell
-        //        cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
-        cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0)).formattedWithSeparator))
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceDebtArchiveYearCommCell") as! FinanceDebtArchiveYearCommCell
+        var last = false
+        if section == (dataFilt.count - 1){
+            last = true
+        }
+        cell.display(dataFilt[section].sectionName, section: section, last: last)
+        
+        //do other header related calls or settups
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 50.0)
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        if section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//            return dataFilt[section].filteredData.count + 2
+//        }else{
+            return dataFilt[section].filteredData.count + 1
+//        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        index = indexPath.row
-        performSegue(withIdentifier: Segues.fromFinanceDebtArchiveVC.toReceipt, sender: self)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0{
+            return 62.0
+        }else{
+            return 50.0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row > 0{
+            index = indexPath.row - 1
+            section = indexPath.section
+            performSegue(withIdentifier: Segues.fromFinanceDebtArchiveVC.toReceipt, sender: self)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceDebtArchiveCommCell") as! FinanceDebtArchiveCommCell
+        //        cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
+        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonth ?? 0) + " \(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYear ?? 0)", desc: (((dataFilt[indexPath.section].filteredData[indexPath.row - 1].sum ?? 0.0)).formattedWithSeparator))
+        return cell
+    }
+    
+    func tableView(_ tableView: ExpyTableView, expyState state: ExpyState, changeForSection section: Int) {
+        
+        if state == .willExpand {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! FinanceDebtArchiveYearCommCell
+            var last = false
+            if section == (dataFilt.count - 1){
+                last = true
+            }
+            cell.expand(true, last: last)
+            
+        } else if state == .willCollapse {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! FinanceDebtArchiveYearCommCell
+            var last = false
+            if section == (dataFilt.count - 1){
+                last = true
+            }
+            cell.expand(false, last: last)
+        }
+    }
+    
+    func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
+        return true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceDebtArchiveVC.toReceipt {
             let vc = segue.destination as! FinanceDebtVCComm
-            vc.data_ = data_[index]
+            vc.data_ = dataFilt[section].filteredData[index]
         }
     }
     
@@ -85,8 +173,59 @@ class FinanceDebtArchiveVCComm: UIViewController, UICollectionViewDelegate, UICo
     }
 }
 
+final class FinanceDebtArchiveYearCommCell: UITableViewCell, ExpyTableViewHeaderCell {
+    
+    @IBOutlet private weak var title:   UILabel!
+    @IBOutlet weak var img: UIImageView!
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var botView: UIView!
+    
+    func display(_ title: String, section: Int, last: Bool) {
+        if section == 0{
+            topView.isHidden = false
+            botView.isHidden = true
+        }else if last{
+            topView.isHidden = true
+            botView.isHidden = false
+        }else{
+            topView.isHidden = false
+            botView.isHidden = false
+        }
+        self.title.text     = title
+        self.img.image = UIImage(named: "expand")
+    }
+    
+    func changeState(_ state: ExpyState, cellReuseStatus cellReuse: Bool) {
+        switch state {
+        case .willExpand:
+            self.img.image = UIImage(named: "expanded")
+        case .willCollapse:
+            self.img.image = UIImage(named: "expand")
+        case .didExpand:
+            self.img.image = UIImage(named: "expanded")
+        case .didCollapse:
+            self.img.image = UIImage(named: "expand")
+        }
+    }
+    
+    func expand(_ isExpanded: Bool, last: Bool) {
+        if !isExpanded {
+            self.img.image = UIImage(named: "expand")
+            if last{
+                topView.isHidden = true
+                botView.isHidden = false
+            }
+        } else {
+            if last{
+                topView.isHidden = false
+                botView.isHidden = false
+            }
+            self.img.image = UIImage(named: "expanded")
+        }
+    }
+}
 
-final class FinanceDebtArchiveCommCell: UICollectionViewCell {
+final class FinanceDebtArchiveCommCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!

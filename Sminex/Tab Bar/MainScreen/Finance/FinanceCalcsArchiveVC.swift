@@ -12,7 +12,7 @@ import ExpyTableView
 final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
     @IBOutlet private weak var table:   ExpyTableView!
-    
+    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
@@ -58,10 +58,12 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
             }
             dataFilt.append(Objects(sectionName: kolYear[i], filteredData: s))
         }
-        print(dataFilt.count)
+//        print(dataFilt.count)
         automaticallyAdjustsScrollViewInsets = false
         table.dataSource    = self
         table.delegate      = self
+        self.table.estimatedRowHeight = 50
+        self.table.rowHeight = UITableViewAutomaticDimension
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -188,20 +190,29 @@ final class FinanceCalcsArchiveVC: UIViewController, ExpyTableViewDataSource, Ex
     }
     
     func tableView(_ tableView: ExpyTableView, expyState state: ExpyState, changeForSection section: Int) {
-        
-        if state == .willExpand {
+        switch state {
+        case .willExpand:
             let index = IndexPath(row: 0, section: section)
             let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCell
             cell.expand(true)
-            
-        } else if state == .willCollapse {
+        case .willCollapse:
             let index = IndexPath(row: 0, section: section)
             let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCell
             cell.expand(false)
+        case .didExpand:
+            print("DID EXPAND")
+
+        case .didCollapse:
+            print("DID COLLAPSE")
         }
     }
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
     func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
+        
         return true
     }
     

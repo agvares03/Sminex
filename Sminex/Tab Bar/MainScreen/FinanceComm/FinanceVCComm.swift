@@ -12,6 +12,7 @@ import ExpyTableView
 class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
     @IBOutlet private weak var loader:  UIActivityIndicatorView!
+    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet weak var table:   ExpyTableView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -93,21 +94,16 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-//        if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
-            return 4
-//        }else{
-//            return 3
-//        }
+        return 4
     }
     
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCommCell") as! FinanceSectionCommCell
         if section == 1 {
-            cell.display("Квитанции")
-            
+            cell.display("Квитанции", section: section, last: false)
         } else {
-            cell.display("Взаиморасчеты")
+            cell.display("Взаиморасчеты", section: section, last: false)
         }
         return cell
     }
@@ -147,12 +143,10 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 let dateText = dateFormatter.string(from: endOfMonth!)
                 
                 let datePay = dateText
-                //                if (datePay.count) > 9 {
-                //                    datePay.removeLast(8)
-                //                }
+                
                 cell.display(amount: (debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: "До " + (datePay))
             }
-            cell.contentView.backgroundColor = backColor
+            cell.contentView.backgroundColor = .clear
             return cell
             
         } else if indexPath.section == 1 {
@@ -162,9 +156,6 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 cell.contentView.backgroundColor = .white
                 
             } else {
-                //                cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
-                //                    desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0) - (receipts[safe: indexPath.row - 1]?.payment_sum ?? 0.0)).formattedWithSeparator)
-                //                if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                 var year = "\(receipts[safe: indexPath.row - 1]?.numYear ?? 0)"
                 if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
                     year.removeFirst()
@@ -180,24 +171,9 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 }
                 cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " " + year,
                              desc: sum)
-                //                }else{
-                //                    cell.display(title: getNameAndMonth(receipts[safe: indexPath.row - 1]?.numMonth ?? 0) + " \(receipts[safe: indexPath.row - 1]?.numYear ?? 0)",
-                //                        desc: ((receipts[safe: indexPath.row - 1]?.sum ?? 0.0)).formattedWithSeparator)
-                //                }
                 cell.contentView.backgroundColor = backColor
             }
             return cell
-            
-            //        }else if indexPath.section == 3 {
-            //            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
-            //            if (self.calcs.count == 0) {
-            //                cell.display(title: "", desc: "")
-            //            } else {
-            //                cell.display(title: "История взаиморасчетов", desc: "")
-            //                cell.contentView.backgroundColor = .white
-            //            }
-            //            return cell
-            
         } else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
             if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 4) && (Double((debt?.sumPay)!) >= 0.00){
@@ -288,57 +264,42 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                                      desc: debt != 0.0 ? "- \(debt.formattedWithSeparator)" : "")
                     }
                 }
-                //                }else{
-                //                    cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " \(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)",
-                //                        desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
-                //                }
-                
                 cell.contentView.backgroundColor = backColor
             }
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCommCell", for: indexPath) as! FinanceSectionCommCell
-            cell.display("История оплат")
+            cell.display("История оплат", section: indexPath.section, last: true)
             //            cell.display(title: "История оплат", desc: "")
-            cell.contentView.backgroundColor = .white
+            cell.contentView.backgroundColor = .clear
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        DispatchQueue.main.async {
+            var height1: CGFloat = 0
+            for cell in self.table.visibleCells {
+                height1 += cell.bounds.height
+            }
+            self.tableHeight.constant = height1
+        }
         if section == 1 {
             if receipts.count == 0 {
                 return 0
-                
             } else if receipts.count < 3 {
                 return receipts.count + 2
-                
             } else {
                 return 5
             }
-            
         } else if section == 2 {
             if filteredCalcs.count == 0 {
-//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-//                    return 1
-//                }else{
-                    return 0
-//                }
+                return 0
             } else if filteredCalcs.count < 3 {
-//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-//                    return filteredCalcs.count + 3
-//                }else{
-                    return filteredCalcs.count + 2
-//                }
-                
+                return filteredCalcs.count + 2
             } else {
-//                if debt?.sumPay != nil && Double((debt?.sumPay)!) < 0.00{
-//                    return 6
-//                }else{
-                    return 5
-//                }
+                return 5
             }
-            
         } else {
             return 1
         }
@@ -371,10 +332,14 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
         
         if indexPath.section == 0 {
             if UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments") {
-                return 160
+                return 139 + 15.0
+            }else{
+                if UserDefaults.standard.bool(forKey: "denyQRCode"){
+                    return 224.0 + 15.0
+                }else{
+                    return 255.0 + 15.0
+                }
             }
-            return 220.0
-            
         } else {
             if view.frame.size.width == 320 && indexPath.section == 2 && indexPath.row != 0{
                 return 60.0
@@ -561,16 +526,35 @@ final class FinanceSectionCommCell: UITableViewCell {
     @IBOutlet private weak var img:     UIImageView!
     @IBOutlet private weak var imgHeight: NSLayoutConstraint!
     @IBOutlet private weak var imgWidth: NSLayoutConstraint!
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var botView: UIView!
     
-    func display(_ title: String) {
+    func display(_ title: String, section: Int, last: Bool) {
+        if section == 1{
+            if (UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments")) {
+                topView.isHidden = false
+                botView.isHidden = true
+            } else if (UserDefaults.standard.bool(forKey: "denyOnlinePayments")) {
+                topView.isHidden = false
+                botView.isHidden = true
+            }else{
+                topView.isHidden = false
+                botView.isHidden = false
+            }
+        }else{
+            topView.isHidden = false
+            botView.isHidden = false
+        }
         self.title.text     = title
         self.img.image = UIImage(named: "expand")
-        imgHeight.constant = 8
-        imgWidth.constant = 14
+        imgHeight.constant = 10
+        imgWidth.constant = 16
         if title == "История оплат"{
             self.img.image = UIImage(named: "arrow_right")
-            imgHeight.constant = 14
-            imgWidth.constant = 8
+            imgHeight.constant = 16
+            imgWidth.constant = 10
+            topView.isHidden = true
+            botView.isHidden = false
         }
     }
     
@@ -587,62 +571,56 @@ final class FinanceSectionCommCell: UITableViewCell {
 
 final class FinanceHeaderCommCell: UITableViewCell {
     
-    @IBOutlet weak var heigth_cell: NSLayoutConstraint!
-    
     @IBOutlet private weak var amount: UILabel!
-    @IBOutlet private weak var amountDrob: UILabel!
     @IBOutlet private weak var date: UILabel!
     
     @IBOutlet weak var pay_button: UIButton!
     @IBOutlet weak var pay_QR: UIButton!
-    @IBOutlet weak var pay_QR_image: UIImageView!
-    
-    @IBOutlet weak var isPayed: NSLayoutConstraint!
-    @IBOutlet weak var heigthPayed: NSLayoutConstraint!
+    @IBOutlet weak var fonIMG: UIImageView!
+    @IBOutlet weak var fonIMG2: UIImageView!
+    @IBOutlet weak var topQR: NSLayoutConstraint!
+    @IBOutlet weak var botQR: NSLayoutConstraint!
+    @IBOutlet weak var fonHeight: NSLayoutConstraint!
+    @IBOutlet weak var heightPayed: NSLayoutConstraint!
+    @IBOutlet weak var heightQR: NSLayoutConstraint!
     
     @IBAction private func barcodePressed(_ sender: UIButton) {
     }
     
     func display(amount: String, date: String) {
         print("SUM = ", amount)
-        var am = amount
-        var am2 = amount
-        if am == "0 ₽"{
-            am = "0.00 ₽"
-            am2 = "0.00 ₽"
-        }
-        am.forEach{_ in
-            if am.contains(find: "."){
-                am.removeLast()
-            }
-        }
-        am2.forEach{_ in
-            if am2.contains(find: "."){
-                am2.removeFirst()
-            }
-        }
-        self.amount.text    = am
-        self.amountDrob.text = ", " + am2
+        self.amount.text    = amount
         self.date.text      = date
         
         let defaults = UserDefaults.standard
         
         if (defaults.bool(forKey: "denyTotalOnlinePayments")) {
             pay_button.isHidden   = true
-            
-            isPayed.constant      = 15
-            heigthPayed.constant  = 150
-            
         } else if (defaults.bool(forKey: "denyOnlinePayments")) {
             pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
-            isPayed.constant      = 15
-            heigthPayed.constant  = 150
+        }
+        if pay_button.isHidden{
+            fonIMG.image = UIImage(named: "greenPay_fon")!
+            fonIMG2.isHidden = true
+            heightPayed.constant = 0
+            pay_QR.isHidden     = true
+            heightQR.constant   = 0
+            topQR.constant      = 0
+            botQR.constant      = 30
+            fonHeight.constant  = 0
+        }else{
+            fonIMG.image = UIImage(named: "mainPay_fon")!
+            fonIMG2.isHidden        = false
+            fonHeight.constant      = 15
+            heightPayed.constant    = 48
         }
         //        print(isPayed.constant, heigthPayed.constant)
         // Выводить или нет кнопку QR-код
         if defaults.bool(forKey: "denyQRCode"){
             pay_QR.isHidden           = true
-            pay_QR_image.isHidden     = true
+            heightQR.constant = 0
+            topQR.constant = 0
+            botQR.constant = 30
         }
         
     }
@@ -659,11 +637,9 @@ final class FinanceCommCell: UITableViewCell {
         self.title.text = title
         self.desc.text  = desc.replacingOccurrences(of: ".", with: ",")
         if title == "Аванс" || desc.contains(find: "-"){
-            self.desc.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
-            self.desc.alpha = 1
+            self.desc.textColor = mainGreenColor
         }else{
-            self.desc.textColor = .darkText
-            self.desc.alpha = 0.5
+            self.desc.textColor = .lightGray
         }
         if (title == "" || title == "Аванс") {
             img.image = nil

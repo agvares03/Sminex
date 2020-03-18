@@ -53,11 +53,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     var notifiPressed = false
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
-            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
-        }else{
+//        if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+//            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
+//        }else{
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
-        }
+//        }
     }
     
     @IBAction func addRequestByTitle(_ sender: Any) {
@@ -202,11 +202,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     //                self.performSegue(withIdentifier: Segues.fromMainScreenVC.toNewsWAnim, sender: self)
                 } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "DEBT") {
                     UserDefaults.standard.set(false, forKey: "openNotification")
-                    if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+//                    if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
                         self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
-                    }else{
-                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
-                    }
+//                    }else{
+//                        self.performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
+//                    }
                 } else if (UserDefaults.standard.string(forKey: "typeNotifi") == "METER_VALUE") {
                     UserDefaults.standard.set(false, forKey: "openNotification")
                     //                DB().del_db(table_name: "Counters")
@@ -835,11 +835,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         if indexPath.section == 2 {
             performSegue(withIdentifier: Segues.fromMainScreenVC.toSchet, sender: self)
         }else if indexPath.section == 1 {
-            if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
+//            if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
                 performSegue(withIdentifier: Segues.fromMainScreenVC.toFinanceComm, sender: self)
-            }else{
-                performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
-            }
+//            }else{
+//                performSegue(withIdentifier: Segues.fromMainScreenVC.toFinance, sender: self)
+//            }
         }
     }
     

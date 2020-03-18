@@ -21,7 +21,7 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
         var filteredData : [AccountCalculationsJson]!
     }
     
-    public var data_:           [AccountCalculationsJson] = []
+    public var data_: [AccountCalculationsJson] = []
     public var dataDebt: [AccountBillsJson] = []
     private var filteredData: [AccountCalculationsJson] = []
     private var index = 0
@@ -61,6 +61,11 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
         automaticallyAdjustsScrollViewInsets = false
         table.dataSource    = self
         table.delegate      = self
+        if table.expandedSections.count != 0{
+            if !table!.expandedSections[0]!{
+                table.expand(0)
+            }
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -70,7 +75,11 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveYearCommCell") as! FinanceCalcsArchiveYearCommCell
-        cell.display(dataFilt[section].sectionName)
+        var last = false
+        if section == (dataFilt.count - 1){
+            last = true
+        }
+        cell.display(dataFilt[section].sectionName, section: section, last: last)
         
         //do other header related calls or settups
         return cell
@@ -89,6 +98,7 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
             if indexPath.row > 0{
                 index = indexPath.row - 2
@@ -191,12 +201,20 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
         if state == .willExpand {
             let index = IndexPath(row: 0, section: section)
             let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCommCell
-            cell.expand(true)
+            var last = false
+            if section == (dataFilt.count - 1){
+                last = true
+            }
+            cell.expand(true, last: last)
             
         } else if state == .willCollapse {
             let index = IndexPath(row: 0, section: section)
             let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCommCell
-            cell.expand(false)
+            var last = false
+            if section == (dataFilt.count - 1){
+                last = true
+            }
+            cell.expand(false, last: last)
         }
     }
     
@@ -265,11 +283,9 @@ final class FinanceCalcsArchiveCommCell: UITableViewCell {
         self.title.text = title
         self.desc.text  = desc.replacingOccurrences(of: ".", with: ",")
         if title == "Аванс" || desc.contains(find: "-"){
-            self.desc.textColor = UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1.0)
-            self.desc.alpha = 1
+            self.desc.textColor = mainGrayColor
         }else{
             self.desc.textColor = .darkText
-            self.desc.alpha = 0.5
         }
         if (title == "Аванс") {
             img.image = nil
@@ -278,21 +294,53 @@ final class FinanceCalcsArchiveCommCell: UITableViewCell {
         }
     }
 }
-final class FinanceCalcsArchiveYearCommCell: UITableViewCell {
+final class FinanceCalcsArchiveYearCommCell: UITableViewCell, ExpyTableViewHeaderCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet weak var img: UIImageView!
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var botView: UIView!
     
-    func display(_ title: String) {
+    func display(_ title: String, section: Int, last: Bool) {
+        if section == 0{
+            topView.isHidden = false
+            botView.isHidden = true
+        }else if last{
+            topView.isHidden = true
+            botView.isHidden = false
+        }else{
+            topView.isHidden = false
+            botView.isHidden = false
+        }
         self.title.text     = title
         self.img.image = UIImage(named: "expand")
     }
     
-    func expand(_ isExpanded: Bool) {
+    func changeState(_ state: ExpyState, cellReuseStatus cellReuse: Bool) {
+        switch state {
+        case .willExpand:
+            self.img.image = UIImage(named: "expanded")
+        case .willCollapse:
+            self.img.image = UIImage(named: "expand")
+        case .didExpand:
+            self.img.image = UIImage(named: "expanded")
+        case .didCollapse:
+            self.img.image = UIImage(named: "expand")
+        }
+    }
+    
+    func expand(_ isExpanded: Bool, last: Bool) {
         if !isExpanded {
             self.img.image = UIImage(named: "expand")
-            
+            if last{
+                topView.isHidden = true
+                botView.isHidden = false
+            }
         } else {
+            if last{
+                topView.isHidden = false
+                botView.isHidden = false
+            }
             self.img.image = UIImage(named: "expanded")
         }
     }
