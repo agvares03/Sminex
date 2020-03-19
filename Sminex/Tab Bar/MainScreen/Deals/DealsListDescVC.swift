@@ -20,6 +20,12 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
 //        navigationController?.popViewController(animated: true)
         navigationController?.popToRootViewController(animated: true)
     }
+    
+    @IBAction private func allButtonTapped(_ sender: UIButton) {
+//        navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
+    }
+    
     public var kolDeals = 1
     public var data_: DealsJson?
     public var anotherDeals_: [DealsJson] = []
@@ -111,7 +117,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
         let cell = DealsListDescCell.fromNib()
         cell?.display(displayDeals[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -119,7 +125,7 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
         let header = DealsListDescHeader.fromNib()
         header?.display(data_)
         let size = header?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
 }
 
@@ -295,18 +301,17 @@ final class DealsListDescHeader: UICollectionReusableView {
 
 final class DealsListDescCell: UICollectionViewCell {
     
-    @IBOutlet private weak var image:   UIImageView!
+//    @IBOutlet private weak var image:   UIImageView!
     @IBOutlet private weak var title:   UILabel!
     
     func display(_ item: DealsJson) {
-        
-        if item.img != nil {
-            image.image = item.img
-        
-        } else {
-            image.frame.size.width = 0
-        }
-        image.contentMode = .scaleToFill
+//        if item.img != nil {
+//            image.image = item.img
+//        
+//        } else {
+//            image.frame.size.width = 0
+//        }
+//        image.contentMode = .scaleToFill
         self.title.text = item.name
     }
     

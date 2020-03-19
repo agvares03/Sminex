@@ -89,12 +89,22 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
         let cell = DealsListCell.fromNib()
         cell?.display(data_[indexPath.row])
         let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-        return CGSize(width: view.frame.size.width, height: size.height + 35)
+        return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DealsListCell", for: indexPath) as! DealsListCell
+        if indexPath.row == 0{
+            cell.topView.cornerRadius = 24
+            cell.botView.cornerRadius = 0
+        }else if indexPath.row == data_.count - 1{
+            cell.topView.cornerRadius = 0
+            cell.botView.cornerRadius = 24
+        }else{
+            cell.topView.cornerRadius = 0
+            cell.botView.cornerRadius = 0
+        }
         cell.display(data_[indexPath.row])
         return cell
     }
@@ -267,8 +277,10 @@ final class DealsListCell: UICollectionViewCell {
     @IBOutlet         weak var imageHeight: NSLayoutConstraint!
     @IBOutlet         weak var imageWidth:  NSLayoutConstraint!
     @IBOutlet private weak var image:       UIImageView!
+    @IBOutlet         weak var topView:     UIView!
+    @IBOutlet         weak var botView:     UIView!
     @IBOutlet private weak var title:       UILabel!
-    @IBOutlet private weak var desc:        UILabel!
+//    @IBOutlet private weak var desc:        UILabel!
     
     fileprivate func display(_ item: DealsJson) {
         
@@ -280,12 +292,12 @@ final class DealsListCell: UICollectionViewCell {
             image.contentMode = .scaleToFill
         }
         title.text          = item.name
-        desc.text           = item.desc
-        
+//        desc.text           = item.desc
+//        desc.isHidden = true
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
         if (250.0...280.0).contains(points) {
             title.font = title.font.withSize(30)
-            desc.font = desc.font.withSize(28)
+//            desc.font = desc.font.withSize(28)
             imageWidth.constant  = 834
             imageHeight.constant = 455
         }else if (300.0...320.0).contains(points) {
@@ -324,14 +336,14 @@ final class DealsListCell: UICollectionViewCell {
             }
         }
         cell?.title.preferredMaxLayoutWidth = cell?.title.bounds.size.width ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
+//        cell?.desc.preferredMaxLayoutWidth  = cell?.desc.bounds.size.width ?? 0.0
         
         let points = Double(UIScreen.pixelsPerInch ?? 0.0)
         print(points)
         
         if (250.0...280.0).contains(points) {
             cell?.title.font = cell?.title.font.withSize(30)
-            cell?.desc.font = cell?.desc.font.withSize(30)
+//            cell?.desc.font = cell?.desc.font.withSize(30)
             cell?.imageWidth.constant  = 834
             cell?.imageHeight.constant = 455
         }else if (300.0...320.0).contains(points) {
