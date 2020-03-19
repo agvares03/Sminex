@@ -16,7 +16,6 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
     @IBOutlet private weak var goButton:    UIButton!
-    @IBOutlet private weak var comment:    UITextView!
     @IBOutlet private weak var btnBotConst: NSLayoutConstraint!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -277,27 +276,10 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        switch kind {
-            
-        case UICollectionElementKindSectionHeader:
-            isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerHeader", for: indexPath) as! QuestionAnswerHeader
-            header.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
-            return header
-            
-        case UICollectionElementKindSectionFooter:
-            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerFooter", for: indexPath) as! QuestionAnswerFooter
-            footer.textView.delegate = self
-            footer.textView.text = ""
-            recomendationArray.append("")
-            return footer
-            
-        default:
-            
-            assert(false, "Unexpected element kind")
-            return UICollectionReusableView()
-        }
+        isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerHeader", for: indexPath) as! QuestionAnswerHeader
+        header.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
+        return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -305,19 +287,16 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         cell?.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
         let size  = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
         if view.frame.size.width == 320{
-            return CGSize(width: view.frame.size.width, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell!.frame.size.width - 60) + 30)
+            return CGSize(width: view.frame.size.width - 32, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell!.frame.size.width - 60) + 30)
         }
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let cell = QuestionAnswerHeader.fromNib()
         cell?.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
         let size  = cell?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-        if view.frame.size.width == 320{
-            return CGSize(width: view.frame.size.width, height: size.height + 30)
-        }
-        return CGSize(width: view.frame.size.width, height: size.height)
+        return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -377,6 +356,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         request.httpBody = jsonData
         
         print(request)
+        
 //        print(String(data: request.httpBody!, encoding: .utf8))
         
         URLSession.shared.dataTask(with: request) {
@@ -595,7 +575,6 @@ final class QuestionAnswerCell: UICollectionViewCell {
     fileprivate func display(isSomeAnswer: Bool) {
         question.isHidden = true
         field.isHidden = false
-        
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapOnOffButton(_:)))
         toggle.addGestureRecognizer(tap)
         
@@ -632,25 +611,33 @@ var recomendationArray: [String] = []
 //------------------------------------------------------------------
 
 
-extension QuestionAnswerVC : UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if(text == "\n") {
-//            recomendationArray.removeLast()
-            print(textView.text)
-            recomendationArray[currQuestion] = textView.text
-            textView.resignFirstResponder()
-            return false
-        }
+extension QuestionAnswerVC : UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
+        print(textField.text!)
+        recomendationArray[currQuestion] = textField.text!
+        textField.resignFirstResponder()
         return true
     }
-    func textViewDidEndEditing(_ textView: UITextView) {
-//        if(textView == "\n") {
-//            recomendationArray.removeLast()
-            print(textView.text)
-            recomendationArray[currQuestion] = textView.text
-            textView.resignFirstResponder()
+    
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//        if(text == "\n") {
+////            recomendationArray.removeLast()
+//            print(textView.text)
+//            recomendationArray[currQuestion] = textView.text
+//            textView.resignFirstResponder()
 //            return false
 //        }
 //        return true
-    }
+//    }
+//    func textViewDidEndEditing(_ textView: UITextView) {
+////        if(textView == "\n") {
+////            recomendationArray.removeLast()
+//            print(textView.text)
+//            recomendationArray[currQuestion] = textView.text
+//            textView.resignFirstResponder()
+////            return false
+////        }
+////        return true
+//    }
 }
