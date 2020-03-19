@@ -14,6 +14,21 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WQW-EV-x6V">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="2"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="24"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отключение горячей воды" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iRb-I6-n9K">
                     <rect key="frame" x="16" y="16" width="325" height="21.5"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
@@ -41,14 +56,18 @@
                     </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="IsU-LD-Bqs" secondAttribute="bottom" constant="12" id="03f-oj-ahh"/>
+                <constraint firstItem="WQW-EV-x6V" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="4GF-zO-sIS"/>
                 <constraint firstItem="XiZ-jH-chw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="6iY-Ro-raN"/>
                 <constraint firstItem="IsU-LD-Bqs" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="8Zc-N4-srY"/>
                 <constraint firstItem="iRb-I6-n9K" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="9FO-1P-CyG"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="XiZ-jH-chw" secondAttribute="trailing" constant="30" id="Asq-p1-nE1"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="EwY-oj-koD" secondAttribute="trailing" constant="19" id="NGL-KX-48k"/>
+                <constraint firstItem="WQW-EV-x6V" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="SEy-yq-GL1"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="WQW-EV-x6V" secondAttribute="bottom" id="XGo-EI-Xwg"/>
+                <constraint firstItem="WQW-EV-x6V" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="XRs-Js-LMu"/>
                 <constraint firstItem="EwY-oj-koD" firstAttribute="centerY" secondItem="iRb-I6-n9K" secondAttribute="centerY" id="cCa-go-Jkl"/>
                 <constraint firstItem="IsU-LD-Bqs" firstAttribute="top" relation="greaterThanOrEqual" secondItem="XiZ-jH-chw" secondAttribute="bottom" constant="5" id="ehd-A4-T81"/>
                 <constraint firstItem="iRb-I6-n9K" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="oxN-B8-31z"/>
@@ -60,19 +79,14 @@
                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                     <real key="value" value="24"/>
                 </userDefinedRuntimeAttribute>
-                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                    <real key="value" value="2"/>
-                </userDefinedRuntimeAttribute>
-                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                    <color key="value" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
+                <outlet property="backView" destination="WQW-EV-x6V" id="2ir-vf-4fM"/>
                 <outlet property="date" destination="IsU-LD-Bqs" id="Bwt-vW-pJH"/>
                 <outlet property="desc" destination="XiZ-jH-chw" id="hBN-S3-uza"/>
                 <outlet property="title" destination="iRb-I6-n9K" id="ycz-FB-og3"/>
             </connections>
-            <point key="canvasLocation" x="132" y="149"/>
+            <point key="canvasLocation" x="132" y="148.87556221889056"/>
         </view>
     </objects>
     <resources>
