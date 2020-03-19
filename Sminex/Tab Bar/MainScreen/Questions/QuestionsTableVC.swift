@@ -107,14 +107,14 @@ final class QuestionsTableVC: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if questions![indexPath.row].dateStart != "" && questions![indexPath.row].dateStart != nil && !(questions![indexPath.row].dateStart?.contains(find: "/"))!{
-            if questions![indexPath.row].dateStop != ""{
-                return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 95)
-            }
-            return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 80)
-        }else{
-            return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 55)
-        }
+//        if questions![indexPath.row].dateStart != "" && questions![indexPath.row].dateStart != nil && !(questions![indexPath.row].dateStart?.contains(find: "/"))!{
+//            if questions![indexPath.row].dateStop != ""{
+//                return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 95)
+//            }
+//            return CGSize(width: view.frame.size.width, height: heightForTitle(text: questions![indexPath.row].name!, width: self.view.frame.size.width - 62) + 80)
+//        }else{
+            return CGSize(width: view.frame.size.width - 32, height: 224)
+//        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -335,7 +335,7 @@ final class QuestionsTableCell: UICollectionViewCell {
             : String(item.questions?.count ?? 0) + txt
         desc.textColor = (isAnswered)
             ? .gray
-            : UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1)
+            : mainGreenColor
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
