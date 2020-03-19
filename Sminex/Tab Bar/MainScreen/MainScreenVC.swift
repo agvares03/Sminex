@@ -2261,10 +2261,17 @@ final class NewsPagerViewCell: FSPagerViewCell{
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var date:    UILabel!
+    @IBOutlet private weak var backView:    UIView!
     
     fileprivate func display(_ item: NewsCellData, indexPath: IndexPath, delegate: CellsDelegate) {
         title.text  = item.title
         desc.text   = item.desc
+        
+        if item.isImportant{
+            backView.borderColor = mainGreenColor
+        }else{
+            backView.borderColor = .white
+        }
         
         if item.date != "" {
             let df = DateFormatter()

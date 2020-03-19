@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import SafariServices
+import WebKit
 
-final class CurrentNews: UIViewController, UIWebViewDelegate {
+final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     @IBOutlet private weak var imageHeight:     NSLayoutConstraint!
     @IBOutlet private weak var imageWidth:      NSLayoutConstraint!
@@ -16,10 +18,12 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
     @IBOutlet private weak var titleTop:        NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var image:           UIImageView!
-    @IBOutlet private weak var webView:         UIWebView!
+    @IBOutlet private weak var wView:           UIView!
     @IBOutlet private weak var titleLabel:  	UILabel!
     @IBOutlet private weak var date:        	UILabel!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
+    
+    var webView: WKWebView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         if isFromNotifi_ {
@@ -42,12 +46,23 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         StartIndicator()
         getImage()
         automaticallyAdjustsScrollViewInsets = false
-        webView.delegate = self
-        webView.scrollView.isScrollEnabled = false
+        let webConfiguration = WKWebViewConfiguration()
+        let customFrame = CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: self.wView.frame.size.width, height: self.wView.frame.size.height))
+        self.webView = WKWebView (frame: customFrame , configuration: webConfiguration)
+        self.webView.translatesAutoresizingMaskIntoConstraints = false
+        self.wView.addSubview(self.webView)
+        self.webView.scrollView.isScrollEnabled = false
+        self.webView.topAnchor.constraint(equalTo: self.wView.topAnchor).isActive = true
+        self.webView.rightAnchor.constraint(equalTo: self.wView.rightAnchor).isActive = true
+        self.webView.leftAnchor.constraint(equalTo: self.wView.leftAnchor).isActive = true
+        self.webView.bottomAnchor.constraint(equalTo: self.wView.bottomAnchor).isActive = true
+        self.webView.heightAnchor.constraint(equalTo: self.wView.heightAnchor).isActive = true
+        self.webView.navigationDelegate = self
+        self.webView.uiDelegate = self
         let txt = "<div font-size:16px;'>" + (data_?.text)!
         webView.loadHTMLString(txt, baseURL: nil)
+        titleLabel.text = data_?.header!.uppercased()
         
-        titleLabel.text = data_?.header
         if data_?.dateStart != "" {
             let df = DateFormatter()
             df.locale = Locale(identifier: "en_US_POSIX")
@@ -114,6 +129,7 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
                 DispatchQueue.main.async {
                     self.titleTop.constant = 16
                     self.image.isHidden = true
+                    self.imageHeight.constant = 0
                     self.StopIndicator()
                 }
             }else{
@@ -128,9 +144,27 @@ final class CurrentNews: UIViewController, UIWebViewDelegate {
         }.resume()
     }
     
-    func webViewDidFinishLoad(_ webView: UIWebView) {
-        webViewHeight.constant     = webView.scrollView.contentSize.height
-        scroll.contentSize.height += webView.scrollView.contentSize.height
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        self.webView.evaluateJavaScript("document.readyState", completionHandler: { (complete, error) in
+            if complete != nil {
+                self.webView.evaluateJavaScript("document.body.scrollHeight", completionHandler: { (height, error) in
+                    self.webViewHeight.constant     = height as! CGFloat + 50
+//                    self.scroll.contentSize.height += height as! CGFloat
+                })
+            }
+
+            })
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping ((WKNavigationActionPolicy) -> Void)) {
+
+        print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
+
+        if let url = navigationAction.request.url {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+
+        decisionHandler(.allow)
     }
     
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
