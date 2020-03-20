@@ -217,7 +217,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
             return cell
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewRequestTypeCell", for: indexPath) as! NewRequestTypeCell
-            cell.display(data[indexPath.section].filteredData![indexPath.row], delegate: self, indexPath: indexPath, displayWidth: self.view.frame.size.width)
+            cell.display(data[indexPath.section].filteredData![indexPath.row], delegate: self, indexPath: indexPath, displayWidth: self.view.frame.size.width - 32)
             return cell
         }
     }
@@ -231,11 +231,11 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 0{
-            return CGSize(width: view.frame.size.width / 4, height: 110)
+            return CGSize(width: (view.frame.size.width - 32) / 4, height: 110)
         }else if indexPath.row == data[1].filteredData.count - 1{
-            return CGSize(width: view.frame.size.width, height: 50)
+            return CGSize(width: view.frame.size.width - 32, height: 50)
         }else{
-            return CGSize(width: view.frame.size.width / 4, height: 140)
+            return CGSize(width: (view.frame.size.width - 32) / 4, height: 140)
         }
     }
     
@@ -344,8 +344,8 @@ class NewRequestTypeCell: UICollectionViewCell {
         if image != nil{
             circleView.image = item.picture
             // Граница вокруг картинки
-            circleView.layer.borderColor = UIColor.black.cgColor
-            circleView.layer.borderWidth = 2.0
+            circleView.layer.borderColor = UIColor.lightGray.cgColor
+            circleView.layer.borderWidth = 1.0
             // Углы
             circleView.layer.cornerRadius = ((displayWidth / 4) - 40) / 2
             // Поправим отображения слоя за его границами
@@ -407,7 +407,7 @@ struct NewRequestTypeCellData {
     func setup () {
         
         let screenSize: CGRect = UIScreen.main.bounds
-        let size = screenSize.width / 4
+        let size = (screenSize.width - 32) / 4
         imageView.frame = CGRect(x: 10, y: 10, width: size - 60, height: size - 60)
         if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
             imageView.frame = CGRect(x: 10, y: 10, width: size - 40, height: size - 40)
@@ -418,5 +418,14 @@ struct NewRequestTypeCellData {
     
     func addImage() {
         imageView.image = image
+        imageView.setImageColor(color: mainGreenColor)
+    }
+}
+
+extension UIImageView {
+    func setImageColor(color: UIColor) {
+        let templateImage = self.image?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        self.image = templateImage
+        self.tintColor = color
     }
 }

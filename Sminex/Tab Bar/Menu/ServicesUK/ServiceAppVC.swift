@@ -273,7 +273,7 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
             let cell = ServiceAppHeader.fromNib()
             cell?.display((arr[0] as! ServiceAppHeaderData), delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
             
         } else {
             let arr1 = arr[indexPath.row] as! ServiceAppCommentCellData
@@ -311,9 +311,9 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! ServiceAppCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }else{
                 var showDate = true
                 let cell = ServiceAppCommentConstCell.fromNib()
@@ -335,9 +335,9 @@ class ServiceAppVC: UIViewController, UICollectionViewDelegate, UICollectionView
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! ServiceAppCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }
         }
     }
@@ -718,14 +718,26 @@ final class ServiceAppHeader: UICollectionViewCell {
         image.image         = item.icons
         desc.text           = item.desc
         mobileNumber.text   = item.mobileNumber
-        status.text         = item.status
+        status.text         = item.status.uppercased()
+        
+        if item.icons == UIImage(named: "orangeStatus"){
+            image.tintColor = mainOrangeColor
+            status.textColor = mainOrangeColor
+        }else if item.icons == UIImage(named: "grayStatus"){
+            image.tintColor = mainGrayColor
+            status.textColor = mainGrayColor
+        }else{
+            image.tintColor = mainGreenColor
+            status.textColor = mainGreenColor
+        }
+        
         emailLbl.text       = item.email
         serviceTitle.text   = item.title
         servicePrice.text   = item.price.replacingOccurrences(of: "руб.", with: "₽")
         serviceDesc.text    = item.servDesc
         serviceIcon.image   = item.servIcon
-        serviceIcon.layer.borderColor = UIColor.black.cgColor
-        serviceIcon.layer.borderWidth = 2.0
+        serviceIcon.layer.borderColor = UIColor.lightGray.cgColor
+        serviceIcon.layer.borderWidth = 1.0
         // Углы
         serviceIcon.layer.cornerRadius = serviceIcon.frame.width / 2
         // Поправим отображения слоя за его границами
@@ -998,7 +1010,7 @@ final class ServiceAppCommentUserCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -1128,7 +1140,7 @@ final class ServiceAppCommentConstCell: UICollectionViewCell{
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
+        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132)
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{

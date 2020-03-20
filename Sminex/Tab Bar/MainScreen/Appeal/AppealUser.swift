@@ -680,7 +680,7 @@ final class AppealUserCell: UITableViewCell {
             desc.text   = item.desc
         }
         icon.image      = item.icon
-        status.text     = item.status
+        status.text     = item.status.uppercased()
         back.isHidden   = !item.isBack
         type            = item.type
         if item.stickTitle == "" {

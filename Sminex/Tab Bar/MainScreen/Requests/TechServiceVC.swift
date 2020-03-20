@@ -466,7 +466,7 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
             let cell = ServiceHeader.fromNib()
             cell?.display((arr[indexPath.row] as! ServiceHeaderData), delegate: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
             
         } else {
             let arr1 = arr[indexPath.row] as! ServiceCommentCellData
@@ -504,9 +504,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! ServiceCommentCellData
                 if ar.desc == "Прикреплено фото" || ar.desc == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }else{
                 var showDate = true
                 let cell = ServiceCommentConstCell.fromNib()
@@ -528,9 +528,9 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! ServiceCommentCellData
                 if ar.desc == "Прикреплено фото" || ar.desc == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }
         }
     }
@@ -780,8 +780,17 @@ final class ServiceHeader: UICollectionViewCell {
             problemHeight.constant = 20
         }
         icon.image = item.icon
-        status.text = item.status
-        
+        status.text = item.status.uppercased()
+        if item.icon == UIImage(named: "orangeStatus"){
+            icon.tintColor = mainOrangeColor
+            status.textColor = mainOrangeColor
+        }else if item.icon == UIImage(named: "grayStatus"){
+            icon.tintColor = mainGrayColor
+            status.textColor = mainGrayColor
+        }else{
+            icon.tintColor = mainGreenColor
+            status.textColor = mainGreenColor
+        }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         print(item.date)

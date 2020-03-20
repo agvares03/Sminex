@@ -835,7 +835,17 @@ final class AdmissionHeader: UICollectionViewCell {
         mobileNumber.text   = phoneOperator
         gosNumbers.text     = item.gosNumber
         markAuto.text       = item.mark
-        status.text         = item.status
+        status.text         = item.status.uppercased()
+        if item.icons == UIImage(named: "orangeStatus"){
+            image.tintColor = mainOrangeColor
+            status.textColor = mainOrangeColor
+        }else if item.icons == UIImage(named: "grayStatus"){
+            image.tintColor = mainGrayColor
+            status.textColor = mainGrayColor
+        }else{
+            image.tintColor = mainGreenColor
+            status.textColor = mainGreenColor
+        }
         let k = heightForView(text: item.gosti, font: gosti.font, width: view.view.frame.size.width - 32)
         if k > 20.5{
             gostiConstant?.constant = k

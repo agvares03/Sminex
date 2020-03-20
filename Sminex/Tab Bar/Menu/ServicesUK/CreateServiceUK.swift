@@ -15,7 +15,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var edConst:     NSLayoutConstraint!
     @IBOutlet private weak var imgsHeight:  NSLayoutConstraint!
-    @IBOutlet private weak var btnConst:    NSLayoutConstraint!
+//    @IBOutlet private weak var btnConst:    NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet private weak var placeHeight: NSLayoutConstraint!
@@ -39,6 +39,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var plcLbl:      UILabel!
     @IBOutlet private weak var expImg:      UIImageView!
     
+    @IBOutlet private weak var timeLine1:   UILabel!
+    @IBOutlet private weak var timeLine2:   UILabel!
     @IBOutlet private weak var timeBtn1:    UIButton!
     @IBOutlet private weak var timeBtn2:    UIButton!
     @IBOutlet private weak var timeBtn1Width: NSLayoutConstraint!
@@ -68,10 +70,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             noDateLbl.isHidden = false
             dateBtn.isHidden = true
             extTime = true
-            timeBtn2.setTitleColor(.lightGray, for: .normal)
-            timeBtn2.backgroundColor = .white
-            timeBtn1.setTitleColor(.black, for: .normal)
-            timeBtn1.backgroundColor = choiceColor
+            timeBtn2.setTitleColor(mainGrayColor, for: .normal)
+            timeLine2.backgroundColor = mainGrayColor
+            timeBtn1.setTitleColor(mainGreenColor, for: .normal)
+            timeLine1.backgroundColor = mainGreenColor
             if !picker.isHidden{
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd MMMM HH:mm"
@@ -91,10 +93,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             noDateLbl.isHidden = true
             dateBtn.isHidden = false
             extTime = false
-            timeBtn1.setTitleColor(.lightGray, for: .normal)
-            timeBtn1.backgroundColor = .white
-            timeBtn2.setTitleColor(.black, for: .normal)
-            timeBtn2.backgroundColor = choiceColor
+            timeBtn2.setTitleColor(mainGreenColor, for: .normal)
+            timeLine2.backgroundColor = mainGreenColor
+            timeBtn1.setTitleColor(mainGrayColor, for: .normal)
+            timeLine1.backgroundColor = mainGrayColor
         }
     }
     
@@ -271,8 +273,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         //        }
         if let image = UIImage(data: Data(base64Encoded: ((data_?.picture ?? "").replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             serviceIcon.image = image
-            serviceIcon.layer.borderColor = UIColor.black.cgColor
-            serviceIcon.layer.borderWidth = 2.0
+            serviceIcon.layer.borderColor = UIColor.lightGray.cgColor
+            serviceIcon.layer.borderWidth = 1.0
             // Углы
             serviceIcon.layer.cornerRadius = serviceIcon.frame.width / 2
             // Поправим отображения слоя за его границами
@@ -335,10 +337,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             noDateLbl.isHidden = false
             dateBtn.isHidden = true
             extTime = true
-            timeBtn2.setTitleColor(.lightGray, for: .normal)
-            timeBtn2.backgroundColor = .white
-            timeBtn1.setTitleColor(.black, for: .normal)
-            timeBtn1.backgroundColor = choiceColor
+            timeBtn2.setTitleColor(mainGrayColor, for: .normal)
+            timeLine2.backgroundColor = mainGrayColor
+            timeBtn1.setTitleColor(mainGreenColor, for: .normal)
+            timeLine1.backgroundColor = mainGreenColor
             if !picker.isHidden{
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "dd MMMM HH:mm"
@@ -349,34 +351,16 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 imageConst.constant = 0
             }
             timeBtn2.isHidden = true
+            timeLine2.isHidden = true
             timeBtn2Width.constant = 0
-            timeBtn1Width.constant = self.view.frame.size.width - 59
-            timeBtn1.layer.borderColor = UIColor.lightGray.cgColor
-            timeBtn1.layer.borderWidth = 1.5
-            // Углы
-            timeBtn1.layer.cornerRadius = 12
-            // Поправим отображения слоя за его границами
-            timeBtn1.layer.masksToBounds = true
+            timeBtn1Width.constant = self.view.frame.size.width - 32
         }else{
-            timeBtn1.setTitleColor(.lightGray, for: .normal)
-            timeBtn1.backgroundColor = .white
-            timeBtn2.setTitleColor(.black, for: .normal)
-            timeBtn2.backgroundColor = choiceColor
-            timeBtn2Width.constant = (self.view.frame.size.width - 59) / 2
-            timeBtn1Width.constant = (self.view.frame.size.width - 59) / 2
-            timeBtn1.layer.borderColor = UIColor.lightGray.cgColor
-            timeBtn1.layer.borderWidth = 1.5
-            // Углы
-            timeBtn1.layer.cornerRadius = 12
-            // Поправим отображения слоя за его границами
-            timeBtn1.layer.masksToBounds = true
-            
-            timeBtn2.layer.borderColor = UIColor.lightGray.cgColor
-            timeBtn2.layer.borderWidth = 1.5
-            // Углы
-            timeBtn2.layer.cornerRadius = 12
-            // Поправим отображения слоя за его границами
-            timeBtn2.layer.masksToBounds = true
+            timeBtn2.setTitleColor(mainGreenColor, for: .normal)
+            timeLine2.backgroundColor = mainGreenColor
+            timeBtn1.setTitleColor(mainGrayColor, for: .normal)
+            timeLine1.backgroundColor = mainGrayColor
+            timeBtn2Width.constant = (self.view.frame.size.width - 32) / 2
+            timeBtn1Width.constant = (self.view.frame.size.width - 32) / 2
         }
         if !(data_?.selectCost)!{
             servicePrice.text = ""
@@ -420,10 +404,6 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         edProblem.text = "Введите описание"
         edProblem.textColor = placeholderColor
         edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
-        self.btnConst.constant = 0
-        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
-            btnConst.constant = 25
-        }
     }
     var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
@@ -441,7 +421,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         if !picker.isHidden {
             dateButtonPressed(nil)
         }
-        self.btnConst.constant = 0
+//        self.btnConst.constant = 0
         let info = sender?.userInfo!
         let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
         if keyboardHeight == 0.0{
@@ -475,10 +455,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         view.frame.origin.y = 0
         scroll.contentInset.top = 0
         keyboardHeight = 0
-        self.btnConst.constant = 0
-        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
-            btnConst.constant = 25
-        }
+//        self.btnConst.constant = 0
+//        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
+//            btnConst.constant = 25
+//        }
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {
