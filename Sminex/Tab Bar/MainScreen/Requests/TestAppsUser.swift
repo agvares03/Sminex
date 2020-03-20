@@ -116,7 +116,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         automaticallyAdjustsScrollViewInsets    = false
         
         self.startAnimator()
-        self.dataType1.append(TestAppsUserHeaderData(title: "Все", id: "0"))
+        self.dataType1.append(TestAppsUserHeaderData(title: "ВСЕ ЗАЯВКИ", id: "0"))
         if TemporaryHolder.instance.requestTypes == nil {
             getRequestTypes()
         }else{
@@ -615,7 +615,14 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     lastComm = nil
                     isAnswered = false
                 }
-                let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                var icon = UIImage(named: "orangeStatus")!
+                if (curr.status?.containsIgnoringCase(find: "закрыта"))! || (curr.status?.containsIgnoringCase(find: "выполнена"))!{
+                    icon = UIImage(named: "grayStatus")!
+                }else if (curr.status?.containsIgnoringCase(find: "отправлена"))! || (curr.status?.containsIgnoringCase(find: "принята"))!{
+                    icon = UIImage(named: "greenStatus")!
+                }else if (curr.status?.containsIgnoringCase(find: "в обработке"))!{
+                    icon = UIImage(named: "orangeStatus")!
+                }
                 let isPerson = curr.name?.contains(find: "ропуск") ?? false
                 
                 var persons = ""//curr.responsiblePerson ?? ""
@@ -714,7 +721,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         }
                         var typeIn = false
                         self.dataType.removeAll()
-                        self.dataType.append(TestAppsUserHeaderData(title: "Все", id: "0"))
+                        self.dataType.append(TestAppsUserHeaderData(title: "ВСЕ ЗАЯВКИ", id: "0"))
                         for k in 0...self.dataType1.count - 1{
                             for i in 0...self.fullData.count - 1{
                                 if self.fullData[i].title.containsIgnoringCase(find: "услугу"){
@@ -821,8 +828,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
             
             DispatchQueue.main.async {
                 self.stopAnimatior()
-                
-                var type = self.fullData[indexPath.row].type
+                var type = self.data[indexPath.row].type
                 // Это костыль - думать, как лучше сделать.
 //                var itsNever: Bool = false
 //                print(type)
@@ -840,10 +846,10 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 //                    type = "Гостевой пропуск"
                 //                }
                 
-                if self.fullData[indexPath.row].title.contains(find: "ропуск") {
+                if self.data[indexPath.row].title.contains(find: "ропуск") {
                     self.typeName = type
 //                    print(self.rows)
-                    let row = self.rows[self.fullData[indexPath.row].id]!
+                    let row = self.rows[self.data[indexPath.row].id]!
                     var persons = row.responsiblePerson ?? ""
                     
                     if persons == "" {
@@ -914,7 +920,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                             }
                         }
                     }
-                    self.admission = AdmissionHeaderData(icon: self.fullData[indexPath.row].icon,
+                    self.admission = AdmissionHeaderData(icon: self.data[indexPath.row].icon,
                                                          gosti: persons == "" ? "Не указано" : persons,
                                                          mobileNumber: row.phoneNum ?? "",
                                                          gosNumber: auto, mark: mark,
@@ -928,13 +934,13 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     }
                     self.prepareGroup?.leave()
                     
-                } else if self.fullData[indexPath.row].title.containsIgnoringCase(find: "услуг"){
-                    let row = self.rows[self.fullData[indexPath.row].id]!
+                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "услуг"){
+                    let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
                     var dataServ: ServicesUKJson!
                     self.dataService.forEach{
                         print("--", $0.name)
-                        if $0.name == self.fullData[indexPath.row].desc || $0.name == self.fullData[indexPath.row].stickTitle{
+                        if $0.name == self.data[indexPath.row].desc || $0.name == self.data[indexPath.row].stickTitle{
                             dataServ = $0
                         }
                     }
@@ -1003,7 +1009,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                 }
                             }
                         }
-                        self.serviceUK = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!, isReaded: row.isReadedOnDevice!)
+                        self.serviceUK = ServiceAppHeaderData(icon: self.data[indexPath.row].icon, price: dataServ.cost ?? "", mobileNumber: row.phoneNum ?? "", servDesc: serviceDesc, email: emails, date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "", status: row.status ?? "", images: [], imagesUrl: images, desc: row.text ?? "", placeHome: place, soonPossible: row.soonPossible, title: dataServ.name ?? "", servIcon: imageIcon, selectPrice: dataServ.selectCost!, selectPlace: dataServ.selectPlace!, isReaded: row.isReadedOnDevice!)
                         self.reqId = row.id ?? ""
                         if self.table != nil {
                             self.performSegue(withIdentifier: Segues.fromAppsUser.toServiceUK, sender: self)
@@ -1011,7 +1017,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         self.prepareGroup?.leave()
                     }
                     
-                } else if self.fullData[indexPath.row].title.containsIgnoringCase(find: "обращение"){
+                } else if self.data[indexPath.row].title.containsIgnoringCase(find: "обращение"){
                     let row = self.rows[self.data[indexPath.row].id]!
                     var persons = row.responsiblePerson ?? ""
                     
@@ -1090,7 +1096,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     }
                     self.prepareGroup?.leave()
                 } else {
-                    let row = self.rows[self.fullData[indexPath.row].id]!
+                    let row = self.rows[self.data[indexPath.row].id]!
                     var images: [String] = []
                     
                     self.techServiceComm = []
@@ -1134,7 +1140,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                     }
 //                    print(row.isReadedOnDevice)
                     
-                    self.techService = ServiceHeaderData(icon: self.fullData[indexPath.row].icon,
+                    self.techService = ServiceHeaderData(icon: self.data[indexPath.row].icon,
                                                          problem: row.text ?? "",
                                                          date: (row.dateTo != "" ? row.dateTo : row.planDate) ?? "",
                                                          status: row.status ?? "",
@@ -1297,11 +1303,13 @@ final class TestAppsUserHeader: UICollectionViewCell {
     private var type: String?
     
     fileprivate func display(_ item: TestAppsUserHeaderData, selectIndex: Bool) {
-        title.text = item.title
+        title.text = item.title.uppercased()
         if selectIndex{
-            selLine.backgroundColor = .darkGray
+            title.textColor         = mainGreenColor
+            selLine.backgroundColor = mainGreenColor
         }else{
-            selLine.backgroundColor = .lightGray
+            title.textColor         = mainGrayColor
+            selLine.backgroundColor = mainGrayColor
         }
     }
     
@@ -1320,8 +1328,8 @@ final class TestAppsUserHeader: UICollectionViewCell {
 
 final class TestAppsUserCell: UITableViewCell {
     
-    @IBOutlet private weak var skTitleHeight: NSLayoutConstraint!
-    @IBOutlet private weak var skTitleBottm: NSLayoutConstraint!
+    @IBOutlet private weak var skTitleHeight:   NSLayoutConstraint!
+    @IBOutlet private weak var skTitleBottm:    NSLayoutConstraint!
     @IBOutlet private weak var icon:            UIImageView!
     @IBOutlet private weak var title:           UILabel!
     @IBOutlet private weak var stickTitle:      UILabel!
@@ -1341,7 +1349,17 @@ final class TestAppsUserCell: UITableViewCell {
             desc.text   = item.desc
         }
         icon.image      = item.icon
-        status.text     = item.status
+        if item.icon == UIImage(named: "orangeStatus"){
+            icon.tintColor = mainOrangeColor
+            status.textColor = mainOrangeColor
+        }else if item.icon == UIImage(named: "grayStatus"){
+            icon.tintColor = mainGrayColor
+            status.textColor = mainGrayColor
+        }else{
+            icon.tintColor = mainGreenColor
+            status.textColor = mainGreenColor
+        }
+        status.text     = item.status.uppercased()
         back.isHidden   = !item.isBack
         type            = item.type
         if item.stickTitle == "" {

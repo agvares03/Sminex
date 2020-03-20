@@ -75,8 +75,8 @@ final class ServicesUKDescVC: UIViewController {
         let denyCompanyService:Bool = (UserDefaults.standard.value(forKey: "denyCompanyService") as! Bool)
         if let image = UIImage(data: Data(base64Encoded: ((data_?.picture ?? "").replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             imgView.image = image
-            imgView.layer.borderColor = UIColor.black.cgColor
-            imgView.layer.borderWidth = 2.0
+            imgView.layer.borderColor = UIColor.lightGray.cgColor
+            imgView.layer.borderWidth = 1.0
             // Углы
             imgView.layer.cornerRadius = imgView.frame.width / 2
             // Поправим отображения слоя за его границами
@@ -253,5 +253,6 @@ final class ServicesUKDescVC: UIViewController {
     
     func addImage() {
         imageView.image = image
+        imageView.setImageColor(color: mainGreenColor)
     }
 }

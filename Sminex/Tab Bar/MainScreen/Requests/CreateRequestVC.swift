@@ -38,7 +38,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var pickerLine:      UILabel!
     @IBOutlet private weak var descInfoLbl:     UILabel!
     @IBOutlet private weak var descInfoView:    UIView!
-    @IBOutlet weak var sendBtnTop: NSLayoutConstraint!
+    @IBOutlet weak var sendBtnHeight: NSLayoutConstraint!
     @IBOutlet weak var heigthFooter: NSLayoutConstraint!
     @IBOutlet weak var phone_service: UILabel!
     @IBOutlet weak var img_phone_service: UIImageView!
@@ -75,15 +75,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             picker.isHidden         = false
             pickerLine.isHidden     = false
             imageConst.constant = 150
-            if transportSwitch.isOn{
-                sendBtnTop.constant = 5
-            }else{
-                if sendBtnTop.constant > 150{
-                    sendBtnTop.constant = sendBtnTop.constant - 150
-                }else{
-                    sendBtnTop.constant = 5
-                }
-            }
+//            if transportSwitch.isOn{
+//                sendBtnTop.constant = 5
+//            }else{
+//                if sendBtnTop.constant > 150{
+//                    sendBtnTop.constant = sendBtnTop.constant - 150
+//                }else{
+//                    sendBtnTop.constant = 5
+//                }
+//            }
         } else {
             
             let dateFormatter = DateFormatter()
@@ -104,7 +104,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             if transportSwitch.isOn{
                 changeFooter()
             }else{
-                sendBtnTop.constant = sendBtnTopConstant
+//                sendBtnTop.constant = sendBtnTopConstant
             }
         }
     }
@@ -358,8 +358,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
-        sendButton.alpha     = 0.5
-        sendButton.isEnabled = false
+        sendBtnHeight.constant = 0
+        sendButton.isHidden = true
         gosNumber.isHidden      = true
         gosLine.isHidden        = true
         markAuto.isHidden       = true
@@ -448,10 +448,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     override func viewDidAppear(_ animated: Bool) {
 //        super.viewDidAppear(true)
         if scroll.contentSize.height < UIScreen.main.bounds.height{
-            sendBtnTop.constant = UIScreen.main.bounds.height - scroll.contentSize.height - 60
+//            sendBtnTop.constant = UIScreen.main.bounds.height - scroll.contentSize.height - 60
             sendBtnTopConstant = UIScreen.main.bounds.height - scroll.contentSize.height - 60
             if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
-                sendBtnTop.constant = UIScreen.main.bounds.height - scroll.contentSize.height - 110
+//                sendBtnTop.constant = UIScreen.main.bounds.height - scroll.contentSize.height - 110
                 sendBtnTopConstant = UIScreen.main.bounds.height - scroll.contentSize.height - 110
             }
         }
@@ -467,17 +467,17 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             isExpanded = true
             showTable = false
             tableView.reloadData()
-            DispatchQueue.main.async{
-                if self.transportSwitch.isOn{
-                    self.sendBtnTop.constant = 5
-                }else{
-                    if self.keyboardHeight != 0{
-                        self.sendBtnTop.constant = self.expandHeigth
-                    }else{
-                        self.sendBtnTop.constant = self.sendBtnTop.constant + self.tableH
-                    }
-                }
-            }
+//            DispatchQueue.main.async{
+//                if self.transportSwitch.isOn{
+//                    self.sendBtnTop.constant = 5
+//                }else{
+//                    if self.keyboardHeight != 0{
+//                        self.sendBtnTop.constant = self.expandHeigth
+//                    }else{
+//                        self.sendBtnTop.constant = self.sendBtnTop.constant + self.tableH
+//                    }
+//                }
+//            }
         } else {
             self.expImg.image = UIImage(named: "expanded")
             isExpanded = false
@@ -489,16 +489,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 }else{
                     self.tableH = 44 * 4
                 }
-                if self.transportSwitch.isOn{
-                    self.sendBtnTop.constant = 5
-                }else{
-                    if self.keyboardHeight != 0{
-                        self.expandHeigth = self.sendBtnTop.constant
-                        self.sendBtnTop.constant = 5
-                    }else{
-                        self.sendBtnTop.constant = self.sendBtnTop.constant - self.tableH
-                    }
-                }
+//                if self.transportSwitch.isOn{
+//                    self.sendBtnTop.constant = 5
+//                }else{
+//                    if self.keyboardHeight != 0{
+//                        self.expandHeigth = self.sendBtnTop.constant
+//                        self.sendBtnTop.constant = 5
+//                    }else{
+//                        self.sendBtnTop.constant = self.sendBtnTop.constant - self.tableH
+//                    }
+//                }
             }
         }
     }
@@ -564,16 +564,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         view.addGestureRecognizer(tap)
         let desiredOffset = CGPoint(x: 0, y: -scroll.contentInset.top)
         scroll.setContentOffset(desiredOffset, animated: false)
-        if transportSwitch.isOn{
-            sendBtnTop.constant = 5
-        }else if isExpanded == false{
-            self.sendBtnTop.constant = 5
-        }else{
-            sendBtnTop.constant = sendBtnTop.constant - keyboardHeight
-            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-                sendBtnTop.constant = 5
-            }
-        }
+//        if transportSwitch.isOn{
+//            sendBtnTop.constant = 5
+//        }else if isExpanded == false{
+//            self.sendBtnTop.constant = 5
+//        }else{
+//            sendBtnTop.constant = sendBtnTop.constant - keyboardHeight
+//            if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+//                sendBtnTop.constant = 5
+//            }
+//        }
     }
     var keyboardHeight = CGFloat()
     // И вниз при исчезновении
@@ -639,18 +639,18 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             descInfoView.isHidden = true
             heigth_phone_service.constant = 0
             dopInfoHeight.constant = 0
-            if keyboardHeight != 0{
-                sendBtnTop.constant = sendBtnTopConstant - keyboardHeight
-                if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-                    sendBtnTop.constant = 5
-                }
-            }else{
-                if isExpanded == true{
-                    sendBtnTop.constant = sendBtnTopConstant
-                }else{
-                    sendBtnTop.constant = sendBtnTopConstant - tableH
-                }
-            }
+//            if keyboardHeight != 0{
+//                sendBtnTop.constant = sendBtnTopConstant - keyboardHeight
+//                if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+//                    sendBtnTop.constant = 5
+//                }
+//            }else{
+//                if isExpanded == true{
+//                    sendBtnTop.constant = sendBtnTopConstant
+//                }else{
+//                    sendBtnTop.constant = sendBtnTopConstant - tableH
+//                }
+//            }
         }
     }
     
@@ -677,15 +677,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
 //                    heigthFooter.constant = 160
                     self.heigth_phone_service.constant = 0
                 }
-                if keyboardHeight != 0{
-                    self.sendBtnTop.constant = 5
-                }else{
-                    if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax){
-                        self.sendBtnTop.constant = sendBtnTopConstant - 110 - self.heigth_phone_service.constant - self.dopInfoHeight.constant
-                    }else{
-                        self.sendBtnTop.constant = 5
-                    }
-                }
+//                if keyboardHeight != 0{
+//                    self.sendBtnTop.constant = 5
+//                }else{
+//                    if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax){
+//                        self.sendBtnTop.constant = sendBtnTopConstant - 110 - self.heigth_phone_service.constant - self.dopInfoHeight.constant
+//                    }else{
+//                        self.sendBtnTop.constant = 5
+//                    }
+//                }
             } else {
                 self.descInfoLbl.isHidden = true
                 self.descInfoView.isHidden = true
@@ -697,15 +697,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             self.descInfoView.isHidden = true
             self.heigth_phone_service.constant = 0
             self.dopInfoHeight.constant = 0
-            if isExpanded == true{
-                if self.scroll.contentSize.height < self.view.frame.size.height{
-                    self.sendBtnTop.constant = sendBtnTopConstant
-                }else{
-                    self.sendBtnTop.constant = 5
-                }
-            }else{
-                sendBtnTop.constant = sendBtnTopConstant - tableH
-            }
+//            if isExpanded == true{
+//                if self.scroll.contentSize.height < self.view.frame.size.height{
+//                    self.sendBtnTop.constant = sendBtnTopConstant
+//                }else{
+//                    self.sendBtnTop.constant = 5
+//                }
+//            }else{
+//                sendBtnTop.constant = sendBtnTopConstant - tableH
+//            }
         }
     }
     
@@ -998,16 +998,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
-            sendButton.alpha     = 0.5
-            sendButton.isEnabled = false
+            sendBtnHeight.constant = 0
+            sendButton.isHidden = true
         
         }else  if (edFio.textColor == placeholderColor || edContact.textColor == placeholderColor){
-            sendButton.alpha     = 0.5
-            sendButton.isEnabled = false
+            sendBtnHeight.constant = 0
+            sendButton.isHidden = true
             
         }else {
-            sendButton.alpha     = 1
-            sendButton.isEnabled = true
+            sendBtnHeight.constant = 48
+            sendButton.isHidden = false
         }
         
         return true
@@ -1020,16 +1020,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if textView == gosNumber{
             if updatedText.isEmpty {
                 textView.text = "Госномер (или номера через запятую, например, А 033 ЕО 77)"
-                sendButton.alpha     = 0.5
-                sendButton.isEnabled = false
+                sendBtnHeight.constant = 0
+                sendButton.isHidden = true
                 textView.textColor = placeholderColor
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
                 
             } else if textView.textColor == placeholderColor && !text.isEmpty {
                 textView.textColor = UIColor.black
                 textView.text = text
-                sendButton.alpha     = 1
-                sendButton.isEnabled = true
+                sendBtnHeight.constant = 48
+                sendButton.isHidden = false
                 
             } else {
                 return true
@@ -1037,16 +1037,16 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }else if textView == markAuto{
             if updatedText.isEmpty {
                 textView.text = "Марка автомобиля \n(или марки через запятую)"
-                sendButton.alpha     = 0.5
-                sendButton.isEnabled = false
+                sendBtnHeight.constant = 0
+                sendButton.isHidden = true
                 textView.textColor = placeholderColor
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
                 
             } else if textView.textColor == placeholderColor && !text.isEmpty {
                 textView.textColor = UIColor.black
                 textView.text = text
-                sendButton.alpha     = 1
-                sendButton.isEnabled = true
+                sendBtnHeight.constant = 48
+                sendButton.isHidden = false
                 
             } else {
                 return true
@@ -1057,8 +1057,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     textView.text = "Примечание"
                     if textView.frame.origin.y < 100{
                         textView.text = "ФИО гостей"
-                        sendButton.alpha     = 0.5
-                        sendButton.isEnabled = false
+                        sendBtnHeight.constant = 0
+                        sendButton.isHidden = true
                     }
                     textView.textColor = placeholderColor
                     textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
@@ -1067,8 +1067,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     textView.textColor = UIColor.black
                     textView.text = text
                     if textView.frame.origin.y < 100 && gosNumber.text != ""{
-                        sendButton.alpha     = 1
-                        sendButton.isEnabled = true
+                        sendBtnHeight.constant = 48
+                        sendButton.isHidden = false
                     }
                     
                 } else {
@@ -1079,8 +1079,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     textView.text = "Примечание"
                     if textView.frame.origin.y < 100{
                         textView.text = "ФИО гостей"
-                        sendButton.alpha     = 0.5
-                        sendButton.isEnabled = false
+                        sendBtnHeight.constant = 0
+                        sendButton.isHidden = true
                     }
                     textView.textColor = placeholderColor
                     textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
@@ -1089,8 +1089,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     textView.textColor = UIColor.black
                     textView.text = text
                     if textView.frame.origin.y < 100{
-                        sendButton.alpha     = 1
-                        sendButton.isEnabled = true
+                        sendBtnHeight.constant = 48
+                        sendButton.isHidden = false
                     }
                     
                 } else {
