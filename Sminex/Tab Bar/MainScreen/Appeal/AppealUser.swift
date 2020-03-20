@@ -391,7 +391,14 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     lastComm = nil
                     isAnswered = false
                 }
-                let icon = !(curr.status?.contains(find: "Отправлена") ?? false) ? UIImage(named: "check_label")! : UIImage(named: "processing_label")!
+                var icon = UIImage(named: "orangeStatus")!
+                if (curr.status?.containsIgnoringCase(find: "закрыта"))! || (curr.status?.containsIgnoringCase(find: "выполнена"))!{
+                    icon = UIImage(named: "grayStatus")!
+                }else if (curr.status?.containsIgnoringCase(find: "отправлена"))! || (curr.status?.containsIgnoringCase(find: "принята"))!{
+                    icon = UIImage(named: "greenStatus")!
+                }else if (curr.status?.containsIgnoringCase(find: "в обработке"))!{
+                    icon = UIImage(named: "orangeStatus")!
+                }
                 let isPerson = curr.name?.contains(find: "ропуск") ?? false
                 
                 var persons = ""//curr.responsiblePerson ?? ""
@@ -681,6 +688,16 @@ final class AppealUserCell: UITableViewCell {
         }
         icon.image      = item.icon
         status.text     = item.status.uppercased()
+        if item.icon == UIImage(named: "orangeStatus"){
+            icon.tintColor = mainOrangeColor
+            status.textColor = mainOrangeColor
+        }else if item.icon == UIImage(named: "grayStatus"){
+            icon.tintColor = mainGrayColor
+            status.textColor = mainGrayColor
+        }else{
+            icon.tintColor = mainGreenColor
+            status.textColor = mainGreenColor
+        }
         back.isHidden   = !item.isBack
         type            = item.type
         if item.stickTitle == "" {

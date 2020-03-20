@@ -947,7 +947,7 @@ final class AdmissionHeader: UICollectionViewCell {
         label.font = font
         label.text = text
         label.sizeToFit()
-        print(label.frame.height, width)
+        
         return label.frame.height
     }
     
@@ -1094,7 +1094,11 @@ final class AdmissionCommentUserCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
+        if heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132) > 24{
+            commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132)
+        }else{
+            commHeight.constant = 24
+        }
         if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
 //            commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 110)
         }
@@ -1176,7 +1180,11 @@ final class AdmissionCommentConstCell: UICollectionViewCell{
         
         title.text      = item.title
         comment.text    = item.comment
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
+        if heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132) > 24{
+            commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132)
+        }else{
+            commHeight.constant = 24
+        }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         let dat = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM")

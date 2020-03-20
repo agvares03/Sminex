@@ -152,6 +152,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
             self.data[6] = MenuCellData(icon: UIImage(named: "new_menu_polls")!, title: "Опросы", notification: "")
             self.collection.reloadData()
         }
+        navigationController?.isNavigationBarHidden = false
         tabBarController?.tabBar.tintColor = mainGreenColor
         tabBarController?.tabBar.selectedItem?.title = "Меню"
         tabBarController?.tabBar.isHidden = false
@@ -294,7 +295,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == Segues.fromMenuVC.toSupport {
-            let vc = segue.destination as! AuthSupportVC
+            let vc = segue.destination as! AuthSupportVCNew
             vc.login_ = UserDefaults.standard.string(forKey: "login") ?? ""
             vc.fromMenu = true
         }

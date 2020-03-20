@@ -231,7 +231,7 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         label.font = font
         label.text = text
         label.sizeToFit()
-        print(label.frame.height, width)
+        
         return label.frame.height
     }
     

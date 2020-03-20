@@ -745,7 +745,7 @@ final class ServiceHeader: UICollectionViewCell {
         label.font = font
         label.text = text
         label.sizeToFit()
-        print(label.frame.height, width)
+        
         return label.frame.height
     }
     
@@ -1027,7 +1027,11 @@ final class ServiceCommentUserCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 100)
+        if heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 132) > 24{
+            commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 132)
+        }else{
+            commHeight.constant = 24
+        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -1157,10 +1161,14 @@ final class ServiceCommentConstCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 100)
-        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-            commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 90)
+        if heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 132) > 24{
+            commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 132)
+        }else{
+            commHeight.constant = 24
         }
+//        if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
+//            commHeight.constant = heightForTitle(text: item.desc, width: delegate2.view.frame.size.width - 90)
+//        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{

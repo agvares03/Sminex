@@ -239,7 +239,7 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
             let cell = AppealHeader.fromNib()
             cell?.display((arr[0] as! AppealHeaderData), delegate: self, delegate1: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
             
         } else {
             let arr1 = arr[indexPath.row] as! AppealCommentCellData
@@ -277,9 +277,9 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AppealCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }else{
                 var showDate = true
                 let cell = AppealCommentConstCell.fromNib()
@@ -301,9 +301,9 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AppealCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }
         }
     }
@@ -891,7 +891,11 @@ final class AppealCommentUserCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
+        if heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132) > 24{
+            commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132)
+        }else{
+            commHeight.constant = 24
+        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
@@ -1021,7 +1025,11 @@ final class AppealCommentConstCell: UICollectionViewCell {
                 }
             }
         }
-        commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 100)
+        if heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132) > 24{
+            commHeight.constant = heightForTitle(text: item.comment, width: delegate2.view.frame.size.width - 132)
+        }else{
+            commHeight.constant = 24
+        }
     }
     
     func heightForTitle(text:String, width:CGFloat) -> CGFloat{
