@@ -281,7 +281,7 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
             let cell = AdmissionHeader.fromNib()
             cell?.display((arr[0] as! AdmissionHeaderData), delegate: self, view: self)
             let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
-            return CGSize(width: view.frame.size.width, height: size.height)
+            return CGSize(width: view.frame.size.width - 32, height: size.height)
             
         } else {
             let arr1 = arr[indexPath.row] as! AdmissionCommentCellData
@@ -319,9 +319,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AdmissionCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }else{
                 var showDate = true
                 let cell = AdmissionCommentConstCell.fromNib()
@@ -343,9 +343,9 @@ final class AdmissionVC: UIViewController, UICollectionViewDelegate, UICollectio
                 let size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0.0, height: 0.0)
                 let ar = arr[indexPath.row] as! AdmissionCommentCellData
                 if ar.comment == "Прикреплено фото" || ar.comment == "Добавлен файл"{
-                    return CGSize(width: view.frame.size.width, height: 0)
+                    return CGSize(width: view.frame.size.width - 32, height: 0)
                 }
-                return CGSize(width: view.frame.size.width, height: size.height)
+                return CGSize(width: view.frame.size.width - 32, height: size.height)
             }
         }
     }
