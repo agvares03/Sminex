@@ -157,18 +157,19 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
 final class ServicesUKTableCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UILabel!
-    @IBOutlet private weak var desc:    UILabel!
+//    @IBOutlet private weak var desc:    UILabel!
     @IBOutlet private weak var amount:  UILabel!
     @IBOutlet private weak var image:   CircleView2!
     
     func display(_ title: String, desc: String, amount: String, picture: String) {
         self.title.text     = title
-        print(desc)
-        if desc != "" && desc != " "{
-            self.desc.text = desc
-        }else{
-            self.desc.text = ""
-        }
+//        if desc != "" && desc != " "{
+//            self.desc.text = desc
+//            self.descHeight.constant = heightForView(text: desc, font: self.desc.font, width: )
+//        }else{
+//            self.descHeight.constant = 0
+//            self.desc.text = ""
+//        }
         self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
         if let imageV = UIImage(data: Data(base64Encoded: (picture.replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             image.image = imageV
@@ -193,15 +194,15 @@ final class ServicesUKTableCell: UICollectionViewCell {
         }
         
         cell?.title.preferredMaxLayoutWidth  = cell?.title.bounds.size.width  ?? 0.0
-        cell?.desc.preferredMaxLayoutWidth   = cell?.desc.bounds.size.width   ?? 0.0
+//        cell?.desc.preferredMaxLayoutWidth   = cell?.desc.bounds.size.width   ?? 0.0
         cell?.amount.preferredMaxLayoutWidth = cell?.amount.bounds.size.width ?? 0.0
         
         if isPlusDevices() {
-            cell?.desc.preferredMaxLayoutWidth += 40
+//            cell?.desc.preferredMaxLayoutWidth += 40
         
         } else if isNeedToScroll() {
             cell?.title.preferredMaxLayoutWidth -= 25
-            cell?.desc.preferredMaxLayoutWidth -= 50
+//            cell?.desc.preferredMaxLayoutWidth -= 50
         }
         
         return cell

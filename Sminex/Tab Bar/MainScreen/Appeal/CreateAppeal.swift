@@ -13,7 +13,7 @@ import AKMaskField
 class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
-    @IBOutlet private weak var sendViewConst: NSLayoutConstraint!
+//    @IBOutlet private weak var sendViewConst: NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
     @IBOutlet private weak var edContact:       AKMaskField!
@@ -185,14 +185,14 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
     }
     // Двигаем view вверх при показе клавиатуры
     @objc func keyboardWillShow(sender: NSNotification?) {
-        let info = sender?.userInfo!
-        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
-        self.sendViewConst.constant = (keyboardSize?.height)!
+//        let info = sender?.userInfo!
+//        let keyboardSize = (info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+//        self.sendViewConst.constant = (keyboardSize?.height)!
     }
 
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
-        self.sendViewConst.constant = 0
+//        self.sendViewConst.constant = 0
     }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer?) {

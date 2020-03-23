@@ -334,7 +334,16 @@ final class NewContactsCell: UICollectionViewCell {
         delegate?.phonePressed(phone.text ?? "")
     }
     @objc private func messagePressed(_ sender: UITapGestureRecognizer) {
-        delegate?.messagePressed(phone.text ?? "")
+//        delegate?.messagePressed(phone.text ?? "")
+        var type = 0
+        if (title.text?.containsIgnoringCase(find: "консьерж"))!{
+            type = 0
+        }else if (title.text?.containsIgnoringCase(find: "предложения"))!{
+            type = 1
+        }else if (title.text?.containsIgnoringCase(find: "поддержка"))!{
+            type = 2
+        }
+        delegate?.btnPressed(type, email.text ?? "")
     }
     @objc private func emailPressed(_ sender: UITapGestureRecognizer) {
         delegate?.emailPressed(email.text ?? "")

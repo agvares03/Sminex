@@ -47,7 +47,7 @@ final class ServicesUKDescVC: UIViewController {
             loader.isHidden = true
             navigationItem.title = allData[index].name
             titleLabel.text = allData[index].name
-            costLabel.text  = allData[index].cost!.replacingOccurrences(of: "руб.", with: "₽")
+            costLabel.text  = "Цена услуги: " + allData[index].cost!.replacingOccurrences(of: "руб.", with: "₽")
             descLabel.text  = allData[index].desc
         }
     }
@@ -65,7 +65,7 @@ final class ServicesUKDescVC: UIViewController {
             loader.isHidden = true
             navigationItem.title = allData[index].name
             titleLabel.text = allData[index].name
-            costLabel.text  = allData[index].cost!.replacingOccurrences(of: "руб.", with: "₽")
+            costLabel.text  = "Цена услуги: " + allData[index].cost!.replacingOccurrences(of: "руб.", with: "₽")
             descLabel.text  = allData[index].desc
         }
     }
@@ -89,7 +89,7 @@ final class ServicesUKDescVC: UIViewController {
         loader.isHidden = true
         navigationItem.title = data_?.name
         titleLabel.text = data_?.name
-        costLabel.text  = data_?.cost!.replacingOccurrences(of: "руб.", with: "₽")
+        costLabel.text  = "Цена услуги: " + (data_?.cost!.replacingOccurrences(of: "руб.", with: "₽"))!
         descLabel.text  = data_?.desc
         if denyCompanyService{
             sendBtn.alpha     = 0.5
@@ -202,9 +202,9 @@ final class ServicesUKDescVC: UIViewController {
         if segue.identifier == Segues.fromRequestTypeVC.toServiceUK {
             let vc = segue.destination as! CreateServiceUK
 //                vc.delegate = delegate as? AppsUserDelegate
-            vc.type_ = RequestTypeStruct(id: (data_?.id)!, name: (data_?.name)!)
+            vc.type_ = RequestTypeStruct(id: (allData[index].id)!, name: (allData[index].name)!)
             vc.parkingsPlace = self.parkingsPlace
-            vc.data_ = data_
+            vc.data_ = allData[index]
         }
     }
     
