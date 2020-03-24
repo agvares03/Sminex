@@ -718,7 +718,11 @@ final class ServiceAppHeader: UICollectionViewCell {
         image.image         = item.icons
         desc.text           = item.desc
         mobileNumber.text   = item.mobileNumber
-        status.text         = item.status.uppercased()
+        if item.status.containsIgnoringCase(find: "отправлена"){
+            status.text = "В ОБРАБОТКЕ"
+        }else{
+            status.text = item.status.uppercased()
+        }
         
         if item.icons == UIImage(named: "orangeStatus"){
             image.tintColor = mainOrangeColor

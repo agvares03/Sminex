@@ -618,9 +618,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                 var icon = UIImage(named: "orangeStatus")!
                 if (curr.status?.containsIgnoringCase(find: "закрыта"))! || (curr.status?.containsIgnoringCase(find: "выполнена"))!{
                     icon = UIImage(named: "grayStatus")!
-                }else if (curr.status?.containsIgnoringCase(find: "отправлена"))! || (curr.status?.containsIgnoringCase(find: "принята"))!{
+                }else if (curr.status?.containsIgnoringCase(find: "принята"))!{
                     icon = UIImage(named: "greenStatus")!
-                }else if (curr.status?.containsIgnoringCase(find: "в обработке"))!{
+                }else if (curr.status?.containsIgnoringCase(find: "отправлена"))! || (curr.status?.containsIgnoringCase(find: "в обработке"))!{
                     icon = UIImage(named: "orangeStatus")!
                 }
                 let isPerson = curr.name?.contains(find: "ропуск") ?? false
@@ -1359,7 +1359,11 @@ final class TestAppsUserCell: UITableViewCell {
             icon.tintColor = mainGreenColor
             status.textColor = mainGreenColor
         }
-        status.text     = item.status.uppercased()
+        if item.status.containsIgnoringCase(find: "отправлена"){
+            status.text = "В ОБРАБОТКЕ"
+        }else{
+            status.text = item.status.uppercased()
+        }
         back.isHidden   = !item.isBack
         type            = item.type
         if item.stickTitle == "" {
