@@ -835,7 +835,11 @@ final class AdmissionHeader: UICollectionViewCell {
         mobileNumber.text   = phoneOperator
         gosNumbers.text     = item.gosNumber
         markAuto.text       = item.mark
-        status.text         = item.status.uppercased()
+        if item.status.containsIgnoringCase(find: "отправлена"){
+            status.text = "В ОБРАБОТКЕ"
+        }else{
+            status.text = item.status.uppercased()
+        }
         if item.icons == UIImage(named: "orangeStatus"){
             image.tintColor = mainOrangeColor
             status.textColor = mainOrangeColor

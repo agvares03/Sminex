@@ -855,7 +855,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if section == 3 && dealsSize == nil {
             return CGSize(width: 0.0, height: 0.0)
         } else if section == 0 {
-            return CGSize(width: view.frame.size.width, height: 180.0)
+            return CGSize(width: view.frame.size.width, height: 160.0)
         } else if section == 3 {
             return CGSize(width: view.frame.size.width, height: 60.0)
         } else if section == 1 || section == 2{
@@ -1124,9 +1124,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                     var icon = UIImage(named: "orangeStatus")!
                     if (row.status?.containsIgnoringCase(find: "закрыта"))! || (row.status?.containsIgnoringCase(find: "выполнена"))!{
                         icon = UIImage(named: "grayStatus")!
-                    }else if (row.status?.containsIgnoringCase(find: "отправлена"))! || (row.status?.containsIgnoringCase(find: "принята"))!{
+                    }else if (row.status?.containsIgnoringCase(find: "принята"))!{
                         icon = UIImage(named: "greenStatus")!
-                    }else if (row.status?.containsIgnoringCase(find: "в обработке"))!{
+                    }else if (row.status?.containsIgnoringCase(find: "отправлена"))! || (row.status?.containsIgnoringCase(find: "в обработке"))!{
                         icon = UIImage(named: "orangeStatus")!
                     }
                     var type = row.idType
@@ -2021,9 +2021,11 @@ final class CellsHeader: UICollectionReusableView {
             self.detail.setTitleColor(.white, for: .normal)
         } else if item.title == "ВЕРСИЯ" {
             self.detail.setTitleColor(.white, for: .normal)
-            self.detail.setTitle("ver. 1.97", for: .normal)
+            let dictionary = Bundle.main.infoDictionary!
+            let version = dictionary["CFBundleShortVersionString"] as! String
+            self.detail.setTitle("ver. " + version, for: .normal)
         } else {
-            self.detail.setTitle("Все", for: .normal)
+            self.detail.setTitle("ВСЕ", for: .normal)
             self.detail.setTitleColor(.white, for: .normal)
         }
     }
@@ -2073,8 +2075,16 @@ final class NewSurveyCell: UICollectionViewCell, FSPagerViewDataSource, FSPagerV
         pagerView.delegate   = self
         pagerHeight.constant = 205
         isLoading = false
-        self.itemSurvey = item.surveyData
-        self.pageControl.numberOfPages = self.itemSurvey.count
+        self.itemSurvey.removeAll()
+        if item.surveyData.count > 3{
+            for i in 0...2{
+                self.itemSurvey.append(item.surveyData[i])
+            }
+            self.pageControl.numberOfPages = 3
+        }else{
+            self.itemSurvey = item.surveyData
+            self.pageControl.numberOfPages = self.itemSurvey.count
+        }
         self.pagerView.transformer = FSPagerViewTransformer(type: .linear)
         self.pagerView.reloadData()
         self.pagerView.automaticSlidingInterval = 3.0
@@ -2594,7 +2604,11 @@ final class AppsPagerViewCell: FSPagerViewCell{
             status.textColor = mainGreenColor
         }
         icon.image  = item.icon
-        status.text = item.status.uppercased()
+        if item.status.containsIgnoringCase(find: "отправлена"){
+            status.text = "В ОБРАБОТКЕ"
+        }else{
+            status.text = item.status.uppercased()
+        }
         
         let df = DateFormatter()
         df.dateFormat = "dd.MM.yyyy HH:mm:ss"
@@ -2867,7 +2881,8 @@ final class SchetCell: UICollectionViewCell {
         }
         if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             title.isHidden  = true
-            date.isHidden   = true
+            date.text  = "Снятие и передача показаний осуществляется управляющей компанией"
+            date.isHidden   = false
             button.isHidden = true
         }else{
             title.isHidden  = false

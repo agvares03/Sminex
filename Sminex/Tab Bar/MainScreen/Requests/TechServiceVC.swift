@@ -780,7 +780,11 @@ final class ServiceHeader: UICollectionViewCell {
             problemHeight.constant = 20
         }
         icon.image = item.icon
-        status.text = item.status.uppercased()
+        if item.status.containsIgnoringCase(find: "отправлена"){
+            status.text = "В ОБРАБОТКЕ"
+        }else{
+            status.text = item.status.uppercased()
+        }
         if item.icon == UIImage(named: "orangeStatus"){
             icon.tintColor = mainOrangeColor
             status.textColor = mainOrangeColor

@@ -394,9 +394,9 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 var icon = UIImage(named: "orangeStatus")!
                 if (curr.status?.containsIgnoringCase(find: "закрыта"))! || (curr.status?.containsIgnoringCase(find: "выполнена"))!{
                     icon = UIImage(named: "grayStatus")!
-                }else if (curr.status?.containsIgnoringCase(find: "отправлена"))! || (curr.status?.containsIgnoringCase(find: "принята"))!{
+                }else if (curr.status?.containsIgnoringCase(find: "принята"))!{
                     icon = UIImage(named: "greenStatus")!
-                }else if (curr.status?.containsIgnoringCase(find: "в обработке"))!{
+                }else if (curr.status?.containsIgnoringCase(find: "отправлена"))! || (curr.status?.containsIgnoringCase(find: "в обработке"))!{
                     icon = UIImage(named: "orangeStatus")!
                 }
                 let isPerson = curr.name?.contains(find: "ропуск") ?? false
@@ -687,7 +687,11 @@ final class AppealUserCell: UITableViewCell {
             desc.text   = item.desc
         }
         icon.image      = item.icon
-        status.text     = item.status.uppercased()
+        if item.status.containsIgnoringCase(find: "отправлена"){
+            status.text = "В ОБРАБОТКЕ"
+        }else{
+            status.text = item.status.uppercased()
+        }
         if item.icon == UIImage(named: "orangeStatus"){
             icon.tintColor = mainOrangeColor
             status.textColor = mainOrangeColor
