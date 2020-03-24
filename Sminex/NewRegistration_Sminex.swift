@@ -14,7 +14,7 @@ final class NewRegistration_Sminex: UIViewController, UITextFieldDelegate, UIGes
     @IBOutlet weak var didntEnter:              UILabel!
     @IBOutlet private weak var sprtTop:         NSLayoutConstraint!
     @IBOutlet private weak var edLSHeight:      NSLayoutConstraint!
-//    @IBOutlet private weak var errorHeight:     NSLayoutConstraint!
+    @IBOutlet private weak var viewHeight:     NSLayoutConstraint!
     @IBOutlet private weak var edLS:            UITextField!
     @IBOutlet private weak var indicator:       UIActivityIndicatorView!
     @IBOutlet private weak var btn_go:          UIButton!
@@ -298,6 +298,7 @@ final class NewRegistration_Sminex: UIViewController, UITextFieldDelegate, UIGes
         edLSHeight.constant = 36
 //        errorLbl.isHidden = true
         errorLblDesc.isHidden = true
+        viewHeight.constant = 160
 //        errorHeight.constant = 0
 //        let recognizer = UITapGestureRecognizer(target: self, action: #selector(btn_cancel(_:)))
 //        recognizer.delegate = self
@@ -396,6 +397,7 @@ final class NewRegistration_Sminex: UIViewController, UITextFieldDelegate, UIGes
                 self.errorLblDesc.text = self.responseString.replacingOccurrences(of: "error: ", with: "")
                 self.changeGoButton(isEnabled: false)
                 self.errorLblDesc.isHidden = false
+                self.viewHeight.constant = 190
 //                self.errorHeight.constant = 36
             }
             if self.errorLblDesc.text?.contains(find: "уже выслан") ?? false {

@@ -101,7 +101,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oK6-ea-CoB">
-                                <rect key="frame" x="16" y="17" width="343" height="231"/>
+                                <rect key="frame" x="16" y="17" width="343" height="220"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Укажите лицевой счет или телефон, привязанный к лицевому счету" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hDe-RD-wer">
                                         <rect key="frame" x="24" y="17" width="295" height="36"/>
@@ -122,7 +122,7 @@
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="phonePad" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EU4-Ak-VIA">
-                                        <rect key="frame" x="71.5" y="161" width="200" height="48"/>
+                                        <rect key="frame" x="71.5" y="150" width="200" height="48"/>
                                         <color key="backgroundColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="9EB-WF-aKW"/>
@@ -151,7 +151,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="xYS-MA-rHM">
-                                        <rect key="frame" x="161.5" y="175" width="20" height="20"/>
+                                        <rect key="frame" x="161.5" y="164" width="20" height="20"/>
                                         <color key="color" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </activityIndicatorView>
                                 </subviews>
@@ -170,7 +170,7 @@
                                     <constraint firstAttribute="trailing" secondItem="hDe-RD-wer" secondAttribute="trailing" constant="24" id="pQU-90-ikz"/>
                                     <constraint firstItem="fB7-ir-xqa" firstAttribute="leading" secondItem="oK6-ea-CoB" secondAttribute="leading" constant="24" id="peb-aP-0bD"/>
                                     <constraint firstItem="hDe-RD-wer" firstAttribute="top" secondItem="oK6-ea-CoB" secondAttribute="top" constant="17" id="xt9-pX-ScS"/>
-                                    <constraint firstAttribute="height" constant="231" id="ycG-1v-QRG"/>
+                                    <constraint firstAttribute="height" constant="220" id="ycG-1v-QRG"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -210,6 +210,7 @@
                         <outlet property="indicator" destination="xYS-MA-rHM" id="QhR-Ly-Y6E"/>
                         <outlet property="sprtTop" destination="Phs-Xo-YGB" id="fXu-bI-yzw"/>
                         <outlet property="txtDesc" destination="hDe-RD-wer" id="UB4-Rj-nND"/>
+                        <outlet property="viewHeight" destination="ycG-1v-QRG" id="Iav-UN-Rfp"/>
                         <segue destination="Rpx-9l-bC5" kind="show" identifier="reg_step1" id="TlG-N2-rSA"/>
                     </connections>
                 </viewController>
@@ -1179,6 +1180,7 @@
         <image name="sminex_mail_new" width="37" height="37"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="afy-77-5eG"/>
         <segue reference="I8e-hu-QVn"/>
         <segue reference="33k-hD-ECi"/>
         <segue reference="j1m-8v-JKZ"/>

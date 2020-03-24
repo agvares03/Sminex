@@ -197,8 +197,6 @@ final class AccountHeader: UICollectionReusableView {
     @IBOutlet private weak var habitableLabel:      UILabel!
     @IBOutlet private weak var holderLabel:         UILabel!
     @IBOutlet private weak var holderPhoneLabel:    UILabel!
-    @IBOutlet private weak var comfortLabel:        UILabel!
-    @IBOutlet private weak var comfortPhoneLabel:   UILabel!
     @IBOutlet         weak var headerView:          UIView!
     
     func display() {
@@ -241,15 +239,15 @@ final class AccountHeader: UICollectionReusableView {
         }
         
         holderPhoneLabel.isUserInteractionEnabled  = true
-        comfortPhoneLabel.isUserInteractionEnabled = true
+//        comfortPhoneLabel.isUserInteractionEnabled = true
         holderPhoneLabel.addGestureRecognizer(  UITapGestureRecognizer(target: self, action: #selector(holderPhonePressed(_:))) )
-        comfortPhoneLabel.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))))
-        let contacts:[ContactsJson] = TemporaryHolder.instance.contactsList
-        contacts.forEach{
-            if ($0.name?.contains(find: "сьерж"))!{
-                comfortPhoneLabel.text = $0.phone
-            }
-        }
+//        comfortPhoneLabel.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))))
+//        let contacts:[ContactsJson] = TemporaryHolder.instance.contactsList
+//        contacts.forEach{
+//            if ($0.name?.contains(find: "сьерж"))!{
+//                comfortPhoneLabel.text = $0.phone
+//            }
+//        }
 //        if TemporaryHolder.instance.bcImage != nil {
 //            bcImageView.image = TemporaryHolder.instance.bcImage
 //
@@ -285,14 +283,14 @@ final class AccountHeader: UICollectionReusableView {
     }
     
     @objc private func phonePressed(_ sender: UITapGestureRecognizer) {
-        let phone = comfortPhoneLabel.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "") ?? ""
-        if let url = URL(string: "tel://" + phone) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
-        }
+//        let phone = comfortPhoneLabel.text?.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "") ?? ""
+//        if let url = URL(string: "tel://" + phone) {
+//            if #available(iOS 10.0, *) {
+//                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//            } else {
+//                UIApplication.shared.openURL(url)
+//            }
+//        }
     }
     
     class func fromNib() -> AccountHeader? {

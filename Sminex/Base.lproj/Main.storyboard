@@ -498,21 +498,25 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="317" height="183"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Осталось 4 дня для передачи показаний" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dk1-Rh-bIY">
-                                                            <rect key="frame" x="22" y="48" width="273" height="41"/>
+                                                            <rect key="frame" x="22" y="47.5" width="273" height="41"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="41" id="yen-YW-L9Q"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Передача с 20 по 25 января" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="SC3-Mr-aT3">
-                                                            <rect key="frame" x="22" y="89" width="273" height="19.5"/>
+                                                            <rect key="frame" x="22" y="88.5" width="273" height="19.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wmi-Re-TJb">
-                                                            <rect key="frame" x="72" y="113" width="173" height="48"/>
+                                                            <rect key="frame" x="58.5" y="113" width="200" height="48"/>
                                                             <color key="backgroundColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
+                                                                <constraint firstAttribute="width" constant="200" id="I07-wX-oFI"/>
                                                                 <constraint firstAttribute="height" constant="48" id="uSb-r3-aks"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
@@ -551,16 +555,15 @@
                                                         <constraint firstItem="SC3-Mr-aT3" firstAttribute="leading" secondItem="bUe-iY-ev3" secondAttribute="leading" constant="22" id="1GH-ez-Gkn"/>
                                                         <constraint firstAttribute="trailing" secondItem="SC3-Mr-aT3" secondAttribute="trailing" constant="22" id="6oS-yy-c1r"/>
                                                         <constraint firstAttribute="trailing" secondItem="BGP-b8-8Wh" secondAttribute="trailing" constant="19" id="E8N-Y1-h20"/>
-                                                        <constraint firstItem="Wmi-Re-TJb" firstAttribute="leading" secondItem="bUe-iY-ev3" secondAttribute="leading" constant="72" id="H7I-b9-dz2"/>
-                                                        <constraint firstAttribute="trailing" secondItem="Wmi-Re-TJb" secondAttribute="trailing" constant="72" id="M3S-hH-AHe"/>
                                                         <constraint firstItem="0yx-jc-rDf" firstAttribute="top" secondItem="bUe-iY-ev3" secondAttribute="top" constant="20" id="PzI-K2-KOx"/>
                                                         <constraint firstItem="SC3-Mr-aT3" firstAttribute="top" secondItem="dk1-Rh-bIY" secondAttribute="bottom" id="WaL-OJ-RUb"/>
                                                         <constraint firstAttribute="bottom" secondItem="Wmi-Re-TJb" secondAttribute="bottom" constant="22" id="Zcy-D4-ERd"/>
-                                                        <constraint firstItem="dk1-Rh-bIY" firstAttribute="top" secondItem="0yx-jc-rDf" secondAttribute="bottom" id="iMh-kQ-Pvg"/>
+                                                        <constraint firstItem="Wmi-Re-TJb" firstAttribute="centerX" secondItem="bUe-iY-ev3" secondAttribute="centerX" id="l8h-pJ-Agb"/>
                                                         <constraint firstItem="BGP-b8-8Wh" firstAttribute="centerY" secondItem="0yx-jc-rDf" secondAttribute="centerY" id="mBn-dN-N52"/>
                                                         <constraint firstAttribute="trailing" secondItem="0yx-jc-rDf" secondAttribute="trailing" constant="22" id="nuB-Td-tb1"/>
                                                         <constraint firstItem="0yx-jc-rDf" firstAttribute="leading" secondItem="bUe-iY-ev3" secondAttribute="leading" constant="22" id="owg-eM-hF4"/>
                                                         <constraint firstAttribute="trailing" secondItem="dk1-Rh-bIY" secondAttribute="trailing" constant="22" id="tUb-t5-IVI"/>
+                                                        <constraint firstItem="Wmi-Re-TJb" firstAttribute="top" secondItem="SC3-Mr-aT3" secondAttribute="bottom" constant="5" id="xRG-r5-sxw"/>
                                                         <constraint firstItem="dk1-Rh-bIY" firstAttribute="leading" secondItem="bUe-iY-ev3" secondAttribute="leading" constant="22" id="yK8-Kq-VtA"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
@@ -587,6 +590,7 @@
                                         <size key="customSize" width="317" height="183"/>
                                         <connections>
                                             <outlet property="button" destination="Wmi-Re-TJb" id="avq-Wk-6O6"/>
+                                            <outlet property="buttonHeight" destination="uSb-r3-aks" id="0jr-Zl-s4R"/>
                                             <outlet property="date" destination="SC3-Mr-aT3" id="LYO-FP-4QN"/>
                                             <outlet property="title" destination="dk1-Rh-bIY" id="K8q-w6-RaJ"/>
                                         </connections>

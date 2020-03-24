@@ -44,6 +44,12 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         }else{
             sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
         }
+        if dateTo == 0 && dateFrom == 0{
+            sendLbl.text  = ""
+        }
+        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+            sendLbl.text  = "Снятие и передача показаний осуществляется управляющей компанией"
+        }
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
