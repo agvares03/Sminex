@@ -39,6 +39,7 @@ final class CounterCellNew: UICollectionViewCell {
     var delegate2: NewCounterDelegate!
     var index = 0
     func display(_ item: MeterValue, delegate: UIViewController, index: Int, delegate2: NewCounterDelegate, date: String, canCount: Bool) {
+        var canCount2 = canCount
         let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
         let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
         let calendar = Calendar.current
@@ -50,19 +51,25 @@ final class CounterCellNew: UICollectionViewCell {
         }else{
             sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
         }
+        if dateTo == 0 && dateFrom == 0{
+            sendLbl.text  = ""
+            sendLblHeight.constant = 0
+            canCount2 = true
+        }
+        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+            sendLblHeight.constant = 45
+            sendLbl.text  = "Снятие и передача показаний осуществляется управляющей компанией"
+        }
         self.delegate = delegate
         self.delegate2 = delegate2
         self.index = index
-        if canCount{
+        sendLblHeight.constant = 45
+        if canCount2{
             sendBtnHeight.constant = 42
-            sendLblHeight.constant = 45
             sendBtn.isHidden = false
-            sendLbl.isHidden = false
         }else{
             sendBtnHeight.constant = 1
-            sendLblHeight.constant = 1
             sendBtn.isHidden = true
-            sendLbl.isHidden = true
         }
         counter_name.text = "Счетчик №" + item.meterUniqueNum!
         var dat: String = item.lastModf!
@@ -87,7 +94,11 @@ final class CounterCellNew: UICollectionViewCell {
         }else{
             dateCheck.isHidden = false
             dateCheckLbl.isHidden = false
-            dateCheckHeight.constant = 65
+            if canCount2{
+                dateCheckHeight.constant = 65
+            }else{
+                dateCheckHeight.constant = 40
+            }
         }
         
         if item.value1 == "" || item.value1 == " " || item.value1 == "-" || item.value1 == nil{
@@ -101,6 +112,7 @@ final class CounterCellNew: UICollectionViewCell {
         }else{
             income.text = item.previousValue1! + " " + item.units!
         }
+        tarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 3
         if item.typeTarif == "1" || item.typeTarif == " " || item.typeTarif == ""{
             kolTarif.text = "1 - тарифный"
             tarifHeight.constant = 0
@@ -121,7 +133,7 @@ final class CounterCellNew: UICollectionViewCell {
             kolTarif.text = "2 - тарифный"
             tarifHeight.constant = 70
             tarifWidth.constant = 0
-            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 2
+            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 2
             tarifBot.constant = 56
             let am = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
             self.oneTarif.text    = am + " ₽/\(item.units!)"
@@ -145,8 +157,8 @@ final class CounterCellNew: UICollectionViewCell {
             tarifLine.isHidden = false
             kolTarif.text = "3 - тарифный"
             tarifHeight.constant = 70
-            tarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
-            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 2) / 3
+            tarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 3
+            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 3
             tarifBot.constant = 56
             let am = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
             self.oneTarif.text    = am + " ₽/\(item.units!)"

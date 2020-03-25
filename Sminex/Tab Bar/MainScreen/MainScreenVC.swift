@@ -2565,19 +2565,19 @@ final class NewRequestCell: UICollectionViewCell, FSPagerViewDataSource, FSPager
 }
 
 final class AppsPagerViewCell: FSPagerViewCell{
-    @IBOutlet private var backBottom:  NSLayoutConstraint!
-    @IBOutlet private var backTop:     NSLayoutConstraint!
-    @IBOutlet private var descTop:     NSLayoutConstraint!
-    @IBOutlet private var descBottom:  NSLayoutConstraint!
+//    @IBOutlet private var backBottom:  NSLayoutConstraint!
+//    @IBOutlet private var backTop:     NSLayoutConstraint!
+//    @IBOutlet private var descTop:     NSLayoutConstraint!
+//    @IBOutlet private var descBottom:  NSLayoutConstraint!
     @IBOutlet private var stickHeight:  NSLayoutConstraint?
     
     @IBOutlet private weak var stickTitle:  UILabel?
     @IBOutlet private weak var title:       UILabel!
-    @IBOutlet private weak var desc:        UILabel!
+//    @IBOutlet private weak var desc:        UILabel!
     @IBOutlet private weak var icon:        UIImageView!
     @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var status:      UILabel!
-    @IBOutlet private weak var back:        UIView!
+//    @IBOutlet private weak var back:        UIView!
     fileprivate func display(_ item: RequestCellData) {
         title.text  = item.title
         if !item.isReaded{
@@ -2586,13 +2586,13 @@ final class AppsPagerViewCell: FSPagerViewCell{
             title.font = UIFont.systemFont(ofSize: self.title.font.pointSize, weight: .regular)
         }
         stickTitle?.text = item.stickTitle
-        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
-            desc.text = "Добавлен файл"
-        }else{
-            //            let mySubstring = item.desc.prefix(30)
-            //            desc.text   = String(mySubstring)
-            desc.text = item.desc
-        }
+//        if item.desc.contains(find: "Отправлен новый файл:") || item.desc.contains(find: "Прикреплён файл"){
+//            desc.text = "Добавлен файл"
+//        }else{
+//            //            let mySubstring = item.desc.prefix(30)
+//            //            desc.text   = String(mySubstring)
+//            desc.text = item.desc
+//        }
         if item.icon == UIImage(named: "orangeStatus"){
             icon.tintColor = mainOrangeColor
             status.textColor = mainOrangeColor
@@ -2617,22 +2617,22 @@ final class AppsPagerViewCell: FSPagerViewCell{
             ? dayDifference(from: df.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "")
             : dayDifference(from: df.date(from: item.date) ?? Date(), style: "dd MMMM")
         
-        if item.isBack {
-            backTop.constant    = 6
-            backBottom.constant = 6
-            descTop.constant    = 48
-            descBottom.constant = 17
-            back.isHidden = false
-            stickTitle?.isHidden = false
-        } else {
-            backTop.constant    = 0
-            backBottom.constant = 0
-            descTop.constant    = 0
-            descBottom.constant = 12
-            back.isHidden = true
-            stickTitle?.isHidden = true
-            stickTitle?.frame.size.height = 0
-        }
+//        if item.isBack {
+//            backTop.constant    = 6
+//            backBottom.constant = 6
+//            descTop.constant    = 48
+//            descBottom.constant = 17
+//            back.isHidden = false
+//            stickTitle?.isHidden = false
+//        } else {
+//            backTop.constant    = 0
+//            backBottom.constant = 0
+//            descTop.constant    = 0
+//            descBottom.constant = 12
+//            back.isHidden = true
+//            stickTitle?.isHidden = true
+//            stickTitle?.frame.size.height = 0
+//        }
         
         let currTitle = item.title
         let titleDateString = currTitle.substring(fromIndex: currTitle.length - 19)
@@ -2856,9 +2856,10 @@ private final class ForPayCellData: MainDataProtocol {
 
 final class SchetCell: UICollectionViewCell {
     
-    @IBOutlet private weak var title:   UILabel!
-    @IBOutlet private weak var date:    UILabel!
-    @IBOutlet private weak var button:  UIButton!
+    @IBOutlet private weak var title:           UILabel!
+    @IBOutlet private weak var date:            UILabel!
+    @IBOutlet private weak var button:          UIButton!
+    @IBOutlet private weak var buttonHeight:    NSLayoutConstraint!
     
     @IBAction private func buttonPressed(_ sender: UIButton) {
         delegate?.tapped(name: button.titleLabel?.text ?? "")
@@ -2869,25 +2870,31 @@ final class SchetCell: UICollectionViewCell {
     fileprivate func display(_ item: SchetCellData, delegate: CellsDelegate? = nil) {
         title.text = item.title
         date.text  = item.date
-        
+        button.isHidden = false
+        buttonHeight.constant = 48
         self.delegate = delegate
+        let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
+        let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
         UserDefaults.standard.synchronize()
-        if UserDefaults.standard.bool(forKey: "didntSchet") == false {
-            button.isEnabled = UserDefaults.standard.bool(forKey: "didntSchet")
-            button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.6)
-        }else{
-            button.isEnabled = UserDefaults.standard.bool(forKey: "didntSchet")
-            button.backgroundColor = button.backgroundColor?.withAlphaComponent(1.0)
-        }
         if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             title.isHidden  = true
             date.text  = "Снятие и передача показаний осуществляется управляющей компанией"
             date.isHidden   = false
             button.isHidden = true
         }else{
-            title.isHidden  = false
-            date.isHidden   = false
-            button.isHidden = false
+            if dateTo == 0 && dateFrom == 0{
+                button.isHidden = false
+                buttonHeight.constant = 48
+            }else if UserDefaults.standard.bool(forKey: "didntSchet") == false {
+                button.isHidden = true
+                buttonHeight.constant = 20
+            }else{
+                button.isHidden = false
+                buttonHeight.constant = 48
+            }
+//            title.isHidden  = false
+//            date.isHidden   = false
+//            button.isHidden = false
         }
     }
     

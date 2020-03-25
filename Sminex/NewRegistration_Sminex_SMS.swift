@@ -258,7 +258,7 @@ final class NewRegistration_Sminex_SMS: UIViewController, UIGestureRecognizerDel
         view.endEditing(true)
         
         if segue.identifier == Segues.fromRegistrationSminexSMS.toEnterPassword {
-            let vc = segue.destination as! RegistrationSminexEnterPassword
+            let vc = segue.destination as! NewRegistrationSminexEnterPassword
             
             let response = responseString.components(separatedBy: ";")
 
