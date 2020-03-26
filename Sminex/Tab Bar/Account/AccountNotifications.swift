@@ -67,12 +67,12 @@ final class AccountNotificationsVC: UIViewController {
             
             var request = URLRequest(url: URL(string: Server.SERVER + Server.CONFIGURE_NOTIFY + "login=\(defaults.string(forKey: "login") ?? "")&deviceid=\(defaults.string(forKey: "id_account") ?? "")&settings=" + newStatusTxt + newCommentTxt + newsTxt + dolgTxt + countersTxt)!)
             request.httpMethod = "GET"
-            
+            print(request)
             URLSession.shared.dataTask(with: request) {
                 data, error, responce in
                 
                 #if DEBUG
-//                    print(String(data: data!, encoding: .utf8) ?? "")
+                    print(String(data: data!, encoding: .utf8) ?? "")
                 #endif
                 
             }.resume()

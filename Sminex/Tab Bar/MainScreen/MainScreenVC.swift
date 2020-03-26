@@ -601,16 +601,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         //        } else {
         //            header.frame.size.height = 0
         //        }
-        header.frame.size.width = view.frame.size.width - 32
-        header.frame.origin.x = 16
+        header.frame.size.width = view.frame.size.width
+        header.frame.origin.x = 0
         
-        if header.title.text == "АКЦИИ И ПРЕДЛОЖЕНИЕ" {
-            header.backgroundColor = .clear
-        } else if header.title.text == "ВЕРСИЯ" {
-            header.backgroundColor = .clear
+        if header.title.text == "ВЕРСИЯ" {
             header.title.text = ""
-        }  else {
-            header.backgroundColor = .clear
         }
         if indexPath.section == 1 || indexPath.section == 2{
             header.title.isHidden = true
@@ -619,17 +614,17 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             header.title.isHidden = false
             header.detail.isHidden = false
         }
-        if #available(iOS 11.0, *) {
-            header.clipsToBounds = false
-            header.layer.cornerRadius = 4
-            header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        } else {
-            let rectShape = CAShapeLayer()
-            rectShape.bounds = header.frame
-            rectShape.position = header.center
-            rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
-            header.layer.mask = rectShape
-        }
+//        if #available(iOS 11.0, *) {
+//            header.clipsToBounds = false
+//            header.layer.cornerRadius = 4
+//            header.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+//        } else {
+//            let rectShape = CAShapeLayer()
+//            rectShape.bounds = header.frame
+//            rectShape.position = header.center
+//            rectShape.path = UIBezierPath(roundedRect: header.bounds, byRoundingCorners: [.topRight , .topLeft], cornerRadii: CGSize(width: 4, height: 4)).cgPath
+//            header.layer.mask = rectShape
+//        }
         return header
         
         //        } else {
@@ -680,9 +675,9 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
         } else if title == "ЗАЯВКИ" {
             let reqDat = data[indexPath.section]![indexPath.row + 1] as! NewRequestCellData
             if reqDat.requestData.count > 0{
-                return CGSize(width: view.frame.size.width - 32, height: 255)
+                return CGSize(width: view.frame.size.width, height: 255)
             }else{
-                return CGSize(width: view.frame.size.width - 32, height: 96)
+                return CGSize(width: view.frame.size.width, height: 96)
             }
         } else if title == "К ОПЛАТЕ" {
             if busines_center_denyTotalOnlinePayments == true || business_center_info == true || self.payNil {
@@ -703,7 +698,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             return CGSize(width: view.frame.size.width - 32, height: 0.0)
             
         } else {
-            return CGSize(width: view.frame.size.width - 32, height: 100.0)
+            return CGSize(width: view.frame.size.width, height: 100.0)
         }
     }
     
@@ -1988,6 +1983,7 @@ final class CellsHeader: UICollectionReusableView {
     
     @IBOutlet private(set) weak var title:   UILabel!
     @IBOutlet private(set) weak var detail:  UIButton!
+    @IBOutlet private(set) weak var fonIMG:  UIImageView!
     
     @IBAction private func titlePressed(_ sender: UIButton) {
         delegate?.tapped(name: title.text ?? "")
@@ -1998,15 +1994,6 @@ final class CellsHeader: UICollectionReusableView {
     fileprivate func display(_ item: CellsHeaderData, delegate: CellsDelegate? = nil) {
         
         title.text = item.title
-        if (UIDevice.current.modelName.contains(find: "iPhone 4")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 4s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5c")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone 5s")) ||
-            (UIDevice.current.modelName.contains(find: "iPhone SE")) ||
-            (UIDevice.current.modelName.contains(find: "Simulator iPhone SE")) {
-            title.font = title.font.withSize(20)
-        }
         //
         //        if !item.isNeedDetail {
         //            detail.isHidden = true
@@ -2016,6 +2003,11 @@ final class CellsHeader: UICollectionReusableView {
         //        }
         
         self.delegate = delegate
+        if item.title == "ЗАЯВКИ"{
+            fonIMG.isHidden = false
+        }else{
+            fonIMG.isHidden = true
+        }
         if item.title == "К ОПЛАТЕ" || item.title ==  "СЧЕТЧИКИ" {
             self.detail.setTitle("Подробнее", for: .normal)
             self.detail.setTitleColor(.white, for: .normal)

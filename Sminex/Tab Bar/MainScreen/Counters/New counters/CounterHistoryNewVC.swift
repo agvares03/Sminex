@@ -440,7 +440,7 @@ extension CounterHistoryNewVC: UIPickerViewDelegate, UIPickerViewDataSource {
             label = UILabel()
         }
         
-        label.textColor = .black
+        label.textColor = mainGrayColor
         label.textAlignment = .center
         label.font = UIFont(name: "Menlo-Regular", size: 15)
         
