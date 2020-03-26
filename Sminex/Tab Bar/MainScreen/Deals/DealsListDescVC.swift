@@ -69,20 +69,6 @@ final class DealsListDescVC: UIViewController, UICollectionViewDelegate, UIColle
             }.resume()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tabBarController?.tabBar.isHidden           = true
-//        let k = kolDeals
-//        if k > 1{
-//            navigationController?.popViewController(animated: true)
-//        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        tabBarController?.tabBar.isHidden           = false
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return displayDeals.count
     }

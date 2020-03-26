@@ -164,22 +164,24 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func showLS(){
-        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счет", preferredStyle: .actionSheet)
-        self.ls2.forEach {
-            let text = $0
-            action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
-                self.LoginText = text
-//                self.edLogin.text = text
-                // Сохраним значения
-//                self.itsPhone = false
-                self.saveUsersDefaults()
-                
-                // Запрос - получение данных !!!
-                self.enter()
-            }))
+        DispatchQueue.main.async{
+            let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счет", preferredStyle: .actionSheet)
+            self.ls2.forEach {
+                let text = $0
+                action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
+                    self.LoginText = text
+    //                self.edLogin.text = text
+                    // Сохраним значения
+    //                self.itsPhone = false
+                    self.saveUsersDefaults()
+                    
+                    // Запрос - получение данных !!!
+                    self.enter()
+                }))
+            }
+            action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
+            self.present(action, animated: true, completion: nil)
         }
-        action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
-        present(action, animated: true, completion: nil)
     }
     
     @IBAction private func showPasswordPressed(_ sender: UIButton) {
@@ -244,7 +246,7 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
         
         if edLogin.text == "" {
             btnEnter.isEnabled = false
-            btnEnter.alpha = 0.5
+//            btnEnter.alpha = 0.5
 //            lsLabel.isHidden = true
         
         } else {
@@ -366,7 +368,7 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
 //        sprtTop.constant = getPoint()
         
         // Скроем верхний бар при появлении
-        navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = false
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -506,6 +508,7 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
                     db.parse_Houses()
                     
                     if !self.isFromSettings_ {
+                        self.navigationController?.isNavigationBarHidden = true
                         self.performSegue(withIdentifier: Segues.fromViewController.toAppsCons, sender: self)
                     }
                     
@@ -532,7 +535,7 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
                         db.del_db(table_name: "Applications")
                         db.del_db(table_name: "Comments")
                         db.parse_Apps(login: self.LoginText, pass: self.edPass.text ?? "", isCons: "0")
-                        
+                        self.navigationController?.isNavigationBarHidden = true
                         self.performSegue(withIdentifier: Segues.fromViewController.toAppsUser, sender: self)
                     }
                 }
@@ -768,7 +771,7 @@ final class NewViewController: UIViewController, UITextFieldDelegate {
         
         if edLogin.text == "" || edPass.text == "" {
             btnEnter.isEnabled = false
-            btnEnter.alpha = 0.5
+//            btnEnter.alpha = 0.5
             
         } else {
             btnEnter.isEnabled = true

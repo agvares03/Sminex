@@ -135,6 +135,7 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
                                                             }
                                                             
                                                         }
+                                                        self.values.reverse()
                                                         DispatchQueue.main.async(execute: {
                                                             self.tableView.reloadData()
                                                         })
@@ -230,6 +231,7 @@ class FinanceHistoryPayController: UIViewController, UITableViewDelegate, UITabl
                                                             }
                                                             
                                                         }
+                                                        self.values.reverse()
                                                         DispatchQueue.main.async(execute: {
                                                             self.tableView.reloadData()
                                                         })

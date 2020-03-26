@@ -58,6 +58,7 @@ final class CounterCellNew: UICollectionViewCell {
         }
         if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
             sendLblHeight.constant = 45
+            canCount2 = false
             sendLbl.text  = "Снятие и передача показаний осуществляется управляющей компанией"
         }
         self.delegate = delegate

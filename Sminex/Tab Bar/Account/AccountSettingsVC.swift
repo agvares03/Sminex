@@ -26,6 +26,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBOutlet private weak var nameField:       	UITextField!
     @IBOutlet private weak var lsLabel:             UITextField!
     @IBOutlet private weak var email:               UITextField!
+    @IBOutlet private weak var adress:              UITextField!
     @IBOutlet private weak var saveButton:          UIButton!
     @IBOutlet private weak var changePassword:  	UILabel!
     @IBOutlet private weak var notifications:   	UILabel!
@@ -161,7 +162,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         if (defaults.string(forKey: "login") == "-") {
             lsLabel.text        = ""
         }
-        
+        adress.text             = defaults.string(forKey: "adress")
         commentField.text       = defaults.string(forKey: "accDesc")
         if (defaults.string(forKey: "accDesc") == "-") || ((defaults.string(forKey: "accDesc")?.containsIgnoringCase(find: "добавить комментарий"))!){
             commentField.text   = "Добавить комментарий (например, «не звонить с 10 до 12»)"
@@ -304,17 +305,19 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let area    = isReg_ ? String(answers[safe: 12] ?? "") : (UserDefaults.standard.string(forKey: "residentialArea")?.stringByAddingPercentEncodingForRFC3986()   ?? "")
         let rooms   = isReg_ ? String(answers[safe: 11] ?? "") : (UserDefaults.standard.string(forKey: "roomsCount")?.stringByAddingPercentEncodingForRFC3986()        ?? "")
         let total   = isReg_ ? String(answers[safe: 13] ?? "") : (UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? "")
-        let adress  = isReg_ ? String(answers[safe: 10] ?? "") : (UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? "")
+//        let adress  = isReg_ ? String(answers[safe: 10] ?? "") : (UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? "")
         let login   = isReg_ ? login_ : (UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? "")
         let defName = isReg_ ? String(answers[safe: 6] ?? "") : (UserDefaults.standard.string(forKey: "name") ?? "")
         let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (defName.stringByAddingPercentEncodingForRFC3986() ?? "")
 //        let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
         let pass: String = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        var comment_txt = commentField.text?.stringByAddingPercentEncodingForRFC3986()
+        var comment_txt:String = commentField.text
         if comment_txt == "Добавить комментарий (например, «не звонить с 10 до 12»)"{
             comment_txt = ""
         }
-        let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&businessPhone=\(phone_contact)&email=\(email)&additionalInfo=\(comment_txt ?? "")&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
+        let adress = self.adress.text?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        comment_txt = comment_txt.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&businessPhone=\(phone_contact)&email=\(email)&additionalInfo=\(comment_txt)&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         print(request)
