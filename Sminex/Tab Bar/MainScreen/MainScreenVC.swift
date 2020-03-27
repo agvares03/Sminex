@@ -2789,7 +2789,7 @@ final class ForPayCell: UICollectionViewCell {
     @IBOutlet private weak var titleDrob:   UILabel!
     @IBOutlet private weak var greenFon:    UIImageView!
     @IBOutlet private weak var whiteFon:    UIImageView!
-    @IBOutlet private weak var date:        UILabel!
+//    @IBOutlet private weak var date:        UILabel!
     @IBOutlet private weak var pay:         UIButton!
     
     fileprivate func display(_ item: ForPayCellData) {
@@ -2811,14 +2811,14 @@ final class ForPayCell: UICollectionViewCell {
         }
         title.text = "Оплатите " + item.title
         
-        if item.date != "" {
-            let df = DateFormatter()
-            df.dateFormat = "dd.MM.yyyy"
-            let currDate = df.date(from: item.date)
-            df.dateFormat = "dd MMMM"
-            df.locale = Locale(identifier: "Ru-ru")
-            date.text = "До " + df.string(from: currDate ?? Date())
-        }
+//        if item.date != "" {
+//            let df = DateFormatter()
+//            df.dateFormat = "dd.MM.yyyy"
+//            let currDate = df.date(from: item.date)
+//            df.dateFormat = "dd MMMM"
+//            df.locale = Locale(identifier: "Ru-ru")
+//            date.text = "До " + df.string(from: currDate ?? Date())
+//        }
         
         func fromNib() -> ForPayCell? {
             var cell: ForPayCell?

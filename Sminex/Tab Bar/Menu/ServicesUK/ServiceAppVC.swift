@@ -740,7 +740,7 @@ final class ServiceAppHeader: UICollectionViewCell {
         servicePrice.text   = item.price.replacingOccurrences(of: "руб.", with: "₽")
         serviceDesc.text    = item.servDesc
         serviceIcon.image   = item.servIcon
-        serviceIcon.layer.borderColor = UIColor.lightGray.cgColor
+        serviceIcon.layer.borderColor = UIColor.black.cgColor
         serviceIcon.layer.borderWidth = 1.0
         // Углы
         serviceIcon.layer.cornerRadius = serviceIcon.frame.width / 2

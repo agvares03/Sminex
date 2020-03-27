@@ -344,7 +344,7 @@ class NewRequestTypeCell: UICollectionViewCell {
         if image != nil{
             circleView.image = item.picture
             // Граница вокруг картинки
-            circleView.layer.borderColor = UIColor.lightGray.cgColor
+            circleView.layer.borderColor = UIColor.black.cgColor
             circleView.layer.borderWidth = 1.0
             // Углы
             circleView.layer.cornerRadius = ((displayWidth / 4) - 40) / 2
@@ -418,7 +418,6 @@ struct NewRequestTypeCellData {
     
     func addImage() {
         imageView.image = image
-        imageView.setImageColor(color: mainGreenColor)
     }
 }
 

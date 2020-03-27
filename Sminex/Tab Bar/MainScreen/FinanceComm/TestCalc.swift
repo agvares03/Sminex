@@ -84,9 +84,10 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     self.dataYear[i] = dat
                 }
                 DispatchQueue.main.async {
+                    self.table.reloadData()
                     let indexPath = NSIndexPath(row: 0, section: 0)
                     self.table.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
-                    self.table.reloadData()
+                    
                     self.stopAnimation()
                 }
             }
@@ -153,9 +154,10 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     self.dataYear[i] = dat
                 }
                 DispatchQueue.main.async {
+                    self.table.reloadData()
                     let indexPath = NSIndexPath(row: 0, section: 0)
                     self.table.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
-                    self.table.reloadData()
+                    
                     self.stopAnimation()
                 }
             }
@@ -293,6 +295,7 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     if self.table?.dataSource?.tableView(self.table!, cellForRowAt: IndexPath(row: 0, section: 0)) != nil {
                         let indexPath = NSIndexPath(row: 0, section: selSection)
                         self.table.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
+                        self.table.expand(selSection)
                     }
                     self.collectionYear.isHidden = false
                     self.stopAnimation()
@@ -356,15 +359,12 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if dataYear.count != 0{
-            dataYear.forEach{_ in
-                start.append(true)
-            }
             return dataYear.count
         }else{
             return 0
         }
     }
-    var start:[Bool] = []
+    
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcHeader") as! TestCalcHeader
         cell.display(getNameAndMonth(dateArr[section].0!) + " \(dateArr[section].1!)")
@@ -378,9 +378,6 @@ class TestCalc: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if start[indexPath.section]{
-            table.expand(indexPath.section)
-        }
         let cell = tableView.dequeueReusableCell(withIdentifier: "TestCalcCell") as! TestCalcCell
         if indexPath.row < dataYear[indexPath.section]!.count + 1 {
 //            print(indexPath.row, dataYear[indexPath.section]!.count)
@@ -761,5 +758,12 @@ private final class CalcYearCellData {
         self.id         = id
         self.year       = year
         self.month      = month
+    }
+}
+
+extension UITableView {
+    func reloadData(completion:@escaping ()->()) {
+        UIView.animate(withDuration: 0, animations: { self.reloadData() })
+            { _ in completion() }
     }
 }

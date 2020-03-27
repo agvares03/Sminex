@@ -15,6 +15,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     @IBOutlet         weak var table:           UITableView!
     @IBOutlet         weak var collectionHeader:UICollectionView?
     @IBOutlet private weak var createButton:    UIButton?
+    @IBOutlet private weak var noDataLbl:       UILabel!
     @IBOutlet private weak var activity:        UIActivityIndicatorView?
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -108,7 +109,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         TemporaryHolder.instance.menuRequests = 0
         updateUserInterface()
         prepareGroup?.enter()
-        
+        noDataLbl.isHidden = true
         table?.delegate                         = self
         table?.dataSource                       = self
         collectionHeader?.delegate              = self
@@ -1171,6 +1172,13 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     private func stopAnimatior() {
+        if self.data.count == 0{
+            self.table.isHidden = true
+            self.noDataLbl.isHidden = false
+        }else{
+            self.table.isHidden = false
+            self.noDataLbl.isHidden = true
+        }
         //        DispatchQueue.main.sync{
         self.activity?.stopAnimating()
         //            self.collectionHeader?.isHidden = false

@@ -17,6 +17,7 @@ protocol AppealUserDelegate: class {
 class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, AppealUserDelegate {
     
     @IBOutlet private weak var tableView:      UITableView!
+    @IBOutlet private weak var noDataLbl:      UILabel!
     @IBOutlet private weak var activity:        UIActivityIndicatorView?
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -79,7 +80,7 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         tableView?.delegate                     = self
         tableView?.dataSource                   = self
         automaticallyAdjustsScrollViewInsets    = false
-        
+        noDataLbl.isHidden = true
         startAnimator()
         
         if TemporaryHolder.instance.requestTypes == nil {
@@ -482,7 +483,7 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 }
                 
                 self.tableView?.reloadData()
-                
+                self.stopAnimatior()
                 if self.requestId_ != "" {
                     print(self.requestId_)
                     for (index, item) in self.data.enumerated() {
@@ -497,7 +498,6 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                     }
                     
                 } else {
-                    self.stopAnimatior()
                     if #available(iOS 10.0, *) {
                         self.tableView?.refreshControl?.endRefreshing()
                     } else {
@@ -604,6 +604,13 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     }
     
     private func stopAnimatior() {
+        if self.data.count == 0{
+            self.tableView.isHidden = true
+            self.noDataLbl.isHidden = false
+        }else{
+            self.tableView.isHidden = false
+            self.noDataLbl.isHidden = true
+        }
         activity?.stopAnimating()
         activity?.isHidden       = true
     }

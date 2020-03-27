@@ -180,7 +180,15 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             nameField.text          = String(describing: name?[safe: 1] ?? "")
             otchestvoField.text     = String(describing: name?[safe: 2] ?? "")
         }
-        
+        if familyNameField.text == "-"{
+            familyNameField.text = ""
+        }
+        if nameField.text == "-"{
+            nameField.text = ""
+        }
+        if otchestvoField.text == "-"{
+            otchestvoField.text = ""
+        }
         contactNumber.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         privNumber.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         email.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -307,8 +315,24 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let total   = isReg_ ? String(answers[safe: 13] ?? "") : (UserDefaults.standard.string(forKey: "totalArea")?.stringByAddingPercentEncodingForRFC3986()         ?? "")
 //        let adress  = isReg_ ? String(answers[safe: 10] ?? "") : (UserDefaults.standard.string(forKey: "adress")?.stringByAddingPercentEncodingForRFC3986()            ?? "")
         let login   = isReg_ ? login_ : (UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986()             ?? "")
-        let defName = isReg_ ? String(answers[safe: 6] ?? "") : (UserDefaults.standard.string(forKey: "name") ?? "")
-        let name    = "\(familyNameField.text ?? "") \(nameField.text ?? "") \(otchestvoField.text ?? "")".stringByAddingPercentEncodingForRFC3986() ?? (defName.stringByAddingPercentEncodingForRFC3986() ?? "")
+//        let defName = isReg_ ? String(answers[safe: 6] ?? "") : (UserDefaults.standard.string(forKey: "name") ?? "")
+        var name    = ""
+        if familyNameField.text == "" || familyNameField.text == " "{
+            name = "-"
+        }else{
+            name = familyNameField.text ?? ""
+        }
+        if nameField.text == "" || nameField.text == " "{
+            name = name + " -"
+        }else{
+            name = name + " " + nameField.text!
+        }
+        if otchestvoField.text == "" || otchestvoField.text == " "{
+            name = name + " -"
+        }else{
+            name = name + " " + otchestvoField.text!
+        }
+        name = name.stringByAddingPercentEncodingForRFC3986() ?? ""
 //        let pass    = getHash(pass: isReg_ ? pass_ : UserDefaults.standard.string(forKey: "pass") ?? "", salt: getSalt(login: isReg_ ? login_ : UserDefaults.standard.string(forKey: "login") ?? ""))
         let pass: String = UserDefaults.standard.string(forKey: "pwd") ?? ""
         var comment_txt:String = commentField.text

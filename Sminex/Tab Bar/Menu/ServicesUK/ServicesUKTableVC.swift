@@ -173,7 +173,7 @@ final class ServicesUKTableCell: UICollectionViewCell {
         self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
         if let imageV = UIImage(data: Data(base64Encoded: (picture.replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             image.image = imageV
-            image.layer.borderColor = UIColor.lightGray.cgColor
+            image.layer.borderColor = UIColor.black.cgColor
             image.layer.borderWidth = 1.0
             // Углы
             image.layer.cornerRadius = image.frame.width / 2

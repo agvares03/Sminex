@@ -273,7 +273,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         //        }
         if let image = UIImage(data: Data(base64Encoded: ((data_?.picture ?? "").replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             serviceIcon.image = image
-            serviceIcon.layer.borderColor = UIColor.lightGray.cgColor
+            serviceIcon.layer.borderColor = UIColor.black.cgColor
             serviceIcon.layer.borderWidth = 1.0
             // Углы
             serviceIcon.layer.cornerRadius = serviceIcon.frame.width / 2
