@@ -40,6 +40,9 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet private weak var picker3:         UIPickerView!
     @IBOutlet private weak var view2:           UIView!
     @IBOutlet private weak var view3:           UIView!
+    @IBOutlet private weak var dateIcon:        UIImageView!
+    @IBOutlet private weak var dateIcon2:       UIImageView!
+    @IBOutlet private weak var dateIcon3:       UIImageView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
@@ -47,10 +50,16 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     
     @IBAction func datePickerPresed(_ sender: UIButton) {
         if picker.isHidden {
+            self.dateIcon.image = UIImage(named: "expanded")
+            self.dateIcon2.image = UIImage(named: "expanded")
+            self.dateIcon3.image = UIImage(named: "expanded")
             picker.isHidden         = false
             picker2.isHidden         = false
             picker3.isHidden         = false
         } else {
+            self.dateIcon.image = UIImage(named: "expand")
+            self.dateIcon2.image = UIImage(named: "expand")
+            self.dateIcon3.image = UIImage(named: "expand")
             picker.isHidden         = true
             picker2.isHidden         = true
             picker3.isHidden         = true
@@ -90,7 +99,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
             nameHeight2.constant = 40
             tarifName2.isHidden = false
             let tarif2 = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
-            tarifName1.text = tarif2.uppercased()
+            tarifName2.text = tarif2.uppercased()
         }else if data_?.typeTarif == "3"{
             view2.isHidden = false
             view3.isHidden = false
@@ -104,8 +113,8 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
             nameHeight3.constant = 40
             let tarif2 = "Тариф - Т2(" + (data_?.tarifName2)! + ")"
             let tarif3 = "Тариф - Т3(" + (data_?.tarifName3)! + ")"
-            tarifName1.text = tarif2.uppercased()
-            tarifName1.text = tarif3.uppercased()
+            tarifName2.text = tarif2.uppercased()
+            tarifName3.text = tarif3.uppercased()
         }
         // Выбор года - уберем с экрана
         picker.isHidden = true
@@ -424,10 +433,13 @@ extension CounterHistoryNewVC: UIPickerViewDelegate, UIPickerViewDataSource {
             self.dateBtn.setTitle(self.selectedYear!, for: .normal)
             self.dateBtn2.setTitle(self.selectedYear!, for: .normal)
             self.dateBtn3.setTitle(self.selectedYear!, for: .normal)
+            self.dateIcon.image = UIImage(named: "expand")
+            self.dateIcon2.image = UIImage(named: "expand")
+            self.dateIcon3.image = UIImage(named: "expand")
+            self.picker.isHidden = true
+            self.picker2.isHidden = true
+            self.picker3.isHidden = true
         }
-        picker.isHidden = true
-        picker2.isHidden = true
-        picker3.isHidden = true
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

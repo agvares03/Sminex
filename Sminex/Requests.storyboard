@@ -2000,10 +2000,10 @@
                                                 </constraints>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HomePlaceCell" id="WDg-gn-PU3" customClass="HomePlaceCell" customModule="Sminex" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="28" width="343" height="41"/>
+                                                        <rect key="frame" x="0.0" y="28" width="343" height="41.5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WDg-gn-PU3" id="rWM-lH-P4z">
-                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="41"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="41.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rra-5P-BCo" customClass="OnOffButton" customModule="Sminex" customModuleProvider="target">
@@ -2042,7 +2042,7 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tac-hd-fPX">
-                                                                    <rect key="frame" x="59" y="10" width="268" height="21"/>
+                                                                    <rect key="frame" x="59" y="10" width="268" height="21.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -2497,10 +2497,10 @@
                                                 </constraints>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HomePlaceCell" id="nCw-Ta-K9t" customClass="HomePlaceCell" customModule="Sminex" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="28" width="343" height="41"/>
+                                                        <rect key="frame" x="0.0" y="28" width="343" height="41.5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nCw-Ta-K9t" id="bc0-ke-l9M">
-                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="41"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="41.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rw3-de-Use" customClass="OnOffButton" customModule="Sminex" customModuleProvider="target">
@@ -2539,7 +2539,7 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GNt-wX-PAJ">
-                                                                    <rect key="frame" x="59" y="10" width="268" height="21"/>
+                                                                    <rect key="frame" x="59" y="10" width="268" height="21.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -4293,6 +4293,12 @@
                                 <rect key="frame" x="177.5" y="530" width="20" height="20"/>
                                 <color key="color" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="У вас пока нет созданных заявок" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UWC-uJ-iEY">
+                                <rect key="frame" x="50" y="312" width="275" height="43"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.83137254900000002" green="0.81960784310000001" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -4302,11 +4308,14 @@
                             <constraint firstItem="oTO-A0-cyD" firstAttribute="top" secondItem="8hd-sf-Cmj" secondAttribute="bottom" id="4UY-5w-lu2"/>
                             <constraint firstItem="gda-sl-DSa" firstAttribute="top" secondItem="qcM-uB-rVa" secondAttribute="bottom" constant="5" id="CZ9-4K-xQB"/>
                             <constraint firstItem="oTO-A0-cyD" firstAttribute="leading" secondItem="1gI-4E-3oC" secondAttribute="leading" id="Ceh-XL-yxe"/>
+                            <constraint firstItem="UWC-uJ-iEY" firstAttribute="leading" secondItem="1gI-4E-3oC" secondAttribute="leading" constant="50" id="DB6-cr-2Bg"/>
                             <constraint firstItem="gda-sl-DSa" firstAttribute="top" secondItem="5iu-TW-Pb4" secondAttribute="bottom" constant="10" id="FY2-gH-78z"/>
                             <constraint firstItem="Wck-lb-BpH" firstAttribute="top" secondItem="gda-sl-DSa" secondAttribute="bottom" constant="10" id="O6v-Rb-uwY"/>
                             <constraint firstItem="gda-sl-DSa" firstAttribute="centerX" secondItem="1gI-4E-3oC" secondAttribute="centerX" id="PZg-rq-cS3"/>
                             <constraint firstItem="5iu-TW-Pb4" firstAttribute="centerX" secondItem="1gI-4E-3oC" secondAttribute="centerX" id="Vbj-Rs-tGO"/>
                             <constraint firstItem="qcM-uB-rVa" firstAttribute="leading" secondItem="1gI-4E-3oC" secondAttribute="leading" constant="16" id="dcM-dP-c7u"/>
+                            <constraint firstAttribute="trailing" secondItem="UWC-uJ-iEY" secondAttribute="trailing" constant="50" id="nif-81-wiz"/>
+                            <constraint firstItem="UWC-uJ-iEY" firstAttribute="centerY" secondItem="1gI-4E-3oC" secondAttribute="centerY" id="tX0-4Z-7ck"/>
                             <constraint firstAttribute="trailing" secondItem="qcM-uB-rVa" secondAttribute="trailing" constant="16" id="xjM-Cb-kOh"/>
                         </constraints>
                         <connections>
@@ -4328,6 +4337,7 @@
                         <outlet property="activity" destination="5iu-TW-Pb4" id="phO-hS-7Xs"/>
                         <outlet property="collectionHeader" destination="oTO-A0-cyD" id="a6K-yY-HZz"/>
                         <outlet property="createButton" destination="gda-sl-DSa" id="wgC-8X-7a0"/>
+                        <outlet property="noDataLbl" destination="UWC-uJ-iEY" id="mSN-xC-oLX"/>
                         <outlet property="table" destination="qcM-uB-rVa" id="lO4-Jt-aBU"/>
                         <segue destination="nGr-Se-ITa" kind="show" identifier="admission" id="3Hj-cb-Rsi"/>
                         <segue destination="42T-JA-rBp" kind="show" identifier="login_activity" id="PeD-30-0rm"/>
@@ -4557,10 +4567,10 @@
                                         </constraints>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HomePlaceCell" id="Vb7-wJ-812" customClass="HomePlaceCell" customModule="Sminex" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="28" width="343" height="41"/>
+                                                <rect key="frame" x="0.0" y="28" width="343" height="41.5"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Vb7-wJ-812" id="v4y-3k-Mxc">
-                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="41"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="41.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xW4-C1-o06" customClass="OnOffButton" customModule="Sminex" customModuleProvider="target">
@@ -4599,7 +4609,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="STZ-NG-X3Z">
-                                                            <rect key="frame" x="55" y="10" width="272" height="21"/>
+                                                            <rect key="frame" x="55" y="10" width="272" height="21.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>

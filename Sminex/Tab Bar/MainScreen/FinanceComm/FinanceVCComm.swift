@@ -176,13 +176,13 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             return cell
         } else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
-            if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 4) && (Double((debt?.sumPay)!) >= 0.00){
-                if (self.calcs.count == 0) {
-                    cell.display(title: "", desc: "")
-                } else {
+            if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 4){
+//                if (self.calcs.count == 0) {
+//                    cell.display(title: "", desc: "")
+//                } else {
                     cell.display(title: "История взаиморасчетов", desc: "")
                     cell.contentView.backgroundColor = .white
-                }
+//                }
             }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5) { //} && (Double((debt?.sumPay)!) >= 0.00){
                 if (self.calcs.count == 0) {
                     cell.display(title: "", desc: "")
@@ -286,7 +286,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
         }
         if section == 1 {
             if receipts.count == 0 {
-                return 0
+                return 2
             } else if receipts.count < 3 {
                 return receipts.count + 2
             } else {
@@ -294,7 +294,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             }
         } else if section == 2 {
             if filteredCalcs.count == 0 {
-                return 0
+                return 2
             } else if filteredCalcs.count < 3 {
                 return filteredCalcs.count + 2
             } else {
@@ -334,11 +334,11 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             if UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments") {
                 return 139 + 15.0
             }else{
-                if UserDefaults.standard.bool(forKey: "denyQRCode"){
-                    return 224.0 + 15.0
-                }else{
-                    return 255.0 + 15.0
-                }
+//                if UserDefaults.standard.bool(forKey: "denyQRCode"){
+//                    return 224.0 + 15.0
+//                }else{
+                    return 229.0 + 15.0
+//                }
             }
         } else {
             if view.frame.size.width == 320 && indexPath.section == 2 && indexPath.row != 0{
@@ -352,9 +352,8 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 1 {
-            guard indexPath.row != 0 else { return }
-            
-            if indexPath.row == receipts.count + 1 || indexPath.row == 4 {
+            guard indexPath.row != 0 && receipts.count != 0 else { return }
+            if indexPath.row == receipts.count + 1 || indexPath.row == 4 || (receipts.count == 0) {
                 performSegue(withIdentifier: Segues.fromFinanceVC.toReceiptArchive, sender: self)
                 return
             }
@@ -362,10 +361,10 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             performSegue(withIdentifier: Segues.fromFinanceVC.toReceipts, sender: self)
             
         } else if indexPath.section == 2 {
-            guard indexPath.row != 0 else { return }
+            guard indexPath.row != 0 && filteredCalcs.count != 0 else { return }
             self.startAnimation()
             if Double((self.debt!.sumPay)!) < 0.00{
-                if indexPath.row == 5 {
+                if indexPath.row == 5 || filteredCalcs.count == 0{
                     performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
                     return
                 }
@@ -374,7 +373,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                     performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
                 }
             }else{
-                if indexPath.row == 4 {
+                if indexPath.row == 4 || filteredCalcs.count == 0{
                     performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
                     return
                 } else if (indexPath.row == 5) {
@@ -572,25 +571,20 @@ final class FinanceSectionCommCell: UITableViewCell {
 final class FinanceHeaderCommCell: UITableViewCell {
     
     @IBOutlet private weak var amount: UILabel!
-    @IBOutlet private weak var date: UILabel!
+//    @IBOutlet private weak var date: UILabel!
     
     @IBOutlet weak var pay_button: UIButton!
-    @IBOutlet weak var pay_QR: UIButton!
     @IBOutlet weak var fonIMG: UIImageView!
     @IBOutlet weak var fonIMG2: UIImageView!
-    @IBOutlet weak var topQR: NSLayoutConstraint!
-    @IBOutlet weak var botQR: NSLayoutConstraint!
     @IBOutlet weak var fonHeight: NSLayoutConstraint!
     @IBOutlet weak var heightPayed: NSLayoutConstraint!
-    @IBOutlet weak var heightQR: NSLayoutConstraint!
     
     @IBAction private func barcodePressed(_ sender: UIButton) {
     }
     
     func display(amount: String, date: String) {
-        print("SUM = ", amount)
         self.amount.text    = amount
-        self.date.text      = date
+//        self.date.text      = date
         
         let defaults = UserDefaults.standard
         
@@ -603,10 +597,6 @@ final class FinanceHeaderCommCell: UITableViewCell {
             fonIMG.image = UIImage(named: "greenPay_fon")!
             fonIMG2.isHidden = true
             heightPayed.constant = 0
-            pay_QR.isHidden     = true
-            heightQR.constant   = 0
-            topQR.constant      = 0
-            botQR.constant      = 30
             fonHeight.constant  = 0
         }else{
             fonIMG.image = UIImage(named: "mainPay_fon")!
@@ -616,12 +606,6 @@ final class FinanceHeaderCommCell: UITableViewCell {
         }
         //        print(isPayed.constant, heigthPayed.constant)
         // Выводить или нет кнопку QR-код
-        if defaults.bool(forKey: "denyQRCode"){
-            pay_QR.isHidden           = true
-            heightQR.constant = 0
-            topQR.constant = 0
-            botQR.constant = 30
-        }
         
     }
 }

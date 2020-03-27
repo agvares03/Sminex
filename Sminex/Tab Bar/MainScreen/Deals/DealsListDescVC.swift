@@ -188,9 +188,11 @@ final class DealsListDescHeader: UICollectionReusableView {
         }
         
         if data_?.dateStop != "" {
+            let d = (data_?.dateStop?.replacingOccurrences(of: " 00:00:00", with: ""))!
+            print(d)
             let df = DateFormatter()
-            df.dateFormat = "YYYY-MM-DD"
-            let date = df.date(from: data_?.dateStop ?? "2018-01-01")
+            df.dateFormat = "dd.MM.yyyy"
+            let date = df.date(from: d )
             df.dateFormat = "dd MMMM yyyy"
             df.locale = Locale(identifier: "Ru-ru")
             dateLabel.text = df.string(from: date ?? Date())

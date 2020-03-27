@@ -20,7 +20,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @IBOutlet weak var tableView:   UITableView!
-    @IBOutlet weak var dateLbl:     UILabel!
+//    @IBOutlet weak var dateLbl:     UILabel!
     @IBOutlet weak var sendLbl:     UILabel!
     @IBOutlet weak var historyBtn:  UIButton!
     @IBOutlet weak var tableHeight:  NSLayoutConstraint!
@@ -53,7 +53,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
-        dateLbl.isHidden = true
+//        dateLbl.isHidden = true
         historyBtn.isHidden = true
         self.indicator.startAnimating()
         self.indicator.isHidden = false
@@ -155,17 +155,17 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                     let calendar = Calendar.current
                     let year = calendar.component(.year, from: Date())
                     let month = calendar.component(.month, from: Date())
-                    if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
-                        if (month - 1) > 0{
-                            self.dateLbl.text = self.getNameAndMonth(String(month - 1)) + " " + (String(year))
-                        }else{
-                            self.dateLbl.text = self.getNameAndMonth("12") + " " + (String(year))
-                        }
-                    }else{
-                        self.dateLbl.text = self.getNameAndMonth(String(month)) + " " + (String(year))
-                    }
+//                    if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+//                        if (month - 1) > 0{
+//                            self.dateLbl.text = self.getNameAndMonth(String(month - 1)) + " " + (String(year))
+//                        }else{
+//                            self.dateLbl.text = self.getNameAndMonth("12") + " " + (String(year))
+//                        }
+//                    }else{
+//                        self.dateLbl.text = self.getNameAndMonth(String(month)) + " " + (String(year))
+//                    }
 //                    self.tableView.isHidden = false
-                    self.dateLbl.isHidden = false
+//                    self.dateLbl.isHidden = false
                     self.historyBtn.isHidden = true
                     self.indicator.stopAnimating()
                     self.indicator.isHidden = true
@@ -188,16 +188,16 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                 self.meterArr = newMeters
                 self.periods  = newPeriods
                 DispatchQueue.main.async {
-                    if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
-                        let month: Int = Int(self.periods.first?.numMonth ?? "1")!
-                        if (month - 1) > 0{
-                            self.dateLbl.text = self.getNameAndMonth(String(month - 1)) + " " + (self.periods.first?.year ?? "")
-                        }else{
-                            self.dateLbl.text = self.getNameAndMonth("12") + " " + (self.periods.first?.year ?? "")
-                        }
-                    }else{
-                        self.dateLbl.text = self.getNameAndMonth(self.periods.first?.numMonth ?? "1") + " " + (self.periods.first?.year ?? "")
-                    }
+//                    if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+//                        let month: Int = Int(self.periods.first?.numMonth ?? "1")!
+//                        if (month - 1) > 0{
+//                            self.dateLbl.text = self.getNameAndMonth(String(month - 1)) + " " + (self.periods.first?.year ?? "")
+//                        }else{
+//                            self.dateLbl.text = self.getNameAndMonth("12") + " " + (self.periods.first?.year ?? "")
+//                        }
+//                    }else{
+//                        self.dateLbl.text = self.getNameAndMonth(self.periods.first?.numMonth ?? "1") + " " + (self.periods.first?.year ?? "")
+//                    }
                     self.tableView.isHidden = false
                     self.fetchedResultsController = CoreDataManager.instance.fetchedResultsController(entityName: "TypesCounters", keysForSort: ["name"], predicateFormat: nil) as? NSFetchedResultsController<TypesCounters>
                     do {
@@ -206,7 +206,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                         print(error)
                     }
                     self.tableView.reloadData()
-                    self.dateLbl.isHidden = false
+//                    self.dateLbl.isHidden = false
                     self.historyBtn.isHidden = false
                     self.indicator.stopAnimating()
                     self.indicator.isHidden = true

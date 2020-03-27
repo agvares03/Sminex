@@ -47,7 +47,7 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
         getImage()
         automaticallyAdjustsScrollViewInsets = false
         let webConfiguration = WKWebViewConfiguration()
-        let customFrame = CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: self.wView.frame.size.width, height: self.wView.frame.size.height))
+        let customFrame = CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 0, height: self.wView.frame.size.height))
         self.webView = WKWebView (frame: customFrame , configuration: webConfiguration)
         self.webView.translatesAutoresizingMaskIntoConstraints = false
         self.wView.addSubview(self.webView)

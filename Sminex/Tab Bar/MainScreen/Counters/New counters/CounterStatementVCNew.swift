@@ -203,21 +203,21 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
             //                goButtonConst.constant = 20
         }
         //        }
-        goButton.isHidden = true
-        goButtonConst.constant = 0
-        if !UserDefaults.standard.bool(forKey: "didntSchet"){
-            goButton.isHidden = true
-            goButtonConst.constant = 0
-        }
-        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
-            goButton.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
-            if goButton.isHidden{
-                goButtonConst.constant = 0
-            }else{
-                goButtonConst.constant = 48
-            }
-        }
-        count.delegate     = self as CounterDelegate
+//        goButton.isHidden = true
+        goButtonConst.constant = 48
+//        if !UserDefaults.standard.bool(forKey: "didntSchet"){
+//            goButton.isHidden = true
+//            goButtonConst.constant = 0
+//        }
+//        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+//            goButton.isHidden = UserDefaults.standard.bool(forKey: "onlyViewMeterReadings")
+//            if goButton.isHidden{
+//                goButtonConst.constant = 0
+//            }else{
+//                goButtonConst.constant = 48
+//            }
+//        }
+        count.delegate     = self
         
         // Выведем текущую дату в формате
         let date = NSDate()
@@ -246,7 +246,7 @@ class CounterStatementVCNew: UIViewController, CounterDelegate {
         view.addGestureRecognizer(tap)
         let _ = count.becomeFirstResponder()
         
-        //        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+//        count.textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         var metValues: [MeterValue] = []
         

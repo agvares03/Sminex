@@ -64,7 +64,6 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("DATA: ", data_)
         collView.reloadData()
     }
     
@@ -107,7 +106,6 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == Segues.fromCounterTableVC.toStatement {
             let date = (period_![0].periodDate ?? "").split(separator: ".")
             

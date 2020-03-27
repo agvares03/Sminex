@@ -221,12 +221,12 @@ open class DigitInputView: UIView {
         }
         
         textField?.keyboardType = .decimalPad
-        if !UserDefaults.standard.bool(forKey: "didntSchet"){
-            textField?.isUserInteractionEnabled = false
-        }
-        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings") == true{
-            textField?.isUserInteractionEnabled = false
-        }
+//        if !UserDefaults.standard.bool(forKey: "didntSchet"){
+//            textField?.isUserInteractionEnabled = false
+//        }
+//        if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings") == true{
+//            textField?.isUserInteractionEnabled = false
+//        }
         
         // Since this function isn't called frequently, we just remove everything
         // and recreate them. Don't need to optimize it.

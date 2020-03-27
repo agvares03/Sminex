@@ -215,7 +215,7 @@ final class AccountHeader: UICollectionReusableView {
             }
         }
         let defaults = UserDefaults.standard
-        accName.text = defaults.string(forKey: "name")
+        accName.text = defaults.string(forKey: "name")?.replacingOccurrences(of: "- ", with: "")
         bcName.text = defaults.string(forKey: "buisness")
         lsLabel.text = defaults.string(forKey: "login")
         streetLabel.text = defaults.string(forKey: "adress")
@@ -232,7 +232,7 @@ final class AccountHeader: UICollectionReusableView {
         if (defaults.string(forKey: "contactNumber") == "-") {
             holderPhoneLabel.text = " "
         }
-        holderLabel.text = defaults.string(forKey: "name")
+        holderLabel.text = defaults.string(forKey: "name")!.replacingOccurrences(of: "- ", with: "")
         descLabel.text   = defaults.string(forKey: "accDesc")
         if (defaults.string(forKey: "accDesc") == "-") {
             descLabel.text = " "
