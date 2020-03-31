@@ -195,7 +195,7 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             if (defaults.bool(forKey: "denyInvoiceFiles")) {
                 return CGSize(width: view.frame.size.width - 32, height: 55.0)
             }
-            return CGSize(width: view.frame.size.width - 32, height: 55.0)
+            return CGSize(width: view.frame.size.width - 32, height: 100)
             
         } else {
             let cell = FinanceDebtCommCell.fromNib()
@@ -477,13 +477,10 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
     
     @IBOutlet private weak var shareLoader: UIActivityIndicatorView!
     @IBOutlet private weak var shareButton: UIButton!
-    @IBOutlet private weak var dateLabel:   UILabel!
     //    @IBOutlet private weak var btnConst:   NSLayoutConstraint!
     @IBOutlet private weak var btnConst1:   NSLayoutConstraint!
     @IBOutlet private weak var viewHeight:   NSLayoutConstraint!
     @IBOutlet weak var pay_button: UIButton!
-    @IBOutlet weak var pay_QR: UIButton!
-    @IBOutlet weak var pay_QR_image: UIImageView!
     
     func display(_ data: AccountBillsJson) {
         self.stopShareAnimation()
@@ -491,7 +488,6 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
         if (date?.count ?? 0) > 9 {
             date?.removeLast(9)
         }
-        self.dateLabel.text = "До " + (date ?? "")
         
         let defaults = UserDefaults.standard
         pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
@@ -500,17 +496,8 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
         if (!defaults.bool(forKey: "denyOnlinePayments")) {
             pay_button.isHidden    = !data.permit_online_payment!
         }
-        
-        // Выводить или нет кнопку QR-код
-        if defaults.bool(forKey: "denyQRCode"){
-            pay_QR.isHidden           = true
-            pay_QR_image.isHidden     = true
-        }
-        pay_QR.isHidden         = true //Временно
-        pay_QR_image.isHidden   = true //Временно
         pay_button.isHidden     = true //Временно
-        dateLabel.isHidden      = true //Временно
-        viewHeight.constant     = 0    //Временно
+        viewHeight.constant     = 50    //Временно
         if pay_button.isHidden {
             btnConst1.constant = 0
         }
