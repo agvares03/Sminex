@@ -109,7 +109,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
         TemporaryHolder.instance.menuRequests = 0
         updateUserInterface()
         prepareGroup?.enter()
-        noDataLbl.isHidden = true
+        if noDataLbl != nil{
+            noDataLbl.isHidden = true
+        }
         table?.delegate                         = self
         table?.dataSource                       = self
         collectionHeader?.delegate              = self
@@ -777,10 +779,12 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                         }
                     }
                     
-                }else if self.fullData.count == 0{
+                }else if self.fullData.count == 0 && self.isFromNotifi_{
                     self.pushAppealID = self.pushReqID
                     self.pushReqID = ""
                     self.getRequests()
+                }else if self.fullData.count == 0{
+                    self.stopAnimatior()
                 }
             }
 //            TemporaryHolder.instance.menuRequests = commentCount
@@ -1173,11 +1177,17 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
     
     private func stopAnimatior() {
         if self.data.count == 0{
-            self.table.isHidden = true
-            self.noDataLbl.isHidden = false
+            
+            if self.noDataLbl != nil{
+                self.table.isHidden = true
+                self.noDataLbl.isHidden = false
+            }
         }else{
-            self.table.isHidden = false
-            self.noDataLbl.isHidden = true
+            
+            if self.noDataLbl != nil{
+                self.table.isHidden = false
+                self.noDataLbl.isHidden = true
+            }
         }
         //        DispatchQueue.main.sync{
         self.activity?.stopAnimating()

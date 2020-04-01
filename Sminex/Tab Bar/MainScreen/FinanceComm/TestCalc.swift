@@ -621,7 +621,7 @@ final class TestCalcCell: UITableViewCell {
     fileprivate func display(_ item: AccountCalculationsJson, pay: PayDelegate, indexPath: IndexPath) {
         self.indexPath = indexPath
         self.delegate = pay
-        if indexPath.row != 0{
+        if indexPath.row != 0 && indexPath.row != 1{
             headerStack.isHidden = true
             headerHeight.constant = 0
         }else{

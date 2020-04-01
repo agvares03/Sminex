@@ -311,7 +311,7 @@ final class FinanceCalcComm3Cell: UICollectionViewCell {
             }else{
                 payBtn.isHidden = true
                 payHeight.constant = 0
-                payTop.constant = 0
+                payTop.constant = 15
                 botConst.constant = 0
             }
             goDebt.isHidden = false

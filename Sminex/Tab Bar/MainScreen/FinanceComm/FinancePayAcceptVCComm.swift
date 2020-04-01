@@ -16,6 +16,11 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var descLabel: UILabel!
     @IBOutlet private weak var sendButton:  UIButton!
+    @IBOutlet private weak var choicePhoneBtn:  UIButton!
+    @IBOutlet private weak var choiceEmailBtn:  UIButton!
+    @IBOutlet private weak var iconPhone:  UIImageView!
+    @IBOutlet private weak var iconEmail:  UIImageView!
+    @IBOutlet private weak var phoneEmailText:    UITextField!
     @IBOutlet private weak var sumTextField:    UITextField!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -32,6 +37,27 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         sumText = sumTextField.text ?? ""
         DispatchQueue.global(qos: .userInitiated).async {
             self.requestPay()
+        }
+    }
+    var phoneChoice = true
+    var emailChoice = false
+    @IBAction private func phonePressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            self.iconPhone.isHidden = false
+            self.iconEmail.isHidden = true
+            self.phoneEmailText.placeholder = "Контактный номер для отправки чека"
+            self.phoneChoice = true
+            self.emailChoice = false
+        }
+    }
+    
+    @IBAction private func emailPressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            self.iconPhone.isHidden = true
+            self.iconEmail.isHidden = false
+            self.phoneEmailText.placeholder = "Email для отправки чека"
+            self.phoneChoice = false
+            self.emailChoice = true
         }
     }
     
@@ -63,7 +89,13 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
             descLabel.isHidden = true
 //            fieldTop.constant = 16
         }
-        
+        self.iconPhone.isHidden = false
+        self.iconPhone.tintColor = mainGreenColor
+        self.iconEmail.tintColor = mainGreenColor
+        self.iconEmail.isHidden = true
+        self.phoneEmailText.placeholder = "Контактный номер для отправки чека"
+        self.phoneChoice = true
+        self.emailChoice = false
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(viewTapped(_:)))
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap)
@@ -80,11 +112,21 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         offerLabel.isUserInteractionEnabled = true
         offerLabel.addGestureRecognizer(offerTap)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         sumTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
     }
     
-    @objc func keyboardWillShow(sender: NSNotification?) {
-        self.sumTextField.text = ""
+    @objc func keyboardWillShow(sender: NSNotification) {
+        if let keyboardSize = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            view.frame.origin.y = 0 - keyboardHeight
+            scroll.contentInset.top = keyboardHeight
+        }
+    }
+    
+    @objc func keyboardWillHide(sender: NSNotification?) {
+        view.frame.origin.y = 0
+        scroll.contentInset.top = 0
     }
     
     func updateUserInterface() {
