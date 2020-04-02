@@ -773,7 +773,7 @@ final class HomePlaceCell: UITableViewCell {
         if checked{
             
             toggle.checked = true
-            toggle.backgroundColor  = blueColor
+            toggle.backgroundColor  = mainGreenColor
             toggle.strokeColor      = .white
             toggle.lineWidth        = 2
             toggle.setBackgroundImage(nil, for: .normal)

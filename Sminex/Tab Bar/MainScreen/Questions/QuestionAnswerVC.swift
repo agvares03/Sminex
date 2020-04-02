@@ -97,7 +97,6 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         stopAnimation()
         updateUserInterface()
         navigationItem.title    = question_?.name
-        
         let decoded = UserDefaults.standard.object(forKey: String(question_?.id ?? 0))
         if decoded != nil {
             answers = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) as! [Int:[Int]]
@@ -108,7 +107,11 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         print(answers)
         kek = answers[(question_?.questions![currQuestion].id!)!] ?? [0]
         print(kek)
-        
+        if kek.count == 1 && kek[0] == 0 {
+            goButton.backgroundColor = mainGrayColor
+        }else if kek.count > 1 || (kek.count == 1 && kek[0] != 0){
+            goButton.backgroundColor = mainGreenColor
+        }
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
@@ -305,6 +308,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             isAccepted = false
             NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
         }
+        goButton.backgroundColor = mainGreenColor
         (collectionView.cellForItem(at: indexPath) as! QuestionAnswerCell).didTapOnOffButton()
     }
     
@@ -339,11 +343,11 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             let (key, value) = arg
             isManyValue = false
             value.forEach {
-                if isManyValue {
+//                if isManyValue {
                     json.append( ["QuestionID":key, "AnswerID":$0, "Comment": ""] )
-                } else {
-                    json.append( ["QuestionID":key, "AnswerID":$0, "Comment": recomendationArray[index] ] )
-                }
+//                } else {
+//                    json.append( ["QuestionID":key, "AnswerID":$0, "Comment": recomendationArray[index] ] )
+//                }
                 
                 isManyValue = true
             }
@@ -482,17 +486,17 @@ final class QuestionAnswerCell: UICollectionViewCell {
             if checked{
                 selectedAnswers.append(index)
             }
-            print(selectedAnswers)
+//            print(selectedAnswers)
             
             if isSomeAnswers {
                 toggle.checked = true
-                toggle.backgroundColor  = blueColor
+                toggle.backgroundColor  = mainGreenColor
                 toggle.strokeColor      = .white
                 toggle.lineWidth        = 2
                 toggle.setBackgroundImage(nil, for: .normal)
             
             } else {
-                toggle.strokeColor  = blueColor
+                toggle.strokeColor  = mainGreenColor
                 toggleView.isHidden = false
                 toggle.lineWidth    = 2
                 toggle.setBackgroundImage(nil, for: .normal)
