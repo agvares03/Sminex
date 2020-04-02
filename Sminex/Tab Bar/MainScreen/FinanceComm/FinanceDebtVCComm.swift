@@ -31,6 +31,10 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         performSegue(withIdentifier: Segues.fromFinanceDebtVC.toPay, sender: self)
     }
     
+    @IBAction private func goArchivePressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "receiptArchive", sender: self)
+    }
+    
     @IBAction private func shareButtonPressed(_ sender: UIButton) {
         delegate?.startShareAnimation()
         if files == nil {
@@ -64,7 +68,7 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             self.getShareFile(files?.first)
         }
     }
-    
+    public var allData_: [AccountBillsJson] = []
     public var data_: AccountBillsJson?
     private var receipts: [ReceiptsJson]?
     private var files: [RecieptFilesJson]?
@@ -398,8 +402,11 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             vc.codePay_ = data_?.codPay
             
         } else if segue.identifier == Segues.fromFinanceDebtVC.toPay {
-            let vc = segue.destination as! FinancePayAcceptVC
+            let vc = segue.destination as! FinancePayAcceptVCComm
             vc.billsData_ = data_
+        } else if segue.identifier == Segues.fromFinanceVC.toReceiptArchive {
+            let vc = segue.destination as! FinanceDebtArchiveVCComm
+            vc.data_ = allData_
         }
     }
 }
@@ -501,6 +508,8 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
         if pay_button.isHidden {
             btnConst1.constant = 0
         }
+        btnConst1.constant = 48
+        pay_button.isHidden = false
     }
     
     func startShareAnimation() {

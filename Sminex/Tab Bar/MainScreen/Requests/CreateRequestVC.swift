@@ -559,7 +559,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @objc func keyboardWillShow(sender: NSNotification?) {
         let info = sender?.userInfo!
         keyboardHeight = ((info![UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size.height)!
-        view.frame.origin.y = 0 - keyboardHeight
+//        view.frame.origin.y = 0 - keyboardHeight
         scroll.contentInset.top = keyboardHeight
         view.addGestureRecognizer(tap)
         let desiredOffset = CGPoint(x: 0, y: -scroll.contentInset.top)

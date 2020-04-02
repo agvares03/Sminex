@@ -106,7 +106,11 @@ class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyT
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceDebtArchiveCommCell") as! FinanceDebtArchiveCommCell
         //        cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
-        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonth ?? 0) + " \(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYear ?? 0)", desc: (((dataFilt[indexPath.section].filteredData[indexPath.row - 1].sum ?? 0.0)).formattedWithSeparator))
+        var last = false
+        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+            last = true
+        }
+        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonth ?? 0) + " \(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYear ?? 0)", desc: (((dataFilt[indexPath.section].filteredData[indexPath.row - 1].sum ?? 0.0)).formattedWithSeparator), last: last)
         return cell
     }
     
@@ -140,6 +144,7 @@ class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyT
         if segue.identifier == Segues.fromFinanceDebtArchiveVC.toReceipt {
             let vc = segue.destination as! FinanceDebtVCComm
             vc.data_ = dataFilt[section].filteredData[index]
+            vc.allData_ = data_
         }
     }
     
@@ -227,10 +232,11 @@ final class FinanceDebtArchiveYearCommCell: UITableViewCell, ExpyTableViewHeader
 
 final class FinanceDebtArchiveCommCell: UITableViewCell {
     
-    @IBOutlet private weak var title:   UILabel!
-    @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet private weak var title:       UILabel!
+    @IBOutlet private weak var fonView:     UIView!
+    @IBOutlet private weak var desc:        UILabel!
     
-    fileprivate func display(title: String, desc: String) {
+    fileprivate func display(title: String, desc: String, last: Bool) {
         let d: Double = Double(desc.replacingOccurrences(of: ",", with: "."))!
         var sum = String(format:"%.2f", d)
         if d > 999.00 || d < -999.00{
@@ -239,6 +245,11 @@ final class FinanceDebtArchiveCommCell: UITableViewCell {
         }
         if sum.first == "-" {
             sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+        }
+        if last{
+            fonView.cornerRadius = 24
+        }else{
+            fonView.cornerRadius = 0
         }
         self.title.text = title
         self.desc.text  = sum.replacingOccurrences(of: ".", with: ",")

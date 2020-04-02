@@ -187,8 +187,8 @@ final class DealsListDescHeader: UICollectionReusableView {
             linksLabel.text = ""
         }
         
-        if data_?.dateStop != "" {
-            let d = (data_?.dateStop?.replacingOccurrences(of: " 00:00:00", with: ""))!
+        if data_?.dateStart != "" {
+            let d = (data_?.dateStart?.replacingOccurrences(of: " 00:00:00", with: ""))!
             print(d)
             let df = DateFormatter()
             df.dateFormat = "dd.MM.yyyy"

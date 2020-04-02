@@ -123,7 +123,11 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
                 let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
                 sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
             }
-            cell.display(title: "Аванс", desc: sum.replacingOccurrences(of: "-", with: ""))
+            var last = false
+            if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+                last = true
+            }
+            cell.display(title: "Аванс", desc: sum.replacingOccurrences(of: "-", with: ""), last: last)
         } else {
             var debt = 0.0
             var currDate = (0, 0)
@@ -165,27 +169,51 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
                 }
                 if debt == 0.00{
                     if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+                        var last = false
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+                            last = true
+                        }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: "Оплачено")
+                                     desc: "Оплачено", last: last)
                     }else{
+                        var last = false
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+                            last = true
+                        }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
-                                     desc: "Оплачено")
+                                     desc: "Оплачено", last: last)
                     }
                 }else if debt > 0.00{
                     if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+                        var last = false
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+                            last = true
+                        }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: "Задолженность " + sum)
+                                     desc: "Задолженность " + sum, last: last)
                     }else{
+                        var last = false
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+                            last = true
+                        }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
-                                     desc: "Задолженность " + sum)
+                                     desc: "Задолженность " + sum, last: last)
                     }
                 }else{
                     if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+                        var last = false
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+                            last = true
+                        }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: sum)
+                                     desc: sum, last: last)
                     }else{
+                        var last = false
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+                            last = true
+                        }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
-                                     desc: sum)
+                                     desc: sum, last: last)
                     }
                 }
 //            }else{
@@ -277,15 +305,21 @@ final class FinanceCalcsArchiveCommCell: UITableViewCell {
     
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
-    @IBOutlet weak var img: UIImageView!
+    @IBOutlet         weak var fonView: UIView!
+    @IBOutlet         weak var img:     UIImageView!
     
-    fileprivate func display(title: String, desc: String) {
+    fileprivate func display(title: String, desc: String, last: Bool) {
         self.title.text = title
         self.desc.text  = desc.replacingOccurrences(of: ".", with: ",")
         if title == "Аванс" || desc.contains(find: "-"){
             self.desc.textColor = mainGrayColor
         }else{
             self.desc.textColor = .darkText
+        }
+        if last{
+            fonView.cornerRadius = 24
+        }else{
+            fonView.cornerRadius = 0
         }
         if (title == "Аванс") {
             img.image = nil

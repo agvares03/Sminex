@@ -74,7 +74,16 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         sumTextField.delegate = self
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
         
-        if accountData_ == nil {
+        if accountData_ != nil && billsData_ != nil {
+            sumTextField.text = String(format: "%.2f", (accountData_?.sumPay ?? 0.0))
+            titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
+            var date = accountData_?.datePay
+            if (date?.count ?? 0) > 9 {
+                date?.removeLast(9)
+            }
+            descLabel.text = "\(billsData_?.number ?? "") от \(date ?? "")"
+            
+        }else if billsData_ != nil {
             sumTextField.text = String(format: "%.2f", (billsData_?.sum ?? 0.0) - (billsData_?.payment_sum ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
             var date = billsData_?.datePay

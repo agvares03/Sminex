@@ -486,7 +486,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
         } else if segue.identifier == Segues.fromFinanceVC.toReceipts {
             let vc = segue.destination as! FinanceDebtVCComm
             vc.data_ = receipts[safe: index]
-            
+            vc.allData_ = receipts
         } else if segue.identifier == Segues.fromFinanceVC.toReceiptArchive {
             let vc = segue.destination as! FinanceDebtArchiveVCComm
             vc.data_ = receipts
@@ -515,6 +515,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
         } else if segue.identifier == Segues.fromFinanceVC.toPay {
             let vc = segue.destination as! FinancePayAcceptVCComm
             vc.accountData_ = debt
+            vc.billsData_ = receipts[0]
         }
     }
 }
