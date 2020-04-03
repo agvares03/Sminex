@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AKMaskField
 
 class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     
@@ -20,7 +21,7 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     @IBOutlet private weak var choiceEmailBtn:  UIButton!
     @IBOutlet private weak var iconPhone:  UIImageView!
     @IBOutlet private weak var iconEmail:  UIImageView!
-    @IBOutlet private weak var phoneEmailText:    UITextField!
+    @IBOutlet private weak var phoneEmailText:    AKMaskField!
     @IBOutlet private weak var sumTextField:    UITextField!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -45,6 +46,10 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
             self.iconPhone.isHidden = false
             self.iconEmail.isHidden = true
+            self.phoneEmailText.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+            self.phoneEmailText.maskTemplate = "*"
+            self.phoneEmailText.keyboardType = .phonePad
+            self.phoneEmailText.reloadInputViews()
             self.phoneEmailText.placeholder = "Контактный номер для отправки чека"
             self.phoneChoice = true
             self.emailChoice = false
@@ -55,6 +60,10 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
             self.iconPhone.isHidden = true
             self.iconEmail.isHidden = false
+            self.phoneEmailText.maskExpression = "{...........................................}"
+            self.phoneEmailText.maskTemplate = " "
+            self.phoneEmailText.keyboardType = .emailAddress
+            self.phoneEmailText.reloadInputViews()
             self.phoneEmailText.placeholder = "Email для отправки чека"
             self.phoneChoice = false
             self.emailChoice = true
@@ -102,6 +111,10 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         self.iconPhone.tintColor = mainGreenColor
         self.iconEmail.tintColor = mainGreenColor
         self.iconEmail.isHidden = true
+        self.phoneEmailText.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+        self.phoneEmailText.maskTemplate = "*"
+        self.phoneEmailText.keyboardType = .phonePad
+        self.phoneEmailText.reloadInputViews()
         self.phoneEmailText.placeholder = "Контактный номер для отправки чека"
         self.phoneChoice = true
         self.emailChoice = false
@@ -220,7 +233,10 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        
+        var email = ""
+        if emailChoice{
+            email = phoneEmailText.text?.replacingOccurrences(of: " ", with: "") ?? ""
+        }
         let number_bills = billsData_?.number_eng
         let date_bills   = billsData_?.datePay
         var url_str = Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + pwd

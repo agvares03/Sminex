@@ -508,8 +508,6 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
         if pay_button.isHidden {
             btnConst1.constant = 0
         }
-        btnConst1.constant = 48
-        pay_button.isHidden = false
     }
     
     func startShareAnimation() {
