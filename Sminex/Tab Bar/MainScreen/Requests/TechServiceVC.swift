@@ -400,6 +400,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
         if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ServiceHeader", for: indexPath) as! ServiceHeader
             cell.display((arr[indexPath.row] as! ServiceHeaderData), delegate: self)
+            if indexPath.row == arr.count - 1{
+                cell.fonView.isHidden = true
+            }else{
+                cell.fonView.isHidden = false
+            }
             return cell
         
         } else {
@@ -436,6 +441,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     showDate = true
                 }
                 cell.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate, delegate2: self)
+                if indexPath.row == arr.count - 1{
+                    cell.fonView.cornerRadius = 24
+                }else{
+                    cell.fonView.cornerRadius = 0
+                }
                 return cell
             }else{
                 var showDate = true
@@ -455,6 +465,11 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
                     showDate = true
                 }
                 cell.display((arr[indexPath.row] as! ServiceCommentCellData), delegate: self, showDate: showDate, delegate2: self)
+                if indexPath.row == arr.count - 1{
+                    cell.fonView.cornerRadius = 24
+                }else{
+                    cell.fonView.cornerRadius = 0
+                }
                 return cell
             }
         }
@@ -720,9 +735,6 @@ final class TechServiceVC: UIViewController, UITextFieldDelegate, UIGestureRecog
 
 final class ServiceHeader: UICollectionViewCell {
     
-    @IBOutlet private weak var imageLoader: UIActivityIndicatorView!
-//    @IBOutlet private weak var scrollTop:   NSLayoutConstraint!
-    @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var problem:     UILabel!
     @IBOutlet private weak var problemHeight: NSLayoutConstraint!
     @IBOutlet private weak var place:       UILabel!
@@ -731,8 +743,8 @@ final class ServiceHeader: UICollectionViewCell {
     @IBOutlet private weak var separator:   UILabel!
     @IBOutlet private weak var noDateHeight: NSLayoutConstraint!
     @IBOutlet private weak var date:        UILabel!
-    @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var icon:        UIImageView!
+    @IBOutlet         weak var fonView:     UIView!
     @IBOutlet private weak var status:      UILabel!
     @IBOutlet private weak var noDateLbl:   UILabel!
     
@@ -768,8 +780,8 @@ final class ServiceHeader: UICollectionViewCell {
             }
         }
         self.delegate = delegate
-        imageLoader.isHidden = true
-        imageLoader.stopAnimating()
+//        imageLoader.isHidden = true
+//        imageLoader.stopAnimating()
         noDateHeight.constant = 0
         noDateLbl.isHidden = true
         problem.text = item.problem
@@ -813,77 +825,77 @@ final class ServiceHeader: UICollectionViewCell {
             noDateHeight.constant = 0
             noDateLbl.isHidden = true
         }
-        scroll.isScrollEnabled = true
-        if item.images.count == 0 {
-            imageConst.constant = 0
-//            scrollTop.constant  = 0
-            scroll.isHidden = true
-        
-        } else {
-            imageConst.constant = 150
-//            scrollTop.constant  = 16
-            scroll.isHidden = false
-        }
-        
-        if item.imgsString.count == 0 && item.images.count != 0 {
-            imageConst.constant = 150
-            DispatchQueue.main.async {
-                var x: CGFloat = 0.0
-                item.images.forEach {
-                    let image = UIImageView(frame: CGRect(x: x, y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
-                    image.image = $0
-                    x += 165.0
-                    let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
-                    image.isUserInteractionEnabled = true
-                    image.addGestureRecognizer(tap)
-                    self.scroll.addSubview(image)
-                }
-                self.scroll.contentSize = CGSize(width: x, height: self.scroll.frame.size.height)
-            }
-        } else if item.imgsString.count != 0{
-            imageConst.constant = 150
-            //            scrollTop.constant  = 16
-            scroll.isHidden = false
-            imageLoader.isHidden = false
-            imageLoader.startAnimating()
-
-            var rowImgs: [UIImage] = []
-
-            DispatchQueue.global(qos: .userInitiated).async {
-
-                item.imgsString.forEach { img in
-
-                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
-                    request.httpMethod = "GET"
-                    print(request)
-                    
-                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
-
-                    if data != nil {
-                        rowImgs.append(UIImage(data: data!)!)
-                    }
-                }
-
-                DispatchQueue.main.async {
-                    var x = 0.0
-                    rowImgs.forEach {
-                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
-                        image.image = $0
-                        x += 165.0
-                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
-                        image.isUserInteractionEnabled = true
-                        image.addGestureRecognizer(tap)
-                        self.scroll.addSubview(image)
-                    }
-                    self.scroll.contentSize = CGSize(width: CGFloat(x), height: self.scroll.frame.size.height)
-                    self.imageLoader.isHidden = true
-                    self.imageLoader.stopAnimating()
-                }
-            }
-        }else{
-            imageConst.constant = 0
-            scroll.isHidden = true
-        }
+//        scroll.isScrollEnabled = true
+//        if item.images.count == 0 {
+//            imageConst.constant = 0
+////            scrollTop.constant  = 0
+//            scroll.isHidden = true
+//
+//        } else {
+//            imageConst.constant = 150
+////            scrollTop.constant  = 16
+//            scroll.isHidden = false
+//        }
+//        
+//        if item.imgsString.count == 0 && item.images.count != 0 {
+//            imageConst.constant = 150
+//            DispatchQueue.main.async {
+//                var x: CGFloat = 0.0
+//                item.images.forEach {
+//                    let image = UIImageView(frame: CGRect(x: x, y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
+//                    image.image = $0
+//                    x += 165.0
+//                    let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
+//                    image.isUserInteractionEnabled = true
+//                    image.addGestureRecognizer(tap)
+//                    self.scroll.addSubview(image)
+//                }
+//                self.scroll.contentSize = CGSize(width: x, height: self.scroll.frame.size.height)
+//            }
+//        } else if item.imgsString.count != 0{
+//            imageConst.constant = 150
+//            //            scrollTop.constant  = 16
+//            scroll.isHidden = false
+//            imageLoader.isHidden = false
+//            imageLoader.startAnimating()
+//
+//            var rowImgs: [UIImage] = []
+//
+//            DispatchQueue.global(qos: .userInitiated).async {
+//
+//                item.imgsString.forEach { img in
+//
+//                    var request = URLRequest(url: URL(string: Server.SERVER + Server.DOWNLOAD_PIC + "id=" + img)!)
+//                    request.httpMethod = "GET"
+//                    print(request)
+//
+//                    let (data, _, _) = URLSession.shared.synchronousDataTask(with: request.url!)
+//
+//                    if data != nil {
+//                        rowImgs.append(UIImage(data: data!)!)
+//                    }
+//                }
+//
+//                DispatchQueue.main.async {
+//                    var x = 0.0
+//                    rowImgs.forEach {
+//                        let image = UIImageView(frame: CGRect(x: CGFloat(x), y: 0, width: CGFloat(150.0), height: self.scroll.frame.size.height))
+//                        image.image = $0
+//                        x += 165.0
+//                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.imagePressed(_:)))
+//                        image.isUserInteractionEnabled = true
+//                        image.addGestureRecognizer(tap)
+//                        self.scroll.addSubview(image)
+//                    }
+//                    self.scroll.contentSize = CGSize(width: CGFloat(x), height: self.scroll.frame.size.height)
+//                    self.imageLoader.isHidden = true
+//                    self.imageLoader.stopAnimating()
+//                }
+//            }
+//        }else{
+//            imageConst.constant = 0
+//            scroll.isHidden = true
+//        }
     }
     
     @objc func imagePressed(_ sender: UITapGestureRecognizer) {
@@ -944,6 +956,7 @@ final class ServiceCommentUserCell: UICollectionViewCell {
     @IBOutlet private      var imgWidth:    NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private      var commHeight:  NSLayoutConstraint!
+    @IBOutlet         weak var fonView:     UIView!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var desc:     UILabel!
     @IBOutlet private weak var date:        UILabel!
@@ -1076,6 +1089,7 @@ final class ServiceCommentConstCell: UICollectionViewCell {
     @IBOutlet private      var imgWidth:    NSLayoutConstraint!
     @IBOutlet              var heightDate:  NSLayoutConstraint!
     @IBOutlet private      var commHeight:  NSLayoutConstraint!
+    @IBOutlet         weak var fonView:     UIView!
     @IBOutlet private weak var comImg:      UIImageView!
     @IBOutlet private weak var title:       UILabel!
     @IBOutlet private weak var desc:        UILabel!

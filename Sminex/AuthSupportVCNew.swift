@@ -8,20 +8,21 @@
 import UIKit
 import DeviceKit
 import Alamofire
+import AKMaskField
 
 final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
 //    @IBOutlet private weak var loader:              UIActivityIndicatorView!
 //    @IBOutlet private weak var sendButtonBottom:    NSLayoutConstraint!
-//    @IBOutlet private weak var sendButtonTop:       NSLayoutConstraint!
+    @IBOutlet private weak var imgsHeight:       NSLayoutConstraint!
     @IBOutlet private weak var sendButtonHeight:     NSLayoutConstraint!
     @IBOutlet private weak var problemHeight:       NSLayoutConstraint!
     @IBOutlet private weak var problemLbl:          UILabel!
 //    @IBOutlet private weak var sendView:            UIView!
 //    @IBOutlet private weak var scroll:              UIScrollView!
-//    @IBOutlet private weak var imgsScroll:          UIScrollView!
+    @IBOutlet private weak var imgsScroll:          UIScrollView!
     @IBOutlet private weak var problemTextView:     UITextField!
-    @IBOutlet private weak var emailTextView:       UITextField!
+    @IBOutlet private weak var emailTextView:       AKMaskField!
     @IBOutlet private weak var lsTextView:          UITextField!
     @IBOutlet private weak var sendButton:          UIButton!
     
@@ -75,27 +76,27 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
     
     public var login_ = ""
     public var fromMenu = false
-//    private var imgs: [UIImage] = [] {
-//        didSet {
-//            if imgs.count == 0 {
-//                imgsHeight.constant = 1
-////                sendButtonTop.constant = getPoint()
-////
-////                if isNeedToScrollMore() && tabBarController != nil {
-////                    sendButtonTop.constant = getPoint() + 99
-////                }
+    private var imgs: [UIImage] = [] {
+        didSet {
+            if imgs.count == 0 {
+                imgsHeight.constant = 1
+//                sendButtonTop.constant = getPoint()
 //
-//            } else {
-//                imgsHeight.constant = 150
-////                sendButtonTop.constant = getPoint() - 150
-////
-////                if isNeedToScrollMore() && tabBarController != nil {
-////                    sendButtonTop.constant = getPoint() - 100
-////                }
-//            }
-//            drawImages()
-//        }
-//    }
+//                if isNeedToScrollMore() && tabBarController != nil {
+//                    sendButtonTop.constant = getPoint() + 99
+//                }
+
+            } else {
+                imgsHeight.constant = 150
+//                sendButtonTop.constant = getPoint() - 150
+//
+//                if isNeedToScrollMore() && tabBarController != nil {
+//                    sendButtonTop.constant = getPoint() - 100
+//                }
+            }
+            drawImages()
+        }
+    }
     private var currPoint: CGFloat = 0.0
     
     override func viewDidLoad() {
@@ -110,14 +111,18 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
         if login_ != "" {
             self.lsTextView.text = login_
         }
-        if UserDefaults.standard.string(forKey: "phone_user") != ""{
-            emailTextView.text = UserDefaults.standard.string(forKey: "phone_user")
+        emailTextView.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+        emailTextView.maskTemplate = "*"
+        var contactPhone: String = UserDefaults.standard.string(forKey: "phone_user") ?? ""
+        if contactPhone.first == "8"{
+            contactPhone.removeFirst()
         }
+        emailTextView.text = contactPhone
 //        loader.isHidden = true
-        if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
+//        if Device().isOneOf([.iPhone5, .iPhone5s, .iPhone5c, .iPhoneSE, .simulator(.iPhoneSE)]){
 //            currPoint = sendView.frame.origin.y - 200
 //            sendButtonWidth.constant = sendButtonWidth.constant - 50
-        }
+//        }
         problemLbl.isHidden = true
         problemHeight.constant = 0
         sendButton.isHidden = true
@@ -125,7 +130,7 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
 //        currPoint = sendView.frame.origin.y
 //        sendButton.isEnabled = false
 //        sendButton.alpha     = 0.5
-//        imgsHeight.constant  = 1
+        imgsHeight.constant  = 1
         
         automaticallyAdjustsScrollViewInsets = false
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
@@ -337,44 +342,44 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
-//    private func drawImages() {
-//
-//        imgsScroll.subviews.forEach {
-//            $0.removeFromSuperview()
-//        }
-//        var x = 0.0
-//        var tag = 0
-//
-//        imgs.forEach {
-//            let img = UIImageView(frame: CGRect(x: x, y: 0.0, width: 150.0, height: 150.0))
-//            img.image = $0
-//            let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
-//            img.isUserInteractionEnabled = true
-//            img.addGestureRecognizer(tap)
-//            imgsScroll.addSubview(img)
-//
-//            let deleteButton = UIButton(frame: CGRect(x: x + 130.0, y: 0.0, width: 20.0, height: 20.0))
-//            deleteButton.backgroundColor = .white
-//            deleteButton.cornerRadius = 0.5 * deleteButton.bounds.size.width
-//            deleteButton.clipsToBounds = true
-//            deleteButton.tag = tag
-//            deleteButton.alpha = 0.7
-//            deleteButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
-//            imgsScroll.addSubview(deleteButton)
-//
-//            let image = UIImageView(frame: CGRect(x: x + 135.0, y: 5.0, width: 10.0, height: 10.0))
-//            image.image = UIImage(named: "rossNavbar")
-//            imgsScroll.addSubview(image)
-//
-//            x += 160
-//            tag += 1
-//        }
-//        imgsScroll.contentSize = CGSize(width: CGFloat(x), height: imgsScroll.frame.size.height)
-//    }
+    private func drawImages() {
+
+        imgsScroll.subviews.forEach {
+            $0.removeFromSuperview()
+        }
+        var x = 0.0
+        var tag = 0
+
+        imgs.forEach {
+            let img = UIImageView(frame: CGRect(x: x, y: 0.0, width: 150.0, height: 150.0))
+            img.image = $0
+            let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+            img.isUserInteractionEnabled = true
+            img.addGestureRecognizer(tap)
+            imgsScroll.addSubview(img)
+
+            let deleteButton = UIButton(frame: CGRect(x: x + 130.0, y: 0.0, width: 20.0, height: 20.0))
+            deleteButton.backgroundColor = .white
+            deleteButton.cornerRadius = 0.5 * deleteButton.bounds.size.width
+            deleteButton.clipsToBounds = true
+            deleteButton.tag = tag
+            deleteButton.alpha = 0.7
+            deleteButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
+            imgsScroll.addSubview(deleteButton)
+
+            let image = UIImageView(frame: CGRect(x: x + 135.0, y: 5.0, width: 10.0, height: 10.0))
+            image.image = UIImage(named: "rossNavbar")
+            imgsScroll.addSubview(image)
+
+            x += 160
+            tag += 1
+        }
+        imgsScroll.contentSize = CGSize(width: CGFloat(x), height: imgsScroll.frame.size.height)
+    }
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         view.endEditing(true)
-//        imgs.remove(at: sender.tag)
+        imgs.remove(at: sender.tag)
     }
     
     @objc func imageTapped(_ sender: UITapGestureRecognizer) {
@@ -430,9 +435,9 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
                 return
             }
             self.reqId = response
-//            self.imgs.forEach{
-//                self.uploadPhoto($0)
-//            }
+            self.imgs.forEach{
+                self.uploadPhoto($0)
+            }
             self.sendMessage()
         }
         task.resume()
@@ -470,8 +475,8 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
         
         group.enter()
         let uid = UUID().uuidString
-        print(uid)
-        print(Server.SERVER + Server.ADD_SUPPORT_FILE + "mailId=" + reqID!)
+//        print(uid)
+//        print(Server.SERVER + Server.ADD_SUPPORT_FILE + "mailId=" + reqID!)
         
         Alamofire.upload(multipartFormData: { multipartFromdata in
             multipartFromdata.append(UIImageJPEGRepresentation(img, 0.5)!, withName: uid, fileName: "\(uid).jpg", mimeType: "image/jpeg")
@@ -480,9 +485,9 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
             case .success(let upload, _, _):
                 
                 upload.uploadProgress(closure: { (progress) in
-                    print("Upload Progress: \(progress.fractionCompleted)")
+//                    print("Upload Progress: \(progress.fractionCompleted)")
                 })
-                print("====")
+//                print("====")
                 upload.responseJSON { response in
 //                    print(response.result.value!)
 
@@ -511,24 +516,29 @@ final class AuthSupportVCNew: UIViewController, UIImagePickerControllerDelegate,
             let response = String(data: data!, encoding: .utf8) ?? ""
             print(response)
             guard data != nil && !(String(data: data!, encoding: .utf8)?.contains(find: "error") ?? true) else {
-                let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.async{
+                    let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
+                    alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+                    DispatchQueue.main.async {
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    self.stopAnimation()
                 }
-                self.stopAnimation()
                 return
             }
-            let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
-            alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
-            self.present(alert, animated: true, completion: nil)
+            DispatchQueue.main.async{
+                self.stopAnimation()
+                let alert = UIAlertController(title: "Спасибо!", message: "Сообщение отправлено в техподдержку приложения", preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in self.navigationController?.popViewController(animated: true) } ) )
+                self.present(alert, animated: true, completion: nil)
+            }
         }
         task.resume()
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-//        imgs.append(image)
+        imgs.append(image)
         dismiss(animated: true, completion: nil)
     }
     

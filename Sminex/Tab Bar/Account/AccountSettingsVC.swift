@@ -8,6 +8,7 @@
 
 import UIKit
 import CropViewController
+import AKMaskField
 
 final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, UITextViewDelegate {
     
@@ -20,9 +21,9 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     @IBOutlet private weak var notificationsImg:    UIImageView!
     @IBOutlet private weak var familyNameField:     UITextField!
     @IBOutlet private weak var otchestvoField:  	UITextField!
-    @IBOutlet private weak var contactNumber:       UITextField!
+    @IBOutlet private weak var contactNumber:       AKMaskField!
     @IBOutlet private weak var commentField:        UITextView!
-    @IBOutlet private weak var privNumber:          UITextField!
+    @IBOutlet private weak var privNumber:          AKMaskField!
     @IBOutlet private weak var nameField:       	UITextField!
     @IBOutlet private weak var lsLabel:             UITextField!
     @IBOutlet private weak var email:               UITextField!
@@ -116,7 +117,6 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             changePasswordBtm.isHidden       = true
             saveButtonTop.constant           = -90
         }
-        
         automaticallyAdjustsScrollViewInsets = false
         DispatchQueue.global(qos: .userInitiated).async {
             if let imageData = UserDefaults.standard.object(forKey: "accountIcon"),
@@ -148,13 +148,24 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
             email.text          = ""
             emailLabel.isHidden = true
         }
-        
-        contactNumber.text      = defaults.string(forKey: "contactNumber")
-        if (defaults.string(forKey: "contactNumber") == "-") {
-            contactNumber.text  = ""
-            contactLabel.isHidden = true
+        contactNumber.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+        contactNumber.maskTemplate = "*"
+        var contactPhone: String = defaults.string(forKey: "contactNumber") ?? ""
+        if contactPhone.first == "8"{
+            contactPhone.removeFirst()
         }
-        privNumber.text         = defaults.string(forKey: "phone_user")
+        contactNumber.text = contactPhone
+//        if (defaults.string(forKey: "contactNumber") == "-") {
+//            contactNumber.text  = ""
+//            contactLabel.isHidden = true
+//        }
+        privNumber.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+        privNumber.maskTemplate = "*"
+        var privPhone: String = defaults.string(forKey: "phone_user") ?? ""
+        if privPhone.first == "8"{
+            privPhone.removeFirst()
+        }
+        privNumber.text = privPhone
         if (defaults.string(forKey: "phone_user") == "-") {
             privNumber.text     = ""
         }
@@ -303,6 +314,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     private func editAccountInfo() {
+        print("SaveINFO: ", contactNumber.text ?? "", privNumber.text ?? "")
         var answers = isReg_ ? responceString_.split(separator: ";") : [""]
         
         let defPhone = isReg_ ? String(answers[safe: 14] ?? "") : (UserDefaults.standard.string(forKey: "contactNumber")?.stringByAddingPercentEncodingForRFC3986() ?? "")
@@ -344,7 +356,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         let url = "\(Server.SERVER)\(Server.EDIT_ACCOUNT)login=\(login)&pwd=\(pass)&address=\(adress)&name=\(name)&phone=\(phone)&businessPhone=\(phone_contact)&email=\(email)&additionalInfo=\(comment_txt)&totalArea=\(total)&resindentialArea=\(area)&roomsCount=\(rooms)"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
-        print(request)
+        print("SaveINFO: ", request)
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -445,12 +457,12 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
         
-        if contactNumber.text == "" {
-            contactLabel.isHidden = true
-            
-        } else {
-            contactLabel.isHidden = false
-        }
+//        if contactNumber.text == "" {
+//            contactLabel.isHidden = true
+//
+//        } else {
+//            contactLabel.isHidden = false
+//        }
         
         if privNumber.text == "" {
             phoneLabel.isHidden = true

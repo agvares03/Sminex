@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import DeviceKit
+import AKMaskField
 
 class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, HomePlaceCellDelegate {
     
@@ -23,7 +24,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var scroll:      UIScrollView!
     @IBOutlet private weak var images:      UIScrollView!
     @IBOutlet private weak var edProblem:   UITextView!
-    @IBOutlet private weak var edPhone:     UITextField!
+    @IBOutlet private weak var edPhone:     AKMaskField!
     @IBOutlet private weak var edEmail:     UITextField!
     @IBOutlet private weak var serviceDesc: UILabel!
     @IBOutlet private weak var servicePrice:UILabel!
@@ -285,10 +286,18 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         if (defaults.string(forKey: "mail") == "-") {
             edEmail.text          = ""
         }
+        edPhone.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
+        edPhone.maskTemplate = "*"
+        
+        
         if UserDefaults.standard.string(forKey: "contactNumber") == "-" || UserDefaults.standard.string(forKey: "contactNumber") == "" || UserDefaults.standard.string(forKey: "contactNumber") == " "{
             edPhone.text = ""
         }else{
-            edPhone.text = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+            var contactPhone: String = defaults.string(forKey: "contactNumber") ?? ""
+            if contactPhone.first == "8"{
+                contactPhone.removeFirst()
+            }
+            edPhone.text = contactPhone
         }
         loader.isHidden = true
 //        navigationItem.title = data_?.name

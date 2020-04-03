@@ -9,12 +9,13 @@ import UIKit
 import Gloss
 import FSPagerView
 import DeviceKit
+//import AlignedCollectionViewFlowLayout
 
 private protocol CellsDelegate:     class {
     func pressed(at indexPath: IndexPath)
 }
 
-class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout {
+class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate {
     
     // MARK: Outlets
     
@@ -39,6 +40,9 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
+//        let alignedFlowLayout = collectionView?.collectionViewLayout as? AlignedCollectionViewFlowLayout
+//        alignedFlowLayout?.horizontalAlignment = .left
+//        alignedFlowLayout?.verticalAlignment = .top
         updateUserInterface()
         getRequestTypes()
     }
@@ -230,12 +234,14 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        print((view.frame.size.width - 32) / 4)
+        
         if indexPath.section == 0{
-            return CGSize(width: (view.frame.size.width - 32) / 4, height: 110)
+            return CGSize(width: 85.75, height: 110)
         }else if indexPath.row == data[1].filteredData.count - 1{
             return CGSize(width: view.frame.size.width - 32, height: 50)
         }else{
-            return CGSize(width: (view.frame.size.width - 32) / 4, height: 140)
+            return CGSize(width: 85.75, height: 140)
         }
     }
     
@@ -332,11 +338,11 @@ class NewRequestTypeCell: UICollectionViewCell {
         if item.title == "Гостевой пропуск"{
             title.text = "Пропуск"
         }
-        if displayWidth < 375{
-            title.font = UIFont.systemFont(ofSize: 11, weight: .regular)
-        }else if displayWidth == 375{
-            title.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        }
+//        if displayWidth < 375{
+//            title.font = UIFont.systemFont(ofSize: 11, weight: .regular)
+//        }else if displayWidth == 375{
+//            title.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+//        }
         if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
             title.font = UIFont.systemFont(ofSize: 10, weight: .regular)
         }
@@ -418,6 +424,31 @@ struct NewRequestTypeCellData {
     
     func addImage() {
         imageView.image = image
+    }
+}
+
+class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
+
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        let attributes = super.layoutAttributesForElements(in: rect)
+
+        var leftMargin = sectionInset.left
+        var maxY: CGFloat = -1.0
+        attributes?.forEach { layoutAttribute in
+            guard layoutAttribute.representedElementCategory == .cell else {
+                return
+            }
+            if layoutAttribute.frame.origin.y >= maxY {
+                leftMargin = sectionInset.left
+            }
+
+            layoutAttribute.frame.origin.x = leftMargin
+
+            leftMargin += layoutAttribute.frame.width + minimumInteritemSpacing
+            maxY = max(layoutAttribute.frame.maxY , maxY)
+        }
+
+        return attributes
     }
 }
 

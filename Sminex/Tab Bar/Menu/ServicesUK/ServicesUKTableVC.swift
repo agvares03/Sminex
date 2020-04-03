@@ -71,7 +71,7 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ServicesUKTableCell", for: indexPath) as! ServicesUKTableCell
         let data = self.data[safe: indexPath.row]
-        cell.display(data?.name ?? "", desc: data?.shortDesc ?? "", amount: data?.cost ?? "", picture: data?.picture ?? "")
+        cell.display(data?.name ?? "", desc: data?.howToOrder ?? "", amount: data?.cost ?? "", picture: data?.picture ?? "")
         return cell
     }
     
@@ -79,7 +79,7 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
     
         let cell = ServicesUKTableCell.fromNib()
         let data = self.data[safe: indexPath.row]
-        cell?.display(data?.name ?? "", desc: data?.shortDesc ?? "", amount: data?.cost ?? "", picture: data?.picture ?? "")
+        cell?.display(data?.name ?? "", desc: data?.howToOrder ?? "", amount: data?.cost ?? "", picture: data?.picture ?? "")
         var size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
         if size.height > 290 {
             size.height = size.height - 50
@@ -157,31 +157,43 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
 final class ServicesUKTableCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:   UILabel!
-//    @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet private weak var desc:    UILabel!
+    @IBOutlet private weak var descHeight:    NSLayoutConstraint!
     @IBOutlet private weak var amount:  UILabel!
-    @IBOutlet private weak var image:   CircleView2!
+    @IBOutlet private weak var image:   CircleView3!
     
     func display(_ title: String, desc: String, amount: String, picture: String) {
         self.title.text     = title
-//        if desc != "" && desc != " "{
-//            self.desc.text = desc
-//            self.descHeight.constant = heightForView(text: desc, font: self.desc.font, width: )
-//        }else{
-//            self.descHeight.constant = 0
-//            self.desc.text = ""
-//        }
+        if desc != "" && desc != " "{
+            self.desc.text = desc
+            self.descHeight.constant = heightForView(text: desc, font: self.desc.font, width: self.desc.bounds.size.width)
+        }else{
+            self.descHeight.constant = 0
+            self.desc.text = ""
+        }
         self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
         if let imageV = UIImage(data: Data(base64Encoded: (picture.replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             image.image = imageV
             image.layer.borderColor = UIColor.black.cgColor
             image.layer.borderWidth = 1.0
             // Углы
-            image.layer.cornerRadius = image.frame.width / 2
+            image.layer.cornerRadius = 25
             // Поправим отображения слоя за его границами
             image.layer.masksToBounds = true
         }else{
             image.isHidden = true
         }
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     class func fromNib() -> ServicesUKTableCell? {
@@ -194,16 +206,16 @@ final class ServicesUKTableCell: UICollectionViewCell {
         }
         
         cell?.title.preferredMaxLayoutWidth  = cell?.title.bounds.size.width  ?? 0.0
-//        cell?.desc.preferredMaxLayoutWidth   = cell?.desc.bounds.size.width   ?? 0.0
+        cell?.desc.preferredMaxLayoutWidth   = cell?.desc.bounds.size.width   ?? 0.0
         cell?.amount.preferredMaxLayoutWidth = cell?.amount.bounds.size.width ?? 0.0
         
-        if isPlusDevices() {
+//        if isPlusDevices() {
 //            cell?.desc.preferredMaxLayoutWidth += 40
-        
-        } else if isNeedToScroll() {
-            cell?.title.preferredMaxLayoutWidth -= 25
+//
+//        } else if isNeedToScroll() {
+//            cell?.title.preferredMaxLayoutWidth -= 25
 //            cell?.desc.preferredMaxLayoutWidth -= 50
-        }
+//        }
         
         return cell
     }
@@ -244,6 +256,37 @@ struct ServicesUKJson: JSONDecodable {
         selectTime = "IsSelectTime"     <~~ json
         selectCost = "IsSelectCost"     <~~ json
         fullDesc   = "FullDescription"  <~~ json
+    }
+}
+
+@IBDesignable class CircleView3: UIView {
+    
+    let imageView = UIImageView()
+    
+    @IBInspectable var image: UIImage? {
+        didSet {
+            addImage()
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setup()
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        setup()
+    }
+    
+    func setup () {
+        imageView.frame = CGRect(x: 5, y: 5, width: 40, height: 40)
+        imageView.contentMode = .scaleAspectFit
+        addSubview(imageView)
+    }
+    
+    func addImage() {
+        imageView.image = image
     }
 }
 
