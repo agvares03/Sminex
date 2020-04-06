@@ -13,7 +13,8 @@ import AKMaskField
 class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
-//    @IBOutlet private weak var sendViewConst: NSLayoutConstraint!
+    @IBOutlet private weak var sendBtnHeight:   NSLayoutConstraint!
+    @IBOutlet private weak var imgsHeight:      NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
     @IBOutlet private weak var edContact:       AKMaskField!
@@ -113,8 +114,9 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         view.addGestureRecognizer(tap)
         edContact.maskExpression = "+7 ({ddd}) {ddd}-{dd}-{dd}"
         edContact.maskTemplate = " "
-        sendButton.alpha     = 0.5
-        sendButton.isEnabled = false
+        sendButton.isHidden = true
+        sendBtnHeight.constant = 0
+        self.imgsHeight.constant = 0
         TypeRequest.text = typeReq
         edEmail.delegate = self
         edIdent.delegate = self
@@ -244,6 +246,13 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
     
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         images.remove(at: sender.tag)
+        DispatchQueue.main.async {
+            if self.images.count != 0{
+                self.imgsHeight.constant = 150
+            }else{
+                self.imgsHeight.constant = 0
+            }
+        }
     }
     
     @objc func imageTapped(_ sender: UITapGestureRecognizer) {
@@ -402,28 +411,35 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         images.append(image)
+        DispatchQueue.main.async {
+            if self.images.count != 0{
+                self.imgsHeight.constant = 150
+            }else{
+                self.imgsHeight.constant = 0
+            }
+        }
         dismiss(animated: true, completion: nil)
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
         if edIdent.text == ""{
-            sendButton.alpha     = 0.5
-            sendButton.isEnabled = false
+            sendButton.isHidden = true
+            sendBtnHeight.constant = 0
         }else if edComment.textColor == UIColor.lightGray{
-            sendButton.alpha     = 0.5
-            sendButton.isEnabled = false
+            sendButton.isHidden = true
+            sendBtnHeight.constant = 0
         }else if edContact.text == "" && edComment.text != "" && edIdent.text != "" && edEmail.text != ""{
-            sendButton.alpha     = 1
-            sendButton.isEnabled = true
+            sendButton.isHidden = false
+            sendBtnHeight.constant = 48
         }else if edContact.text != "" && edComment.text != "" && edIdent.text != "" && edEmail.text == ""{
-            sendButton.alpha     = 1
-            sendButton.isEnabled = true
+            sendButton.isHidden = false
+            sendBtnHeight.constant = 48
         }else if edContact.text != "" && edComment.text != "" && edIdent.text != "" && edEmail.text != ""{
-            sendButton.alpha     = 1
-            sendButton.isEnabled = true
+            sendButton.isHidden = false
+            sendBtnHeight.constant = 48
         }else if edContact.text == "" && edComment.text != "" && edIdent.text != "" && edEmail.text == ""{
-            sendButton.alpha     = 0.5
-            sendButton.isEnabled = false
+            sendButton.isHidden = true
+            sendBtnHeight.constant = 0
         }
     }
     
@@ -434,16 +450,16 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
             if updatedText.isEmpty {
                 textView.text = "Описание"
-                sendButton.alpha     = 0.5
-                sendButton.isEnabled = false
+                sendButton.isHidden = true
+                sendBtnHeight.constant = 0
                 textView.textColor = UIColor.lightGray
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
                 
             } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
                 textView.textColor = UIColor.black
                 textView.text = text
-                sendButton.alpha     = 1
-                sendButton.isEnabled = true
+                sendButton.isHidden = false
+                sendBtnHeight.constant = 48
             } else {
                 return true
             }

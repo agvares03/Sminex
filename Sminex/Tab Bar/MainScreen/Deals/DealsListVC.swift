@@ -95,15 +95,22 @@ final class DealsListVC: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DealsListCell", for: indexPath) as! DealsListCell
-        if indexPath.row == 0{
+        if indexPath.row == 0 && indexPath.row == data_.count - 1{
+            cell.topView.cornerRadius = 24
+            cell.botView.cornerRadius = 24
+            cell.separator.isHidden = true
+        }else if indexPath.row == 0{
             cell.topView.cornerRadius = 24
             cell.botView.cornerRadius = 0
+            cell.separator.isHidden = false
         }else if indexPath.row == data_.count - 1{
             cell.topView.cornerRadius = 0
             cell.botView.cornerRadius = 24
+            cell.separator.isHidden = true
         }else{
             cell.topView.cornerRadius = 0
             cell.botView.cornerRadius = 0
+            cell.separator.isHidden = false
         }
         cell.display(data_[indexPath.row])
         return cell
@@ -280,6 +287,7 @@ final class DealsListCell: UICollectionViewCell {
     @IBOutlet         weak var topView:     UIView!
     @IBOutlet         weak var botView:     UIView!
     @IBOutlet private weak var title:       UILabel!
+    @IBOutlet         weak var separator:   UILabel!
 //    @IBOutlet private weak var desc:        UILabel!
     
     fileprivate func display(_ item: DealsJson) {

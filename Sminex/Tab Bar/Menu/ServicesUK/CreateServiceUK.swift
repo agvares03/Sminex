@@ -364,10 +364,11 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             timeBtn2Width.constant = 0
             timeBtn1Width.constant = self.view.frame.size.width - 32
         }else{
-            timeBtn2.setTitleColor(mainGreenColor, for: .normal)
-            timeLine2.backgroundColor = mainGreenColor
-            timeBtn1.setTitleColor(mainGrayColor, for: .normal)
-            timeLine1.backgroundColor = mainGrayColor
+            extTime = true
+            timeBtn2.setTitleColor(mainGrayColor, for: .normal)
+            timeLine2.backgroundColor = mainGrayColor
+            timeBtn1.setTitleColor(mainGreenColor, for: .normal)
+            timeLine1.backgroundColor = mainGreenColor
             timeBtn2Width.constant = (self.view.frame.size.width - 32) / 2
             timeBtn1Width.constant = (self.view.frame.size.width - 32) / 2
         }
