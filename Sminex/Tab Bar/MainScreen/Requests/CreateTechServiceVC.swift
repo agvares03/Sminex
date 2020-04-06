@@ -325,10 +325,11 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
 //        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
 //            btnConst.constant = 25
 //        }
-        timeBtn2.setTitleColor(mainGreenColor, for: .normal)
-        timeLine2.backgroundColor = mainGreenColor
-        timeBtn1.setTitleColor(mainGrayColor, for: .normal)
-        timeLine1.backgroundColor = mainGrayColor
+        extTime = true
+        timeBtn2.setTitleColor(mainGrayColor, for: .normal)
+        timeLine2.backgroundColor = mainGrayColor
+        timeBtn1.setTitleColor(mainGreenColor, for: .normal)
+        timeLine1.backgroundColor = mainGreenColor
         imgsHeight.constant = 0
     }
     var tap = UIGestureRecognizer()
@@ -814,7 +815,7 @@ final class HomePlaceCell: UITableViewCell {
         if checked{
             
             toggle.checked = true
-            toggle.backgroundColor  = blueColor
+            toggle.backgroundColor  = mainGreenColor
             toggle.strokeColor      = .white
             toggle.lineWidth        = 2
             toggle.setBackgroundImage(nil, for: .normal)

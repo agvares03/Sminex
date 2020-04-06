@@ -21,6 +21,7 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
     @IBOutlet private weak var wView:           UIView!
     @IBOutlet private weak var titleLabel:  	UILabel!
     @IBOutlet private weak var date:        	UILabel!
+    @IBOutlet private weak var desc:            UILabel!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     var webView: WKWebView!
@@ -46,21 +47,22 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
         StartIndicator()
         getImage()
         automaticallyAdjustsScrollViewInsets = false
-        let webConfiguration = WKWebViewConfiguration()
-        let customFrame = CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 0, height: self.wView.frame.size.height))
-        self.webView = WKWebView (frame: customFrame , configuration: webConfiguration)
-        self.webView.translatesAutoresizingMaskIntoConstraints = false
-        self.wView.addSubview(self.webView)
-        self.webView.scrollView.isScrollEnabled = false
-        self.webView.topAnchor.constraint(equalTo: self.wView.topAnchor).isActive = true
-        self.webView.rightAnchor.constraint(equalTo: self.wView.rightAnchor).isActive = true
-        self.webView.leftAnchor.constraint(equalTo: self.wView.leftAnchor).isActive = true
-        self.webView.bottomAnchor.constraint(equalTo: self.wView.bottomAnchor).isActive = true
-        self.webView.heightAnchor.constraint(equalTo: self.wView.heightAnchor).isActive = true
-        self.webView.navigationDelegate = self
-        self.webView.uiDelegate = self
+//        let webConfiguration = WKWebViewConfiguration()
+//        let customFrame = CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 0, height: self.wView.frame.size.height))
+//        self.webView = WKWebView (frame: customFrame , configuration: webConfiguration)
+//        self.webView.translatesAutoresizingMaskIntoConstraints = false
+//        self.wView.addSubview(self.webView)
+//        self.webView.scrollView.isScrollEnabled = false
+//        self.webView.topAnchor.constraint(equalTo: self.wView.topAnchor).isActive = true
+//        self.webView.rightAnchor.constraint(equalTo: self.wView.rightAnchor).isActive = true
+//        self.webView.leftAnchor.constraint(equalTo: self.wView.leftAnchor).isActive = true
+//        self.webView.bottomAnchor.constraint(equalTo: self.wView.bottomAnchor).isActive = true
+//        self.webView.heightAnchor.constraint(equalTo: self.wView.heightAnchor).isActive = true
+//        self.webView.navigationDelegate = self
+//        self.webView.uiDelegate = self
         let txt = "<div font-size:16px;'>" + (data_?.text)!
-        webView.loadHTMLString(txt, baseURL: nil)
+        desc.attributedText = txt.htmlToAttributedString
+//        webView.loadHTMLString(txt, baseURL: nil)
         titleLabel.text = data_?.header!.uppercased()
         
         if data_?.dateStart != "" {
@@ -91,30 +93,12 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
 //        } else {
 //            image.image = UIImage(data: Data(base64Encoded: (data_?.headerImage?.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)!)
 //        }
-        
-        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
-        print(points)
-        
-        if (300.0...320.0).contains(points) {
-            imageWidth.constant  = 288
-            imageHeight.constant = 144
-        } else if (320.0...350.0).contains(points) {
-            imageWidth.constant  = 343
-            imageHeight.constant = 170
-        } else if (350.0...400.0).contains(points) {
-            imageWidth.constant  = 343
-            imageHeight.constant = 170
-            
-        } else {
-            imageWidth.constant  = 382
-            imageHeight.constant = 191
-        }
     }
     
     private func getImage() {
         let newsId:Int = (data_?.newsId!)!
         var request = URLRequest(url: URL(string: Server.SERVER + "GetNewsHeaderImageByID.ashx?" + "id=" + String(newsId))!)
-//        print("REQUEST = \(request)")
+        print("REQUEST = \(request)")
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) {
@@ -123,7 +107,7 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
             guard data != nil else { return }
             
 //            #if DEBUG
-//            print(String(data: data!, encoding: .utf8) ?? "")
+            print(String(data: data!, encoding: .utf8) ?? "")
 //            #endif
             if String(data: data!, encoding: .utf8) != nil && (String(data: data!, encoding: .utf8)?.contains(find: "картинка для новости"))!{
                 DispatchQueue.main.async {
@@ -135,6 +119,22 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
             }else{
                 if let image = UIImage(data: data!) {
                     DispatchQueue.main.async {
+                        let points = Double(UIScreen.pixelsPerInch ?? 0.0)
+                        print(points)
+                        
+                        if (300.0...320.0).contains(points) {
+                            self.imageWidth.constant  = 288
+                            self.imageHeight.constant = 144
+                        } else if (320.0...350.0).contains(points) {
+                            self.imageWidth.constant  = 343
+                            self.imageHeight.constant = 170
+                        } else if (350.0...400.0).contains(points) {
+                            self.imageWidth.constant  = 343
+                            self.imageHeight.constant = 170
+                        } else {
+                            self.imageWidth.constant  = 382
+                            self.imageHeight.constant = 191
+                        }
                         self.image.image = image
                         self.image.isHidden = false
                         self.StopIndicator()
@@ -187,5 +187,19 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
         
         self.indicator.stopAnimating()
         self.indicator.isHidden = true
+    }
+}
+
+extension String {
+    var htmlToAttributedString: NSAttributedString? {
+        guard let data = data(using: .utf8) else { return NSAttributedString() }
+        do {
+            return try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding:String.Encoding.utf8.rawValue], documentAttributes: nil)
+        } catch {
+            return NSAttributedString()
+        }
+    }
+    var htmlToString: String {
+        return htmlToAttributedString?.string ?? ""
     }
 }

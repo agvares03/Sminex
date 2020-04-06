@@ -9,13 +9,12 @@ import UIKit
 import Gloss
 import FSPagerView
 import DeviceKit
-//import AlignedCollectionViewFlowLayout
 
 private protocol CellsDelegate:     class {
     func pressed(at indexPath: IndexPath)
 }
 
-class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate {
+class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, CellsDelegate, UICollectionViewDelegateFlowLayout {
     
     // MARK: Outlets
     
@@ -40,9 +39,6 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
-//        let alignedFlowLayout = collectionView?.collectionViewLayout as? AlignedCollectionViewFlowLayout
-//        alignedFlowLayout?.horizontalAlignment = .left
-//        alignedFlowLayout?.verticalAlignment = .top
         updateUserInterface()
         getRequestTypes()
     }
@@ -165,7 +161,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
                     }
                     b.append(NewRequestTypeCellData(id: $0.id!, title: $0.name!, picture: image))
                 }
-                b.append(NewRequestTypeCellData(id: "-1", title: "Перейти в каталог услуг", picture: UIImage(named: "admissionIcon")!))
+                //b.append(NewRequestTypeCellData(id: "-1", title: "Перейти в каталог услуг", picture: UIImage(named: "admissionIcon")!))
                 self.data.append(Objects(sectionName: "Дополнительные (платные) услуги", filteredData: b))
             }
             
@@ -216,14 +212,14 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if data[1].filteredData.count - 1 == indexPath.row && indexPath.section == 1{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GoTypeCell", for: indexPath) as! GoTypeCell
-            return cell
-        }else{
+        //if data[1].filteredData.count - 1 == indexPath.row && indexPath.section == 1{
+            //let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GoTypeCell", for: indexPath) as! GoTypeCell
+            //return cell
+        //}else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewRequestTypeCell", for: indexPath) as! NewRequestTypeCell
             cell.display(data[indexPath.section].filteredData![indexPath.row], delegate: self, indexPath: indexPath, displayWidth: self.view.frame.size.width - 32)
             return cell
-        }
+        //}
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -237,11 +233,9 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
 //        print((view.frame.size.width - 32) / 4)
         
         if indexPath.section == 0{
-            return CGSize(width: 85.75, height: 110)
-        }else if indexPath.row == data[1].filteredData.count - 1{
-            return CGSize(width: view.frame.size.width - 32, height: 50)
+            return CGSize(width: 85.75, height: 100)
         }else{
-            return CGSize(width: 85.75, height: 140)
+            return CGSize(width: (view.frame.size.width - 32) / 4, height: 130)
         }
     }
     
@@ -328,21 +322,26 @@ class NewRequestTypeCell: UICollectionViewCell {
     private var indexPath: IndexPath?
     
     fileprivate func display(_ item: NewRequestTypeCellData, delegate: CellsDelegate, indexPath: IndexPath, displayWidth: CGFloat) {
+        viewConst.constant = 20
+        viewConst2.constant = 20
         if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
             viewConst.constant = 10
             viewConst2.constant = 10
         }
         self.delegate    = delegate
         self.indexPath   = indexPath
-        title.text       = item.title
+        title.text       = item.title.replacingOccurrences(of: " ", with: " ")
         if item.title == "Гостевой пропуск"{
             title.text = "Пропуск"
         }
-//        if displayWidth < 375{
-//            title.font = UIFont.systemFont(ofSize: 11, weight: .regular)
-//        }else if displayWidth == 375{
-//            title.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-//        }
+        if item.title == "Доставка питьевой воды"{
+            title.text = "Доставка\nпитьевой\nводы"
+        }
+        if displayWidth < 375{
+            title.font = UIFont.systemFont(ofSize: 11, weight: .regular)
+        }else if displayWidth == 375{
+            title.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        }
         if Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE) {
             title.font = UIFont.systemFont(ofSize: 10, weight: .regular)
         }
@@ -424,31 +423,6 @@ struct NewRequestTypeCellData {
     
     func addImage() {
         imageView.image = image
-    }
-}
-
-class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
-
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        let attributes = super.layoutAttributesForElements(in: rect)
-
-        var leftMargin = sectionInset.left
-        var maxY: CGFloat = -1.0
-        attributes?.forEach { layoutAttribute in
-            guard layoutAttribute.representedElementCategory == .cell else {
-                return
-            }
-            if layoutAttribute.frame.origin.y >= maxY {
-                leftMargin = sectionInset.left
-            }
-
-            layoutAttribute.frame.origin.x = leftMargin
-
-            leftMargin += layoutAttribute.frame.width + minimumInteritemSpacing
-            maxY = max(layoutAttribute.frame.maxY , maxY)
-        }
-
-        return attributes
     }
 }
 
