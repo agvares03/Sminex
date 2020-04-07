@@ -237,6 +237,21 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         if emailChoice{
             email = phoneEmailText.text?.replacingOccurrences(of: " ", with: "") ?? ""
         }
+        if email == ""{
+            var mes = ""
+            if phoneChoice{
+                mes = "Укажите номер телефона"
+            }else{
+                mes = "Укажите Email"
+            }
+            let alert = UIAlertController(title: "Ошибка", message: mes, preferredStyle: .alert)
+            alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+            DispatchQueue.main.sync {
+                self.stopAnimation()
+                self.present(alert, animated: true, completion: nil)
+            }
+            return
+        }
         let number_bills = billsData_?.number_eng
         let date_bills   = billsData_?.datePay
         var url_str = Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + pwd

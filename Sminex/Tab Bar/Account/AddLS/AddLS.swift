@@ -13,6 +13,7 @@ import Gloss
 final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet private weak var sprtTop:     NSLayoutConstraint!
+    @IBOutlet private weak var btnGoHeight: NSLayoutConstraint!
     @IBOutlet private weak var edLS:        UITextField!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
     @IBOutlet private weak var btn_go:      UIButton!
@@ -36,7 +37,7 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             }
         }
         if didntAdd == true{
-            self.txtDesc.textColor = .red
+            self.txtDesc.textColor = mainOrangeColor
             let ident: String = edLS.text!
             self.txtDesc.text = "Лицевой счет \(ident) уже добавлен в приложение"
             self.changeGoButton(isEnabled: false)
@@ -192,8 +193,8 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             edLS.text   = login
             
         } else {
-            btn_go.isEnabled = false
-            btn_go.alpha = 0.5
+            btn_go.isHidden = true
+            btnGoHeight.constant = 0
         }
     }
     
@@ -251,7 +252,7 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
         
         if isError {
             
-            self.txtDesc.textColor = .red
+            self.txtDesc.textColor = mainOrangeColor
             self.txtDesc.text = self.responseString.replacingOccurrences(of: "error: ", with: "")
             self.changeGoButton(isEnabled: false)
             
@@ -270,8 +271,8 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
         DispatchQueue.global(qos: .background).async {
             sleep(60)
             DispatchQueue.main.async {
-                self.txtDesc.textColor = .gray
-                self.txtDesc.text = "Укажите ваш лицевой счет"
+//                self.txtDesc.textColor = .gray
+//                self.txtDesc.text = "Укажите ваш лицевой счет"
                 self.changeGoButton(isEnabled: true)
             }
         }
@@ -285,23 +286,23 @@ final class AddLS: UIViewController, UITextFieldDelegate, UIGestureRecognizerDel
             
             if #available(iOS 10.0, *) {
                 UIViewPropertyAnimator(duration: 0, curve: .easeInOut) {
-                    self.btn_go.isEnabled = false
-                    self.btn_go.alpha = 0.5
+                    self.btn_go.isHidden = true
+                    self.btnGoHeight.constant = 0
                     }.startAnimation()
             } else {
-                btn_go.isEnabled = false
-                self.btn_go.alpha = 0.5
+                btn_go.isHidden = true
+                btnGoHeight.constant = 0
             }
         } else {
             
             if #available(iOS 10.0, *) {
                 UIViewPropertyAnimator(duration: 0, curve: .easeInOut) {
-                    self.btn_go.isEnabled = true
-                    self.btn_go.alpha = 1
+                    self.btn_go.isHidden = false
+                    self.btnGoHeight.constant = 48
                     }.startAnimation()
             } else {
-                btn_go.isEnabled = true
-                self.btn_go.alpha = 1
+                self.btn_go.isHidden = false
+                self.btnGoHeight.constant = 48
             }
         }
     }

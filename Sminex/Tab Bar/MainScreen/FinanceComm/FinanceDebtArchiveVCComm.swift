@@ -107,7 +107,7 @@ class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyT
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceDebtArchiveCommCell") as! FinanceDebtArchiveCommCell
         //        cell.display(title: self.getNameAndMonth(data_[indexPath.row].numMonth ?? 0) + " \(data_[indexPath.row].numYear ?? 0)", desc: (((data_[safe: indexPath.row]?.sum ?? 0.0) - (data_[safe: indexPath.row]?.payment_sum ?? 0.0)).formattedWithSeparator))
         var last = false
-        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[indexPath.section].filteredData.count{
             last = true
         }
         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonth ?? 0) + " \(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYear ?? 0)", desc: (((dataFilt[indexPath.section].filteredData[indexPath.row - 1].sum ?? 0.0)).formattedWithSeparator), last: last)
@@ -186,12 +186,15 @@ final class FinanceDebtArchiveYearCommCell: UITableViewCell, ExpyTableViewHeader
     @IBOutlet weak var botView: UIView!
     
     func display(_ title: String, section: Int, last: Bool) {
-        if section == 0{
-            topView.isHidden = false
+        if last && section == 0{
+            topView.isHidden = true
             botView.isHidden = true
-        }else if last{
+        }else if section == 0{
             topView.isHidden = true
             botView.isHidden = false
+        }else if last{
+            topView.isHidden = false
+            botView.isHidden = true
         }else{
             topView.isHidden = false
             botView.isHidden = false
@@ -204,10 +207,12 @@ final class FinanceDebtArchiveYearCommCell: UITableViewCell, ExpyTableViewHeader
         switch state {
         case .willExpand:
             self.img.image = UIImage(named: "expanded")
+            botView.isHidden = false
         case .willCollapse:
             self.img.image = UIImage(named: "expand")
         case .didExpand:
             self.img.image = UIImage(named: "expanded")
+            botView.isHidden = false
         case .didCollapse:
             self.img.image = UIImage(named: "expand")
         }
@@ -217,12 +222,10 @@ final class FinanceDebtArchiveYearCommCell: UITableViewCell, ExpyTableViewHeader
         if !isExpanded {
             self.img.image = UIImage(named: "expand")
             if last{
-                topView.isHidden = true
-                botView.isHidden = false
+                botView.isHidden = true
             }
         } else {
             if last{
-                topView.isHidden = false
                 botView.isHidden = false
             }
             self.img.image = UIImage(named: "expanded")

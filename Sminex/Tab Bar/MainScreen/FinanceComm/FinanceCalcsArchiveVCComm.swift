@@ -86,11 +86,11 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
-            return dataFilt[section].filteredData.count + 2
-        }else{
+//        if section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//            return dataFilt[section].filteredData.count + 2
+//        }else{
             return dataFilt[section].filteredData.count + 1
-        }
+//        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -99,43 +99,43 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
-            if indexPath.row > 0{
-                index = indexPath.row - 2
-                section = indexPath.section
-                performSegue(withIdentifier: Segues.fromFinanceCalcsArchive.toCalc, sender: self)
-            }
-        }else{
+//        if indexPath.section == 0 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//            if indexPath.row > 0{
+//                index = indexPath.row - 2
+//                section = indexPath.section
+//                performSegue(withIdentifier: Segues.fromFinanceCalcsArchive.toCalc, sender: self)
+//            }
+//        }else{
             if indexPath.row > 0{
                 index = indexPath.row - 1
                 section = indexPath.section
                 performSegue(withIdentifier: Segues.fromFinanceCalcsArchive.toCalc, sender: self)
             }
-        }
+//        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCalcsArchiveCommCell") as! FinanceCalcsArchiveCommCell
-        if indexPath.section == 0 && indexPath.row == 1 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
-            var sum = String(format:"%.2f", debt!.sumPay!)
-            if Double(debt!.sumPay!) > 999.00 || Double(debt!.sumPay!) < -999.00{
-                let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
-                sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
-            }
-            var last = false
-            if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
-                last = true
-            }
-            cell.display(title: "Аванс", desc: sum.replacingOccurrences(of: "-", with: ""), last: last)
-        } else {
+//        if indexPath.section == 0 && indexPath.row == 1 && (Double((debt?.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//            var sum = String(format:"%.2f", debt!.sumPay!)
+//            if Double(debt!.sumPay!) > 999.00 || Double(debt!.sumPay!) < -999.00{
+//                let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+//                sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+//            }
+//            var last = false
+//            if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+//                last = true
+//            }
+//            cell.display(title: "Аванс", desc: sum.replacingOccurrences(of: "-", with: ""), last: last)
+//        } else {
             var debt = 0.0
             var currDate = (0, 0)
-            if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
-                currDate = (dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet, dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet) as! (Int, Int)
-            }else{
+//            if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                currDate = (dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet, dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet) as! (Int, Int)
+//            }else{
                 currDate = (dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet, dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet) as! (Int, Int)
-            }
+//            }
             data_.forEach {
                 if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
                     debt += ($0.sumDebt ?? 0.0)
@@ -143,22 +143,22 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
             }
 //            if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                 var year = ""
-                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
-                    year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet ?? 0)"
-                }else{
+//                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                    year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet ?? 0)"
+//                }else{
                     year = "\(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet ?? 0)"
-                }
-                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
-                    if dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet! > 2000{
-                        year.removeFirst()
-                        year.removeFirst()
-                    }
-                }else{
+//                }
+//                if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                    if dataFilt[indexPath.section].filteredData[indexPath.row - 2].numYearSet! > 2000{
+//                        year.removeFirst()
+//                        year.removeFirst()
+//                    }
+//                }else{
                     if dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet! > 2000{
                         year.removeFirst()
                         year.removeFirst()
                     }
-                }
+//                }
                 var sum = String(format:"%.2f", debt)
                 if Double(debt) > 999.00 || Double(debt) < -999.00{
                     let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
@@ -168,59 +168,59 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
                     sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
                 }
                 if debt == 0.00{
-                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                        var last = false
+//                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+//                            last = true
+//                        }
+//                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+//                                     desc: "Оплачено", last: last)
+//                    }else{
                         var last = false
-                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
-                            last = true
-                        }
-                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: "Оплачено", last: last)
-                    }else{
-                        var last = false
-                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[indexPath.section].filteredData.count{
                             last = true
                         }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
                                      desc: "Оплачено", last: last)
-                    }
+//                    }
                 }else if debt > 0.00{
-                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                        var last = false
+//                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+//                            last = true
+//                        }
+//                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+//                                     desc: "Задолженность " + sum, last: last)
+//                    }else{
                         var last = false
-                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
-                            last = true
-                        }
-                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: "Задолженность " + sum, last: last)
-                    }else{
-                        var last = false
-                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[indexPath.section].filteredData.count{
                             last = true
                         }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
                                      desc: "Задолженность " + sum, last: last)
-                    }
+//                    }
                 }else{
-                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                    if indexPath.section == 0 && (Double((self.debt!.sumPay)!) < 0.00 && UserDefaults.standard.string(forKey: "typeBuilding") != ""){
+//                        var last = false
+//                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
+//                            last = true
+//                        }
+//                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+//                                     desc: sum, last: last)
+//                    }else{
                         var last = false
-                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 2{
-                            last = true
-                        }
-                        cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: sum, last: last)
-                    }else{
-                        var last = false
-                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[section].filteredData.count - 1{
+                        if indexPath.section == dataFilt.count - 1 && indexPath.row == dataFilt[indexPath.section].filteredData.count{
                             last = true
                         }
                         cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
                                      desc: sum, last: last)
-                    }
+//                    }
                 }
 //            }else{
 //                cell.display(title: self.getNameAndMonth(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numMonthSet ?? 0) + " \(dataFilt[indexPath.section].filteredData[indexPath.row - 1].numYearSet ?? 0)",
 //                    desc: debt != 0.0 ? "Долг \(debt.formattedWithSeparator)" : "")
 //            }
-        }
+//        }
         return cell
     }
     
@@ -243,7 +243,23 @@ class FinanceCalcsArchiveVCComm: UIViewController, ExpyTableViewDataSource, Expy
                 last = true
             }
             cell.expand(false, last: last)
-        }
+        } else if state == .didExpand {
+            let index = IndexPath(row: 0, section: section)
+            let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCommCell
+            var last = false
+            if section == (dataFilt.count - 1){
+                last = true
+            }
+            cell.expand(true, last: last)
+        } else if state == .didCollapse {
+           let index = IndexPath(row: 0, section: section)
+           let cell = tableView.cellForRow(at: index) as! FinanceCalcsArchiveYearCommCell
+           var last = false
+           if section == (dataFilt.count - 1){
+               last = true
+           }
+           cell.expand(false, last: last)
+       }
     }
     
     func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
@@ -336,12 +352,15 @@ final class FinanceCalcsArchiveYearCommCell: UITableViewCell, ExpyTableViewHeade
     @IBOutlet weak var botView: UIView!
     
     func display(_ title: String, section: Int, last: Bool) {
-        if section == 0{
-            topView.isHidden = false
+        if last && section == 0{
+            topView.isHidden = true
             botView.isHidden = true
-        }else if last{
+        }else if section == 0{
             topView.isHidden = true
             botView.isHidden = false
+        }else if last{
+            topView.isHidden = false
+            botView.isHidden = true
         }else{
             topView.isHidden = false
             botView.isHidden = false
@@ -354,10 +373,12 @@ final class FinanceCalcsArchiveYearCommCell: UITableViewCell, ExpyTableViewHeade
         switch state {
         case .willExpand:
             self.img.image = UIImage(named: "expanded")
+            botView.isHidden = false
         case .willCollapse:
             self.img.image = UIImage(named: "expand")
         case .didExpand:
             self.img.image = UIImage(named: "expanded")
+            botView.isHidden = false
         case .didCollapse:
             self.img.image = UIImage(named: "expand")
         }
@@ -367,12 +388,10 @@ final class FinanceCalcsArchiveYearCommCell: UITableViewCell, ExpyTableViewHeade
         if !isExpanded {
             self.img.image = UIImage(named: "expand")
             if last{
-                topView.isHidden = true
-                botView.isHidden = false
+                botView.isHidden = true
             }
         } else {
             if last{
-                topView.isHidden = false
                 botView.isHidden = false
             }
             self.img.image = UIImage(named: "expanded")
