@@ -201,11 +201,11 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             } else {
                 var debt = 0.00
                 var currDate = (0, 0)
-                if (Double((self.debt!.sumPay)!) < 0.00){
-                    currDate = (filteredCalcs[indexPath.row - 2].numMonthSet, filteredCalcs[indexPath.row - 2].numYearSet) as! (Int, Int)
-                }else{
+//                if (Double((self.debt!.sumPay)!) < 0.00){
+//                    currDate = (filteredCalcs[indexPath.row - 2].numMonthSet, filteredCalcs[indexPath.row - 2].numYearSet) as! (Int, Int)
+//                }else{
                     currDate = (filteredCalcs[indexPath.row - 1].numMonthSet, filteredCalcs[indexPath.row - 1].numYearSet) as! (Int, Int)
-                }
+//                }
                 calcs.forEach {
                     if ($0.numMonthSet == currDate.0 && $0.numYearSet == currDate.1) {
                         debt += ($0.sumDebt ?? 0.00)
@@ -213,24 +213,24 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 }
                 //                if UserDefaults.standard.string(forKey: "typeBuilding") != ""{
                 var year = ""
-                if (Double((self.debt!.sumPay)!) < 0.00){
-                    year = "\(filteredCalcs[indexPath.row - 2].numYearSet ?? 0)"
-                }else{
+//                if (Double((self.debt!.sumPay)!) < 0.00){
+//                    year = "\(filteredCalcs[indexPath.row - 2].numYearSet ?? 0)"
+//                }else{
                     year = "\(filteredCalcs[indexPath.row - 1].numYearSet ?? 0)"
-                }
-                if (Double((self.debt!.sumPay)!) < 0.00){
-                    if receipts[safe: indexPath.row - 2]!.numYear! > 2000{
-                        year.removeFirst()
-                        year.removeFirst()
-                    }
-                }else{
+//                }
+//                if (Double((self.debt!.sumPay)!) < 0.00){
+//                    if receipts[safe: indexPath.row - 2]!.numYear! > 2000{
+//                        year.removeFirst()
+//                        year.removeFirst()
+//                    }
+//                }else{
                     if receipts.count > 0 {
                         if receipts[safe: indexPath.row - 1]!.numYear! > 2000{
                             year.removeFirst()
                             year.removeFirst()
                         }
                     }
-                }
+//                }
                 var sum = String(format:"%.2f", debt)
                 if Double(debt) > 999.00 || Double(debt) < -999.00{
                     let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
@@ -240,29 +240,29 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                     sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
                 }
                 if debt == 0.00{
-                    if (Double((self.debt!.sumPay)!) < 0.00){
-                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: "Оплачено")
-                    }else{
+//                    if (Double((self.debt!.sumPay)!) < 0.00){
+//                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+//                                     desc: "Оплачено")
+//                    }else{
                         cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
                                      desc: "Оплачено")
-                    }
+//                    }
                 }else if debt > 0.00{
-                    if (Double((self.debt!.sumPay)!) < 0.00){
-                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: "Задолженность " + sum)
-                    }else{
+//                    if (Double((self.debt!.sumPay)!) < 0.00){
+//                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+//                                     desc: "Задолженность " + sum)
+//                    }else{
                         cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
                                      desc: "Задолженность " + sum)
-                    }
+//                    }
                 }else{
-                    if Double((self.debt!.sumPay)!) < 0.00{
-                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
-                                     desc: sum)
-                    }else{
+//                    if Double((self.debt!.sumPay)!) < 0.00{
+//                        cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 2].numMonthSet ?? 0) + " " + year,
+//                                     desc: sum)
+//                    }else{
                         cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
                                      desc: debt != 0.0 ? "- \(debt.formattedWithSeparator)" : "")
-                    }
+//                    }
                 }
                 cell.contentView.backgroundColor = backColor
             }
@@ -363,17 +363,17 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
         } else if indexPath.section == 2 {
             guard indexPath.row != 0 && filteredCalcs.count != 0 else { return }
             self.startAnimation()
-            if Double((self.debt!.sumPay)!) < 0.00{
-                if indexPath.row == 5 || filteredCalcs.count == 0{
-                    performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
-                    return
-                }
-                index = indexPath.row - 2
-                if indexPath.row != 1{
-                    performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
-                }
-            }else{
-                if indexPath.row == 4 || filteredCalcs.count == 0{
+//            if Double((self.debt!.sumPay)!) < 0.00{
+//                if indexPath.row == 5 || filteredCalcs.count == 0 || indexPath.row == filteredCalcs.count + 2{
+//                    performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
+//                    return
+//                }
+//                index = indexPath.row - 2
+//                if indexPath.row != 1{
+//                    performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
+//                }
+//            }else{
+                if indexPath.row == 4 || filteredCalcs.count == 0 || indexPath.row == filteredCalcs.count + 1{
                     performSegue(withIdentifier: Segues.fromFinanceVC.toCalcsArchive, sender: self)
                     return
                 } else if (indexPath.row == 5) {
@@ -382,8 +382,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 }
                 index = indexPath.row - 1
                 performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
-            }
-            
+//            }
         } else if indexPath.section == 3 {
             performSegue(withIdentifier: Segues.fromFinanceVC.toHistory, sender: self)
         }

@@ -41,6 +41,9 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.barTintColor = navigationGrayColor
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.hidesBackButton   = true
         updateUserInterface()
 //        collection.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 20, right: 0)
         
@@ -69,6 +72,7 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),

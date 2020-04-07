@@ -18,6 +18,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var NameLS:      UILabel!
     @IBOutlet private weak var descTxt:     UILabel!
     @IBOutlet private weak var indicator:   UIActivityIndicatorView!
+    @IBOutlet private weak var btnGoHeight: NSLayoutConstraint!
     @IBOutlet private weak var btn_go:      UIButton!
     @IBOutlet private weak var smsField:    UITextField!
     @IBOutlet private weak var againLabel:  UIButton!
@@ -148,8 +149,8 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         
         descText = descTxt.text ?? ""
         
-        btn_go.isEnabled = false
-        btn_go.alpha = 0.5
+        btn_go.isHidden = true
+        btnGoHeight.constant = 0
         
         smsField.delegate = self
         startTimer()
@@ -650,12 +651,12 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if smsField.text != "" {
-            btn_go.isEnabled = true
-            btn_go.alpha = 1
+            btn_go.isHidden = false
+            btnGoHeight.constant = 48
             
         } else {
-            btn_go.isEnabled = false
-            btn_go.alpha = 0.5
+            btn_go.isHidden = true
+            btnGoHeight.constant = 0
         }
         return true
     }
