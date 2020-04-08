@@ -13,7 +13,14 @@ final class CounterHistoryTableVC: UIViewController {
     @IBOutlet private weak var collection: UICollectionView!
     @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet private weak var tableView: UITableView!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     // MARK: Properties
     
     public var data_: [MeterValue] = []
@@ -26,6 +33,16 @@ final class CounterHistoryTableVC: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 73
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
     }
     
     // MARK: Actions

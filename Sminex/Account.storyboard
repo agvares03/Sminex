@@ -198,7 +198,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="42307 810 5 9038 0710235" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="bUN-hB-nat">
-                                                    <rect key="frame" x="16" y="40" width="215" height="20.5"/>
+                                                    <rect key="frame" x="16" y="40" width="294" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -453,18 +453,27 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="UxW-6g-vfF"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Профиль" id="hvp-6m-Y3a"/>
+                    <navigationItem key="navigationItem" title="Профиль" id="5QW-kc-OeY">
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="ZsZ-nL-XjT">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="1lU-OQ-vrk" id="nM8-oi-Oua"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <size key="freeformSize" width="375" height="1000"/>
                     <connections>
                         <outlet property="collection" destination="S4m-Bt-HXZ" id="GUu-Kk-D8l"/>
+                        <outlet property="notifiBtn" destination="ZsZ-nL-XjT" id="5gD-5v-FYP"/>
                         <segue destination="CoA-xV-yxk" kind="show" identifier="settings" id="pA6-7e-kJU"/>
+                        <segue destination="GFx-2i-bSX" kind="show" identifier="goNotifi" id="71q-LY-iaR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vtN-OW-bC3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="863.20000000000005" y="614.392803598201"/>
         </scene>
-        <!--Редактирование-->
+        <!--Редактирование профиля-->
         <scene sceneID="qdX-QC-6gb">
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="CoA-xV-yxk" customClass="AccountSettingsVC" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
@@ -477,7 +486,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Txg-6F-VFE">
-                                <rect key="frame" x="0.0" y="44" width="375" height="756"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="707"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lng-4t-ldm">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="821"/>
@@ -965,14 +974,22 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jYd-8E-dCN"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Редактирование" id="iOk-Ju-FHi">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Редактирование профиля" id="iOk-Ju-FHi">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="f4d-AU-Uov">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="backButtonPressed:" destination="CoA-xV-yxk" id="QEM-Xc-vBJ"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="Hhe-DK-Cfd">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="CoA-xV-yxk" id="f4h-VZ-Jg2"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="800"/>
                     <connections>
                         <outlet property="accountImageView" destination="wXy-Nf-4Vh" id="gZZ-VA-Bxc"/>
@@ -990,6 +1007,7 @@
                         <outlet property="loader" destination="0wb-tX-9cD" id="Ltj-Zb-iDW"/>
                         <outlet property="lsLabel" destination="CY0-rb-nYG" id="nkR-6G-gsH"/>
                         <outlet property="nameField" destination="rUK-iA-Bcq" id="tKx-Av-yQe"/>
+                        <outlet property="notifiBtn" destination="Hhe-DK-Cfd" id="d2m-NV-7zi"/>
                         <outlet property="notifications" destination="AGO-yu-wFA" id="DUT-v7-j7C"/>
                         <outlet property="notificationsImg" destination="Bh2-eL-tnG" id="TIy-kh-byb"/>
                         <outlet property="otchestvoField" destination="0Fo-ZP-18t" id="Rl8-Cd-6rw"/>
@@ -1000,6 +1018,7 @@
                         <segue destination="EgF-GX-IRb" kind="show" identifier="accountChangePassword" id="ShQ-w2-muM"/>
                         <segue destination="xQp-IS-0XP" kind="show" identifier="changeNotifications" id="wGG-ux-Y3e"/>
                         <segue destination="Lzv-Jk-6u4" kind="show" identifier="toMain" id="gyB-AU-k6K"/>
+                        <segue destination="GFx-2i-bSX" kind="show" identifier="goNotifi" id="FxQ-0n-Cay"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l6o-xR-wak" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1196,6 +1215,12 @@
                                 <action selector="backButtonPressed:" destination="xQp-IS-0XP" id="qgb-O4-4d8"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="4sx-2j-YsP">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="xQp-IS-0XP" id="uNk-5K-H3K"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="counters" destination="4Rw-D0-Ix8" id="MlQ-BH-Nce"/>
@@ -1203,6 +1228,8 @@
                         <outlet property="newComment" destination="ODh-g6-qul" id="cHI-UO-LOC"/>
                         <outlet property="newStatus" destination="web-Pr-ljm" id="t2H-QK-ods"/>
                         <outlet property="news" destination="xmT-cx-snQ" id="ZpW-Kt-er8"/>
+                        <outlet property="notifiBtn" destination="4sx-2j-YsP" id="tes-W4-B2O"/>
+                        <segue destination="GFx-2i-bSX" kind="show" identifier="goNotifi" id="BQP-9x-kNh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cAl-p2-xhm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1588,6 +1615,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3M3-Q2-1TJ"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Смена пароля" id="idG-nu-yiL">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="Zgi-lb-WPL">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1595,13 +1623,21 @@
                                 <action selector="backButtonPressed:" destination="EgF-GX-IRb" id="Pym-1w-S40"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="dNG-65-1tl">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="EgF-GX-IRb" id="M1z-KU-ndO"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="errorHeight" destination="twe-aB-yWf" id="JKq-dA-Bd1"/>
                         <outlet property="loader" destination="5F7-0G-yHh" id="ocz-hb-Kyr"/>
                         <outlet property="newPasswordField" destination="6Z5-UH-lvc" id="Vrg-Y2-vWN"/>
                         <outlet property="newPasswordIndicator" destination="3wB-LG-9hR" id="MrY-5T-Nlq"/>
                         <outlet property="newPasswordSecure" destination="bMp-YC-pmi" id="5CM-IJ-TIT"/>
+                        <outlet property="notifiBtn" destination="dNG-65-1tl" id="k7f-el-bO4"/>
                         <outlet property="oldPasswordField" destination="zdt-UY-pzu" id="tBu-O0-v0b"/>
                         <outlet property="oldPasswordIndicator" destination="sWM-b7-lui" id="3vi-OM-93m"/>
                         <outlet property="oldPasswordSecure" destination="cM3-4X-vaH" id="e6O-lP-QE8"/>
@@ -1609,6 +1645,7 @@
                         <outlet property="viewHeight" destination="P9y-Mh-4kD" id="O0g-oc-7Ld"/>
                         <outlet property="wrongPassLabel" destination="fHM-lJ-D9N" id="kRi-9H-CJ6"/>
                         <segue destination="Oye-Je-7Xt" kind="show" identifier="forgot" id="igt-R0-iN2"/>
+                        <segue destination="GFx-2i-bSX" kind="show" identifier="goNotifi" id="bkq-h3-b3N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z0B-lI-Okr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1637,6 +1674,10 @@
                         <color key="backgroundColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
@@ -2183,11 +2224,22 @@
             </objects>
             <point key="canvasLocation" x="3338.4000000000001" y="1356.9715142428786"/>
         </scene>
+        <!--Notifications-->
+        <scene sceneID="8lm-qJ-cBh">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Notifications" id="GFx-2i-bSX" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="39Z-FU-qcf"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l9P-LS-56t" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="963" y="1673"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="bkq-h3-b3N"/>
         <segue reference="RUE-Ep-0Ip"/>
         <segue reference="pA6-7e-kJU"/>
-        <segue reference="OLZ-ao-Qp9"/>
+        <segue reference="4gF-n8-y4p"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="add_photo_txt" width="330" height="165"/>
@@ -2197,6 +2249,7 @@
         <image name="new_account" width="18" height="22.5"/>
         <image name="new_add" width="40" height="40"/>
         <image name="new_check" width="36" height="36"/>
+        <image name="new_notifi1" width="18" height="22"/>
         <image name="new_settings" width="37" height="37"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
         <image name="sminex_call_new" width="37" height="37"/>

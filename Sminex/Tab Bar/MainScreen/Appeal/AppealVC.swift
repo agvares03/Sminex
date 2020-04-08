@@ -22,7 +22,14 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
     @IBOutlet private weak var commentField:    UITextField!
     @IBOutlet private weak var sendBtn:         UIButton!
     @IBOutlet private weak var cameraButton:    UIButton!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         imgs = [:]
         if isFromNotifi_ {
@@ -172,6 +179,12 @@ class AppealVC: UIViewController, UICollectionViewDelegate, UICollectionViewDele
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),

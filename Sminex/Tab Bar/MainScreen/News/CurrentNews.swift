@@ -23,7 +23,14 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
     @IBOutlet private weak var date:        	UILabel!
     @IBOutlet private weak var desc:            UILabel!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     var webView: WKWebView!
     
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
@@ -93,6 +100,16 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
 //        } else {
 //            image.image = UIImage(data: Data(base64Encoded: (data_?.headerImage?.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)!)
 //        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
     }
     
     private func getImage() {

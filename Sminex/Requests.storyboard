@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="FTj-1w-rXP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="FTj-1w-rXP">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,11 +21,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kCc-5m-D9m">
-                                <rect key="frame" x="0.0" y="44" width="375" height="1106"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="1057"/>
                                 <color key="backgroundColor" red="0.83088141680000005" green="0.82050639390000002" blue="0.76284402610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0Eh-C7-iPR">
-                                <rect key="frame" x="16" y="49" width="343" height="1096"/>
+                                <rect key="frame" x="16" y="49" width="343" height="1047"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="wXS-u8-j4J">
                                     <size key="itemSize" width="320" height="275"/>
@@ -740,7 +740,7 @@
                                 </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ar-jX-SG5">
-                                <rect key="frame" x="0.0" y="1150" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="1101" width="375" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wwI-eG-bd1">
                                         <rect key="frame" x="10" y="12.5" width="25" height="25"/>
@@ -824,6 +824,7 @@
                             <constraint firstItem="6Ar-jX-SG5" firstAttribute="top" secondItem="kCc-5m-D9m" secondAttribute="bottom" id="y33-Pj-dZo"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Пропуск" id="F1B-Pv-Q34">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="qXx-EF-z7f">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -831,15 +832,23 @@
                                 <action selector="backButtonPressed:" destination="nGr-Se-ITa" id="hzg-oM-G1r"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="GqA-qG-zr4">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="nGr-Se-ITa" id="TxP-hU-8jB"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="1200"/>
                     <connections>
                         <outlet property="cameraButton" destination="wwI-eG-bd1" id="DPA-wJ-hK8"/>
                         <outlet property="collection" destination="0Eh-C7-iPR" id="ehL-pa-nG9"/>
                         <outlet property="commentField" destination="dJL-jy-Btl" id="zng-9j-rRq"/>
                         <outlet property="loader" destination="7yn-gr-ZWd" id="GlC-G8-X0N"/>
+                        <outlet property="notifiBtn" destination="GqA-qG-zr4" id="YPR-mT-Q3e"/>
                         <outlet property="sendBtn" destination="uPP-F1-ePF" id="rtk-Ai-Awo"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="yRL-vZ-hbU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hk3-L3-JSi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -859,11 +868,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nt4-aP-vC5">
-                                <rect key="frame" x="0.0" y="44" width="375" height="906"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="857"/>
                                 <color key="backgroundColor" red="0.83088141680000005" green="0.82050639390000002" blue="0.76284402610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cLU-39-NnP">
-                                <rect key="frame" x="16" y="49" width="343" height="896"/>
+                                <rect key="frame" x="16" y="49" width="343" height="847"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="zlW-D8-D8U">
                                     <size key="itemSize" width="320" height="350"/>
@@ -1377,7 +1386,7 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hob-uV-sSb">
-                                <rect key="frame" x="0.0" y="950" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="901" width="375" height="50"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Сообщение" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HPL-jD-7qO">
                                         <rect key="frame" x="50" y="10" width="315" height="30"/>
@@ -1462,6 +1471,7 @@
                             <constraint firstItem="e37-1J-5sG" firstAttribute="top" secondItem="hob-uV-sSb" secondAttribute="bottom" id="pU2-wM-vKg"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Обслуживание" id="wNP-nf-6xP">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="d63-Kn-LCX">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1469,16 +1479,24 @@
                                 <action selector="backButtonPressed:" destination="Poq-SC-Dnp" id="mPa-r8-TKn"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="Ygs-SX-x2Q">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="Poq-SC-Dnp" id="B9C-n8-TAl"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="1000"/>
                     <connections>
                         <outlet property="cameraButton" destination="54P-ic-Jlj" id="Epv-MG-R6Z"/>
                         <outlet property="collection" destination="cLU-39-NnP" id="ecD-Yc-bsN"/>
                         <outlet property="commentField" destination="HPL-jD-7qO" id="cQR-rA-Klm"/>
                         <outlet property="loader" destination="8QP-Be-X2U" id="wHt-Cz-CKI"/>
+                        <outlet property="notifiBtn" destination="Ygs-SX-x2Q" id="vcQ-eg-MtI"/>
                         <outlet property="sendBtn" destination="bEL-Ou-uXu" id="Ek9-Ec-xch"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="5Ly-q8-rYt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zpw-xr-bMH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1877,10 +1895,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j4X-hF-enh">
-                                <rect key="frame" x="16" y="60" width="343" height="591"/>
+                                <rect key="frame" x="16" y="60" width="343" height="542"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="YQP-Vh-NAs">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="541"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="492"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="1oJ-vf-A4o">
                                             <size key="itemSize" width="50" height="94"/>
@@ -1950,7 +1968,7 @@
                                         </collectionReusableView>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aEO-8m-JHB">
-                                        <rect key="frame" x="0.0" y="541" width="343" height="40"/>
+                                        <rect key="frame" x="0.0" y="492" width="343" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="fFy-lj-6DZ"/>
                                         </constraints>
@@ -1988,6 +2006,7 @@
                             <constraint firstItem="j4X-hF-enh" firstAttribute="top" secondItem="w4G-9w-UNv" secondAttribute="bottom" constant="16" id="lcE-Kt-iTG"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Услуги" id="JCs-DV-PBB">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="90l-ym-b8t">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1995,13 +2014,22 @@
                                 <action selector="backButtonPressed:" destination="XXp-eL-9Wz" id="Kfa-vV-iRG"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="Gm0-c8-BY1">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="XXp-eL-9Wz" id="RgD-F6-1oG"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="YQP-Vh-NAs" id="hvD-eb-dSR"/>
+                        <outlet property="notifiBtn" destination="Gm0-c8-BY1" id="ukd-dq-2wV"/>
                         <segue destination="S4H-xZ-gJL" kind="show" identifier="service" id="ZBp-Yh-2M2"/>
                         <segue destination="BKd-GT-Fg1" kind="show" identifier="serviceUK" id="Z5J-TN-GCX"/>
                         <segue destination="HBn-i2-Bxp" kind="show" identifier="admission" id="1r7-m0-tG8"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="ARG-55-dES"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AzJ-vS-uz7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2456,6 +2484,7 @@
                             <constraint firstItem="4rj-Mn-7GG" firstAttribute="top" secondItem="4x9-Qu-jyk" secondAttribute="bottom" id="eOl-1C-gWd"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Обслуживание" id="XHm-Kt-We5">
                         <barButtonItem key="leftBarButtonItem" image="rossNavbar" id="IWp-bR-3iH">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2463,8 +2492,14 @@
                                 <action selector="cancelButtonPressed:" destination="S4H-xZ-gJL" id="sqA-o1-X6D"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="k1h-kR-DsR">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="S4H-xZ-gJL" id="OOL-UW-UYl"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="900"/>
                     <connections>
                         <outlet property="dateBtn" destination="Z8x-fW-nsN" id="KnN-IS-zQM"/>
@@ -2477,6 +2512,7 @@
                         <outlet property="imgsHeight" destination="pL0-gL-e8W" id="cY8-Ks-GOi"/>
                         <outlet property="loader" destination="ZqF-mu-ord" id="AyI-ZJ-qcY"/>
                         <outlet property="noDateLbl" destination="EH7-Pr-cbN" id="E5E-uP-D5e"/>
+                        <outlet property="notifiBtn" destination="k1h-kR-DsR" id="UW1-7j-DeN"/>
                         <outlet property="picker" destination="Oyv-hX-gbO" id="VXc-Im-se0"/>
                         <outlet property="pickerLine" destination="n9J-dY-hna" id="xPl-pb-RCS"/>
                         <outlet property="placeHeight" destination="xiW-hQ-Vv4" id="rQW-cF-Qr3"/>
@@ -2492,6 +2528,7 @@
                         <outlet property="timeLine1" destination="3IA-Nx-2pi" id="ea5-t9-zVz"/>
                         <outlet property="timeLine2" destination="JEW-Wl-iEj" id="9SZ-RH-nA3"/>
                         <segue destination="Poq-SC-Dnp" kind="show" identifier="showService" id="XJk-q4-yci"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="8XD-NK-Qjm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SKq-0u-qvb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3088,6 +3125,7 @@
                             <constraint firstAttribute="bottom" secondItem="uET-F5-12l" secondAttribute="bottom" id="oCh-fw-kQ1"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Заказ услуги" id="D8Q-ev-DA9">
                         <barButtonItem key="leftBarButtonItem" image="rossNavbar" id="f9h-Gu-Zgq">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3095,8 +3133,14 @@
                                 <action selector="cancelButtonPressed:" destination="BKd-GT-Fg1" id="MmA-Er-0Le"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="5gB-ck-ayi">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="BKd-GT-Fg1" id="FzW-Ru-9bL"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="1000"/>
                     <connections>
                         <outlet property="dateBtn" destination="jId-80-fVR" id="nP3-bL-8Ry"/>
@@ -3111,6 +3155,7 @@
                         <outlet property="imgsHeight" destination="GCB-T1-jio" id="8MZ-fw-SAL"/>
                         <outlet property="loader" destination="CWq-Gv-FLM" id="Ooe-5B-7fO"/>
                         <outlet property="noDateLbl" destination="kMu-Ud-pO9" id="mCV-Kx-pJG"/>
+                        <outlet property="notifiBtn" destination="5gB-ck-ayi" id="r5X-YB-q3E"/>
                         <outlet property="picker" destination="uYg-Yv-Ese" id="jvt-bG-VFQ"/>
                         <outlet property="pickerLine" destination="ICx-vb-vDe" id="L4F-Au-2fJ"/>
                         <outlet property="placeHeight" destination="Zfp-sN-oKk" id="wQF-cv-RJ3"/>
@@ -3134,6 +3179,7 @@
                         <outlet property="timeLine2" destination="hoh-5C-SzS" id="2e0-fM-0M9"/>
                         <segue destination="nhL-ja-kRb" kind="show" identifier="goService" id="LXW-54-Zjm"/>
                         <segue destination="94L-mE-Ntk" kind="show" identifier="showService" id="Hf8-HX-Hmi"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="Zov-Pn-cYN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hFc-t2-Wul" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3161,11 +3207,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gbV-GC-zyp">
-                                <rect key="frame" x="0.0" y="44" width="375" height="1106"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="1057"/>
                                 <color key="backgroundColor" red="0.83088141680000005" green="0.82050639390000002" blue="0.76284402610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uU4-El-ppN">
-                                <rect key="frame" x="16" y="49" width="343" height="1096"/>
+                                <rect key="frame" x="16" y="49" width="343" height="1047"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="6gS-NM-zkt">
                                     <size key="itemSize" width="320" height="275"/>
@@ -3847,7 +3893,7 @@
                                 </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xxu-8S-9c1">
-                                <rect key="frame" x="0.0" y="1150" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="1101" width="375" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QMg-SE-Sce">
                                         <rect key="frame" x="10" y="12.5" width="25" height="25"/>
@@ -3929,6 +3975,7 @@
                             <constraint firstItem="gbV-GC-zyp" firstAttribute="leading" secondItem="CId-dX-lve" secondAttribute="leading" id="vGT-XV-ggi"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Заявка на услугу" id="88s-Ku-kGI">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="cgL-g0-cZI">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3936,16 +3983,24 @@
                                 <action selector="backButtonPressed:" destination="94L-mE-Ntk" id="xXB-QE-0lO"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="X0J-El-MKb">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="94L-mE-Ntk" id="Cfi-or-pNk"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="1200"/>
                     <connections>
                         <outlet property="cameraButton" destination="QMg-SE-Sce" id="c6O-c5-D8i"/>
                         <outlet property="collection" destination="uU4-El-ppN" id="sru-Mh-bhk"/>
                         <outlet property="commentField" destination="PfV-nH-4bp" id="e6g-rC-Fot"/>
                         <outlet property="loader" destination="sl6-S1-AGU" id="tGq-Hs-LeG"/>
+                        <outlet property="notifiBtn" destination="X0J-El-MKb" id="0qC-Zh-Bys"/>
                         <outlet property="sendBtn" destination="ds2-G8-qI7" id="sk2-OY-Rl2"/>
                         <segue destination="nhL-ja-kRb" kind="show" identifier="goService" id="qxF-7n-YKU"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="BEn-xQ-cKW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XdK-Sx-aXe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4496,13 +4551,20 @@
                                 <action selector="backButtonPressed:" destination="FTj-1w-rXP" id="E6e-ev-p7m"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="nVi-C0-oT4">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="FTj-1w-rXP" id="2Xi-sQ-rw1"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="activity" destination="5iu-TW-Pb4" id="phO-hS-7Xs"/>
                         <outlet property="collectionHeader" destination="oTO-A0-cyD" id="a6K-yY-HZz"/>
                         <outlet property="createButton" destination="gda-sl-DSa" id="wgC-8X-7a0"/>
                         <outlet property="noDataLbl" destination="UWC-uJ-iEY" id="mSN-xC-oLX"/>
+                        <outlet property="notifiBtn" destination="nVi-C0-oT4" id="aF0-il-akd"/>
                         <outlet property="table" destination="qcM-uB-rVa" id="lO4-Jt-aBU"/>
                         <segue destination="nGr-Se-ITa" kind="show" identifier="admission" id="3Hj-cb-Rsi"/>
                         <segue destination="42T-JA-rBp" kind="show" identifier="login_activity" id="PeD-30-0rm"/>
@@ -4510,6 +4572,7 @@
                         <segue destination="XXp-eL-9Wz" kind="show" identifier="requestType" id="qQR-5f-R0f"/>
                         <segue destination="Poq-SC-Dnp" kind="show" identifier="service" id="WQZ-Pn-ONZ"/>
                         <segue destination="Pkv-1S-7u5" kind="show" identifier="toAppeal" id="G58-ZI-v96"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="Vfc-5L-vYs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wts-OC-fxi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4549,7 +4612,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ybi-Qg-Zum">
-                                <rect key="frame" x="16" y="60" width="343" height="1135"/>
+                                <rect key="frame" x="16" y="60" width="343" height="1086"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Rq-VC-P8b">
                                         <rect key="frame" x="0.0" y="858.5" width="343" height="100"/>
@@ -5120,6 +5183,7 @@
                             <constraint firstAttribute="trailing" secondItem="Ybi-Qg-Zum" secondAttribute="trailing" constant="16" id="kVk-qa-EyY"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Пропуск" id="FlN-Bs-nQj">
                         <barButtonItem key="leftBarButtonItem" image="rossNavbar" id="sbA-Xa-sQV">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5127,8 +5191,14 @@
                                 <action selector="closeButtonPressed:" destination="HBn-i2-Bxp" id="EAt-ks-O4a"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="KEm-Zz-5bJ">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="HBn-i2-Bxp" id="yNV-V2-dmz"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="1200"/>
                     <connections>
                         <outlet property="FioConst" destination="dOi-38-Ghz" id="z4a-F0-W5l"/>
@@ -5153,6 +5223,7 @@
                         <outlet property="loader" destination="I7C-YD-RrS" id="iTd-sX-UTC"/>
                         <outlet property="markAuto" destination="bdH-qn-aiP" id="Xaa-O3-wRZ"/>
                         <outlet property="markLine" destination="bpr-Bp-JKh" id="dqw-WG-Ne1"/>
+                        <outlet property="notifiBtn" destination="KEm-Zz-5bJ" id="njj-aR-gor"/>
                         <outlet property="phone_service" destination="NbG-yk-WnQ" id="wJO-e8-R9i"/>
                         <outlet property="picker" destination="qsM-OT-01E" id="H9k-EM-7py"/>
                         <outlet property="pickerLine" destination="PUo-JK-eaG" id="LST-bB-1Uf"/>
@@ -5169,18 +5240,37 @@
                         <outlet property="transportSwitch" destination="vuB-TN-6YL" id="0vV-E8-3NC"/>
                         <outlet property="transportTitle" destination="HTv-Mw-vKx" id="mDq-CN-Yz7"/>
                         <segue destination="nGr-Se-ITa" kind="show" identifier="admission" id="C2H-Tg-Kau"/>
+                        <segue destination="K5c-3J-33N" kind="show" identifier="goNotifi" id="gAh-Qq-eGU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P9w-Kn-tIf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2270" y="-1822"/>
         </scene>
+        <!--Notifications-->
+        <scene sceneID="Tp3-00-DaP">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Notifications" id="K5c-3J-33N" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Dcu-Wd-nwS"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="txY-NB-2Cp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3445" y="-2201"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="BEn-xQ-cKW"/>
+        <segue reference="Hf8-HX-Hmi"/>
+        <segue reference="qxF-7n-YKU"/>
+        <segue reference="XJk-q4-yci"/>
+        <segue reference="C2H-Tg-Kau"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow_right" width="40" height="65"/>
         <image name="cameraIcon" width="29" height="22"/>
         <image name="closeIcon" width="25" height="25"/>
         <image name="greenStatus" width="17" height="17"/>
+        <image name="new_notifi1" width="18" height="22"/>
         <image name="personBubble" width="90" height="90"/>
         <image name="rossNavbar" width="20" height="20"/>
         <image name="send_icon" width="23" height="23"/>
@@ -5188,10 +5278,4 @@
         <image name="sminex_call_new" width="37" height="37"/>
         <image name="userBubble" width="90" height="90"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="Hf8-HX-Hmi"/>
-        <segue reference="LXW-54-Zjm"/>
-        <segue reference="XJk-q4-yci"/>
-        <segue reference="C2H-Tg-Kau"/>
-    </inferredMetricsTieBreakers>
 </document>

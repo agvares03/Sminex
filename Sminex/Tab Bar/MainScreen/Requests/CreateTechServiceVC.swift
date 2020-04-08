@@ -44,7 +44,14 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     @IBOutlet private weak var timeBtn2:    UIButton!
     @IBOutlet private weak var dateLbl:     UILabel!
     @IBOutlet private weak var noDateLbl:   UILabel!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     
     @IBAction private func cancelButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -335,6 +342,12 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
         tabBarController?.tabBar.isHidden = true
     }
     

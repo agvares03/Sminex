@@ -21,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iaT-6v-ssi">
-                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </webView>
                         </subviews>
@@ -63,7 +63,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wKs-YF-N79">
-                                <rect key="frame" x="0.0" y="44" width="375" height="656"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="651"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BS5-vy-V3g">
                                         <rect key="frame" x="16" y="20" width="343" height="537.5"/>
@@ -369,6 +369,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="i5G-Ss-0Hh"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="JAZZ by SMINEX" id="irL-e5-Wdz">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="3gM-rG-WDA">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -376,7 +377,14 @@
                                 <action selector="backButtonPressed:" destination="kUj-2K-6Vo" id="mfj-bb-De5"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="2gD-yn-Of6">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="kUj-2K-6Vo" id="k4c-op-E0M"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="700"/>
                     <connections>
                         <outlet property="choiceEmailBtn" destination="Snp-R8-OwV" id="znJ-qn-5Ve"/>
@@ -385,6 +393,7 @@
                         <outlet property="iconEmail" destination="5tq-RK-OzR" id="2uW-5c-WbG"/>
                         <outlet property="iconPhone" destination="nDh-1v-EN3" id="bkA-j8-NmW"/>
                         <outlet property="loader" destination="uFa-Ro-99V" id="wBq-W6-k7A"/>
+                        <outlet property="notifiBtn" destination="2gD-yn-Of6" id="x8M-Or-zC9"/>
                         <outlet property="offerLabel" destination="gyn-MO-kyz" id="7Ax-fb-xlw"/>
                         <outlet property="phoneEmailText" destination="9s5-xr-gBI" id="L7u-6t-PE4"/>
                         <outlet property="scroll" destination="wKs-YF-N79" id="iyc-Xj-y8T"/>
@@ -392,6 +401,7 @@
                         <outlet property="sumTextField" destination="Lmw-Jw-Ukw" id="BKd-Id-URr"/>
                         <outlet property="titleLabel" destination="8FV-RJ-nau" id="Kq7-kf-bNE"/>
                         <segue destination="IKy-B1-0S4" kind="show" identifier="toPay" id="4GH-ng-I1k"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="Xou-Wv-46B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dbA-sc-QC4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -411,7 +421,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UdN-8l-mMB" customClass="ExpyTableView" customModule="ExpyTableView">
-                                <rect key="frame" x="16" y="54" width="343" height="613"/>
+                                <rect key="frame" x="16" y="10" width="343" height="608"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FinanceDebtArchiveYearCommCell" id="GUq-c9-AWB" customClass="FinanceDebtArchiveYearCommCell" customModule="Sminex" customModuleProvider="target">
@@ -595,6 +605,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hJr-lD-V5T"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Архив квитанции" id="HLo-Gf-Wq0">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="dWI-kq-XZv">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -602,10 +613,19 @@
                                 <action selector="backButtonPressed:" destination="rXO-RA-66m" id="Ebg-wZ-gKx"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="CvE-PR-cba">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="rXO-RA-66m" id="CR7-Eu-XwV"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="notifiBtn" destination="CvE-PR-cba" id="ADB-Ts-DAd"/>
                         <outlet property="table" destination="UdN-8l-mMB" id="gx6-RM-Rd9"/>
                         <segue destination="rgs-yw-6Z6" kind="show" identifier="receipt" id="1zh-mT-3jK"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="zEu-dy-R8u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JQM-VP-Htd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -625,7 +645,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Btw-EU-Pgt">
-                                <rect key="frame" x="16" y="64" width="343" height="553"/>
+                                <rect key="frame" x="16" y="20" width="343" height="548"/>
                                 <color key="backgroundColor" red="0.83137254900000002" green="0.81960784310000001" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="0We-7A-Pva">
                                     <size key="itemSize" width="375" height="30"/>
@@ -870,7 +890,7 @@
                                 <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
                             </activityIndicatorView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dzh-wC-4NM">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="568" width="375" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Архив квитанций" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwv-9W-NMw">
                                         <rect key="frame" x="20" y="5" width="210" height="40"/>
@@ -925,6 +945,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gyV-mV-mQK"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Квитанция" id="b8y-xA-0DB">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="j5c-97-G22">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -932,13 +953,22 @@
                                 <action selector="backButtonPressed:" destination="rgs-yw-6Z6" id="8s8-iY-j8C"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="Pgf-9u-5WK">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="rgs-yw-6Z6" id="eNf-RD-1OL"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collection" destination="Btw-EU-Pgt" id="Hyj-4M-dMD"/>
                         <outlet property="loader" destination="LTn-Eb-n7x" id="Ayc-di-FWJ"/>
+                        <outlet property="notifiBtn" destination="Pgf-9u-5WK" id="vrv-Xp-IrS"/>
                         <segue destination="9bL-4T-xpf" kind="presentation" identifier="barcode" id="vpQ-46-9Tt"/>
                         <segue destination="kUj-2K-6Vo" kind="show" identifier="pay" id="Uab-Pc-moj"/>
                         <segue destination="rXO-RA-66m" kind="show" identifier="receiptArchive" id="y14-D3-i89"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="JJZ-OB-ecs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rzK-er-hBr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -958,7 +988,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="S1U-jG-38g" customClass="ExpyTableView" customModule="ExpyTableView">
-                                <rect key="frame" x="16" y="44" width="343" height="623"/>
+                                <rect key="frame" x="16" y="44" width="343" height="574"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="623" id="Wcs-9k-RZ9"/>
@@ -1225,6 +1255,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qC3-8g-UlX"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Финансы" id="Q83-N0-NGZ">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="42d-8I-9ix">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1232,10 +1263,18 @@
                                 <action selector="backButtonPressed:" destination="GQf-hu-YC9" id="2Cf-c1-cOa"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="hul-hp-Dat">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="GQf-hu-YC9" id="cYz-f9-anN"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="loader" destination="0vI-kn-qgC" id="S7z-vO-sS8"/>
+                        <outlet property="notifiBtn" destination="hul-hp-Dat" id="oij-wn-qRG"/>
                         <outlet property="table" destination="S1U-jG-38g" id="kBb-RP-tv0"/>
                         <outlet property="tableHeight" destination="Wcs-9k-RZ9" id="CBb-L8-lWr"/>
                         <segue destination="9bL-4T-xpf" kind="presentation" identifier="barcode" id="NUx-9a-9M3"/>
@@ -1246,6 +1285,7 @@
                         <segue destination="j2s-6G-M1y" kind="show" identifier="login_activity" id="kIt-Vc-ybU"/>
                         <segue destination="OFP-t6-yAJ" kind="show" identifier="payHistory" id="8YO-9u-U7o"/>
                         <segue destination="Rpr-gj-Ay6" kind="show" identifier="calcs" id="Dm0-Q0-hIN"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="99T-8G-fDZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FbU-Nb-blO" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1265,7 +1305,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SmY-97-Kdt" customClass="ExpyTableView" customModule="ExpyTableView">
-                                <rect key="frame" x="16" y="54" width="343" height="613"/>
+                                <rect key="frame" x="16" y="54" width="343" height="564"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FinanceCalcsArchiveYearCommCell" id="NqM-gd-a8S" customClass="FinanceCalcsArchiveYearCommCell" customModule="Sminex" customModuleProvider="target">
@@ -1454,6 +1494,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7ss-or-0kh"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="История взаиморасчетов" id="pB4-hv-fEb">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="WYX-gx-W1t">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1461,12 +1502,21 @@
                                 <action selector="backButtonPressed:" destination="ovY-BL-bj0" id="jOj-1a-pxN"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="hgm-vT-d72">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="ovY-BL-bj0" id="7pi-sa-fZj"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="notifiBtn" destination="hgm-vT-d72" id="DN8-Xt-4Df"/>
                         <outlet property="table" destination="SmY-97-Kdt" id="IZE-1m-1E8"/>
                         <segue destination="8T3-GY-rZK" kind="show" identifier="calc1" id="zjp-Be-f6C"/>
                         <segue destination="j2s-6G-M1y" kind="show" identifier="login_activity" id="Xv5-ms-dDg"/>
                         <segue destination="0ab-hT-N6f" kind="show" identifier="calc" id="eUL-UU-BV4"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="LDc-44-tBI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XEb-Ng-7Q2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1486,7 +1536,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GhP-XX-42M">
-                                <rect key="frame" x="16" y="84" width="343" height="583"/>
+                                <rect key="frame" x="16" y="84" width="343" height="534"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="POw-1N-G8P">
                                     <size key="itemSize" width="375" height="219"/>
@@ -1927,10 +1977,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3a8-ZM-1Dq">
-                                <rect key="frame" x="16" y="107" width="343" height="540"/>
+                                <rect key="frame" x="16" y="107" width="343" height="491"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nII-84-fTt">
-                                        <rect key="frame" x="0.0" y="37" width="343" height="503"/>
+                                        <rect key="frame" x="0.0" y="37" width="343" height="454"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HistoryPayCell" id="mxe-PA-W3J" customClass="HistoryPayCell" customModule="Sminex" customModuleProvider="target">
@@ -2076,6 +2126,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="История платежей" id="RDk-Qz-1Ck">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="sminex_arrow_navbar" id="UG9-BC-UIl">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2083,7 +2134,14 @@
                                 <action selector="backClick:" destination="OFP-t6-yAJ" id="eqz-Rz-JaT"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="EYD-xd-Pyh">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="OFP-t6-yAJ" id="dZ3-vX-KU6"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="allPaysBtn" destination="nWc-c3-5do" id="awC-Mt-aTH"/>
                         <outlet property="back" destination="UG9-BC-UIl" id="yef-pv-QLo"/>
@@ -2091,11 +2149,13 @@
                         <outlet property="dateLabel" destination="EOb-F1-Ffe" id="Qyz-5B-QSH"/>
                         <outlet property="headerView" destination="3a8-ZM-1Dq" id="9NL-uy-ZOA"/>
                         <outlet property="mobilePaysBtn" destination="2rO-gX-Ddx" id="iCm-qP-DGg"/>
+                        <outlet property="notifiBtn" destination="EYD-xd-Pyh" id="7Sj-sh-eyC"/>
                         <outlet property="selectAllPay" destination="geQ-93-PkY" id="fzc-nG-1FK"/>
                         <outlet property="selectMobilePay" destination="o8u-GW-qey" id="Lch-EK-K7q"/>
                         <outlet property="sumConst2" destination="ruf-Nf-ZbD" id="MLQ-TT-LWW"/>
                         <outlet property="sumLabel" destination="ufv-F8-LdX" id="iF2-s4-jKj"/>
                         <outlet property="tableView" destination="nII-84-fTt" id="tsC-JI-CWD"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="7nh-gf-ahA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nGN-IW-Qje" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2115,7 +2175,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0AN-eJ-kvY">
-                                <rect key="frame" x="16" y="64" width="343" height="533"/>
+                                <rect key="frame" x="16" y="64" width="343" height="484"/>
                                 <color key="backgroundColor" red="0.83137254900000002" green="0.81960784310000001" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="2Az-Xs-Eus">
                                     <size key="itemSize" width="375" height="219"/>
@@ -2355,7 +2415,7 @@
                                 </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U1H-Bm-FIK">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="568" width="375" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="История взаиморасчетов" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bl-99-ffr">
                                         <rect key="frame" x="20" y="5" width="210" height="40"/>
@@ -2409,6 +2469,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="AfT-fb-MF2"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Взаиморасчеты" id="aMK-eT-ueH">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="bOf-R0-lHD">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2416,11 +2477,20 @@
                                 <action selector="backButtonPressed:" destination="Rpr-gj-Ay6" id="paz-LA-ute"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="MfF-87-UVF">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="Rpr-gj-Ay6" id="0Jt-Ua-xHZ"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collection" destination="0AN-eJ-kvY" id="zjc-9S-t5B"/>
+                        <outlet property="notifiBtn" destination="MfF-87-UVF" id="qhe-r4-ri7"/>
                         <segue destination="rgs-yw-6Z6" kind="show" identifier="receiptArchive" id="wPp-pk-XU9"/>
                         <segue destination="IKy-B1-0S4" kind="show" identifier="goPay" id="R8q-Bf-OzV"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="zqK-RT-e6v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XIL-aE-bLQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2505,7 +2575,7 @@
                                 </cells>
                             </collectionView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gxm-pX-PfK" customClass="ExpyTableView" customModule="ExpyTableView">
-                                <rect key="frame" x="16" y="84" width="343" height="583"/>
+                                <rect key="frame" x="16" y="84" width="343" height="534"/>
                                 <color key="backgroundColor" red="0.83137254900000002" green="0.81960784310000001" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TestCalcCell" rowHeight="239" id="yfM-Oj-1wP" customClass="TestCalcCell" customModule="Sminex" customModuleProvider="target">
@@ -2785,6 +2855,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ydx-i2-csD"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Взаиморасчеты" id="YtI-ZC-1kK">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="GVK-qL-t0t">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2792,13 +2863,22 @@
                                 <action selector="backButtonPressed:" destination="0ab-hT-N6f" id="5At-iI-R9y"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="ab0-dR-GOt">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="0ab-hT-N6f" id="BWl-aF-3bT"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionYear" destination="Ocj-3B-0Lx" id="TFX-yj-63S"/>
                         <outlet property="loader" destination="tza-SA-OFP" id="Uxw-RY-nAO"/>
+                        <outlet property="notifiBtn" destination="ab0-dR-GOt" id="db3-vE-tEO"/>
                         <outlet property="table" destination="gxm-pX-PfK" id="b5I-TD-luu"/>
                         <segue destination="IKy-B1-0S4" kind="show" identifier="goPay" id="CF6-uX-e0K"/>
                         <segue destination="rgs-yw-6Z6" kind="show" identifier="receiptArchive" id="UMO-4b-77t"/>
+                        <segue destination="Ddd-l0-Gz8" kind="show" identifier="goNotifi" id="TB2-LO-Dy5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MyO-fv-hkL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2815,15 +2895,26 @@
             </objects>
             <point key="canvasLocation" x="2900" y="-1123.088455772114"/>
         </scene>
+        <!--Notifications-->
+        <scene sceneID="iC4-mR-UB9">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Notifications" id="Ddd-l0-Gz8" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="7fD-PU-gI2"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RwW-kQ-uVD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3674" y="-2395"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="zqK-RT-e6v"/>
         <segue reference="Xv5-ms-dDg"/>
-        <segue reference="NUx-9a-9M3"/>
+        <segue reference="vpQ-46-9Tt"/>
         <segue reference="hWf-5f-CQ5"/>
-        <segue reference="wPp-pk-XU9"/>
-        <segue reference="LFZ-Gg-ebw"/>
-        <segue reference="EIU-tV-9kd"/>
-        <segue reference="R8q-Bf-OzV"/>
+        <segue reference="1zh-mT-3jK"/>
+        <segue reference="y14-D3-i89"/>
+        <segue reference="Uab-Pc-moj"/>
+        <segue reference="4GH-ng-I1k"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow_right" width="40" height="65"/>
@@ -2831,6 +2922,7 @@
         <image name="finance_fon" width="340" height="12"/>
         <image name="greenPay_fon" width="1032" height="441"/>
         <image name="mainPay_fon" width="344" height="207"/>
+        <image name="new_notifi1" width="18" height="22"/>
         <image name="share_action" width="27" height="27"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>

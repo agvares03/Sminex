@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tmH-zp-1G4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tmH-zp-1G4">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -145,6 +145,7 @@
                             <constraint firstItem="7lD-Vg-iIu" firstAttribute="leading" secondItem="Kbx-HD-tmM" secondAttribute="leading" constant="16" id="zBp-xY-eSr"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Опросы" id="jog-OG-ery">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="Cc7-I0-mcG">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -152,15 +153,23 @@
                                 <action selector="backButtonPressed:" destination="tmH-zp-1G4" id="0Pq-eL-kbB"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="YbL-lF-Oqh">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="tmH-zp-1G4" id="a8N-sw-EaD"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collection" destination="7lD-Vg-iIu" id="0xb-Or-n0x"/>
                         <outlet property="emptyLabel" destination="AkE-Sm-eXn" id="kxo-mR-9QA"/>
                         <outlet property="loader" destination="Ld1-3O-B7v" id="V1q-nJ-slw"/>
+                        <outlet property="notifiBtn" destination="YbL-lF-Oqh" id="uNt-io-XU0"/>
                         <segue destination="PVX-C6-6zy" kind="show" identifier="questionAnswers" id="3KC-dU-m8A"/>
                         <segue destination="oj6-yl-Mmw" kind="show" identifier="login_activity" id="Mnq-iz-tCK"/>
+                        <segue destination="dBO-tn-7Ut" kind="show" identifier="goNotifi" id="xIY-gO-xjg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3AM-mi-e4w" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -180,10 +189,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wa0-de-tcZ">
-                                <rect key="frame" x="16" y="60" width="343" height="591"/>
+                                <rect key="frame" x="16" y="60" width="343" height="542"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="doL-fK-g9Z">
-                                        <rect key="frame" x="71.5" y="527" width="200" height="48"/>
+                                        <rect key="frame" x="71.5" y="478" width="200" height="48"/>
                                         <color key="backgroundColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="2kj-sQ-CTR"/>
@@ -203,7 +212,7 @@
                                         </connections>
                                     </button>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="og4-iB-GFd">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="527"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="478"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="5" id="yMs-hA-BU0">
                                             <size key="itemSize" width="375" height="300"/>
@@ -249,7 +258,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Свой вариант" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1X8-lc-5k7">
-                                                            <rect key="frame" x="51" y="17" width="300" height="21"/>
+                                                            <rect key="frame" x="51" y="16.5" width="300" height="22"/>
                                                             <color key="tintColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <textInputTraits key="textInputTraits"/>
@@ -330,7 +339,7 @@
                                         </collectionReusableView>
                                     </collectionView>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="g6W-MS-cuO">
-                                        <rect key="frame" x="161.5" y="541" width="20" height="20"/>
+                                        <rect key="frame" x="161.5" y="492" width="20" height="20"/>
                                     </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -359,6 +368,7 @@
                             <constraint firstAttribute="trailing" secondItem="Wa0-de-tcZ" secondAttribute="trailing" constant="16" id="re7-ob-Ww0"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Имя опроса" id="ebw-I2-uYW">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="L0P-KT-gab">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -366,13 +376,21 @@
                                 <action selector="backButtonPressed:" destination="PVX-C6-6zy" id="wXd-Tu-yob"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="42X-GY-80V">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="PVX-C6-6zy" id="zuf-zA-IIL"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collection" destination="og4-iB-GFd" id="ksv-sp-qIb"/>
                         <outlet property="goButton" destination="doL-fK-g9Z" id="yvP-IA-9Pf"/>
                         <outlet property="loader" destination="g6W-MS-cuO" id="qJE-vy-EFi"/>
+                        <outlet property="notifiBtn" destination="42X-GY-80V" id="n4Z-gq-pwN"/>
                         <segue destination="Al1-wW-sRC" kind="show" identifier="final" id="9dd-Yw-q4d"/>
+                        <segue destination="dBO-tn-7Ut" kind="show" identifier="goNotifi" id="eEV-9c-BDk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="haf-If-umg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -392,7 +410,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KrN-kR-G8a">
-                                <rect key="frame" x="16" y="60" width="343" height="567"/>
+                                <rect key="frame" x="16" y="60" width="343" height="518"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="questionFinal" translatesAutoresizingMaskIntoConstraints="NO" id="qcO-s0-9Dc">
                                         <rect key="frame" x="50" y="16" width="243" height="365"/>
@@ -410,13 +428,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Они помогут нам сделать ваш дом комфортнее" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6wr-cD-AGN">
-                                        <rect key="frame" x="0.0" y="412" width="343" height="41"/>
+                                        <rect key="frame" x="0.0" y="412" width="343" height="28"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Bc-tT-uqm">
-                                        <rect key="frame" x="71.5" y="499" width="200" height="48"/>
+                                        <rect key="frame" x="71.5" y="450" width="200" height="48"/>
                                         <color key="backgroundColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="MaO-Xh-Dn1"/>
@@ -467,6 +485,7 @@
                             <constraint firstAttribute="trailing" secondItem="KrN-kR-G8a" secondAttribute="trailing" constant="16" id="WoL-fj-SiA"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Имя опроса" id="tyo-hD-bbz">
                         <barButtonItem key="leftBarButtonItem" image="sminex_arrow_navbar" id="wVn-TB-8w3">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -474,7 +493,18 @@
                                 <action selector="backButtonPressed:" destination="Al1-wW-sRC" id="C98-sj-ggf"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="paG-dT-0En">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="Al1-wW-sRC" id="wqV-q6-bL4"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="notifiBtn" destination="paG-dT-0En" id="LEp-bv-RDr"/>
+                        <segue destination="dBO-tn-7Ut" kind="show" identifier="goNotifi" id="gRa-ye-t4j"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UNP-Ai-CV7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -488,8 +518,22 @@
             </objects>
             <point key="canvasLocation" x="2378" y="-1421"/>
         </scene>
+        <!--Notifications-->
+        <scene sceneID="g1I-HZ-j2g">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Notifications" id="dBO-tn-7Ut" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Mz7-AZ-xKH"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bZE-8i-r4P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2408" y="-2299"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="gRa-ye-t4j"/>
+    </inferredMetricsTieBreakers>
     <resources>
+        <image name="new_notifi1" width="18" height="22"/>
         <image name="questionFinal" width="699" height="1050"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>
     </resources>

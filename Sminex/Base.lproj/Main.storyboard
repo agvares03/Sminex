@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uII-yM-bRq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uII-yM-bRq">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -99,7 +99,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X1j-Bl-qoa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3733" y="233"/>
+            <point key="canvasLocation" x="2365" y="-727"/>
         </scene>
         <!--service-->
         <scene sceneID="hu6-M6-GH5">
@@ -1350,14 +1350,22 @@
                             <constraint firstItem="iNj-og-ttI" firstAttribute="top" secondItem="YAd-sI-o1i" secondAttribute="bottom" id="wZW-I3-taw"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Быстрый доступ" id="Mvs-p3-GBB"/>
+                    <navigationItem key="navigationItem" title="Быстрый доступ" id="g00-qe-Oe9">
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="kfD-Kt-r5N">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="tn2-P2-nNN" id="ska-XP-C0t"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collection" destination="YAd-sI-o1i" id="TPl-bN-jXt"/>
+                        <outlet property="notifiBtn" destination="kfD-Kt-r5N" id="mIW-KS-yRa"/>
                         <segue destination="cfi-9z-57m" kind="show" identifier="deals" id="GE7-WC-XoA"/>
                         <segue destination="IEv-8l-sOU" kind="show" identifier="support" id="0qu-di-vbD"/>
                         <segue destination="tDl-EB-ejX" kind="show" identifier="appeal" id="qge-NK-deo"/>
                         <segue destination="AM0-AH-4YQ" kind="show" identifier="ukServices" id="Ztu-X9-tSA"/>
-                        <segue destination="2uc-1H-2RF" kind="show" identifier="notifications" id="31h-Mw-lAc"/>
+                        <segue destination="2uc-1H-2RF" kind="show" identifier="goNotifi" id="31h-Mw-lAc"/>
                         <segue destination="XmE-kI-RT8" kind="show" identifier="questionTable" id="HmP-bP-SsO"/>
                         <segue destination="PNL-ER-y4X" kind="show" identifier="schet" id="cB6-Eb-ek3"/>
                         <segue destination="LnE-VV-eWZ" kind="show" identifier="news" id="Gq0-o9-E7f"/>
@@ -1635,11 +1643,20 @@
                             <constraint firstAttribute="trailing" secondItem="C2f-hB-2VV" secondAttribute="trailing" id="zM7-Pb-mOi"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Контакты" id="nkm-ZF-fGn"/>
+                    <navigationItem key="navigationItem" title="Контакты" id="7oy-3H-POy">
+                        <barButtonItem key="rightBarButtonItem" image="new_notifi1" width="50" id="Vpk-kP-lBE">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="goNotifi:" destination="BqQ-GY-vtF" id="mXr-PP-kxJ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collection" destination="C2f-hB-2VV" id="FqN-Ho-6cR"/>
+                        <outlet property="notifiBtn" destination="Vpk-kP-lBE" id="7Td-yE-ewT"/>
                         <segue destination="iiH-v6-XvV" kind="show" identifier="authSupport" id="pMV-JD-BFy"/>
                         <segue destination="ooC-my-lNN" kind="show" identifier="addAppeal" id="syN-90-XKy"/>
+                        <segue destination="2uc-1H-2RF" kind="show" identifier="goNotifi" id="66r-aA-rHh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iPf-RH-xda" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1647,6 +1664,16 @@
             <point key="canvasLocation" x="1372" y="-570"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="HVt-ts-Ta6"/>
+        <segue reference="Gq0-o9-E7f"/>
+        <segue reference="2a7-EI-alq"/>
+        <segue reference="HmP-bP-SsO"/>
+        <segue reference="cB6-Eb-ek3"/>
+        <segue reference="6VF-iA-wXk"/>
+        <segue reference="6ym-eY-iri"/>
+        <segue reference="66r-aA-rHh"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow_right" width="40" height="65"/>
         <image name="contacts_fon" width="259" height="194"/>
@@ -1665,14 +1692,4 @@
         <image name="sminex_logo_new" width="730" height="260"/>
         <image name="sminex_mail_new" width="37" height="37"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="cut-Ue-rY9"/>
-        <segue reference="Ggi-Bk-Rzm"/>
-        <segue reference="efl-bX-pxf"/>
-        <segue reference="QLh-38-2Hc"/>
-        <segue reference="JHZ-fd-xvP"/>
-        <segue reference="6VF-iA-wXk"/>
-        <segue reference="7Ci-na-4TA"/>
-        <segue reference="WEl-HK-CAh"/>
-    </inferredMetricsTieBreakers>
 </document>

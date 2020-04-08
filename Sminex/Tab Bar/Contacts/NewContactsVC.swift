@@ -21,6 +21,34 @@ class NewContactsVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     @IBOutlet private weak var collection: UICollectionView!
     
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: Network.reachability)
+        updateUserInterface()
+        data_ = TemporaryHolder.instance.contactsList
+        collection.reloadData()
+        //        navigationController?.isNavigationBarHidden = true
+        tabBarController?.tabBar.isHidden = false
+    }
     private var data_: [ContactsJson] = []
     
     override func viewDidLoad() {
@@ -53,19 +81,7 @@ class NewContactsVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         updateUserInterface()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        NotificationCenter.default
-            .addObserver(self,
-                         selector: #selector(statusManager),
-                         name: .flagsChanged,
-                         object: Network.reachability)
-        updateUserInterface()
-        data_ = TemporaryHolder.instance.contactsList
-        collection.reloadData()
-//        navigationController?.isNavigationBarHidden = true
-        tabBarController?.tabBar.isHidden = false
-    }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
