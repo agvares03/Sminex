@@ -15,7 +15,15 @@ final class AccountNotificationsVC: UIViewController {
     @IBOutlet private weak var counters:    UISwitch!
     @IBOutlet private weak var news:        UISwitch!
     @IBOutlet private weak var dolg:        UISwitch!
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         sendStats()
         navigationController?.popViewController(animated: true)
@@ -30,6 +38,16 @@ final class AccountNotificationsVC: UIViewController {
         counters.setOn(!defaults.bool(forKey: "countersNotify"), animated: false)
         news.setOn(!defaults.bool(forKey: "newsNotify"), animated: false)
         dolg.setOn(!defaults.bool(forKey: "dolgNotify"), animated: false)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
     }
     
     private func sendStats() {

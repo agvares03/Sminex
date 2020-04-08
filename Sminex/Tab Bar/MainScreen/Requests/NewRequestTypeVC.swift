@@ -19,7 +19,14 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
     // MARK: Outlets
     
     @IBOutlet private weak var collectionView: UICollectionView!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     // MARK: Properties
     
     open var delegate: AppsUserDelegate?
@@ -181,6 +188,12 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),

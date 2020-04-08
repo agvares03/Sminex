@@ -11,7 +11,15 @@ import UIKit
 final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     @IBAction private func lsButtonPressed(_ sender: UIButton) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "CustomAlertViewController") as! CustomAlertViewController
         vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
@@ -73,6 +81,12 @@ final class AccountVC: UIViewController, UICollectionViewDelegate, UICollectionV
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = false
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),

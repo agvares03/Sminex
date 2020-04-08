@@ -10,7 +10,15 @@ import UIKit
 class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet private weak var collection: UICollectionView!
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     private var data =
         [
             MenuCellData(icon: UIImage(named: "new_menu_finance")!, title: "Финансы", notification: ""),
@@ -108,6 +116,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
                          object: Network.reachability)
         updateUserInterface()
 //        self.navigationController?.isNavigationBarHidden = true
+        notifiPressed = false
         if TemporaryHolder.instance.menuDeals > 0 {
             if TemporaryHolder.instance.menuDeals > 99{
                 self.data[7] = MenuCellData(icon: UIImage(named: "new_menu_sales")!, title: "Акции и предложения", notification: "99+")
@@ -120,6 +129,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
             self.collection.reloadData()
         }
         if TemporaryHolder.instance.menuNotifications > 0 {
+            notifiBtn.image = UIImage(named: "new_notifi1")!
             if TemporaryHolder.instance.menuNotifications > 99{
                 self.data[8] = MenuCellData(icon: UIImage(named: "new_menu_notifications")!, title: "Уведомления", notification: "99+")
             }else{
@@ -127,6 +137,7 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
             }
             self.collection.reloadData()
         }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
             self.data[8] = MenuCellData(icon: UIImage(named: "new_menu_notifications")!, title: "Уведомления", notification: "")
             self.collection.reloadData()
         }

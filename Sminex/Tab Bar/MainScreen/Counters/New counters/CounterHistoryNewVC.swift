@@ -43,7 +43,14 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet private weak var dateIcon:        UIImageView!
     @IBOutlet private weak var dateIcon2:       UIImageView!
     @IBOutlet private weak var dateIcon3:       UIImageView!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
@@ -153,6 +160,16 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         collection2.dataSource   = self
         collection3.delegate     = self
         collection3.dataSource   = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
     }
     
     func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{

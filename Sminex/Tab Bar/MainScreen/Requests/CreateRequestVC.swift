@@ -52,7 +52,14 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     @IBOutlet private weak var expImg:      UIImageView!
     @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet private weak var placeHeight: NSLayoutConstraint!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     @IBAction private func closeButtonPressed(_ sender: UIBarButtonItem) {
         
         let action = UIAlertController(title: "Удалить заявку?", message: "Изменения не сохранятся", preferredStyle: .alert)
@@ -536,6 +543,12 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(statusManager),

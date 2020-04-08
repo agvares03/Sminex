@@ -48,7 +48,14 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var timeBtn2Width: NSLayoutConstraint!
     @IBOutlet private weak var dateLbl:     UILabel!
     @IBOutlet private weak var noDateLbl:   UILabel!
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     
     @IBAction private func cancelButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -418,6 +425,12 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
         tabBarController?.tabBar.isHidden = true
     }
     

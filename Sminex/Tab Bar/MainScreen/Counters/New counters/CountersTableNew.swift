@@ -18,7 +18,14 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     }
     
     
-    
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     var title_name: String?
     public var data_: [MeterValue] = []
     public var period_: [CounterPeriod]? = []
@@ -64,6 +71,12 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
+        }
         collView.reloadData()
     }
     

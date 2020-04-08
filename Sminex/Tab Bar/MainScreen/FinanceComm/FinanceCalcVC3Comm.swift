@@ -13,6 +13,14 @@ class FinanceCalcVC3Comm: UIViewController, UICollectionViewDelegate, UICollecti
     @IBAction private func backButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
+    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
+        if !notifiPressed{
+            notifiPressed = true
+            performSegue(withIdentifier: "goNotifi", sender: self)
+        }
+    }
+    var notifiPressed = false
     public var debt: AccountDebtJson?
     public var data_: [AccountCalculationsJson] = []
     public var dataDebt: [AccountBillsJson] = []
@@ -129,6 +137,16 @@ class FinanceCalcVC3Comm: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
             }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notifiPressed = false
+        if TemporaryHolder.instance.menuNotifications > 0{
+            notifiBtn.image = UIImage(named: "new_notifi1")!
+        }else{
+            notifiBtn.image = UIImage(named: "new_notifi0")!
         }
     }
     
