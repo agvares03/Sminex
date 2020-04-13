@@ -11,48 +11,51 @@ import Alamofire
 import DeviceKit
 import AKMaskField
 
-final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, HomePlaceCellDelegate, UITableViewDelegate, UITableViewDataSource {
+final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, HomePlaceCellDelegate, UITableViewDelegate, UITableViewDataSource, DelFioAppCellDelegate {
     
-    @IBOutlet weak var isTransport: NSLayoutConstraint!
-    @IBOutlet weak var transportTitle: UILabel!
-    @IBOutlet private weak var loader:          UIActivityIndicatorView!
-    @IBOutlet private weak var imageConst:      NSLayoutConstraint!
-    @IBOutlet weak var commentConst: NSLayoutConstraint!
-    @IBOutlet private weak var transportConst:    NSLayoutConstraint!
-//    @IBOutlet weak var sendViewConst: NSLayoutConstraint!
-    @IBOutlet weak var edConst: NSLayoutConstraint!
-    @IBOutlet weak var FioConst: NSLayoutConstraint!
-    @IBOutlet private weak var scroll:          UIScrollView!
-    @IBOutlet private weak var imgScroll:       UIScrollView!
-    @IBOutlet private weak var picker:          UIDatePicker!
-    @IBOutlet private weak var edFio:           UITextView!
-    @IBOutlet weak var edContact:       AKMaskField!
-    @IBOutlet private weak var gosNumber:       UITextView!
-    @IBOutlet private weak var markAuto:        UITextView!
-    @IBOutlet private weak var edComment:       UITextView!
-    @IBOutlet private weak var dateField:       UIButton!
-    @IBOutlet private weak var sendButton:      UIButton!
-    @IBOutlet private weak var transportSwitch: UISwitch!
-    @IBOutlet private weak var gosLine:         UILabel!
-    @IBOutlet private weak var markLine:        UILabel!
-    @IBOutlet private weak var pickerLine:      UILabel!
-    @IBOutlet private weak var descInfoLbl:     UILabel!
-    @IBOutlet private weak var descInfoView:    UIView!
-    @IBOutlet weak var sendBtnHeight: NSLayoutConstraint!
-    @IBOutlet weak var heigthFooter: NSLayoutConstraint!
-    @IBOutlet weak var phone_service: UILabel!
-    @IBOutlet weak var img_phone_service: UIImageView!
-    @IBOutlet weak var dopInfoHeight: NSLayoutConstraint!
-    @IBOutlet weak var heigth_phone_service: NSLayoutConstraint!
+    @IBOutlet         weak var isTransport:             NSLayoutConstraint!
+    @IBOutlet         weak var transportTitle:          UILabel!
+    @IBOutlet private weak var loader:                  UIActivityIndicatorView!
+    @IBOutlet private weak var imageConst:              NSLayoutConstraint!
+    @IBOutlet         weak var commentConst:            NSLayoutConstraint!
+    @IBOutlet private weak var transportConst:          NSLayoutConstraint!
+//    @IBOutlet         weak var sendViewConst:           NSLayoutConstraint!
+    @IBOutlet         weak var edConst:                 NSLayoutConstraint!
+    @IBOutlet         weak var FioConst:                NSLayoutConstraint!
+    @IBOutlet private weak var scroll:                  UIScrollView!
+    @IBOutlet private weak var imgScroll:               UIScrollView!
+    @IBOutlet private weak var picker:                  UIDatePicker!
+    @IBOutlet private weak var edFio:                   UITextField!
+    @IBOutlet         weak var edContact:               AKMaskField!
+    @IBOutlet private weak var gosNumber:               UITextView!
+    @IBOutlet private weak var markAuto:                UITextView!
+    @IBOutlet private weak var edComment:               UITextView!
+    @IBOutlet private weak var dateField:               UIButton!
+    @IBOutlet private weak var sendButton:              UIButton!
+    @IBOutlet private weak var transportSwitch:         UISwitch!
+    @IBOutlet private weak var gosLine:                 UILabel!
+    @IBOutlet private weak var markLine:                UILabel!
+    @IBOutlet private weak var pickerLine:              UILabel!
+    @IBOutlet private weak var descInfoLbl:             UILabel!
+    @IBOutlet private weak var descInfoView:            UIView!
+    @IBOutlet         weak var sendBtnHeight:           NSLayoutConstraint!
+    @IBOutlet         weak var heigthFooter:            NSLayoutConstraint!
+    @IBOutlet         weak var phone_service:           UILabel!
+    @IBOutlet         weak var img_phone_service:       UIImageView!
+    @IBOutlet         weak var dopInfoHeight:           NSLayoutConstraint!
+    @IBOutlet         weak var heigth_phone_service:    NSLayoutConstraint!
     
-    @IBOutlet private weak var tableView:   UITableView!
-    @IBOutlet private weak var placeView:   UIView!
-    @IBOutlet private weak var placeLbl:    UILabel!
-    @IBOutlet private weak var plcLbl:      UILabel!
-    @IBOutlet private weak var expImg:      UIImageView!
-    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
-    @IBOutlet private weak var placeHeight: NSLayoutConstraint!
-    @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBOutlet private weak var tablePlace:              UITableView!
+    @IBOutlet private weak var numberFio:               UILabel!
+    @IBOutlet private weak var tableFio:                UITableView!
+    @IBOutlet private weak var placeView:               UIView!
+    @IBOutlet private weak var placeLbl:                UILabel!
+    @IBOutlet private weak var plcLbl:                  UILabel!
+    @IBOutlet private weak var expImg:                  UIImageView!
+    @IBOutlet private weak var tableHeight:             NSLayoutConstraint!
+    @IBOutlet private weak var placeHeight:             NSLayoutConstraint!
+    @IBOutlet private weak var notifiBtn:               UIBarButtonItem!
+    
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
         if !notifiPressed{
             notifiPressed = true
@@ -67,6 +70,15 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         action.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { (_) in self.navigationController?.popViewController(animated: true) }))
         present(action, animated: true, completion: nil)
         
+    }
+    
+    @IBAction private func addFioPressed(_ sender: UIButton?) {
+        if edFio.text != ""{
+            self.fioList.append(edFio.text ?? "")
+            edFio.text = ""
+            self.numberFio.text = String(self.fioList.count + 1)
+            self.tableFio.reloadData()
+        }
     }
     
     @IBAction private func datePickerPressed(_ sender: UIButton?) {
@@ -125,7 +137,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         viewTapped(nil)
-        if (edFio.text == "" || edFio.text == "ФИО гостей") && edContact.text == ""{
+        if edFio.text != ""{
+            self.fioList.append(edFio.text ?? "")
+            edFio.text = ""
+            self.numberFio.text = String(self.fioList.count + 1)
+            self.tableFio.reloadData()
+        }
+        if (fioList.count == 0) && edContact.text == ""{
             if (!(UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto")) && (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle")) || transportSwitch.isOn == true) && gosNumber.textColor == placeholderColor && markAuto.textColor == placeholderColor{
                 let alert = UIAlertController(title: "Ошибка!", message: "Заполните поля: ФИО, Контактный номер, Марка автомобиля и Госномер", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
@@ -152,7 +170,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 alert.addAction(cancelAction)
                 self.present(alert, animated: true, completion: nil)
             }
-        }else if (edFio.text == "" || edFio.text == "ФИО гостей") {
+        }else if (fioList.count == 0) {
             let alert = UIAlertController(title: "Ошибка!", message: "Заполните поле: ФИО", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
             alert.addAction(cancelAction)
@@ -242,9 +260,17 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     }
                 }
             }
+            var fio = ""
+            for i in 0...fioList.count - 1{
+                if i == 0{
+                    fio = fioList[i]
+                }else{
+                    fio = fio + ", " + fioList[i]
+                }
+            }
             if edComment.text == "Примечание" && edComment.textColor == placeholderColor{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
-                                           gosti: edFio.text!,
+                                           gosti: fio,
                                            mobileNumber: edContact.text!,
                                            gosNumber: gos , mark: mark ,
                                            date: dateFormatter.string(from: picker.date),
@@ -253,7 +279,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                            imagesUrl: [], desc: "", placeHome: place, isReaded: "1")
             }else{
                 data = AdmissionHeaderData(icon: UIImage(named: "account")!,
-                                           gosti: edFio.text!,
+                                           gosti: fio,
                                            mobileNumber: edContact.text!,
                                            gosNumber: gos , mark: mark ,
                                            date: dateFormatter.string(from: picker.date),
@@ -318,8 +344,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         edContact.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         edContact.maskTemplate = "*"
         self.expImg.image = UIImage(named: "expand")
-        tableView.delegate = self
-        tableView.dataSource = self
+        tablePlace.delegate = self
+        tablePlace.dataSource = self
+        tableFio.delegate = self
+        tableFio.dataSource = self
         placeHeight.constant = 0
         tableHeight.constant = 0
         plcLbl.isHidden = true
@@ -415,15 +443,12 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
         
         edComment.text = "Примечание"
-        edFio.text = "ФИО гостей"
         gosNumber.textColor = placeholderColor
         gosNumber.selectedTextRange = gosNumber.textRange(from: gosNumber.beginningOfDocument, to: gosNumber.beginningOfDocument)
         markAuto.textColor = placeholderColor
         markAuto.selectedTextRange = markAuto.textRange(from: markAuto.beginningOfDocument, to: markAuto.beginningOfDocument)
         edComment.textColor = placeholderColor
         edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
-        edFio.textColor = placeholderColor
-        edFio.selectedTextRange = edFio.textRange(from: edFio.beginningOfDocument, to: edFio.beginningOfDocument)
         heigthFooter.constant = 0
         heigth_phone_service.constant = 0
         dopInfoHeight.constant = 0
@@ -473,7 +498,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             self.expImg.image = UIImage(named: "expand")
             isExpanded = true
             showTable = false
-            tableView.reloadData()
+            tablePlace.reloadData()
 //            DispatchQueue.main.async{
 //                if self.transportSwitch.isOn{
 //                    self.sendBtnTop.constant = 5
@@ -489,7 +514,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             self.expImg.image = UIImage(named: "expanded")
             isExpanded = false
             showTable = true
-            tableView.reloadData()
+            tablePlace.reloadData()
             DispatchQueue.main.async{
                 if self.parkingsPlace!.count <= 4{
                     self.tableH = CGFloat(44 * self.parkingsPlace!.count)
@@ -854,10 +879,10 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         request.httpMethod = "POST"
         
         var requestBody: [String:[Any]] = ["persons":[], "autos":[]]
-        let personsArr = edFio.text?.split(separator: ",")
+//        let personsArr = edFio.text?.split(separator: ",")
         let autosArr = gosNumber.text?.split(separator: ",")
         let mark = markAuto.text?.split(separator: ",")
-        personsArr?.forEach {
+        fioList.forEach {
             requestBody["persons"]?.append(["FIO":$0, "PassportData":""])
         }
         var i = 0
@@ -877,6 +902,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         if let json = try? JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted) {
             request.httpBody = Data(json)
         }
+        print(request)
+        print(requestBody)
         
         URLSession.shared.dataTask(with: request) {
             responce, error, _ in
@@ -990,10 +1017,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
-        if textField === edFio {
-            edContact.becomeFirstResponder()
-
-        } else if textField === edContact {
+        if textField === edContact {
             if !gosNumber.isHidden {
                 gosNumber.becomeFirstResponder()
 
@@ -1014,7 +1038,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             sendBtnHeight.constant = 0
             sendButton.isHidden = true
         
-        }else  if (edFio.textColor == placeholderColor || edContact.textColor == placeholderColor){
+        }else  if (edFio.text == "" || edContact.textColor == placeholderColor){
             sendBtnHeight.constant = 0
             sendButton.isHidden = true
             
@@ -1138,9 +1162,9 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                     self.show = false
                 }
                 if height < 40{
-                    self.FioConst.constant = 40
+//                    self.FioConst.constant = 40
                 }else{
-                    self.FioConst.constant = height
+//                    self.FioConst.constant = height
                 }
             }
             previousValue = currentRect
@@ -1158,33 +1182,57 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     var showTable = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        DispatchQueue.main.async {
-            if self.showTable{
-                if self.parkingsPlace!.count <= 4{
-                    self.tableHeight.constant = CGFloat(44 * self.parkingsPlace!.count)
+        self.FioConst.constant = 300
+        if tableView == self.tablePlace{
+            DispatchQueue.main.async {
+                if self.showTable{
+                    if self.parkingsPlace!.count <= 4{
+                        self.tableHeight.constant = CGFloat(44 * self.parkingsPlace!.count)
+                    }else{
+                        self.tableHeight.constant = 44 * 4
+                    }
                 }else{
-                    self.tableHeight.constant = 44 * 4
+                    self.tableHeight.constant = 0
                 }
-            }else{
-                self.tableHeight.constant = 0
             }
+            return self.parkingsPlace!.count
+        }else{
+            DispatchQueue.main.async {
+                var height1: CGFloat = 0
+                for cell in self.tableFio.visibleCells {
+                    height1 += cell.bounds.height
+                }
+                self.FioConst.constant = height1
+            }
+            return self.fioList.count
         }
-        return self.parkingsPlace!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "HomePlaceCell", for: indexPath) as! HomePlaceCell
-        cell.display(item: parkingsPlace![indexPath.row], isChecked: checkPlace[indexPath.row], delegate: self)
-        return cell
+        if tableView == self.tablePlace{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "HomePlaceCell", for: indexPath) as! HomePlaceCell
+            cell.display(item: parkingsPlace![indexPath.row], isChecked: checkPlace[indexPath.row], delegate: self)
+            return cell
+        }else{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "fioAddTableCell", for: indexPath) as! fioAddTableCell
+            cell.ident = indexPath.row
+            cell.textFile.text = fioList[indexPath.row]
+            cell.numberFio.text = String(indexPath.row + 1)
+            cell.delegate2 = self
+            cell.delegate = self
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !checkPlace[indexPath.row] == true{
-            placeCheck(text: parkingsPlace![indexPath.row], del: false)
-        }else {
-            placeCheck(text: parkingsPlace![indexPath.row], del: true)
+        if tableView == self.tablePlace{
+            if !checkPlace[indexPath.row] == true{
+                placeCheck(text: parkingsPlace![indexPath.row], del: false)
+            }else {
+                placeCheck(text: parkingsPlace![indexPath.row], del: true)
+            }
+            self.tablePlace.reloadRows(at: [indexPath], with: .automatic)
         }
-        self.tableView.reloadRows(at: [indexPath], with: .automatic)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -1238,5 +1286,43 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         label.sizeToFit()
         
         return label.frame.height
+    }
+    
+    func delFioLs(ident: Int, name: String) {
+        self.fioList.remove(at: ident)
+        self.numberFio.text = String(self.fioList.count + 1)
+        self.tableFio.reloadData()
+    }
+    
+    var fioList:[String] = []
+}
+
+protocol DelFioAppCellDelegate: class {
+    func delFioLs(ident: Int, name: String)
+}
+
+class fioAddTableCell: UITableViewCell {
+    
+    var delegate: UIViewController?
+    var delegate2: DelFioAppCellDelegate?
+    var ident = -1
+    
+    @IBOutlet weak var textFile: UILabel!
+    @IBOutlet weak var numberFio: UILabel!
+    @IBOutlet weak var delFileBtn: UIButton!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+    
+    @IBAction func delFioAction(_ sender: UIButton) {
+        delegate2?.delFioLs(ident: ident, name: textFile.text!)
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        // Configure the view for the selected state
     }
 }

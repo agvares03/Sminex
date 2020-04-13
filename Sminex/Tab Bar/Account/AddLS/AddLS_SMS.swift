@@ -525,7 +525,7 @@ final class AddLS_SMS: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             #if DEBUG
             //            print("token (add) = \(String(describing: self.responseString))")
             #endif
-            UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
+            UserDefaults.standard.setValue(token, forKey: "googleToken")
             UserDefaults.standard.synchronize()
             
             }.resume()

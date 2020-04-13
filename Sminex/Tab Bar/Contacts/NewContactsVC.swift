@@ -227,7 +227,7 @@ final class NewContactsCell: UICollectionViewCell {
     @IBOutlet private weak var fonHeight:       NSLayoutConstraint!
     @IBOutlet private weak var fonWidth:        NSLayoutConstraint!
     @IBOutlet private weak var fonTop:          NSLayoutConstraint!
-    @IBOutlet private weak var messageImage:    UIImageView!
+//    @IBOutlet private weak var messageImage:    UIImageView!
     @IBOutlet private weak var phoneImage:      UIImageView!
     @IBOutlet private weak var fonImage:        UIImageView!
     @IBOutlet private weak var emailImage:      UIImageView!
@@ -306,7 +306,7 @@ final class NewContactsCell: UICollectionViewCell {
             title.text = "Поддержка мобильного\nприложения"
         }
         descHeight.constant = heightForTitle(text: item.description!, width: desc.frame.size.width)
-        messageImage.isUserInteractionEnabled = true
+//        messageImage.isUserInteractionEnabled = true
         phoneImage.isUserInteractionEnabled   = true
         emailImage.isUserInteractionEnabled   = true
         email.isUserInteractionEnabled        = true
@@ -314,7 +314,7 @@ final class NewContactsCell: UICollectionViewCell {
         
         email.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(emailPressed(_:))) )
         phone.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))) )
-        messageImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(messagePressed(_:))) )
+//        messageImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(messagePressed(_:))) )
         phoneImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(phonePressed(_:))) )
         emailImage.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(emailPressed(_:))) )
         
@@ -362,7 +362,16 @@ final class NewContactsCell: UICollectionViewCell {
         delegate?.btnPressed(type, email.text ?? "")
     }
     @objc private func emailPressed(_ sender: UITapGestureRecognizer) {
-        delegate?.emailPressed(email.text ?? "")
+//        delegate?.emailPressed(email.text ?? "")
+        var type = 0
+        if (title.text?.containsIgnoringCase(find: "консьерж"))!{
+            type = 0
+        }else if (title.text?.containsIgnoringCase(find: "предложения"))!{
+            type = 1
+        }else if (title.text?.containsIgnoringCase(find: "поддержка"))!{
+            type = 2
+        }
+        delegate?.btnPressed(type, email.text ?? "")
     }
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         var type = 0

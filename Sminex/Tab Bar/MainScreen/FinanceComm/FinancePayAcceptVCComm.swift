@@ -43,8 +43,28 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         startAnimation()
         sumText = sumTextField.text ?? ""
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.requestPay()
+        if Double(sumText) != nil{
+            if Double(sumText)! > 0.00{
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.requestPay()
+                }
+            }else{
+                DispatchQueue.main.async{
+                    let alert = UIAlertController(title: "Ошибка", message: "Сумма к оплате равна нулю!", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                    self.stopAnimation()
+                }
+            }
+        }else{
+            DispatchQueue.main.async{
+                let alert = UIAlertController(title: "Ошибка", message: "Сумма к оплате равна нулю!", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+                self.stopAnimation()
+            }
         }
     }
     var phoneChoice = true
@@ -204,6 +224,7 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     
     @objc func textFieldDidChange(_ textField: UITextField){
         var str: String = textField.text!
+        print(str)
         str = str.replacingOccurrences(of: ",", with: ".")
         self.sumTextField.text = str
         if str.contains(find: "."){
@@ -223,6 +244,15 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
                 str.removeLast()
                 self.sumTextField.text = str
             }
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let str: String = sumTextField.text ?? ""
+        if str != "" && !str.contains(find: "."){
+            sumTextField.text = sumTextField.text! + ".00"
+        }else if str == ""{
+            sumTextField.text = "0.00"
         }
     }
     

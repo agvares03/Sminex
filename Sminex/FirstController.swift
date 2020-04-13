@@ -422,7 +422,7 @@ class FirstController: UIViewController {
             #endif
             let UUID = UIDevice.current.identifierForVendor?.uuidString
             UserDefaults.standard.setValue(UUID, forKey: "uuId")
-            UserDefaults.standard.setValue(self.responseString, forKey: "googleToken")
+            UserDefaults.standard.setValue(token, forKey: "googleToken")
             UserDefaults.standard.synchronize()
             
             }.resume()

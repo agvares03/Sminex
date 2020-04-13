@@ -76,14 +76,13 @@ final class AccountNotificationsVC: UIViewController {
             defaults.setValue(news, forKey: "newsNotify")
             defaults.setValue(dolg, forKey: "dolgNotify")
             defaults.synchronize()
-            
             let newStatusTxt    = !newStatus    ? "1;" : "0;"
             let newCommentTxt   = !newComment   ? "1;" : "0;"
             let newsTxt         = !news         ? "1;" : "0;"
             let dolgTxt         = !dolg         ? "1;" : "0;"
             let countersTxt     = !counters     ? "1"  : "0"
             
-            var request = URLRequest(url: URL(string: Server.SERVER + Server.CONFIGURE_NOTIFY + "login=\(defaults.string(forKey: "login") ?? "")&deviceid=\(defaults.string(forKey: "id_account") ?? "")&settings=" + newStatusTxt + newCommentTxt + newsTxt + dolgTxt + countersTxt)!)
+            var request = URLRequest(url: URL(string: Server.SERVER + Server.CONFIGURE_NOTIFY + "login=\(defaults.string(forKey: "login") ?? "")&deviceid=\(UserDefaults.standard.string(forKey: "googleToken") ?? "")&settings=" + newStatusTxt + newCommentTxt + newsTxt + dolgTxt + countersTxt)!)
             request.httpMethod = "GET"
             print(request)
             URLSession.shared.dataTask(with: request) {
