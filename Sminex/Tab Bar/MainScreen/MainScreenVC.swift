@@ -680,11 +680,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 return CGSize(width: view.frame.size.width, height: 96)
             }
         } else if title == "К ОПЛАТЕ" {
-            if busines_center_denyTotalOnlinePayments == true || business_center_info == true || self.payNil {
-                return CGSize(width: view.frame.size.width - 32, height: 112.0)
-            } else {
+//            if busines_center_denyTotalOnlinePayments == true || business_center_info == true || self.payNil {
+//                return CGSize(width: view.frame.size.width - 32, height: 112.0)
+//            } else {
                 return CGSize(width: view.frame.size.width - 32, height: 207.0)
-            }
+//            }
         } else if title == "СЧЕТЧИКИ" {
 //            let cell = SchetCell.fromNib()
 //            cell?.display(data[indexPath.section]![indexPath.row + 1] as! SchetCellData)
@@ -2800,16 +2800,16 @@ final class ForPayCell: UICollectionViewCell {
         pay.isHidden = defaults.bool(forKey: "denyOnlinePayments")
         whiteFon.isHidden = defaults.bool(forKey: "denyOnlinePayments")
         greenFon.isHidden = !defaults.bool(forKey: "denyOnlinePayments")
-        if (defaults.bool(forKey: "denyTotalOnlinePayments")) || item.title == "0 ₽"{
-            greenFon.isHidden = false
-            whiteFon.isHidden = true
-            pay.isHidden = true
-        }else{
+//        if (defaults.bool(forKey: "denyTotalOnlinePayments")) || item.title == "0 ₽"{
+//            greenFon.isHidden = false
+//            whiteFon.isHidden = true
+//            pay.isHidden = true
+//        }else{
             greenFon.isHidden = true
             whiteFon.isHidden = false
             pay.isHidden = false
-        }
-        title.text = "Оплатите " + item.title
+//        }
+        title.text = item.title
         
 //        if item.date != "" {
 //            let df = DateFormatter()

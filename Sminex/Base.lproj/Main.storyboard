@@ -448,8 +448,20 @@
                                                         <action selector="payButtonPressed:" destination="1ZO-FU-KIK" eventType="touchUpInside" id="JnF-z5-k9P"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Оплатите 12 567,00 Р" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EjD-At-rEH">
-                                                    <rect key="frame" x="16" y="30" width="212" height="24"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Оплатите" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EjD-At-rEH">
+                                                    <rect key="frame" x="16" y="20" width="88.5" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="BYK-Og-NIE"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12 900.00 Р" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0N7-YX-PhZ">
+                                                    <rect key="frame" x="16" y="40" width="116.5" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="24" id="O2S-BQ-K4M"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -464,9 +476,11 @@
                                             <constraint firstItem="Z4h-rc-ntG" firstAttribute="leading" secondItem="sPE-gb-plh" secondAttribute="leading" constant="72" id="Dve-Nt-Vhy"/>
                                             <constraint firstItem="ILT-3F-LyV" firstAttribute="top" secondItem="sPE-gb-plh" secondAttribute="top" id="Hp1-rF-jtK"/>
                                             <constraint firstItem="5RB-R6-2v9" firstAttribute="top" secondItem="sPE-gb-plh" secondAttribute="top" id="I3U-AS-meU"/>
-                                            <constraint firstItem="EjD-At-rEH" firstAttribute="top" secondItem="sPE-gb-plh" secondAttribute="top" constant="30" id="NcF-Xc-uGB"/>
+                                            <constraint firstItem="EjD-At-rEH" firstAttribute="top" secondItem="sPE-gb-plh" secondAttribute="top" constant="20" id="NcF-Xc-uGB"/>
+                                            <constraint firstItem="0N7-YX-PhZ" firstAttribute="top" secondItem="EjD-At-rEH" secondAttribute="bottom" id="QRl-fS-H0g"/>
                                             <constraint firstItem="ILT-3F-LyV" firstAttribute="leading" secondItem="sPE-gb-plh" secondAttribute="leading" id="dQE-cc-kbV"/>
                                             <constraint firstAttribute="trailing" secondItem="ILT-3F-LyV" secondAttribute="trailing" id="nYw-sn-1Yr"/>
+                                            <constraint firstItem="0N7-YX-PhZ" firstAttribute="leading" secondItem="sPE-gb-plh" secondAttribute="leading" constant="16" id="qZp-cA-zqY"/>
                                             <constraint firstItem="5RB-R6-2v9" firstAttribute="leading" secondItem="sPE-gb-plh" secondAttribute="leading" id="udk-9x-jCN"/>
                                             <constraint firstAttribute="bottom" secondItem="Z4h-rc-ntG" secondAttribute="bottom" constant="39" id="xXi-yH-Nkj"/>
                                             <constraint firstAttribute="trailing" secondItem="Z4h-rc-ntG" secondAttribute="trailing" constant="72" id="yq8-zW-cgS"/>
@@ -480,7 +494,7 @@
                                         <connections>
                                             <outlet property="greenFon" destination="ILT-3F-LyV" id="hW3-P7-1dd"/>
                                             <outlet property="pay" destination="Z4h-rc-ntG" id="OF8-Xg-MP1"/>
-                                            <outlet property="title" destination="EjD-At-rEH" id="vmd-sw-Gvp"/>
+                                            <outlet property="title" destination="0N7-YX-PhZ" id="FaP-wY-g3L"/>
                                             <outlet property="whiteFon" destination="5RB-R6-2v9" id="Mxx-ib-N4P"/>
                                         </connections>
                                     </collectionViewCell>
@@ -1655,14 +1669,14 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="HVt-ts-Ta6"/>
-        <segue reference="Gq0-o9-E7f"/>
-        <segue reference="2a7-EI-alq"/>
-        <segue reference="HmP-bP-SsO"/>
-        <segue reference="cB6-Eb-ek3"/>
+        <segue reference="cut-Ue-rY9"/>
+        <segue reference="Ggi-Bk-Rzm"/>
+        <segue reference="efl-bX-pxf"/>
+        <segue reference="E5J-g1-PDx"/>
+        <segue reference="JHZ-fd-xvP"/>
         <segue reference="6VF-iA-wXk"/>
-        <segue reference="6ym-eY-iri"/>
-        <segue reference="66r-aA-rHh"/>
+        <segue reference="7Ci-na-4TA"/>
+        <segue reference="WEl-HK-CAh"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow_right" width="40" height="65"/>

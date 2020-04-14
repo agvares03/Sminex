@@ -10,9 +10,11 @@ import CoreData
 
 protocol NewCounterDelegate: class {
     func pressed(index: Int)
+    func pressedHistory(ident: Int, name: String)
 }
 
 class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CounterStatementDelegate, NewCounterDelegate {
+    
     func update() {
         print("")
     }
@@ -28,6 +30,7 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
     var notifiPressed = false
     var title_name: String?
     public var data_: [MeterValue] = []
+    public var dataHistory_: [MeterValue] = []
     public var period_: [CounterPeriod]? = []
     public var canCount: Bool?
     
@@ -133,9 +136,22 @@ class CountersTableNew: UIViewController, UICollectionViewDelegate, UICollection
             vc.date_    = date[0] + " "
             vc.date_ = vc.date_! + getNameAndMonth(period_![0].numMonth ?? "1") + " " + (period_![0].year ?? "")
             vc.delegate = self
-            
-            
         }
+        if segue.identifier == "history2"{
+            let vc = segue.destination as! CounterHistoryNewVC
+            dataHistory_.forEach{
+                if $0.meterUniqueNum == nameCounter{
+                    vc.data_ = $0
+                }
+            }
+//            vc.data_ = data_[index]
+            vc.period_ = period_
+        }
+    }
+    var nameCounter = ""
+    func pressedHistory(ident: Int, name: String) {
+        self.nameCounter = name
+        performSegue(withIdentifier: "history2", sender: self)
     }
     
     private func getNameAndMonth(_ number_month: String) -> String {

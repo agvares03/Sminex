@@ -344,15 +344,15 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.section == 0 {
-            if UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments") {
-                return 139 + 15.0
-            }else{
+//            if UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments") {
+//                return 139 + 15.0
+//            }else{
 //                if UserDefaults.standard.bool(forKey: "denyQRCode"){
 //                    return 224.0 + 15.0
 //                }else{
                     return 229.0 + 15.0
 //                }
-            }
+//            }
         } else {
             if view.frame.size.width == 320 && indexPath.section == 2 && indexPath.row != 0{
                 return 60.0
@@ -602,21 +602,21 @@ final class FinanceHeaderCommCell: UITableViewCell {
         let defaults = UserDefaults.standard
         
         if (defaults.bool(forKey: "denyTotalOnlinePayments")) {
-            pay_button.isHidden   = true
+//            pay_button.isHidden   = true
         } else if (defaults.bool(forKey: "denyOnlinePayments")) {
-            pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
+//            pay_button.isHidden   = defaults.bool(forKey: "denyOnlinePayments")
         }
-        if pay_button.isHidden{
-            fonIMG.image = UIImage(named: "greenPay_fon")!
-            fonIMG2.isHidden = true
-            heightPayed.constant = 0
-            fonHeight.constant  = 0
-        }else{
+//        if pay_button.isHidden{
+//            fonIMG.image = UIImage(named: "greenPay_fon")!
+//            fonIMG2.isHidden = true
+//            heightPayed.constant = 0
+//            fonHeight.constant  = 0
+//        }else{
             fonIMG.image = UIImage(named: "mainPay_fon")!
             fonIMG2.isHidden        = false
             fonHeight.constant      = 15
             heightPayed.constant    = 48
-        }
+//        }
         //        print(isPayed.constant, heigthPayed.constant)
         // Выводить или нет кнопку QR-код
         

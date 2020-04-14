@@ -25,7 +25,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var images:      UIScrollView!
     @IBOutlet private weak var edProblem:   UITextView!
     @IBOutlet private weak var edPhone:     AKMaskField!
-    @IBOutlet private weak var edEmail:     UITextField!
+//    @IBOutlet private weak var edEmail:     UITextField!
     @IBOutlet private weak var serviceDesc: UILabel!
     @IBOutlet private weak var servicePrice:UILabel!
     @IBOutlet private weak var servPriceHeight: NSLayoutConstraint!
@@ -211,13 +211,13 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         if picker.date < Date(){
             picker.date = Date()
         }
-        if !Server().isValidEmail(testStr: edEmail.text!){
-            let alert = UIAlertController(title: "Ошибка!", message: "Введите корректный E-mail", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
+//        if !Server().isValidEmail(testStr: edEmail.text!){
+//            let alert = UIAlertController(title: "Ошибка!", message: "Введите корректный E-mail", preferredStyle: .alert)
+//            let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+//            alert.addAction(cancelAction)
+//            self.present(alert, animated: true, completion: nil)
+//            return
+//        }
         startAnimator()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy hh:mm:ss"
@@ -252,7 +252,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
                 }
             }
         }
-        data = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: servicePrice.text ?? "", mobileNumber: edPhone.text ?? "", servDesc: serviceDesc.text ?? "", email: edEmail.text ?? "", date: dateFormatter.string(from: picker.date), status: "В ОБРАБОТКЕ", images: imagesArr, imagesUrl: [], desc: edProblem.text!, placeHome: place, soonPossible: extTime, title: data_?.name ?? "", servIcon: serviceIcon.image!, selectPrice: (data_?.selectCost)!, selectPlace: (data_?.selectPlace)!, isReaded: "1")
+        data = ServiceAppHeaderData(icon: UIImage(named: "account")!, price: servicePrice.text ?? "", mobileNumber: edPhone.text ?? "", servDesc: serviceDesc.text ?? "", email: UserDefaults.standard.string(forKey: "mail") ?? "", date: dateFormatter.string(from: picker.date), status: "В ОБРАБОТКЕ", images: imagesArr, imagesUrl: [], desc: edProblem.text!, placeHome: place, soonPossible: extTime, title: data_?.name ?? "", servIcon: serviceIcon.image!, selectPrice: (data_?.selectCost)!, selectPlace: (data_?.selectPlace)!, isReaded: "1")
         uploadRequest()
         //        }
     }
@@ -289,10 +289,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             serviceIcon.layer.masksToBounds = true
         }
         let defaults            = UserDefaults.standard
-        edEmail.text              = defaults.string(forKey: "mail")
-        if (defaults.string(forKey: "mail") == "-") {
-            edEmail.text          = ""
-        }
+//        edEmail.text              = defaults.string(forKey: "mail")
+//        if (defaults.string(forKey: "mail") == "-") {
+//            edEmail.text          = ""
+//        }
         edPhone.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         edPhone.maskTemplate = "*"
         
@@ -418,7 +418,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         picker.minimumDate = date!
         picker.addTarget(self, action: #selector(
             datePickerValueChanged), for: UIControlEvents.valueChanged)
-        edProblem.text = "Введите описание"
+        edProblem.text = "Что нужно сделать?"
         edProblem.textColor = placeholderColor
         edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
     }
@@ -624,9 +624,10 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         if data_?.name == "Дополнительное обслуживание"{
             paidEmergency = "1"
         }
+        let email = UserDefaults.standard.string(forKey: "mail") ?? ""
 //        print(Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id ?? "")&name=\(data_?.name! ?? "")&text=\(comm)&phonenum=\(edPhone.text! )&responsiblePerson=\(data_?.name! ?? "")&emails=\(edEmail.text!)&isPaidEmergencyRequest=\(paidEmergency)&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss"))&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss"))&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")))&paidServiceType=\(data_?.id! ?? "")&premises=\(place)&asSoonAsPossible=\(soonPossible)")
         
-        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&responsiblePerson=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&emails=\(edEmail.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=\(paidEmergency.stringByAddingPercentEncodingForRFC3986() ?? "")&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
+        let url: String = Server.SERVER + Server.ADD_APP + "login=\(login)&pwd=\(pass)&type=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&name=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&text=\(comm.stringByAddingPercentEncodingForRFC3986()!)&phonenum=\(edPhone.text!.stringByAddingPercentEncodingForRFC3986() ?? "")&responsiblePerson=\(data_?.name!.stringByAddingPercentEncodingForRFC3986()! ?? "")&emails=\(email.stringByAddingPercentEncodingForRFC3986() ?? "")&isPaidEmergencyRequest=\(paidEmergency.stringByAddingPercentEncodingForRFC3986() ?? "")&isNotify=1&dateFrom=\(formatDate(Date(), format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateTo=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&dateServiceDesired=\(formatDate(picker.date, format: "dd.MM.yyyy HH:mm:ss").stringByAddingPercentEncodingForRFC3986() ?? "")&clearAfterWork=&PeriodFrom=\(Date().toString(format: .custom("dd.MM.yyyy HH:mm:ss")).stringByAddingPercentEncodingForRFC3986() ?? "")&paidServiceType=\(data_?.id!.stringByAddingPercentEncodingForRFC3986() ?? "")&premises=\(place.stringByAddingPercentEncodingForRFC3986() ?? "")&asSoonAsPossible=\(soonPossible.stringByAddingPercentEncodingForRFC3986() ?? "")"
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -779,7 +780,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
         
         if updatedText.isEmpty {
-            textView.text = "Введите описание"
+            textView.text = "Что нужно сделать?"
             textView.textColor = placeholderColor
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             

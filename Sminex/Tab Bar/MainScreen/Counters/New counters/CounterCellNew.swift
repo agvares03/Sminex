@@ -35,6 +35,11 @@ final class CounterCellNew: UICollectionViewCell {
     @IBAction private func go_action(_ sender: UIButton) {
         self.delegate2.pressed(index: index)
     }
+    
+    @IBAction private func history_action(_ sender: UIButton) {
+        self.delegate2.pressedHistory(ident: index, name: (counter_name.text?.replacingOccurrences(of: "Счетчик №", with: ""))!)
+    }
+    
     var delegate : UIViewController!
     var delegate2: NewCounterDelegate!
     var index = 0

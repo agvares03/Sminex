@@ -70,6 +70,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         } catch {
             print(error)
         }
+        historyBtn.isHidden = true
         tableView.reloadData()
     }
     
@@ -126,6 +127,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         vc.canCount = canCount
         vc.data_ = metArr
         vc.period_ = periods
+        vc.dataHistory_ = meterArr
         vc.title = counter.name
         vc.title_name = counter.name
         tableView.deselectRow(at: indexPath, animated: true)
@@ -220,7 +222,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                     }
                     self.tableView.reloadData()
 //                    self.dateLbl.isHidden = false
-                    self.historyBtn.isHidden = false
+//                    self.historyBtn.isHidden = false
                     self.indicator.stopAnimating()
                     self.indicator.isHidden = true
                 }
