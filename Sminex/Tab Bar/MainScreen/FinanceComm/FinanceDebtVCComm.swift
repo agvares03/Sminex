@@ -14,6 +14,7 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
+    @IBOutlet private weak var archiveBtn: UILabel!
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
         if !notifiPressed{
             notifiPressed = true
@@ -100,6 +101,9 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                     self.getShareElements()
                 }
             }
+        }
+        if title == "Неоплаченный счет"{
+            archiveBtn.text = "Архив неоплаченных счетов"
         }
     }
     
@@ -420,6 +424,9 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         } else if segue.identifier == Segues.fromFinanceVC.toReceiptArchive {
             let vc = segue.destination as! FinanceDebtArchiveVCComm
             vc.data_ = allData_
+            if title == "Неоплаченный счет"{
+                vc.title = "Неоплаченные счета"
+            }
         }
     }
 }

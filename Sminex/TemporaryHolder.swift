@@ -99,7 +99,7 @@ final class TemporaryHolder {
             var request = URLRequest(url: URL(string: url + "&pwd=" + pwd)!)
             request.httpMethod = "GET"
             
-            print(request.url)
+            print(request)
             
             receiptsGroup.enter()
             URLSession.shared.dataTask(with: request) {

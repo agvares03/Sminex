@@ -924,29 +924,6 @@
             </connections>
             <point key="canvasLocation" x="1257" y="-343"/>
         </collectionViewCell>
-        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="FinanceCalcCommHeader" id="AkN-WX-Rnf" customClass="FinanceCalcCommHeader" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Март 2018*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="laW-I6-2yo">
-                    <rect key="frame" x="32" y="0.0" width="327" height="50"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-            </subviews>
-            <constraints>
-                <constraint firstItem="laW-I6-2yo" firstAttribute="top" secondItem="AkN-WX-Rnf" secondAttribute="topMargin" id="1oT-UG-BKJ"/>
-                <constraint firstAttribute="trailingMargin" secondItem="laW-I6-2yo" secondAttribute="trailing" id="Pv7-hh-3P1"/>
-                <constraint firstAttribute="bottomMargin" secondItem="laW-I6-2yo" secondAttribute="bottom" id="dyc-Lm-9hs"/>
-                <constraint firstItem="laW-I6-2yo" firstAttribute="leading" secondItem="AkN-WX-Rnf" secondAttribute="leadingMargin" constant="16" id="wSO-lw-qBp"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="CGy-Wc-HL2"/>
-            <connections>
-                <outlet property="title" destination="laW-I6-2yo" id="4VI-cR-Lhn"/>
-            </connections>
-            <point key="canvasLocation" x="-388" y="542"/>
-        </collectionReusableView>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="FinanceDebtCommHeader" id="Nu1-La-0HI" customClass="FinanceDebtCommHeader" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
@@ -1408,215 +1385,6 @@
             </connections>
             <point key="canvasLocation" x="574" y="345"/>
         </collectionViewCell>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalcYearCell" id="1ce-EC-ZEj" customClass="CalcYearCell" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2019" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pn9-3U-Omc">
-                        <rect key="frame" x="0.0" y="0.0" width="100" height="28"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JVE-DC-TfN">
-                        <rect key="frame" x="5" y="28" width="90" height="2"/>
-                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="2" id="Yoq-Ga-hsr"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </subviews>
-            </view>
-            <constraints>
-                <constraint firstItem="JVE-DC-TfN" firstAttribute="top" secondItem="Pn9-3U-Omc" secondAttribute="bottom" id="4R2-56-zPJ"/>
-                <constraint firstAttribute="bottom" secondItem="JVE-DC-TfN" secondAttribute="bottom" id="WWq-wG-Eta"/>
-                <constraint firstItem="Pn9-3U-Omc" firstAttribute="top" secondItem="1ce-EC-ZEj" secondAttribute="top" id="hNE-RP-VdJ"/>
-                <constraint firstItem="JVE-DC-TfN" firstAttribute="leading" secondItem="1ce-EC-ZEj" secondAttribute="leading" constant="5" id="qec-MM-CoU"/>
-                <constraint firstItem="Pn9-3U-Omc" firstAttribute="leading" secondItem="1ce-EC-ZEj" secondAttribute="leading" id="wGO-ag-Fga"/>
-                <constraint firstAttribute="trailing" secondItem="Pn9-3U-Omc" secondAttribute="trailing" id="yUa-7w-hXK"/>
-                <constraint firstAttribute="trailing" secondItem="JVE-DC-TfN" secondAttribute="trailing" constant="5" id="yxD-26-np5"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="3FI-O5-reB"/>
-            <size key="customSize" width="100" height="30"/>
-            <connections>
-                <outlet property="selLine" destination="JVE-DC-TfN" id="76z-nP-gnX"/>
-                <outlet property="title" destination="Pn9-3U-Omc" id="L2q-Ex-p8C"/>
-            </connections>
-            <point key="canvasLocation" x="1014" y="385"/>
-        </collectionViewCell>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FinanceCalcCommCell" id="3AG-zD-9AP" customClass="FinanceCalcCommCell" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="219"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="219"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCM-K8-7Wo">
-                        <rect key="frame" x="16" y="0.0" width="343" height="109"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="L8L-qN-BPW">
-                                <rect key="frame" x="32" y="5" width="295" height="20"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Начислено" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xk6-oe-p3M">
-                                        <rect key="frame" x="0.0" y="0.0" width="98.5" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Оплачено" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9lk-HF-PWJ">
-                                        <rect key="frame" x="98.5" y="0.0" width="98" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Долг" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IBK-vQ-KGa">
-                                        <rect key="frame" x="196.5" y="0.0" width="98.5" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="kDf-Og-OM9"/>
-                                </constraints>
-                            </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Машиноместа по прайс листу" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6u1-M2-qSs">
-                                <rect key="frame" x="16" y="35" width="327" height="31"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="OdN-gC-lvE">
-                                <rect key="frame" x="32" y="74" width="295" height="25"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="7i0-3Z-tsM">
-                                        <rect key="frame" x="0.0" y="0.0" width="295" height="25"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Начислено*" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="h8b-TM-YCM">
-                                                <rect key="frame" x="0.0" y="0.0" width="98.5" height="25"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Оплачено*" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="SKB-za-WK7">
-                                                <rect key="frame" x="98.5" y="0.0" width="98" height="25"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Долг*" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="1Iz-ok-zWc">
-                                                <rect key="frame" x="196.5" y="0.0" width="98.5" height="25"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="25" id="sjU-AP-UQc"/>
-                                </constraints>
-                            </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UnV-XJ-gf4">
-                                <rect key="frame" x="0.0" y="108" width="343" height="1"/>
-                                <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="Gff-ab-NM2"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="OdN-gC-lvE" firstAttribute="leading" secondItem="6u1-M2-qSs" secondAttribute="leading" constant="16" id="3uC-NW-6RP"/>
-                            <constraint firstItem="L8L-qN-BPW" firstAttribute="leading" secondItem="CCM-K8-7Wo" secondAttribute="leading" constant="32" id="BZW-qe-TKV"/>
-                            <constraint firstAttribute="trailing" secondItem="OdN-gC-lvE" secondAttribute="trailing" constant="16" id="EtD-Qo-xgx"/>
-                            <constraint firstAttribute="bottom" secondItem="UnV-XJ-gf4" secondAttribute="bottom" id="IiP-GC-9aI"/>
-                            <constraint firstItem="6u1-M2-qSs" firstAttribute="leading" secondItem="CCM-K8-7Wo" secondAttribute="leading" constant="16" id="K1f-ZW-bvO"/>
-                            <constraint firstAttribute="trailing" secondItem="UnV-XJ-gf4" secondAttribute="trailing" id="LSO-vj-kl5"/>
-                            <constraint firstItem="OdN-gC-lvE" firstAttribute="top" secondItem="6u1-M2-qSs" secondAttribute="bottom" constant="8" id="Ogk-kn-gb3"/>
-                            <constraint firstItem="6u1-M2-qSs" firstAttribute="top" secondItem="L8L-qN-BPW" secondAttribute="bottom" constant="10" id="QTR-40-cd8"/>
-                            <constraint firstItem="L8L-qN-BPW" firstAttribute="top" secondItem="CCM-K8-7Wo" secondAttribute="top" constant="5" id="SyO-mc-0g5"/>
-                            <constraint firstItem="UnV-XJ-gf4" firstAttribute="leading" secondItem="CCM-K8-7Wo" secondAttribute="leading" id="Xq0-Do-bks"/>
-                            <constraint firstAttribute="bottom" secondItem="OdN-gC-lvE" secondAttribute="bottom" constant="10" id="YUp-1W-ZAH"/>
-                            <constraint firstAttribute="trailing" secondItem="6u1-M2-qSs" secondAttribute="trailing" id="q0B-7T-p7l"/>
-                            <constraint firstAttribute="trailing" secondItem="L8L-qN-BPW" secondAttribute="trailing" constant="16" id="z4A-Mu-50a"/>
-                        </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <real key="value" value="4"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
-                        </userDefinedRuntimeAttributes>
-                    </view>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G7l-FE-zrT">
-                        <rect key="frame" x="16" y="124" width="343" height="40"/>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="40" id="jwK-LP-6Lm"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <state key="normal" title="Перейти к квитанциям">
-                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </state>
-                        <connections>
-                            <action selector="goCalc:" destination="3AG-zD-9AP" eventType="touchUpInside" id="aR6-EZ-43a"/>
-                        </connections>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ngM-OA-tzK">
-                        <rect key="frame" x="16" y="179" width="343" height="40"/>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="40" id="eVi-mq-VvV"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <state key="normal" title="Оплатить">
-                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </state>
-                        <connections>
-                            <action selector="goPay:" destination="3AG-zD-9AP" eventType="touchUpInside" id="nAx-ra-FLh"/>
-                        </connections>
-                    </button>
-                </subviews>
-            </view>
-            <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-            <constraints>
-                <constraint firstItem="ngM-OA-tzK" firstAttribute="top" secondItem="G7l-FE-zrT" secondAttribute="bottom" constant="15" id="28E-jw-yfo"/>
-                <constraint firstItem="CCM-K8-7Wo" firstAttribute="leading" secondItem="3AG-zD-9AP" secondAttribute="leading" constant="16" id="FPc-aw-ALf"/>
-                <constraint firstItem="ngM-OA-tzK" firstAttribute="leading" secondItem="3AG-zD-9AP" secondAttribute="leading" constant="16" id="IbL-ik-qeU"/>
-                <constraint firstItem="CCM-K8-7Wo" firstAttribute="top" secondItem="3AG-zD-9AP" secondAttribute="top" id="Sxd-wD-Qb5"/>
-                <constraint firstAttribute="trailing" secondItem="G7l-FE-zrT" secondAttribute="trailing" constant="16" id="fod-u4-Aic"/>
-                <constraint firstItem="G7l-FE-zrT" firstAttribute="leading" secondItem="3AG-zD-9AP" secondAttribute="leading" constant="16" id="heJ-0q-jbA"/>
-                <constraint firstAttribute="bottom" secondItem="ngM-OA-tzK" secondAttribute="bottom" id="l71-PL-OnR"/>
-                <constraint firstItem="G7l-FE-zrT" firstAttribute="top" secondItem="CCM-K8-7Wo" secondAttribute="bottom" constant="15" id="qO1-JT-MHQ"/>
-                <constraint firstAttribute="trailing" secondItem="ngM-OA-tzK" secondAttribute="trailing" constant="16" id="sC1-ZH-OSl"/>
-                <constraint firstAttribute="trailing" secondItem="CCM-K8-7Wo" secondAttribute="trailing" constant="16" id="zlN-17-cJB"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="KcC-b1-owq"/>
-            <connections>
-                <outlet property="debtHeight" destination="jwK-LP-6Lm" id="EwK-WO-rNQ"/>
-                <outlet property="debtTop" destination="qO1-JT-MHQ" id="51x-dE-3Il"/>
-                <outlet property="goDebt" destination="G7l-FE-zrT" id="KIm-T1-MGL"/>
-                <outlet property="headerHeight" destination="kDf-Og-OM9" id="ggN-J6-jxA"/>
-                <outlet property="headerStack" destination="L8L-qN-BPW" id="UCI-za-SMs"/>
-                <outlet property="payBtn" destination="ngM-OA-tzK" id="H3C-6j-VtB"/>
-                <outlet property="payHeight" destination="eVi-mq-VvV" id="UwK-Ip-mRo"/>
-                <outlet property="payTop" destination="28E-jw-yfo" id="pTY-xv-6pq"/>
-                <outlet property="sumAccured" destination="h8b-TM-YCM" id="y0n-LS-8ne"/>
-                <outlet property="sumDebt" destination="1Iz-ok-zWc" id="cg6-8Z-hTD"/>
-                <outlet property="sumPay" destination="SKB-za-WK7" id="lcX-ne-Kux"/>
-                <outlet property="title" destination="6u1-M2-qSs" id="fu0-J8-NPp"/>
-            </connections>
-            <point key="canvasLocation" x="897" y="176"/>
-        </collectionViewCell>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="FinanceCalcComm3Header" id="5uF-NZ-JYC" customClass="FinanceCalcComm3Header" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
@@ -1638,48 +1406,8 @@
             <connections>
                 <outlet property="title" destination="bUR-jD-bKj" id="xOz-uA-V2s"/>
             </connections>
+            <point key="canvasLocation" x="-609" y="159"/>
         </collectionReusableView>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalcYearCell1" id="wm7-tG-d0M" customClass="CalcYearCell" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2019" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rfK-u9-hG9">
-                        <rect key="frame" x="0.0" y="0.0" width="100" height="28"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nJq-Yl-TtL">
-                        <rect key="frame" x="5" y="28" width="90" height="2"/>
-                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="2" id="qLR-np-oco"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </subviews>
-            </view>
-            <constraints>
-                <constraint firstItem="nJq-Yl-TtL" firstAttribute="leading" secondItem="wm7-tG-d0M" secondAttribute="leading" constant="5" id="0LX-Lg-eCf"/>
-                <constraint firstAttribute="bottom" secondItem="nJq-Yl-TtL" secondAttribute="bottom" id="957-Sz-mLS"/>
-                <constraint firstItem="nJq-Yl-TtL" firstAttribute="top" secondItem="rfK-u9-hG9" secondAttribute="bottom" id="O6K-sy-q6v"/>
-                <constraint firstAttribute="trailing" secondItem="rfK-u9-hG9" secondAttribute="trailing" id="WVm-U6-Joa"/>
-                <constraint firstItem="rfK-u9-hG9" firstAttribute="top" secondItem="wm7-tG-d0M" secondAttribute="top" id="ZQR-zs-IUi"/>
-                <constraint firstItem="rfK-u9-hG9" firstAttribute="leading" secondItem="wm7-tG-d0M" secondAttribute="leading" id="cLL-HA-cHT"/>
-                <constraint firstAttribute="trailing" secondItem="nJq-Yl-TtL" secondAttribute="trailing" constant="5" id="cmt-rR-E41"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="lLG-QP-f4q"/>
-            <size key="customSize" width="100" height="30"/>
-            <connections>
-                <outlet property="selLine" destination="nJq-Yl-TtL" id="akc-Ce-B4t"/>
-                <outlet property="title" destination="rfK-u9-hG9" id="MgW-cs-qC9"/>
-            </connections>
-        </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalcYearCell1" id="CgS-96-b6f" customClass="CalcYearCell1" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1720,6 +1448,7 @@
                 <outlet property="selLine" destination="QEQ-HW-chB" id="3vL-Vv-Yif"/>
                 <outlet property="title" destination="2fN-18-4a3" id="be6-fq-e9q"/>
             </connections>
+            <point key="canvasLocation" x="1012.8" y="298.65067466266868"/>
         </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TestAppsUserHeader" id="ZOb-Gv-h5c" customClass="TestAppsUserHeader" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="290" height="30"/>
@@ -1761,6 +1490,7 @@
                 <outlet property="selLine" destination="Ygg-1R-vJ5" id="3hf-50-AVj"/>
                 <outlet property="title" destination="LYp-gb-ayd" id="3Ak-89-ch5"/>
             </connections>
+            <point key="canvasLocation" x="594" y="400"/>
         </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ContactsCell" id="jFD-N4-3Nn" customClass="ContactsCell" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="302"/>

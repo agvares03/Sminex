@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol PayDelegate{
+    func requestPay(debt: String, indexPath: IndexPath)
+    func goCalc(indexPath: IndexPath)
+}
+
 class FinanceCalcVC3Comm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PayDelegate {
     
     @IBOutlet weak var collection: UICollectionView!

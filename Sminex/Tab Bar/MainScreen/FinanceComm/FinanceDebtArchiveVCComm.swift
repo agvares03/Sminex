@@ -162,6 +162,9 @@ class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyT
             let vc = segue.destination as! FinanceDebtVCComm
             vc.data_ = dataFilt[section].filteredData[index]
             vc.allData_ = data_
+            if title == "Неоплаченные счета"{
+                vc.title = "Неоплаченный счет"
+            }
         }
     }
     

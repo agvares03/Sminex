@@ -107,13 +107,13 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(_ tableView: ExpyTableView, expandableCellForSection section: Int) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCommCell") as! FinanceSectionCommCell
-        if section == 1 {
+        if section == 3 {
             cell.display("Квитанции", section: section, last: false)
         } else {
             cell.display("Взаиморасчеты", section: section, last: false)
@@ -162,7 +162,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             cell.contentView.backgroundColor = .clear
             return cell
             
-        } else if indexPath.section == 1 {
+        } else if indexPath.section == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
             if indexPath.row == receipts.count + 1 || indexPath.row == 4 {
                 cell.display(title: "Архив квитанции", desc: "")
@@ -187,14 +187,15 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 cell.contentView.backgroundColor = backColor
             }
             return cell
-        } else if indexPath.section == 2{
+        } else if indexPath.section == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceCommCell", for: indexPath) as! FinanceCommCell
             if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 4){
 //                if (self.calcs.count == 0) {
 //                    cell.display(title: "", desc: "")
 //                } else {
                     cell.display(title: "История взаиморасчетов", desc: "")
-                    cell.contentView.backgroundColor = .white
+                cell.botView.isHidden = true
+                    cell.contentView.backgroundColor = .clear
 //                }
             }else if (indexPath.row == filteredCalcs.count + 1 || indexPath.row == 5) { //} && (Double((debt?.sumPay)!) >= 0.00){
                 if (self.calcs.count == 0) {
@@ -280,6 +281,12 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 cell.contentView.backgroundColor = backColor
             }
             return cell
+        }else if indexPath.section == 1{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCommCell", for: indexPath) as! FinanceSectionCommCell
+            cell.display("Неоплаченные счета", section: indexPath.section, last: true)
+            //            cell.display(title: "История оплат", desc: "")
+            cell.contentView.backgroundColor = .clear
+            return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceSectionCommCell", for: indexPath) as! FinanceSectionCommCell
             cell.display("История оплат", section: indexPath.section, last: true)
@@ -297,7 +304,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             }
             self.tableHeight.constant = height1
         }
-        if section == 1 {
+        if section == 3 {
             if receipts.count == 0 {
                 return 2
             } else if receipts.count < 3 {
@@ -305,7 +312,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             } else {
                 return 5
             }
-        } else if section == 2 {
+        } else if section == 4 {
             if filteredCalcs.count == 0 {
                 return 2
             } else if filteredCalcs.count < 3 {
@@ -333,11 +340,11 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     }
     
     func tableView(_ tableView: ExpyTableView, canExpandSection section: Int) -> Bool {
-        if section == 0 || section == 3 {
-            return false
+        if section == 3 || section == 4 {
+            return true
             
         } else {
-            return true
+            return false
         }
     }
     
@@ -350,9 +357,14 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
 //                if UserDefaults.standard.bool(forKey: "denyQRCode"){
 //                    return 224.0 + 15.0
 //                }else{
-                    return 229.0 + 15.0
+                    return 229.0
 //                }
 //            }
+        }else if indexPath.section == 2 {
+            if view.frame.size.width == 320 && indexPath.section == 2 && indexPath.row != 0{
+                return 70.0
+            }
+            return 60.0
         } else {
             if view.frame.size.width == 320 && indexPath.section == 2 && indexPath.row != 0{
                 return 60.0
@@ -364,7 +376,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 1 {
+        if indexPath.section == 3 {
             guard indexPath.row != 0 && receipts.count != 0 else { return }
             if indexPath.row == receipts.count + 1 || indexPath.row == 4 || (receipts.count == 0) {
                 performSegue(withIdentifier: Segues.fromFinanceVC.toReceiptArchive, sender: self)
@@ -373,7 +385,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             index = indexPath.row - 1
             performSegue(withIdentifier: Segues.fromFinanceVC.toReceipts, sender: self)
             
-        } else if indexPath.section == 2 {
+        } else if indexPath.section == 4 {
             guard indexPath.row != 0 && filteredCalcs.count != 0 else { return }
             self.startAnimation()
 //            if Double((self.debt!.sumPay)!) < 0.00{
@@ -396,8 +408,10 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
                 index = indexPath.row - 1
                 performSegue(withIdentifier: Segues.fromFinanceVC.toCalcs, sender: self)
 //            }
-        } else if indexPath.section == 3 {
+        } else if indexPath.section == 2 {
             performSegue(withIdentifier: Segues.fromFinanceVC.toHistory, sender: self)
+        } else if indexPath.section == 1 {
+            performSegue(withIdentifier: Segues.fromFinanceVC.toBillsArchive, sender: self)
         }
     }
     
@@ -503,6 +517,19 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             let vc = segue.destination as! FinanceDebtArchiveVCComm
             vc.data_ = receipts
             
+        } else if segue.identifier == Segues.fromFinanceVC.toBillsArchive {
+            let vc = segue.destination as! FinanceDebtArchiveVCComm
+            var bills = receipts
+            bills.removeAll()
+            receipts.forEach{
+                let payment_sum: Double = $0.payment_sum ?? 0.0
+                let sum: Double = $0.sum ?? 0.0
+                if payment_sum < sum{
+                    bills.append($0)
+                }
+            }
+            vc.title = "Неоплаченные счета"
+            vc.data_ = bills
         } else if segue.identifier == Segues.fromFinanceVC.toCalcs {
             let vc = segue.destination as! FinanceCalcVC3Comm
             let date = (filteredCalcs[index].numMonthSet, filteredCalcs[index].numYearSet)
@@ -538,44 +565,56 @@ final class FinanceSectionCommCell: UITableViewCell {
     @IBOutlet private weak var img:     UIImageView!
     @IBOutlet private weak var imgHeight: NSLayoutConstraint!
     @IBOutlet private weak var imgWidth: NSLayoutConstraint!
+    @IBOutlet private weak var botConst1: NSLayoutConstraint!
+    @IBOutlet private weak var botConst2: NSLayoutConstraint!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var botView: UIView!
-    
+    var section = 0
     func display(_ title: String, section: Int, last: Bool) {
-        if section == 1{
-            if (UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments")) {
-                topView.isHidden = false
-                botView.isHidden = true
-            } else if (UserDefaults.standard.bool(forKey: "denyOnlinePayments")) {
-                topView.isHidden = false
-                botView.isHidden = true
-            }else{
-                topView.isHidden = false
-                botView.isHidden = false
-            }
-        }else{
-            topView.isHidden = false
-            botView.isHidden = false
-        }
+        self.section = section
         self.title.text     = title
         self.img.image = UIImage(named: "expand")
         imgHeight.constant = 10
         imgWidth.constant = 16
+        botConst1.constant = 0
+        botConst2.constant = 0
+        if section == 1{
+            topView.isHidden = true
+            botView.isHidden = false
+        }else if section == 2{
+            topView.isHidden = false
+            botView.isHidden = true
+            botConst1.constant = 10
+            botConst2.constant = 10
+        }else if section == 3{
+            topView.isHidden = true
+            botView.isHidden = false
+        }else if section == 4{
+            topView.isHidden = false
+            botView.isHidden = true
+        }
         if title == "История оплат"{
             self.img.image = UIImage(named: "arrow_right")
             imgHeight.constant = 16
             imgWidth.constant = 10
-            topView.isHidden = true
-            botView.isHidden = false
+        }else if title == "Неоплаченные счета"{
+            self.img.image = UIImage(named: "arrow_right")
+            imgHeight.constant = 16
+            imgWidth.constant = 10
         }
     }
     
     func expand(_ isExpanded: Bool) {
         if !isExpanded {
             self.img.image = UIImage(named: "expand")
-            
+            if section == 4{
+                botView.isHidden = true
+            }
         } else {
             self.img.image = UIImage(named: "expanded")
+            if section == 4{
+                botView.isHidden = false
+            }
         }
     }
 }
@@ -613,8 +652,8 @@ final class FinanceHeaderCommCell: UITableViewCell {
 //            fonHeight.constant  = 0
 //        }else{
             fonIMG.image = UIImage(named: "mainPay_fon")!
-            fonIMG2.isHidden        = false
-            fonHeight.constant      = 15
+//            fonIMG2.isHidden        = false
+//            fonHeight.constant      = 15
             heightPayed.constant    = 48
 //        }
         //        print(isPayed.constant, heigthPayed.constant)
@@ -629,6 +668,7 @@ final class FinanceCommCell: UITableViewCell {
     @IBOutlet private weak var title:   UILabel!
     @IBOutlet private weak var desc:    UILabel!
     @IBOutlet weak var img: UIImageView!
+    @IBOutlet weak var botView: UIView!
     
     func display(title: String, desc: String) {
         self.title.text = title
@@ -643,6 +683,10 @@ final class FinanceCommCell: UITableViewCell {
         }else{
             img.image = UIImage(named: "arrow_right")
         }
-        
+        if title == "История взаиморасчетов"{
+            botView.isHidden = true
+        }else{
+            botView.isHidden = false
+        }
     }
 }
