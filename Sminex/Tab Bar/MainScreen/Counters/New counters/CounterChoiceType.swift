@@ -70,7 +70,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
         } catch {
             print(error)
         }
-        historyBtn.isHidden = true
+//        historyBtn.isHidden = true
         tableView.reloadData()
     }
     
@@ -222,7 +222,7 @@ class CounterChoiceType: UIViewController, UITableViewDelegate, UITableViewDataS
                     }
                     self.tableView.reloadData()
 //                    self.dateLbl.isHidden = false
-//                    self.historyBtn.isHidden = false
+                    self.historyBtn.isHidden = false
                     self.indicator.stopAnimating()
                     self.indicator.isHidden = true
                 }

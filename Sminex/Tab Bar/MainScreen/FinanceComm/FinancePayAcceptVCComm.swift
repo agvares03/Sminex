@@ -48,6 +48,14 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
                 DispatchQueue.global(qos: .userInitiated).async {
                     self.requestPay()
                 }
+            }else if Double(sumText)! < 0.00{
+                DispatchQueue.main.async{
+                    let alert = UIAlertController(title: "Ошибка", message: "Имеется переплата!", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Ок", style: .default) { (_) -> Void in }
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                    self.stopAnimation()
+                }
             }else{
                 DispatchQueue.main.async{
                     let alert = UIAlertController(title: "Ошибка", message: "Сумма к оплате равна нулю!", preferredStyle: .alert)
