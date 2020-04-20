@@ -36,7 +36,11 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
     }
     
     @IBAction private func payButtonPressed(_ sender: UIButton) {
-        performSegue(withIdentifier: Segues.fromFinanceVC.toPay, sender: self)
+        if (UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments")) {
+            performSegue(withIdentifier: Segues.fromFinanceVC.toBillsArchive, sender: self)
+        }else{
+            performSegue(withIdentifier: Segues.fromFinanceVC.toPay, sender: self)
+        }
     }
     
     private var backColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1.0)
@@ -522,9 +526,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             var bills = receipts
             bills.removeAll()
             receipts.forEach{
-                let payment_sum: Double = $0.payment_sum ?? 0.0
-                let sum: Double = $0.sum ?? 0.0
-                if payment_sum < sum{
+                if $0.payment_name == "Не оплачен"{
                     bills.append($0)
                 }
             }

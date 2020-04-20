@@ -56,7 +56,11 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //        if UserDefaults.standard.string(forKey: "typeBuilding") != "commercial"{
 //            performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePay, sender: self)
 //        }else{
+        if (UserDefaults.standard.bool(forKey: "denyTotalOnlinePayments")) {
+            performSegue(withIdentifier: Segues.fromFinanceVC.toBillsArchive, sender: self)
+        }else{
             performSegue(withIdentifier: Segues.fromMainScreenVC.toFinancePayComm, sender: self)
+        }
 //        }
     }
     
@@ -1890,6 +1894,18 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             let vc = segue.destination as! FinancePayAcceptVCComm
             vc.accountData_ = debt
             
+        }else if segue.identifier == Segues.fromFinanceVC.toBillsArchive{
+            let vc = segue.destination as! FinanceDebtArchiveVCComm
+            let receipts = TemporaryHolder.instance.receipts
+            var bills = receipts
+            bills.removeAll()
+            receipts.forEach{
+                if $0.payment_name == "Не оплачен"{
+                    bills.append($0)
+                }
+            }
+            vc.title = "Неоплаченные счета"
+            vc.data_ = bills
         } else if segue.identifier == Segues.fromMainScreenVC.toNewsWAnim {
             let vc = segue.destination as! NewsListTVC
             vc.tappedNews = tappedNews

@@ -415,10 +415,13 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             edContact.text = ""
         }else{
             var phone = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
-            if phone.first == "8" && phone.count > 10{
+//            if phone.first == "8" && phone.count > 10{
+//                phone.removeFirst()
+//            }else if phone.first == "+" && phone.count > 10{
+//                phone = phone.replacingOccurrences(of: "+7", with: "")
+//            }
+            if phone.first == "8"{
                 phone.removeFirst()
-            }else if phone.first == "+" && phone.count > 10{
-                phone = phone.replacingOccurrences(of: "+7", with: "")
             }
             edContact.text = phone
         }

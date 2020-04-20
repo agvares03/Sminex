@@ -3,7 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -411,7 +411,7 @@
         <!--Архив квитанции-->
         <scene sceneID="3R8-5b-2ba">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="rXO-RA-66m" customClass="FinanceDebtArchiveVCComm" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="billsArchive" modalPresentationStyle="fullScreen" id="rXO-RA-66m" customClass="FinanceDebtArchiveVCComm" customModule="Sminex" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="AoY-Ue-qwD"/>
                         <viewControllerLayoutGuide type="bottom" id="4yQ-of-RVp"/>
@@ -893,10 +893,7 @@
                                 <rect key="frame" x="0.0" y="568" width="375" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Архив квитанций" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwv-9W-NMw">
-                                        <rect key="frame" x="20" y="5" width="210" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="210" id="5Ov-K0-hli"/>
-                                        </constraints>
+                                        <rect key="frame" x="15" y="5" width="333" height="40"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -922,9 +919,10 @@
                                     <constraint firstAttribute="bottom" secondItem="Jwv-9W-NMw" secondAttribute="bottom" constant="5" id="Q4w-c3-vER"/>
                                     <constraint firstAttribute="height" constant="50" id="TWp-rU-RWU"/>
                                     <constraint firstItem="Jwv-9W-NMw" firstAttribute="top" secondItem="dzh-wC-4NM" secondAttribute="top" constant="5" id="YTr-vI-3gF"/>
-                                    <constraint firstItem="Jwv-9W-NMw" firstAttribute="leading" secondItem="dzh-wC-4NM" secondAttribute="leading" constant="20" id="htU-9k-7dK"/>
+                                    <constraint firstItem="Jwv-9W-NMw" firstAttribute="leading" secondItem="dzh-wC-4NM" secondAttribute="leading" constant="15" id="htU-9k-7dK"/>
                                     <constraint firstAttribute="trailing" secondItem="sr5-NX-aDs" secondAttribute="trailing" id="l6L-jn-lYE"/>
                                     <constraint firstItem="b4l-TL-oUT" firstAttribute="centerY" secondItem="dzh-wC-4NM" secondAttribute="centerY" id="ndf-lD-NJD"/>
+                                    <constraint firstItem="b4l-TL-oUT" firstAttribute="leading" secondItem="Jwv-9W-NMw" secondAttribute="trailing" id="pWc-0f-2AC"/>
                                     <constraint firstItem="sr5-NX-aDs" firstAttribute="top" secondItem="dzh-wC-4NM" secondAttribute="top" id="rka-qn-xS6"/>
                                     <constraint firstItem="sr5-NX-aDs" firstAttribute="leading" secondItem="dzh-wC-4NM" secondAttribute="leading" id="u4n-oW-kwy"/>
                                     <constraint firstAttribute="bottom" secondItem="sr5-NX-aDs" secondAttribute="bottom" id="z3y-Xe-90L"/>
@@ -2616,14 +2614,14 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="JJZ-OB-ecs"/>
+        <segue reference="zEu-dy-R8u"/>
         <segue reference="kIt-Vc-ybU"/>
-        <segue reference="vpQ-46-9Tt"/>
+        <segue reference="NUx-9a-9M3"/>
         <segue reference="gXy-iR-Oab"/>
-        <segue reference="dmk-7H-ulN"/>
-        <segue reference="y14-D3-i89"/>
-        <segue reference="Uab-Pc-moj"/>
-        <segue reference="4GH-ng-I1k"/>
+        <segue reference="1zh-mT-3jK"/>
+        <segue reference="LFZ-Gg-ebw"/>
+        <segue reference="EIU-tV-9kd"/>
+        <segue reference="R8q-Bf-OzV"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow_right" width="40" height="65"/>

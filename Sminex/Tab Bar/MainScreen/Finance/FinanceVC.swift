@@ -724,6 +724,7 @@ struct AccountBillsJson: JSONDecodable {
     let numYear: 	           Int?
     let permit_online_payment: Bool?
     let number_eng:            String?
+    let payment_name:          String?
     
     init?(json: JSON) {
         idReceipts            = "id_receipts" <~~ json
@@ -738,6 +739,7 @@ struct AccountBillsJson: JSONDecodable {
         payment_sum           = "payment_sum" <~~ json
         permit_online_payment = "permit_online_payment"  <~~ json
         number_eng            = "number_eng"  <~~ json
+        payment_name          = "payment_name"  <~~ json
     }
 }
 
