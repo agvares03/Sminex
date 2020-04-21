@@ -89,10 +89,10 @@ class FinanceCalcVC3Comm: UIViewController, UICollectionViewDelegate, UICollecti
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "receiptArchive" {
             let vc = segue.destination as! FinanceDebtVCComm
-            var dat: AccountBillsJson?
+            var dat: [AccountBillsJson] = []
             dataDebt.forEach{
                 if date.0 == $0.numMonth && date.1 == $0.numYear{
-                    dat = $0
+                    dat.append($0)
                 }
             }
             vc.data_ = dat

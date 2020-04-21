@@ -515,7 +515,9 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
             
         } else if segue.identifier == Segues.fromFinanceVC.toReceipts {
             let vc = segue.destination as! FinanceDebtVCComm
-            vc.data_ = receipts[safe: index]
+            var dat: [AccountBillsJson] = []
+            dat.append(receipts[safe: index]!)
+            vc.data_ = dat
             vc.allData_ = receipts
         } else if segue.identifier == Segues.fromFinanceVC.toReceiptArchive {
             let vc = segue.destination as! FinanceDebtArchiveVCComm
@@ -625,7 +627,7 @@ final class FinanceSectionCommCell: UITableViewCell {
 final class FinanceHeaderCommCell: UITableViewCell {
     
     @IBOutlet private weak var amount: UILabel!
-//    @IBOutlet private weak var date: UILabel!
+    @IBOutlet private weak var titlePay: UILabel!
     
     @IBOutlet weak var pay_button: UIButton!
     @IBOutlet weak var fonIMG: UIImageView!
@@ -637,7 +639,13 @@ final class FinanceHeaderCommCell: UITableViewCell {
     }
     
     func display(amount: String, date: String) {
-        self.amount.text    = amount
+        if amount.contains(find: "-"){
+            titlePay.text = "Переплата"
+            self.amount.text = amount.replacingOccurrences(of: "-", with: "")
+        }else{
+            titlePay.text = "Оплатите"
+            self.amount.text = amount
+        }
 //        self.date.text      = date
         
         let defaults = UserDefaults.standard

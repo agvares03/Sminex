@@ -2802,7 +2802,7 @@ final class VersionCell: UICollectionViewCell {
 final class ForPayCell: UICollectionViewCell {
     
     @IBOutlet private weak var title:       UILabel!
-    @IBOutlet private weak var titleDrob:   UILabel!
+    @IBOutlet private weak var titlePay:   UILabel!
     @IBOutlet private weak var greenFon:    UIImageView!
     @IBOutlet private weak var whiteFon:    UIImageView!
 //    @IBOutlet private weak var date:        UILabel!
@@ -2825,8 +2825,13 @@ final class ForPayCell: UICollectionViewCell {
             whiteFon.isHidden = false
             pay.isHidden = false
 //        }
-        title.text = item.title
-        
+        if item.title.contains(find: "-"){
+            titlePay.text = "Переплата"
+            title.text = item.title.replacingOccurrences(of: "-", with: "")
+        }else{
+            titlePay.text = "Оплатите"
+            title.text = item.title
+        }
 //        if item.date != "" {
 //            let df = DateFormatter()
 //            df.dateFormat = "dd.MM.yyyy"

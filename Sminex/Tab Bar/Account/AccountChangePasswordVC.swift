@@ -293,7 +293,7 @@ final class AccountChangePasswordVC: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromAccountChangePasswordVC.toForgot {
-            let vc = segue.destination as! Registration_Sminex
+            let vc = segue.destination as! NewRegistration_Sminex
             vc.isReg_       = false
             vc.isFromApp_   = true
         }

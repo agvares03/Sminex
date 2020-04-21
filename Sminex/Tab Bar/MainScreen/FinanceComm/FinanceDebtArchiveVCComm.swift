@@ -11,6 +11,7 @@ import ExpyTableView
 class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDelegate {
     
     @IBOutlet private weak var table:   ExpyTableView!
+    @IBOutlet private weak var noBillsLbl: UILabel!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
         if !notifiPressed{
@@ -52,16 +53,24 @@ class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyT
                 kolYear.append(String($0.numYear!))
             }
         }
-        for i in 0...kolYear.count - 1{
-            var s = filteredData
-            s.removeAll()
-            filteredData.forEach{
-                if String($0.numYear!) == kolYear[i]{
-                    s.append($0)
+        noBillsLbl.isHidden = true
+//        table.isHidden = false
+        if kolYear.count > 0{
+            for i in 0...kolYear.count - 1{
+                var s = filteredData
+                s.removeAll()
+                filteredData.forEach{
+                    if String($0.numYear!) == kolYear[i]{
+                        s.append($0)
+                    }
                 }
+                dataFilt.append(Objects(sectionName: kolYear[i], filteredData: s))
             }
-            dataFilt.append(Objects(sectionName: kolYear[i], filteredData: s))
         }
+//        else{
+//            noBillsLbl.isHidden = false
+//            table.isHidden = true
+//        }
         automaticallyAdjustsScrollViewInsets = false
         table.dataSource = self
         table.delegate   = self
@@ -159,8 +168,15 @@ class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyT
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceDebtArchiveVC.toReceipt {
+            var dat = data_
+            dat.removeAll()
+            data_.forEach{
+                if $0.numMonth == dataFilt[section].filteredData[index].numMonth && $0.numYear == dataFilt[section].filteredData[index].numYear{
+                    dat.append($0)
+                }
+            }
             let vc = segue.destination as! FinanceDebtVCComm
-            vc.data_ = dataFilt[section].filteredData[index]
+            vc.data_ = dat
             vc.allData_ = data_
             if title == "Неоплаченные счета"{
                 vc.title = "Неоплаченный счет"

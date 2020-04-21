@@ -63,7 +63,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wKs-YF-N79">
-                                <rect key="frame" x="0.0" y="44" width="375" height="607"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="651"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BS5-vy-V3g">
                                         <rect key="frame" x="16" y="20" width="343" height="537.5"/>
@@ -421,7 +421,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UdN-8l-mMB" customClass="ExpyTableView" customModule="ExpyTableView">
-                                <rect key="frame" x="16" y="54" width="343" height="564"/>
+                                <rect key="frame" x="16" y="10" width="343" height="608"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FinanceDebtArchiveYearCommCell" id="GUq-c9-AWB" customClass="FinanceDebtArchiveYearCommCell" customModule="Sminex" customModuleProvider="target">
@@ -595,13 +595,22 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ВСЕ СЧЕТА ОПЛАЧЕНЫ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Et2-Td-Uwh">
+                                <rect key="frame" x="30" y="100" width="315" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.83137254900000002" green="0.81960784310000001" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="hJr-lD-V5T" firstAttribute="trailing" secondItem="UdN-8l-mMB" secondAttribute="trailing" constant="16" id="3l9-89-SgX"/>
                             <constraint firstItem="UdN-8l-mMB" firstAttribute="leading" secondItem="hJr-lD-V5T" secondAttribute="leading" constant="16" id="94W-Q5-SFb"/>
+                            <constraint firstItem="Et2-Td-Uwh" firstAttribute="top" secondItem="AoY-Ue-qwD" secondAttribute="bottom" constant="100" id="FOP-OI-C0J"/>
                             <constraint firstItem="4yQ-of-RVp" firstAttribute="top" secondItem="UdN-8l-mMB" secondAttribute="bottom" id="KtP-VM-v52"/>
+                            <constraint firstAttribute="trailing" secondItem="Et2-Td-Uwh" secondAttribute="trailing" constant="30" id="OUl-6F-FcT"/>
                             <constraint firstItem="UdN-8l-mMB" firstAttribute="top" secondItem="AoY-Ue-qwD" secondAttribute="bottom" constant="10" id="ajt-br-Rfw"/>
+                            <constraint firstItem="Et2-Td-Uwh" firstAttribute="leading" secondItem="hJr-lD-V5T" secondAttribute="leading" constant="30" id="tN1-15-Uwx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hJr-lD-V5T"/>
                     </view>
@@ -622,6 +631,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="noBillsLbl" destination="Et2-Td-Uwh" id="II1-M5-OOZ"/>
                         <outlet property="notifiBtn" destination="CvE-PR-cba" id="ADB-Ts-DAd"/>
                         <outlet property="table" destination="UdN-8l-mMB" id="gx6-RM-Rd9"/>
                         <segue destination="rgs-yw-6Z6" kind="show" identifier="receipt" id="1zh-mT-3jK"/>
@@ -645,7 +655,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Btw-EU-Pgt">
-                                <rect key="frame" x="16" y="64" width="343" height="504"/>
+                                <rect key="frame" x="16" y="0.0" width="343" height="568"/>
                                 <color key="backgroundColor" red="0.83137254900000002" green="0.81960784310000001" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="0We-7A-Pva">
                                     <size key="itemSize" width="375" height="30"/>
@@ -751,7 +761,7 @@
                                                                 <color key="titleColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="shareButtonPressed:" destination="rgs-yw-6Z6" eventType="touchUpInside" id="NYZ-Dz-8bZ"/>
+                                                                <action selector="shareButtonPressed:" destination="YMA-PD-gdN" eventType="touchUpInside" id="Wt0-sY-mLA"/>
                                                             </connections>
                                                         </button>
                                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ZfY-xp-qoK">
@@ -768,7 +778,7 @@
                                                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="barcodePressed:" destination="rgs-yw-6Z6" eventType="touchUpInside" id="yOG-6l-Fdp"/>
+                                                                <action selector="barcodePressed:" destination="YMA-PD-gdN" eventType="touchUpInside" id="Aoc-Pq-SSr"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -810,7 +820,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <action selector="payButtonPressed:" destination="rgs-yw-6Z6" eventType="touchUpInside" id="f8d-Y3-CPJ"/>
+                                                        <action selector="payButtonPressed:" destination="YMA-PD-gdN" eventType="touchUpInside" id="jjs-7S-pzT"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -841,7 +851,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cpt-YM-EDb">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="100"/>
+                                            <rect key="frame" x="0.0" y="10" width="343" height="100"/>
                                             <color key="backgroundColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="100" id="MDG-it-wlh"/>
@@ -853,7 +863,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Август 2017*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="nFQ-sL-bIr">
-                                            <rect key="frame" x="16" y="17" width="188" height="22"/>
+                                            <rect key="frame" x="16" y="20" width="188" height="27"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="31" id="SWf-cK-wAN"/>
                                             </constraints>
@@ -862,7 +872,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="999 999,99 P" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A4l-P2-uNe">
-                                            <rect key="frame" x="212" y="17.5" width="115" height="21.5"/>
+                                            <rect key="frame" x="212" y="23" width="115" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -870,14 +880,14 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstItem="cpt-YM-EDb" firstAttribute="top" secondItem="iiu-Gg-Aer" secondAttribute="top" id="9xh-f2-9PZ"/>
+                                        <constraint firstItem="cpt-YM-EDb" firstAttribute="top" secondItem="iiu-Gg-Aer" secondAttribute="top" constant="10" id="9xh-f2-9PZ"/>
                                         <constraint firstAttribute="trailing" secondItem="cpt-YM-EDb" secondAttribute="trailing" id="BxA-SX-DQa"/>
                                         <constraint firstAttribute="trailing" secondItem="A4l-P2-uNe" secondAttribute="trailing" constant="16" id="Jz8-Fg-Sd3"/>
                                         <constraint firstItem="cpt-YM-EDb" firstAttribute="leading" secondItem="iiu-Gg-Aer" secondAttribute="leading" id="RnL-Sm-LLd"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="nFQ-sL-bIr" secondAttribute="trailing" constant="131" id="bBw-Yo-lws"/>
                                         <constraint firstItem="A4l-P2-uNe" firstAttribute="centerY" secondItem="nFQ-sL-bIr" secondAttribute="centerY" id="eyv-fm-pse"/>
-                                        <constraint firstItem="nFQ-sL-bIr" firstAttribute="top" secondItem="iiu-Gg-Aer" secondAttribute="top" constant="17" id="fQt-k1-u3X"/>
-                                        <constraint firstAttribute="bottom" secondItem="nFQ-sL-bIr" secondAttribute="bottom" constant="23" id="omI-pg-pOZ"/>
+                                        <constraint firstItem="nFQ-sL-bIr" firstAttribute="top" secondItem="iiu-Gg-Aer" secondAttribute="top" constant="20" id="fQt-k1-u3X"/>
+                                        <constraint firstAttribute="bottom" secondItem="nFQ-sL-bIr" secondAttribute="bottom" constant="15" id="omI-pg-pOZ"/>
                                         <constraint firstItem="nFQ-sL-bIr" firstAttribute="leading" secondItem="iiu-Gg-Aer" secondAttribute="leading" constant="16" id="upz-Hw-gcr"/>
                                     </constraints>
                                     <connections>
@@ -939,7 +949,7 @@
                             <constraint firstItem="LTn-Eb-n7x" firstAttribute="centerY" secondItem="IUV-yK-HLl" secondAttribute="centerY" id="Los-cI-ahv"/>
                             <constraint firstAttribute="trailing" secondItem="dzh-wC-4NM" secondAttribute="trailing" id="YdO-o9-vu3"/>
                             <constraint firstItem="pTL-aW-e8C" firstAttribute="top" secondItem="dzh-wC-4NM" secondAttribute="bottom" id="krc-Vd-mbx"/>
-                            <constraint firstItem="Btw-EU-Pgt" firstAttribute="top" secondItem="ohT-X6-wbe" secondAttribute="bottom" constant="20" id="sEL-lf-6Bj"/>
+                            <constraint firstItem="Btw-EU-Pgt" firstAttribute="top" secondItem="ohT-X6-wbe" secondAttribute="bottom" id="sEL-lf-6Bj"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gyV-mV-mQK"/>
                     </view>
@@ -1167,6 +1177,7 @@
                                             <outlet property="fonIMG" destination="zmX-zf-mdZ" id="QyO-d2-0FU"/>
                                             <outlet property="heightPayed" destination="cDt-yS-Xre" id="qg7-fV-oa5"/>
                                             <outlet property="pay_button" destination="YUc-7m-00z" id="T2c-06-LVx"/>
+                                            <outlet property="titlePay" destination="NNb-ur-nqU" id="J2b-NA-c1b"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FinanceCommCell" rowHeight="50" id="cef-eX-B2K" customClass="FinanceCommCell" customModule="Sminex" customModuleProvider="target">
@@ -2614,13 +2625,13 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="zEu-dy-R8u"/>
+        <segue reference="JJZ-OB-ecs"/>
         <segue reference="kIt-Vc-ybU"/>
-        <segue reference="NUx-9a-9M3"/>
+        <segue reference="vpQ-46-9Tt"/>
         <segue reference="gXy-iR-Oab"/>
         <segue reference="1zh-mT-3jK"/>
-        <segue reference="LFZ-Gg-ebw"/>
-        <segue reference="EIU-tV-9kd"/>
+        <segue reference="y14-D3-i89"/>
+        <segue reference="Uab-Pc-moj"/>
         <segue reference="R8q-Bf-OzV"/>
     </inferredMetricsTieBreakers>
     <resources>

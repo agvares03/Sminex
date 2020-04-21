@@ -9,7 +9,13 @@ import UIKit
 import Gloss
 import PDFKit
 
-class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+protocol BillsCellDelegate: class {
+    func barcodePressed(section: Int)
+    func payButtonPressed(section: Int)
+    func shareButtonPressed(section: Int)
+}
+
+class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, BillsCellDelegate {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
@@ -26,8 +32,9 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         navigationController?.popViewController(animated: true)
     }
     
-    @IBAction private func barcodePressed(_ sender: UIButton) {
-        if data_?.codPay != "" && data_?.codPay != nil {
+    func barcodePressed(section: Int) {
+        currSection = section
+        if data_[section].codPay != "" && data_[section].codPay != nil {
             performSegue(withIdentifier: Segues.fromFinanceDebtVC.toBarcode, sender: self)
             
         } else {
@@ -35,7 +42,8 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    @IBAction private func payButtonPressed(_ sender: UIButton) {
+    func payButtonPressed(section: Int) {
+        currSection = section
         performSegue(withIdentifier: Segues.fromFinanceDebtVC.toPay, sender: self)
     }
     
@@ -43,43 +51,53 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         performSegue(withIdentifier: "receiptArchive", sender: self)
     }
     
-    @IBAction private func shareButtonPressed(_ sender: UIButton) {
+    func shareButtonPressed(section: Int) {
+        currSection = section
         delegate?.startShareAnimation()
-        if files == nil {
+        if files[section].filteredData == nil {
             DispatchQueue.global(qos: .background).async {
                 self.filesGroup.wait()
-                
-                if (self.files?.count ?? 0) > 1 {
+
+                if (self.files[section].filteredData.count) > 1 {
                     let alert = UIAlertController(title: "Выберите файл", message: nil, preferredStyle: .actionSheet)
-                    self.files?.forEach { file in
+                    self.files[section].filteredData.forEach { file in
                         alert.addAction( UIAlertAction(title: file.fileName, style: .default, handler: { (_) in self.getShareFile(file) } ) )
                     }
                     DispatchQueue.main.async {
                         self.present(alert, animated: true, completion: nil)
                     }
-                    
+
                 } else {
-                    self.getShareFile(self.files?.first)
+                    self.getShareFile(self.files[section].filteredData.first)
                 }
             }
             return
         }
-        
-        if (files?.count ?? 0) > 1 {
+
+        if (files[section].filteredData.count) > 1 {
             let alert = UIAlertController(title: "Выберите файл", message: nil, preferredStyle: .actionSheet)
-            files?.forEach { file in
+            files[section].filteredData.forEach { file in
                 alert.addAction( UIAlertAction(title: file.fileName, style: .default, handler: { (_) in self.getShareFile(file) } ) )
             }
             present(alert, animated: true, completion: nil)
-            
+
         } else {
-            self.getShareFile(files?.first)
+            self.getShareFile(files[section].filteredData.first)
         }
     }
+    struct Objects {
+        var sectionName : Int
+        var filteredData : [ReceiptsJson]!
+    }
+    struct FileObjects {
+        var sectionName : Int
+        var filteredData : [RecieptFilesJson]!
+    }
+    var currSection = -1
+    var dataFilt = [Objects]()
     public var allData_: [AccountBillsJson] = []
-    public var data_: AccountBillsJson?
-    private var receipts: [ReceiptsJson]?
-    private var files: [RecieptFilesJson]?
+    public var data_: [AccountBillsJson] = []
+    private var files = [FileObjects]()
     private var filesGroup = DispatchGroup()
     private var delegate: FinanceDebtPayCellDelegate?
     
@@ -94,11 +112,11 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         if (defaults.bool(forKey: "denyInvoiceFiles")) {
             
         } else {
-            if data_ != nil {
+            if data_.count != 0 {
                 self.startAnimation()
                 DispatchQueue.global(qos: .userInitiated).async {
-                    self.getDebt()
-                    self.getShareElements()
+                    self.getDebt(dat: self.data_[0])
+                    self.getShareElements(dat: self.data_[0])
                 }
             }
         }
@@ -148,37 +166,41 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard receipts != nil else {
+        guard dataFilt[section].filteredData != nil else {
             return 0
         }
-        return receipts?.count != 0 ? (receipts?.count ?? 0) + 1 : 1
+        return dataFilt[section].filteredData?.count != 0 ? (dataFilt[section].filteredData?.count ?? 0) + 1 : 1
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return dataFilt.count
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FinanceDebtCommHeader", for: indexPath) as! FinanceDebtCommHeader
-        header.dispay(getNameAndMonth(data_?.numMonth ?? 0) + " \(data_?.numYear ?? 0)", (String(format:"%.2f", (data_?.sum)!) ))
+        header.dispay(getNameAndMonth(data_[indexPath.section].numMonth ?? 0) + " \(data_[indexPath.section].numYear ?? 0)", (String(format:"%.2f", (data_[indexPath.section].sum)!) ))
         return header
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if indexPath.row == receipts?.count {
+        if indexPath.row == dataFilt[indexPath.section].filteredData?.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtPayCommCell", for: indexPath) as! FinanceDebtPayCommCell
-            cell.display(data_!)
+            cell.display(data_[indexPath.section], delegate: self, section: indexPath.section)
             delegate = cell
             return cell
         }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
-        var isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
-        if receipts![indexPath.row].usluga == "" && receipts![indexPath.row].type != ""{
+        var isBold = dataFilt[indexPath.section].filteredData![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == dataFilt[indexPath.section].filteredData![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
+        if dataFilt[indexPath.section].filteredData![indexPath.row].usluga == "" && dataFilt[indexPath.section].filteredData![indexPath.row].type != ""{
             isBold = true
         }
         if !isBold {
-            cell.display(title: receipts![indexPath.row].usluga ?? "",
-                         desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
+            cell.display(title: dataFilt[indexPath.section].filteredData![indexPath.row].usluga ?? "",
+                         desc: (dataFilt[indexPath.section].filteredData![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                          isBold: isBold)
             
         } else {
@@ -189,52 +211,45 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             //            currType?.forEach {
             //                sum += ($0.sum ?? 0.0)
             //            }
-            cell.display(title: receipts![indexPath.row].type ?? "",
-                         desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
+            cell.display(title: dataFilt[indexPath.section].filteredData![indexPath.row].type ?? "",
+                         desc: (dataFilt[indexPath.section].filteredData![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                          isBold: isBold)
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-//        if indexPath.row == receipts?.count {
-//            let defaults = UserDefaults.standard
-//            if (!defaults.bool(forKey: "denyOnlinePayments")) {
-//                let kek = !(data_?.permit_online_payment!)!
-//                if kek == true{
-//                    return CGSize(width: view.frame.size.width - 32, height: 130.0)
-//
-//                }
-//            }
-//
-//            return CGSize(width: view.frame.size.width, height: 193.0)
-//
-//        }
-        if indexPath.row == receipts?.count {
+        if indexPath.row == dataFilt[indexPath.section].filteredData?.count {
+            var height:CGFloat = 100.0
             let defaults = UserDefaults.standard
-            if (defaults.bool(forKey: "denyInvoiceFiles")) {
-                return CGSize(width: view.frame.size.width - 32, height: 55.0)
+//            if (defaults.bool(forKey: "denyInvoiceFiles")) {
+//                height = 60.0
+//            }
+            if (!defaults.bool(forKey: "denyOnlinePayments")) {
+                let kek = data_[indexPath.section].permit_online_payment!
+                if kek == true{
+                    height = 193
+                }
             }
-            return CGSize(width: view.frame.size.width - 32, height: 100)
+            return CGSize(width: view.frame.size.width - 32, height: height)
             
         } else {
             let cell = FinanceDebtCommCell.fromNib()
-            var isBold = receipts![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == receipts![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
-            if receipts![indexPath.row].usluga == "" && receipts![indexPath.row].type != ""{
+            var isBold = dataFilt[indexPath.section].filteredData![indexPath.row].usluga?.replacingOccurrences(of: " ", with: "") == dataFilt[indexPath.section].filteredData![indexPath.row].type?.replacingOccurrences(of: " ", with: "")
+            if dataFilt[indexPath.section].filteredData![indexPath.row].usluga == "" && dataFilt[indexPath.section].filteredData![indexPath.row].type != ""{
                 isBold = true
             }
-            cell?.display(title: receipts![indexPath.row].usluga ?? "",
-                          desc: (receipts![indexPath.row].sum ?? 0.0).formattedWithSeparator,
+            cell?.display(title: dataFilt[indexPath.section].filteredData![indexPath.row].usluga ?? "",
+                          desc: (dataFilt[indexPath.section].filteredData![indexPath.row].sum ?? 0.0).formattedWithSeparator,
                           isBold: false)
             var lblH: CGFloat = 0
             if !isBold {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
-                lblH = heightForView(text: receipts![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 199) + 10
+                lblH = heightForView(text: dataFilt[indexPath.section].filteredData![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 199) + 10
                 return CGSize(width: view.frame.size.width - 32, height: lblH)
             } else {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
-                lblH = heightForView(text: receipts![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 159) + 10
+                lblH = heightForView(text: dataFilt[indexPath.section].filteredData![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 159) + 10
                 if lblH > 39{
                     return CGSize(width: view.frame.size.width - 32, height: lblH)
                 }else{
@@ -256,11 +271,11 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         return label.frame.height
     }
     
-    private func getDebt() {
+    private func getDebt(dat: AccountBillsJson) {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        let id = data_?.idReceipts?.stringByAddingPercentEncodingForRFC3986() ?? ""
+        let id = dat.idReceipts?.stringByAddingPercentEncodingForRFC3986() ?? ""
         
         let url = Server.SERVER + Server.GET_BILLS_SERVICES + "login=" + login + "&pwd=" + pwd + "&id_receipts=" + id
         var request = URLRequest(url: URL(string: url)!)
@@ -284,26 +299,32 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
                 }
                 return
             }
-            
+            var rec: [ReceiptsJson]? = []
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                self.receipts = ReceiptsDataJson(json: json!)?.data
+                rec = ReceiptsDataJson(json: json!)?.data
             }
-            if self.receipts!.count != 0{
+            if rec!.count != 0{
                 var cont = false
-                for k in 0...self.receipts!.count - 1{
+                for k in 0...rec!.count - 1{
                     if !cont{
-                        if (self.receipts![k].type?.containsIgnoringCase(find: "пени"))!{
+                        if (rec![k].type?.containsIgnoringCase(find: "пени"))!{
                             if UserDefaults.standard.bool(forKey: "denyShowFine"){
-                                self.receipts?.remove(at: k)
+                                rec?.remove(at: k)
                                 cont = true
                             }
                         }
                     }
                 }
             }
-            DispatchQueue.main.async {
-                self.stopAnimation()
-                self.collection.reloadData()
+            self.dataFilt.append(Objects(sectionName: self.dataFilt.count, filteredData: rec))
+            if self.dataFilt.count == self.data_.count{
+                print(self.dataFilt)
+                DispatchQueue.main.async {
+                    self.stopAnimation()
+                    self.collection.reloadData()
+                }
+            }else{
+                self.getDebt(dat: self.data_[self.dataFilt.count])
             }
             #if DEBUG
             //                print("bills = \(String(data: data!, encoding: .utf8) ?? "")")
@@ -312,12 +333,12 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             }.resume()
     }
     
-    private func getShareElements() {
+    private func getShareElements(dat: AccountBillsJson) {
         
         let login = UserDefaults.standard.string(forKey: "login")?.stringByAddingPercentEncodingForRFC3986() ?? ""
         let pwd   = UserDefaults.standard.string(forKey: "pwd") ?? ""
         
-        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(data_?.idReceipts ?? "")")!)
+        var request = URLRequest(url: URL(string: Server.SERVER + Server.GET_BILL_FILES + "login=\(login)&pwd=\(pwd)&id_receipts=\(dat.idReceipts ?? "")")!)
         request.httpMethod = "GET"
         
         //        print(request.url)
@@ -335,11 +356,14 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             #if DEBUG
             //            print(String(data: data!, encoding: .utf8) ?? "")
             #endif
-            
+            var fil:[RecieptFilesJson]? = []
             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON {
-                self.files = RecieptFilesDataJson.init(json: json!)?.data
+                fil = RecieptFilesDataJson.init(json: json!)?.data
             }
-            
+            self.files.append(FileObjects(sectionName: self.files.count, filteredData: fil))
+            if self.files.count != self.data_.count{
+                self.getShareElements(dat: self.data_[self.files.count])
+            }
             }.resume()
     }
     
@@ -415,12 +439,12 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Segues.fromFinanceDebtVC.toBarcode {
             let vc = segue.destination as! FinanceBarCodeVC
-            vc.amount_ = (data_?.sum ?? 0.0) - (data_?.payment_sum ?? 0.0)
-            vc.codePay_ = data_?.codPay
+            vc.amount_ = (data_[currSection].sum ?? 0.0) - (data_[currSection].payment_sum ?? 0.0)
+            vc.codePay_ = data_[currSection].codPay
             
         } else if segue.identifier == Segues.fromFinanceDebtVC.toPay {
             let vc = segue.destination as! FinancePayAcceptVCComm
-            vc.billsData_ = data_
+            vc.billsData_ = data_[currSection]
         } else if segue.identifier == Segues.fromFinanceVC.toReceiptArchive {
             let vc = segue.destination as! FinanceDebtArchiveVCComm
             vc.data_ = allData_
@@ -508,8 +532,23 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
     @IBOutlet private weak var btnConst1:   NSLayoutConstraint!
     @IBOutlet private weak var viewHeight:   NSLayoutConstraint!
     @IBOutlet weak var pay_button: UIButton!
+    var delegate: BillsCellDelegate?
+    var section = -1
+    @IBAction private func barcodePressed(_ sender: UIButton) {
+        delegate?.barcodePressed(section: section)
+    }
     
-    func display(_ data: AccountBillsJson) {
+    @IBAction private func payButtonPressed(_ sender: UIButton) {
+        delegate?.payButtonPressed(section: section)
+    }
+    
+    @IBAction private func shareButtonPressed(_ sender: UIButton) {
+        delegate?.shareButtonPressed(section: section)
+    }
+    
+    func display(_ data: AccountBillsJson, delegate: BillsCellDelegate, section: Int) {
+        self.delegate = delegate
+        self.section = section
         self.stopShareAnimation()
         var date = data.datePay
         if (date?.count ?? 0) > 9 {
@@ -523,10 +562,12 @@ final class FinanceDebtPayCommCell: UICollectionViewCell, FinanceDebtPayCellDele
         if (!defaults.bool(forKey: "denyOnlinePayments")) {
             pay_button.isHidden    = !data.permit_online_payment!
         }
-        pay_button.isHidden     = true //Временно
-        viewHeight.constant     = 50    //Временно
         if pay_button.isHidden {
             btnConst1.constant = 0
+            viewHeight.constant = 50
+        }else{
+            viewHeight.constant = 120
+            btnConst1.constant = 48
         }
     }
     
