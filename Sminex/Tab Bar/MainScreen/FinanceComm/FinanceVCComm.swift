@@ -661,7 +661,7 @@ final class FinanceHeaderCommCell: UITableViewCell {
 //            heightPayed.constant = 0
 //            fonHeight.constant  = 0
 //        }else{
-            fonIMG.image = UIImage(named: "mainPay_fon")!
+            fonIMG.image = UIImage(named: "financePay_fon")!
 //            fonIMG2.isHidden        = false
 //            fonHeight.constant      = 15
             heightPayed.constant    = 48

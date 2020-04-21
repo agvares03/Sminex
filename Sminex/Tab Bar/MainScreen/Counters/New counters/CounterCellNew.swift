@@ -47,9 +47,11 @@ final class CounterCellNew: UICollectionViewCell {
         var canCount2 = canCount
         let dateFrom = UserDefaults.standard.integer(forKey: "meterReadingsDayFrom")
         let dateTo = UserDefaults.standard.integer(forKey: "meterReadingsDayTo")
-        let calendar = Calendar.current
-        let curDay = calendar.component(.day, from: Date())
-        if curDay > dateTo || curDay < dateFrom{
+        let curDay = Calendar.current.component(.day, from: Date())
+        if (curDay >= dateTo && curDay >= dateFrom) || (curDay <= dateTo && curDay <= dateFrom){
+            sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
+        }else if curDay > dateTo || curDay < dateFrom{
+            canCount2 = false
             sendLbl.text = "Передача показаний за этот месяц осуществляется с \(dateFrom) по \(dateTo) число"
         }else if !canCount{
             sendLbl.text = "Данные по приборам учета собираются УК самостоятельно"

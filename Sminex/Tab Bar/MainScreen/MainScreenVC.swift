@@ -1549,7 +1549,15 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()
             }else{
-                self.data[1]![1] = ForPayCellData(title: (self.debt?.sumPay ?? 0.0).formattedWithSeparator + " ₽", date: datePay ?? "")
+                var sum = String(format:"%.2f", self.debt?.sumPay ?? 0.0)
+                if Double(self.debt?.sumPay ?? 0.0) > 999.00 || Double(self.debt?.sumPay ?? 0.0) < -999.00{
+                    let i = Int(sum.distance(from: sum.startIndex, to: sum.index(of: ".")!)) - 3
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: i))
+                }
+                if sum.first == "-" {
+                    sum.insert(" ", at: sum.index(sum.startIndex, offsetBy: 1))
+                }
+                self.data[1]![1] = ForPayCellData(title: sum + " ₽", date: datePay ?? "")
                 defaults.setValue(String(self.debt?.sumPay ?? 0.0) + " ₽", forKey: "ForPayTitle")
                 defaults.setValue(datePay, forKey: "ForPayDate")
                 defaults.synchronize()

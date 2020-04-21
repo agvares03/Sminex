@@ -246,7 +246,7 @@ class NewRequestTypeVC: UIViewController, UICollectionViewDelegate, UICollection
 //        print((view.frame.size.width - 32) / 4)
         
         if indexPath.section == 0{
-            return CGSize(width: 85.75, height: 100)
+            return CGSize(width: (view.frame.size.width - 32) / 4, height: 100)
         }else{
             return CGSize(width: (view.frame.size.width - 32) / 4, height: 130)
         }

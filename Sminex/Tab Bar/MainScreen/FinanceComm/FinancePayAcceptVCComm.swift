@@ -284,10 +284,7 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        var email = ""
-        if emailChoice{
-            email = phoneEmailText.text?.replacingOccurrences(of: " ", with: "") ?? ""
-        }
+        let email = phoneEmailText.text?.replacingOccurrences(of: " ", with: "") ?? ""
         if email == ""{
             var mes = ""
             if phoneChoice{

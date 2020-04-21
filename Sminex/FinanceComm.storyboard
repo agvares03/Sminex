@@ -63,7 +63,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wKs-YF-N79">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="651"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="607"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BS5-vy-V3g">
                                         <rect key="frame" x="16" y="20" width="343" height="537.5"/>
@@ -421,7 +421,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UdN-8l-mMB" customClass="ExpyTableView" customModule="ExpyTableView">
-                                <rect key="frame" x="16" y="10" width="343" height="608"/>
+                                <rect key="frame" x="16" y="54" width="343" height="564"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FinanceDebtArchiveYearCommCell" id="GUq-c9-AWB" customClass="FinanceDebtArchiveYearCommCell" customModule="Sminex" customModuleProvider="target">
@@ -596,7 +596,7 @@
                                 </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ВСЕ СЧЕТА ОПЛАЧЕНЫ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Et2-Td-Uwh">
-                                <rect key="frame" x="30" y="100" width="315" height="21"/>
+                                <rect key="frame" x="30" y="144" width="315" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" red="0.2901960784" green="0.3294117647" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -655,7 +655,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Btw-EU-Pgt">
-                                <rect key="frame" x="16" y="0.0" width="343" height="568"/>
+                                <rect key="frame" x="16" y="44" width="343" height="524"/>
                                 <color key="backgroundColor" red="0.83137254900000002" green="0.81960784310000001" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="0We-7A-Pva">
                                     <size key="itemSize" width="375" height="30"/>
@@ -1102,7 +1102,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RA0-2l-DBd">
                                                     <rect key="frame" x="0.0" y="20" width="343" height="199"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mainPay_fon" translatesAutoresizingMaskIntoConstraints="NO" id="zmX-zf-mdZ">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="financePay_fon" translatesAutoresizingMaskIntoConstraints="NO" id="zmX-zf-mdZ">
                                                             <rect key="frame" x="0.0" y="0.0" width="343" height="199"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Оплатите" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NNb-ur-nqU">
@@ -2625,20 +2625,20 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="JJZ-OB-ecs"/>
+        <segue reference="99T-8G-fDZ"/>
         <segue reference="kIt-Vc-ybU"/>
-        <segue reference="vpQ-46-9Tt"/>
+        <segue reference="NUx-9a-9M3"/>
         <segue reference="gXy-iR-Oab"/>
-        <segue reference="1zh-mT-3jK"/>
-        <segue reference="y14-D3-i89"/>
-        <segue reference="Uab-Pc-moj"/>
-        <segue reference="R8q-Bf-OzV"/>
+        <segue reference="dmk-7H-ulN"/>
+        <segue reference="LFZ-Gg-ebw"/>
+        <segue reference="EIU-tV-9kd"/>
+        <segue reference="4GH-ng-I1k"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow_right" width="40" height="65"/>
         <image name="check_label" width="14" height="11"/>
+        <image name="financePay_fon" width="344" height="207"/>
         <image name="greenPay_fon" width="1032" height="441"/>
-        <image name="mainPay_fon" width="344" height="207"/>
         <image name="new_notifi1" width="18" height="22"/>
         <image name="share_action" width="27" height="27"/>
         <image name="sminex_arrow_navbar" width="12" height="22"/>

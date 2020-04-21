@@ -16,7 +16,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var edConst:     NSLayoutConstraint!
     @IBOutlet private weak var imgsHeight:  NSLayoutConstraint!
-//    @IBOutlet private weak var btnConst:    NSLayoutConstraint!
+    @IBOutlet private weak var sendBtnHeight:    NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
     @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet private weak var placeHeight: NSLayoutConstraint!
@@ -66,7 +66,7 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         present(action, animated: true, completion: nil)
     }
     
-    var choiceBtn = 1
+    var choiceBtn = 0
     var choiceColor = UIColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1.0)
     var unChoiceColor = UIColor(red: 246/255, green: 249/255, blue: 249/255, alpha: 1.0)
     var placeholderColor = UIColor(red: 0, green: 0, blue: 0.0980392, alpha: 0.22)
@@ -320,9 +320,6 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         serviceDesc.isUserInteractionEnabled   = true
         serviceDesc.addGestureRecognizer(tap2)
         
-        dateLbl.isHidden = false
-        noDateLbl.isHidden = true
-        dateBtn.isHidden = false
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
         tableView.dataSource = self
@@ -371,11 +368,23 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             timeBtn2Width.constant = 0
             timeBtn1Width.constant = self.view.frame.size.width - 32
         }else{
+            dateLbl.isHidden = true
+            noDateLbl.isHidden = false
+            dateBtn.isHidden = true
             extTime = true
             timeBtn2.setTitleColor(mainGrayColor, for: .normal)
             timeLine2.backgroundColor = mainGrayColor
             timeBtn1.setTitleColor(mainGreenColor, for: .normal)
             timeLine1.backgroundColor = mainGreenColor
+            if !picker.isHidden{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd MMMM HH:mm"
+                
+                dateBtn.setTitle(dateFormatter.string(from: picker.date), for: .normal)
+                picker.isHidden         = true
+                pickerLine.isHidden     = true
+                imageConst.constant = 0
+            }
             timeBtn2Width.constant = (self.view.frame.size.width - 32) / 2
             timeBtn1Width.constant = (self.view.frame.size.width - 32) / 2
         }
@@ -391,8 +400,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
         
-        sendBtn.isEnabled   = false
-        sendBtn.alpha       = 0.5
+        sendBtn.isHidden = true
+        sendBtnHeight.constant = 0
         
         edProblem.delegate = self
         
@@ -797,12 +806,12 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
     func textViewDidChange(_ textView: UITextView) {
         
         if edProblem.text == "" || edProblem.text.count == 1 {
-            sendBtn.isEnabled   = false
-            sendBtn.alpha       = 0.5
+            sendBtn.isHidden = true
+            sendBtnHeight.constant = 0
             
         } else {
-            sendBtn.isEnabled   = true
-            sendBtn.alpha       = 1
+            sendBtn.isHidden = false
+            sendBtnHeight.constant = 48
         }
         
         if (textView.text as NSString).components(separatedBy: .newlines).count < 3 {

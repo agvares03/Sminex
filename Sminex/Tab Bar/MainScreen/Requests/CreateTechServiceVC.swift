@@ -19,7 +19,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var imgsHeight:  NSLayoutConstraint!
-//    @IBOutlet private weak var sendBtnBot:  NSLayoutConstraint!
+    @IBOutlet private weak var sendBtnHeight:  NSLayoutConstraint!
     @IBOutlet private weak var edConst:     NSLayoutConstraint!
 //    @IBOutlet private weak var btnConst:    NSLayoutConstraint!
     @IBOutlet private weak var imageConst:  NSLayoutConstraint!
@@ -62,7 +62,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         present(action, animated: true, completion: nil)
     }
     
-    var choiceBtn = 1
+    var choiceBtn = 0
     var extTime = false
     @IBAction private func timeBtn1Action(_ sender: UIButton){
         if choiceBtn == 1{
@@ -269,9 +269,6 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
 //            btnConst.constant = 50
 //        }
         
-        dateLbl.isHidden = false
-        noDateLbl.isHidden = true
-        dateBtn.isHidden = false
         self.expImg.image = UIImage(named: "expand")
         tableView.delegate = self
         tableView.dataSource = self
@@ -312,8 +309,8 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         tap.delegate                    = self
         view.isUserInteractionEnabled   = true
         
-        sendBtn.isEnabled   = false
-        sendBtn.alpha       = 0.5
+        sendBtn.isHidden = true
+        sendBtnHeight.constant = 0
         
         edProblem.delegate = self
         
@@ -332,12 +329,25 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
 //        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
 //            btnConst.constant = 25
 //        }
+        imgsHeight.constant = 0
+        
+        dateLbl.isHidden = true
+        noDateLbl.isHidden = false
+        dateBtn.isHidden = true
         extTime = true
         timeBtn2.setTitleColor(mainGrayColor, for: .normal)
         timeLine2.backgroundColor = mainGrayColor
         timeBtn1.setTitleColor(mainGreenColor, for: .normal)
         timeLine1.backgroundColor = mainGreenColor
-        imgsHeight.constant = 0
+        if !picker.isHidden{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMMM HH:mm"
+            
+            dateBtn.setTitle(dateFormatter.string(from: picker.date), for: .normal)
+            picker.isHidden         = true
+            pickerLine.isHidden     = true
+            imageConst.constant = 0
+        }
     }
     var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
@@ -676,12 +686,12 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
     func textViewDidChange(_ textView: UITextView) {
         
         if edProblem.text == "" || edProblem.text.count == 1 {
-            sendBtn.isEnabled   = false
-            sendBtn.alpha       = 0.5
+            sendBtn.isHidden = true
+            sendBtnHeight.constant = 0
             
         } else {
-            sendBtn.isEnabled   = true
-            sendBtn.alpha       = 1
+            sendBtn.isHidden = false
+            sendBtnHeight.constant = 48
         }
         
         if (textView.text as NSString).components(separatedBy: .newlines).count < 3 {
