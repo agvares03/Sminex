@@ -283,14 +283,7 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
-            
-            defer {
-                DispatchQueue.main.sync {
-                    self.stopAnimation()
-                    self.collection.reloadData()
-                }
-            }
-            
+                        
             if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
                 let alert = UIAlertController(title: "Ошибка сервера", message: "Попробуйте позже", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in  } ) )
@@ -318,7 +311,6 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             }
             self.dataFilt.append(Objects(sectionName: self.dataFilt.count, filteredData: rec))
             if self.dataFilt.count == self.data_.count{
-                print(self.dataFilt)
                 DispatchQueue.main.async {
                     self.stopAnimation()
                     self.collection.reloadData()

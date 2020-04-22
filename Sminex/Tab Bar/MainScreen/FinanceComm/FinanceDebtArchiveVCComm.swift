@@ -41,7 +41,7 @@ class FinanceDebtArchiveVCComm: UIViewController, ExpyTableViewDataSource, ExpyT
         var currMonth = 0
         filteredData = data_.filter {
             if ($0.numMonth ?? 0) != currMonth {
-                currMonth = ($0.numMonth ?? 0)
+//                currMonth = ($0.numMonth ?? 0)
                 return true
             }
             return false

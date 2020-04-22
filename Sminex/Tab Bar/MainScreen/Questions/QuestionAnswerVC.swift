@@ -16,6 +16,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
     @IBOutlet private weak var collection:  UICollectionView!
     @IBOutlet private weak var goButton:    UIButton!
+    @IBOutlet private weak var comment:    UITextView!
     @IBOutlet private weak var btnBotConst: NSLayoutConstraint!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
@@ -74,7 +75,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             collection.reloadData()
             currQuestion += 1
             NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
-        
+            comment.text = ""
         } else {
             if question_?.questions![currQuestion].answers?.count == 0 && (recomendationArray.count == 0 || recomendationArray[currQuestion] == ""){
                 let alert = UIAlertController(title: "Ошибка", message: "Введите комментарий", preferredStyle: .alert)
@@ -110,10 +111,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         }
 //        currQuestion = answers.count
         currQuestion = 0
-        print("=")
-        print(answers)
         kek = answers[(question_?.questions![currQuestion].id!)!] ?? [0]
-        print(kek)
         if kek.count == 1 && kek[0] == 0 {
             goButton.backgroundColor = mainGrayColor
         }else if kek.count > 1 || (kek.count == 1 && kek[0] != 0){
@@ -122,7 +120,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         automaticallyAdjustsScrollViewInsets = false
         collection.delegate     = self
         collection.dataSource   = self
-        
+        comment.delegate = self
         let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped(_:)))
         edgePan.edges = .left
         view.addGestureRecognizer(edgePan)
@@ -356,16 +354,16 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             let (key, value) = arg
             isManyValue = false
             value.forEach {
-//                if isManyValue {
+                if isManyValue {
                     json.append( ["QuestionID":key, "AnswerID":$0, "Comment": ""] )
-//                } else {
-//                    json.append( ["QuestionID":key, "AnswerID":$0, "Comment": recomendationArray[index] ] )
-//                }
+                } else {
+                    json.append( ["QuestionID":key, "AnswerID":$0, "Comment": recomendationArray[index] ?? "" ] )
+                }
                 
-                isManyValue = true
+//                isManyValue = true
             }
             if value.count == 0{
-                json.append( ["QuestionID":key, "AnswerID":0, "Comment": recomendationArray[index] ] )
+                json.append( ["QuestionID":key, "AnswerID":0, "Comment": recomendationArray[index] ?? "" ] )
             }
             index += 1
         }
@@ -374,7 +372,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         
         print(request)
         
-//        print(String(data: request.httpBody!, encoding: .utf8))
+        print(String(data: request.httpBody!, encoding: .utf8))
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -622,39 +620,31 @@ var isSomeAnswers   = false
 var isAccepted      = false
 var selectedAnswers: [Int] = []
 
-var recomendationArray: [String] = []
+var recomendationArray: [Int:String] = [:]
 
 
 //------------------------------------------------------------------
 
 
-extension QuestionAnswerVC : UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool  {
-        print(textField.text!)
-        recomendationArray[currQuestion] = textField.text!
-        textField.resignFirstResponder()
+extension QuestionAnswerVC : UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+//            recomendationArray.removeLast()
+//            print(textView.text)
+            recomendationArray[currQuestion] = textView.text
+            textView.resignFirstResponder()
+            return false
+        }
         return true
     }
-    
-//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-//        if(text == "\n") {
-////            recomendationArray.removeLast()
+    func textViewDidEndEditing(_ textView: UITextView) {
+//        if(textView == "\n") {
+//            recomendationArray.removeLast()
 //            print(textView.text)
-//            recomendationArray[currQuestion] = textView.text
-//            textView.resignFirstResponder()
+            recomendationArray[currQuestion] = textView.text
+            textView.resignFirstResponder()
 //            return false
 //        }
 //        return true
-//    }
-//    func textViewDidEndEditing(_ textView: UITextView) {
-////        if(textView == "\n") {
-////            recomendationArray.removeLast()
-//            print(textView.text)
-//            recomendationArray[currQuestion] = textView.text
-//            textView.resignFirstResponder()
-////            return false
-////        }
-////        return true
-//    }
+    }
 }
