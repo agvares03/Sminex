@@ -18,6 +18,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet private weak var goButton:    UIButton!
     @IBOutlet private weak var comment:    UITextView!
     @IBOutlet private weak var btnBotConst: NSLayoutConstraint!
+    @IBOutlet private weak var collectionHeight: NSLayoutConstraint!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
         if !notifiPressed{
@@ -301,7 +302,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         cell?.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
         let size  = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
         if view.frame.size.width == 320{
-            return CGSize(width: view.frame.size.width - 32, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell!.frame.size.width - 60) + 30)
+            return CGSize(width: view.frame.size.width - 32, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell!.frame.size.width - 60) + 10)
         }
         return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
@@ -310,6 +311,14 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         let cell = QuestionAnswerHeader.fromNib()
         cell?.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
         let size  = cell?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
+        DispatchQueue.main.async {
+            var height:CGFloat = 0
+            for cell in collectionView.visibleCells {
+                height += cell.bounds.height + 10
+            }
+            self.collectionHeight.constant = height + size.height
+            print(self.collectionHeight.constant)
+        }
         return CGSize(width: view.frame.size.width - 32, height: size.height)
     }
     

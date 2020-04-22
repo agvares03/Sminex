@@ -3,7 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -2237,41 +2237,6 @@
             </connections>
             <point key="canvasLocation" x="-1943" y="307"/>
         </collectionViewCell>
-        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="QuestionAnswerHeader" id="W7I-p3-Kor" customClass="QuestionAnswerHeader" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="343" height="113"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой выриант использования лобби-бара является для Вас предпочтительным" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdV-Wj-nch">
-                    <rect key="frame" x="18" y="29" width="309" height="79"/>
-                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 из 6" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F3T-rv-Myb">
-                    <rect key="frame" x="18" y="11" width="43.5" height="15"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="15" id="gc2-ox-WAp"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="16"/>
-                    <color key="textColor" red="0.54901960780000003" green="0.54901960780000003" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-            </subviews>
-            <constraints>
-                <constraint firstItem="F3T-rv-Myb" firstAttribute="top" secondItem="W7I-p3-Kor" secondAttribute="top" constant="11" id="3dS-tG-w3C"/>
-                <constraint firstItem="F3T-rv-Myb" firstAttribute="leading" secondItem="W7I-p3-Kor" secondAttribute="leading" constant="18" id="8CK-3j-8ow"/>
-                <constraint firstAttribute="bottom" secondItem="rdV-Wj-nch" secondAttribute="bottom" constant="5" id="8FX-LA-6YC"/>
-                <constraint firstItem="rdV-Wj-nch" firstAttribute="top" secondItem="F3T-rv-Myb" secondAttribute="bottom" constant="3" id="DKJ-9h-Jmf"/>
-                <constraint firstAttribute="trailing" secondItem="rdV-Wj-nch" secondAttribute="trailing" constant="16" id="LZH-yo-Q9s"/>
-                <constraint firstItem="rdV-Wj-nch" firstAttribute="leading" secondItem="F3T-rv-Myb" secondAttribute="leading" id="r7Z-Oh-5So"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="HpE-Ee-uts"/>
-            <connections>
-                <outlet property="question" destination="rdV-Wj-nch" id="MMO-MK-aab"/>
-                <outlet property="title" destination="F3T-rv-Myb" id="itr-nd-LWx"/>
-            </connections>
-            <point key="canvasLocation" x="-25" y="348"/>
-        </collectionReusableView>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="QuestionAnswerCell" id="yD4-UU-DId" customClass="QuestionAnswerCell" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2636,7 +2601,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="42307 810 5 9038 0710235" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="0Ke-W2-aWF">
-                            <rect key="frame" x="16" y="40" width="294" height="20.5"/>
+                            <rect key="frame" x="16" y="40" width="215" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -6532,6 +6497,41 @@
             </connections>
             <point key="canvasLocation" x="1125" y="822"/>
         </collectionViewCell>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="QuestionAnswerHeader" id="Y8a-Jz-4bS" customClass="QuestionAnswerHeader" customModule="Sminex" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="343" height="113"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой выриант использования лобби-бара является для Вас предпочтительным" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cs9-hr-A9R">
+                    <rect key="frame" x="18" y="43" width="309" height="65"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 из 6" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Uu-UL-VxT">
+                    <rect key="frame" x="18" y="18" width="43.5" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="rs9-gb-3Gj"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="16"/>
+                    <color key="textColor" red="0.54901960780000003" green="0.54901960780000003" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="cs9-hr-A9R" secondAttribute="trailing" constant="16" id="GsO-aS-mcb"/>
+                <constraint firstItem="8Uu-UL-VxT" firstAttribute="leading" secondItem="Y8a-Jz-4bS" secondAttribute="leading" constant="18" id="Q6W-Gk-NjT"/>
+                <constraint firstItem="8Uu-UL-VxT" firstAttribute="top" secondItem="Y8a-Jz-4bS" secondAttribute="top" constant="18" id="UWK-Fa-QbZ"/>
+                <constraint firstAttribute="bottom" secondItem="cs9-hr-A9R" secondAttribute="bottom" constant="5" id="kCf-9c-OfR"/>
+                <constraint firstItem="cs9-hr-A9R" firstAttribute="top" secondItem="8Uu-UL-VxT" secondAttribute="bottom" constant="10" id="mUz-K6-3RN"/>
+                <constraint firstItem="cs9-hr-A9R" firstAttribute="leading" secondItem="8Uu-UL-VxT" secondAttribute="leading" id="qe8-72-46j"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="yBH-jD-Aj3"/>
+            <connections>
+                <outlet property="question" destination="cs9-hr-A9R" id="Nh6-AE-nxY"/>
+                <outlet property="title" destination="8Uu-UL-VxT" id="D5L-v6-hma"/>
+            </connections>
+            <point key="canvasLocation" x="-26" y="364"/>
+        </collectionReusableView>
     </objects>
     <resources>
         <image name="account" width="25" height="28"/>
