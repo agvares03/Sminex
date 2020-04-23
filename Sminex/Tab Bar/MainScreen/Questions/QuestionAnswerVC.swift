@@ -75,6 +75,11 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             i = 0
             collection.reloadData()
             currQuestion += 1
+            if answers.count < currQuestion + 1{
+                goButton.backgroundColor = mainGrayColor
+            }else{
+                goButton.backgroundColor = mainGreenColor
+            }
             NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
             comment.text = ""
         } else {
@@ -122,9 +127,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         collection.delegate     = self
         collection.dataSource   = self
         comment.delegate = self
-        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped(_:)))
-        edgePan.edges = .left
-        view.addGestureRecognizer(edgePan)
+//        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped(_:)))
+//        edgePan.edges = .left
+//        view.addGestureRecognizer(edgePan)
         
         tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         if !(question_?.isReaded!)!{
@@ -203,43 +208,43 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         tabBarController?.tabBar.isHidden = false
     }
 
-    @objc private func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        guard currQuestion != 0 else { return }
-        
-        if #available(iOS 10.0, *) {
-            UIViewPropertyAnimator(duration: 0, curve: .linear) {
-                self.collection.frame.origin.x = recognizer.location(in: self.view).x
-            }.startAnimation()
-        } else {
-            self.collection.frame.origin.x = recognizer.location(in: self.view).x
-        }
-        
-        if recognizer.state == .ended {
-            if recognizer.location(in: view).x > 100 {
-                currQuestion -= 1
-                collection.alpha = 0
-                collection.frame.origin.x = 0
-                if #available(iOS 10.0, *) {
-                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
-                        self.collection.alpha = 1
-                    }.startAnimation()
-                } else {
-                    collection.alpha = 1
-                }
-                collection.reloadData()
-                
-            } else {
-                if #available(iOS 10.0, *) {
-                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
-                        self.collection.frame.origin.x = 0
-                    }.startAnimation()
-                    
-                } else {
-                    collection.frame.origin.x = 0
-                }
-            }
-        }
-    }
+//    @objc private func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+//        guard currQuestion != 0 else { return }
+//
+//        if #available(iOS 10.0, *) {
+//            UIViewPropertyAnimator(duration: 0, curve: .linear) {
+//                self.collection.frame.origin.x = recognizer.location(in: self.view).x
+//            }.startAnimation()
+//        } else {
+//            self.collection.frame.origin.x = recognizer.location(in: self.view).x
+//        }
+//
+//        if recognizer.state == .ended {
+//            if recognizer.location(in: view).x > 100 {
+//                currQuestion -= 1
+//                collection.alpha = 0
+//                collection.frame.origin.x = 0
+//                if #available(iOS 10.0, *) {
+//                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
+//                        self.collection.alpha = 1
+//                    }.startAnimation()
+//                } else {
+//                    collection.alpha = 1
+//                }
+//                collection.reloadData()
+//
+//            } else {
+//                if #available(iOS 10.0, *) {
+//                    UIViewPropertyAnimator(duration: 0, curve: .linear) {
+//                        self.collection.frame.origin.x = 0
+//                    }.startAnimation()
+//
+//                } else {
+//                    collection.frame.origin.x = 0
+//                }
+//            }
+//        }
+//    }
     
     @objc private func viewTapped(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)

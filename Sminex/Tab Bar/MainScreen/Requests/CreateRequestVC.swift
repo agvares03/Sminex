@@ -77,6 +77,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             self.fioList.append(edFio.text ?? "")
             edFio.text = ""
             self.numberFio.text = String(self.fioList.count + 1)
+            print(fioList.count)
             self.tableFio.reloadData()
         }
     }
@@ -1185,7 +1186,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     
     var showTable = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.FioConst.constant = 300
         if tableView == self.tablePlace{
             DispatchQueue.main.async {
                 if self.showTable{
@@ -1201,11 +1201,12 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             return self.parkingsPlace!.count
         }else{
             DispatchQueue.main.async {
-                var height1: CGFloat = 0
-                for cell in self.tableFio.visibleCells {
-                    height1 += cell.bounds.height
-                }
-                self.FioConst.constant = height1
+                self.FioConst.constant = 300
+//                var height1: CGFloat = 0
+//                for cell in self.tableFio.visibleCells {
+//                    height1 += cell.bounds.height
+//                }
+                self.FioConst.constant = CGFloat(25 * self.fioList.count)
             }
             return self.fioList.count
         }

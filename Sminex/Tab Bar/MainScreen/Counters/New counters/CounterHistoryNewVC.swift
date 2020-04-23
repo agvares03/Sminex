@@ -359,33 +359,33 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == collection{
-            if values.count > 6{
-                self.collHeight1.constant = 302
-                return values.count
-            }else if values.count > 0{
-                self.collHeight1.constant = 130 + CGFloat(30 * values.count)
+            if values.count > 0{
+                DispatchQueue.main.async {
+                    self.collHeight1.constant = 1000
+                    self.collHeight1.constant = 130 + CGFloat(30 * self.values.count)
+                }
                 return values.count
             }else{
                 self.collHeight1.constant = 0
                 return 0
             }
         }else if collectionView == collection2{
-            if values2.count > 6{
-                self.collHeight2.constant = 302
-                return values2.count
-            }else if values2.count > 0{
-                self.collHeight2.constant = 130 + CGFloat(30 * values2.count)
+            if values2.count > 0{
+                DispatchQueue.main.async {
+                    self.collHeight2.constant = 1000
+                    self.collHeight2.constant = 130 + CGFloat(30 * self.values2.count)
+                }
                 return values2.count
             }else{
                 self.collHeight2.constant = 0
                 return 0
             }
         }else{
-            if values3.count > 6{
-                self.collHeight3.constant = 302
-                return values3.count
-            }else if values3.count != 0{
-                self.collHeight3.constant = 130 + CGFloat(30 * values3.count)
+            if values3.count != 0{
+                DispatchQueue.main.async {
+                    self.collHeight3.constant = 1000
+                    self.collHeight3.constant = 130 + CGFloat(30 * self.values3.count)
+                }
                 return values3.count
             }else{
                 self.collHeight3.constant = 0
