@@ -179,7 +179,7 @@ final class DealsListDescHeader: UICollectionReusableView {
             return titleLabel.frame.height
         }
         
-        func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
             bodyLabel.numberOfLines = 0
             bodyLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
             bodyLabel.font = font
@@ -217,7 +217,7 @@ final class DealsListDescHeader: UICollectionReusableView {
         
         titleLabel.preferredMaxLayoutWidth = titleLabel.bounds.size.width
         bodyLabel.preferredMaxLayoutWidth  = bodyLabel.bounds.size.width
-        let height = heightForView(text: bodyLabel.text!, font: font!, width: bodyLabel.preferredMaxLayoutWidth)
+        let height = heightForLabel(text: bodyLabel.text!, font: font!, width: bodyLabel.preferredMaxLayoutWidth)
         let height2 = heightForTitle(text: titleLabel.text!, width: titleLabel.preferredMaxLayoutWidth)
         bodyLabel.bounds.size.height = height + 20
         titleLabel.bounds.size.height = height2 + 50

@@ -76,9 +76,15 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         }
     }
     var phoneChoice = true
+    var phoneString = ""
     var emailChoice = false
+    var emailString = ""
     @IBAction private func phonePressed(_ sender: UIButton) {
+        if emailChoice{
         DispatchQueue.main.async {
+            if self.phoneEmailText.text != ""{
+                self.emailString = self.phoneEmailText.text ?? ""
+            }
             self.iconPhone.isHidden = false
             self.iconEmail.isHidden = true
             self.phoneEmailText.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
@@ -86,13 +92,19 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
             self.phoneEmailText.keyboardType = .phonePad
             self.phoneEmailText.reloadInputViews()
             self.phoneEmailText.placeholder = "Контактный номер для отправки чека"
+            self.phoneEmailText.text = self.phoneString
             self.phoneChoice = true
             self.emailChoice = false
+        }
         }
     }
     
     @IBAction private func emailPressed(_ sender: UIButton) {
+        if phoneChoice{
         DispatchQueue.main.async {
+            if self.phoneEmailText.text != ""{
+                self.phoneString = self.phoneEmailText.text ?? ""
+            }
             self.iconPhone.isHidden = true
             self.iconEmail.isHidden = false
             self.phoneEmailText.maskExpression = "{...........................................}"
@@ -100,8 +112,10 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
             self.phoneEmailText.keyboardType = .emailAddress
             self.phoneEmailText.reloadInputViews()
             self.phoneEmailText.placeholder = "Email для отправки чека"
+            self.phoneEmailText.text = self.emailString
             self.phoneChoice = false
             self.emailChoice = true
+        }
         }
     }
     
@@ -152,6 +166,9 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         self.phoneEmailText.reloadInputViews()
         self.phoneEmailText.placeholder = "Контактный номер для отправки чека"
         self.phoneChoice = true
+        phoneString = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
+        emailString = UserDefaults.standard.string(forKey: "mail") ?? ""
+        self.phoneEmailText.text = phoneString
         self.emailChoice = false
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(viewTapped(_:)))
         view.isUserInteractionEnabled = true

@@ -429,7 +429,6 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             datePickerValueChanged), for: UIControlEvents.valueChanged)
         edProblem.text = "Что нужно сделать?"
         edProblem.textColor = placeholderColor
-        edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
     }
     var tap = UIGestureRecognizer()
     override func viewWillAppear(_ animated: Bool) {
@@ -779,32 +778,47 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
         }
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if edProblem.textColor == placeholderColor {
+            edProblem.text = nil
+            edProblem.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if edProblem.text.isEmpty {
+            edProblem.text = "Что нужно сделать?"
+            edProblem.textColor = placeholderColor
+        }
+    }
+    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
-        if text == "\n" && (textView.text as NSString).replacingCharacters(in: range, with: text).components(separatedBy: .newlines).count < 3 {
-            edConst.constant += 16
+        var height = heightForView(text: edProblem.text, font: edProblem.font!, width: view.frame.size.width - 64)
+        if text == "\n"{
+            height = height + 20
         }
-        
-        let currentText:String = textView.text
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-        
-        if updatedText.isEmpty {
-            textView.text = "Что нужно сделать?"
-            textView.textColor = placeholderColor
-            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            
-        } else if textView.textColor == placeholderColor && !text.isEmpty {
-            textView.textColor = UIColor.black
-            textView.text = text
-            
-        } else {
-            return true
+        if height > 40.0{
+            DispatchQueue.main.async{
+                self.edConst.constant = height
+            }
+        }else{
+            DispatchQueue.main.async{
+                self.edConst.constant = 40
+            }
         }
-        return false
+        return true
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UITextView = UITextView(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        
         if edProblem.text == "" || edProblem.text.count == 1 {
             sendBtn.isHidden = true
             sendBtnHeight.constant = 0
@@ -813,19 +827,8 @@ class CreateServiceUK: UIViewController, UIGestureRecognizerDelegate, UITextFiel
             sendBtn.isHidden = false
             sendBtnHeight.constant = 48
         }
-        
-        if (textView.text as NSString).components(separatedBy: .newlines).count < 3 {
-            edConst.constant = textView.contentSize.height
-        }
     }
     
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        if self.view.window != nil {
-            if textView.textColor == placeholderColor {
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            }
-        }
-    }
     var showTable = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         DispatchQueue.main.async {

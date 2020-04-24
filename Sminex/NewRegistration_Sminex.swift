@@ -119,7 +119,7 @@ final class NewRegistration_Sminex: UIViewController, UITextFieldDelegate, UIGes
         
         var request = URLRequest(url: URL(string: Server.SERVER + Server.FORGOT + "identOrPhone=" + edLS.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!)!)
         request.httpMethod = "GET"
-//        print(request)
+        print(request)
         
         URLSession.shared.dataTask(with: request) {
             data, response, error in
@@ -136,7 +136,8 @@ final class NewRegistration_Sminex: UIViewController, UITextFieldDelegate, UIGes
             self.responseString = String(data: data!, encoding: .utf8) ?? ""
             
 //            #if DEBUG
-//                print("responseString = \(self.responseString)")
+                print("responseString = \(self.responseString)")
+            
 //            #endif
             self.choice()
             

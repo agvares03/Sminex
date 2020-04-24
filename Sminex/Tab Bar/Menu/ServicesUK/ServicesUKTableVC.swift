@@ -96,9 +96,12 @@ final class ServicesUKTableVC: UIViewController, UICollectionViewDelegate, UICol
         let data = self.data[safe: indexPath.row]
         cell?.display(data?.name ?? "", desc: data?.howToOrder ?? "", amount: data?.cost ?? "", picture: data?.picture ?? "")
         var size = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-        if size.height > 290 {
-            size.height = size.height - 50
-            return CGSize(width: view.frame.size.width, height: size.height)
+//        if size.height > 290 {
+//            size.height = size.height - 50
+//            return CGSize(width: view.frame.size.width, height: size.height)
+//        }
+        if (data?.cost?.contains(find: "Стоимость услуги"))!{
+            return CGSize(width: view.frame.size.width, height: 100)
         }
         return CGSize(width: view.frame.size.width, height: size.height)
     }
@@ -181,12 +184,15 @@ final class ServicesUKTableCell: UICollectionViewCell {
         self.title.text     = title
         if desc != "" && desc != " "{
             self.desc.text = desc
-            self.descHeight.constant = heightForView(text: desc, font: self.desc.font, width: self.desc.bounds.size.width)
+            self.descHeight.constant = heightForLabel(text: desc, font: self.desc.font, width: self.desc.bounds.size.width)
         }else{
             self.descHeight.constant = 0
             self.desc.text = ""
         }
         self.amount.text    = amount.replacingOccurrences(of: "руб.", with: "₽")
+        if amount.contains(find: "Стоимость услуги"){
+            self.amount.text = amount.replacingOccurrences(of: " ", with: "\n")
+        }
         if let imageV = UIImage(data: Data(base64Encoded: (picture.replacingOccurrences(of: "data:image/png;base64,", with: ""))) ?? Data()) {
             image.image = imageV
             image.layer.borderColor = UIColor.black.cgColor
@@ -200,7 +206,7 @@ final class ServicesUKTableCell: UICollectionViewCell {
         }
     }
     
-    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping

@@ -153,7 +153,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         email.text              = defaults.string(forKey: "mail")
         if (defaults.string(forKey: "mail") == "-") {
             email.text          = ""
-            emailLabel.isHidden = true
+//            emailLabel.isHidden = true
         }
         contactNumber.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         contactNumber.maskTemplate = "*"
@@ -246,6 +246,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
                          name: .flagsChanged,
                          object: Network.reachability)
         updateUserInterface()
+        commentField.delegate = self
         tabBarController?.tabBar.isHidden = false
         navigationController?.isNavigationBarHidden = false
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -469,61 +470,45 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
-        
-//        if contactNumber.text == "" {
-//            contactLabel.isHidden = true
+            
+    //        if contactNumber.text == "" {
+    //            contactLabel.isHidden = true
+    //
+    //        } else {
+    //            contactLabel.isHidden = false
+    //        }
+            
+//        if privNumber.text == "" {
+//            phoneLabel.isHidden = true
+//            
+//        } else {
+//            phoneLabel.isHidden = false
+//        }
+//        if lsLabel.text == "" {
+//            lisevoyLabel.isHidden = true
 //
 //        } else {
-//            contactLabel.isHidden = false
+//            lisevoyLabel.isHidden = false
 //        }
-        
-        if privNumber.text == "" {
-            phoneLabel.isHidden = true
-            
-        } else {
-            phoneLabel.isHidden = false
-        }
-        if lsLabel.text == "" {
-            lisevoyLabel.isHidden = true
-            
-        } else {
-            lisevoyLabel.isHidden = false
-        }
-        if email.text == "" {
-            emailLabel.isHidden = true
-            
-        } else {
-            emailLabel.isHidden = false
+//        if email.text == "" {
+//            emailLabel.isHidden = true
+//
+//        } else {
+//            emailLabel.isHidden = false
+//        }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if commentField.textColor == UIColor.lightGray {
+            commentField.text = nil
+            commentField.textColor = UIColor.black
         }
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
-        let currentText:String = textView.text
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-//        if textView.text == "Добавить комментарий (например, «не звонить с 10 до 12»)"{
-//            textView.text = ""
-//        }
-        if updatedText.isEmpty {
-            textView.text = "Добавить комментарий (например, «не звонить с 10 до 12»)"
-            textView.textColor = UIColor.lightGray
-            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            
-        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-            textView.textColor = UIColor.black
-            textView.text = text
-            
-        } else {
-            return true
-        }
-        return false
-    }
-    
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        if self.view.window != nil {
-            if textView.textColor == UIColor.lightGray {
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if commentField.text.isEmpty {
+            commentField.text = "Добавить комментарий (например, «не звонить с 10 до 12»)"
+            commentField.textColor = UIColor.lightGray
         }
     }
 }

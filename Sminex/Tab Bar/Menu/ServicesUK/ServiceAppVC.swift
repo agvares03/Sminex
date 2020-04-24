@@ -783,8 +783,6 @@ final class ServiceAppHeader: UICollectionViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         date.text = dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM").contains(find: "Послезавтра") ? dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "").replacingOccurrences(of: ",", with: "") : dayDifference(from: dateFormatter.date(from: item.date) ?? Date(), style: "dd MMMM HH:mm")
-        print(item.soonPossible)
-        
         if item.soonPossible{
             date.text = "Как можно скорее"
             if item.status != "Принята к выполнению"{

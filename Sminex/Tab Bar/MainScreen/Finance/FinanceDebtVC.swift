@@ -215,16 +215,16 @@ final class FinanceDebtVC: UIViewController, UICollectionViewDelegate, UICollect
             var lblH: CGFloat = 0
             if !isBold {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
-                lblH = heightForView(text: receipts![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
+                lblH = heightForLabel(text: receipts![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
             } else {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCell", for: indexPath) as! FinanceDebtCell
-                lblH = heightForView(text: receipts![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
+                lblH = heightForLabel(text: receipts![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 126) + 10
             }
             return CGSize(width: view.frame.size.width, height: lblH)
         }
     }
     
-    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping

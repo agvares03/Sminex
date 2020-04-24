@@ -289,8 +289,9 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
                 }
                 } } ) )
             alert.addAction( UIAlertAction(title: "Написать письмо", style: .default, handler: { (_) in
-                self.performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self)
-                UserDefaults.standard.set(true, forKey: "fromMenu")
+//                self.performSegue(withIdentifier: Segues.fromMenuVC.toSupport, sender: self)
+//                UserDefaults.standard.set(true, forKey: "fromMenu")
+                self.addRequestPressed()
             } ) )
             alert.addAction( UIAlertAction(title: "Отменить", style: .cancel, handler: { (_) in } ) )
             present(alert, animated: true, completion: nil)
@@ -303,8 +304,44 @@ class NewMenuVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         }
     }
     
+    func addRequestPressed() {
+        DispatchQueue.global(qos: .userInteractive).async {
+            if let types = TemporaryHolder.instance.requestTypes?.types {
+                for i in 0...types.count - 1{
+                    if types[i].name == "Обращение"{
+                        self.typeName = types[i].name!
+                    }
+                }
+                self.dataType = types
+            }
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "addAppeal", sender: self)
+            }
+        }
+    }
+    var typeName = ""
+    private var dataType = [RequestTypeStruct]()
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        if segue.identifier == "addAppeal"{
+            let vc = segue.destination as! CreateAppeal
+            vc.typeReq = "В техподдержку приложения"
+            let dat = TemporaryHolder.instance.contactsList
+            var selEmail = ""
+            dat.forEach{
+                if ($0.name?.contains(find: "оддержка"))!{
+                    selEmail = $0.email ?? ""
+                }
+            }
+            vc.selEmail = selEmail
+            vc.name_ = typeName
+            vc.fromMenu = true
+            for i in 0...dataType.count - 1{
+                if dataType[i].name == "Обращение"{
+                    vc.type_ = dataType[i]
+                }
+            }
+        }
         if segue.identifier == Segues.fromMenuVC.toSupport {
             let vc = segue.destination as! AuthSupportVCNew
             vc.login_ = UserDefaults.standard.string(forKey: "login") ?? ""

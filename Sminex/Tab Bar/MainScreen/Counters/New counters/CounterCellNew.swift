@@ -67,6 +67,8 @@ final class CounterCellNew: UICollectionViewCell {
             sendLblHeight.constant = 45
             canCount2 = false
             sendLbl.text  = "Снятие и передача показаний осуществляется управляющей компанией"
+            sendBtnHeight.constant = 1
+            sendBtn.isHidden = true
         }
         self.delegate = delegate
         self.delegate2 = delegate2

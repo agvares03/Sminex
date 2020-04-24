@@ -365,27 +365,6 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
             let tap1 = UITapGestureRecognizer(target: self, action: #selector(expand))
             placeView.addGestureRecognizer(tap1)
         }
-//        if  Device() == .iPhone4 || Device() == .simulator(.iPhone4) ||
-//            Device() == .iPhone4s || Device() == .simulator(.iPhone4s) ||
-//            Device() == .iPhone5 || Device() == .simulator(.iPhone5) ||
-//            Device() == .iPhone5c || Device() == .simulator(.iPhone5c) ||
-//            Device() == .iPhone5s || Device() == .simulator(.iPhone5s) ||
-//            Device() == .iPhoneSE || Device() == .simulator(.iPhoneSE){
-//            edConst.constant -= 22
-//        } else if Device() == .iPhone6 || Device() == .simulator(.iPhone6) ||
-//            Device() == .iPhone6s || Device() == .simulator(.iPhone6s) ||
-//            Device() == .iPhone7 || Device() == .simulator(.iPhone7) ||
-//            Device() == .iPhone8 || Device() == .simulator(.iPhone8){
-//            edConst.constant -= 22
-//        }else if Device() == .iPhone7Plus || Device() == .simulator(.iPhone7Plus) ||
-//            Device() == .iPhone8Plus || Device() == .simulator(.iPhone8Plus) ||
-//            Device() == .iPhone6Plus || Device() == .simulator(.iPhone6Plus) ||
-//            Device() == .iPhone6sPlus || Device() == .simulator(.iPhone6sPlus){
-//            edConst.constant += 16
-//        } else if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) {
-//            edConst.constant += 16
-//        }
-        edConst.constant = 30
         sprtTopConst = pickerLine.frame.origin.y
         btnConstant = sendButton.frame.origin.y
         endAnimator()
@@ -448,11 +427,8 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         
         edComment.text = "Примечание"
         gosNumber.textColor = placeholderColor
-        gosNumber.selectedTextRange = gosNumber.textRange(from: gosNumber.beginningOfDocument, to: gosNumber.beginningOfDocument)
         markAuto.textColor = placeholderColor
-        markAuto.selectedTextRange = markAuto.textRange(from: markAuto.beginningOfDocument, to: markAuto.beginningOfDocument)
         edComment.textColor = placeholderColor
-        edComment.selectedTextRange = edComment.textRange(from: edComment.beginningOfDocument, to: edComment.beginningOfDocument)
         heigthFooter.constant = 0
         heigth_phone_service.constant = 0
         dopInfoHeight.constant = 0
@@ -708,7 +684,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                         phone = data.phone ?? "";
                     }
                 }
-                self.dopInfoHeight.constant = heightForView(text: "Вниманию арендаторов помещений! В случае планируемого вывоза имущества Вам необходимо получить подтверждение владельца помещения на вывоз.", font: self.descInfoLbl.font, width: self.view.frame.size.width - 16)
+                self.dopInfoHeight.constant = heightForLabel(text: "Вниманию арендаторов помещений! В случае планируемого вывоза имущества Вам необходимо получить подтверждение владельца помещения на вывоз.", font: self.descInfoLbl.font, width: self.view.frame.size.width - 16)
                 if (phone != "") {
                     
 //                    heigthFooter.constant = 270
@@ -1054,134 +1030,68 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         return true
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
-        let currentText:String = textView.text
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-        if textView == gosNumber{
-            if updatedText.isEmpty {
-                textView.text = "Госномер (или номера через запятую, например, А 033 ЕО 77)"
-                sendBtnHeight.constant = 0
-                sendButton.isHidden = true
-                textView.textColor = placeholderColor
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-                
-            } else if textView.textColor == placeholderColor && !text.isEmpty {
-                textView.textColor = UIColor.black
-                textView.text = text
-                sendBtnHeight.constant = 48
-                sendButton.isHidden = false
-                
-            } else {
-                return true
-            }
-        }else if textView == markAuto{
-            if updatedText.isEmpty {
-                textView.text = "Марка автомобиля \n(или марки через запятую)"
-                sendBtnHeight.constant = 0
-                sendButton.isHidden = true
-                textView.textColor = placeholderColor
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-                
-            } else if textView.textColor == placeholderColor && !text.isEmpty {
-                textView.textColor = UIColor.black
-                textView.text = text
-                sendBtnHeight.constant = 48
-                sendButton.isHidden = false
-                
-            } else {
-                return true
-            }
-        }else{
-            if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
-                if updatedText.isEmpty {
-                    textView.text = "Примечание"
-                    if textView.frame.origin.y < 100{
-                        textView.text = "ФИО гостей"
-                        sendBtnHeight.constant = 0
-                        sendButton.isHidden = true
-                    }
-                    textView.textColor = placeholderColor
-                    textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-                    
-                } else if textView.textColor == placeholderColor && !text.isEmpty {
-                    textView.textColor = UIColor.black
-                    textView.text = text
-                    if textView.frame.origin.y < 100 && gosNumber.text != ""{
-                        sendBtnHeight.constant = 48
-                        sendButton.isHidden = false
-                    }
-                    
-                } else {
-                    return true
-                }
-            }else {
-                if updatedText.isEmpty {
-                    textView.text = "Примечание"
-                    if textView.frame.origin.y < 100{
-                        textView.text = "ФИО гостей"
-                        sendBtnHeight.constant = 0
-                        sendButton.isHidden = true
-                    }
-                    textView.textColor = placeholderColor
-                    textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-                    
-                } else if textView.textColor == placeholderColor && !text.isEmpty {
-                    textView.textColor = UIColor.black
-                    textView.text = text
-                    if textView.frame.origin.y < 100{
-                        sendBtnHeight.constant = 48
-                        sendButton.isHidden = false
-                    }
-                    
-                } else {
-                    return true
-                }
-            }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if edComment.textColor == placeholderColor {
+            edComment.text = nil
+            edComment.textColor = UIColor.black
         }
-        
-        return false
-    }
-    var previousValue = CGRect.zero
-    var lines = 1
-    func textViewDidChange(_ textView: UITextView) {
-        if textView != gosNumber && textView != markAuto{
-            let pos = textView.endOfDocument
-            let currentRect = textView.caretRect(for: pos)
-            if (currentRect.origin.y > previousValue.origin.y){
-                lines += 1
-            }else if (currentRect.origin.y < previousValue.origin.y){
-                lines -= 1
-            }
-            
-            if (textView.text as NSString).components(separatedBy: .newlines).count < 4 && lines < 4 && textView.frame.origin.y < 100 {
-                var height = textView.contentSize.height
-                if height == 57 && self.show == false{
-                    self.show = true
-                }else if (currentRect.origin.y > previousValue.origin.y) && self.show == true{
-                    height -= 20
-                    self.show = true
-                }
-                if height == 37{
-                    self.show = false
-                }
-                if height < 40{
-//                    self.FioConst.constant = 40
-                }else{
-//                    self.FioConst.constant = height
-                }
-            }
-            previousValue = currentRect
+        if gosNumber.textColor == placeholderColor {
+            gosNumber.text = nil
+            gosNumber.textColor = UIColor.black
+            sendBtnHeight.constant = 48
+            sendButton.isHidden = false
         }
-        
+        if markAuto.textColor == placeholderColor {
+            markAuto.text = nil
+            markAuto.textColor = UIColor.black
+            sendBtnHeight.constant = 48
+            sendButton.isHidden = false
+        }
     }
     
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        if self.view.window != nil {
-            if textView.textColor == placeholderColor {
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if edComment.text.isEmpty {
+            edComment.text = "Примечание"
+            edComment.textColor = placeholderColor
+        }
+        if gosNumber.text.isEmpty {
+            gosNumber.text = "Госномер (или номера через запятую, например, А 033 ЕО 77)"
+            gosNumber.textColor = placeholderColor
+            sendBtnHeight.constant = 0
+            sendButton.isHidden = true
+        }
+        if markAuto.text.isEmpty {
+            markAuto.text = "Марка автомобиля \n(или марки через запятую)"
+            markAuto.textColor = placeholderColor
+            sendBtnHeight.constant = 0
+            sendButton.isHidden = true
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        var height = heightForView(text: edComment.text, font: edComment.font!, width: view.frame.size.width - 64)
+        if text == "\n"{
+            height = height + 20
+        }
+        if height > 40.0{
+            DispatchQueue.main.async{
+                self.edConst.constant = height
+            }
+        }else{
+            DispatchQueue.main.async{
+                self.edConst.constant = 40
             }
         }
+        return true
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UITextView = UITextView(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
     }
     
     var showTable = false
@@ -1281,7 +1191,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         }
     }
     
-    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping

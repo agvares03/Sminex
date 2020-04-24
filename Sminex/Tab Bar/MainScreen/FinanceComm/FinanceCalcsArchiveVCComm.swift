@@ -345,9 +345,10 @@ final class FinanceCalcsArchiveCommCell: UITableViewCell {
         self.title.text = title
         self.desc.text  = desc.replacingOccurrences(of: ".", with: ",")
         if title == "Аванс" || desc.contains(find: "-"){
-            self.desc.textColor = mainGrayColor
+            self.desc.textColor = mainGreenColor
+            self.desc.text  = desc.replacingOccurrences(of: ".", with: ",").replacingOccurrences(of: "- ", with: "")
         }else{
-            self.desc.textColor = .darkText
+            self.desc.textColor = .lightGray
         }
         if last{
             fonView.cornerRadius = 24

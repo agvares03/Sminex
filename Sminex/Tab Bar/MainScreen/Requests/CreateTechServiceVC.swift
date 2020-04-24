@@ -325,7 +325,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             datePickerValueChanged), for: UIControlEvents.valueChanged)
         edProblem.text = "Введите описание"
         edProblem.textColor = UIColor.lightGray
-        edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
+//        edProblem.selectedTextRange = edProblem.textRange(from: edProblem.beginningOfDocument, to: edProblem.beginningOfDocument)
 //        if Device() == .iPhoneX || Device() == .simulator(.iPhoneX) || Device() == .iPhoneXr || Device() == .simulator(.iPhoneXr) || Device() == .iPhoneXs || Device() == .simulator(.iPhoneXs) || Device() == .iPhoneXsMax || Device() == .simulator(.iPhoneXsMax) {
 //            btnConst.constant = 25
 //        }
@@ -659,32 +659,7 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
         }
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
-        if text == "\n" && (textView.text as NSString).replacingCharacters(in: range, with: text).components(separatedBy: .newlines).count < 3 {
-            edConst.constant += 16
-        }
-        
-        let currentText:String = textView.text
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-        
-        if updatedText.isEmpty {
-            textView.text = "Введите описание"
-            textView.textColor = UIColor.lightGray
-            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-        
-        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-            textView.textColor = UIColor.black
-            textView.text = text
-        
-        } else {
-            return true
-        }
-        return false
-    }
-    
     func textViewDidChange(_ textView: UITextView) {
-        
         if edProblem.text == "" || edProblem.text.count == 1 {
             sendBtn.isHidden = true
             sendBtnHeight.constant = 0
@@ -693,19 +668,48 @@ final class CreateTechServiceVC: UIViewController, UIGestureRecognizerDelegate, 
             sendBtn.isHidden = false
             sendBtnHeight.constant = 48
         }
-        
-        if (textView.text as NSString).components(separatedBy: .newlines).count < 3 {
-            edConst.constant = textView.contentSize.height
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if edProblem.textColor == UIColor.lightGray {
+            edProblem.text = nil
+            edProblem.textColor = UIColor.black
         }
     }
     
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        if self.view.window != nil {
-            if textView.textColor == UIColor.lightGray {
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if edProblem.text.isEmpty {
+            edProblem.text = "Введите описание"
+            edProblem.textColor = UIColor.lightGray
         }
     }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        var height = heightForView(text: edProblem.text, font: edProblem.font!, width: view.frame.size.width - 64)
+        if text == "\n"{
+            height = height + 20
+        }
+        if height > 40.0{
+            DispatchQueue.main.async{
+                self.edConst.constant = height
+            }
+        }else{
+            DispatchQueue.main.async{
+                self.edConst.constant = 40
+            }
+        }
+        return true
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UITextView = UITextView(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
+    }
+    
     var showTable = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         DispatchQueue.main.async {

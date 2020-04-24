@@ -738,7 +738,7 @@ final class AdmissionHeader: UICollectionViewCell {
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
-            let k = heightForView(text: item.placeHome, font: place.font, width: view.view.frame.size.width - 32)
+            let k = heightForLabel(text: item.placeHome, font: place.font, width: view.view.frame.size.width - 32)
             if k > 24{
                 placeHeight?.constant = k + 36
             }else{
@@ -783,7 +783,7 @@ final class AdmissionHeader: UICollectionViewCell {
                 heigthFooter?.constant = 0
                 heigth_phone_service?.constant = 0
             }
-            let k = heightForView(text: item.gosNumber, font: gosNumbers.font, width: gosNumbers.frame.size.width)
+            let k = heightForLabel(text: item.gosNumber, font: gosNumbers.font, width: gosNumbers.frame.size.width)
             if k > 24{
                 gosConstant?.constant = k + 36
             }else{
@@ -800,7 +800,7 @@ final class AdmissionHeader: UICollectionViewCell {
             markLine.isHidden    = true
             markTitle.isHidden   = true
         } else {
-            let k = heightForView(text: item.mark, font: markAuto.font, width: markAuto.frame.size.width)
+            let k = heightForLabel(text: item.mark, font: markAuto.font, width: markAuto.frame.size.width)
             if k > 24{
                 markConstant?.constant = k + 36
             }else{
@@ -818,7 +818,7 @@ final class AdmissionHeader: UICollectionViewCell {
             descLine?.isHidden  = true
             descText?.text = ""
         } else {
-            let k = heightForView(text: item.desc, font: descText!.font, width: descText!.frame.size.width)
+            let k = heightForLabel(text: item.desc, font: descText!.font, width: descText!.frame.size.width)
             if k > 24{
                 descConstant?.constant = k + 36
             }else{
@@ -878,7 +878,7 @@ final class AdmissionHeader: UICollectionViewCell {
             image.tintColor = mainGreenColor
             status.textColor = mainGreenColor
         }
-        let k = heightForView(text: item.gosti, font: gosti.font, width: view.view.frame.size.width - 32)
+        let k = heightForLabel(text: item.gosti, font: gosti.font, width: view.view.frame.size.width - 32)
         if k > 20.5{
             gostiConstant?.constant = k
         }else{
@@ -972,7 +972,7 @@ final class AdmissionHeader: UICollectionViewCell {
         }
     }
     
-    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping

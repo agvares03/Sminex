@@ -763,7 +763,7 @@ final class ServiceHeader: UICollectionViewCell {
     
     private var delegate: TechServiceCellsProtocol?
     
-    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -785,7 +785,7 @@ final class ServiceHeader: UICollectionViewCell {
             place.isHidden = false
             placeLbl.isHidden = false
             separator.isHidden = false
-            let k = heightForView(text: item.placeHome, font: place.font, width: place.frame.size.width)
+            let k = heightForLabel(text: item.placeHome, font: place.font, width: place.frame.size.width)
             if k > 20{
                 placeHeight.constant = k + 40
             }else{
@@ -798,7 +798,7 @@ final class ServiceHeader: UICollectionViewCell {
         noDateHeight.constant = 0
         noDateLbl.isHidden = true
         problem.text = item.problem
-        let k = heightForView(text: item.problem, font: problem.font, width: problem.frame.size.width)
+        let k = heightForLabel(text: item.problem, font: problem.font, width: problem.frame.size.width)
         if k > 20{
             problemHeight.constant = k
         }else{

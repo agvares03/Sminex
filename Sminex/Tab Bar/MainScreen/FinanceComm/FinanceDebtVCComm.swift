@@ -245,11 +245,11 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
             var lblH: CGFloat = 0
             if !isBold {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
-                lblH = heightForView(text: dataFilt[indexPath.section].filteredData![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 199) + 10
+                lblH = heightForLabel(text: dataFilt[indexPath.section].filteredData![indexPath.row].usluga!, font: cell1.title.font, width: self.view.frame.size.width - 199) + 10
                 return CGSize(width: view.frame.size.width - 32, height: lblH)
             } else {
                 let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "FinanceDebtCommCell", for: indexPath) as! FinanceDebtCommCell
-                lblH = heightForView(text: dataFilt[indexPath.section].filteredData![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 159) + 10
+                lblH = heightForLabel(text: dataFilt[indexPath.section].filteredData![indexPath.row].type!, font: cell1.title.font, width: self.view.frame.size.width - 159) + 10
                 if lblH > 39{
                     return CGSize(width: view.frame.size.width - 32, height: lblH)
                 }else{
@@ -260,7 +260,7 @@ class FinanceDebtVCComm: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping

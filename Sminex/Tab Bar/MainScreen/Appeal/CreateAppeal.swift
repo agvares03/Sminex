@@ -15,6 +15,7 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
     @IBOutlet private weak var loader:          UIActivityIndicatorView!
     @IBOutlet private weak var sendBtnHeight:   NSLayoutConstraint!
     @IBOutlet private weak var imgsHeight:      NSLayoutConstraint!
+    @IBOutlet private weak var edConst:         NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var imgScroll:       UIScrollView!
     @IBOutlet private weak var edContact:       AKMaskField!
@@ -39,12 +40,16 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         let action = UIAlertController(title: "Удалить сообщение?", message: "Изменения не сохранятся", preferredStyle: .alert)
         action.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (_) in }))
         action.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { (_) in
-            let AppsUserDelegate = self.delegate as! AppealUser
-            
-            if (AppsUserDelegate.isCreatingRequest_) {
-                self.navigationController?.popToRootViewController(animated: true)
-            } else {
+            if self.fromAuth || self.fromMenu{
                 self.navigationController?.popViewController(animated: true)
+            }else{
+                let AppsUserDelegate = self.delegate as! AppealUser
+                
+                if (AppsUserDelegate.isCreatingRequest_) {
+                    self.navigationController?.popToRootViewController(animated: true)
+                } else {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
         }))
         present(action, animated: true, completion: nil)
@@ -99,6 +104,8 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         }
     }
     
+    public var fromAuth: Bool = false
+    public var fromMenu: Bool = false
     public var name_ = ""
     public var delegate: AppealUserDelegate?
     public var type_: RequestTypeStruct?
@@ -347,7 +354,9 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
                     DispatchQueue.main.sync {
                         
                         self.endAnimator()
-                        self.delegate?.update()
+                        if !self.fromAuth && !self.fromMenu{
+                            self.delegate?.update()
+                        }
                         var titleA = ""
                         if self.typeReq == "Консьержу/ в службу комфорта"{
                             titleA = "Сообщение отправлено в службу комфорта"
@@ -456,36 +465,65 @@ class CreateAppeal: UIViewController, UIScrollViewDelegate, UIGestureRecognizerD
         }
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
-        
-        let currentText:String = textView.text
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-            if updatedText.isEmpty {
-                textView.text = "Описание"
-                sendButton.isHidden = true
-                sendBtnHeight.constant = 0
-                textView.textColor = UIColor.lightGray
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-                
-            } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-                textView.textColor = UIColor.black
-                textView.text = text
-                sendButton.isHidden = false
-                sendBtnHeight.constant = 48
-            } else {
-                return true
-            }
-        return false
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if edComment.textColor == UIColor.lightGray {
+            edComment.text = nil
+            edComment.textColor = UIColor.black
+        }
     }
-    var previousValue = CGRect.zero
-    var lines = 1
     
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        if self.view.window != nil {
-            if textView.textColor == UIColor.lightGray {
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if edComment.text.isEmpty {
+            edComment.text = "Описание"
+            edComment.textColor = UIColor.lightGray
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        var height = heightForView(text: edComment.text, font: edComment.font!, width: view.frame.size.width - 64)
+        if text == "\n"{
+            height = height + 20
+        }
+        if height > 40.0{
+            DispatchQueue.main.async{
+                self.edConst.constant = height
             }
+        }else{
+            DispatchQueue.main.async{
+                self.edConst.constant = 40
+            }
+        }
+        return true
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UITextView = UITextView(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if edIdent.text == ""{
+            sendButton.isHidden = true
+            sendBtnHeight.constant = 0
+        }else if edComment.textColor == UIColor.lightGray{
+            sendButton.isHidden = true
+            sendBtnHeight.constant = 0
+        }else if edContact.text == "" && edComment.text != "" && edIdent.text != "" && edEmail.text != ""{
+            sendButton.isHidden = false
+            sendBtnHeight.constant = 48
+        }else if edContact.text != "" && edComment.text != "" && edIdent.text != "" && edEmail.text == ""{
+            sendButton.isHidden = false
+            sendBtnHeight.constant = 48
+        }else if edContact.text != "" && edComment.text != "" && edIdent.text != "" && edEmail.text != ""{
+            sendButton.isHidden = false
+            sendBtnHeight.constant = 48
+        }else if edContact.text == "" && edComment.text != "" && edIdent.text != "" && edEmail.text == ""{
+            sendButton.isHidden = true
+            sendBtnHeight.constant = 0
         }
     }
 }

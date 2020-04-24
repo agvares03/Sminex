@@ -134,7 +134,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         fraction = data_?.fractionalNumber
         
         res.text = data_?.resource
-        resHeight.constant = heightForView(text: data_?.resource ?? "", font: res.font, width: view.frame.size.width - 48)
+        resHeight.constant = heightForLabel(text: data_?.resource ?? "", font: res.font, width: view.frame.size.width - 48)
         name.text = "Счетчик " + (data_?.meterUniqueNum)!
         years.append(period_![0].year!)
         selectedYear = period_![0].year!
@@ -172,7 +172,7 @@ class CounterHistoryNewVC: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat{
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
