@@ -72,6 +72,13 @@ struct QuestionsTextJson: JSONDecodable {
         text         = "Text"           <~~ json
         id           = "ID"             <~~ json
     }
+    
+    init(isUserAnswer: Bool, comment: String, text: String, id: Int){
+        self.isUserAnswer = isUserAnswer
+        self.comment = comment
+        self.text = text
+        self.id = id
+    }
 }
 
 

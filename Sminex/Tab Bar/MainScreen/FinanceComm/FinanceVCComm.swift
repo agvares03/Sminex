@@ -279,7 +279,7 @@ class FinanceVCComm: UIViewController, ExpyTableViewDataSource, ExpyTableViewDel
 //                                     desc: sum)
 //                    }else{
                         cell.display(title: getNameAndMonth(filteredCalcs[indexPath.row - 1].numMonthSet ?? 0) + " " + year,
-                                     desc: debt != 0.0 ? "- \(debt.formattedWithSeparator)" : "")
+                                     desc: debt != 0.0 ? "\(debt.formattedWithSeparator)" : "")
 //                    }
                 }
                 cell.contentView.backgroundColor = backColor

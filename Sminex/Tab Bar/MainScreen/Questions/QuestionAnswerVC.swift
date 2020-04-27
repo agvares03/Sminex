@@ -11,14 +11,17 @@ var currQuestion = 0
 var kek: [Int] = []
 var i = Int()
 
-final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
+final class QuestionAnswerVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
     @IBOutlet private weak var loader:      UIActivityIndicatorView!
-    @IBOutlet private weak var collection:  UICollectionView!
+    @IBOutlet private weak var table:  UITableView!
     @IBOutlet private weak var goButton:    UIButton!
-    @IBOutlet private weak var comment:    UITextView!
+    @IBOutlet private weak var answersLbl:  UILabel!
+    @IBOutlet private weak var questionLbl:    UILabel!
+    @IBOutlet private weak var questionView:    UIView!
+//    @IBOutlet private weak var comment:    UITextView!
     @IBOutlet private weak var btnBotConst: NSLayoutConstraint!
-    @IBOutlet private weak var collectionHeight: NSLayoutConstraint!
+    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
         if !notifiPressed{
@@ -73,15 +76,15 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
                 kek = answers[(question_?.questions![currQuestion + 1].id!)!]!
             }
             i = 0
-            collection.reloadData()
             currQuestion += 1
+            table.reloadData()
             if answers.count < currQuestion + 1{
                 goButton.backgroundColor = mainGrayColor
             }else{
                 goButton.backgroundColor = mainGreenColor
             }
             NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
-            comment.text = ""
+//            comment.text = ""
         } else {
             if question_?.questions![currQuestion].answers?.count == 0 && (recomendationArray.count == 0 || recomendationArray[currQuestion] == ""){
                 let alert = UIAlertController(title: "Ошибка", message: "Введите комментарий", preferredStyle: .alert)
@@ -124,9 +127,9 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
             goButton.backgroundColor = mainGreenColor
         }
         automaticallyAdjustsScrollViewInsets = false
-        collection.delegate     = self
-        collection.dataSource   = self
-        comment.delegate = self
+        table.delegate     = self
+        table.dataSource   = self
+//        comment.delegate = self
 //        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwiped(_:)))
 //        edgePan.edges = .left
 //        view.addGestureRecognizer(edgePan)
@@ -254,34 +257,54 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     @objc func keyboardWillShow(sender: NSNotification?) {
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tap!)
-//        view.frame.origin.y = -125
         if let keyboardSize = (sender?.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
-            view.frame.origin.y = 0 - keyboardHeight
-            collection.contentInset.top = keyboardHeight
+            if (self.questionView.frame.size.height + keyboardHeight + 16) > self.view.frame.size.height{
+                upView = true
+                view.frame.origin.y = 0 - keyboardHeight
+                table.contentInset.top = keyboardHeight
+            }
         }
     }
-    
+    var upView = false
     // И вниз при исчезновении
     @objc func keyboardWillHide(sender: NSNotification?) {
         view.removeGestureRecognizer(tap!)
 //        view.frame.origin.y = 0
-        view.frame.origin.y = 0
-        collection.contentInset.top = 0
+        if upView{
+            view.frame.origin.y = 0
+            table.contentInset.top = 0
+        }
+        upView = false
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return question_?.questions![currQuestion].answers?.count ?? 0
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        questionLbl.text = question_?.questions![currQuestion].question
+        answersLbl.text = "\(currQuestion + 1) из \(question_?.questions?.count ?? 0)"
+        DispatchQueue.main.async {
+            self.tableHeight.constant = 1000
+            var height:CGFloat = 0
+//            for cell in tableView.visibleCells {
+//                height += cell.bounds.height
+//            }
+            self.question_?.questions![currQuestion].answers?.forEach{
+                height = height + self.heightForTitle(text: ($0.text)!, width: self.view.frame.size.width - 87) + 30
+            }
+            height = height + self.heightForTitle(text: "Свой вариант", width: self.view.frame.size.width - 87) + 30
+            self.tableHeight.constant = height
+            print(self.tableHeight.constant)
+        }
+        return (question_?.questions![currQuestion].answers?.count ?? 0) + 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "QuestionAnswerCell", for: indexPath) as! QuestionAnswerCell
-        cell.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
-//        if view.frame.size.width == 320{
-            cell.frame = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y, width: cell.frame.size.width, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell.frame.size.width - 60) + 30)
-//        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "QuestionAnswerCell", for: indexPath) as! QuestionAnswerCell
+        if indexPath.row == question_?.questions![currQuestion].answers?.count{
+            cell.display(QuestionsTextJson(isUserAnswer: true, comment: "", text: "Свой вариант", id: -1), index: indexPath.row)
+        }else{
+            cell.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
+        }
         return cell
     }
     
@@ -289,52 +312,25 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = label.font.withSize(17)
         label.text = text
         label.sizeToFit()
         
         return label.frame.height
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        isSomeAnswers = (question_?.questions![currQuestion].isAcceptSomeAnswers)!
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "QuestionAnswerHeader", for: indexPath) as! QuestionAnswerHeader
-        header.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
-        return header
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell = QuestionAnswerCell.fromNib()
-        cell?.display((question_?.questions![currQuestion].answers![indexPath.row])!, index: indexPath.row)
-        let size  = cell?.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-        if view.frame.size.width == 320{
-            return CGSize(width: view.frame.size.width - 32, height: heightForTitle(text: (question_?.questions![currQuestion].answers![indexPath.row].text)!, width: cell!.frame.size.width - 60) + 10)
-        }
-        return CGSize(width: view.frame.size.width - 32, height: size.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let cell = QuestionAnswerHeader.fromNib()
-        cell?.display((question_?.questions![currQuestion])!, currentQuestion: currQuestion, questionCount: question_?.questions?.count ?? 0)
-        let size  = cell?.systemLayoutSizeFitting(UILayoutFittingCompressedSize) ?? CGSize(width: 0, height: 0)
-        DispatchQueue.main.async {
-            var height:CGFloat = 0
-            for cell in collectionView.visibleCells {
-                height += cell.bounds.height + 10
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == question_?.questions![currQuestion].answers?.count{
+            
+        }else{
+            if !isSomeAnswers {
+                isAccepted = false
+                NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
             }
-            self.collectionHeight.constant = height + size.height
-            print(self.collectionHeight.constant)
+            goButton.backgroundColor = mainGreenColor
+            (tableView.cellForRow(at: indexPath) as! QuestionAnswerCell).didTapOnOffButton()
         }
-        return CGSize(width: view.frame.size.width - 32, height: size.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if !isSomeAnswers {
-            isAccepted = false
-            NotificationCenter.default.post(name: NSNotification.Name("Uncheck"), object: nil)
-        }
-        goButton.backgroundColor = mainGreenColor
-        (collectionView.cellForItem(at: indexPath) as! QuestionAnswerCell).didTapOnOffButton()
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     private func startAnimation() {
@@ -387,6 +383,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
         print(request)
         
         print(String(data: request.httpBody!, encoding: .utf8))
+        fatalError()
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -446,41 +443,7 @@ final class QuestionAnswerVC: UIViewController, UICollectionViewDelegate, UIColl
     }
 }
 
-final class QuestionAnswerHeader: UICollectionReusableView {
-    
-    @IBOutlet private weak var question:    UILabel!
-    @IBOutlet private weak var title:       UILabel!
-    
-    fileprivate func display(_ item: QuestionJson, currentQuestion: Int, questionCount: Int) {
-        question.text = item.question
-        title.text = "\(currentQuestion + 1) из \(questionCount)"
-    }
-    
-    class func fromNib() -> QuestionAnswerHeader? {
-        var cell: QuestionAnswerHeader?
-        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
-        views?.forEach {
-            if let view = $0 as? QuestionAnswerHeader {
-                cell = view
-            }
-        }
-        cell?.question.preferredMaxLayoutWidth = cell?.question.bounds.size.width ?? 0.0
-        
-        return cell
-    }
-}
-
-
-final class QuestionAnswerFooter: UICollectionReusableView {
-    @IBOutlet weak var textView: UITextView!{
-        didSet{
-            textView.layer.borderWidth = 1
-            textView.layer.borderColor = UIColor.black.cgColor
-        }
-    }
-}
-
-final class QuestionAnswerCell: UICollectionViewCell {
+final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
     
     @IBOutlet private weak var toggle:      OnOffButton!
     @IBOutlet private weak var field:       UITextField!
@@ -504,12 +467,16 @@ final class QuestionAnswerCell: UICollectionViewCell {
         
         
         if checked || ((currIndex == index + 1) && (i < kek.count)){
-            if (currIndex == index + 1) && (selectedAnswers.count < kek.count){
-                i += 1
-                selectedAnswers.append(index)
-            }
-            if checked{
-                selectedAnswers.append(index)
+            if question.isHidden{
+                
+            }else{
+                if (currIndex == index + 1) && (selectedAnswers.count < kek.count){
+                    i += 1
+                    selectedAnswers.append(index)
+                }
+                if checked{
+                    selectedAnswers.append(index)
+                }
             }
 //            print(selectedAnswers)
             
@@ -531,10 +498,13 @@ final class QuestionAnswerCell: UICollectionViewCell {
             currIndex = 0
             
         }else {
-            
-            for (ind, item) in selectedAnswers.enumerated() {
-                if item == index {
-                    selectedAnswers.remove(at: ind)
+            if question.isHidden{
+                
+            }else{
+                for (ind, item) in selectedAnswers.enumerated() {
+                    if item == index {
+                        selectedAnswers.remove(at: ind)
+                    }
                 }
             }
             if isSomeAnswers {
@@ -553,6 +523,23 @@ final class QuestionAnswerCell: UICollectionViewCell {
             isAccepted              = false
             checked                 = true
         }
+        if field.text != "" && question.isHidden{
+            if isSomeAnswers {
+                toggle.checked = true
+                toggle.backgroundColor  = mainGreenColor
+                toggle.strokeColor      = .white
+                toggle.lineWidth        = 2
+                toggle.setBackgroundImage(nil, for: .normal)
+            } else {
+                toggle.strokeColor  = mainGreenColor
+                toggleView.isHidden = false
+                toggle.lineWidth    = 2
+                toggle.setBackgroundImage(nil, for: .normal)
+            }
+            checked                 = false
+            isAccepted              = true
+        }
+        
         if i == kek.count{
             i = 0
         }
@@ -565,7 +552,8 @@ final class QuestionAnswerCell: UICollectionViewCell {
     
     fileprivate func display(_ item: QuestionsTextJson, index: Int) {
         self.index = index
-        
+        field.text = ""
+        field.delegate = self
         kek.forEach {
             if item.id == $0{
                 currIndex = index + 1
@@ -581,13 +569,13 @@ final class QuestionAnswerCell: UICollectionViewCell {
         } else {
             toggle.strokeColor = .darkGray
         }
-        
+        question.isHidden = false
+        field.isHidden = true
+        question.text = item.text
         if item.text?.contains(find: "Свой вариант") ?? false {
             display(isSomeAnswer: true)
             return
         }
-        
-        question.text = item.text
         
         checked = false
         didTapOnOffButton()
@@ -604,29 +592,96 @@ final class QuestionAnswerCell: UICollectionViewCell {
     fileprivate func display(isSomeAnswer: Bool) {
         question.isHidden = true
         field.isHidden = false
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapOnOffButton(_:)))
-        toggle.addGestureRecognizer(tap)
-        
-        // Подхватываем показ клавиатуры
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapOnOffButton(_:)))
+//        toggle.addGestureRecognizer(tap)
+//
+//        // Подхватываем показ клавиатуры
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
-    @objc func keyboardWillShow(sender: NSNotification?) {
-        if checked {
-            didTapOnOffButton()
-        }
-    }
+//    @objc func keyboardWillShow(sender: NSNotification?) {
+//        if checked {
+//            didTapOnOffButton()
+//        }
+//    }
     
-    class func fromNib() -> QuestionAnswerCell? {
-        var cell: QuestionAnswerCell?
-        let views = Bundle.main.loadNibNamed("DynamicCellsNib", owner: nil, options: nil)
-        views?.forEach {
-            if let view = $0 as? QuestionAnswerCell {
-                cell = view
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField.text != ""{
+            if isSomeAnswers {
+                toggle.checked = true
+                toggle.backgroundColor  = mainGreenColor
+                toggle.strokeColor      = .white
+                toggle.lineWidth        = 2
+                toggle.setBackgroundImage(nil, for: .normal)
+            } else {
+                toggle.strokeColor  = mainGreenColor
+                toggleView.isHidden = false
+                toggle.lineWidth    = 2
+                toggle.setBackgroundImage(nil, for: .normal)
             }
+            checked                 = false
+            isAccepted              = true
+        }else{
+            if isSomeAnswers {
+                toggle.checked = false
+                toggle.strokeColor      = .darkGray
+                toggle.backgroundColor  = .white
+                toggle.lineWidth        = 1
+                toggle.setBackgroundImage(nil, for: .normal)
+            
+            } else {
+                toggle.strokeColor  = .lightGray
+                toggleView.isHidden = true
+                toggle.lineWidth    = 0
+                toggle.setBackgroundImage(UIImage(named: "ic_choice"), for: .normal)
+            }
+            isAccepted              = false
+            checked                 = true
         }
-        cell?.question.preferredMaxLayoutWidth = cell?.question.bounds.size.width ?? 0.0
-        return cell
+        if(string == "\n") {
+//            recomendationArray.removeLast()
+//            print(textView.text)
+            recomendationArray[currQuestion] = textField.text
+            textField.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text != ""{
+            if isSomeAnswers {
+                toggle.checked = true
+                toggle.backgroundColor  = mainGreenColor
+                toggle.strokeColor      = .white
+                toggle.lineWidth        = 2
+                toggle.setBackgroundImage(nil, for: .normal)
+            } else {
+                toggle.strokeColor  = mainGreenColor
+                toggleView.isHidden = false
+                toggle.lineWidth    = 2
+                toggle.setBackgroundImage(nil, for: .normal)
+            }
+            checked                 = false
+            isAccepted              = true
+        }else{
+            if isSomeAnswers {
+                toggle.checked = false
+                toggle.strokeColor      = .darkGray
+                toggle.backgroundColor  = .white
+                toggle.lineWidth        = 1
+                toggle.setBackgroundImage(nil, for: .normal)
+            } else {
+                toggle.strokeColor  = .lightGray
+                toggleView.isHidden = true
+                toggle.lineWidth    = 0
+                toggle.setBackgroundImage(UIImage(named: "ic_choice"), for: .normal)
+            }
+            isAccepted              = false
+            checked                 = true
+        }
+        recomendationArray[currQuestion] = textField.text
+        textField.resignFirstResponder()
     }
 }
 
@@ -640,25 +695,25 @@ var recomendationArray: [Int:String] = [:]
 //------------------------------------------------------------------
 
 
-extension QuestionAnswerVC : UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if(text == "\n") {
-//            recomendationArray.removeLast()
-//            print(textView.text)
-            recomendationArray[currQuestion] = textView.text
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
-    }
-    func textViewDidEndEditing(_ textView: UITextView) {
-//        if(textView == "\n") {
-//            recomendationArray.removeLast()
-//            print(textView.text)
-            recomendationArray[currQuestion] = textView.text
-            textView.resignFirstResponder()
+//extension QuestionAnswerVC : UITextViewDelegate {
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//        if(text == "\n") {
+////            recomendationArray.removeLast()
+////            print(textView.text)
+//            recomendationArray[currQuestion] = textView.text
+//            textView.resignFirstResponder()
 //            return false
 //        }
 //        return true
-    }
-}
+//    }
+//    func textViewDidEndEditing(_ textView: UITextView) {
+////        if(textView == "\n") {
+////            recomendationArray.removeLast()
+////            print(textView.text)
+//            recomendationArray[currQuestion] = textView.text
+//            textView.resignFirstResponder()
+////            return false
+////        }
+////        return true
+//    }
+//}

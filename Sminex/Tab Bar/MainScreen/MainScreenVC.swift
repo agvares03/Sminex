@@ -696,7 +696,13 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
 //            if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
 //                size.height = 15
 //            }
-            return CGSize(width: view.frame.size.width - 32, height: 183)
+            if UserDefaults.standard.bool(forKey: "onlyViewMeterReadings"){
+                return CGSize(width: view.frame.size.width - 32, height: 140)
+            }
+            if (data[indexPath.section]![indexPath.row + 1] as! SchetCellData).title.contains(find: "для передачи показаний"){
+                return CGSize(width: view.frame.size.width - 32, height: 180)
+            }
+            return CGSize(width: view.frame.size.width - 32, height: 150)
         } else if title == "ВЕРСИЯ" {
             
             return CGSize(width: view.frame.size.width - 32, height: 0.0)
@@ -2902,6 +2908,7 @@ final class SchetCell: UICollectionViewCell {
             date.text  = "Снятие и передача показаний осуществляется управляющей компанией"
             date.isHidden   = false
             button.isHidden = true
+            buttonHeight.constant = 0
         }else{
             if dateTo == 0 && dateFrom == 0{
                 button.isHidden = false

@@ -10,18 +10,18 @@ import UIKit
 import SafariServices
 import WebKit
 
-final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
+final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate, UITextViewDelegate {
     
     @IBOutlet private weak var imageHeight:     NSLayoutConstraint!
     @IBOutlet private weak var imageWidth:      NSLayoutConstraint!
-    @IBOutlet private weak var webViewHeight:   NSLayoutConstraint!
+    @IBOutlet private weak var descHeight:      NSLayoutConstraint!
     @IBOutlet private weak var titleTop:        NSLayoutConstraint!
     @IBOutlet private weak var scroll:          UIScrollView!
     @IBOutlet private weak var image:           UIImageView!
     @IBOutlet private weak var wView:           UIView!
     @IBOutlet private weak var titleLabel:  	UILabel!
     @IBOutlet private weak var date:        	UILabel!
-    @IBOutlet private weak var desc:            UILabel!
+    @IBOutlet private weak var desc:            UITextView!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
@@ -67,9 +67,13 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
 //        self.webView.heightAnchor.constraint(equalTo: self.wView.heightAnchor).isActive = true
 //        self.webView.navigationDelegate = self
 //        self.webView.uiDelegate = self
+        
         let txt = "<div font-size:16px;'>" + (data_?.text)!
+        desc.delegate = self
+        desc.isEditable = false
         desc.attributedText = txt.htmlToAttributedString
 //        webView.loadHTMLString(txt, baseURL: nil)
+        descHeight.constant = heightForView(text: desc?.text ?? "", font: UIFont(name: "Times New Roman", size: 16)!, width: view.frame.size.width - 68)
         titleLabel.text = data_?.header!.uppercased()
         
         if data_?.dateStart != "" {
@@ -100,6 +104,24 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
 //        } else {
 //            image.image = UIImage(data: Data(base64Encoded: (data_?.headerImage?.replacingOccurrences(of: "data:image/png;base64,", with: ""))!)!)
 //        }
+    }
+    
+    func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UITextView = UITextView(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.font = font
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
+    }
+    
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(URL, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(URL)
+        }
+        return false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,37 +181,6 @@ final class CurrentNews: UIViewController, WKNavigationDelegate, WKUIDelegate {
                 }
             }
         }.resume()
-    }
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.webView.evaluateJavaScript("document.readyState", completionHandler: { (complete, error) in
-            if complete != nil {
-                self.webView.evaluateJavaScript("document.body.scrollHeight", completionHandler: { (height, error) in
-                    self.webViewHeight.constant     = height as! CGFloat + 50
-//                    self.scroll.contentSize.height += height as! CGFloat
-                })
-            }
-
-            })
-    }
-    
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping ((WKNavigationActionPolicy) -> Void)) {
-
-        print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
-
-        if let url = navigationAction.request.url {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-
-        decisionHandler(.allow)
-    }
-    
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        if navigationType == UIWebViewNavigationType.linkClicked {
-            UIApplication.shared.open(request.url!, options: [:], completionHandler: nil)
-            return false
-        }
-        return true
     }
     
     private func StartIndicator() {

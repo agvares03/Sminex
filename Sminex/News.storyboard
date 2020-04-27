@@ -3,7 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -181,7 +181,7 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="574"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bNw-r2-MdW">
-                                        <rect key="frame" x="16" y="16" width="343" height="309.5"/>
+                                        <rect key="frame" x="16" y="16" width="343" height="310"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Солнечное замение на смотровой площадке" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b2e-Jp-W4K">
                                                 <rect key="frame" x="18" y="186" width="307" height="43"/>
@@ -205,37 +205,31 @@
                                                     <constraint firstAttribute="width" constant="343" id="Wcl-x3-7yD"/>
                                                 </constraints>
                                             </imageView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jny-ZC-jys">
-                                                <rect key="frame" x="18" y="294.5" width="307" height="0.0"/>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Описание новости" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bOK-GR-txE">
+                                                <rect key="frame" x="18" y="262" width="307" height="30"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" id="EbF-X8-oud"/>
+                                                    <constraint firstAttribute="height" constant="30" id="WGz-J0-9bS"/>
                                                 </constraints>
-                                            </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OsT-CV-r9O">
-                                                <rect key="frame" x="18" y="264" width="307" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
-                                            <constraint firstItem="OsT-CV-r9O" firstAttribute="top" secondItem="tsy-ih-V8D" secondAttribute="bottom" constant="10" id="1zs-Fr-h4Y"/>
                                             <constraint firstItem="b2e-Jp-W4K" firstAttribute="leading" secondItem="bNw-r2-MdW" secondAttribute="leading" constant="18" id="Gv8-48-NB2"/>
-                                            <constraint firstAttribute="bottom" secondItem="jny-ZC-jys" secondAttribute="bottom" constant="15" id="HNa-lb-TJ5"/>
+                                            <constraint firstAttribute="trailing" secondItem="bOK-GR-txE" secondAttribute="trailing" constant="18" id="Hsl-eB-E7e"/>
                                             <constraint firstAttribute="trailing" secondItem="b2e-Jp-W4K" secondAttribute="trailing" constant="18" id="Lib-Y4-03u"/>
-                                            <constraint firstItem="jny-ZC-jys" firstAttribute="leading" secondItem="bNw-r2-MdW" secondAttribute="leading" constant="18" id="YTT-Ld-DQS"/>
-                                            <constraint firstItem="OsT-CV-r9O" firstAttribute="leading" secondItem="bNw-r2-MdW" secondAttribute="leading" constant="18" id="bfu-Q0-5CU"/>
+                                            <constraint firstAttribute="bottom" secondItem="bOK-GR-txE" secondAttribute="bottom" constant="18" id="XeI-jb-r3e"/>
+                                            <constraint firstItem="bOK-GR-txE" firstAttribute="top" secondItem="tsy-ih-V8D" secondAttribute="bottom" constant="8" id="ZIl-aN-2Zq"/>
                                             <constraint firstItem="tsy-ih-V8D" firstAttribute="leading" secondItem="bNw-r2-MdW" secondAttribute="leading" constant="18" id="eGv-r3-Xex"/>
+                                            <constraint firstItem="bOK-GR-txE" firstAttribute="leading" secondItem="bNw-r2-MdW" secondAttribute="leading" constant="18" id="kWd-5b-3QR"/>
                                             <constraint firstItem="KMo-xe-wk7" firstAttribute="leading" secondItem="bNw-r2-MdW" secondAttribute="leading" constant="16" id="luv-jj-KwM"/>
                                             <constraint firstAttribute="trailing" secondItem="tsy-ih-V8D" secondAttribute="trailing" constant="18" id="m5h-pQ-5F8"/>
                                             <constraint firstItem="tsy-ih-V8D" firstAttribute="top" secondItem="b2e-Jp-W4K" secondAttribute="bottom" constant="5" id="mpU-5f-7Ed"/>
-                                            <constraint firstAttribute="trailing" secondItem="OsT-CV-r9O" secondAttribute="trailing" constant="18" id="nPw-WT-Ocm"/>
-                                            <constraint firstAttribute="trailing" secondItem="jny-ZC-jys" secondAttribute="trailing" constant="18" id="neG-73-LPz"/>
                                             <constraint firstAttribute="trailing" secondItem="KMo-xe-wk7" secondAttribute="trailing" constant="16" id="p1J-BY-guJ"/>
                                             <constraint firstItem="KMo-xe-wk7" firstAttribute="top" secondItem="bNw-r2-MdW" secondAttribute="top" constant="16" id="r4b-Tz-4Vb"/>
-                                            <constraint firstItem="jny-ZC-jys" firstAttribute="top" secondItem="OsT-CV-r9O" secondAttribute="bottom" constant="10" id="syk-iK-H2y"/>
                                             <constraint firstItem="b2e-Jp-W4K" firstAttribute="top" secondItem="KMo-xe-wk7" secondAttribute="bottom" id="yJ3-2k-cRK"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
@@ -285,7 +279,8 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="date" destination="tsy-ih-V8D" id="jnZ-kl-cwY"/>
-                        <outlet property="desc" destination="OsT-CV-r9O" id="gCA-DA-IEg"/>
+                        <outlet property="desc" destination="bOK-GR-txE" id="b93-V8-oHX"/>
+                        <outlet property="descHeight" destination="WGz-J0-9bS" id="x2Q-Rm-XDG"/>
                         <outlet property="image" destination="KMo-xe-wk7" id="csk-kO-Kmc"/>
                         <outlet property="imageHeight" destination="CIK-j7-BnN" id="z6w-M5-QlD"/>
                         <outlet property="imageWidth" destination="Wcl-x3-7yD" id="F8e-et-0vw"/>
@@ -294,8 +289,6 @@
                         <outlet property="scroll" destination="pi6-I5-0U0" id="43d-Z3-uJP"/>
                         <outlet property="titleLabel" destination="b2e-Jp-W4K" id="ZTH-t5-0Oj"/>
                         <outlet property="titleTop" destination="yJ3-2k-cRK" id="tGi-lO-1rK"/>
-                        <outlet property="wView" destination="jny-ZC-jys" id="b9d-yV-pBQ"/>
-                        <outlet property="webViewHeight" destination="EbF-X8-oud" id="b1G-f2-feO"/>
                         <segue destination="HVL-1d-xeg" kind="show" identifier="goNotifi" id="7Jr-Xr-W0e"/>
                     </connections>
                 </viewController>
@@ -323,7 +316,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cpZ-Lj-XaB"/>
+        <segue reference="7Jr-Xr-W0e"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow_right" width="40" height="65"/>

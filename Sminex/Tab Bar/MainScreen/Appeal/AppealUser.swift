@@ -573,7 +573,7 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                             commImg = $0.fileId
                         }
                     }
-                    if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+//                    if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
                         self.AppealComm.append ( AppealCommentCellData(image: UIImage(named: "account")!,
                                                                        title: comm.name ?? "",
                                                                        comment: comm.text ?? "",
@@ -581,9 +581,9 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                                                                        commImg: nil,
                                                                        commImgUrl: commImg,
                                                                        id: comm.id ?? "") )
-                    }else{
-                        images.append(commImg!)
-                    }
+//                    }else{
+//                        images.append(commImg!)
+//                    }
                 }
                 if images.count == 0{
                     self.rowFiles.forEach { files in

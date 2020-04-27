@@ -910,7 +910,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                 commImg = $0.fileId
                             }
                         }
-                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+//                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
                             self.admissionComm.append ( AdmissionCommentCellData(image: UIImage(named: "account")!,
                                                                                  title: comm.name ?? "",
                                                                                  comment: comm.text ?? "",
@@ -918,9 +918,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                                                  commImg: nil,
                                                                                  commImgUrl: commImg,
                                                                                  id: comm.id ?? "") )
-                        }else{
-                            images.append(commImg!)
-                        }
+//                        }else{
+//                            images.append(commImg!)
+//                        }
                     }
                     if images.count == 0{
                         self.rowFiles.forEach { files in
@@ -999,7 +999,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                     commImg = $0.fileId!
                                 }
                             }
-                            if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+//                            if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
                                 self.serviceUKComm.append( ServiceAppCommentCellData(image: UIImage(named: "account")!,
                                                                                      title: comm.name ?? "",
                                                                                      comment: comm.text ?? "",
@@ -1007,9 +1007,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                                                      commImg: nil,
                                                                                      commImgUrl: commImg,
                                                                                      id: comm.id ?? ""))
-                            }else{
-                                images.append(commImg!)
-                            }
+//                            }else{
+//                                images.append(commImg!)
+//                            }
                         }
                         if images.count == 0{
                             self.rowFiles.forEach { files in
@@ -1079,7 +1079,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                 commImg = $0.fileId
                             }
                         }
-                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+//                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
                             self.appealComm.append ( AppealCommentCellData(image: UIImage(named: "account")!,
                                                                            title: comm.name ?? "",
                                                                            comment: comm.text ?? "",
@@ -1087,9 +1087,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                                            commImg: nil,
                                                                            commImgUrl: commImg,
                                                                            id: comm.id ?? "") )
-                        }else{
-                            images.append(commImg!)
-                        }
+//                        }else{
+//                            images.append(commImg!)
+//                        }
                     }
                     if images.count == 0{
                         self.rowFiles.forEach { files in
@@ -1127,7 +1127,7 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                 commImg = $0.fileId!
                             }
                         }
-                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
+//                        if !(comm.text?.containsIgnoringCase(find: "+skip"))!{
                             self.techServiceComm.append( ServiceCommentCellData(icon: UIImage(named: "account")!,
                                                                                 title: comm.name ?? "",
                                                                                 desc: comm.text ?? "",
@@ -1135,9 +1135,9 @@ class TestAppsUser: UIViewController, UICollectionViewDelegate, UICollectionView
                                                                                 image: nil,
                                                                                 imageUrl: commImg,
                                                                                 id: comm.id ?? ""))
-                        }else{
-                            images.append(commImg!)
-                        }
+//                        }else{
+//                            images.append(commImg!)
+//                        }
                         
                     }
                     if images.count == 0{

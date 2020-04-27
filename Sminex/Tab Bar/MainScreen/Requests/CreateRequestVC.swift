@@ -1031,17 +1031,17 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if edComment.textColor == placeholderColor {
+        if textView == edComment && edComment.textColor == placeholderColor {
             edComment.text = nil
             edComment.textColor = UIColor.black
         }
-        if gosNumber.textColor == placeholderColor {
+        if textView == gosNumber && gosNumber.textColor == placeholderColor {
             gosNumber.text = nil
             gosNumber.textColor = UIColor.black
             sendBtnHeight.constant = 48
             sendButton.isHidden = false
         }
-        if markAuto.textColor == placeholderColor {
+        if textView == markAuto && markAuto.textColor == placeholderColor {
             markAuto.text = nil
             markAuto.textColor = UIColor.black
             sendBtnHeight.constant = 48
@@ -1050,17 +1050,17 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        if edComment.text.isEmpty {
+        if textView == edComment && edComment.text.isEmpty {
             edComment.text = "Примечание"
             edComment.textColor = placeholderColor
         }
-        if gosNumber.text.isEmpty {
+        if textView == gosNumber && gosNumber.text.isEmpty {
             gosNumber.text = "Госномер (или номера через запятую, например, А 033 ЕО 77)"
             gosNumber.textColor = placeholderColor
             sendBtnHeight.constant = 0
             sendButton.isHidden = true
         }
-        if markAuto.text.isEmpty {
+        if textView == markAuto && markAuto.text.isEmpty {
             markAuto.text = "Марка автомобиля \n(или марки через запятую)"
             markAuto.textColor = placeholderColor
             sendBtnHeight.constant = 0
@@ -1069,17 +1069,19 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        var height = heightForView(text: edComment.text, font: edComment.font!, width: view.frame.size.width - 64)
-        if text == "\n"{
-            height = height + 20
-        }
-        if height > 40.0{
-            DispatchQueue.main.async{
-                self.edConst.constant = height
+        if textView == edComment{
+            var height = heightForView(text: edComment.text, font: edComment.font!, width: view.frame.size.width - 64)
+            if text == "\n"{
+                height = height + 20
             }
-        }else{
-            DispatchQueue.main.async{
-                self.edConst.constant = 40
+            if height > 40.0{
+                DispatchQueue.main.async{
+                    self.edConst.constant = height
+                }
+            }else{
+                DispatchQueue.main.async{
+                    self.edConst.constant = 40
+                }
             }
         }
         return true
