@@ -1913,6 +1913,7 @@
                 <outlet property="questions" destination="vl4-Z6-79x" id="Pjf-9t-BIV"/>
                 <outlet property="title" destination="3eb-qf-pSx" id="Y1d-gI-UhS"/>
             </connections>
+            <point key="canvasLocation" x="654" y="-154"/>
         </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SchetCell" id="Ke5-X4-7or" customClass="SchetCell" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="317" height="183"/>
@@ -2237,86 +2238,6 @@
             </connections>
             <point key="canvasLocation" x="-1943" y="307"/>
         </collectionViewCell>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="QuestionAnswerCell" id="yD4-UU-DId" customClass="QuestionAnswerCell" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kqw-np-qNX" customClass="OnOffButton" customModule="Sminex" customModuleProvider="target">
-                        <rect key="frame" x="18" y="15" width="25" height="25"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="25" id="AeG-Yl-WtO"/>
-                            <constraint firstAttribute="width" constant="25" id="keW-V0-Blq"/>
-                        </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="lineWidth">
-                                <real key="value" value="1"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="color" keyPath="strokeColor">
-                                <color key="value" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="ringAlpha">
-                                <real key="value" value="0.29999999999999999"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <real key="value" value="13"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Проведение встречи (в том числе деловой) прямо в лобби дома, не выходя в кафе" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQy-7a-Mct">
-                        <rect key="frame" x="51" y="15" width="292" height="64"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Свой вариант" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xSR-FN-iOH">
-                        <rect key="frame" x="51" y="16.5" width="292" height="22"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </textField>
-                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L2t-I3-LM0">
-                        <rect key="frame" x="25.5" y="22.5" width="10" height="10"/>
-                        <color key="backgroundColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.37254901959999998" green="0.64705882349999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="10" id="TJe-cY-6Dy"/>
-                            <constraint firstAttribute="height" constant="10" id="bvc-6z-odl"/>
-                        </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <real key="value" value="5"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </view>
-                </subviews>
-            </view>
-            <constraints>
-                <constraint firstItem="xSR-FN-iOH" firstAttribute="trailing" secondItem="bQy-7a-Mct" secondAttribute="trailing" id="1WT-hv-eNT"/>
-                <constraint firstItem="L2t-I3-LM0" firstAttribute="centerX" secondItem="kqw-np-qNX" secondAttribute="centerX" id="9sR-Ip-LpJ"/>
-                <constraint firstItem="bQy-7a-Mct" firstAttribute="leading" secondItem="kqw-np-qNX" secondAttribute="trailing" constant="8" id="CkH-px-bW0"/>
-                <constraint firstItem="xSR-FN-iOH" firstAttribute="centerY" secondItem="L2t-I3-LM0" secondAttribute="centerY" id="Nul-sY-gGW"/>
-                <constraint firstItem="kqw-np-qNX" firstAttribute="leading" secondItem="yD4-UU-DId" secondAttribute="leading" constant="18" id="Q9e-9f-2Jw"/>
-                <constraint firstItem="bQy-7a-Mct" firstAttribute="top" secondItem="yD4-UU-DId" secondAttribute="top" constant="15" id="Vr7-DW-l92"/>
-                <constraint firstItem="L2t-I3-LM0" firstAttribute="centerY" secondItem="kqw-np-qNX" secondAttribute="centerY" id="Wo9-kf-Imd"/>
-                <constraint firstItem="kqw-np-qNX" firstAttribute="top" secondItem="bQy-7a-Mct" secondAttribute="top" id="hbb-Rg-cm5"/>
-                <constraint firstItem="xSR-FN-iOH" firstAttribute="leading" secondItem="bQy-7a-Mct" secondAttribute="leading" id="hbe-BV-Ofv"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kqw-np-qNX" secondAttribute="bottom" constant="3" id="kGi-kX-SDr"/>
-                <constraint firstAttribute="bottomMargin" secondItem="bQy-7a-Mct" secondAttribute="bottom" constant="5" id="moh-gC-Fkh"/>
-                <constraint firstAttribute="trailingMargin" secondItem="bQy-7a-Mct" secondAttribute="trailing" constant="16" id="npI-2b-xPF"/>
-            </constraints>
-            <size key="customSize" width="375" height="84"/>
-            <connections>
-                <outlet property="field" destination="xSR-FN-iOH" id="bUE-3r-3hS"/>
-                <outlet property="question" destination="bQy-7a-Mct" id="TEE-nv-6lh"/>
-                <outlet property="toggle" destination="kqw-np-qNX" id="sYn-z9-BRc"/>
-                <outlet property="toggleView" destination="L2t-I3-LM0" id="4jU-kY-Azk"/>
-            </connections>
-            <point key="canvasLocation" x="-746.39999999999998" y="-661.16941529235385"/>
-        </collectionViewCell>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DealsListCell" id="1xk-yK-GxV" customClass="DealsListCell" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="284"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2601,7 +2522,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="42307 810 5 9038 0710235" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="0Ke-W2-aWF">
-                            <rect key="frame" x="16" y="40" width="294" height="20.5"/>
+                            <rect key="frame" x="16" y="40" width="215" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -6407,41 +6328,6 @@
             </connections>
             <point key="canvasLocation" x="1125" y="822"/>
         </collectionViewCell>
-        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="QuestionAnswerHeader" id="Y8a-Jz-4bS" customClass="QuestionAnswerHeader" customModule="Sminex" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="343" height="113"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой выриант использования лобби-бара является для Вас предпочтительным" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cs9-hr-A9R">
-                    <rect key="frame" x="18" y="43" width="309" height="65"/>
-                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 из 6" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Uu-UL-VxT">
-                    <rect key="frame" x="18" y="18" width="43.5" height="15"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="15" id="rs9-gb-3Gj"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="16"/>
-                    <color key="textColor" red="0.54901960780000003" green="0.54901960780000003" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-            </subviews>
-            <constraints>
-                <constraint firstAttribute="trailing" secondItem="cs9-hr-A9R" secondAttribute="trailing" constant="16" id="GsO-aS-mcb"/>
-                <constraint firstItem="8Uu-UL-VxT" firstAttribute="leading" secondItem="Y8a-Jz-4bS" secondAttribute="leading" constant="18" id="Q6W-Gk-NjT"/>
-                <constraint firstItem="8Uu-UL-VxT" firstAttribute="top" secondItem="Y8a-Jz-4bS" secondAttribute="top" constant="18" id="UWK-Fa-QbZ"/>
-                <constraint firstAttribute="bottom" secondItem="cs9-hr-A9R" secondAttribute="bottom" constant="5" id="kCf-9c-OfR"/>
-                <constraint firstItem="cs9-hr-A9R" firstAttribute="top" secondItem="8Uu-UL-VxT" secondAttribute="bottom" constant="10" id="mUz-K6-3RN"/>
-                <constraint firstItem="cs9-hr-A9R" firstAttribute="leading" secondItem="8Uu-UL-VxT" secondAttribute="leading" id="qe8-72-46j"/>
-            </constraints>
-            <viewLayoutGuide key="safeArea" id="yBH-jD-Aj3"/>
-            <connections>
-                <outlet property="question" destination="cs9-hr-A9R" id="Nh6-AE-nxY"/>
-                <outlet property="title" destination="8Uu-UL-VxT" id="D5L-v6-hma"/>
-            </connections>
-            <point key="canvasLocation" x="-26" y="364"/>
-        </collectionReusableView>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ServicesUKTableCell" id="aKb-MC-PYH" customClass="ServicesUKTableCell" customModule="Sminex" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

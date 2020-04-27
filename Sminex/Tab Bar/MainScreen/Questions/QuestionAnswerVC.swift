@@ -383,7 +383,6 @@ final class QuestionAnswerVC: UIViewController, UITableViewDelegate, UITableView
         print(request)
         
         print(String(data: request.httpBody!, encoding: .utf8))
-        fatalError()
         
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
@@ -523,22 +522,6 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
             isAccepted              = false
             checked                 = true
         }
-        if field.text != "" && question.isHidden{
-            if isSomeAnswers {
-                toggle.checked = true
-                toggle.backgroundColor  = mainGreenColor
-                toggle.strokeColor      = .white
-                toggle.lineWidth        = 2
-                toggle.setBackgroundImage(nil, for: .normal)
-            } else {
-                toggle.strokeColor  = mainGreenColor
-                toggleView.isHidden = false
-                toggle.lineWidth    = 2
-                toggle.setBackgroundImage(nil, for: .normal)
-            }
-            checked                 = false
-            isAccepted              = true
-        }
         
         if i == kek.count{
             i = 0
@@ -606,38 +589,7 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
 //    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField.text != ""{
-            if isSomeAnswers {
-                toggle.checked = true
-                toggle.backgroundColor  = mainGreenColor
-                toggle.strokeColor      = .white
-                toggle.lineWidth        = 2
-                toggle.setBackgroundImage(nil, for: .normal)
-            } else {
-                toggle.strokeColor  = mainGreenColor
-                toggleView.isHidden = false
-                toggle.lineWidth    = 2
-                toggle.setBackgroundImage(nil, for: .normal)
-            }
-            checked                 = false
-            isAccepted              = true
-        }else{
-            if isSomeAnswers {
-                toggle.checked = false
-                toggle.strokeColor      = .darkGray
-                toggle.backgroundColor  = .white
-                toggle.lineWidth        = 1
-                toggle.setBackgroundImage(nil, for: .normal)
-            
-            } else {
-                toggle.strokeColor  = .lightGray
-                toggleView.isHidden = true
-                toggle.lineWidth    = 0
-                toggle.setBackgroundImage(UIImage(named: "ic_choice"), for: .normal)
-            }
-            isAccepted              = false
-            checked                 = true
-        }
+        
         if(string == "\n") {
 //            recomendationArray.removeLast()
 //            print(textView.text)
@@ -649,37 +601,6 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text != ""{
-            if isSomeAnswers {
-                toggle.checked = true
-                toggle.backgroundColor  = mainGreenColor
-                toggle.strokeColor      = .white
-                toggle.lineWidth        = 2
-                toggle.setBackgroundImage(nil, for: .normal)
-            } else {
-                toggle.strokeColor  = mainGreenColor
-                toggleView.isHidden = false
-                toggle.lineWidth    = 2
-                toggle.setBackgroundImage(nil, for: .normal)
-            }
-            checked                 = false
-            isAccepted              = true
-        }else{
-            if isSomeAnswers {
-                toggle.checked = false
-                toggle.strokeColor      = .darkGray
-                toggle.backgroundColor  = .white
-                toggle.lineWidth        = 1
-                toggle.setBackgroundImage(nil, for: .normal)
-            } else {
-                toggle.strokeColor  = .lightGray
-                toggleView.isHidden = true
-                toggle.lineWidth    = 0
-                toggle.setBackgroundImage(UIImage(named: "ic_choice"), for: .normal)
-            }
-            isAccepted              = false
-            checked                 = true
-        }
         recomendationArray[currQuestion] = textField.text
         textField.resignFirstResponder()
     }

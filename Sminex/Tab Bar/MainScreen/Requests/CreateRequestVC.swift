@@ -344,6 +344,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         scroll.isHidden = true
         edContact.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         edContact.maskTemplate = "*"
+        edContact.maskDelegate = self
         self.expImg.image = UIImage(named: "expand")
         tablePlace.delegate = self
         tablePlace.dataSource = self
@@ -1013,20 +1014,21 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
             sendBtnHeight.constant = 0
             sendButton.isHidden = true
         
-        }else  if (edFio.text == "" || edContact.textColor == placeholderColor){
+        }else if ((edFio.text == "" && self.fioList.count == 0) || edContact.text == ""){
             sendBtnHeight.constant = 0
             sendButton.isHidden = true
             
+        }else if (self.fioList.count != 0 && edContact.text != "") || (self.fioList.count == 0 && edFio.text != "" && edContact.text != ""){
+            sendBtnHeight.constant = 48
+            sendButton.isHidden = false
         }else {
             sendBtnHeight.constant = 48
             sendButton.isHidden = false
         }
-        
         return true
     }
     
@@ -1208,9 +1210,37 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
         self.fioList.remove(at: ident)
         self.numberFio.text = String(self.fioList.count + 1)
         self.tableFio.reloadData()
+        if fioList.count == 0{
+            DispatchQueue.main.async{
+                self.sendBtnHeight.constant = 0
+                self.sendButton.isHidden = true
+            }
+        }
     }
     
     var fioList:[String] = []
+}
+
+extension CreateRequestVC: AKMaskFieldDelegate {
+    
+    func maskField(_ maskField: AKMaskField, shouldChangeBlock block: AKMaskFieldBlock, inRange range: inout NSRange, replacementString string: inout String) -> Bool {
+        if (UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingleWithAuto") == false && UserDefaults.standard.bool(forKey: "denyIssuanceOfPassSingle") == true){
+            sendBtnHeight.constant = 0
+            sendButton.isHidden = true
+        
+        }else if ((edFio.text == "" && self.fioList.count == 0) || edContact.text == ""){
+            sendBtnHeight.constant = 0
+            sendButton.isHidden = true
+            
+        }else if (self.fioList.count != 0 && edContact.text != "") || (self.fioList.count == 0 && edFio.text != "" && edContact.text != ""){
+            sendBtnHeight.constant = 48
+            sendButton.isHidden = false
+        }else {
+            sendBtnHeight.constant = 48
+            sendButton.isHidden = false
+        }
+        return true
+    }
 }
 
 protocol DelFioAppCellDelegate: class {
