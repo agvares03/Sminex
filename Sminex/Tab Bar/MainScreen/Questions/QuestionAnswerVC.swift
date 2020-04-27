@@ -537,6 +537,8 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
         self.index = index
         field.text = ""
         field.delegate = self
+        toggle.isHidden = false
+        toggleView.isHidden = false
         kek.forEach {
             if item.id == $0{
                 currIndex = index + 1
@@ -556,6 +558,8 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
         field.isHidden = true
         question.text = item.text
         if item.text?.contains(find: "Свой вариант") ?? false {
+            toggle.isHidden = true
+            toggleView.isHidden = true
             display(isSomeAnswer: true)
             return
         }
