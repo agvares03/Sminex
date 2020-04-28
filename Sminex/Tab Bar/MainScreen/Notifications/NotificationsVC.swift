@@ -50,10 +50,12 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         self.getServices()
         UserDefaults.standard.set(false, forKey: "successParse")
         if let sections = fetchedResultsController?.sections {
-            for i in 0...sections[0].numberOfObjects - 1{
-                let indexPath = IndexPath(row: i, section: 0)
-                let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
-                readNotifi(id: Int(push.id))
+            if sections[0].numberOfObjects > 0{
+                for i in 0...sections[0].numberOfObjects - 1{
+                    let indexPath = IndexPath(row: i, section: 0)
+                    let push = (fetchedResultsController?.object(at: indexPath))! as Notifications
+                    readNotifi(id: Int(push.id))
+                }
             }
         }
         refreshControl = UIRefreshControl()
