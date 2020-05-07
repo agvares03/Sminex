@@ -122,7 +122,7 @@ final class CounterCellNew: UICollectionViewCell {
         }else{
             income.text = item.previousValue1! + " " + item.units!
         }
-        tarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 3
+        tarifWidth.constant = (self.delegate.view.frame.size.width - 64 - 2) / 3
         if item.typeTarif == "1" || item.typeTarif == " " || item.typeTarif == ""{
             kolTarif.text = "1 - тарифный"
             tarifHeight.constant = 0
@@ -143,7 +143,7 @@ final class CounterCellNew: UICollectionViewCell {
             kolTarif.text = "2 - тарифный"
             tarifHeight.constant = 70
             tarifWidth.constant = 0
-            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 2
+            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 64 - 2) / 2
             tarifBot.constant = 56
             let am = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
             self.oneTarif.text    = am + " ₽/\(item.units!)"
@@ -167,8 +167,8 @@ final class CounterCellNew: UICollectionViewCell {
             tarifLine.isHidden = false
             kolTarif.text = "3 - тарифный"
             tarifHeight.constant = 70
-            tarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 3
-            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 32 - 2) / 3
+            tarifWidth.constant = (self.delegate.view.frame.size.width - 64 - 2) / 3
+            oneTarifWidth.constant = (self.delegate.view.frame.size.width - 64 - 2) / 3
             tarifBot.constant = 56
             let am = item.tarifPrice1!.replacingOccurrences(of: ",", with: ".")
             self.oneTarif.text    = am + " ₽/\(item.units!)"

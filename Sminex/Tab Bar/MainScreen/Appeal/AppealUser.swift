@@ -101,13 +101,11 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             }
             
         } else {
-            
-            DispatchQueue.main.async {
-                self.getRequests()
-            }
-            
             if isCreatingRequest_ {
                 addRequestPressed()
+            }
+            DispatchQueue.main.async {
+                self.getRequests()
             }
             
             refreshControl = UIRefreshControl()
@@ -498,7 +496,6 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                 self.tableView?.reloadData()
                 self.stopAnimatior()
                 if self.requestId_ != "" {
-                    print(self.requestId_)
                     for (index, item) in self.data.enumerated() {
                         if item.id == self.requestId_ || item.webId == self.requestId_{
                             if self.tableView != nil {
@@ -614,6 +611,10 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     private func startAnimator() {
         activity?.isHidden       = false
         activity?.startAnimating()
+        if isHidNav {
+            self.tableView.isHidden = true
+            self.noDataLbl.isHidden = true
+        }
     }
     
     private func stopAnimatior() {
@@ -626,6 +627,10 @@ class AppealUser: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }
         activity?.stopAnimating()
         activity?.isHidden       = true
+        if isHidNav {
+            self.tableView.isHidden = true
+            self.noDataLbl.isHidden = true
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

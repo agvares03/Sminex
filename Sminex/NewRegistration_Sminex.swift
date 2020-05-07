@@ -224,22 +224,24 @@ final class NewRegistration_Sminex: UIViewController, UITextFieldDelegate, UIGes
     }
     
     private func showLS(){
-        let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счет", preferredStyle: .actionSheet)
-        ls1.forEach {
-            let text = $0
-            action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
-                self.ls = text
-                self.edLS.text = text
-                if self.isReg_ {
-                    self.registration()
-                    
-                } else {
-                    self.forgotPass()
-                }
-            }))
+        DispatchQueue.main.async {
+            let action = UIAlertController(title: nil, message: "Выберите привязанный лицевой счет", preferredStyle: .actionSheet)
+            ls1.forEach {
+                let text = $0
+                action.addAction(UIAlertAction(title: $0, style: .default, handler: { (_) in
+                    self.ls = text
+                    self.edLS.text = text
+                    if self.isReg_ {
+                        self.registration()
+                        
+                    } else {
+                        self.forgotPass()
+                    }
+                }))
+            }
+            action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
+            self.present(action, animated: true, completion: nil)
         }
-        action.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in }))
-        present(action, animated: true, completion: nil)
     }
     
     private func choiceReg() {
