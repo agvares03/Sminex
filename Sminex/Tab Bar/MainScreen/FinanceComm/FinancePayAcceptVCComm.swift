@@ -43,6 +43,22 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     @IBAction private func sendButtonPressed(_ sender: UIButton) {
         startAnimation()
         sumText = sumTextField.text ?? ""
+        let email = self.phoneEmailText.text?.replacingOccurrences(of: " ", with: "") ?? ""
+        if email == ""{
+            var mes = ""
+            if phoneChoice{
+                mes = "Укажите номер телефона"
+            }else{
+                mes = "Укажите Email"
+            }
+            let alert = UIAlertController(title: "Ошибка", message: mes, preferredStyle: .alert)
+            alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
+            DispatchQueue.main.sync {
+                self.stopAnimation()
+                self.present(alert, animated: true, completion: nil)
+            }
+            return
+        }
         if Double(sumText) != nil{
             if Double(sumText)! > 0.00{
                 DispatchQueue.global(qos: .userInitiated).async {
@@ -121,6 +137,7 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     
     public var accountData_: AccountDebtJson?
     public var billsData_: AccountBillsJson?
+    public var debt = ""
     private var url: URLRequest!
     private var str_url: String!
     private var sumText = ""
@@ -131,11 +148,19 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         stopAnimation()
         sumTextField.delegate = self
         title = (UserDefaults.standard.string(forKey: "buisness") ?? "") + " by SMINEX"
-        
         if accountData_ != nil && billsData_ != nil {
             sumTextField.text = String(format: "%.2f", (accountData_?.sumPay ?? 0.0))
             titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
             var date = accountData_?.datePay
+            if (date?.count ?? 0) > 9 {
+                date?.removeLast(9)
+            }
+            descLabel.text = "\(billsData_?.number ?? "") от \(date ?? "")"
+            
+        }else if billsData_ != nil && debt != ""{
+            sumTextField.text = self.debt
+            titleLabel.text = "Платеж для Лицевого счета №\(billsData_?.number ?? "")"
+            var date = billsData_?.datePay
             if (date?.count ?? 0) > 9 {
                 date?.removeLast(9)
             }
@@ -301,26 +326,10 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         
         let login = UserDefaults.standard.string(forKey: "login") ?? ""
         let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        let email = phoneEmailText.text?.replacingOccurrences(of: " ", with: "") ?? ""
-        if email == ""{
-            var mes = ""
-            if phoneChoice{
-                mes = "Укажите номер телефона"
-            }else{
-                mes = "Укажите Email"
-            }
-            let alert = UIAlertController(title: "Ошибка", message: mes, preferredStyle: .alert)
-            alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-            DispatchQueue.main.sync {
-                self.stopAnimation()
-                self.present(alert, animated: true, completion: nil)
-            }
-            return
-        }
         let number_bills = billsData_?.number_eng
         let date_bills   = billsData_?.datePay
         var url_str = Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + pwd
-        url_str = url_str + "&amount=" + sumText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
+        url_str = url_str + "&amount=" + sumText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + "&phone=" + phoneString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)! + "&email=" + emailString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
         if (number_bills != nil) {
             url_str = url_str + "&invoiceNumber=" + number_bills!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
             url_str = url_str + "&date=" + date_bills!.replacingOccurrences(of: " 00:00:00", with: "").addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
@@ -328,7 +337,7 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         
         var request = URLRequest(url: URL(string: url_str)!)
         request.httpMethod = "GET"
-        
+        print(request)
         URLSession.shared.dataTask(with: request) {
             data, error, responce in
             

@@ -97,9 +97,10 @@ class FinanceCalcVC3Comm: UIViewController, UICollectionViewDelegate, UICollecti
             }
             vc.data_ = dat
         }
-        if segue.identifier == "goPay" {
-            let vc = segue.destination as! FinancePayVC
-            vc.url_ = url
+        if segue.identifier == Segues.fromFinanceDebtVC.toPay {
+            let vc = segue.destination as! FinancePayAcceptVCComm
+            vc.billsData_ = self.billsData_
+            vc.debt = self.debtA
         }
         if segue.identifier == Segues.fromFinanceVC.toCalcsArchive {
             let vc = segue.destination as! FinanceCalcsArchiveVCComm
@@ -213,64 +214,24 @@ class FinanceCalcVC3Comm: UIViewController, UICollectionViewDelegate, UICollecti
         return header
     }
     private var url: URLRequest!
+    var billsData_: AccountBillsJson?
+    var debtA = ""
     func requestPay(debt: String, indexPath: IndexPath) {
-        
-        let login = UserDefaults.standard.string(forKey: "login") ?? ""
-        let pwd = UserDefaults.standard.string(forKey: "pwd") ?? ""
-        var billsData_: AccountBillsJson?
+        self.debtA = debt
         for i in 0...dataDebt.count - 1 {
             if date.0 == dataDebt[i].numMonth && date.1 == dataDebt[i].numYear{
-                billsData_ = dataDebt[i]
+                self.billsData_ = dataDebt[i]
             }
         }
-        let number_bills = billsData_?.number_eng
-        let date_bills   = billsData_?.datePay
-        var url_str = Server.SERVER + Server.PAY_ONLINE + "login=" + login + "&pwd=" + pwd
-        url_str = url_str + "&amount=" + debt.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        if (number_bills != nil) {
-            url_str = url_str + "&invoiceNumber=" + number_bills!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-            url_str = url_str + "&date=" + date_bills!.replacingOccurrences(of: " 00:00:00", with: "").addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlPathAllowed)!
-        }
-        
-        var request = URLRequest(url: URL(string: url_str)!)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request) {
-            data, error, responce in
-            
-            guard data != nil else { return }
-            
-            if String(data: data!, encoding: .utf8)?.contains(find: "error") ?? false {
-                let alert = UIAlertController(title: "Ошибка сервера", message: String(data: data!, encoding: .utf8)?.replacingOccurrences(of: "error: ", with: "") ?? "", preferredStyle: .alert)
+        if billsData_ != nil{
+            performSegue(withIdentifier: Segues.fromFinanceDebtVC.toPay, sender: self)
+        }else{
+            DispatchQueue.main.async{
+                let alert = UIAlertController(title: "", message: "Не найдена квитанция по выбранной дате!", preferredStyle: .alert)
                 alert.addAction( UIAlertAction(title: "OK", style: .default, handler: { (_) in } ) )
-                DispatchQueue.main.sync {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
+                self.present(alert, animated: true, completion: nil)
             }
-            
-            //            self.str_url = String(data: data!, encoding: .utf8)!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
-            //            self.str_url = self.str_url.replacingOccurrences(of: "https%3A", with: "https:")
-            
-            // Костыль
-            let str_url = String(data: data!, encoding: .utf8)!//.replacingOccurrences(of: " ", with: "")
-            
-            //            let index = self.str_url.index(self.str_url.startIndex, offsetBy: 39)
-            //            var str1 = self.str_url.substring(to: index)
-            //            var str2 = self.str_url.suffix(self.str_url.length - 39)
-            //
-            //            self.str_url = str1 + str2.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
-            self.url = URLRequest(url: URL(string: str_url)!)
-            
-            DispatchQueue.main.sync {
-                self.performSegue(withIdentifier: "goPay", sender: self)
-            }
-            
-            #if DEBUG
-            //            print(String(data: data!, encoding: .utf8) ?? "")
-            #endif
-            
-            }.resume()
+        }
     }
 }
 

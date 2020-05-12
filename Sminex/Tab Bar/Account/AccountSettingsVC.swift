@@ -158,7 +158,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         contactNumber.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         contactNumber.maskTemplate = "*"
         var contactPhone: String = defaults.string(forKey: "contactNumber") ?? ""
-        if contactPhone.first == "8"{
+        if contactPhone.first == "8" || contactPhone.first == "7"{
             contactPhone.removeFirst()
         }
         contactNumber.text = contactPhone
@@ -169,7 +169,7 @@ final class AccountSettingsVC: UIViewController, UIScrollViewDelegate, UIImagePi
         privNumber.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
         privNumber.maskTemplate = "*"
         var privPhone: String = defaults.string(forKey: "phone_user") ?? ""
-        if privPhone.first == "8"{
+        if privPhone.first == "8" || privPhone.first == "7"{
             privPhone.removeFirst()
         }
         privNumber.text = privPhone

@@ -497,15 +497,15 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
             currIndex = 0
             
         }else {
-            if question.isHidden{
+//            if question.isHidden{
                 
-            }else{
+//            }else{
                 for (ind, item) in selectedAnswers.enumerated() {
                     if item == index {
                         selectedAnswers.remove(at: ind)
                     }
                 }
-            }
+//            }
             if isSomeAnswers {
                 toggle.checked = false
                 toggle.strokeColor      = .darkGray
@@ -538,7 +538,7 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
         field.text = ""
         field.delegate = self
         toggle.isHidden = false
-        toggleView.isHidden = false
+//        toggleView.isHidden = false
         kek.forEach {
             if item.id == $0{
                 currIndex = index + 1
@@ -550,7 +550,7 @@ final class QuestionAnswerCell: UITableViewCell, UITextFieldDelegate {
         if !isSomeAnswers {
             toggle.strokeColor  = .lightGray
             toggle.lineWidth    = 2
-        
+            
         } else {
             toggle.strokeColor = .darkGray
         }
