@@ -1914,7 +1914,7 @@ final class MainScreenVC: UIViewController, UICollectionViewDelegate, UICollecti
             var bills = receipts
             bills.removeAll()
             receipts.forEach{
-                if $0.payment_name == "Не оплачен"{
+                if $0.payment_name == "Не оплачен" || $0.payment_name == "ОплаченЧастично"{
                     bills.append($0)
                 }
             }

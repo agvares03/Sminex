@@ -275,7 +275,7 @@ class NewTechServiceVC: UIViewController {
         if date < Date(){
             date = Date()
         }
-        data = ServiceHeaderData(icon: UIImage(named: "account")!,
+        data = ServiceHeaderData(icon: UIImage(named: "orangeStatus")!,
                                  problem: detailText,
                                  date: date.toString(format: .custom("dd.MM.yyyy HH:mm:ss")),
                                  status: "В ОБРАБОТКЕ",

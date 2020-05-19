@@ -270,7 +270,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                 }
             }
             if edComment.text == "Примечание" && edComment.textColor == placeholderColor{
-                data = AdmissionHeaderData(icon: UIImage(named: "account")!,
+                data = AdmissionHeaderData(icon: UIImage(named: "orangeStatus")!,
                                            gosti: fio,
                                            mobileNumber: edContact.text!,
                                            gosNumber: gos , mark: mark ,
@@ -279,7 +279,7 @@ final class CreateRequestVC: UIViewController, UIScrollViewDelegate, UIGestureRe
                                            images: images,
                                            imagesUrl: [], desc: "", placeHome: place, isReaded: "1")
             }else{
-                data = AdmissionHeaderData(icon: UIImage(named: "account")!,
+                data = AdmissionHeaderData(icon: UIImage(named: "orangeStatus")!,
                                            gosti: fio,
                                            mobileNumber: edContact.text!,
                                            gosNumber: gos , mark: mark ,

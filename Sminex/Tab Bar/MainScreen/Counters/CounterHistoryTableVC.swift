@@ -11,7 +11,7 @@ import UIKit
 final class CounterHistoryTableVC: UIViewController {
     
     @IBOutlet private weak var collection: UICollectionView!
-    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
+//    @IBOutlet private weak var tableHeight: NSLayoutConstraint!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var notifiBtn: UIBarButtonItem!
     @IBAction private func goNotifi(_ sender: UIBarButtonItem) {
@@ -71,19 +71,25 @@ final class CounterHistoryTableVC: UIViewController {
 extension CounterHistoryTableVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        DispatchQueue.main.async {
-            var height1: CGFloat = 0
-            for cell in self.tableView.visibleCells {
-                height1 += cell.bounds.height
-            }
-            self.tableHeight.constant = height1
-        }
+//        DispatchQueue.main.async {
+//            var height1: CGFloat = 0
+//            for cell in self.tableView.visibleCells {
+//                height1 += cell.bounds.height
+//            }
+//            self.tableHeight.constant = height1
+//        }
         return data_.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCounterCell", for: indexPath) as! HistoryCounterCell
-        cell.configure(title: data_[indexPath.row].resource ?? "", counterName: data_[indexPath.row].meterType! + ", " + data_[indexPath.row].meterUniqueNum! )
+        var indexCell = "-"
+        if indexPath.row == 0{
+            indexCell = "first"
+        }else if indexPath.row == data_.count - 1{
+            indexCell = "last"
+        }
+        cell.configure(title: data_[indexPath.row].resource ?? "", counterName: data_[indexPath.row].meterType! + ", " + data_[indexPath.row].meterUniqueNum!, indexCell: indexCell )
         return cell
     }
     
