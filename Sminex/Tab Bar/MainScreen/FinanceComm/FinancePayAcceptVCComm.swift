@@ -103,6 +103,7 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
             }
             self.iconPhone.isHidden = false
             self.iconEmail.isHidden = true
+            self.phoneEmailText.maskDelegate = self
             self.phoneEmailText.maskExpression = "+7 ({ddd}) {ddd}-{dddd}"
             self.phoneEmailText.maskTemplate = "*"
             self.phoneEmailText.keyboardType = .phonePad
@@ -123,12 +124,18 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
             }
             self.iconPhone.isHidden = true
             self.iconEmail.isHidden = false
-            self.phoneEmailText.maskExpression = "{...........................................}"
+            var mask = "{"
+            self.emailString.forEach{_ in
+                mask = mask + "."
+            }
+            mask = mask + "}"
+            self.phoneEmailText.maskExpression = mask
             self.phoneEmailText.maskTemplate = " "
             self.phoneEmailText.keyboardType = .emailAddress
             self.phoneEmailText.reloadInputViews()
             self.phoneEmailText.placeholder = "Email для отправки чека"
             self.phoneEmailText.text = self.emailString
+            self.phoneEmailText.delegate = self
             self.phoneChoice = false
             self.emailChoice = true
         }
@@ -190,6 +197,7 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         self.phoneEmailText.keyboardType = .phonePad
         self.phoneEmailText.reloadInputViews()
         self.phoneEmailText.placeholder = "Контактный номер для отправки чека"
+        self.phoneEmailText.maskDelegate = self
         self.phoneChoice = true
         phoneString = UserDefaults.standard.string(forKey: "contactNumber") ?? ""
         emailString = UserDefaults.standard.string(forKey: "mail") ?? ""
@@ -273,36 +281,42 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField){
-        var str: String = textField.text!
-        print(str)
-        str = str.replacingOccurrences(of: ",", with: ".")
-        self.sumTextField.text = str
-        if str.contains(find: "."){
-            var i = 0
-            str.forEach{
-                if $0 == "."{
-                    i += 1
+        if textField == self.sumTextField{
+            var str: String = textField.text!
+            str = str.replacingOccurrences(of: ",", with: ".")
+            self.sumTextField.text = str
+            if str.contains(find: "."){
+                var i = 0
+                str.forEach{
+                    if $0 == "."{
+                        i += 1
+                    }
                 }
-            }
-            if i > 1 && str.last == "."{
-                str.removeLast()
-                self.sumTextField.text = str
-            }
-            let index = (str.index(of: "."))!
-            let s = str.distance(from: index, to: str.endIndex)
-            if s > 3{
-                str.removeLast()
-                self.sumTextField.text = str
+                if i > 1 && str.last == "."{
+                    str.removeLast()
+                    self.sumTextField.text = str
+                }
+                let index = (str.index(of: "."))!
+                let s = str.distance(from: index, to: str.endIndex)
+                if s > 3{
+                    str.removeLast()
+                    self.sumTextField.text = str
+                }
             }
         }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        let str: String = sumTextField.text ?? ""
-        if str != "" && !str.contains(find: "."){
-            sumTextField.text = sumTextField.text! + ".00"
-        }else if str == ""{
-            sumTextField.text = "0.00"
+        if textField == self.sumTextField{
+            let str: String = sumTextField.text ?? ""
+            if str != "" && !str.contains(find: "."){
+                sumTextField.text = sumTextField.text! + ".00"
+            }else if str == ""{
+                sumTextField.text = "0.00"
+            }
+        }
+        if textField == self.phoneEmailText{
+            emailString = textField.text?.replacingOccurrences(of: " ", with: "") ?? ""
         }
     }
     
@@ -400,4 +414,26 @@ class FinancePayAcceptVCComm: UIViewController, UITextFieldDelegate {
         }
     }
     
+}
+
+extension FinancePayAcceptVCComm: AKMaskFieldDelegate {
+    
+    func maskField(_ maskField: AKMaskField, shouldChangeBlock block: AKMaskFieldBlock, inRange range: inout NSRange, replacementString string: inout String) -> Bool {
+        
+        return true
+    }
+    
+    func maskFieldDidBeginEditing(_ maskField: AKMaskField) {
+        if emailChoice{
+            maskField.text = maskField.text?.replacingOccurrences(of: " ", with: "")
+        }
+    }
+    
+    func maskFieldDidEndEditing(_ maskField: AKMaskField) {
+        if emailChoice{
+            emailString = maskField.text?.replacingOccurrences(of: " ", with: "") ?? ""
+        }else{
+            phoneString = maskField.text ?? ""
+        }
+    }
 }
